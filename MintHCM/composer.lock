@@ -35,6 +35,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
@@ -1935,16 +1936,16 @@
         },
         {
             "name": "robrichards/xmlseclibs",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robrichards/xmlseclibs.git",
-                "reference": "406c68ac9124db033d079284b719958b829cb830"
+                "reference": "0a53d3c3aa87564910cae4ed01416441d3ae0db5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/406c68ac9124db033d079284b719958b829cb830",
-                "reference": "406c68ac9124db033d079284b719958b829cb830",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/0a53d3c3aa87564910cae4ed01416441d3ae0db5",
+                "reference": "0a53d3c3aa87564910cae4ed01416441d3ae0db5",
                 "shasum": ""
             },
             "require": {
@@ -1969,7 +1970,7 @@
                 "xml",
                 "xmldsig"
             ],
-            "time": "2018-11-15T11:59:02+00:00"
+            "time": "2019-11-05T11:44:22+00:00"
         },
         {
             "name": "slim/slim",
@@ -2641,12 +2642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/browserstack/browserstack-local-php.git",
-                "reference": "c81e90964140562e7aee0bfd9f6b249ce186e426"
+                "reference": "b834ba50960e8e2d546042ad2360dd3d9aef1867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/browserstack/browserstack-local-php/zipball/c81e90964140562e7aee0bfd9f6b249ce186e426",
-                "reference": "c81e90964140562e7aee0bfd9f6b249ce186e426",
+                "url": "https://api.github.com/repos/browserstack/browserstack-local-php/zipball/b834ba50960e8e2d546042ad2360dd3d9aef1867",
+                "reference": "b834ba50960e8e2d546042ad2360dd3d9aef1867",
                 "shasum": ""
             },
             "require": {
@@ -2677,7 +2678,7 @@
                 "php",
                 "selenium"
             ],
-            "time": "2018-05-29T13:04:48+00:00"
+            "time": "2019-09-10T18:37:21+00:00"
         },
         {
             "name": "codeception/codeception",
@@ -3763,20 +3764,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913"
+                "reference": "b9cdea3e42c3bcb1a9faafd04ccce4e8ec860ad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/5caf261a0c618eeb123df944597df3ca7bdf0913",
-                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/b9cdea3e42c3bcb1a9faafd04ccce4e8ec860ad9",
+                "reference": "b9cdea3e42c3bcb1a9faafd04ccce4e8ec860ad9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": "^5.4.0 || ^7"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.6",
-                "squizlabs/php_codesniffer": "~2.5"
+                "squizlabs/php_codesniffer": "~2.5",
+                "twbs/bootstrap": "~4.3",
+                "zurb/foundation": "~6.5"
             },
             "bin": [
                 "bin/pscss"
@@ -3807,7 +3810,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2018-10-23T23:05:32+00:00"
+            "time": "2019-06-18T21:15:44+00:00"
         },
         {
             "name": "league/container",
@@ -3875,16 +3878,16 @@
             "time": "2017-05-10T09:20:27+00:00"
         },
         {
-            "name": "mikey179/vfsStream",
+            "name": "mikey179/vfsstream",
             "version": "v1.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mikey179/vfsStream.git",
+                "url": "https://github.com/bovigo/vfsStream.git",
                 "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
+                "url": "https://api.github.com/repos/bovigo/vfsStream/zipball/d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
                 "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
                 "shasum": ""
             },
@@ -4627,6 +4630,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {
