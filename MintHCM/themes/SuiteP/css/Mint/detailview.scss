@@ -1,0 +1,59 @@
+input[type=button], input.button[type=button], input.button[type=submit]  {
+    background: $button-light-bg;
+    border: 1px solid $button-light-border;
+    color: $button-light-color;
+}
+
+input[type=button]:hover, input.button[type=button]:hover, .buttons .button:hover{
+    background-color: $button-light-bg-hover;
+}
+
+input[type=button][selected], .buttons .button[selected] {
+    background: $color-mint-lightgreen;
+    color: #fff;
+}
+
+input[type=button][selected]:hover, .buttons .button[selected]:hover {
+    background: $color-mint-lightgreen-lighter;
+    color: #fff;
+}
+
+.detail-view-field .dataField input.button {
+    background-color: $color-36;
+}
+
+.detail-view-field .dataField input.button:hover {
+    background-color: $color-94;
+}
+
+.nav-tabs > li.tab-inline-pagination .btn-pagination[disabled]:hover {
+    background-color: $color-94;
+    color: $color-6;
+    cursor: default;
+}
+
+.nav-tabs > li.tab-inline-pagination .btn-pagination:hover {
+    background-color: $color-43;
+    color: $color-22;
+}
+.pagination button.button[disabled],
+.pagination button.button[disabled]:hover, .pagination button.button[disabled] .suitepicon {
+    color: $color-mint-lightgreen-lighter;
+}
+
+table.subpanel-table .pagination .sugar_action_button:hover {
+    background-color: $color-97;
+}
+ul.clickMenu li a:hover {
+    color: $color-93;
+}
+ul.clickMenu.SugarActionMenu li.single a:hover,
+table.subpanel-table li.sugar_action_button:hover{
+    background-color: $color-100;
+}
+
+.sub-panel tbody tr td .sugar_action_button > a:link:hover,
+.sub-panel .table-responsive.list > tbody > tr > td ul.subnav a:hover{
+    color: $color-93;
+
+}

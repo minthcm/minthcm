@@ -1,0 +1,220 @@
+<div>
+    <style><!--
+        .left {
+            text-align: left;}
+        .right {
+            text-align: right;}
+        .middle {
+            vertical-align: middle;}
+        .inscryption {
+            font-size: 6;
+            text-align: center;}
+        --></style>
+</div>
+<table style="text-align: center; width: 100%;" border="1">
+    <tbody>
+        <tr>
+            <td class="middle" colspan="3"><strong>POLECENIE WYJAZDU SŁUŻBOWEGO</strong></td>
+            <td><strong>$name</strong></td>
+        </tr>
+        <tr>
+            <td class="left" rowspan="2">DLA:</td>
+            <td>$assigned_user_link__first_name</td>
+            <td>$assigned_user_link__last_name</td>
+            <td rowspan="10">STWIERDZENIE POBYTU SŁUŻBOWEGO</td>
+        </tr>
+        <tr>
+            <td class="inscryption">imię</td>
+            <td class="inscryption">nazwisko</td>
+        </tr>
+        <tr>
+            <td class="left">OD DATA:</td>
+            <td colspan="2">$day_start</td>
+        </tr>
+        <tr>
+            <td class="left">DO DATA:</td>
+            <td colspan="2">$day_end</td>
+        </tr>
+        <tr>
+            <td class="left">Z:</td>
+            <td colspan="2">$from_city</td>
+        </tr>
+        <tr>
+            <td class="left">DO:</td>
+            <td colspan="2">$destinations</td>
+        </tr>
+        <tr>
+            <td class="left">W CELU:</td>
+            <td colspan="2">$purpose</td>
+        </tr>
+        <tr>
+            <td class="left">ŚRODKI LOKOMOCJI:</td>
+            <td colspan="2">$means_of_transport</td>
+        </tr>
+        <tr>
+            <td class="middle">$day_start</td>
+            <td colspan="2">
+                <p> </p>
+                <p> </p>
+                <p> </p>
+                <p> </p>
+            </td>
+        </tr>
+        <tr>
+            <td>data</td>
+            <td colspan="2">podpis zlecającego wyjazd</td>
+        </tr>
+    </tbody>
+</table>
+<p style="text-align: center; font-size: 12;"><strong>RACHUNEK KOSZTÓW PODRÓŻY</strong></p>
+<table style="text-align: center; width: 100%;" border="1">
+    <tbody>
+        <tr>
+            <td colspan="3"><strong>DIETY</strong></td>
+            <td colspan="3"><strong>NAZWA WALUTY</strong></td>
+        </tr>
+        <tr>
+            <td class="left">CZAS POBYTU</td>
+            <td>data</td>
+            <td>godz.</td>
+            <td>PLN</td>
+            <td>EUR</td>
+            <td>USD </td>
+        </tr>
+        <tr>
+            <td class="left">OD:</td>
+            <td>$day_start</td>
+            <td>$hour_start</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td class="left">DO:</td>
+            <td>$day_end</td>
+            <td>$hour_end</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">LICZBA RACHUNKÓW Z RESTAURACJI</td>
+            <td>$restaurant_bills</td>
+            <td><span>$restaurant_bills_eur</span> </td>
+            <td><span>$restaurant_bills_usd</span> </td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">DIETY:</td>
+            <td class="right">$regiments</td>
+            <td class="right">$regiments_eur</td>
+            <td><span>$regiments_usd</span> </td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">PRZEJAZDY:</td>
+            <td class="right">$transport_cost</td>
+            <td class="right">$transport_cost_eur</td>
+            <td>$transport_cost_usd</td>
+        </tr>
+        <!--repeat type="link" relationship="transportations" orderby="trans_date" dir="ASC"-->
+        <tr>
+            <td class="left">Z: <strong>$transportations__from_city</strong></td>
+            <td class="left" colspan="2">DO: <strong>$transportations__to_city</strong></td>
+            <td class="right">$transportations__pln_total</td>
+            <td class="right">$transportations__eur_total</td>
+            <td><span>$transportations__usd_total</span> </td>
+        </tr>
+        <!--endrepeat-->
+        <tr>
+            <td class="left" colspan="3">LICZBA RACHUNKÓW ZA NOCLEGI</td>
+            <td>$accomodations</td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">NOCLEGI WG RACHUNKÓW</td>
+            <td class="right">$total_accommodation</td>
+            <td class="right">$total_accommodation_eur</td>
+            <td><span>$total_accommodation_usd</span></td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">RYCZAŁT ZA NOCLEGI</td>
+            <td class="right">$accommodation_lump_sum</td>
+            <td class="right">$accommodation_lump_sum_eur</td>
+            <td><span>$accommodation_lump_sum_usd</span> </td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">INNE WYDATKI</td>
+            <td class="right">$other</td>
+            <td class="right">$other_eur</td>
+            <td><span>$other_usd</span></td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">OGÓŁEM WYDATKOWANO</td>
+            <td class="right">$total_expenses</td>
+            <td class="right">$total_expenses_eur</td>
+            <td><span>$total_expenses_usd</span></td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">NA KOSZTY DELEGACJI OTRZYMANO Z KASY</td>
+            <td class="right">$obtained_sum</td>
+            <td class="right">$obtained_sum_eur</td>
+            <td><span>$obtained_sum_usd</span></td>
+        </tr>
+        <tr>
+            <td class="left" colspan="3">ZWROT DO KASY</td>
+            <td class="right">$return_sum</td>
+            <td class="right">$return_sum_eur</td>
+            <td><span>$return_sum_usd</span></td>
+        </tr>
+        <tr>
+            <td class="right" colspan="3">Ogółem do wypłaty</td>
+            <td class="right">$payoff_sum</td>
+            <td class="right">$payoff_sum_eur</td>
+            <td><span>$payoff_sum_usd</span></td>
+        </tr>
+        <tr>
+            <td colspan="6"> </td>
+        </tr>
+        <tr>
+            <td colspan="3">Rachunek sprawdzono pod względem:<br />
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td class="label" style="height: 40px;"><small>Merytorycznym oraz stwierdzono wykonanie <br />polecenia służbowego</small></td>
+                            <td class="label"><small>Formalnym i rachunkowym</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td colspan="3">Niniejszy rachunek przedkładam</td>
+        </tr>
+        <tr>
+            <td colspan="3">$end_date_plus_one</td>
+            <td colspan="3">$end_date_plus_one</td>
+        </tr>
+        <tr>
+            <td colspan="3">data i podpis</td>
+            <td colspan="3">data i podpis</td>
+        </tr>
+    </tbody>
+</table>
+<p style="text-align: left; font-size: 7;">Oświadczam, iż zostałem uprzedzony o odpowiedzialnści karnej z artykułu 247 Kodeksu Karnego, oraz o odpowiedzialności za podawanie niezgodnych z prawdą danych o rozliczeniu kosztów zagranicznej podróży służbowej.</p>
+<table style="width: 100%;" border="0">
+    <tbody>
+        <tr>
+            <td> </td>
+            <td>Zwrot kosztów otrzymano:</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td style="border-bottom: 1px dotted black;">
+                <p> </p>
+                <p> </p>
+            </td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td class="inscryption">podpis</td>
+        </tr>
+    </tbody>
+</table>

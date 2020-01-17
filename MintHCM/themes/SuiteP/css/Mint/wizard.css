@@ -1,0 +1,67 @@
+.screen h2 {
+    margin: unset;
+}
+.screen .edit.view {
+    padding: 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+#personalinfo {
+    width: 780px;
+}
+.nav-buttons {
+    margin-top: 40px;
+}
+
+#personalinfo input[type="text"], #personalinfo textarea, #personalinfo select {
+    width: 90%;
+}
+#personalinfo .edit.view table tr td:nth-child(2) {
+    padding-right: 20px;
+}
+#personalinfo .edit.view table tr td:nth-child(3) {
+    padding-left: 20px;
+}
+#personalinfo .edit.view table tr td:nth-child(4) {
+    padding-right: 20px;
+}
+
+.button.back {
+    background-color: white !important;
+    color: #606164;
+    border: 1px solid #606164;
+}
+.button.back:hover {
+    background-color: #b2b4b3 !important;
+    color: white;
+    border: 1px solid #b2b4b3;
+}
+
+#finish table {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+#finish h2 {
+    text-align: left;
+}
+
+#finish td {
+    text-align: center;
+}
+
+#finish td p {
+    text-align: left;
+}
+
+#finish a.button.back {
+    height: 32px;
+    display: inline-block;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+header {
+    height: 60px;
+}

@@ -1,0 +1,58 @@
+<?php
+
+class jjwg_Address_Cache_sugar extends Basic {
+
+    var $new_schema = true;
+    var $module_dir = 'jjwg_Address_Cache';
+    var $object_name = 'jjwg_Address_Cache';
+    var $table_name = 'jjwg_address_cache';
+    var $importable = true;
+    var $disable_row_level_security = true;
+    var $id;
+    var $name;
+    var $date_entered;
+    var $date_modified;
+    var $modified_user_id;
+    var $modified_by_name;
+    var $created_by;
+    var $created_by_name;
+    var $description;
+    var $deleted;
+    var $created_by_link;
+    var $modified_user_link;
+    var $assigned_user_id;
+    var $assigned_user_name;
+    var $assigned_user_link;
+    var $lat;
+    var $lng;
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * @deprecated deprecated since version 7.6, PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code, use __construct instead
+     */
+    function jjwg_Address_Cache_sugar(){
+        $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
+        if(isset($GLOBALS['log'])) {
+            $GLOBALS['log']->deprecated($deprecatedMessage);
+        }
+        else {
+            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+        }
+        self::__construct();
+    }
+
+
+    function bean_implements($interface) {
+        switch ($interface) {
+            case 'ACL': return false;
+        }
+        return false;
+    }
+
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
+        return false;
+    }
+}

@@ -1,0 +1,20 @@
+.fc-day-number {
+    color: #646464;
+}
+ .qtip-default {
+  border: none !important;
+  border-radius: 4px !important;
+  @include BoxShadow(4);
+
+  > .qtip-titlebar {
+    background-color: $dashlet-title-bg !important;
+  }
+}
+
+.qtip-content {
+    background-color: $navbar-main-menu-bg;
+}
+
+.qtip-content a {
+    color: $calendar-user-bg;
+}

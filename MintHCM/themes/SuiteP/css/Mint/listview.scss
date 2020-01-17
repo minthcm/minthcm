@@ -1,0 +1,130 @@
+div.modal-footer > button.btn.button.purple.btn-default {
+    background-color: $modal-footer-close-btn;
+}
+
+div.modal-footer > button.btn.button.purple.btn-default:hover {
+    background-color: $modal-footer-close-btn;
+}
+
+div.modal-footer > button.button.red {
+    background-color: $modal-footer-save-btn;
+}
+
+div.modal-footer > button.button.red:hover {
+    background-color: $modal-footer-save-btn;
+    border: 1px solid #FCFAFA;;
+}
+
+input[type=checkbox] {
+    background: url('../../../../../themes/SuiteP/images/forms/check.png') no-repeat;
+}
+
+.subpanel-table ul.subnav {
+    background-color: $list-view-action-button-bg;
+}
+
+table.subpanel-table .pagination a {
+    background-color: $list-view-action-button-bg;
+}
+
+ul.clickMenu li ul.subnav li a:hover {
+    background-color: $color-97;
+    color: $color-81;
+}
+
+table.subpanel-table .pagination li.sugar_action_button:hover > form > a {
+    background-color: $list-view-action-button-bg;
+}
+
+.pagination button[disabled] {
+    background-color: $disabled-btn-bg;
+}
+
+.paginationTable .selectActionsDisabled,
+.paginationTable .selectActionsDisabled a,
+.paginationTable .paginationChangeButtons button[disabled],
+.paginationTable .paginationActionButtons button[disabled],
+{
+    //background-color: $color-51;
+    //color: $color-100;
+    opacity: 0.5;
+}
+
+// Mint development
+
+.paginationTable .paginationChangeButtons button, .paginationTable .paginationActionButtons button {
+    background: $pagination-button-bg;
+    border: none;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 4px;
+}
+
+.paginationActionButtons .pageNumbers {
+  color: $pagination-numbers;
+  padding: 0 $mint-rem;
+}
+
+.paginationActionButtons > ul {
+    float: left;
+    height: 30px;
+}
+
+input.button {
+    background-color: $color-97;
+}
+
+.tabForm select {
+    background-color: $color-93;
+}
+
+
+.paginationTable ul.clickMenu li a#delete_listview_top:hover,
+.paginationTable ul.clickMenu li a#delete_listview_bottom:hover,
+{
+    color: $color-100;
+}
+
+#actionLinkTop li.sugar_action_button a,
+#actionLinkBottom li.sugar_action_button a {
+    color: inherit;
+}
+
+ul.clickMenu li.sugar_action_button:hover {
+    background-color: $color-51;
+    color: $color-100;
+}
+
+.paginationTable ul.clickMenu li.sugar_action_button a:hover{
+    color: $color-100;
+}
+
+// Mint development
+
+.pagination-unique > td {
+    padding-left: 8px;
+}
+
+.submitButtonsAdvanced {
+    margin-top: 100px;
+}
+
+.selectedRecords.value {
+    margin-right: 8px;
+}
+
+.selectedRecords {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    color: #fff;
+}
+
+div.list-view-rounded-corners > table, tr.pagination-unique {
+    background: #eaeaea;
+}
+
+.selectActionsDisabled.show {
+    display: inline-block !important;
+}

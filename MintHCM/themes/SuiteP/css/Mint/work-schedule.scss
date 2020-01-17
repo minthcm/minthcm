@@ -1,0 +1,31 @@
+@media screen and (max-width:768px){
+    .evTWSToolbarForm table tr td:nth-child(1){
+        span{
+            input{
+                max-width:130px;
+            }
+        }
+
+    }
+}
+
+.evTWSToolbarForm table tr td:nth-child(2){
+    display: grid;
+    max-width: 300px;
+    select{
+        min-width:100px !important;
+    }
+}
+
+
+.yui-calendar td.calcell.today, .yui-calendar td.calcell.today a{
+	background-color:#63c29a;
+	background:#63c29a;
+        color:white;
+}
+
+.yui-calendar td.calcell.today.selected, .yui-calendar td.calcell.today.selected a, .yui-calendar td.calcell.selected:hover, .yui-calendar td.calcell.selected:hover > a {
+    background:#009976;
+	background-color:#009976;
+	color:white;
+}
