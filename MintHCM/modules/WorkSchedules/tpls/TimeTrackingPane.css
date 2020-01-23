@@ -1,0 +1,44 @@
+.TimePanel {
+    overflow: visible;
+}
+
+.TimePanel table{
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+}
+
+.TimePanel .time-cell {
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0px 5px 20px 2px #00000021;
+    display: inline-block;
+    margin: 0px;
+    position: absolute;
+    cursor: pointer;
+    text-align: center;
+    margin: 0;
+    color: #000;
+}
+
+.TimePanel .orangeColor {
+    background-color: orange;
+}
+
+.TimePanel .orangeColor:hover {
+    background-color: #ff6633;
+}
+
+
+.TimePanelLeft {
+    position:relative;
+    z-index: 15;
+}
+
+.TimePanelMiddle {
+    position:relative;
+}
+
+.TimePanelRight {
+    position:relative;
+    text-align:right;
+}

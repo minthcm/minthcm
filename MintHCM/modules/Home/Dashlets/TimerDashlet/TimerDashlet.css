@@ -1,0 +1,39 @@
+
+.TimerDashlet .timer-output {
+    font-size: 22px;
+}
+
+.TimerDashlet .timer-button {
+    width: 30px !important;
+    height: 30px !important;
+    background-image: url('pause_play_stop_black.png');
+    background-size: 110px 30px;
+    background-repeat: no-repeat;
+    transition: transform 1s;
+    display: inline-block;
+}
+
+.TimerDashlet .timer-button:hover {
+    transform: rotate(360deg);
+}
+
+.TimerDashlet .button-play {
+    background-position-x: -40px;
+    background-position: -40px 0;
+}
+
+
+.TimerDashlet .button-pause {
+    background-position-x: 0px;
+    background-position: 0 0;
+}
+
+
+.TimerDashlet .button-stop {
+    background-position-x: -80px;
+    background-position: -80px 0;
+}
+
+.TimerDashlet {
+    margin-top: 15px;
+}

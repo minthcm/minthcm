@@ -1,0 +1,22 @@
+.TWSToolbar {
+    /* margin-bottom: 10px; */
+}
+
+.TWSToolbar tr {
+  height: 54px;
+}
+.TWSList>thead th {
+    text-align: left;
+}
+.TWSListBody>tr {
+    height: 25px;
+}
+.TWSListBody>tr:nth-child(odd) {
+    background-color: #ebebed;
+}
+.TWSListBody>tr:nth-child(event) {
+    background-color: #fff;
+}
+.TWSDashlet {
+    /* margin-top: 10px; */
+}

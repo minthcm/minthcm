@@ -1,0 +1,124 @@
+#mintNews {
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    position:fixed; 
+    left: 0;
+    top: 0;
+    z-index: 9999;
+
+    .mintNews-container {
+        width: 1000px; 
+        max-height: 550px; 
+        background-color: white; 
+        position:fixed; 
+        top: 50%; 
+        left: 50%; 
+        margin-left: -500px; 
+        margin-top: -275px;
+
+        @media only screen and (max-width: 1024px) {
+            width: 80%; 
+            margin-left: -40%;
+        }
+    }
+
+    .mintNews-header {
+        text-transform: uppercase; 
+        color: white; 
+        background-color: #009975; 
+        padding: 8px 8px 8px 25px;
+
+        span {
+            font-size: 18px;
+            float: right;
+        }
+    }
+
+    .mintNews-boxes {
+        max-height: 500px;
+        overflow-y: auto;
+        padding-bottom: 20px;
+
+        > div {
+            margin: 20px 20px 0 20px;
+
+            .mintNews-box-header {
+                width: 100%;
+                padding: 8px;
+                word-wrap: break-word;
+            }
+
+            .mintNews-box-content {
+                display: flex;
+                align-items: center;
+                min-height: 50px;
+                padding: 8px;
+
+                @media only screen and (max-width: 1024px) {
+                    display: block;
+                }
+
+                .mintNews-box-text {
+                    width: 100%;
+                    word-wrap: break-word;
+                }
+
+                .mintNews-box-button {
+                    width: 19%;
+                    display: flex;
+                    justify-content: center;
+
+                    @media only screen and (max-width: 1024px) {
+                        width: 100%;
+                        padding-top: 3px;
+                    }
+
+                    input {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+
+        .mintNews-announcement {
+            background-color: #63c19a;
+
+            .mintNews-box-header {
+                color: #ffffff;
+                background-color: #009975;
+            }
+
+            .mintNews-box-content .mintNews-box-text {
+                color: #ffffff;
+            }
+        }
+
+
+        .mintNews-reminder {
+            background-color: #eaeaea;
+
+            .mintNews-box-header {
+                color: #EAEAEA;
+                background-color: #646464;
+            }
+
+            .mintNews-box-content {
+                .mintNews-box-text {
+                    color: #009975;
+                }
+
+                .mintNews-box-button { 
+                    flex-direction: column;
+                    align-items: center;
+
+                    input:nth-child(2) {
+                        font-size: 11px;
+                        padding: 0 10px 0 10px;
+                        margin-top: 5px;
+                    }
+                }
+            }
+        }
+    }
+}

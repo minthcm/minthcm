@@ -1,0 +1,1 @@
+<h3>{$LBL_CHART_NODATA}</h3>
