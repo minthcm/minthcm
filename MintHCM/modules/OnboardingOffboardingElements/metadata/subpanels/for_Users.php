@@ -57,6 +57,10 @@ $subpanel_layout = array(
             'widget_class' => 'SubPanelDetailViewLink',
             'width' => '25%',
         ),
+        'kind_of_element' => array(
+            'vname' => 'LBL_KIND_OF_ELEMENT',
+            'width' => '15%',
+        ),
         'type' => array(
             'vname' => 'LBL_TYPE',
             'width' => '15%',
@@ -69,11 +73,6 @@ $subpanel_layout = array(
         'days_from_start' => array(
             'vname' => 'LBL_DAYS_FROM_START',
             'width' => '15%',
-        ),
-        'own_task' => array(
-            'width' => '15%',
-            'vname' => 'LBL_OWN_TASK',
-            'default' => true,
         ),
         'edit_button' => array(
             'vname' => 'LBL_EDIT_BUTTON',

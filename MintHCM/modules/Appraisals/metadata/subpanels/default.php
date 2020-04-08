@@ -86,6 +86,10 @@ $subpanel_layout = array(
          'vname' => 'LBL_EMPLOYEE_NAME',
          'width' => '10%',
       ),
+      'evaluator_name' => array(
+         'vname' => 'LBL_EVALUATOR_NAME',
+         'width' => '10%',
+      ),
       'candidature_name' =>
       array(
          'vname' => 'LBL_CANDIDATURE_NAME',

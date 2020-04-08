@@ -84,6 +84,13 @@ $listViewDefs [$module_name] = array(
       'width' => '10%',
       'default' => true,
    ),
+   'EVALUATOR_NAME' => array(
+      'link' => true,
+      'label' => 'LBL_EVALUATOR_NAME',
+      'id' => 'EVALUATOR_ID',
+      'width' => '10%',
+      'default' => true,
+   ),
    'DATE_MODIFIED' =>
    array(
       'type' => 'datetime',

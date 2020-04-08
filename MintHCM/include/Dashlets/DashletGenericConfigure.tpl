@@ -99,7 +99,7 @@
                     {$columnChooser}
                 </td>
             </tr>
-            {if $showMyItemsOnly || $showMyFavorites || !empty($searchFields)}
+            {if $showMyItemsOnly || $showMyFavorites || $showMySubordinates || !empty($searchFields)}
                 <tr>
                     <td scope='row' colspan='4' align='left'>
                         <br>
@@ -108,22 +108,38 @@
                 </tr>
                 {if $showMyItemsOnly}
                     <tr>
-                        <td scope='row'>
-                            {$strings.myItems}
-                        </td>
                         <td>
                             <input type='checkbox' {if $myItemsOnly == 'true'}checked{/if} name='myItemsOnly'
                                    value='true'>
                         </td>
-                    </tr>
+                        <td scope='row' style='margin-left: 5px'>
+                            {$strings.myItems}
+                        </td>
                 {/if}
                 {if $showMyFavorites}
-                    <tr>
-                        <td scope='row'>
-                            {$strings.myFavorites}
-                        </td>
                         <td>
                             <input type='checkbox' {if $myFavorites == 'true'}checked{/if} name='myFavorites' value='true'>
+                        </td>
+                        <td scope='row' style='margin-left: 5px'>
+                            {$strings.myFavorites}
+                        </td>
+                {/if}
+                {if $showMySubordinates}
+                        <td>
+                            <input type='checkbox' {if $mySubordinates == 'true'}checked{/if} name='mySubordinates' value='true'>
+                        </td>
+                        <td scope='row' style='margin-left: 5px'>
+                            {$strings.mySubordinates}
+                        </td>
+                    </tr>
+                {/if}
+                {if $showMySubordinates}
+                    <tr>
+                        <td scope='row'>
+                            {$strings.mySubordinates}
+                        </td>
+                        <td>
+                            <input type='checkbox' {if $mySubordinates == 'true'}checked{/if} name='mySubordinates' value='true'>
                         </td>
                     </tr>
                 {/if}
@@ -138,7 +154,7 @@
                     {if ($smarty.foreach.searchIteration.iteration is even) and $smarty.foreach.searchIteration.iteration != $smarty.foreach.searchIteration.last}                        </tr>
                         </tr>
 
-                        <tr>
+                        <tr style='margin-bottom: 15px'>
                     {/if}
                 {/foreach}
 

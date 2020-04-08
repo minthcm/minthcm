@@ -97,4 +97,6 @@ $mod_strings = array(
     'LBL_APPRAISALITEMS' => 'Appraisal Items',
     'LBL_APPRAISAL_ITEMS_INLINE' => 'Appraisal Items',
     'LBL_LIST_TITLE' => 'Appraisal',
+    'LBL_EVALUATOR_NAME' => 'Evaluator',
+    'LBL_EVALUATOR_ID' => 'Evaluator (ID)',
 );

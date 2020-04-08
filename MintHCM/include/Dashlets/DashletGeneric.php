@@ -105,6 +105,16 @@ class DashletGeneric extends Dashlet {
      */
     var $showMyFavorites = true;
     /**
+     * Flag to display only the items of current users's subordinates.
+     * @var bool
+     */
+    var $mySubordinates = false;
+    /**
+     * Flag to display "mySubordinates" checkbox in the DashletGenericConfigure.
+     * @var bool
+     */
+    var $showMySubordinates = true;
+    /**
      * location of Smarty template file for display
      * @var string
      */
@@ -141,6 +151,7 @@ class DashletGeneric extends Dashlet {
             if(!empty($options['displayColumns'])) $this->displayColumns = $options['displayColumns'];
             if(isset($options['myItemsOnly'])) $this->myItemsOnly = $options['myItemsOnly'];
             if(isset($options['myFavorites'])) $this->myFavorites = $options['myFavorites'];
+            if(isset($options['mySubordinates'])) $this->mySubordinates = $options['mySubordinates'];
             if(isset($options['autoRefresh'])) $this->autoRefresh = $options['autoRefresh'];
         }
 
@@ -269,6 +280,7 @@ class DashletGeneric extends Dashlet {
                                      'filters' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_FILTERS'],
                                      'myItems' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_MY_ITEMS_ONLY'],
                                      'myFavorites' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_FAVORITES'],
+                                     'mySubordinates' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_SUBORDINATES'],
                                      'displayRows' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_DISPLAY_ROWS'],
                                      'title' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_TITLE'],
                                      'save' => $GLOBALS['app_strings']['LBL_SAVE_BUTTON_LABEL'],
@@ -278,12 +290,15 @@ class DashletGeneric extends Dashlet {
         $this->configureSS->assign('id', $this->id);
         $this->configureSS->assign('showMyItemsOnly', $this->showMyItemsOnly);
         $this->configureSS->assign('showMyFavorites', $this->showMyFavorites);
+        $this->configureSS->assign('showMySubordinates', $this->showMySubordinates);
         $this->configureSS->assign('myItemsOnly', $this->myItemsOnly);
         $this->configureSS->assign('myFavorites', $this->myFavorites);
+        $this->configureSS->assign('mySubordinates', $this->mySubordinates);
         $this->configureSS->assign('searchFields', $this->currentSearchFields);
         $this->configureSS->assign('showClearButton', $this->isConfigPanelClearShown);
         // title
-        $this->configureSS->assign('dashletTitle', $this->title);
+         $this->configureSS->assign('dashletTitle', $this->title);
+
 
         // display rows
         $displayRowOptions = $GLOBALS['sugar_config']['dashlet_display_row_options'];
@@ -378,6 +393,11 @@ class DashletGeneric extends Dashlet {
 
             array_push($returnArray, $favorites_sql);
         } 
+        if($this->mySubordinates){
+            $subordinates_sql = "{$this->seedBean->table_name}.assigned_user_id IN (SELECT id FROM users WHERE deleted=0 AND reports_to_id = '{$current_user->id}')";
+
+            array_push($returnArray, $subordinates_sql);
+        } 
 
         return $returnArray;
     }
@@ -413,7 +433,7 @@ class DashletGeneric extends Dashlet {
 		$this->loadCustomMetadata();
         $this->addCustomFields();
         // apply filters
-        if(isset($this->filters) || $this->myItemsOnly || $this->myFavorites) {
+        if(isset($this->filters) || $this->myItemsOnly || $this->myFavorites || $this->mySubordinates) {
             $whereArray = $this->buildWhere();
         }
 
@@ -538,7 +558,12 @@ class DashletGeneric extends Dashlet {
             }
         }
         if(!empty($req['dashletTitle'])) {
-            $options['title'] = $req['dashletTitle'];
+            if(array_key_exists($req['dashletTitle'],$GLOBALS['app_strings'])){
+                $options['title'] = $GLOBALS['app_strings'][$req['dashletTitle']];
+            }else{
+                $options['title'] = $req['dashletTitle'];
+            }
+            
         }
 
         // Don't save the options for myItemsOnly if we're not even showing the options.
@@ -559,12 +584,23 @@ class DashletGeneric extends Dashlet {
             $options['myFavorites'] = false;
             }
         }
+        if($this->showMySubordinates){
+            if(!empty($req['mySubordinates'])) {
+                $options['mySubordinates'] = $req['mySubordinates'];
+            }
+            else {
+            $options['mySubordinates'] = false;
+            }
+        }
         $options['displayRows'] = empty($req['displayRows']) ? '5' : $req['displayRows'];
         // displayColumns
         if(!empty($req['displayColumnsDef'])) {
             $options['displayColumns'] = explode('|', $req['displayColumnsDef']);
         }
         $options['autoRefresh'] = empty($req['autoRefresh']) ? '0' : $req['autoRefresh'];
+        if(!empty($req['dashletTitle'])){
+            $options['title'] = $req['dashletTitle'];
+        }
         return $options;
     }
 

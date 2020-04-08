@@ -53,6 +53,11 @@ $listViewDefs[$module_name] = array(
         'default' => true,
         'link' => true
     ),
+    'KIND_OF_ELEMENT' => array(
+        'width' => '15',
+        'label' => 'LBL_KIND_OF_ELEMENT',
+        'default' => true,
+    ),
     'TYPE' => array(
         'width' => '15',
         'label' => 'LBL_TYPE',
@@ -76,10 +81,12 @@ $listViewDefs[$module_name] = array(
         'id' => 'USERS_ID',
         'default' => true
     ),
-    'OWN_TASK' => array(
-        'width' => '15',
-        'label' => 'LBL_OWN_TASK',
-        'default' => true,
+    'ORGANIZATIONALUNIT_NAME' => array(
+        'width' => '9',
+        'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+        'module' => 'OrganizationalUnits',
+        'id' => 'ORGANIZATIONALUNIT_ID',
+        'default' => false
     ),
     'ASSIGNED_USER_NAME' => array(
         'width' => '9',

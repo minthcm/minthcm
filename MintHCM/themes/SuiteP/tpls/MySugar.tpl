@@ -83,11 +83,13 @@
                 <li role="presentation" class="active" data-forced="{$dashboardPages.$tabNum.DMForced}">
                     {* Mint end #52883 *}   
                     <a id="tab{$tabNum}" href="#tab_content_{$tabNum}" data-toggle="tab" {if !$lock_homepage}ondblclick="renameTab({$tabNum} )"{/if} onClick="retrievePage({$tabNum} );" class="hidden-xs">
-                        {$dashboardPages.$tabNum.pageTitle}
+                        {assign var="dashlet_lbl" value=$dashboardPages.$tabNum.pageTitle}
+                        {if $mod.$dashlet_lbl != ""}{$mod.$dashlet_lbl}{else}{$dashlet_lbl}{/if}
                     </a>
 
                     <a id="xstab{$tabNum}" href="#" class="visible-xs first-tab-xs dropdown-toggle" data-toggle="dropdown">
-                        {$dashboardPages.$tabNum.pageTitle}
+                        {assign var="dashlet_lbl" value=$dashboardPages.$tabNum.pageTitle}
+                        {if $mod.$dashlet_lbl != ""}{$mod.$dashlet_lbl}{else}{$dashlet_lbl}{/if}
                         <span class="suitepicon suitepicon-action-caret"></span>
                     </a>
                     <ul id="first-tab-menu-xs" class="dropdown-menu">
@@ -96,7 +98,8 @@
                             {counter name="tabCountXS" print=false}
                             <li role="presentation">
                                 <a id="tabxs{$tabCountXS}" href="#tab_content_{$tabCountXS}" data-toggle="tab"  onClick="retrievePage({$tabCountXS} );">
-                                    {$dashboardPages.$tabCountXS.pageTitle}
+                                    {assign var="dashlet_lbl" value=$dashboardPages.$tabCountXS.pageTitle}
+                                    {if $mod.$dashlet_lbl != ""}{$mod.$dashlet_lbl}{else}{$dashlet_lbl}{/if}
                                 </a>
                             </li>
                         {/foreach}
@@ -107,7 +110,8 @@
                 <li role="presentation" data-forced="{$dashboardPages.$tabNum.DMForced}">
                     {* Mint end #52883 *}  
                     <a id="tab{$tabNum}" href="#tab_content_{$tabNum}"  data-toggle="tab"  {if !$lock_homepage}ondblclick="renameTab({$tabNum} )"{/if} onClick="retrievePage({$tabNum} );" class="hidden-xs">
-                        {$dashboardPages.$tabNum.pageTitle}
+                        {assign var="dashlet_lbl" value=$dashboardPages.$tabNum.pageTitle}
+                        {if $mod.$dashlet_lbl != ""}{$mod.$dashlet_lbl}{else}{$dashlet_lbl}{/if}
                     </a>
                 </li>
             {/if}

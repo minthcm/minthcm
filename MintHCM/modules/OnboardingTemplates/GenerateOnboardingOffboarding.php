@@ -143,9 +143,7 @@ class GenerateOnboardingOffboarding
         $bean = BeanFactory::newBean('Tasks');
         $bean->name = $element->name;
         $bean->description = $element->description;
-        $bean->assigned_user_id = ((bool) $element->own_task ? $this->employee_id
-            : $element->user_id);
-        $bean->assigned_user_name = $element->user_name;
+        $bean->assigned_user_id = $this->getAssignedUserIDBasedOnKindOfElement($element);
         $date_start_object = new DateTime($this->date_start);
         $days_from_start = (int) $element->days_from_start;
         $date_start_object->modify("+{$days_from_start} days");
@@ -237,5 +235,31 @@ class GenerateOnboardingOffboarding
         $notification->setDescription(translate($app_strings['LBL_GENERATE_ONBOARDING_OFFBOARDING']));
         $notification->disableUniqueValidation();
         $notification->saveAsAlert();
+    }
+
+    protected function getAssignedUserIDBasedOnKindOfElement($element)
+    {
+        $assigned_user_id = "";
+        switch ($element->kind_of_element) {
+            case 'self';
+                $assigned_user_id = $this->employee_id;
+                break;
+            case 'employee_manager';
+                $user = BeanFactory::getBean('Users', $this->employee_id);
+                if ($user && !empty($user->reports_to_id)) {
+                    $assigned_user_id = $user->reports_to_id;
+                }
+                break;
+            case 'organizational_unit_manager';
+                $organizational_unit = BeanFactory::getBean('OrganizationalUnits', $element->organizationalunit_id);
+                if ($organizational_unit && !empty($organizational_unit->current_manager_id)) {
+                    $assigned_user_id = $organizational_unit->current_manager_id;
+                }
+                break;
+            case 'specific_user';
+                $assigned_user_id = $element->user_id;
+                break;
+        }
+        return $assigned_user_id;
     }
 }

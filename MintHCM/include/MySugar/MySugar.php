@@ -404,9 +404,14 @@ EOJS;
 		        $current_user->setPreference('dashlets', $dashletDefs, 0, $this->type);
 		    }
 		    else { // display options
-		        $json = getJSONobj();
-		        return 'result = ' . $json->encode((array('header' => $dashlet->title . ' : ' . $app_strings['LBL_OPTIONS'],
-		                                                 'body'  => $dashlet->displayOptions())));
+                $json = getJSONobj();
+                if (isset($app_strings[$dashlet->title])) {
+                    $title = $app_strings[$dashlet->title];
+                } else {
+                    $title = $dashlet->title;
+                }
+                return 'result = '.$json->encode((array('header' => $title.' : '.$app_strings['LBL_OPTIONS'],
+                        'body' => $dashlet->displayOptions())));
 		    }
 		}
 		else {

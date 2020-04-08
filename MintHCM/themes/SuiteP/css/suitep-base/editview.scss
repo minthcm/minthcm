@@ -3456,7 +3456,7 @@ table legend {
 .table-responsive.list > tbody > tr > td {
   padding: 0 0 0 $mint-rem;
   height: 54px;
-  line-height: 54px;
+  vertical-align: middle;
 
   .suitepicon {
     line-height: unset;

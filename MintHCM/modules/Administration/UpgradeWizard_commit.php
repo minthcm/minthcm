@@ -310,6 +310,14 @@ switch( $install_type ){
 
         if( $mode == "Install" || $mode=="Enable" ){
             $sugar_config['languages'] = $sugar_config['languages'] + array( $_REQUEST['new_lang_name'] => $_REQUEST['new_lang_desc'] );
+            if($mode == "Install"){
+                $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
+				if(is_file($file))
+				{
+					include($file);
+					post_install();
+				}
+            }
         }
         else if( $mode == "Uninstall" || $mode=="Disable" ){
             $new_langs = array();

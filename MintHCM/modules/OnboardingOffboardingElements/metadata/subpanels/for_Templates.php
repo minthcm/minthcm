@@ -72,6 +72,10 @@ $subpanel_layout = array(
             'target_record_key' => 'user_id',
             'target_module' => 'Users',
         ),
+        'kind_of_element' => array(
+            'vname' => 'LBL_KIND_OF_ELEMENT',
+            'width' => '15%',
+        ),
         'type' => array(
             'vname' => 'LBL_TYPE',
             'width' => '15%',
@@ -80,11 +84,6 @@ $subpanel_layout = array(
             'vname' => 'LBL_TASK_DURATION',
             'width' => '15%',
             'sortable' => false,
-        ),
-        'own_task' => array(
-            'width' => '15%',
-            'vname' => 'LBL_OWN_TASK',
-            'default' => true,
         ),
         'days_from_start' => array(
             'vname' => 'LBL_DAYS_FROM_START',

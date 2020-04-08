@@ -45,10 +45,6 @@
  */
 
 $dashletData['AppraisalsDashlet']['searchFields'] = array(
-   'name' =>
-   array(
-      'default' => '',
-   ),
    'date' =>
    array(
       'default' => '',
@@ -57,7 +53,7 @@ $dashletData['AppraisalsDashlet']['searchFields'] = array(
    array(
       'default' => '',
    ),
-   'candidature_name' =>
+   'status' =>
    array(
       'default' => '',
    ),
@@ -65,15 +61,7 @@ $dashletData['AppraisalsDashlet']['searchFields'] = array(
    array(
       'default' => '',
    ),
-   'position_name' =>
-   array(
-      'default' => '',
-   ),
    'assigned_user_name' =>
-   array(
-      'default' => '',
-   ),
-   'status' =>
    array(
       'default' => '',
    ),

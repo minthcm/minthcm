@@ -83,10 +83,6 @@ $mod_strings = array(
    'LBL_POSITION_NAME' => 'Position',
    'LBL_POSITION_ID' => 'Position (ID)',
    'LBL_ONBOARDINGS_ONBOARDINGTEMPLATES_TITLE' => 'Onboardings',
-   'LBL_EMPLOYEE_NAME' => 'Employee',
-   'LBL_START_DATE' => 'Start Date',
-   'LBL_GENERATE_BUTTON' => 'Generate',
-   'LBL_GENERATE_SUCCESS' => 'Generation has been started',
-   'LBL_GENERATE_ERROR' => 'Generating failed',
+   'LBL_GENERATE_BUTTON' => 'Generate Onboarding',
    'LBL_ONBOARDINGOFFBOARDINGELEMENTS' => 'Onboarding/Offboarding Elements',
 );

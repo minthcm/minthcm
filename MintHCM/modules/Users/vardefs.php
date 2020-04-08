@@ -818,8 +818,8 @@ $dictionary['User'] = array(
          'vname' => 'LBL_CANDIDATE_EMPLOYEE_ID_FROM_EMPLOYEE',
          'audited' => true,
       ),
-      "organizationalunits" => array(
-         'name' => 'organizationalunits',
+      "organizationalunit" => array(
+         'name' => 'organizationalunit',
          'type' => 'link',
          'relationship' => 'organizationalunits_employees',
          'source' => 'non-db',
@@ -835,7 +835,7 @@ $dictionary['User'] = array(
          'vname' => 'LBL_ORGANIZATIONALUNIT_NAME',
          'save' => true,
          'id_name' => 'organizationalunit_id',
-         'link' => 'organizationalunits',
+         'link' => 'organizationalunit',
          'module' => 'OrganizationalUnits',
          'table' => 'organizationalunits',
          'rname' => 'name',
@@ -846,6 +846,7 @@ $dictionary['User'] = array(
          'type' => 'link',
          'vname' => 'LBL_ORGANIZATIONALUNIT_ID',
          'dbType' => 'id',
+    'join_name' => 'organizationalunits_employees',
       ),
       "ideas" => array(
          'name' => 'ideas',

@@ -55,7 +55,6 @@ $dashletData['ReservationsDashlet']['searchFields'] = array(
    'date_modified' => array('default' => ''),
    'employee_name' => array('default' => ''),
    'resource_name' => array('default' => ''),
-   'DELEGATION_NAME' => array('default' => ''),
    'assigned_user_id' => array(
       'type' => 'assigned_user_name',
       'default' => $current_user->name

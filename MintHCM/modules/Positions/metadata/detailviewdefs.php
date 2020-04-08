@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -56,59 +55,66 @@
  */
 $module_name = 'Positions';
 $viewdefs[$module_name]['DetailView'] = array(
-   'templateMeta' => array( 'form' => array( 'buttons' => array( 'EDIT', 'DUPLICATE', 'DELETE', 'FIND_DUPLICATES',
-         ) ),
-      'maxColumns' => '2',
-      'widths' => array(
-         array( 'label' => '10', 'field' => '30' ),
-         array( 'label' => '10', 'field' => '30' )
-      ),
-      'useTabs' => true,
-      'tabDefs' =>
-      array(
-         'DEFAULT' =>
-         array(
-            'newTab' => true,
-            'panelDefault' => 'expanded',
-         ),
-         'LBL_SHOW_MORE_INFORMATION' =>
-         array(
-            'newTab' => true,
-            'panelDefault' => 'expanded',
-         ),
-      ),
-   ),
-   'panels' => array(
-      'default' => array(
-         array(
-            'name',
-            'status',
-         ),
-         array(
-            'organizationalunits_leader_name',            
-            'positions_supervision_name',
-         ),
-         array(
-            'description',
-         ),
-      ),
-      'LBL_SHOW_MORE_INFORMATION' => array(
-         array(
-            'assigned_user_name', ''
-         ),
-         array(
+    'templateMeta' => array('form' => array('buttons' => array('EDIT', 'DUPLICATE', 'DELETE', 'FIND_DUPLICATES',
+    )),
+        'maxColumns' => '2',
+        'widths' => array(
+            array('label' => '10', 'field' => '30'),
+            array('label' => '10', 'field' => '30'),
+        ),
+        'useTabs' => true,
+        'tabDefs' => array(
+            'DEFAULT' => array(
+                'newTab' => true,
+                'panelDefault' => 'expanded',
+            ),
+            'LBL_SHOW_MORE_INFORMATION' => array(
+                'newTab' => true,
+                'panelDefault' => 'expanded',
+            ),
+        ),
+    ),
+    'panels' => array(
+        'default' => array(
             array(
-               'name' => 'date_entered',
-               'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
-               'label' => 'LBL_DATE_ENTERED',
+                'name',
+                'status',
             ),
             array(
-               'name' => 'date_modified',
-               'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
-               'label' => 'LBL_DATE_MODIFIED',
+                'organizationalunits_leader_name',
+                'positions_supervision_name',
             ),
-         ),
-      ),
-   )
+            array(
+                'offboardingtemplate_name',
+                'onboardingtemplate_name',
+            ),
+            array(
+                array(
+                    'name' => 'parent_name',
+                    'customLabel' => '{sugar_translate label=\'LBL_MODULE_NAME\' module=$fields.parent_type.value}',
+                ),
+                '',
+            ),
+            array(
+                'description',
+            ),
+        ),
+        'LBL_SHOW_MORE_INFORMATION' => array(
+            array(
+                'assigned_user_name', '',
+            ),
+            array(
+                array(
+                    'name' => 'date_entered',
+                    'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
+                    'label' => 'LBL_DATE_ENTERED',
+                ),
+                array(
+                    'name' => 'date_modified',
+                    'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
+                    'label' => 'LBL_DATE_MODIFIED',
+                ),
+            ),
+        ),
+    ),
 );
-?>

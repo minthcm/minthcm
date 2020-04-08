@@ -49,7 +49,7 @@ if ( !defined('sugarEntry') ) {
 }
 
 require_once('include/SugarQueue/SugarJobQueue.php');
-SugarAutoLoader::requireWithCustom('include/ScheduleGenerateOnboardingOffboarding/ScheduleGenerateOnboardingOffboarding.php');
+SugarAutoLoader::requireWithCustom('include/GenerateOnboardingOffboarding/ScheduleGenerateOnboardingOffboarding.php');
 
 $module_name = filter_input(INPUT_GET, 'module_name', FILTER_SANITIZE_STRING);
 $template_id = filter_input(INPUT_GET, 'template_id', FILTER_SANITIZE_STRING);

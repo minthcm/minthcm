@@ -95,34 +95,6 @@ $layout_defs["Positions"]["subpanel_setup"] = array(
             ),
         ),
     ),
-    'onboardingtemplates' => array(
-        'order' => 100,
-        'module' => 'OnboardingTemplates',
-        'subpanel_name' => 'default',
-        'sort_order' => 'asc',
-        'sort_by' => 'id',
-        'title_key' => 'LBL_ONBOARDINGTEMPLATES_POSITIONS_FROM_ONBOARDINGTEMPLATES_TITLE',
-        'get_subpanel_data' => 'onboardingtemplates',
-        'top_buttons' => array(
-            array(
-                'widget_class' => 'SubPanelTopButtonQuickCreate',
-            ),
-        ),
-    ),
-    'offboardingtemplates' => array(
-        'order' => 100,
-        'module' => 'OffboardingTemplates',
-        'subpanel_name' => 'default',
-        'sort_order' => 'asc',
-        'sort_by' => 'id',
-        'title_key' => 'LBL_OFFBOARDINGTEMPLATES_POSITIONS_FROM_OFFBOARDINGTEMPLATES_TITLE',
-        'get_subpanel_data' => 'offboardingtemplates',
-        'top_buttons' => array(
-            array(
-                'widget_class' => 'SubPanelTopButtonQuickCreate',
-            ),
-        ),
-    ),
     'positions_supervision_left' => array(
         'order' => 200,
         'module' => 'Positions',

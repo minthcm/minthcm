@@ -572,6 +572,7 @@ class SugarView
             );
             $ss->assign("CURRENT_USER_ID", $current_user->id);
             $ss->assign("CURRENT_USER_HAS_PHOTO", !empty($current_user->photo)); // MintHCM #63083
+            $ss->assign("CURRENT_USER_DATE_MODIFIED", $current_user->date_modified); //MintHCM #67873
 
 	    // get the last viewed records
 	    $favorites = BeanFactory::getBean('Favorites');

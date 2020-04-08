@@ -56,6 +56,7 @@ function installMintHCMSettings()
     global $sugar_config;
 
     $sugar_config['minthcm_cloud'] = false; // MintHCM #62039
+    $sugar_config['subpanel_count_method'] = 'count';
 
     ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');

@@ -53,7 +53,7 @@ class CandidaturesController extends SugarController
         $record_id = filter_input(INPUT_GET, 'record_id', FILTER_SANITIZE_SPECIAL_CHARS);
         $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $convert_candidature = new CandidatureConverter($record_id, $login);
-        echo '<id>' . $convert_candidature->convert() . '</id>';
+        echo $convert_candidature->convert();
     }
 
 }

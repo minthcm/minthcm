@@ -94,9 +94,19 @@ class Onboardings extends Basic
     protected function concatName()
     {
         global $timedate, $current_user;
-        $test_converted_to_db = $timedate->to_db($this->date_start);
-        $coverted_to_user_date = $timedate->to_display_date_time($test_converted_to_db, $current_user);
-        $converted_to_db_date = $timedate->to_db_date($coverted_to_user_date, false);
+        $test_converted_to_db = $this->date_start;
+        $date_time_regex = '/^\d\d\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[0-9]|[0-5][0-9]):(0[0-9]|[0-5][0-9])$/m';
+        preg_match($date_time_regex, $test_converted_to_db, $matches);
+        if (empty($matches)) {
+            $test_converted_to_db = $timedate->to_db($test_converted_to_db);
+        }
+        $converted_to_db_date = '';
+        if (empty($test_converted_to_db)) {
+            $GLOBALS['log']->fatal("Onboardings::concatName(): Incorrect date_start format, given: {$this->date_start}, returns empty string");
+        } else {
+            $coverted_to_user_date = $timedate->to_display_date_time($test_converted_to_db, $current_user);
+            $converted_to_db_date = $timedate->to_db_date($coverted_to_user_date, false);
+        }
         $employee = BeanFactory::getBean('Employees', $this->employee_id);
         $this->name = $employee->last_name . ' ' . $employee->first_name . ' - ' . $converted_to_db_date;
     }

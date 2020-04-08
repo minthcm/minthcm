@@ -1,52 +1,55 @@
-var MintHCMPopup = function ( title, body, buttons, options ) {
+var MintHCMPopup = function (title, body, buttons, options, onShow) {
 
-   if ( !(this instanceof MintHCMPopup) ) {
-      return new MintHCMPopup( title, body, buttons, options );
+   if (!(this instanceof MintHCMPopup)) {
+      return new MintHCMPopup(title, body, buttons, options, onShow);
    }
 
    this.id = "MintHCMPopup";
    this.title = title || "";
    this.body = body || "";
-   this.buttons = buttons || [ ];
-   this.options = options || { };
+   this.buttons = buttons || [];
+   this.options = options || {};
+   this.onShow = onShow || null;
 
    this.init = function () {
-      var _this = this;
-      if ( undefined !== $( '#' + _this.id ).get( 0 ) ) {
-         $( '#' + _this.id ).remove();
+      if (undefined !== $('#' + this.id).get(0)) {
+         $('#' + this.id).remove();
       }
-      $( 'body' ).append( '<div id="' + _this.id + '">' + _this.getBody() + '</div>' );
-      if ( typeof _this.options.noCloseButton !== 'undefined' && _this.options.noCloseButton ) {
-         $( '.MintHCMPopup-header' ).removeClass( 'MintHCMPopup-close' );
+      $('body').append('<div id="' + this.id + '">' + this.getBody() + '</div>');
+      if (typeof this.options.noCloseButton !== 'undefined' && this.options.noCloseButton) {
+         $('.MintHCMPopup-header').removeClass('MintHCMPopup-close');
       } else {
-         $( '.MintHCMPopup-close' ).click( MintHCMPopup.close );
+         $('.MintHCMPopup-close').click(MintHCMPopup.close);
       }
-      _this.setButtonsEvents();
+      this.setButtonsEvents();
+      if (this.onShow) {
+         this.onShow();
+      }
    };
 
    this.getBody = function () {
-      var body = _.template( '<div class="MintHCMPopup-container"><div class="MintHCMPopup-header MintHCMPopup-close"><div class="MintHCMPopup-title"><%= title %></div><span class="suitepicon suitepicon-action-clear"></span><div style="clear: both;"></div></div><div class="MintHCMPopup-body"><%= body %></div><div class="MintHCMPopup-buttons"><%= buttons %></div></div>' );
-      return body( {
+      var body = _.template('<div class="MintHCMPopup-container"><div class="MintHCMPopup-header MintHCMPopup-close"><div class="MintHCMPopup-title"><%= title %></div><span class="suitepicon suitepicon-action-clear"></span><div style="clear: both;"></div></div><div class="MintHCMPopup-body"><%= body %></div><div class="MintHCMPopup-buttons"><%= buttons %></div></div>');
+      return body({
          title: this.title,
          body: this.body,
          buttons: this.getButtons()
-      } );
+      });
    };
 
    this.getButtons = function () {
-      var button = _.template( '<input type="button" value="<%= text %>" />' );
+      var button = _.template('<input type="button" value="<%= text %>" />');
       var buttons = "";
-      this.buttons.forEach( function ( btn ) {
-         buttons += button( {text: btn.text} );
-      } );
+      this.buttons.forEach(function (btn) {
+         buttons += button({ text: btn.text });
+      });
       return buttons;
    };
 
    this.setButtonsEvents = function () {
-      var _this = this;
-      $( '.MintHCMPopup-buttons input' ).each( function ( index ) {
-         $( this ).click( _this.buttons[index].click );
-      } );
+      const _this = this;
+      $('.MintHCMPopup-buttons input').each(function (index) {
+         $(this).click(_this.buttons[index].click);
+      });
    };
 
    this.init();
@@ -54,5 +57,5 @@ var MintHCMPopup = function ( title, body, buttons, options ) {
 };
 
 MintHCMPopup.close = function () {
-   $( '#MintHCMPopup' ).fadeOut();
+   $('#MintHCMPopup').fadeOut();
 };

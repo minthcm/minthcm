@@ -101,6 +101,20 @@ $layout_defs["OrganizationalUnits"]["subpanel_setup"] = array(
          ),
       ),
    ),
+   'onboardingoffboardingelements' => array(
+      'order' => 200,
+      'module' => 'OnboardingOffboardingElements',
+      'subpanel_name' => 'default',
+      'sort_order' => 'asc',
+      'sort_by' => 'id',
+      'title_key' => 'LBL_ONBOARDINGOFFBOARDINGELEMENTS',
+      'get_subpanel_data' => 'onboardingoffboardingelements',
+      'top_buttons' => array(
+         array(
+            'widget_class' => 'SubPanelTopButtonQuickCreate',
+         ),
+      ),
+   ),
    'employees' => array(
       'order' => 200,
       'module' => 'Employees',

@@ -124,6 +124,13 @@ $searchdefs [$module_name] = array(
             'default' => true,
             'width' => '10%',
          ),
+         'evaluator_name' => array(
+            'name' => 'evaluator_name',
+            'label' => 'LBL_EVALUATOR_NAME',
+            'type' => 'relate',
+            'default' => true,
+            'width' => '10%',
+         ),
          'assigned_user_id' =>
          array(
             'name' => 'assigned_user_id',

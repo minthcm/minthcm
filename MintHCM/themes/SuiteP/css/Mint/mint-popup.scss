@@ -8,7 +8,7 @@
     z-index: 9999;
 
     .MintHCMPopup-container {
-        width: 400px; 
+        min-width: 400px; 
         max-height: 400px; 
         background-color: $color-101;
         position: fixed; 
