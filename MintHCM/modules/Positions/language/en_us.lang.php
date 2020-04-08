@@ -124,4 +124,6 @@ $mod_strings = array(
     'LBL_ORGANIZATIONALUNITS_POSITIONS_LEADER_TITLE' => 'Organizational unit leader',
     'LBL_SALARYRANGE_SUBPANEL_TITLE' => 'Salary Ranges',
     'LBL_TERMSOFEMPLOYMENT_SUBPANEL_TITLE' => 'Terms of Employment',
+    'LBL_OFFBOARDINGTEMPLATE_NAME' => 'Offboarding Template Name',
+    'LBL_ONBOARDINGTEMPLATE_NAME' => 'Onboarding Template Name',
 );

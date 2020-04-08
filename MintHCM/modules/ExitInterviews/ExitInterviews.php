@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,50 +36,61 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-class ExitInterviews extends Basic {
+class ExitInterviews extends Basic
+{
 
-   public $new_schema = true;
-   public $module_dir = 'ExitInterviews';
-   public $object_name = 'ExitInterviews';
-   public $table_name = 'exitinterviews';
-   public $importable = true;
-   public $id;
-   public $name;
-   public $date_entered;
-   public $date_modified;
-   public $modified_user_id;
-   public $modified_by_name;
-   public $created_by;
-   public $created_by_name;
-   public $description;
-   public $deleted;
-   public $created_by_link;
-   public $modified_user_link;
-   public $assigned_user_id;
-   public $assigned_user_name;
-   public $assigned_user_link;
-   public $SecurityGroups;
+    public $new_schema = true;
+    public $module_dir = 'ExitInterviews';
+    public $object_name = 'ExitInterviews';
+    public $table_name = 'exitinterviews';
+    public $importable = true;
+    public $id;
+    public $name;
+    public $date_entered;
+    public $date_modified;
+    public $modified_user_id;
+    public $modified_by_name;
+    public $created_by;
+    public $created_by_name;
+    public $description;
+    public $deleted;
+    public $created_by_link;
+    public $modified_user_link;
+    public $assigned_user_id;
+    public $assigned_user_name;
+    public $assigned_user_link;
+    public $SecurityGroups;
 
-   public function bean_implements($interface) {
-      if ( "ACL" === $interface ) {
-         return true;
-      } else {
-         return false;
-      }
-   }
+    public function bean_implements($interface)
+    {
+        if ("ACL" === $interface) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-   public function save($check_notify = false) {
-      $id = parent::save($check_notify);
-      require_once 'modules/ExitInterviews/SugarFeeds/ExitInterviewsFeed.php';
-      $feed = new ExitInterviewsFeed();
-      $feed->pushFeed($this, null, null);
-      return $id;
-   }
+    public function save($check_notify = false)
+    {
+        require_once 'modules/Onboardings/OnboardingStatus.php';
+        $status_before = $this->fetched_row['status'];
+        $id = parent::save($check_notify);
+        if (!empty($this->offboarding_id) && $this->status != $status_before
+            && $this->status == 'held') {
+            $boarding_bean = BeanFactory::getBean('Offboardings', $this->offboarding_id);
+            $onboarding_status = new OnboardingStatus();
+            $onboarding_status->closeIfActivitiesAreHeld($boarding_bean);
+        }
+        require_once 'modules/ExitInterviews/SugarFeeds/ExitInterviewsFeed.php';
+        $feed = new ExitInterviewsFeed();
+        $feed->pushFeed($this, null, null);
+        return $id;
+    }
 
 }

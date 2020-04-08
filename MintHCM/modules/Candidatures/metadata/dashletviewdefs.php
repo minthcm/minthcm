@@ -67,7 +67,7 @@ $dashletData['CandidaturesDashlet']['searchFields'] = array(
    'date_modified' => array(
       'default' => ''
    ),
-   'team_id' => array(
+   'status' => array(
       'default' => ''
    ),
    'assigned_user_id' => array(

@@ -239,6 +239,16 @@ $dictionary['OrganizationalUnits'] = array(
          'audited' => false,
          'reportable' => true,
       ),
+      "onboardingoffboardingelements" => array(
+         'name' => 'OnboardingOffboardingElements',
+         'type' => 'link',
+         'relationship' => 'organizationalunits_onboardingoffboardingelements',
+         'source' => 'non-db',
+         'module' => 'OnboardingOffboardingElements',
+         'bean_name' => 'OnboardingOffboardingElements',
+         'side' => 'left',
+         'vname' => 'LBL_ONBOARDINGOFFBOARDINGELEMENTS',
+      ),
    ),
    'relationships' => array(
       "employees_organizationalunits" => array(

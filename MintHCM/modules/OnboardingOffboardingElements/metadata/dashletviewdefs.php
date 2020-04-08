@@ -54,16 +54,22 @@ $dashletData['OnboardingOffboardingElementsDashlet']['searchFields'] = array(
         'type' => 'assigned_user_name',
         'label' => 'LBL_ASSIGNED_TO',
     ),
+    'kind_of_element' => array('default' => ''),
     'type' => array('default' => ''),
     'days_from_start' => array('default' => ''),
     'user_name' => array('default' => ''),
-    'own_task' => array('default' => ''),
+    'organizationalunit_name' => array('default' => ''),
 );
 $dashletData['OnboardingOffboardingElementsDashlet']['columns']      = array(
     'name' => array(
         'width' => '40',
         'label' => 'LBL_LIST_NAME',
         'link' => true,
+        'default' => true
+    ),
+    'kind_of_element' => array(
+        'width' => '15',
+        'label' => 'LBL_KIND_OF_ELEMENT',
         'default' => true
     ),
     'type' => array(
@@ -99,12 +105,13 @@ $dashletData['OnboardingOffboardingElementsDashlet']['columns']      = array(
         'width' => '8',
         'label' => 'LBL_USERS_NAME'
     ),
+    'organizationalunit_name' => array(
+        'width' => '8',
+        'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+        'default' => false
+    ),
     'assigned_user_name' => array(
         'width' => '8',
         'label' => 'LBL_LIST_ASSIGNED_USER'
-    ),
-    'own_task' => array(
-        'width' => '8',
-        'label' => 'LBL_OWN_TASK',
     ),
 );

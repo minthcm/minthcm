@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,42 +36,54 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 
 $module_name = 'OnboardingOffboardingElements';
 $subpanel_layout = array(
-   'top_buttons' => array(
-      array( 'widget_class' => 'SubPanelTopCreateButton' ),
-   ),
-   'where' => '',
-   'list_fields' => array(
-      'name' => array(
-         'vname' => 'LBL_NAME',
-         'widget_class' => 'SubPanelDetailViewLink',
-         'width' => '45%',
-      ),
-      'own_task' => array(
-         'width' => '15%',
-         'vname' => 'LBL_OWN_TASK',
-         'default' => true,
-      ),
-      'date_modified' => array(
-         'vname' => 'LBL_DATE_MODIFIED',
-         'width' => '45%',
-      ),
-      'edit_button' => array(
-         'vname' => 'LBL_EDIT_BUTTON',
-         'widget_class' => 'SubPanelEditButton',
-         'module' => $module_name,
-         'width' => '4%',
-      ),
-   ),
+    'top_buttons' => array(
+        array('widget_class' => 'SubPanelTopCreateButton'),
+    ),
+    'where' => '',
+    'list_fields' => array(
+        'name' => array(
+            'vname' => 'LBL_NAME',
+            'widget_class' => 'SubPanelDetailViewLink',
+            'width' => '25%',
+        ),
+        'kind_of_element' => array(
+            'vname' => 'LBL_KIND_OF_ELEMENT',
+            'width' => '15%',
+        ),
+        'type' => array(
+            'vname' => 'LBL_TYPE',
+            'width' => '15%',
+        ),
+        'task_duration' => array(
+            'vname' => 'LBL_TASK_DURATION',
+            'width' => '15%',
+            'sortable' => false,
+        ),
+        'days_from_start' => array(
+            'vname' => 'LBL_DAYS_FROM_START',
+            'width' => '15%',
+        ),
+        'date_modified' => array(
+            'vname' => 'LBL_DATE_MODIFIED',
+            'width' => '45%',
+        ),
+        'edit_button' => array(
+            'vname' => 'LBL_EDIT_BUTTON',
+            'widget_class' => 'SubPanelEditButton',
+            'module' => $module_name,
+            'width' => '4%',
+        ),
+    ),
 );

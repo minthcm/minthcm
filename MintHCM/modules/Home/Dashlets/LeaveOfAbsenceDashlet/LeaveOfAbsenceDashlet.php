@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 if (!defined('sugarEntry') || !sugarEntry) {
@@ -50,9 +50,9 @@ require_once 'include/Sugar_Smarty.php';
 
 class LeaveOfAbsenceDashlet extends Dashlet
 {
-    protected $url               = 'http://www.sugarcrm.com/crm/aggregator/rss/1';
-    protected $height            = '200'; // height of the pad
-    protected $images_dir        = 'modules/Home/Dashlets/LeaveOfAbsenceDashlet/images';
+    protected $url = 'http://www.sugarcrm.com/crm/aggregator/rss/1';
+    protected $height = '200'; // height of the pad
+    protected $images_dir = 'modules/Home/Dashlets/LeaveOfAbsenceDashlet/images';
     protected $show_days_of_week = [
         'sunday' => false, // 0 - sunday
         'monday' => true,
@@ -103,7 +103,7 @@ class LeaveOfAbsenceDashlet extends Dashlet
         parent::__construct($id); // call parent constructor
 
         $this->isConfigurable = false; // dashlet is configurable
-        $this->hasScript      = true; // dashlet has javascript attached to it
+        $this->hasScript = true; // dashlet has javascript attached to it
     }
 
     /**
@@ -113,7 +113,7 @@ class LeaveOfAbsenceDashlet extends Dashlet
      */
     public function display()
     {
-        $ss   = new Sugar_Smarty();
+        $ss = new Sugar_Smarty();
         $ss->assign('saving', $this->dashletStrings['LBL_SAVING']);
         $ss->assign('saved', $this->dashletStrings['LBL_SAVED']);
         $ss->assign('DASHLET_STRINGS', $this->dashletStrings);
@@ -123,8 +123,8 @@ class LeaveOfAbsenceDashlet extends Dashlet
         $ss->assign('lang', $lang);
         $ss->assign('first_day_of_week', $this->first_day_of_week);
         $ss->assign('show_days_of_week', $this->show_days_of_week);
-        $str  = $ss->fetch('modules/Home/Dashlets/LeaveOfAbsenceDashlet/LeaveOfAbsenceDashlet.tpl');
-        return parent::display($this->dashletStrings['LBL_DBLCLICK_HELP']).$str;
+        $str = $ss->fetch('modules/Home/Dashlets/LeaveOfAbsenceDashlet/LeaveOfAbsenceDashlet.tpl');
+        return parent::display($this->dashletStrings['LBL_DBLCLICK_HELP']) . $str;
     }
 
     public function displayScript()
@@ -144,8 +144,8 @@ class LeaveOfAbsenceDashlet extends Dashlet
         $ss->assign('title', $this->title);
         $ss->assign('show_days_of_week', $this->show_days_of_week);
 
-        return parent::displayOptions().
-            $ss->fetch('modules/Home/Dashlets/LeaveOfAbsenceDashlet/LeaveOfAbsenceDashletOptions.tpl');
+        return parent::displayOptions() .
+        $ss->fetch('modules/Home/Dashlets/LeaveOfAbsenceDashlet/LeaveOfAbsenceDashletOptions.tpl');
     }
 
     /**
@@ -156,16 +156,16 @@ class LeaveOfAbsenceDashlet extends Dashlet
      */
     public function saveOptions($req)
     {
-        $options                      = array();
-        $options['title']             = $req['title'];
-        $options['url']               = $req['url'];
-        $options['height']            = $req['height'];
-        $options['autoRefresh']       = 0;
+        $options = array();
+        $options['title'] = $req['title'];
+        $options['url'] = $req['url'];
+        $options['height'] = $req['height'];
+        $options['autoRefresh'] = 0;
         $options['show_days_of_week'] = $this->show_days_of_week;
 
         foreach (array_keys($options['show_days_of_week']) as $day) {
             $options['show_days_of_week'][$day] = false;
-            if (isset($req['show_'.$day])) {
+            if (isset($req['show_' . $day])) {
                 $options['show_days_of_week'][$day] = true;
             }
         }
@@ -187,7 +187,11 @@ class LeaveOfAbsenceDashlet extends Dashlet
         $template = new Sugar_Smarty();
 
         $template->assign('is_locked', $this->is_locked);
-        $template->assign('DASHLET_TITLE', $this->title);
+        $title = $this->title;
+        if (!empty($GLOBALS['app_strings'][$title])) {
+            $title = $GLOBALS['app_strings'][$title];
+        }
+        $template->assign('DASHLET_TITLE', $title);
         $template->assign('DASHLET_ID', $this->id);
         $template->assign('DASHLET_MODULE', 'Calendar');
         $template->assign('DASHLET_BUTTON_ARIA_EDIT', translate('LBL_DASHLET_EDIT', 'Home'));

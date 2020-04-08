@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -46,8 +46,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-require_once('modules/Calendar/Calendar.php');
-require_once('include/Dashlets/Dashlet.php');
+require_once 'modules/Calendar/Calendar.php';
+require_once 'include/Dashlets/Dashlet.php';
 
 class CalendarDashlet extends Dashlet
 {
@@ -112,9 +112,9 @@ class CalendarDashlet extends Dashlet
             return parent::display() . "Only one Calendar dashlet is allowed.";
         }
 
-        require_once('modules/Calendar/Calendar.php');
-        require_once('modules/Calendar/CalendarDisplay.php');
-        require_once("modules/Calendar/CalendarGrid.php");
+        require_once 'modules/Calendar/Calendar.php';
+        require_once 'modules/Calendar/CalendarDisplay.php';
+        require_once "modules/Calendar/CalendarGrid.php";
 
         global $cal_strings, $current_language;
         $cal_strings = return_module_language($current_language, 'Calendar');
@@ -137,7 +137,7 @@ class CalendarDashlet extends Dashlet
         ob_end_clean();
 
 // MintHCM QuickFix START - refresh Calendar Dashlet on load
-//        return parent::display() . $str;
+        //        return parent::display() . $str;
         $qfix = "
             <script>
                 if ( typeof calendar_dashlet_reloaded === 'undefined' ) {
@@ -172,7 +172,7 @@ class CalendarDashlet extends Dashlet
         $ss->assign('id', $this->id);
 
         return parent::displayOptions() .
-            $ss->fetch('modules/Calendar/Dashlets/CalendarDashlet/CalendarDashletOptions.tpl');
+        $ss->fetch('modules/Calendar/Dashlets/CalendarDashlet/CalendarDashletOptions.tpl');
     }
 
     /**
@@ -192,17 +192,22 @@ class CalendarDashlet extends Dashlet
     {
         return '';
     }
-   public function getHeader($text = '') {
-      $template = new Sugar_Smarty();
+    public function getHeader($text = '')
+    {
+        $template = new Sugar_Smarty();
 
-      $template->assign('is_locked', $this->is_locked);
-      $template->assign('DASHLET_TITLE', $this->title);
-      $template->assign('DASHLET_ID', $this->id);
-      $template->assign('DASHLET_MODULE', 'Calendar');
-      $template->assign('DASHLET_BUTTON_ARIA_EDIT', translate('LBL_DASHLET_EDIT', 'Home'));
-      $template->assign('DASHLET_BUTTON_ARIA_REFRESH', translate('LBL_DASHLET_REFRESH', 'Home'));
-      $template->assign('DASHLET_BUTTON_ARIA_DELETE', translate('LBL_DASHLET_DELETE', 'Home'));
+        $template->assign('is_locked', $this->is_locked);
+        $title = $this->title;
+        if (!empty($GLOBALS['app_strings'][$title])) {
+            $title = $GLOBALS['app_strings'][$title];
+        }
+        $template->assign('DASHLET_TITLE', $title);
+        $template->assign('DASHLET_ID', $this->id);
+        $template->assign('DASHLET_MODULE', 'Calendar');
+        $template->assign('DASHLET_BUTTON_ARIA_EDIT', translate('LBL_DASHLET_EDIT', 'Home'));
+        $template->assign('DASHLET_BUTTON_ARIA_REFRESH', translate('LBL_DASHLET_REFRESH', 'Home'));
+        $template->assign('DASHLET_BUTTON_ARIA_DELETE', translate('LBL_DASHLET_DELETE', 'Home'));
 
-      return $template->fetch('include/Dashlets/DashletHeader.tpl');
-   }
+        return $template->fetch('include/Dashlets/DashletHeader.tpl');
+    }
 }

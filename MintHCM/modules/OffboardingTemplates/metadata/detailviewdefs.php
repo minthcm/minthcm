@@ -70,7 +70,7 @@ $viewdefs [$module_name] = array(
                         'name' => 'generate_button',
                         'id' => 'generate_button',
                         'title' => '{$MOD.LBL_GENERATE_BUTTON}',
-                        'onClick' => 'generateOnboardingOffboarding.init()',
+                        'onClick' => 'generateOnboardingOffboarding.init(generateOnboardingOffboarding)',
                      ),
                      'template' => '[CONTENT]',
                   ),
@@ -101,12 +101,6 @@ $viewdefs [$module_name] = array(
             array(
                'newTab' => true,
                'panelDefault' => 'expanded',
-            ),
-         ),
-         'includes' =>
-         array(
-            array(
-               'file' => 'modules/OnboardingTemplates/js/view.detail.js',
             ),
          ),
       ),

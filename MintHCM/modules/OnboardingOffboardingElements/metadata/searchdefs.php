@@ -56,13 +56,6 @@ $searchdefs[$module_name] = array(
       ),
       'advanced_search' => array(
          'name',
-         'own_task' =>
-         array(
-            'type' => 'bool',
-            'label' => 'LBL_OWN_TASK',
-            'width' => '10%',
-            'name' => 'own_task',
-         ),
          array(
             'name' => 'assigned_user_id',
             'label' => 'LBL_ASSIGNED_TO',
@@ -75,11 +68,25 @@ $searchdefs[$module_name] = array(
             'function' => array( 'name' => 'get_user_array', 'params' => array( false ) ),
             'name' => 'user_id',
          ),
+         'kind_of_element' => array(
+            'name' => 'kind_of_element',
+            'label' => 'LBL_KIND_OF_ELEMENT',
+            'type' => 'enum',
+         ),
          'type' => array(
             'name' => 'type',
             'label' => 'LBL_TYPE',
             'type' => 'enum',
-            'options' => 'onoff_elements_list'
+         ),
+         'organizationalunit_name' =>
+         array(
+            'type' => 'relate',
+            'link' => true,
+            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+            'id' => 'ORGANIZATIONALUNIT_ID',
+            'width' => '10%',
+            'default' => true,
+            'name' => 'organizationalunit_name',
          ),
          'days_from_start',
          'date_modified' =>

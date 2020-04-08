@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $dictionary['OnboardingOffboardingElements'] = array(
@@ -48,8 +48,26 @@ $dictionary['OnboardingOffboardingElements'] = array(
     'duplicate_merge' => true,
     'importable' => true,
     'fields' => array(
-        'type' =>
-        array(
+        'kind_of_element' => array(
+            'required' => true,
+            'name' => 'kind_of_element',
+            'vname' => 'LBL_KIND_OF_ELEMENT',
+            'type' => 'enum',
+            'massupdate' => '1',
+            'importable' => 'true',
+            'duplicate_merge' => 'disabled',
+            'duplicate_merge_dom_value' => '0',
+            'audited' => true,
+            'inline_edit' => '',
+            'reportable' => true,
+            'unified_search' => false,
+            'merge_filter' => 'disabled',
+            'len' => 100,
+            'size' => '20',
+            'options' => 'kind_of_element_list',
+            'studio' => 'visible',
+        ),
+        'type' => array(
             'required' => true,
             'name' => 'type',
             'vname' => 'LBL_TYPE',
@@ -72,8 +90,7 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'studio' => 'visible',
             'dependency' => false,
         ),
-        'task_duration_hours' =>
-        array(
+        'task_duration_hours' => array(
             'name' => 'task_duration_hours',
             'vname' => 'LBL_TASK_DURATION_HOURS',
             'type' => 'int',
@@ -86,8 +103,7 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'duplicate_merge' => 'disabled',
             'duplicate_merge_dom_value' => '0',
         ),
-        'task_duration_minutes' =>
-        array(
+        'task_duration_minutes' => array(
             'name' => 'task_duration_minutes',
             'vname' => 'LBL_TASK_DURATION_MINUTES',
             'type' => 'int',
@@ -103,8 +119,7 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'duplicate_merge' => 'disabled',
             'duplicate_merge_dom_value' => '0',
         ),
-        'days_from_start' =>
-        array(
+        'days_from_start' => array(
             'required' => true,
             'name' => 'days_from_start',
             'vname' => 'LBL_DAYS_FROM_START',
@@ -151,36 +166,13 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'table' => 'users',
             'rname' => 'name',
             'required' => true,
-            'vt_dependency' => "not(equals(\$own_task,'1'))",
+            'vt_dependency' => "equals(\$kind_of_element,'specific_user')",
         ),
         "user_id" => array(
             'name' => 'user_id',
             'relationship' => 'users_onboardingoffboardingelements',
             'type' => 'id',
             'vname' => 'LBL_USERS_ID',
-        ),
-        'own_task' =>
-        array(
-            'required' => false,
-            'name' => 'own_task',
-            'vname' => 'LBL_OWN_TASK',
-            'type' => 'bool',
-            'massupdate' => 0,
-            'default' => '0',
-            'no_default' => false,
-            'comments' => '',
-            'help' => '',
-            'importable' => 'true',
-            'duplicate_merge' => 'enabled',
-            'duplicate_merge_dom_value' => '1',
-            'audited' => true,
-            'inline_edit' => true,
-            'reportable' => true,
-            'unified_search' => false,
-            'merge_filter' => 'disabled',
-            'len' => '255',
-            'size' => '20',
-            'vt_dependency' => "equals(\$type,'task')"
         ),
         'onboardingtemplates' => array(
             'name' => 'onboardingtemplates',
@@ -200,6 +192,49 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'source' => 'non-db',
             'vname' => 'LBL_OFFBOARDINGTEMPLATES',
         ),
+        'organizationalunits' => array(
+            'name' => 'organizationalunits',
+            'type' => 'link',
+            'relationship' => 'organizationalunits_onboardingoffboardingelements',
+            'source' => 'non-db',
+            'module' => 'OrganizationalUnits',
+            'bean_name' => 'OrganizationalUnits',
+            'vname' => 'LBL_ORGANIZATIONALUNITS',
+            'id_name' => 'organizationalunit_id',
+        ),
+        'organizationalunit_name' => array(
+            'name' => 'organizationalunit_name',
+            'type' => 'relate',
+            'source' => 'non-db',
+            'vname' => 'LBL_ORGANIZATIONALUNIT_NAME',
+            'save' => true,
+            'id_name' => 'organizationalunit_id',
+            'link' => 'organizationalunits',
+            'table' => 'organizationalunits',
+            'module' => 'OrganizationalUnits',
+            'rname' => 'name',
+            'required' => true,
+            'vt_dependency' => "equals(\$kind_of_element,'organizational_unit_manager')",
+        ),
+        'organizationalunit_id' => array(
+            'name' => 'organizationalunit_id',
+            'type' => 'id',
+            'relationship' => 'organizationalunits_onboardingoffboardingelements',
+            'reportable' => false,
+            'rname' => 'id',
+            'isnull' => 'true',
+            'dbType' => 'id',
+            'vname' => 'LBL_ORGANIZATIONALUNIT_ID',
+        ),
+        "trainings" => array(
+            'name' => 'trainings',
+            'type' => 'link',
+            'relationship' => 'onboardingoffboardingelements_trainings',
+            'source' => 'non-db',
+            'module' => 'Trainings',
+            'bean_name' => 'Trainings',
+            'vname' => 'LBL_RELATIONSHIP_TRAININGS_NAME',
+        ),
     ),
     'relationships' => array(
         "users_onboardingoffboardingelements" => array(
@@ -211,18 +246,27 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'rhs_key' => 'user_id',
             'relationship_type' => 'one-to-many',
         ),
+        "organizationalunits_onboardingoffboardingelements" => array(
+            'lhs_module' => 'OrganizationalUnits',
+            'lhs_table' => 'organizationalunits',
+            'lhs_key' => 'id',
+            'rhs_module' => 'OnboardingOffboardingElements',
+            'rhs_table' => 'onboardingoffboardingelements',
+            'rhs_key' => 'organizationalunit_id',
+            'relationship_type' => 'one-to-many',
+        ),
     ),
     'optimistic_locking' => true,
     'unified_search' => true,
 );
 if (!class_exists('VardefManager')) {
-    require_once('include/SugarObjects/VardefManager.php');
+    require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('OnboardingOffboardingElements',
     'OnboardingOffboardingElements',
     array(
-    'basic',
-    'assignable',
-    'security_groups'
+        'basic',
+        'assignable',
+        'security_groups',
     )
 );

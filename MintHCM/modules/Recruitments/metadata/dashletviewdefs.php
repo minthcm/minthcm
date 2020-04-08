@@ -64,7 +64,7 @@ global $current_user;
 
 $dashletData['RecruitmentsDashlet']['searchFields'] = array( 'date_entered' => array( 'default' => '' ),
    'date_modified' => array( 'default' => '' ),
-   'team_id' => array( 'default' => '' ),
+   'project_status' => array( 'default' => '' ),
    'assigned_user_id' => array( 'type' => 'assigned_user_name',
       'default' => $current_user->name ) );
 $dashletData['RecruitmentsDashlet']['columns'] = array( 'name' => array(

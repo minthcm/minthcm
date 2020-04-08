@@ -706,7 +706,7 @@ function installLog($entry) {
  * takes session vars and creates config.php
  * @return array bottle collection of error messages
  */
-function handleSugarConfig() {
+function handleSugarConfig($lock = false) {
    global $bottle;
    global $cache_dir;
    global $mod_strings;
@@ -740,7 +740,7 @@ function handleSugarConfig() {
    // build default sugar_config and merge with new values
    $sugar_config = sugarArrayMerge(get_sugar_config_defaults(), $sugar_config);
    // always lock the installer
-   $sugar_config['installer_locked'] = true;
+   $sugar_config['installer_locked'] = ($lock)?true:false;
    // we're setting these since the user was given a fair chance to change them
    $sugar_config['dbconfig']['db_host_name'] = $setup_db_host_name;
    if ( !empty($setup_db_host_instance) ) {
@@ -1335,6 +1335,18 @@ function insert_default_settings() {
    }
 }
 
+function installDefaultRoles(){
+   require_once 'install/suite_install/ACLRolesUpdater.php';
+   $acl_roles_updater = new ACLRolesUpdater();
+   $acl_roles_updater->run();
+}
+
+function installDefaultKReports(){
+   require_once 'install/suite_install/KReportsInstaller.php';
+   $kreports_installer = new KReportsInstaller();
+   $kreports_installer->run();
+}
+
 function rebuildWithViewTools($set_developer_mode = null) {
     require_once('modules/Administration/RebuildAllJavascripts.php');
     setConfig('developerMode', true);
@@ -1396,7 +1408,7 @@ function installDelegationPDFTemplate(){
     $db = DBManagerFactory::getInstance();
     $query = "
         INSERT IGNORE INTO `pdftemplates` (`id`, `name`, `date_entered`, `date_modified`, `modified_user_id`, `created_by`, `description`, `deleted`, `is_default`, `relatedmodule`)
-        VALUES ('delegation-default', 'Domyślny', NOW(), NOW(), '1', '1', NULL, '0', '1', 'Delegations');
+        VALUES ('delegation-default', 'Default', NOW(), NOW(), '1', '1', NULL, '0', '1', 'Delegations');
     ";
     $db->query($query);
 }
@@ -2111,6 +2123,18 @@ function add_digits($quantity, &$string, $min = 0, $max = 9) {
    }
 }
 
+function getRelationshipLinkFieldName($module, $rel_name) {
+   $result = '';
+   $bean = BeanFactory::newBean($module);
+   foreach ($bean->field_defs as $field_name => $field_def) {
+      if($field_def['type'] == 'link' && $field_def['relationship'] == $rel_name) {
+         $result = $field_name;
+         break;
+      }
+   }
+   return $result;
+}
+
 function create_phone_number() {
    $phone = "(";
    add_digits(3, $phone);
@@ -2122,11 +2146,37 @@ function create_phone_number() {
    return $phone;
 }
 
+function modify_date($field, $modify) {
+   global $timedate;
+   $date = $timedate->fromDbDate($field);
+   $date->modify($modify);
+   return $timedate->asDbDate($date);
+}
+
+function modify_datetime($field, $modify) {
+   global $timedate;
+   $date = $timedate->fromDb($field);
+   $date->modify($modify);
+   return $timedate->asDb($date);
+}
+
+function create_datetime_from_date($field, $hr = null, $min = null, $sec = null) {
+   return $field . ' ' . create_time($hr,$min,$sec);
+}
+
+function create_datetime($year = null, $mnth = null, $day = null, $hr = null, $min = null, $sec = null) {
+   return create_date($year,$mnth,$day) . ' ' . create_time($hr,$min,$sec);
+}
+
+function create_past_datetime($year = null, $mnth = null, $day = null, $hr = null, $min = null, $sec = null) {
+   return create_past_date($year,$mnth,$day) . ' ' . create_time($hr,$min,$sec);
+}
+
 function create_date($year = null, $mnth = null, $day = null) {
    global $timedate;
    $now = $timedate->getNow();
    if ( $day == null )
-      $day = $now->day + mt_rand(0, 365);
+      $day = $now->day + mt_rand(0, 100);
    return $timedate->asDbDate($now->get_day_begin($day, $mnth, $year));
 }
 
@@ -2150,8 +2200,50 @@ function create_time($hr = null, $min = null, $sec = null) {
 function create_past_date() {
    global $timedate;
    $now = $timedate->getNow(true);
-   $day = $now->day - mt_rand(1, 365);
+   $day = $now->day - mt_rand(1, 100);
    return $timedate->asDbDate($now->get_day_begin($day));
+}
+
+function generateUserPasswordHash($user_name) {
+   return User::getPasswordHash($user_name);
+}
+
+function create_unique_past_date_from_now($assigned_user_id, $table, $field_name)
+{
+   global $db, $timedate;
+   $counter = 0;
+   $now = $timedate->getNow(true);
+   while (true) {
+      $now->modify('-1 day');
+      $date = $timedate->asDbDate($now);
+      $sql = "SELECT count(id) FROM {$table} WHERE {$field_name} = '{$date}' AND assigned_user_id = '{$assigned_user_id}' AND deleted = 0";
+      if ($counter == 100 || (!isWeekend($date) && !$db->getOne($sql))) {
+         break;
+      }
+      $counter++;
+   }
+   return $date;
+}
+
+function create_unique_date_from_now($assigned_user_id, $table, $field_name)
+{
+   global $db, $timedate;
+   $counter = 0;
+   $now = $timedate->getNow(true);
+   while (true) {
+      $date = $timedate->asDbDate($now);
+      $sql = "SELECT count(id) FROM {$table} WHERE {$field_name} = '{$date}' AND assigned_user_id = '{$assigned_user_id}' AND deleted = 0";
+      if ($counter == 100 || (!isWeekend($date) && !$db->getOne($sql))) {
+         break;
+      }
+      $now->modify('+1 day');
+      $counter++;
+   }
+   return $date;
+}
+
+function isWeekend($date) {
+   return (date('N', strtotime($date)) >= 6);
 }
 
 /**
@@ -2268,3 +2360,6 @@ function enableInsideViewConnector() {
    // $mapping is brought in from the mapping.php file above
    $source->saveMappingHook($mapping);
 }
+
+
+include_once('install/config/dashlets/dashlets_config.php');

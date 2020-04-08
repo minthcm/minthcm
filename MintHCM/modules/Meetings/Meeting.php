@@ -169,7 +169,6 @@ class Meeting extends SugarBean {
    public function save($check_notify = FALSE) {
       global $timedate;
       global $current_user;
-
       global $disable_date_format;
 
       if ( isset($this->date_start) ) {
@@ -262,8 +261,13 @@ class Meeting extends SugarBean {
          $api->logoff();
       }
 
+      
       $return_id = parent::save($check_notify);
 
+      if ($this->status != $bean->fetched_row['status'] && $this->status == 'Held') {
+         $this->closeRelatedTraining();
+         }
+         
       if ( $this->update_vcal ) {
          vCal::cache_sugar_vcal($current_user);
          // MintHCM start
@@ -283,6 +287,29 @@ class Meeting extends SugarBean {
 
       return $return_id;
    }
+
+   public function closeRelatedTraining(){
+      global $db;
+      $id = $this->id;
+      $sql = "SELECT t.id FROM trainings AS t 
+      JOIN trainings_meetings AS tm ON t.id = tm.training_id 
+      JOIN meetings AS m ON tm.meeting_id = m.id 
+      WHERE m.id = '{$id}' 
+      AND t.status LIKE 'planned' AND t.deleted = 0";
+         $result = $db->query($sql);
+         while (($row = $db->fetchByAssoc($result)) != null) {
+            $training_id = $row['id'];
+            $sql_meetings = "SELECT m.id FROM meetings AS m 
+            JOIN trainings_meetings AS tm ON m.id = tm.meeting_id 
+            JOIN trainings AS m ON tm.training_id = t.id
+            WHERE t.id = '{$training_id}' AND m.status LIKE 'Planned'";
+            if(empty($db->getOne($sql_meetings))){
+               $training_bean = BeanFactory::getBean('Trainings', $training_id);
+               $training_bean->status = 'held';
+               $training_bean->save();
+            }
+   }
+}
 
    protected function postSave() {
       require_once 'modules/Candidatures/logic_hooks/CandidaturesLogicHook.php';

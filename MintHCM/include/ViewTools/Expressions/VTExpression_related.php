@@ -88,7 +88,7 @@ class VTExpression_related extends VTExpression {
     */
    public function backend($arguments = array()) {
       $db = DBManagerFactory::getInstance();
-      require ('cache/Relationships/relationships.cache.php');
+      include('cache/Relationships/relationships.cache.php');
       SugarAutoLoader::requireWithCustom('include/ViewTools/Expressions/cache.php');
       SugarAutoLoader::requireWithCustom('include/ViewTools/Expressions/VTFormulaParser.php');
       SugarAutoLoader::requireWithCustom('include/ViewTools/Expressions/VTExpression.php');

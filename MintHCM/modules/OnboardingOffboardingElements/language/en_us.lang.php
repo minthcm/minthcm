@@ -82,7 +82,6 @@ $mod_strings = array(
     'LBL_DAYS_FROM_START' => 'Days From Start',
     'LBL_USERS_NAME' => 'Related User',
     'LBL_USERS_ID' => 'Related User (ID)',
-    'LBL_OWN_TASK' => 'Own Task',
     'LBL_ONBOARDINGTEMPLATES' => 'Onboarding Templates',
     'LBL_OFFBOARDINGTEMPLATES' => 'Offboarding Templates',
     'LBL_ERR_NOTICE_DURATION_TIME' => 'Duration time must be greater than or equal 0',
@@ -93,4 +92,9 @@ $mod_strings = array(
     'LBL_HOURS_ABBREV' => 'h',
     'LBL_MINSS_ABBREV' => 'm',
     'LBL_USERS_ONBOARDINGOFFBOARDINGELEMENTS' => 'Onboarding/Offboarding elements',
+    'LBL_KIND_OF_ELEMENT' => 'Kind of Element',
+    'LBL_ORGANIZATIONALUNITS' => 'Organizational Units',
+    'LBL_ORGANIZATIONALUNIT_NAME' => 'Organizational Unit',
+    'LBL_ORGANIZATIONALUNIT_ID' => 'Organizational Unit (ID)',
+    'LBL_RELATIONSHIP_TRAININGS_NAME' => 'Trainings',
 );

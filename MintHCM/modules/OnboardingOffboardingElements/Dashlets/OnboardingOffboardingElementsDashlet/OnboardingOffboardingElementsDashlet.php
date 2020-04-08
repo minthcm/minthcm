@@ -113,6 +113,7 @@ class OnboardingOffboardingElementsDashlet extends DashletGeneric
                 'myItems' => translate('LBL_DASHLET_CONFIGURE_MY_ITEMS_ONLY',
                     'OnboardingOffboardingElements'),
                 'myFavorites' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_FAVORITES'],
+                'mySubordinates' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_SUBORDINATES'],
                 'displayRows' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_DISPLAY_ROWS'],
                 'title' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_TITLE'],
                 'clear' => $GLOBALS['app_strings']['LBL_CLEAR_BUTTON_LABEL'],

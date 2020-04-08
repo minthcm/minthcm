@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,15 +36,15 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if ( !defined('sugarEntry') || !sugarEntry ){
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /*
  * Your installation or use of this SugarCRM file is subject to the applicable
@@ -60,43 +59,54 @@ if ( !defined('sugarEntry') || !sugarEntry ){
 
 $module_name = 'Positions';
 $listViewDefs[$module_name] = array(
-   'NAME' => array(
-      'name' => 'name',
-      'label' => 'LBL_NAME',
-      'default' => true,
-      'enabled' => true,
-      'link' => true,
-   ),
-   'STATUS' =>
-   array(
-      'label' => 'LBL_STATUS',
-      'default' => true,
-   ),
-   'ORGANIZATIONALUNITS_LEADER_NAME' => array(
-      'name' => 'organizationalunits_leader_name',
-      'label' => 'LBL_ORGANIZATIONALUNITS_LEADER_NAME',
-      'id' => 'ORGANIZATIONALUNITS_LEADER_ID',
-      'enabled' => true,
-      'default' => true,
-   ),
-   'POSITIONS_SUPERVISION_NAME' => array(
-      'name' => 'positions_supervision_name',
-      'label' => 'LBL_POSITIONS_SUPERVISION_NAME',
-      'enabled' => true,
-      'default' => true,
-   ),
-   'ASSIGNED_USER_NAME' => array(
-      'name' => 'assigned_user_name',
-      'label' => 'LBL_ASSIGNED_TO_NAME',
-      'default' => true,
-      'enabled' => true,
-      'link' => true,
-   ),
-   'DATE_MODIFIED' => array(
-      'label' => 'LBL_DATE_MODIFIED',
-      'enabled' => true,
-      'default' => true,
-      'name' => 'date_modified',
-      'readonly' => true,
-   ),
+    'NAME' => array(
+        'name' => 'name',
+        'label' => 'LBL_NAME',
+        'default' => true,
+        'enabled' => true,
+        'link' => true,
+    ),
+    'STATUS' => array(
+        'label' => 'LBL_STATUS',
+        'default' => true,
+    ),
+    'ORGANIZATIONALUNITS_LEADER_NAME' => array(
+        'name' => 'organizationalunits_leader_name',
+        'label' => 'LBL_ORGANIZATIONALUNITS_LEADER_NAME',
+        'id' => 'ORGANIZATIONALUNITS_LEADER_ID',
+        'enabled' => true,
+        'default' => true,
+    ),
+    'OFFBOARDINGTEMPLATE_NAME' => array(
+        'name' => 'offboardingtemplate_name',
+        'label' => 'LBL_OFFBOARDINGTEMPLATE_NAME',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'ONBOARDINGTEMPLATE_NAME' => array(
+        'name' => 'onboardingtemplate_name',
+        'label' => 'LBL_ONBOARDINGTEMPLATE_NAME',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'POSITIONS_SUPERVISION_NAME' => array(
+        'name' => 'positions_supervision_name',
+        'label' => 'LBL_POSITIONS_SUPERVISION_NAME',
+        'enabled' => true,
+        'default' => true,
+    ),
+    'ASSIGNED_USER_NAME' => array(
+        'name' => 'assigned_user_name',
+        'label' => 'LBL_ASSIGNED_TO_NAME',
+        'default' => true,
+        'enabled' => true,
+        'link' => true,
+    ),
+    'DATE_MODIFIED' => array(
+        'label' => 'LBL_DATE_MODIFIED',
+        'enabled' => true,
+        'default' => true,
+        'name' => 'date_modified',
+        'readonly' => true,
+    ),
 );

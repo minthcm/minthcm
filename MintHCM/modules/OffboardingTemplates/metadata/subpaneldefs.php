@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,43 +36,61 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 $layout_defs["OffboardingTemplates"]["subpanel_setup"] = array(
-   'offboardings' => array(
-      'order' => 100,
-      'module' => 'Offboardings',
-      'subpanel_name' => 'default',
-      'sort_order' => 'asc',
-      'sort_by' => 'id',
-      'title_key' => 'LBL_OFFBOARDINGS',
-      'get_subpanel_data' => 'offboardings',
-      'top_buttons' => array(),
-   ),
-   'elements' => array(
-      'order' => 103,
-      'module' => 'OnboardingOffboardingElements',
-      'subpanel_name' => 'for_Templates',
-      'sort_order' => 'asc',
-      'sort_by' => 'days_from_start',
-      'title_key' => 'LBL_ELEMENTS',
-      'get_subpanel_data' => 'elements',
-   ),
-   'securitygroups' => array(
-      'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect'),),
-      'order' => 900,
-      'sort_by' => 'name',
-      'sort_order' => 'asc',
-      'module' => 'SecurityGroups',
-      'refresh_page' => 1,
-      'subpanel_name' => 'default',
-      'get_subpanel_data' => 'SecurityGroups',
-      'add_subpanel_data' => 'securitygroup_id',
-      'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
-   ),
+    'elements' => array(
+        'order' => 90,
+        'module' => 'OnboardingOffboardingElements',
+        'subpanel_name' => 'for_Templates',
+        'sort_order' => 'asc',
+        'sort_by' => 'days_from_start',
+        'title_key' => 'LBL_ELEMENTS',
+        'get_subpanel_data' => 'elements',
+    ),
+    'positions' => array(
+        'order' => 100,
+        'module' => 'Positions',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_OFFBOARDINGTEMPLATES_POSITIONS_TITLE',
+        'get_subpanel_data' => 'positions',
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+                'widget_class' => 'SubPanelTopSelectButton',
+                'mode' => 'MultiSelect',
+            ),
+        ),
+    ),
+    'offboardings' => array(
+        'order' => 100,
+        'module' => 'Offboardings',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_OFFBOARDINGS',
+        'get_subpanel_data' => 'offboardings',
+        'top_buttons' => array(),
+    ),
+    'securitygroups' => array(
+        'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect')),
+        'order' => 900,
+        'sort_by' => 'name',
+        'sort_order' => 'asc',
+        'module' => 'SecurityGroups',
+        'refresh_page' => 1,
+        'subpanel_name' => 'default',
+        'get_subpanel_data' => 'SecurityGroups',
+        'add_subpanel_data' => 'securitygroup_id',
+        'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
+    ),
 );

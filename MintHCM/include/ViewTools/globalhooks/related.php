@@ -58,7 +58,7 @@ class Related {
    public function relatedRecalculation(SugarBean &$bean, $event = false, $arguments = false) {
       include('include/ViewTools/Expressions/cache.php');
       if ( isset($related_recalculation[$bean->table_name]) ) {
-         require ('cache/Relationships/relationships.cache.php');
+         include ('cache/Relationships/relationships.cache.php');
          foreach ( array_unique($related_recalculation[$bean->table_name]) as $relationship ) {
             if ( $bean->load_relationship($relationship) ) {
                $related_module_name = $bean->$relationship->getRelatedModuleName();

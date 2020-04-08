@@ -90,11 +90,11 @@ $viewdefs [$module_name] = array(
             array(
                 array(
                     'name',
-                    'type',
+                    'kind_of_element',
                 ),
                 array(
-                    'user_name',
-                    'own_task',
+                    'type',
+                    '',
                 ),
                 array(
                     'days_from_start',
@@ -103,6 +103,10 @@ $viewdefs [$module_name] = array(
                         'customCode' => '{$fields.task_duration_hours.value}{$MOD.LBL_HOURS_ABBREV} {$fields.task_duration_minutes.value}{$MOD.LBL_MINSS_ABBREV}&nbsp;',
                         'label' => 'LBL_TASK_DURATION',
                     )
+                ),
+                array(
+                    'organizationalunit_name',
+                    'user_name',
                 ),
                 array(
                     'description',

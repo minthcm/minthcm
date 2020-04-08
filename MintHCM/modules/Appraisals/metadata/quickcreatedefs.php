@@ -89,6 +89,9 @@ $viewdefs [$module_name] = array(
                'candidature_name',
             ),
             array(
+               'evaluator_name',
+            ),
+            array(
                'assigned_user_name',
                'employee_name',
             ),

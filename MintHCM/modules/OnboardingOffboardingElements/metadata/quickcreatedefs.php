@@ -57,11 +57,11 @@ $viewdefs[$module_name]['QuickCreate'] = array(
         'default' => array(
             array(
                 'name',
-                'type',
+                'kind_of_element',
             ),
             array(
-                'user_name',
-                'own_task',
+                'type',
+                '',
             ),
             array(
                 'days_from_start',
@@ -73,6 +73,10 @@ $viewdefs[$module_name]['QuickCreate'] = array(
                         'required' => true,
                     ),
                 ),
+            ),
+            array(
+                'organizationalunit_name',
+                'user_name',
             ),
             array(
                 'assigned_user_name',

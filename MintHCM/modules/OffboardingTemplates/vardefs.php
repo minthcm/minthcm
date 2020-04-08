@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,90 +36,60 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $dictionary['OffboardingTemplates'] = array(
-   'table' => 'offboardingtemplates',
-   'audited' => true,
-   'inline_edit' => true,
-   'duplicate_merge' => true,
-   'fields' => array(
-      'position' => array(
-         'name' => 'position',
-         'type' => 'link',
-         'relationship' => 'offboardingtemplates_positions',
-         'source' => 'non-db',
-         'module' => 'Positions',
-         'bean_name' => 'Positions',
-         'vname' => 'LBL_OFFBOARDINGTEMPLATES_POSITIONS_TITLE',
-         'id_name' => 'position_id',
-      ),
-      'position_name' => array(
-         'name' => 'position_name',
-         'type' => 'relate',
-         'source' => 'non-db',
-         'vname' => 'LBL_POSITION_NAME',
-         'save' => true,
-         'id_name' => 'position_id',
-         'link' => 'position',
-         'table' => 'positions',
-         'module' => 'Positions',
-         'rname' => 'name',
-         'required' => true,
-      ),
-      'position_id' => array(
-         'name' => 'position_id',
-         'type' => 'link',
-         'relationship' => 'offboardingtemplates_positions',
-         'reportable' => false,
-         'vname' => 'LBL_POSITION_ID',
-         'dbType' => 'id',
-      ),
-      'offboardings' => array(
-         'name' => 'offboardings',
-         'type' => 'link',
-         'relationship' => 'offboardings_offboardingtemplates',
-         'source' => 'non-db',
-         'module' => 'Offboardings',
-         'bean_name' => 'Offboardings',
-         'side' => 'right',
-         'vname' => 'LBL_OFFBOARDINGS',
-      ),
-      'elements' => array(
-         'name' => 'elements',
-         'type' => 'link',
-         'relationship' => 'onboardingoffboardingelements_offboardingtemplates',
-         'module' => 'OnboardingOffboardingElements',
-         'bean_name' => 'OnboardingOffboardingElements',
-         'source' => 'non-db',
-         'vname' => 'LBL_ELEMENTS',
-      ),
-   ),
-   'relationships' => array(
-      "offboardingtemplates_positions" => array(
-         'lhs_module' => 'Positions',
-         'lhs_table' => 'positions',
-         'lhs_key' => 'id',
-         'rhs_module' => 'OffboardingTemplates',
-         'rhs_table' => 'offboardingtemplates',
-         'rhs_key' => 'position_id',
-         'relationship_type' => 'one-to-many',
-      ),
-   ),
-   'optimistic_locking' => true,
-   'unified_search' => true,
+    'table' => 'offboardingtemplates',
+    'audited' => true,
+    'inline_edit' => true,
+    'duplicate_merge' => true,
+    'fields' => array(
+        'positions' => array(
+            'name' => 'positions',
+            'type' => 'link',
+            'relationship' => 'offboardingtemplates_positions',
+            'source' => 'non-db',
+            'module' => 'Positions',
+            'bean_name' => 'Positions',
+            'side' => 'right',
+            'vname' => 'LBL_ONBOARDINGTEMPLATES_POSITIONS_TITLE',
+        ),
+        'offboardings' => array(
+            'name' => 'offboardings',
+            'type' => 'link',
+            'relationship' => 'offboardings_offboardingtemplates',
+            'source' => 'non-db',
+            'module' => 'Offboardings',
+            'bean_name' => 'Offboardings',
+            'side' => 'right',
+            'vname' => 'LBL_OFFBOARDINGS',
+        ),
+        'elements' => array(
+            'name' => 'elements',
+            'type' => 'link',
+            'relationship' => 'onboardingoffboardingelements_offboardingtemplates',
+            'module' => 'OnboardingOffboardingElements',
+            'bean_name' => 'OnboardingOffboardingElements',
+            'source' => 'non-db',
+            'vname' => 'LBL_ELEMENTS',
+        ),
+    ),
+    'relationships' => array(
+    ),
+    'optimistic_locking' => true,
+    'unified_search' => true,
 );
-if ( !class_exists('VardefManager') ) {
-   require_once('include/SugarObjects/VardefManager.php');
+if (!class_exists('VardefManager')) {
+    require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('OffboardingTemplates', 'OffboardingTemplates',
-   array(
-      'basic',
-      'assignable',
-      'security_groups'
-   )
+    array(
+        'basic',
+        'assignable',
+        'security_groups',
+    )
 );

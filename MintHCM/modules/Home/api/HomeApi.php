@@ -291,4 +291,32 @@ class HomeApi {
       return json_encode($language);
    }
 
+   public function getJSCalendarVariables()
+    {
+        global $timedate, $current_user;
+        $cal_date_format = $timedate->get_cal_date_format();
+        $user_date_format = $timedate->get_user_date_format();
+        $user_time_format = $timedate->get_user_time_format();
+        $calendar_fdow = $current_user->get_first_day_of_week();
+        $time_separator = ':';
+        if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $user_time_format, $match)) {
+            $time_separator = $match[1];
+        }
+        $t23 = strpos($user_time_format, '23') !== false ? '%H' : '%I';
+        if (!isset($match[2]) || empty($match[2])) {
+            $calendar_format = $cal_date_format . ' ' . $t23 . $time_separator . '%M';
+        } else {
+            $pm = $match[2] === 'pm' ? '%P' : '%p';
+            $calendar_format = $cal_date_format . ' ' . $t23 . $time_separator . '%M' . $pm;
+        }
+        return [
+            $cal_date_format,
+            $user_date_format,
+            $user_time_format,
+            $calendar_format,
+            $time_separator,
+            $calendar_fdow,
+        ];
+    }
+
 }

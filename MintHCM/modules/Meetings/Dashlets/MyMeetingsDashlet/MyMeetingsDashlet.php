@@ -172,6 +172,7 @@ class MyMeetingsDashlet extends DashletGeneric
             'filters' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_FILTERS'],
             'myItems' => translate('LBL_DASHLET_CONFIGURE_MY_ITEMS_ONLY', 'Meetings'),
             'myFavorites' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_FAVORITES'],
+            'mySubordinates' => $GLOBALS['app_strings']['LBL_DASHLET_CONFIGURE_MY_SUBORDINATES'],
             'displayRows' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_DISPLAY_ROWS'],
             'title' => $GLOBALS['mod_strings']['LBL_DASHLET_CONFIGURE_TITLE'],
             'save' => $GLOBALS['app_strings']['LBL_SAVE_BUTTON_LABEL'],

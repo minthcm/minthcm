@@ -500,35 +500,38 @@ EOQ;
 
 EOQ;
 
-        $out .= <<<EOQ3
-        </div>
-        </div>
-
-EOQ3;
         // ------------------
         //  Choose Demo Data
         // ------------------------->
+
+
         //demo data select
-        $demoDD = "<select name='demoData' id='demoData' class='select'><option value='no' >" . $mod_strings['LBL_NO'] . "</option><option value='yes'>" . $mod_strings['LBL_YES'] . "</option>";
+        $demoDD = "<select name='demoData' id='demoData' class='select'><option value='no' >".$mod_strings['LBL_NO']."</option><option value='yes'>".$mod_strings['LBL_YES']."</option>";
         $demoDD .= "</select>";
 
-//         $out .=<<<EOQ3
-        //                <div class="floatbox full" id="fb0">
-        //             <h2>{$mod_strings['LBL_MORE_OPTIONS_TITLE']}</h2>
-        //         </div>
-        //         <div class="floatbox full" id="fb1">
-        //             <div class="install_block">
-        //                 <h3 onclick="$(this).next().toggle();" class="toggler">&raquo; {$mod_strings['LBL_DBCONF_DEMO_DATA_TITLE']}</h3>
-        //                 <div class="form_section" style="display: none;">
-        //                 <div class="clear"></div>
-        //                     <div class="formrow big">
-        //                         <label>{$mod_strings['LBL_DBCONF_DEMO_DATA']}</label>
-        //                         {$demoDD}
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        // EOQ3;
+        $out .=<<<EOQ3
+        </div>
+        </div>
+
+        <div class="floatbox full" id="fb0">
+            <h2>{$mod_strings['LBL_MORE_OPTIONS_TITLE']}</h2>
+        </div>
+
+        <div class="floatbox full" id="fb1">
+            <div class="install_block">
+                <h3 onclick="$(this).next().toggle();" class="toggler">&raquo; {$mod_strings['LBL_DBCONF_DEMO_DATA_TITLE']}</h3>
+
+                <div class="form_section" style="display: none;">
+                <div class="clear"></div>
+                    <div class="formrow big">
+                        <label>{$mod_strings['LBL_DBCONF_DEMO_DATA']}</label>
+                        {$demoDD}
+                    </div>
+                </div>
+            </div>
+        </div>
+EOQ3;
+
         // ------------------
         //  Choose Scenarios
         // ------------------------->
@@ -538,7 +541,7 @@ EOQ3;
             foreach ($_SESSION['installation_scenarios'] as $scenario) {
                 $key = $scenario['key'];
                 $description = $scenario['description'];
-                $scenarioModuleList = implode($scenario['modulesScenarioDisplayName'], ',');
+                $scenarioModuleList = implode($scenario['modulesScenarioDisplayName'],',');
                 $title = $scenario['title'];
 
                 $scenarioSelection .= "<input type='checkbox' name='scenarios[]' value='$key' checked><b>$title</b>.  $description ($scenarioModuleList).<br>";
@@ -1325,38 +1328,66 @@ EOQ;
                      * Show and refresh status message to user.
                      */
                     statReaderStop = false;
+                    var ajax_step = 0;
+                    var ajax_steps = [];
                     var startStatusReader = function() {
                         setInterval(function(){
                             if(!statReaderStop) {
                                 $.getJSON('install/status.json?' + Math.random(), function(resp){
                                     preloaderSetStatus(resp.message);
-                                    if(resp.command && resp.command.function == 'redirect') {
-                                        document.location.href = resp.command.arguments;
-                                        statReaderStop = true;
+                                    if(resp.command) {
+                                        if(resp.command.function == 'redirect'){
+                                            statReaderStop = true;
+                                        } else if(resp.command.function == 'next_step'){
+                                            if(ajax_steps.indexOf(resp.command.step) == -1){
+                                                dbCheckPassed('', ajax_step+1, {hide:function(){}}, resp.command.skip_minify);
+                                            }
+                                            ajax_steps.push(resp.command.step);
+                                        }
                                     }
                                 });
                             }
-                        }, 1200);
+                        }, 2200);
                     };
 
-                    var dbCheckPassed = function(url, next_step, msgpanel) {
+                    var dbCheckPassed = function(url, next_step, msgpanel, skip_minify) {
                                 msgpanel.hide();
-                                document.installForm.goto.value="{$mod_strings['LBL_NEXT']}";
-                                document.getElementById('hidden_goto').value="{$mod_strings['LBL_NEXT']}";
-                                document.installForm.current_step.value=next_step;
                                 removeSMTPSettings();
-                                // TODO--low: add correct form validation for all fields (number is number, server name a valid server name etc)
-                                $('#installForm').attr('action', 'install.php');
-
-                                //preloaderOn('{$mod_strings['LBL_INSTALL_PROCESS']}', '...');
-                                startStatusReader();
-
+                                _data = {};
+                                _form = $('#installForm').find('input').each(function(i,e){
+                                    if(e.value!=""){
+                                        if(e.type == "checkbox"){
+                                            if($(e).prop('checked')) {_data[e.name] = e.value; }
+                                        } else {
+                                            _data[e.name] = e.value;
+                                        }
+                                    }
+                                });
                                 $('#installForm').hide();
+                                _data.goto = "{$mod_strings['LBL_NEXT']}";
+                                _data.hidden_goto = "{$mod_strings['LBL_NEXT']}";
+                                _data.current_step = next_step;
+                                ajax_step = parseInt(next_step);
+                                if(skip_minify){
+                                    _data.skip_minify = true;
+                                }
+                                $.ajax({
+                                    url: "install.php",
+                                    method: "POST",
+                                    data: _data,
+                                    success : function(response) {
+                                        if(response.indexOf('head') > 0 && response.indexOf('body') > 0){
+                                            document.open();
+                                            document.write(response);
+                                            document.close();
+                                        }
+                                    },
+                                });
+                                startStatusReader();
                                 $('#installStatus').show();
                                 $("html, body").animate({
                                      scrollTop:0
                                 });
-                                document.installForm.submit();
                     };
 
                     /**

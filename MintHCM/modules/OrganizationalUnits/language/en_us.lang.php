@@ -93,4 +93,5 @@ $mod_strings = array(
    'LBL_CURRENT_MANAGER_ID' => 'Current Manager (ID)',
    'LBL_CURRENT_MANAGER' => 'Current Manager',
    'LBL_CURRENT_MANAGER_NAME' => 'Current Manager',
+   'LBL_ONBOARDINGOFFBOARDINGELEMENTS' => 'Onboarding/Offboarding Elements',
 );

@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,42 +35,39 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-$module_name  = 'OnboardingOffboardingElements';
-$object_name  = 'OnboardingOffboardingElements';
+$module_name = 'OnboardingOffboardingElements';
+$object_name = 'OnboardingOffboardingElements';
 $_module_name = 'onboardingoffboardingelements';
-$popupMeta    = array(
+$popupMeta = array(
     'moduleMain' => $module_name,
     'varName' => $object_name,
-    'orderBy' => $_module_name.'.name',
+    'orderBy' => $_module_name . '.name',
     'whereClauses' => array(
-        'name' => $_module_name.'.name',
+        'name' => $_module_name . '.name',
         'user_name' => 'users.name',
     ),
-    'whereStatement' => "type!='exit_interview'",
-    'searchInputs' => array($_module_name.'_number', 'name', 'priority', 'status'),
+    'whereStatement' => "$_module_name . type!='exit_interview'",
+    'searchInputs' => array($_module_name . '_number', 'name', 'priority', 'status'),
     'searchdefs' => array(
-        'name' =>
-        array(
+        'name' => array(
             'name' => 'name',
             'width' => '10%',
         ),
-        'task_duration' =>
-        array(
+        'task_duration' => array(
             'name' => 'name',
             'width' => '10%',
         ),
-        'days_from_start' =>
-        array(
+        'days_from_start' => array(
             'name' => 'name',
             'width' => '10%',
         ),
@@ -82,20 +79,27 @@ $popupMeta    = array(
             'width' => '10%',
             'name' => 'user_name',
         ),
-        'type' =>
-        array(
+        'organizationalunit_name' => array(
+            'type' => 'relate',
+            'link' => true,
+            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+            'id' => 'ORGANIZATIONALUNIT_ID',
+            'width' => '10%',
+            'name' => 'organizationalunit_name',
+        ),
+        'kind_of_element' => array(
+            'type' => 'enum',
+            'studio' => 'visible',
+            'label' => 'LBL_KIND_OF_ELEMENT',
+            'width' => '10%',
+            'name' => 'kind_of_element',
+        ),
+        'type' => array(
             'type' => 'enum',
             'studio' => 'visible',
             'label' => 'LBL_TYPE',
             'width' => '10%',
             'name' => 'type',
-        ),
-        'own_task' =>
-        array(
-            'type' => 'bool',
-            'label' => 'LBL_OWN_TASK',
-            'width' => '10%',
-            'name' => 'own_task',
         ),
     ),
     'listviewdefs' => array(
@@ -103,7 +107,12 @@ $popupMeta    = array(
             'width' => '20',
             'label' => 'LBL_NAME',
             'default' => true,
-            'link' => true
+            'link' => true,
+        ),
+        'KIND_OF_ELEMENT' => array(
+            'width' => '15',
+            'label' => 'LBL_KIND_OF_ELEMENT',
+            'default' => true,
         ),
         'TYPE' => array(
             'width' => '15',
@@ -125,12 +134,14 @@ $popupMeta    = array(
             'label' => 'LBL_USERS_NAME',
             'module' => 'Users',
             'id' => 'USERS_ID',
-            'default' => false
+            'default' => false,
         ),
-        'OWN_TASK' => array(
-            'width' => '15',
-            'label' => 'LBL_OWN_TASK',
-            'default' => true,
+        'ORGANIZATIONALUNIT_NAME' => array(
+            'width' => '9',
+            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+            'module' => 'OrganizationalUnits',
+            'id' => 'ORGANIZATIONALUNIT_ID',
+            'default' => false,
         ),
     ),
 );

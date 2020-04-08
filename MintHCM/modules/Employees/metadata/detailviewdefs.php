@@ -112,6 +112,23 @@ $viewdefs ['Employees'] = array(
                      'template' => '{if isset($appraisals_edit_access) && $appraisals_edit_access}[CONTENT]{/if}'
                   ),
                ),
+               array(
+                  'customCode' => true,
+                  'sugar_html' =>
+                  array(
+                     'type' => 'button',
+                     'value' => '{$MOD.LBL_GENERATE_ONBOARDING_OFFBOARDING}',
+                     'htmlOptions' =>
+                     array(
+                        'class' => 'button',
+                        'name' => 'generate_button',
+                        'id' => 'generate_button',
+                        'title' => '{$MOD.LBL_GENERATE_ONBOARDING_OFFBOARDING}',
+                        'onClick' => 'generateOnboardingOffboarding.init(generateOnboardingOffboarding)',
+                     ),
+                     'template' => '{if $bean->aclAccess("edit")}[CONTENT]{/if}',
+                  ),
+               ),
             ),
          ),
          'maxColumns' => '2',

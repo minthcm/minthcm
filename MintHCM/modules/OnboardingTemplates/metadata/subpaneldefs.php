@@ -42,18 +42,8 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $layout_defs["OnboardingTemplates"]["subpanel_setup"] = array(
-    'onboardings' => array(
-        'order' => 100,
-        'module' => 'Onboardings',
-        'subpanel_name' => 'default',
-        'sort_order' => 'asc',
-        'sort_by' => 'id',
-        'title_key' => 'LBL_ONBOARDINGS_ONBOARDINGTEMPLATES_TITLE',
-        'get_subpanel_data' => 'onboardings',
-        'top_buttons' => array(),
-    ),
     'elements' => array(
-        'order' => 103,
+        'order' => 90,
         'module' => 'OnboardingOffboardingElements',
         'subpanel_name' => 'for_Templates',
         'sort_order' => 'asc',
@@ -70,9 +60,37 @@ $layout_defs["OnboardingTemplates"]["subpanel_setup"] = array(
             ),
         ),
     ),
+    'positions' => array(
+        'order' => 100,
+        'module' => 'Positions',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_ONBOARDINGTEMPLATES_POSITIONS_TITLE',
+        'get_subpanel_data' => 'positions',
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+                'widget_class' => 'SubPanelTopSelectButton',
+                'mode' => 'MultiSelect',
+            ),
+        ),
+    ),
+    'onboardings' => array(
+        'order' => 100,
+        'module' => 'Onboardings',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_ONBOARDINGS_ONBOARDINGTEMPLATES_TITLE',
+        'get_subpanel_data' => 'onboardings',
+        'top_buttons' => array(),
+    ),
     'securitygroups' => array(
         'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton',
-                'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect'),),
+            'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect')),
         'order' => 900,
         'sort_by' => 'name',
         'sort_order' => 'asc',

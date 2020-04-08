@@ -102,20 +102,6 @@ $layout_defs["Competencies"]["subpanel_setup"] = array(
         'get_subpanel_data' => 'competencyratings',
         'top_buttons' => array(array('widget_class' => 'SubPanelTopCreateButton')),
     ),
-    'appraisalitems' => array(
-        'order' => 200,
-        'module' => 'AppraisalItems',
-        'subpanel_name' => 'default',
-        'sort_order' => 'asc',
-        'sort_by' => 'id',
-        'title_key' => 'LBL_APPRAISALITEMS',
-        'get_subpanel_data' => 'appraisalitems',
-        'top_buttons' => array(
-            array(
-                'widget_class' => 'SubPanelTopButtonQuickCreate',
-            ),
-        ),
-    ),
     'securitygroups' => array(
         'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect')),
         'order' => 900,

@@ -100,6 +100,9 @@ $viewdefs [$module_name] = array(
                'type',
             ),
             array(
+               'evaluator_name',
+            ),
+            array(
                'position_name',
                'candidature_name',
             ),

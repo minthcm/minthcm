@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,31 +36,55 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 
 global $mod_strings, $app_strings, $sugar_config;
 $module_name = 'Onboardings';
-if ( ACLController::checkAccess($module_name, 'list', true) ) {
-   $module_menu[] = array(
-      'index.php?module=Onboardings&action=index&return_module=Onboardings&return_action=DetailView', 
-      $mod_strings['LNK_LIST'], 
-      'View', 
-      $module_name
-      );
+if (ACLController::checkAccess('OnboardingTemplates', 'detail', true)) {
+    $module_menu[] = array(
+        'javascript:generateOnboardingOffboarding.init(generateOnboardingOffboarding);',
+        translate('LBL_GENERATE_BUTTON', 'OnboardingTemplates'),
+        'Add',
+        'OnboardingTemplates',
+    );
 }
-if ( ACLController::checkAccess($module_name, 'import', true) ) {
-   $module_menu[] = array(
-      'index.php?module=Import&action=Step1&import_module=Onboardings&return_module=Onboardings&return_action=index', 
-      $app_strings['LBL_IMPORT'],
-      'Import',
-      $module_name
-      );
+if (ACLController::checkAccess($module_name, 'list', true)) {
+    $module_menu[] = array(
+        'index.php?module=Onboardings&action=index&return_module=Onboardings&return_action=DetailView',
+        $mod_strings['LNK_LIST'],
+        'View',
+        $module_name,
+    );
+}
+if (ACLController::checkAccess($module_name, 'import', true)) {
+    $module_menu[] = array(
+        'index.php?module=Import&action=Step1&import_module=Onboardings&return_module=Onboardings&return_action=index',
+        $app_strings['LBL_IMPORT'],
+        'Import',
+        $module_name,
+    );
+}
+if (ACLController::checkAccess('OnboardingTemplates', 'edit', true)) {
+    $module_menu[] = array(
+        'index.php?module=OnboardingTemplates&action=EditView&return_module=OnboardingTemplates&return_action=DetailView',
+        translate('LNK_NEW_RECORD', 'OnboardingTemplates'),
+        'Add',
+        'OnboardingTemplates',
+    );
+}
+if (ACLController::checkAccess('OnboardingTemplates', 'list', true)) {
+    $module_menu[] = array(
+        'index.php?module=OnboardingTemplates&action=index&return_module=OnboardingTemplates&return_action=DetailView',
+        translate('LNK_LIST', 'OnboardingTemplates'),
+        'View',
+        'OnboardingTemplates',
+    );
 }

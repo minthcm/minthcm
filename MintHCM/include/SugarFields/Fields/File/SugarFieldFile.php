@@ -75,6 +75,7 @@ class SugarFieldFile extends SugarFieldBase {
                 $vardef['fileId'] = 'id';
             }
         }
+
     }
 
 
