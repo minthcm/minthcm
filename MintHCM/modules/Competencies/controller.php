@@ -54,17 +54,13 @@ class CompetenciesController extends SugarController
             $duplicate_bean->load_relationship('knowledge');
             $duplicate_bean->load_relationship('skills');
             $duplicate_bean->load_relationship('attitudes');
-            $duplicate_bean->load_relationship('competencyratings');
             $this_bean = BeanFactory::getBean(static::TEMPLATE, $this->bean->id);
-            $duplicate_bean = BeanFactory::getBean(static::TEMPLATE, $template_id);
             $this_bean->load_relationship('knowledge');
             $this_bean->load_relationship('skills');
             $this_bean->load_relationship('attitudes');
-            $this_bean->load_relationship('competencyratings');
             $linked_beans_knowledge = $duplicate_bean->get_linked_beans('knowledge');
             $linked_beans_skills = $duplicate_bean->get_linked_beans('skills');
             $linked_beans_attitudes = $duplicate_bean->get_linked_beans('attitudes');
-            $linked_beans_competencyratings = $duplicate_bean->get_linked_beans('competencyratings');
             foreach ($linked_beans_knowledge as $linked_bean) {
                 $this_bean->knowledge->add($linked_bean);
             }
@@ -73,9 +69,6 @@ class CompetenciesController extends SugarController
             }
             foreach ($linked_beans_attitudes as $linked_bean) {
                 $this_bean->attitudes->add($linked_bean);
-            }
-            foreach ($linked_beans_competencyratings as $linked_bean) {
-                $this_bean->competencyratings->add($linked_bean);
             }
         }
     }

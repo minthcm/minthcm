@@ -1,7 +1,7 @@
 <?php
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -41,23 +41,26 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  * ****************************************************************************** */
 
-require_once('include/MVC/View/views/view.edit.php');
+require_once 'include/MVC/View/views/view.edit.php';
 
-class NewsViewEdit extends ViewEdit {
+class NewsViewEdit extends ViewEdit
+{
 
-   public function display() {
-      parent::display();
-      $this->displayTMCE();
-   }
+    public function display()
+    {
+        parent::display();
+        $this->displayTMCE();
+    }
 
-   public function displayTMCE() {
-      require_once("include/SugarTinyMCE.php");
-      global $locale;
+    public function displayTMCE()
+    {
+        require_once "include/SugarTinyMCE.php";
+        global $locale;
 
-      $tiny = new SugarTinyMCE();
-      $tinyMCE = $tiny->getConfig();
+        $tiny = new SugarTinyMCE();
+        $tinyMCE = $tiny->getConfig();
 
-      $js = <<<JS
+        $js = <<<JS
 		<script language="javascript" type="text/javascript">
 		$tinyMCE
 		var df = '{$locale->getPrecedentPreference('default_date_format')}';
@@ -69,7 +72,7 @@ class NewsViewEdit extends ViewEdit {
 			elements : "content_of_announcement",
 			theme_advanced_toolbar_location : "top",
 			theme_advanced_buttons1: "code,help,separator,bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,forecolor,backcolor,separator,styleprops,styleselect,formatselect,fontselect,fontsizeselect",
-			theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,selectall,separator,search,replace,separator,bullist,numlist,separator,outdent,indent,separator,ltr,rtl,separator,undo,redo,separator, link,unlink,anchor,separator,sub,sup,separator,charmap,visualaid",
+			theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,selectall,separator,search,replace,separator,bullist,numlist,separator,outdent,indent,separator,ltr,rtl,separator,undo,redo,separator, link,unlink,anchor,image,separator,sub,sup,separator,charmap,visualaid",
 			theme_advanced_buttons3: "tablecontrols,separator,advhr,hr,removeformat,separator,insertdate,pagebreak",
 			theme_advanced_fonts:"Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Helvetica Neu=helveticaneue,sans-serif;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats",
 			plugins : "advhr,insertdatetime,table,paste,searchreplace,directionality,style,pagebreak",
@@ -90,7 +93,7 @@ class NewsViewEdit extends ViewEdit {
 		</script>
 
 JS;
-      echo $js;
-   }
+        echo $js;
+    }
 
 }

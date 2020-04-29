@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,17 +35,17 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $subqueries = [];
 if (isset($_REQUEST['status_perm_advanced']) && !empty($_REQUEST['status_perm_advanced'])) {
-    $status                      = json_decode(str_replace('&quot;', '"', $_REQUEST['status_perm_advanced']));
+    $status = json_decode(str_replace('&quot;', '"', $_REQUEST['status_perm_advanced']));
     $_REQUEST['status_advanced'] = $status;
-    $subqueries[] = "workschedules.status IN ('".implode("','", $status)."')";
+    $subqueries[] = "workschedules.status IN ('" . implode("','", $status) . "')";
 } else {
     $_REQUEST['status_advanced'] = [];
 }
@@ -59,9 +59,9 @@ if (isset($_REQUEST['assigned_to_perm_advanced']) && !empty($_REQUEST['assigned_
 }
 
 if (isset($_REQUEST['type_perm_advanced']) && !empty($_REQUEST['type_perm_advanced'])) {
-    $status                    = json_decode(str_replace('&quot;', '"', $_REQUEST['type_perm_advanced']));
+    $status = json_decode(str_replace('&quot;', '"', $_REQUEST['type_perm_advanced']));
     $_REQUEST['type_advanced'] = $status;
-    $subqueries[] = "workschedules.type IN ('".implode("','", $status)."')";
+    $subqueries[] = "workschedules.type IN ('" . implode("','", $status) . "')";
 }
 
 $whereStatement = implode(" AND ", $subqueries);
@@ -83,59 +83,46 @@ $popupMeta = array(
         'spent_time',
     ),
     'searchdefs' => array(
-        'schedule_date' =>
-        array(
-            'type' => 'date',
-            'label' => 'LBL_SCHEDULE_DATE',
-            'width' => '10%',
-            'name' => 'schedule_date',
-        ),
-        'type' =>
-        array(
+        'type' => array(
             'type' => 'enum',
             'studio' => 'visible',
             'label' => 'LBL_TYPE',
             'width' => '10%',
             'name' => 'type',
         ),
-        'status' =>
-        array(
+        'status' => array(
             'type' => 'enum',
             'studio' => 'visible',
             'label' => 'LBL_STATUS',
             'width' => '10%',
             'name' => 'status',
         ),
-        'supervisor_acceptance' =>
-        array(
+        'supervisor_acceptance' => array(
             'type' => 'enum',
             'studio' => 'visible',
             'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
             'width' => '10%',
             'name' => 'supervisor_acceptance',
         ),
-        'ASSIGNED_TO_PERM' =>
-        array(
+        'ASSIGNED_TO_PERM' => array(
             'type' => 'varchar',
-            'studio' => array('editview' => 'false',),
+            'studio' => array('editview' => 'false'),
             'label' => '',
             'default' => true,
             'name' => 'assigned_to_perm',
             'displayParams' => array('hidden' => true),
         ),
-        'TYPE_PERM' =>
-        array(
+        'TYPE_PERM' => array(
             'type' => 'varchar',
-            'studio' => array('editview' => 'false',),
+            'studio' => array('editview' => 'false'),
             'label' => '',
             'default' => true,
             'name' => 'type_perm',
             'displayParams' => array('hidden' => true),
         ),
-        'STATUS_PERM' =>
-        array(
+        'STATUS_PERM' => array(
             'type' => 'varchar',
-            'studio' => array('editview' => 'false',),
+            'studio' => array('editview' => 'false'),
             'label' => '',
             'default' => true,
             'name' => 'status_perm',
@@ -143,28 +130,19 @@ $popupMeta = array(
         ),
     ),
     'listviewdefs' => array(
-        'NAME' =>
-        array(
+        'NAME' => array(
             'type' => 'name',
             'link' => true,
             'label' => 'LBL_NAME',
             'width' => '10%',
             'default' => true,
         ),
-        'STATUS' =>
-        array(
+        'STATUS' => array(
             'type' => 'enum',
             'default' => true,
             'studio' => 'visible',
             'label' => 'LBL_STATUS',
             'width' => '10%',
-        ),
-        'SPENT_TIME' =>
-        array(
-            'type' => 'float',
-            'label' => 'LBL_SPENT_TIME',
-            'width' => '10%',
-            'default' => true,
         ),
         'ASSIGNED_USER_NAME' => array(
             'link' => 'assigned_user_link',

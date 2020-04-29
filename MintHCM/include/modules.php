@@ -606,6 +606,7 @@ $beanFiles['Attitudes'] = 'modules/Attitudes/Attitudes.php';
 $beanFiles['Knowledge'] = 'modules/Knowledge/Knowledge.php';
 $beanFiles['SalaryRanges'] = 'modules/SalaryRanges/SalaryRanges.php';
 $beanFiles['EmployeeCertificates'] = 'modules/EmployeeCertificates/EmployeeCertificates.php';
+$beanFiles['Dictionaries'] = 'modules/Dictionaries/Dictionaries.php';
 //
 
 $beanList['Skills'] = 'Skills';
@@ -671,6 +672,7 @@ $beanList['Attitudes'] = 'Attitudes';
 $beanList['Knowledge'] = 'Knowledge';
 $beanList['SalaryRanges'] = 'SalaryRanges';
 $beanList['EmployeeCertificates'] = 'EmployeeCertificates';
+$beanList['Dictionaries'] = 'Dictionaries';
 //
 $moduleList[] = 'ReservationsCalendar';
 $moduleList[] = 'ResponsibilityActivities';

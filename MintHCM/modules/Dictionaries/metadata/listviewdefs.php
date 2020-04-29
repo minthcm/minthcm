@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -42,42 +41,42 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-class ScheduleGenerateOnboardingOffboarding
-{
-    protected $module_name;
-    protected $template_id;
-    protected $employee_id;
-    protected $date_start;
-
-    public function __construct($module_name, $template_id, $employee_id,
-                                $date_start)
-    {
-        global $timedate;
-        $this->module_name = $module_name;
-        $this->template_id = $template_id;
-        $this->employee_id = $employee_id;
-        $this->date_start  = $date_start;
-        if (!empty($this->date_start)) {
-            $this->date_start = $timedate->to_db($this->date_start);
-        }
-    }
-
-    public function schedule()
-    {
-        global $current_user;
-        $jq                    = new SugarJobQueue();
-        $job                   = new SchedulersJob();
-        $job->name             = "Schedule Generate Onboarding/Offboarding";
-        $job->target           = "class::GenerateOnboardingOffboardingJob";
-        $data                  = base64_encode(json_encode(array(
-            'module_name' => $this->module_name,
-            'template_id' => $this->template_id,
-            'employee_id' => $this->employee_id,
-            'date_start' => $this->date_start,
-        )));
-        $job->data             = $data;
-        $job->assigned_user_id = $current_user->id;
-        $jq->submitJob($job);
-        return true;
-    }
-}
+$module_name = 'Dictionaries';
+$listViewDefs[$module_name] = array(
+    'NAME' => array(
+        'width' => '32%',
+        'label' => 'LBL_NAME',
+        'default' => true,
+        'link' => true,
+    ),
+    'LIST_TYPE' => array(
+        'type' => 'enum',
+        'label' => 'LBL_LIST_TYPE',
+        'width' => '10%',
+        'default' => true,
+    ),
+    'LIST_MODULE' => array(
+        'type' => 'readonly',
+        'label' => 'LBL_MODULE',
+        'width' => '10%',
+        'default' => true,
+    ),
+    'IS_ACTIVE' => array(
+        'type' => 'bool',
+        'label' => 'LBL_IS_ACTIVE',
+        'width' => '10%',
+        'default' => true,
+    ),
+    'DATE_MODIFIED' => array(
+        'type' => 'datetime',
+        'label' => 'LBL_DATE_MODIFIED',
+        'width' => '10%',
+        'default' => false,
+    ),
+    'DATE_ENTERED' => array(
+        'type' => 'datetime',
+        'label' => 'LBL_DATE_ENTERED',
+        'width' => '10%',
+        'default' => false,
+    ),
+);

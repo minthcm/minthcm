@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,78 +36,65 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 $module_name = 'WorkSchedules';
 $listViewDefs[$module_name] = array(
-   'NAME' => array(
-      'width' => '32%',
-      'label' => 'LBL_NAME',
-      'default' => true,
-      'link' => true,
-   ),
-   'SCHEDULE_DATE' => array(
-      'type' => 'date',
-      'label' => 'LBL_SCHEDULE_DATE',
-      'width' => '10%',
-      'default' => true,
-   ),
-   'TYPE' => array(
-      'type' => 'enum',
-      'default' => true,
-      'studio' => 'visible',
-      'label' => 'LBL_TYPE',
-      'width' => '10%',
-   ),
-   'STATUS' => array(
-      'type' => 'enum',
-      'default' => true,
-      'studio' => 'visible',
-      'label' => 'LBL_STATUS',
-      'width' => '10%',
-   ),
-   'SUPERVISOR_ACCEPTANCE' => array(
-      'type' => 'enum',
-      'default' => true,
-      'studio' => 'visible',
-      'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
-      'width' => '10%',
-   ),
-   'ASSIGNED_USER_NAME' => array(
-      'width' => '9%',
-      'label' => 'LBL_ASSIGNED_TO_NAME',
-      'module' => 'Employees',
-      'id' => 'ASSIGNED_USER_ID',
-      'default' => true,
-   ),
-   'DATE_START' => array(
-      'type' => 'datetimecombo',
-      'label' => 'LBL_DATE_START',
-      'width' => '10%',
-      'default' => false,
-   ),
-   'SPENT_TIME' => array(
-      'type' => 'float',
-      'label' => 'LBL_SPENT_TIME',
-      'width' => '10%',
-      'default' => false,
-   ),
-   'DATE_END' => array(
-      'type' => 'datetimecombo',
-      'label' => 'LBL_DATE_END',
-      'width' => '10%',
-      'default' => false,
-   ),
-   'DELEGATION_DURATION' => array(
-      'type' => 'float',
-      'label' => 'LBL_DELEGATION_DURATION',
-      'width' => '10%',
-      'default' => false,
-   ),
+    'NAME' => array(
+        'width' => '32%',
+        'label' => 'LBL_NAME',
+        'default' => true,
+        'link' => true,
+    ),
+    'TYPE' => array(
+        'type' => 'enum',
+        'default' => true,
+        'studio' => 'visible',
+        'label' => 'LBL_TYPE',
+        'width' => '10%',
+    ),
+    'STATUS' => array(
+        'type' => 'enum',
+        'default' => true,
+        'studio' => 'visible',
+        'label' => 'LBL_STATUS',
+        'width' => '10%',
+    ),
+    'SUPERVISOR_ACCEPTANCE' => array(
+        'type' => 'enum',
+        'default' => true,
+        'studio' => 'visible',
+        'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
+        'width' => '10%',
+    ),
+    'ASSIGNED_USER_NAME' => array(
+        'width' => '9%',
+        'label' => 'LBL_ASSIGNED_TO_NAME',
+        'module' => 'Employees',
+        'id' => 'ASSIGNED_USER_ID',
+        'default' => true,
+    ),
+    'DATE_START' => array(
+        'type' => 'datetimecombo',
+        'label' => 'LBL_DATE_START',
+        'width' => '10%',
+        'default' => false,
+    ),
+    'DATE_END' => array(
+        'type' => 'datetimecombo',
+        'label' => 'LBL_DATE_END',
+        'width' => '10%',
+        'default' => false,
+    ),
+    'DELEGATION_DURATION' => array(
+        'type' => 'float',
+        'label' => 'LBL_DELEGATION_DURATION',
+        'width' => '10%',
+        'default' => false,
+    ),
 );
-?>

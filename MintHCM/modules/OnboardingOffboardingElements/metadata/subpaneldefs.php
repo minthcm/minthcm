@@ -53,13 +53,6 @@ $layout_defs["OnboardingOffboardingElements"]["subpanel_setup"] = array(
         'title_key' => 'LBL_RELATIONSHIP_TRAININGS_NAME',
         'get_subpanel_data' => 'trainings',
         'top_buttons' => array(
-            array(
-                'widget_class' => 'SubPanelTopSelectButton',
-                'mode' => 'MultiSelect',
-            ),
-            array(
-                'widget_class' => 'SubPanelTopButtonQuickCreate',
-            ),
         ),
     ),
     'onboardingtemplates' => array(

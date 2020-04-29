@@ -85,4 +85,5 @@ $mod_strings = array(
    'LBL_DATE_END' => 'End Date',
    'LBL_STATUS' => 'Status',
    'LBL_APPRAISALITEMS' => 'Appraisal Items',
+   'LBL_EMPLOYEE_NAME' => 'Employee',
 );

@@ -1,7 +1,7 @@
 <?php
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -40,36 +40,40 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 
 $module_name = 'SpentTime';
 $listViewDefs[$module_name] = array(
-   'NAME' => array(
-      'width' => '20%',
-      'label' => 'LBL_NAME',
-      'default' => true,
-      'link' => true
-   ),
-   'SPEND_TIME' => array(
-      'width' => '10%',
-      'label' => 'LBL_SPENT_TIME',
-      'default' => true,
-   ),
+    'NAME' => array(
+        'width' => '20%',
+        'label' => 'LBL_NAME',
+        'default' => true,
+        'link' => true,
+    ),
+    'SPEND_TIME' => array(
+        'width' => '10%',
+        'label' => 'LBL_SPENT_TIME',
+        'default' => true,
+    ),
    'WORK_DATE' => array(
       'width' => '10%',
       'label' => 'LBL_WORK_DATE',
       'default' => true,
    ),
-   'TYPE' => array(
-      'width' => '10%',
-      'label' => 'LBL_SPENT_TIME_TYPE',
-      'default' => false,
-   ),
-   'DESCRIPTION' => array(
-      'width' => '23%',
-      'label' => 'LBL_DESCRIPTION',
-      'default' => true,
-   ),
-   'DESCRIPTION' => array(
-      'width' => '23%',
-      'label' => 'LBL_DESCRIPTION',
-      'default' => true,
-   ),
+    'TYPE' => array(
+        'width' => '10%',
+        'label' => 'LBL_SPENT_TIME_TYPE',
+        'default' => false,
+    ),
+    'CATEGORY' => array(
+        'width' => '10%',
+        'label' => 'LBL_SPENT_TIME_CATEGORY',
+        'default' => false,
+    ),
+    'DESCRIPTION' => array(
+        'width' => '23%',
+        'label' => 'LBL_DESCRIPTION',
+        'default' => true,
+    ),
+    'DESCRIPTION' => array(
+        'width' => '23%',
+        'label' => 'LBL_DESCRIPTION',
+        'default' => true,
+    ),
 );
-?>

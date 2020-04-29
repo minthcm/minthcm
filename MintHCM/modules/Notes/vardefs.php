@@ -162,7 +162,7 @@ $dictionary['Note'] = array(
   	'type'=>'function',
   	'function_class'=>'UploadFile',
   	'function_name'=>'get_upload_url',
-  	'function_params'=> array('$this'),
+  	'function_params'=> ['$this'],
   	'source'=>'function',
   	'reportable'=>false,
   	'comment' => 'Path to file (can be URL)',
@@ -178,6 +178,13 @@ $dictionary['Note'] = array(
     'reportable'=>true,
     'comment' => 'File name associated with the note (attachment)',
     'importable' => false,
+  ),
+  'filecontents' =>
+  array(
+    'name' => 'filecontents',
+    'vname' => 'LBL_FILE_CONTENTS',
+    'type' => 'varchar',
+    'source' => 'non-db',
   ),
   'parent_type'=>
   array(
@@ -199,15 +206,7 @@ $dictionary['Note'] = array(
   	'reportable'=>true,
   	'comment' => 'The ID of the Sugar item specified in parent_type'
   ),
-  'contact_id'=>
-  array(
-  	'name'=>'contact_id',
-  	'vname'=>'LBL_CONTACT_ID',
-  	'type'=>'id',
-  	'required'=>false,
-  	'reportable'=>false,
-  	'comment' => 'Contact ID note is associated with'
-  ),
+
   'portal_flag' =>
   array (
     'name' => 'portal_flag',
@@ -257,39 +256,6 @@ $dictionary['Note'] = array(
 		'source'=>'non-db',
 		'options'=> 'record_type_display_notes',
 		),
-
- 'contact_name'=>
- 	array(
-		'name'=>'contact_name',
-		'rname'=>'name',
-		'id_name'=>'contact_id',
-		'vname'=>'LBL_CONTACT_NAME',
-        'table'=>'contacts',
-		'type'=>'relate',
-		'link'=>'contact',
-		'join_name'=>'contacts',
-        'db_concat_fields'=> array(0=>'first_name', 1=>'last_name'),
-		'isnull'=>'true',
-		'module'=>'Contacts',
-		'source'=>'non-db',
-		),
-
-  'contact_phone'=>
-    array(
-        'name'=>'contact_phone',
-        'vname' => 'LBL_PHONE',
-        'type'=>'phone',
-        'source'=>'non-db'
-    ),
-
- 'contact_email'=>
-    array(
-        'name'=>'contact_email',
-        'type'=>'varchar',
-		'vname' => 'LBL_EMAIL_ADDRESS',
-		'source' => 'non-db',
-        'studio' => false
-    ),
 
   'account_id' =>
   array (
@@ -347,14 +313,6 @@ $dictionary['Note'] = array(
     'source'=>'non-db',
   ),
 
-  'contact' =>
-  array (
-    'name' => 'contact',
-    'type' => 'link',
-    'relationship' => 'contact_notes',
-    'vname' => 'LBL_LIST_CONTACT_NAME',
-    'source'=>'non-db',
-  ),
   'cases' =>
   array (
     'name' => 'cases',
@@ -469,7 +427,6 @@ $dictionary['Note'] = array(
        array('name' =>'notespk', 'type' =>'primary', 'fields'=>array('id')),
        array('name' =>'idx_note_name', 'type'=>'index', 'fields'=>array('name')),
        array('name' =>'idx_notes_parent', 'type'=>'index', 'fields'=>array('parent_id', 'parent_type')),
-       array('name' =>'idx_note_contact', 'type'=>'index', 'fields'=>array('contact_id')),
        array('name' =>'idx_notes_assigned_del', 'type' =>'index', 'fields'=>array( 'deleted', 'assigned_user_id')),
                                                       )
 

@@ -338,18 +338,10 @@ class WorkSchedules extends Basic
 
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
-        global $current_user;
-        $result = parent::ACLAccess($view, $is_owner);
-        $user_controller = ControllerFactory::getController('Users');
-        $subordinates = $user_controller::getIDOfSubordinates([$current_user->id]);
-        $user_has_access = ACLAction::userHasAccess($current_user->id, $this->object_name, 'edit');
-        if (in_array($view, array('edit', 'EditView', 'delete')) && $this->status == 'closed' && !$current_user->is_admin) {
-            $result = false;
-        }
-        if ($this->assigned_user_id && in_array($this->assigned_user_id, $subordinates) && $user_has_access) {
-            $result = true;
-        }
-        return $result;
+        require_once 'modules/WorkSchedules/WorkSchedulesACLAccess.php';
+        $acl = new WorkSchedulesACLAccess($this, parent::ACLAccess($view, $is_owner));
+        return $acl->ACLAccess($view, $is_owner, $in_group);
+        
     }
 
     protected function setSupervisorAcceptance()
