@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,80 +36,84 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 $module_name = 'SpentTime';
 $viewdefs[$module_name]['QuickCreate'] = array(
-   'templateMeta' => array(
-      'maxColumns' => '2',
-      'widths' => array(
-         array(
-            'label' => '10',
-            'field' => '30'
-         ),
-         array(
-            'label' => '10',
-            'field' => '30'
-         )
-      ),
-      'includes' => array(
-         array(
-            'file' => 'include/javascript/moment.min.js'
-         ),
-         array(
-            'file' => 'modules/SpentTime/js/view.edit.js',
-         ),
-      ),
-   ),
-   'panels' => array(
-      'default' => array(
-         array(
-            'employee_name',
-            'assigned_user_name',
-         ),
-         array(
-            'work_date',
-            'spent_time',
-         ),
-         array(
+    'templateMeta' => array(
+        'maxColumns' => '2',
+        'widths' => array(
             array(
-               'name' => 'date_start',
-               'displayParams' => array(
-                  'minutesStep' => 5,
-               ),
+                'label' => '10',
+                'field' => '30',
             ),
             array(
-               'name' => 'date_end',
-               'displayParams' => array(
-                  'minutesStep' => 5,
-               ),
+                'label' => '10',
+                'field' => '30',
             ),
-         ),
-         array(
-            'description',
+        ),
+        'includes' => array(
             array(
-               'name' => 'workschedule_name',
-               'displayParams' => array(
-                  'call_back_function' => 'set_return_red_user_st',
-                  'field_to_name_array' => array(
-                     'id' => 'workschedule_id',
-                     'name' => 'workschedule_name',
-                     'date_start' => 'work_date',
-                  ),
-               ),
+                'file' => 'include/javascript/moment.min.js',
             ),
-         ),
-      ),
-      'LBL_PANEL_TASK' => array(
-         array(
-            'remaining_hours',
-            'done_ratio',
-         ),
-      ),
-   ),
+            array(
+                'file' => 'modules/SpentTime/js/view.edit.js',
+            ),
+        ),
+    ),
+    'panels' => array(
+        'default' => array(
+            array(
+                'employee_name',
+                'assigned_user_name',
+            ),
+            array(
+                'spent_time',
+                '',
+            ),
+            array(
+                'category',
+                '',
+            ),
+            array(
+                array(
+                    'name' => 'date_start',
+                    'displayParams' => array(
+                        'minutesStep' => 5,
+                    ),
+                ),
+                array(
+                    'name' => 'date_end',
+                    'displayParams' => array(
+                        'minutesStep' => 5,
+                    ),
+                ),
+            ),
+            array(
+                'description',
+                array(
+                    'name' => 'workschedule_name',
+                    'displayParams' => array(
+                        'call_back_function' => 'set_return_red_user_st',
+                        'field_to_name_array' => array(
+                            'id' => 'workschedule_id',
+                            'name' => 'workschedule_name',
+                            'date_start' => 'work_date',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        'LBL_PANEL_TASK' => array(
+            array(
+                'remaining_hours',
+                'done_ratio',
+            ),
+        ),
+    ),
 );

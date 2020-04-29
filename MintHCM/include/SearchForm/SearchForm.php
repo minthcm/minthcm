@@ -332,6 +332,12 @@ class SearchForm {
                     $operator = '=';
                 }
 
+                if(isset($parms['my_subordinates']) and $parms['my_subordinates'] == true) {
+                    global $current_user;
+                    $field_value = "SELECT id FROM users WHERE reports_to_id = '{$current_user->id}'";
+                    $operator = 'in';
+                }
+
                 $where = '';
                 $itr = 0;
                 if($field_value != '') {

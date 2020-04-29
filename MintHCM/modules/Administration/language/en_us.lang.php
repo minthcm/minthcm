@@ -960,4 +960,6 @@ $mod_strings = array(
    'LBL_GENERATOR_DESCRIPTION' => "Repair all DetailViews in modules, by adding or removing PDF buttons as needed.",
    'LBL_BLANK' => "",
    'LBL_ADMIN_GENERATOR' => "PDF Templates",
+   'LBL_DICTIONARIES' => "Dictionaries",
+   'LBL_DICTIONARIES_DESC' => "Create and edit dictionaries",
 );

@@ -9,10 +9,6 @@ generateOnboardingOffboarding = {
    popup: null,
    init: function () {
       viewTools.GUI.fieldErrorUnmark();
-      if (this.popup) {
-         this.popup.init();
-         return;
-      }
       $.get(this.tpl, function (tpl) {
          this.popup = MintHCMPopup(
             viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_POPUP_TITLE'),
@@ -114,30 +110,76 @@ generateOnboardingOffboarding = {
          form_name: this.form_name,
          relate_field_target_module: this.relate_field_target_module,
          parent_type_options: this.getParentTypeOptions(),
+         hide_dropdown: this.hideDropdown(),
+         is_employees: this.isEmployees(),
       }, this.getPrefillData())) + '</div>';
    },
    getPrefillData: function () {
-      let employee_id, employee_name, parent_id, parent_name = '';
+      let employee_id, employee_name, parent_id, parent_name, parent_type = '';
       const module = $('input[name=module]:not(.form-control)').val();
       const record_id = $('input[name=record]').val();
       const record_name = $('div[field=name] > span.sugar_field').text().trim();
+      const name_for_onboardings = $('div[field=onboardingtemplate_name] > a > span.sugar_field').text().trim();
+      const id_for_onboardings = $('div[field=onboardingtemplate_name] > a > span.sugar_field').attr('data-id-value');
+      const name_for_offboardings = $('div[field=offboardingtemplate_name] > a > span.sugar_field').text().trim();
+      const id_for_offboardings = $('div[field=offboardingtemplate_name] > a > span.sugar_field').attr('data-id-value');
       switch (module) {
          case 'Employees':
             employee_id = record_id;
             employee_name = record_name;
+            parent_type = "document.querySelector('#parent_type').value";
             break;
          case 'OffboardingTemplates':
+            parent_id = record_id;
+            parent_name = record_name;
+            parent_type = "\'OffboardingTemplates\'";
+            break;
          case 'OnboardingTemplates':
             parent_id = record_id;
             parent_name = record_name;
+            parent_type = "\'OnboardingTemplates\'";
+            break;
+         case 'Onboardings':
+            parent_id = id_for_onboardings;
+            parent_name = name_for_onboardings;
+            parent_type = "\'OnboardingTemplates\'";
+            break;
+         case 'Offboardings':
+            parent_id = id_for_offboardings
+            parent_name = name_for_offboardings;
+            parent_type = "\'OffboardingTemplates\'";
             break;
       }
       return {
          employee_id: employee_id,
          employee_name: employee_name,
          parent_id: parent_id,
-         parent_name: parent_name
+         parent_name: parent_name,
+         parent_type: parent_type
       }
+   },
+   hideDropdown: function () {
+      let hide_dropdown = "";
+      const module = $('input[name=module]:not(.form-control)').val();
+      switch (module) {
+         case 'Onboardings':
+         case 'Offboardings':
+         case 'OffboardingTemplates':
+         case 'OnboardingTemplates':
+            hide_dropdown = " hidden";
+            break;
+      }
+      return hide_dropdown;
+   },
+   isEmployees: function () {
+      let is_employees = "";
+      const module = $('input[name=module]:not(.form-control)').val();
+      switch (module) {
+         case 'Employees':
+            is_employees = "true";
+            break;
+      }
+      return is_employees;
    },
    getParentTypeOptions: function () {
       let selected = '';
@@ -153,8 +195,29 @@ generateOnboardingOffboarding = {
    onPopupShow: function () {
       this.prepareSqsObjects();
       this.prepareCalendar();
+
+      if (this.isEmployees()) {
+         $('#' + this.form_name + ' select#parent_type').change(this.getOnboardingOffboardingNameForEmployees.bind(this))
+         $('#' + this.form_name + ' select#parent_type').val('OnboardingTemplates')
+         viewTools.api.callCustomApi({
+            module: 'Positions',
+            action: 'getOnboardingOffboardingName',
+            dataPOST: {
+               boarding: 'OnboardingTemplates',
+               employee_id: $('input[name=record]').val(),
+            },
+            callback: function (data) {
+               if (data) {
+                  $('#' + this.form_name + ' #parent_id').val(data['parent_id']);
+                  $('#' + this.form_name + ' #parent_name').val(data['parent_name']);
+               }
+            }.bind(this)
+         });
+      }
+
    },
    prepareSqsObjects: function () {
+      QSProcessedFieldsArray = {};
       sqs_objects = [];
       let relate_field_name = this.relate_field_name + "_name";
       let relate_field_id = this.relate_field_name + "_id";
@@ -193,7 +256,7 @@ generateOnboardingOffboarding = {
          }
       }
       changeParentQS("parent_name")
-   }, 
+   },
    prepareCalendar: function () {
       viewTools.api.callCustomApi({
          module: 'Home',
@@ -219,6 +282,22 @@ generateOnboardingOffboarding = {
                   comboObject: combo_goo_date_start
                });
                combo_goo_date_start.update(false);
+            }
+         }.bind(this)
+      });
+   },
+   getOnboardingOffboardingNameForEmployees: function (e) {
+      viewTools.api.callCustomApi({
+         module: 'Positions',
+         action: 'getOnboardingOffboardingName',
+         dataPOST: {
+            boarding: e.currentTarget.value,
+            employee_id: $('input[name=record]').val(),
+         },
+         callback: function (data) {
+            if (data) {
+               $('#' + this.form_name + ' #parent_id').val(data['parent_id']);
+               $('#' + this.form_name + ' #parent_name').val(data['parent_name']);
             }
          }.bind(this)
       });

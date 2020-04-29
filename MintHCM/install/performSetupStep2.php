@@ -57,15 +57,12 @@ set_time_limit(3600);
 // flush after each output so the user can see the progress in real-time
 ob_implicit_flush();
 
+require_once 'install/install_utils.php';
 
-require_once('install/install_utils.php');
-
-require_once('modules/TableDictionary.php');
-
+require_once 'modules/TableDictionary.php';
 
 $trackerManager = TrackerManager::getInstance();
 $trackerManager->pause();
-
 
 $cache_dir = sugar_cached("");
 $line_entry_format = "&nbsp&nbsp&nbsp&nbsp&nbsp<b>";
@@ -93,15 +90,13 @@ $setup_site_url = $_SESSION['setup_site_url'];
 $parsed_url = parse_url($setup_site_url);
 $setup_site_host_name = $parsed_url['host'];
 $setup_site_log_dir = isset($_SESSION['setup_site_custom_log_dir']) ? $_SESSION['setup_site_log_dir']
-        : '.';
-$setup_site_log_file = 'minthcm.log';  // may be an option later
+: '.';
+$setup_site_log_file = 'minthcm.log'; // may be an option later
 $setup_site_session_path = isset($_SESSION['setup_site_custom_session_path']) ? $_SESSION['setup_site_session_path']
-        : '';
+: '';
 $setup_site_log_level = 'fatal';
 
-
 //$bottle = handleSugarConfig();
-
 
 ///////////////////////////////////////////////////////////////////////////////
 ////    START CREATE DEFAULTS
@@ -113,8 +108,6 @@ if ($new_config) {
     insert_default_settings();
 }
 installerHook('post_createDefaultSettings');
-
-
 
 $new_tables = 1; // is there ever a scenario where we DON'T create the admin user?
 
@@ -130,9 +123,7 @@ if ($new_tables) {
 }
 installerHook('post_createUsers');
 
-
 installDefaultKReports();
-
 
 // default OOB schedulers
 
@@ -144,7 +135,7 @@ installerHook('post_createDefaultSchedulers');
 
 installDelegationPDFTemplate();
 
-    install_mint_dashlets($db);
+install_mint_dashlets($db);
 installLog($mod_strings['LBL_PERFORM_VIEW_TOOLS']);
 installStatus($mod_strings['STAT_PERFORM_VIEW_TOOLS']);
 rebuildWithViewTools(false);
@@ -161,11 +152,10 @@ if (isset($_SESSION['INSTALLED_LANG_PACKS']) && is_array($_SESSION['INSTALLED_LA
     updateUpgradeHistory();
 }
 
-
 //require_once('modules/Connectors/InstallDefaultConnectors.php');
 ///////////////////////////////////////////////////////////////////////////////
 ////    INSTALL PASSWORD TEMPLATES
-include('install/seed_data/Advanced_Password_SeedData.php');
+include 'install/seed_data/Advanced_Password_SeedData.php';
 
 ///////////////////////////////////////////////////////////////////////////////
 ////    SETUP DONE
@@ -173,9 +163,8 @@ installLog("Installation has completed *********");
 
 $memoryUsed = '';
 if (function_exists('memory_get_usage')) {
-    $memoryUsed = $mod_strings['LBL_PERFORM_OUTRO_5'].memory_get_usage().$mod_strings['LBL_PERFORM_OUTRO_6'];
+    $memoryUsed = $mod_strings['LBL_PERFORM_OUTRO_5'] . memory_get_usage() . $mod_strings['LBL_PERFORM_OUTRO_6'];
 }
-
 
 $errTcpip = '';
 
@@ -265,7 +254,7 @@ $enabled_tabs[] = 'Attitudes';
 if (file_exists('custom/include/tabConfig.php')) {
     unlink('custom/include/tabConfig.php');
 }
-require_once('include/tabConfig.php');
+require_once 'include/tabConfig.php';
 
 //Remove the custom dashlet so that we can use the complete list of defaults to filter by category
 if (file_exists('custom/modules/Home/dashlets.php')) {
@@ -280,8 +269,7 @@ if (!file_exists('custom/include')) {
     sugar_mkdir('custom/include', 0775);
 }
 
-
-require_once('modules/Home/dashlets.php');
+require_once 'modules/Home/dashlets.php';
 
 if (isset($_SESSION['installation_scenarios'])) {
     foreach ($_SESSION['installation_scenarios'] as $scenario) {
@@ -298,8 +286,10 @@ if (isset($_SESSION['installation_scenarios'])) {
                 //if (($removeKey = array_search($dashlet, $defaultDashlets)) !== false) {
                 //    unset($defaultDashlets[$removeKey]);
                 // }
-                if (isset($defaultDashlets[$dashlet]))
-                        unset($defaultDashlets[$dashlet]);
+                if (isset($defaultDashlets[$dashlet])) {
+                    unset($defaultDashlets[$dashlet]);
+                }
+
             }
 
             //If the scenario has an associated group tab, remove accordingly (by not adding to the custom tabconfig.php
@@ -315,34 +305,32 @@ if (!is_null($_SESSION['scenarios'])) {
     unset($GLOBALS['tabStructure']['LBL_TABGROUP_DEFAULT']);
 }
 
-
 //Write the tabstructure to custom so that the grouping are not shown for the un-selected scenarios
 $fp = sugar_fopen('custom/include/tabConfig.php', 'w');
-$fileContents = "<?php \n".'$GLOBALS["tabStructure"] ='.var_export($GLOBALS['tabStructure'], true).';';
+$fileContents = "<?php \n" . '$GLOBALS["tabStructure"] =' . var_export($GLOBALS['tabStructure'], true) . ';';
 fwrite($fp, $fileContents);
 fclose($fp);
 
 //Write the dashlets to custom so that the dashlets are not shown for the un-selected scenarios
 $fp = sugar_fopen('custom/modules/Home/dashlets.php', 'w');
-$fileContents = "<?php \n".'$defaultDashlets ='.var_export($defaultDashlets, true).';';
+$fileContents = "<?php \n" . '$defaultDashlets =' . var_export($defaultDashlets, true) . ';';
 fwrite($fp, $fileContents);
 fclose($fp);
 
-
 // End of the scenario implementations
 
-
-include_once('install/suite_install/suite_install.php');
+include_once 'install/suite_install/suite_install.php';
 
 post_install_modules();
 //install default KReports
 installDefaultKReports();
+//install default Dictionaries
+installDefaultDictionaries();
 //Call rebuildSprites
 /* if(function_exists('imagecreatetruecolor'))
-  {
-  require_once('modules/UpgradeWizard/uw_utils.php');
-  rebuildSprites(true);
-  } */
-
+{
+require_once('modules/UpgradeWizard/uw_utils.php');
+rebuildSprites(true);
+} */
 
 installStatus('', array('function' => 'next_step', 'step' => 2, 'skip_minify' => true)); //mn

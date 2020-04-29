@@ -644,7 +644,7 @@ class SearchForm {
                   }
                }
             }
-
+            $additional_params = array();
             if ( isset($this->fieldDefs[$fvName]['function']) ) {
                $this->fieldDefs[$fvName]['type'] = 'multienum';
 
@@ -659,16 +659,21 @@ class SearchForm {
                } else {
                   $function_name = $this->fieldDefs[$fvName]['function'];
                }
-
+               if(!empty($this->fieldDefs[$fvName]['function']['additional_params'])){
+                  $additional_params = $this->fieldDefs[$fvName]['function']['additional_params'];
+               }
                if ( !empty($this->fieldDefs[$fvName]['function']['returns']) && $this->fieldDefs[$fvName]['function']['returns'] == 'html' ) {
                   if ( !empty($this->fieldDefs[$fvName]['function']['include']) ) {
                      require_once($this->fieldDefs[$fvName]['function']['include']);
                   }
-                  $value = call_user_func($function_name, $this->seed, $name, $value, $this->view);
+                  $value = call_user_func($function_name, $this->seed, $name, $value, $this->view, $additional_params);
                   $this->fieldDefs[$fvName]['value'] = $value;
                } else {
                   if ( !isset($function['params']) || !is_array($function['params']) ) {
-                     $this->fieldDefs[$fvName]['options'] = call_user_func($function_name, $this->seed, $name, $value, $this->view);
+                     if ( !empty($this->fieldDefs[$fvName]['function']['include']) ) {
+                        require_once($this->fieldDefs[$fvName]['function']['include']);
+                     }
+                     $this->fieldDefs[$fvName]['options'] = call_user_func($function_name, $this->seed, $name, $value, $this->view, $additional_params);
                   } else {
                      $this->fieldDefs[$fvName]['options'] = call_user_func_array($function_name, $function['params']);
                   }
@@ -1017,6 +1022,15 @@ class SearchForm {
                   global $current_user;
                   $field_value = $db->quote($current_user->id);
                   $operator = '=';
+               }
+            } elseif(!empty($parms['my_subordinates'])){
+               if ( $parms['value'] == false ) {
+                  continue;
+               } else {
+                  global $current_user;
+                  $uc = ControllerFactory::getController('Users');
+                  $field_value = "'" . implode("','", $uc::getIDOfSubordinates([$current_user->id])). "'";
+                $operator = 'in';
                }
             } elseif ( !empty($parms['closed_values']) && is_array($parms['closed_values']) ) {
                if ( $parms['value'] == false ) {
@@ -1424,6 +1438,7 @@ class SearchForm {
     * @param $module
     */
    public static function retrieveSearchDefs($module) {
+      global $current_user, $db;
       $searchdefs = array();
       $searchFields = array();
 
@@ -1450,7 +1465,18 @@ class SearchForm {
       if ( file_exists('custom/modules/' . $module . '/metadata/SearchFields.php') ) {
          require('custom/modules/' . $module . '/metadata/SearchFields.php');
       }
-
+      $sql = "SELECT id from users WHERE reports_to_id = '{$current_user->id}'";
+      if($db->getOne($sql)){
+         $searchdefs[$module]['layout']['basic_search'][] = array('name' => 'my_subordinates', 'label' => 'LBL_SUBORDINATES_FILTER', 'type' => 'bool');
+         $searchdefs[$module]['layout']['advanced_search'][] = array('name' => 'my_subordinates', 'label' => 'LBL_SUBORDINATES_FILTER', 'type' => 'bool');
+         $searchFields[$module]['my_subordinates'] = array(
+           'query_type' => 'default',
+           'db_field' => array('assigned_user_id'),
+           'my_subordinates' => true,
+           'vname' => 'LBL_SUBORDINATES_FILTER',
+           'type' => 'bool',
+         );
+      }
       return array( 'searchdefs' => $searchdefs, 'searchFields' => $searchFields );
    }
 

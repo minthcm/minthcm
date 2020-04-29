@@ -51,20 +51,6 @@ array (
     'link' => true,
     'default' => true,
   ),
-  'CONTACT_NAME' => 
-  array (
-    'width' => '20%',
-    'label' => 'LBL_LIST_CONTACT',
-    'link' => true,
-    'id' => 'CONTACT_ID',
-    'module' => 'Contacts',
-    'default' => true,
-    'ACLTag' => 'CONTACT',
-    'related_fields' => 
-    array (
-      0 => 'contact_id',
-    ),
-  ),
   'PARENT_NAME' => 
   array (
     'width' => '20%',

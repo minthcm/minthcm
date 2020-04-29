@@ -560,13 +560,15 @@ $dictionary['Meeting'] = array(
       'type' =>array(
          'name' => 'type',
          'vname' => 'LBL_TYPE',
-         'required' => true,
+         'required' => false,
          'type' => 'enum',
          'len' => 255,
          'comment' => 'Meeting type',
-         'options' => 'meetings_type_dom',
          'massupdate' => false,
          'audited' => true,
+         'function' => ['name' => 'getDictionary', 
+         'additional_params' => 'Meetings-type',
+         'include' => 'include/utils/getDictionary.php'],
       ),
       'repeat_pane' =>array(
          'name' => 'repeat_pane',

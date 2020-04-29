@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,18 +35,18 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 /**
  * This file is used to rebuild js View Tools files.
  * Each change in include/ViewTools/Expressions shuld be ended by execute This file.
- * 
+ *
  * Warning!
- * Do not edit/format/delete this file, otherwise ViewTools will not 
+ * Do not edit/format/delete this file, otherwise ViewTools will not
  * work properly.
  */
 if (!defined('sugarEntry') || !sugarEntry) {
@@ -65,9 +65,9 @@ try {
  * Warning!
  * This file is generated automatically.
  * Edit only on your own responsibility
-*/'."\n");
+*/' . "\n");
 
-    $phpcache            = fopen('include/ViewTools/Expressions/cache.php', 'w');
+    $phpcache = fopen('include/ViewTools/Expressions/cache.php', 'w');
     fwrite($phpcache,
         "<?php\n".'
 /**
@@ -118,11 +118,11 @@ try {
 */'."\n");
     $tmp_expression_list = array();
     //At first scan main Expressions folder
-    $Expressionlist      = scandir('include/ViewTools/Expressions/');
+    $Expressionlist = scandir('include/ViewTools/Expressions/');
     foreach ($Expressionlist as $key => $filename) {
         if (strpos($filename, 'VTExpression_') !== false) {
             $tmp_expression_list[substr($filename, 13, (strlen($filename) - 17))]
-                = 'include/ViewTools/Expressions/'.$filename;
+            = 'include/ViewTools/Expressions/' . $filename;
         }
     }
     //Then check ext folder (and eventually overwrite standard functions)
@@ -131,51 +131,48 @@ try {
         foreach ($Expressionlist as $key => $filename) {
             if (strpos($filename, 'VTExpression_') !== false) {
                 $tmp_expression_list[substr($filename, 13,
-                        (strlen($filename) - 17))] = 'include/ViewTools/Expressions/ext/'.$filename;
+                    (strlen($filename) - 17))] = 'include/ViewTools/Expressions/ext/' . $filename;
             }
         }
     }
     //Write formula definitions to file
     foreach ($tmp_expression_list as $fname => $src) {
         fwrite($phpcache,
-            '$vt_expression_list[\''.$fname.'\'] = \''.$src.'\';'."\n");
+            '$vt_expression_list[\'' . $fname . '\'] = \'' . $src . '\';' . "\n");
     }
     fclose($phpcache);
-
-
-
 
     /**
      * Define serversideFrontend functions
      */
-    require_once('include/ViewTools/Expressions/cache.php');
-    require_once('include/ViewTools/Expressions/VTExpression.php');
+    require_once 'include/ViewTools/Expressions/cache.php';
+    require_once 'include/ViewTools/Expressions/VTExpression.php';
     $formula_list = array();
     foreach ($vt_expression_list as $formula => $source) {
-        require_once($source);
-        $validationClass = 'VTExpression_'.$formula;
-        $validationObj   = new $validationClass();
+        require_once $source;
+        $validationClass = 'VTExpression_' . $formula;
+        $validationObj = new $validationClass();
         if ($validationObj->serversideFrontend === true) {
             $formula_list[] = $formula;
         }
     }
     fwrite($jscache,
         '
-window.viewTools.cache.serversideFrontend='.json_encode($formula_list).';');
+window.viewTools.cache.serversideFrontend=' . json_encode($formula_list) . ';');
 
     /**
      * Build View Tools frontend functions
      */
-    $returnFormulas   = '';
+    $returnFormulas = '';
     $validationFields = array();
     ksort($vt_expression_list);
     foreach ($vt_expression_list as $functionName => $fileSource) {
-        $validationClass = 'VTExpression_'.$functionName;
-        $validationObj   = new $validationClass();
+        $validationClass = 'VTExpression_' . $functionName;
+        $validationObj = new $validationClass();
         if ($validationObj->frontend() !== false || $validationObj->serversideFrontend
             === true) {
-            $returnFormulas = $returnFormulas.'
-window.viewTools.formula.'.$functionName.'=function(){
+            $returnFormulas = $returnFormulas . '
+window.viewTools.formula.' . $functionName . '=function(){
    try {';
             if ($validationObj->serversideFrontend === true) {
                 $returnFormulas .= <<<EOT
@@ -195,7 +192,7 @@ window.viewTools.formula.'.$functionName.'=function(){
          } else {
             submodule = module_elem.attr('id').replace('create', '');
          }
-      
+
          values['convert_lead'] = true;
          values['convert_lead_module'] = submodule;
       }
@@ -216,14 +213,14 @@ window.viewTools.formula.'.$functionName.'=function(){
       return ret;
 EOT;
             } else {
-                $returnFormulas = $returnFormulas.'//Get arguments values
+                $returnFormulas = $returnFormulas . '//Get arguments values
       for ( key in arguments ) {
          arguments[key] = viewTools.formula.valueOf( arguments[key] );
       }';
                 if ($validationObj->inputParams !== false) {
-                    $returnFormulas = $returnFormulas.'
+                    $returnFormulas = $returnFormulas . '
       //set argument names
-      var tmpArgumentsKeys = '.json_encode($validationObj->inputParams).';
+      var tmpArgumentsKeys = ' . json_encode($validationObj->inputParams) . ';
       var tmpArguments = [ ];
       var x = 0;
       for ( key in tmpArgumentsKeys ) {
@@ -235,10 +232,10 @@ EOT;
       arguments = tmpArguments;
 ';
                 }
-                $returnFormulas = $returnFormulas.'
-'.$validationObj->frontend();
+                $returnFormulas = $returnFormulas . '
+' . $validationObj->frontend();
             }
-            $returnFormulas = $returnFormulas.'
+            $returnFormulas = $returnFormulas . '
    } catch ( e ) {
       viewTools.console.log( e );
       return false;
@@ -247,8 +244,8 @@ EOT;
         }
         $sqlformulas = array();
         foreach ($vt_expression_list as $functionName => $fileSource) {
-            $validationClass = 'VTExpression_'.$functionName;
-            $validationObj   = new $validationClass();
+            $validationClass = 'VTExpression_' . $functionName;
+            $validationObj = new $validationClass();
             if ($validationObj->sqlBackendFormula === true) {
                 $sqlformulas[] = "'{$functionName}'";
             }
@@ -256,17 +253,17 @@ EOT;
 
         //declare frontend function as validation-formula
         if ($validationObj->inputParams !== false) {
-            $paramCounter             = 1;
+            $paramCounter = 1;
             $frontendValidationParams = '';
             foreach ($validationObj->inputParams as $param) {
-                $frontendValidationParams = $frontendValidationParams.'
-         '.$param.':{'.'order:'.$paramCounter.'},';
+                $frontendValidationParams = $frontendValidationParams . '
+         ' . $param . ':{' . 'order:' . $paramCounter . '},';
                 $paramCounter++;
             }
-            $validationFields[$functionName] = '   '.
-                $functionName.':{
-      formulaName:\''.$functionName.'\',
-      params:{'.$frontendValidationParams.'
+            $validationFields[$functionName] = '   ' .
+                $functionName . ':{
+      formulaName:\'' . $functionName . '\',
+      params:{' . $frontendValidationParams . '
       }
    },
 ';
@@ -275,31 +272,31 @@ EOT;
     fwrite($jscache,
         '
    window.viewTools.formulaParser = {
-'.implode("", $validationFields).'}');
+' . implode("", $validationFields) . '}');
 
     $phpcache = fopen("include/ViewTools/Expressions/cache.php", "a") or die("Unable to open 'cache.php' file!");
     fwrite($phpcache, '
-$sql_formula=array('.implode(",", $sqlformulas).');
+$sql_formula=array(' . implode(",", $sqlformulas) . ');
 ');
     fclose($phpcache);
 
     fwrite($jscache, '
-'.$returnFormulas);
+' . $returnFormulas);
 
     /*
      * Declare availability filters
      */
     $tmp_availablilities = array('All' => 'vt_formula');
     foreach ($vt_expression_list as $functionName => $fileSource) {
-        $validationClass = 'VTExpression_'.$functionName;
-        $validationObj   = new $validationClass();
+        $validationClass = 'VTExpression_' . $functionName;
+        $validationObj = new $validationClass();
         foreach ($validationObj->availability as $available_in) {
             $tmp_availablilities[$available_in] = $available_in;
         }
     }
     $formula_availablilities = '';
     foreach ($tmp_availablilities as $name => $class) {
-        $formula_availablilities = $formula_availablilities.' | <a style="cursor:pointer;" class="filterButton '.$class.'" onclick="setFilter(\''.$class.'\')">'.$name.'</a>';
+        $formula_availablilities = $formula_availablilities . ' | <a style="cursor:pointer;" class="filterButton ' . $class . '" onclick="setFilter(\'' . $class . '\')">' . $name . '</a>';
     }
 
     //Build ExpressionList documentation
@@ -310,24 +307,24 @@ $sql_formula=array('.implode(",", $sqlformulas).');
     fwrite($documentationFileHandler,
         "<b style=\"color:#aaa;\">Please put custom formula classes in ' custom / Expressions / ext / ' directory. </b><br/>\n");
     fwrite($documentationFileHandler,
-        "<i style=\"color:#aaa;\">[Documentation generated : ".date('Y-m-d h:i:s')."]</i><br/>\n");
+        "<i style=\"color:#aaa;\">[Documentation generated : " . date('Y-m-d h:i:s') . "]</i><br/>\n");
 
     fwrite($documentationFileHandler,
         "<div style=\"border-top: 1px solid #cccccc;margin-top:5px; padding-top:5px;\">Filter:{$formula_availablilities}</div>\n");
 
     foreach ($vt_expression_list as $functionName => $fileSource) {
-        $validationClass = 'VTExpression_'.$functionName;
-        $validationObj   = new $validationClass();
+        $validationClass = 'VTExpression_' . $functionName;
+        $validationObj = new $validationClass();
         fwrite($documentationFileHandler,
-            "<div style=\"border-top: 1px solid #cccccc;margin-top:5px; padding-top:5px;\" class=\"vt_formula ".implode(" ",
-                $validationObj->availability)."\">\n");
+            "<div style=\"border-top: 1px solid #cccccc;margin-top:5px; padding-top:5px;\" class=\"vt_formula " . implode(" ",
+                $validationObj->availability) . "\">\n");
         fwrite($documentationFileHandler,
             "<div><h1><b><a id=\"{$functionName}\">{$functionName}</a></b>");
 
         if ($validationObj->inputParams != false) {
             fwrite($documentationFileHandler,
-                "<span style=\"color:grey;\"> (".implode(' , ',
-                    $validationObj->inputParams).")</span>");
+                "<span style=\"color:grey;\"> (" . implode(' , ',
+                    $validationObj->inputParams) . ")</span>");
         }
         fwrite($documentationFileHandler, "</h1></div>\n");
         $fileHandler = fopen($fileSource, "r");
@@ -337,9 +334,9 @@ $sql_formula=array('.implode(",", $sqlformulas).');
          * false - reading description
          * true - end of description
          */
-        $docEndFlag  = null;
-        while (($buffer      = fgets($fileHandler, 4096)) !== false && $docEndFlag
-        !== true) {
+        $docEndFlag = null;
+        while (($buffer = fgets($fileHandler, 4096)) !== false && $docEndFlag
+            !== true) {
             //Search for description
             if ($docEndFlag === null) {
                 //Found start of description
@@ -364,20 +361,20 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                             "<a href=\"#{$fname}\">{$fname}</a>(", $buffer);
                     }
                     //set $field_name as bold
-                    $buffer  = preg_replace('/\$(\w+)/',
+                    $buffer = preg_replace('/\$(\w+)/',
                         '<b style="color:black;">\$$1</b>', $buffer);
                     //set color to strings
-                    $buffer  = preg_replace('/\'(.+)\'/',
+                    $buffer = preg_replace('/\'(.+)\'/',
                         '<span style="color:green;">\'$1\'</span>', $buffer);
                     //set color to numbers
-                    $buffer  = preg_replace('/\ (\d+)\ /',
+                    $buffer = preg_replace('/\ (\d+)\ /',
                         ' <b style="color:orange;">$1</b> ', $buffer);
-                    $buffer  = preg_replace('/\ -(\d+)\ /',
+                    $buffer = preg_replace('/\ -(\d+)\ /',
                         ' <b style="color:orange;">-$1</b> ', $buffer);
                     //
                     $docLine = trim(preg_replace("/\ \*/", "", $buffer));
                     if ($docLine != "") {
-                        fwrite($documentationFileHandler, $docLine."<br/>\n");
+                        fwrite($documentationFileHandler, $docLine . "<br/>\n");
                     }
                 }
             }
@@ -389,8 +386,8 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                 $tmpWhereVavailable = 'as formula and array';
             }
             fwrite($documentationFileHandler,
-                "<i style=\"color:grey;\">Available in: ".implode(' , ',
-                    $validationObj->availability)." / {$tmpWhereVavailable}</i><br/>\n");
+                "<i style=\"color:grey;\">Available in: " . implode(' , ',
+                    $validationObj->availability) . " / {$tmpWhereVavailable}</i><br/>\n");
         }
         fwrite($documentationFileHandler, "</div>\n");
     }
@@ -400,12 +397,12 @@ $sql_formula=array('.implode(",", $sqlformulas).');
      * Require all module vardefs
      */
     foreach (scandir('cache/modules') as $folder) {
-        if ($folder != '.' && $folder != '..' && file_exists('cache/modules/'.$folder)
-            && is_dir('cache/modules/'.$folder)) {
-            foreach (scandir('cache/modules/'.$folder) as $file) {
+        if ($folder != '.' && $folder != '..' && file_exists('cache/modules/' . $folder)
+            && is_dir('cache/modules/' . $folder)) {
+            foreach (scandir('cache/modules/' . $folder) as $file) {
                 if ($file !== '.' && $file != '..' && strpos($file,
-                        'vardefs.php') !== false) {
-                    require_once('cache/modules/'.$folder.'/'.$file);
+                    'vardefs.php') !== false) {
+                    require_once 'cache/modules/' . $folder . '/' . $file;
                 }
             }
         }
@@ -413,7 +410,7 @@ $sql_formula=array('.implode(",", $sqlformulas).');
     /*
      * Get all vt_calculated, vt_dependency, vt_required, vt_readonly vt_ definitions
      */
-    include_once('cache/Relationships/relationships.cache.php');
+    include_once 'cache/Relationships/relationships.cache.php';
     $initArray = array();
     foreach ($GLOBALS["dictionary"] as $moduleName => $moduleData) {
         if (is_array($moduleData['fields'])) {
@@ -421,13 +418,13 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                 foreach ($params as $paramName => $paramData) {
                     //Found vt formula
                     if (in_array($paramName,
-                            array('vt_calculated', 'vt_dependency', 'vt_required',
-                                'vt_readonly'))) {
+                        array('vt_calculated', 'vt_dependency', 'vt_required',
+                            'vt_readonly'))) {
                         if (is_array($paramData)) {
                             foreach ($paramData as $paramDataField => $paramDataValue) {
                                 if (substr($paramDataValue, 0, 1) == '$') {
                                     $initArray[$moduleData['table']][substr($paramDataValue,
-                                            1)][$fieldName] = $fieldName;
+                                        1)][$fieldName] = $fieldName;
                                 }
                             }
                         } else if (is_string($paramData)) {
@@ -437,7 +434,7 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                             preg_match_all('/\$(\w+)/i', $paramData, $variables);
                             foreach ($variables[1] as $matchedVariable) {
                                 $initArray[$moduleData['table']][$matchedVariable][$fieldName]
-                                    = $fieldName;
+                                = $fieldName;
                             }
                             //check all relation definitions
                             $paramData = preg_replace('/\ /', '', $paramData);
@@ -454,10 +451,10 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                                             $get_foreign_key_from = 'rhs';
                                         }
                                         foreach ($focus->field_defs as $field) {
-                                            if ($field['id_name'] == $def["join_key_".$get_foreign_key_from]
+                                            if ($field['id_name'] == $def["join_key_" . $get_foreign_key_from]
                                                 && $field['link'] == $matchedVariable) {
                                                 $initArray[$moduleData['table']][$field['name']][$fieldName]
-                                                    = $fieldName;
+                                                = $fieldName;
                                                 break;
                                             }
                                         }
@@ -465,51 +462,51 @@ $sql_formula=array('.implode(",", $sqlformulas).');
                                         //lhs_key
                                         if (isset($def['lhs_key'])) {
                                             $initArray[$moduleData['table']][$def['lhs_key']][$fieldName]
-                                                = $fieldName;
+                                            = $fieldName;
                                         }
                                         //rhs_key
                                         if (isset($defs[$matchedVariable]['rhs_key'])) {
                                             $initArray[$moduleData['table']][$def['rhs_key']][$fieldName]
-                                                = $fieldName;
+                                            = $fieldName;
                                         }
                                     }
                                     /*
-                                      if ( isset($def['relationships']) ) {
-                                      $add_table = $def['relationships'];
-                                      //join_key_lhs
-                                      if ( isset($add_table['join_key_lhs']) ) {
-                                      $initArray[$moduleData['table']][$add_table['join_key_lhs']][$fieldName] = $fieldName;
-                                      }
-                                      //join_key_rhs
-                                      if ( isset($add_table['join_key_rhs']) ) {
-                                      $initArray[$moduleData['table']][$add_table['join_key_rhs']][$fieldName] = $fieldName;
-                                      }
-                                      }
-                                     */
+                                if ( isset($def['relationships']) ) {
+                                $add_table = $def['relationships'];
+                                //join_key_lhs
+                                if ( isset($add_table['join_key_lhs']) ) {
+                                $initArray[$moduleData['table']][$add_table['join_key_lhs']][$fieldName] = $fieldName;
+                                }
+                                //join_key_rhs
+                                if ( isset($add_table['join_key_rhs']) ) {
+                                $initArray[$moduleData['table']][$add_table['join_key_rhs']][$fieldName] = $fieldName;
+                                }
+                                }
+                                 */
                                 }
                                 if (isset($relationships[$matchedVariable])) {
                                     $relationship = $relationships[$matchedVariable];
                                     //lhs_key
                                     if (isset($relationship['lhs_key'])) {
                                         $initArray[$moduleData['table']][$relationship['lhs_key']][$fieldName]
-                                            = $fieldName;
+                                        = $fieldName;
                                     }
                                     //rhs_key
                                     if (isset($relationships[$matchedVariable]['rhs_key'])) {
                                         $initArray[$moduleData['table']][$relationship['rhs_key']][$fieldName]
-                                            = $fieldName;
+                                        = $fieldName;
                                     }
                                     if (isset($relationship['relationships'])) {
                                         $add_table = $relationship['relationships'];
                                         //join_key_lhs
                                         if (isset($add_table['join_key_lhs'])) {
                                             $initArray[$moduleData['table']][$add_table['join_key_lhs']][$fieldName]
-                                                = $fieldName;
+                                            = $fieldName;
                                         }
                                         //join_key_rhs
                                         if (isset($add_table['join_key_rhs'])) {
                                             $initArray[$moduleData['table']][$add_table['join_key_rhs']][$fieldName]
-                                                = $fieldName;
+                                            = $fieldName;
                                         }
                                     }
                                 }
@@ -524,11 +521,11 @@ $sql_formula=array('.implode(",", $sqlformulas).');
     require_once 'modules/Administration/LeadConversionViewToolsRebuild/ViewToolsLeadConverRebuild.php';
 
     $viewTools_lead_converter_rebuild = new ViewToolsLeadConverRebuild();
-    $parsedInitArray                  = $viewTools_lead_converter_rebuild->addLeadConversionDependency($initArray);
+    $parsedInitArray = $viewTools_lead_converter_rebuild->addLeadConversionDependency($initArray);
 
     fwrite($jscache,
         ';
-window.viewTools.cache.initMappings = '.json_encode($parsedInitArray).';');
+window.viewTools.cache.initMappings = ' . json_encode($parsedInitArray) . ';');
 
     /*
      * Get all field requirements
@@ -548,7 +545,7 @@ window.viewTools.cache.initMappings = '.json_encode($parsedInitArray).';');
 
     fwrite($jscache,
         '
-window.viewTools.cache.formulaRequirements = '.json_encode($parsed_field_requirements).';');
+window.viewTools.cache.formulaRequirements = ' . json_encode($parsed_field_requirements) . ';');
 
     /*
      * Get duplicate fields from duplicate definitions
@@ -556,7 +553,7 @@ window.viewTools.cache.formulaRequirements = '.json_encode($parsed_field_require
     $duplicate_fields = array();
     foreach ($GLOBALS["dictionary"] as $module) {
         if (isset($module['vt_duplicate']) && is_string($module['vt_duplicate'])) {
-            $variables              = array();
+            $variables = array();
             $module['vt_duplicate'] = preg_replace('/\ /', '',
                 $module['vt_duplicate']);
             preg_match_all('/\$(\w+)/i', $module['vt_duplicate'], $variables);
@@ -571,7 +568,7 @@ window.viewTools.cache.formulaRequirements = '.json_encode($parsed_field_require
     }
     fwrite($jscache,
         '
-window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields).';');
+window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_fields) . ';');
 
     /*
      * Get duplicate formulas from duplicate definitions
@@ -579,16 +576,16 @@ window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields)
     $duplicate_formulas = '';
     foreach ($GLOBALS["dictionary"] as $module) {
         if (isset($module['vt_duplicate'])) {
-            $duplicate_formulas .= '$duplicate[\''.$module['table'].'\'][\'formula\']=\''.str_replace("'",
-                    "\'", $module['vt_duplicate']).'\';'."\n";
+            $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'formula\']=\'' . str_replace("'",
+                "\'", $module['vt_duplicate']) . '\';' . "\n";
 
-            $variables              = array();
+            $variables = array();
             $module['vt_duplicate'] = preg_replace('/\ /', '',
                 $module['vt_duplicate']);
             preg_match_all('/[\$@](\w+)/i', $module['vt_duplicate'], $variables);
             foreach ($variables[1] as $matchedVariable) {
-                $duplicate_formulas .= '$duplicate[\''.$module['table'].'\'][\'fields\'][\''.$matchedVariable.'\']=\''.$matchedVariable.'\';'."\n";
-                $duplicate_formulas .= '$label[\''.$module['table'].'\'][\''.$matchedVariable.'\']=\''.$module['fields'][$matchedVariable]['vname'].'\';'."\n";
+                $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'fields\'][\'' . $matchedVariable . '\']=\'' . $matchedVariable . '\';' . "\n";
+                $duplicate_formulas .= '$label[\'' . $module['table'] . '\'][\'' . $matchedVariable . '\']=\'' . $module['fields'][$matchedVariable]['vname'] . '\';' . "\n";
             }
             if (isset($module['vt_duplicateColumns'])) {
                 $module['vt_duplicateColumns'] = preg_replace('/\ /', '',
@@ -596,20 +593,20 @@ window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields)
                 preg_match_all('/(\w+)/i', $module['vt_duplicateColumns'],
                     $columns);
                 foreach ($columns[1] as $matchedColumn) {
-                    $duplicate_formulas .= '$duplicate[\''.$module['table'].'\'][\'duplicateColumns\'][\''.$matchedColumn.'\']=\''.$matchedColumn.'\';'."\n";
-                    $duplicate_formulas .= '$label[\''.$module['table'].'\'][\'duplicateColumns\'][\''.$matchedColumn.'\']=\''.$module['fields'][$matchedColumn]['vname'].'\';'."\n";
+                    $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $matchedColumn . '\';' . "\n";
+                    $duplicate_formulas .= '$label[\'' . $module['table'] . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $module['fields'][$matchedColumn]['vname'] . '\';' . "\n";
                 }
             }
         }
     }
     $phpcache = fopen("include/ViewTools/Expressions/cache.php", "a") or die("Unable to open 'cache.php' file!");
     fwrite($phpcache, '
-'.$duplicate_formulas);
+' . $duplicate_formulas);
 
     /*
      * check for relate
      */
-    require ('cache/Relationships/relationships.cache.php');
+    require 'cache/Relationships/relationships.cache.php';
     $related_tmp = array();
     foreach ($GLOBALS["dictionary"] as $module_name => $module) {
         if (is_array($module['fields'])) {
@@ -621,7 +618,7 @@ window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields)
                         > 0) {
                         foreach ($vt_relationsip_tmp[1] as $relationship_name) {
                             $relationship_field = $module['fields'][$relationship_name];
-                            $relationship       = $relationships[$relationship_field['relationship']];
+                            $relationship = $relationships[$relationship_field['relationship']];
                             if ($relationship['lhs_table'] == $module['table']) {
                                 $related_tmp[$relationship['rhs_table']][] = "'{$relationship_field['name']}'";
                             } else if ($relationship['rhs_table'] == $module['table']) {
@@ -630,7 +627,7 @@ window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields)
                                     if ($field['type'] == 'link' && $field['relationship']
                                         == $relationship['name']) {
                                         $related_tmp[$relationship['lhs_table']][]
-                                            = "'{$field['name']}'";
+                                        = "'{$field['name']}'";
                                         break;
                                     }
                                 }
@@ -643,8 +640,8 @@ window.viewTools.cache.formulaDuplicateFields = '.json_encode($duplicate_fields)
     }
     foreach ($related_tmp as $key => $module) {
         fwrite($phpcache,
-            "\n\$related_recalculation['{$key}']=array(".implode(',',
-                array_unique($module)).");");
+            "\n\$related_recalculation['{$key}']=array(" . implode(',',
+                array_unique($module)) . ");");
     }
     fclose($phpcache);
 

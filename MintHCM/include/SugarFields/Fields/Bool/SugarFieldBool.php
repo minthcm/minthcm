@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,34 +36,23 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+require_once 'include/SugarFields/Fields/Base/SugarFieldBase.php';
 
-require_once('include/SugarFields/Fields/Base/SugarFieldBase.php');
+class SugarFieldBool extends SugarFieldBase
+{
 
-class SugarFieldBool extends SugarFieldBase {
-	/**
-	 *
-	 * @return The html for a drop down if the search field is not 'my_items_only' or a dropdown for all other fields.
-	 *			This strange behavior arises from the special needs of PM. They want the my items to be checkboxes and all other boolean fields to be dropdowns.
-	 * @author Navjeet Singh
-	 * @param $parentFieldArray -
-	 **/
-	function getSearchViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex) {
-		$this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
-		//If there was a type override to specifically render it as a boolean, show the EditView checkbox
-		if( preg_match("/(favorites|current_user|open)_only.*/", $vardef['name']))
-		{
-			return $this->fetch($this->findTemplate('EditView'));
-		} else {
-			return $this->fetch($this->findTemplate('SearchView'));
-		}
-	}
+    public function getSearchViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex)
+    {
+        $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
+        return $this->fetch($this->findTemplate('EditView'));
+    }
 
     /**
      * @see SugarFieldBase::importSanitize()
@@ -73,41 +62,42 @@ class SugarFieldBool extends SugarFieldBase {
         $vardef,
         $focus,
         ImportFieldSanitize $settings
-        )
-    {
-        $bool_values = array(0=>'0',1=>'no',2=>'off',3=>'n',4=>'yes',5=>'y',6=>'on',7=>'1');
-        $bool_search = array_search($value,$bool_values);
-        if ( $bool_search === false ) {
+    ) {
+        $bool_values = array(0 => '0', 1 => 'no', 2 => 'off', 3 => 'n', 4 => 'yes', 5 => 'y', 6 => 'on', 7 => '1');
+        $bool_search = array_search($value, $bool_values);
+        if ($bool_search === false) {
             return false;
-        }
-        else {
+        } else {
             //Convert all the values to a real bool.
-            $value = (int) ( $bool_search > 3 );
+            $value = (int) ($bool_search > 3);
         }
-        if ( isset($vardef['dbType']) && $vardef['dbType'] == 'varchar' )
-            $value = ( $value ? 'on' : 'off' );
+        if (isset($vardef['dbType']) && $vardef['dbType'] == 'varchar') {
+            $value = ($value ? 'on' : 'off');
+        }
 
         return $value;
     }
 
-    public function getEmailTemplateValue($inputField, $vardef, $context = null){
+    public function getEmailTemplateValue($inputField, $vardef, $context = null)
+    {
         global $app_list_strings;
         // This does not return a smarty section, instead it returns a direct value
-        if ( $inputField == 'bool_true' || $inputField === true ) { // Note: true must be absolute true
+        if ($inputField == 'bool_true' || $inputField === true) { // Note: true must be absolute true
             return $app_list_strings['checkbox_dom']['1'];
-        } else if ( $inputField == 'bool_false' || $inputField === false){ // Note: false must be absolute false
+        } else if ($inputField == 'bool_false' || $inputField === false) { // Note: false must be absolute false
             return $app_list_strings['checkbox_dom']['2'];
         } else { // otherwise we return blank display
             return '';
         }
     }
 
-    public function unformatField($formattedField, $vardef){
-        if ( empty($formattedField) ) {
+    public function unformatField($formattedField, $vardef)
+    {
+        if (empty($formattedField)) {
             $unformattedField = false;
             return $unformattedField;
         }
-        if ( $formattedField == '0' || $formattedField == 'off' || $formattedField == 'false' || $formattedField == 'no' ) {
+        if ($formattedField == '0' || $formattedField == 'off' || $formattedField == 'false' || $formattedField == 'no') {
             $unformattedField = false;
         } else {
             $unformattedField = true;

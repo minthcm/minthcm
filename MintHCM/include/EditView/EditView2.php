@@ -533,7 +533,7 @@ class EditView {
 
          foreach ( $this->focus->toArray() as $name => $value ) {
             $valueFormatted = false;
-
+            $additional_params = false;
             $this->fieldDefs[$name] = (!empty($this->fieldDefs[$name]) && !empty($this->fieldDefs[$name]['value'])) ? array_merge($this->focus->field_defs[$name], $this->fieldDefs[$name]) : $this->focus->field_defs[$name];
 
             foreach ( array( "formula", "default", "comments", "help" ) as $toEscape ) {
@@ -591,7 +591,11 @@ class EditView {
                ) {
                   require_once($this->fieldDefs[$name]['function']['include']);
                }
-
+               if (
+                  isset($this->fieldDefs[$name]['function']['additional_params'])
+               ) {
+                  $additional_params = $this->fieldDefs[$name]['function']['additional_params'];
+               }
                if (
                        !empty($this->fieldDefs[$name]['function']['returns']) &&
                        $this->fieldDefs[$name]['function']['returns'] === 'html'
@@ -599,11 +603,11 @@ class EditView {
                   if ( !empty($this->fieldDefs[$name]['function']['include']) ) {
                      require_once($this->fieldDefs[$name]['function']['include']);
                   }
-                  $value = call_user_func($function, $this->focus, $name, $value, $this->view);
+                  $value = call_user_func($function, $this->focus, $name, $value, $this->view,$additional_params);
                   $valueFormatted = true;
                } else {
                   $this->fieldDefs[$name]['options'] = call_user_func(
-                          $function, $this->focus, $name, $value, $this->view
+                          $function, $this->focus, $name, $value, $this->view, $additional_params
                   );
                }
             }

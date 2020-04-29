@@ -1,7 +1,7 @@
 <?php
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -41,49 +41,46 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 global $current_user;
 
 $dashletData['SpentTimeDashlet']['searchFields'] = array(
-   'work_date' => array(
-      'default' => ''
-   ),
-   'assigned_user_id' => array(
-      'type' => 'assigned_user_name',
-      'default' => $current_user->name
-   )
+    'assigned_user_id' => array(
+        'type' => 'assigned_user_name',
+        'default' => $current_user->name,
+    ),
 );
 $dashletData['SpentTimeDashlet']['columns'] = array(
-   'name' => array(
-      'width' => '20',
-      'label' => 'LBL_LIST_NAME',
-      'link' => true,
-      'default' => true
-   ),
-   'date_start' => array(
-      'label' => 'LBL_DATE_START',
-      'width' => '10%',
-      'default' => true,
-   ),
-   'date_end' => array(
-      'label' => 'LBL_DATE_END',
-      'width' => '10%',
-      'default' => true,
-   ),
-   'spent_time' => array(
-      'width' => '8',
-      'label' => 'LBL_SPENT_TIME',
-      'default' => true,
-   ),
-   'work_date' => array(
-      'width' => '8',
-      'label' => 'LBL_WORK_DATE',
-      'default' => false,
-   ),
-   'description' => array(
-      'width' => '23%',
-      'label' => 'LBL_DESCRIPTION',
-      'default' => true,
-   ),
-   'assigned_user_name' => array(
-      'width' => '8',
-      'label' => 'LBL_LIST_ASSIGNED_USER',
-      'default' => false,
-   ),
+    'name' => array(
+        'width' => '20',
+        'label' => 'LBL_LIST_NAME',
+        'link' => true,
+        'default' => true,
+    ),
+    'date_start' => array(
+        'label' => 'LBL_DATE_START',
+        'width' => '10%',
+        'default' => true,
+    ),
+    'date_end' => array(
+        'label' => 'LBL_DATE_END',
+        'width' => '10%',
+        'default' => true,
+    ),
+    'spent_time' => array(
+        'width' => '8',
+        'label' => 'LBL_SPENT_TIME',
+        'default' => true,
+    ),
+    'work_date' => array(
+        'width' => '8',
+        'label' => 'LBL_WORK_DATE',
+        'default' => false,
+    ),
+    'description' => array(
+        'width' => '23%',
+        'label' => 'LBL_DESCRIPTION',
+        'default' => true,
+    ),
+    'assigned_user_name' => array(
+        'width' => '8',
+        'label' => 'LBL_LIST_ASSIGNED_USER',
+        'default' => false,
+    ),
 );

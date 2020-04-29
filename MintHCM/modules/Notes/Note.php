@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -52,50 +52,43 @@ require_once __DIR__ . '/../../include/SugarObjects/templates/file/File.php';
 // Note is used to store customer information.
 class Note extends File
 {
-    var $field_name_map;
+    public $field_name_map;
     // Stored fields
-    var $id;
-    var $date_entered;
-    var $date_modified;
-    var $modified_user_id;
-    var $assigned_user_id;
-    var $created_by;
-    var $created_by_name;
-    var $modified_by_name;
-    var $description;
-    var $name;
-    var $filename;
+    public $id;
+    public $date_entered;
+    public $date_modified;
+    public $modified_user_id;
+    public $assigned_user_id;
+    public $created_by;
+    public $created_by_name;
+    public $modified_by_name;
+    public $description;
+    public $name;
+    public $filename;
     // handle to an upload_file object
     // used in emails
-    var $file;
-    var $embed_flag; // inline image flag
-    var $parent_type;
-    var $parent_id;
-    var $contact_id;
-    var $portal_flag;
+    public $file;
+    public $embed_flag; // inline image flag
+    public $parent_type;
+    public $parent_id;
+    public $contact_id;
+    public $portal_flag;
 
-    var $parent_name;
-    var $contact_name;
-    var $contact_phone;
-    var $contact_email;
-    var $file_mime_type;
-    var $module_dir = "Notes";
-    var $default_note_name_dom = array('Meeting notes', 'Reminder');
-    var $table_name = "notes";
-    var $new_schema = true;
-    var $object_name = "Note";
-    var $importable = true;
+    public $parent_name;
+    public $file_mime_type;
+    public $module_dir = "Notes";
+    public $default_note_name_dom = array('Meeting notes', 'Reminder');
+    public $table_name = "notes";
+    public $new_schema = true;
+    public $object_name = "Note";
+    public $importable = true;
 
     // This is used to retrieve related fields from form posts.
-    var $additional_column_fields = Array(
-        'contact_name',
-        'contact_phone',
-        'contact_email',
+    public $additional_column_fields = array(
         'parent_name',
         'first_name',
-        'last_name'
+        'last_name',
     );
-
 
     public function __construct()
     {
@@ -116,8 +109,7 @@ class Note extends File
         self::__construct();
     }
 
-
-    function safeAttachmentName()
+    public function safeAttachmentName()
     {
         global $sugar_config;
 
@@ -149,7 +141,7 @@ class Note extends File
      * related to those notes
      * @param string id ID
      */
-    function mark_deleted($id)
+    public function mark_deleted($id)
     {
         global $sugar_config;
 
@@ -168,10 +160,10 @@ class Note extends File
         parent::mark_deleted($id);
     }
 
-    function deleteAttachment($isduplicate = "false")
+    public function deleteAttachment($isduplicate = "false")
     {
         $removeFile = null;
-        
+
         if ($this->ACLAccess('edit')) {
             if ($isduplicate == "true") {
                 return true;
@@ -204,13 +196,12 @@ class Note extends File
         return false;
     }
 
-
-    function get_summary_text()
+    public function get_summary_text()
     {
         return "$this->name";
     }
 
-    function create_export_query($order_by, $where, $relate_link_join = '')
+    public function create_export_query($order_by, $where, $relate_link_join = '')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
         $custom_join['join'] .= $relate_link_join;
@@ -242,34 +233,17 @@ class Note extends File
         return $query;
     }
 
-    function fill_in_additional_list_fields()
+    public function fill_in_additional_list_fields()
     {
         $this->fill_in_additional_detail_fields();
     }
 
-    function fill_in_additional_detail_fields()
+    public function fill_in_additional_detail_fields()
     {
         parent::fill_in_additional_detail_fields();
-        //TODO:  Seems odd we need to clear out these values so that list views don't show the previous rows value if current value is blank
-        $this->getRelatedFields('Contacts', $this->contact_id,
-            array('name' => 'contact_name', 'phone_work' => 'contact_phone'));
-        if (!empty($this->contact_name)) {
-
-            $emailAddress = new SugarEmailAddress();
-            $this->contact_email = $emailAddress->getPrimaryAddress(false, $this->contact_id, 'Contacts');
-        }
-
-        if (isset($this->contact_id) && $this->contact_id != '') {
-            $contact = new Contact();
-            $contact->retrieve($this->contact_id);
-            if (isset($contact->id)) {
-                $this->contact_name = $contact->full_name;
-            }
-        }
     }
 
-
-    function get_list_view_data()
+    public function get_list_view_data()
     {
         $note_fields = $this->get_list_view_array();
         global $app_list_strings, $focus, $action, $currentModule, $mod_strings, $sugar_config;
@@ -284,26 +258,31 @@ class Note extends File
                 $note_fields['FILE_URL'] = UploadFile::get_upload_url($this);
             }
         }
-        if (isset($this->contact_id) && $this->contact_id != '') {
-            $contact = new Contact();
-            $contact->retrieve($this->contact_id);
-            if (isset($contact->id)) {
-                $this->contact_name = $contact->full_name;
-            }
-        }
-        if (isset($this->contact_name)) {
-            $note_fields['CONTACT_NAME'] = $this->contact_name;
-        }
 
         global $current_language;
         $mod_strings = return_module_language($current_language, 'Notes');
         $note_fields['STATUS'] = $mod_strings['LBL_NOTE_STATUS'];
 
-
         return $note_fields;
     }
 
-    function listviewACLHelper()
+     /**
+     * Returns the content as string or false if there is no attachment or it
+     * couldn't be located.
+     *
+     * @return bool|string
+     */
+    public function getAttachmentContent()
+    {
+        $path = "upload://{$this->id}";
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        return file_get_contents($path);
+    }
+
+    public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
         $is_owner = false;
@@ -324,7 +303,7 @@ class Note extends File
                     }
                 }
             }
-            require_once("modules/SecurityGroups/SecurityGroup.php");
+            require_once "modules/SecurityGroups/SecurityGroup.php";
             $in_group = SecurityGroup::groupHasAccess($this->parent_type, $this->parent_id, 'view');
             /* END - SECURITY GROUPS */
         }
@@ -334,7 +313,7 @@ class Note extends File
          * if(!ACLController::moduleSupportsACL($this->parent_type) || ACLController::checkAccess($this->parent_type, 'view', $is_owner)) {
          */
         if (!ACLController::moduleSupportsACL($this->parent_type) || ACLController::checkAccess($this->parent_type,
-                'view', $is_owner, 'module', $in_group)
+            'view', $is_owner, 'module', $in_group)
         ) {
             /* END - SECURITY GROUPS */
             $array_assign['PARENT'] = 'a';
@@ -344,24 +323,6 @@ class Note extends File
 
         $is_owner = false;
         $in_group = false; //SECURITY GROUPS
-        if (!empty($this->contact_name)) {
-            if (!empty($this->contact_name_owner)) {
-                global $current_user;
-                $is_owner = $current_user->id == $this->contact_name_owner;
-            }
-            /* BEGIN - SECURITY GROUPS */
-            //contact_name_owner not being set for whatever reason so we need to figure this out
-            else {
-                global $current_user;
-                $parent_bean = BeanFactory::getBean('Contacts', $this->contact_id);
-                if ($parent_bean !== false) {
-                    $is_owner = $current_user->id == $parent_bean->assigned_user_id;
-                }
-            }
-            require_once("modules/SecurityGroups/SecurityGroup.php");
-            $in_group = SecurityGroup::groupHasAccess('Contacts', $this->contact_id, 'view');
-            /* END - SECURITY GROUPS */
-        }
 
         /* BEGIN - SECURITY GROUPS */
         /**
@@ -377,12 +338,12 @@ class Note extends File
         return $array_assign;
     }
 
-    function bean_implements($interface)
+    public function bean_implements($interface)
     {
         switch ($interface) {
             case 'ACL':
                 return true;
-            case 'FILE' :
+            case 'FILE':
                 return true;
         }
 

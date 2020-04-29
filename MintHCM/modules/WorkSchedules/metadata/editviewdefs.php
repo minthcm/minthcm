@@ -137,7 +137,6 @@ $viewdefs [$module_name] = array(
             ),
             array(
                'delegation_duration',
-               '',
             ),
             array(
                'description',

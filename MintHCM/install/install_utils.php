@@ -1347,6 +1347,12 @@ function installDefaultKReports(){
    $kreports_installer->run();
 }
 
+function installDefaultDictionaries(){
+   require_once 'install/suite_install/DictionariesInstaller.php';
+   $dictionaries_installer = new DictionariesInstaller();
+   $dictionaries_installer->run();
+}
+
 function rebuildWithViewTools($set_developer_mode = null) {
     require_once('modules/Administration/RebuildAllJavascripts.php');
     setConfig('developerMode', true);

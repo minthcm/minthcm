@@ -2,7 +2,7 @@
     <b><%= APP.LBL_GENERATEONBOARDINGOFFBOARDING_TEMPLATE %>:</b>
     <div class="col-xs-12 col-sm-12 edit-view-field  yui-ac" type="parent" field="parent_name">
         <select name="parent_type" tabindex="0" id="parent_type" title="" class="vt_formulaSelector"
-            onchange="document.<%= form_name %>.parent_name.value = &quot;&quot;;document.<%= form_name %>.parent_id.value = &quot;&quot;; changeParentQS( &quot;parent_name&quot; ); checkParentType( document.<%= form_name %>.parent_type.value, document.<%= form_name %>.btn_parent_name );">
+            onchange="document.<%= form_name %>.parent_name.value = &quot;&quot;;document.<%= form_name %>.parent_id.value = &quot;&quot;; changeParentQS( &quot;parent_name&quot; ); checkParentType( document.<%= form_name %>.parent_type.value, document.<%= form_name %>.btn_parent_name );"<%= hide_dropdown %>>
             <%= parent_type_options %>
         </select>
         <input type="text" name="parent_name" id="parent_name" class="vt_formulaSelector sqsEnabled yui-ac-input" tabindex="0" size="" autocomplete="off" value="<%= parent_name %>">
@@ -10,7 +10,7 @@
         <span class="id-ff multiple">
             <button type="button" name="btn_parent_name" id="btn_parent_name" tabindex="0" title="Wybierz"
                 class="button firstChild" value="Wybierz"
-                onclick="open_popup( document.<%= form_name %>.parent_type.value, 600, 400, &quot;&quot;, true, false, {&quot;call_back_function&quot;:&quot;viewTools.form.function.set_return&quot;,&quot;form_name&quot;:&quot;<%= form_name %>&quot;,&quot;field_to_name_array&quot;:{&quot;id&quot;:&quot;parent_id&quot;,&quot;name&quot;:&quot;parent_name&quot;}}, &quot;single&quot;, true );"><span
+                onclick="open_popup( <%= parent_type %>, 600, 400, &quot;&quot;, true, false, {&quot;call_back_function&quot;:&quot;viewTools.form.function.set_return&quot;,&quot;form_name&quot;:&quot;<%= form_name %>&quot;,&quot;field_to_name_array&quot;:{&quot;id&quot;:&quot;parent_id&quot;,&quot;name&quot;:&quot;parent_name&quot;}}, &quot;single&quot;, true );"><span
                     class="suitepicon suitepicon-action-select"></span></button><button type="button"
                 name="btn_clr_parent_name" id="btn_clr_parent_name" tabindex="0" title="" class="button lastChild"
                 onclick="this.form.parent_name.value = ''; this.form.parent_id.value = ''; $( '#parent_name' ).blur();"

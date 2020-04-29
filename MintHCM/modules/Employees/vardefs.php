@@ -65,6 +65,14 @@ $dictionary['Employee']['fields']['email_addresses_primary']['required'] = false
 $dictionary['Employee']['fields']['status']['studio'] = false;
 $dictionary['Employee']['fields']['status']['required'] = false;
 
+$dictionary["Employee"]["fields"]["employeecertificates"] = array(
+    'name' => 'employeecertificates',
+    'type' => 'link',
+    'relationship' => 'employeecertificates_employees',
+    'source' => 'non-db',
+    'side' => 'right',
+    'vname' => 'LBL_EMPLOYEECERTIFICATES',
+);
 $dictionary["Employee"]["fields"]["spenttime"] = array(
     'name' => 'spenttime',
     'type' => 'link',

@@ -10,7 +10,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -38,69 +38,57 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-
-
 $subpanel_layout = array(
-	'top_buttons' => array(
+    'top_buttons' => array(
         array('widget_class' => 'SubPanelTopCreateButton'),
-		array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Notes'),
-	),
+        array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Notes'),
+    ),
 
-	'where' => '',
+    'where' => '',
 
-
-
-	'list_fields' => array(
-		'object_image'=>array(
-			'vname' => 'LBL_OBJECT_IMAGE',
-			'widget_class' => 'SubPanelIcon',
- 		 	'width' => '2%',
- 		 	'image2'=>'attachment',
- 		 	'image2_url_field'=> array(
-				'id_field' => 'id',
-				'filename_field' => 'filename',
-			),
-		),
-        'name'=>array(
- 			'vname' => 'LBL_LIST_SUBJECT',
-			'widget_class' => 'SubPanelDetailViewLink',
-			'width' => '50%',
-		),
-		'contact_name'=>array(
-			'module' => 'Contacts',
-			'vname' => 'LBL_LIST_CONTACT_NAME',
-		    'width' => '20%',
-            'target_record_key' => 'contact_id',
-            'target_module' => 'Contacts',
-            'widget_class' => 'SubPanelDetailViewLink',
-		),
-		'date_modified'=>array(
-		 	'vname' => 'LBL_LIST_DATE_MODIFIED',
-			'width' => '10%',
-		),
-		'edit_button'=>array(
-			'vname' => 'LBL_EDIT_BUTTON',
-			'widget_class' => 'SubPanelEditButton',
-		 	'module' => 'Notes',
-			'width' => '5%',
-		),
-        'remove_button'=>array(
-            'vname' => 'LBL_REMOVE',
-             'widget_class' => 'SubPanelRemoveButton',
-             'width' => '2%',
+    'list_fields' => array(
+        'object_image' => array(
+            'vname' => 'LBL_OBJECT_IMAGE',
+            'widget_class' => 'SubPanelIcon',
+            'width' => '2%',
+            'image2' => 'attachment',
+            'image2_url_field' => array(
+                'id_field' => 'id',
+                'filename_field' => 'filename',
+            ),
         ),
-		'file_url'=>array(
-			'usage'=>'query_only'
-			),
-		'filename'=>array(
-			'usage'=>'query_only'
-			),
-	),
+        'name' => array(
+            'vname' => 'LBL_LIST_SUBJECT',
+            'widget_class' => 'SubPanelDetailViewLink',
+            'width' => '50%',
+        ),
+        'date_modified' => array(
+            'vname' => 'LBL_LIST_DATE_MODIFIED',
+            'width' => '10%',
+        ),
+        'edit_button' => array(
+            'vname' => 'LBL_EDIT_BUTTON',
+            'widget_class' => 'SubPanelEditButton',
+            'module' => 'Notes',
+            'width' => '5%',
+        ),
+        'remove_button' => array(
+            'vname' => 'LBL_REMOVE',
+            'widget_class' => 'SubPanelRemoveButton',
+            'width' => '2%',
+        ),
+        'file_url' => array(
+            'usage' => 'query_only',
+        ),
+        'filename' => array(
+            'usage' => 'query_only',
+        ),
+    ),
 );

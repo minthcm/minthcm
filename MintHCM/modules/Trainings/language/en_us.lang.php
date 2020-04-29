@@ -88,6 +88,6 @@ $mod_strings = array(
     'LBL_PARENT_ID' => 'Related to ID',
     'LBL_PARENT_NAME' => 'Related to',
     'LBL_RELATIONSHIP_CERTIFICATES_NAME' => 'Certificates',
-    'LBL_RELATIONSHIP_ELEMENTS_NAME' => 'Onboarding/Offboarding Element Name',
-    'LBL_RELATIONSHIP_ELEMENTS_ID' => 'Onboarding/Offboarding Element ID',
+    'LBL_RELATIONSHIP_ELEMENTS_NAME' => 'Element Name',
+    'LBL_RELATIONSHIP_ELEMENTS_ID' => 'Element ID',
 );

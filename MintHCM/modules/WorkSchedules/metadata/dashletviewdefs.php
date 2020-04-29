@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,81 +36,69 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 $dashletData['WorkSchedulesDashlet']['searchFields'] = array(
-   'status' => array(
-      'default' => '',
-   ),
-   'type' => array(
-      'default' => '',
-   ),
-   'supervisor_acceptance' => array(
-      'default' => '',
-   ),
-   'schedule_date' => array(
-      'default' => '',
-   ),
-   'assigned_user_id' => array(
-      'default' => '',
-   ),
+    'status' => array(
+        'default' => '',
+    ),
+    'type' => array(
+        'default' => '',
+    ),
+    'supervisor_acceptance' => array(
+        'default' => '',
+    ),
+    'schedule_date' => array(
+        'default' => '',
+    ),
+    'assigned_user_id' => array(
+        'default' => '',
+    ),
 );
 $dashletData['WorkSchedulesDashlet']['columns'] = array(
-   'assigned_user_name' => array(
-      'width' => '8%',
-      'label' => 'LBL_LIST_ASSIGNED_USER',
-      'name' => 'assigned_user_name',
-      'default' => true,
-   ),
-   'schedule_date' => array(
-      'type' => 'date',
-      'label' => 'LBL_SCHEDULE_DATE',
-      'width' => '10%',
-      'default' => true,
-   ),
-   'type' => array(
-      'type' => 'enum',
-      'default' => true,
-      'studio' => 'visible',
-      'label' => 'LBL_TYPE',
-      'width' => '10%',
-   ),
-   'status' => array(
-      'type' => 'enum',
-      'default' => true,
-      'studio' => 'visible',
-      'label' => 'LBL_STATUS',
-      'width' => '10%',
-   ),
-   'supervisor_acceptance' => array(
-      'type' => 'enum',
-      'default' => false,
-      'studio' => 'visible',
-      'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
-      'width' => '10%',
-   ),
-   'spent_time' => array(
-      'type' => 'float',
-      'label' => 'LBL_SPENT_TIME',
-      'width' => '10%',
-      'default' => true,
-   ),
-   'name' => array(
-      'width' => '40%',
-      'label' => 'LBL_LIST_NAME',
-      'link' => true,
-      'default' => false,
-      'name' => 'name',
-   ),
-   'delegation_duration' => array(
-      'type' => 'float',
-      'label' => 'LBL_DELEGATION_DURATION',
-      'width' => '10%',
-      'default' => false,
-   ),
+    'assigned_user_name' => array(
+        'width' => '8%',
+        'label' => 'LBL_LIST_ASSIGNED_USER',
+        'name' => 'assigned_user_name',
+        'default' => true,
+    ),
+    'type' => array(
+        'type' => 'enum',
+        'default' => true,
+        'studio' => 'visible',
+        'label' => 'LBL_TYPE',
+        'width' => '10%',
+    ),
+    'status' => array(
+        'type' => 'enum',
+        'default' => true,
+        'studio' => 'visible',
+        'label' => 'LBL_STATUS',
+        'width' => '10%',
+    ),
+    'supervisor_acceptance' => array(
+        'type' => 'enum',
+        'default' => false,
+        'studio' => 'visible',
+        'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
+        'width' => '10%',
+    ),
+    'name' => array(
+        'width' => '40%',
+        'label' => 'LBL_LIST_NAME',
+        'link' => true,
+        'default' => false,
+        'name' => 'name',
+    ),
+    'delegation_duration' => array(
+        'type' => 'float',
+        'label' => 'LBL_DELEGATION_DURATION',
+        'width' => '10%',
+        'default' => false,
+    ),
 );

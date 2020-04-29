@@ -49,7 +49,7 @@ $mod_strings = array(
     'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
     'LBL_CLOSE_PLAN' => 'Submit',
-    'LBL_CLOSE_PLAN_CONFIRM' => 'Are you sure you want to approve this plan? This operation cannot be undone.',
+    'LBL_CLOSE_PLAN_CONFIRM' => 'Are you sure you want to approve this plan?',
     'LBL_COMMENTS' => 'Comments',
     'LBL_CONFIRM_REMOVE_ALL_RECURRING' => 'Are you sure you want to delete all recurring records?',
     'LBL_CREATED' => 'Created by',
@@ -134,4 +134,5 @@ $mod_strings = array(
     'LBL_TWO_WEEKS_ALERT' => "Note! You do not have a planned plan for a minimum of two weeks.",
     'LBL_APPROVED_ALERT' => "Note! Your work plan %s has not been approved by you.",
     'LBL_LIST_TITLE' => 'Work Schedule',
+    'LBL_SPENT_TIME_CATEGORY' => 'Category',
 );
