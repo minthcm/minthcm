@@ -62,7 +62,7 @@ $searchdefs['Users'] = array(
             'title',
             'is_group',
             'position_name',
-            'organizationalunit_name',
+            'securitygroup_name',
             'phone' => array(
                 'name' => 'phone',
                 'label' => 'LBL_ANY_PHONE',

@@ -60,7 +60,7 @@ class GenerateUsersNews {
       $news = BeanFactory::getBean('News', $this->record_id);
       if ( $news && !empty($news->id) ) {
          $organizational_units_ids = $news->getRelatedOrganizationalUnitsIDs();
-         $organizationalunits_controller = ControllerFactory::getController('OrganizationalUnits');
+         $organizationalunits_controller = ControllerFactory::getController('SecurityGroups');
          $users_ids = $organizationalunits_controller->getActiveUsers($organizational_units_ids);
          $this->createOrUpdateUsersNews($users_ids);
          $this->addUsersPrivateGroupsToNews($users_ids);

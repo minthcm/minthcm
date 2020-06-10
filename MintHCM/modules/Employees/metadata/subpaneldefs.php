@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -42,9 +41,18 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-
 $layout_defs['Employees'] = array(
     'subpanel_setup' => array(
+        'subordinates_employee' => array(
+            'order' => 100,
+            'module' => 'Employees',
+            'subpanel_name' => 'default',
+            'sort_order' => 'asc',
+            'sort_by' => 'id',
+            'title_key' => 'LBL_SUBORDINATES',
+            'get_subpanel_data' => 'function:fetchAllSubordinates',
+            'top_buttons' => array(),
+        ),
         "spenttime" => array(
             'order' => 100,
             'module' => 'SpentTime',
@@ -223,14 +231,14 @@ $layout_defs['Employees'] = array(
                 ),
             ),
         ),
-        'organizationalunits' => array(
+        'securitygroups_managers' => array(
             'order' => 100,
-            'module' => 'OrganizationalUnits',
+            'module' => 'SecurityGroups',
             'subpanel_name' => 'default',
             'sort_order' => 'asc',
             'sort_by' => 'id',
-            'title_key' => 'LBL_RELATIONSHIP_ORGANIZATIONALUNITS_NAME',
-            'get_subpanel_data' => 'organizationalunits',
+            'title_key' => 'LBL_RELATIONSHIP_SECURITYGROUPS_NAME',
+            'get_subpanel_data' => 'securitygroups_managers',
             'top_buttons' => array(
                 array(
                     'widget_class' => 'SubPanelTopButtonQuickCreate',
@@ -252,6 +260,35 @@ $layout_defs['Employees'] = array(
             'top_buttons' => array(
                 array(
                     'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+            ),
+        ),
+        'employeeinteractiontracking' => array(
+            'order' => 200,
+            'sort_order' => 'desc',
+            'sort_by' => 'date_entered',
+            'title_key' => 'LBL_EMPLOYEEINTERACTIONTRACKING',
+            'type' => 'collection',
+            'subpanel_name' => 'ee', //this values is not associated with a physical file.
+            'header_definition_from_subpanel' => 'employeeinteractiontracking_employee',
+            'module' => 'EmployeeInteractionTracking',
+            'top_buttons' => array(
+                array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+            ),
+            'collection_list' => array(
+                'employeeinteractiontracking_employee' => array(
+                    'module' => 'EmployeeInteractionTracking',
+                    'subpanel_name' => 'default',
+                    'get_subpanel_data' => 'employeeinteractiontracking_employee',
+                ),
+                'employeeinteractiontracking_assigned_user' => array(
+                    'module' => 'EmployeeInteractionTracking',
+                    'subpanel_name' => 'default',
+                    'get_subpanel_data' => 'function:get_employeeinteractiontracking_for_subpanel',
+                    'function_parameters' => array('get' => true),
+                    'generate_select' => true,
                 ),
             ),
         ),

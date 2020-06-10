@@ -63,12 +63,8 @@ $popupMeta = array(
             'name' => 'name',
             'width' => '10%',
         ),
-        'task_duration' => array(
-            'name' => 'name',
-            'width' => '10%',
-        ),
         'days_from_start' => array(
-            'name' => 'name',
+            'name' => 'days_from_start',
             'width' => '10%',
         ),
         'user_name' => array(
@@ -79,13 +75,13 @@ $popupMeta = array(
             'width' => '10%',
             'name' => 'user_name',
         ),
-        'organizationalunit_name' => array(
+        'securitygroup_unit_name' => array(
             'type' => 'relate',
             'link' => true,
-            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
-            'id' => 'ORGANIZATIONALUNIT_ID',
+            'label' => 'LBL_SECURITYGROUP_UNIT_NAME',
+            'id' => 'SECURITYGROUP_UNIT_ID',
             'width' => '10%',
-            'name' => 'organizationalunit_name',
+            'name' => 'securitygroup_unit_name',
         ),
         'kind_of_element' => array(
             'type' => 'enum',
@@ -136,11 +132,11 @@ $popupMeta = array(
             'id' => 'USERS_ID',
             'default' => false,
         ),
-        'ORGANIZATIONALUNIT_NAME' => array(
+        'SECURITYGROUP_UNIT_NAME' => array(
             'width' => '9',
-            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
-            'module' => 'OrganizationalUnits',
-            'id' => 'ORGANIZATIONALUNIT_ID',
+            'label' => 'LBL_SECURITYGROUP_UNIT_NAME',
+            'module' => 'SecurityGroups',
+            'id' => 'SECURITYGROUP_UNIT_ID',
             'default' => false,
         ),
     ),

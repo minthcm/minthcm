@@ -110,12 +110,12 @@ function build_logic_file($hook_array){
 	$hook_contents .= "// Do not store anything in this file that is not part of the array or the hook version.  This file will	\n";
 	$hook_contents .= "// be automatically rebuilt in the future. \n ";
 	$hook_contents .= "\$hook_version = 1; \n";
-	$hook_contents .= "\$hook_array = Array(); \n";
+	$hook_contents .= "if(!isset(\$hook_array)){ \$hook_array = Array();} \n";
 	$hook_contents .= "// position, file, function \n";
 
 	foreach($hook_array as $event_array => $event){
 
-	$hook_contents .= "\$hook_array['".$event_array."'] = Array(); \n";
+	$hook_contents .= "if(!isset(\$hook_array['" . $event_array . "'])){ \$hook_array['".$event_array."'] = Array(); }\n";
 
 		foreach($event as $second_key => $elements){
 

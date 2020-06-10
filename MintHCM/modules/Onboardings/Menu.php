@@ -48,7 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $mod_strings, $app_strings, $sugar_config;
 $module_name = 'Onboardings';
-if (ACLController::checkAccess('OnboardingTemplates', 'detail', true)) {
+if (ACLController::checkAccess('OnboardingTemplates', 'edit', true)) {
     $module_menu[] = array(
         'javascript:generateOnboardingOffboarding.init(generateOnboardingOffboarding);',
         translate('LBL_GENERATE_BUTTON', 'OnboardingTemplates'),

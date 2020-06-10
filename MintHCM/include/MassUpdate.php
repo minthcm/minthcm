@@ -712,14 +712,17 @@ EOJS;
         } else {
             $function = $vardef['function'];
         }
+        if (!empty($vardef['function']['additional_params'])){
+            $additional_params = $vardef['function']['additional_params'];
+        }
         if (!empty($vardef['function']['returns']) && $vardef['function']['returns'] == 'html') {
             if (!empty($vardef['function']['include'])) {
                 require_once($vardef['function']['include']);
             }
 
-            return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
+            return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate',  $additional_params);
         } else {
-            return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
+            return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate', $additional_params);
         }
     }
 

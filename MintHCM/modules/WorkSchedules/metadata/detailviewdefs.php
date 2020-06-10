@@ -136,15 +136,15 @@ $viewdefs[$module_name] = array(
                     ),
                 ),
                 array(
-                    '',
+                    'spent_time',
+                    'spent_time_settlement',
+                ),
+                array(
                     array(
                         'label' => 'LBL_DURATION',
                         'customCode' => '{$fields.duration_hours.value} <span class="dateFormat">{$MOD.LBL_HOURS_HOURS}</span>&nbsp;{$fields.duration_minutes.value} <span class="dateFormat">{$MOD.LBL_HOURS_MINUTES}</span>',
                     ),
-                ),
-                array(
                     'delegation_name',
-                    '',
                 ),
                 array(
                     array(

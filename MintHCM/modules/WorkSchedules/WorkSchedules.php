@@ -182,8 +182,6 @@ class WorkSchedules extends Basic
             $GLOBALS['log']->fatal("Date start or date end is empty. Cannot save.Date start: {$this->date_start} date end: {$this->date_end}");
         } else {
             $parent_result = parent::save($check_notify);
-            $GLOBALS['log']->fatal("Work schedule: id = {$this->id} type = {$this->type} spent_time_settlement = {$this->spent_time_settlement}");
-
             $this->saveRepeatly();
             //prevents work schedule from being saved with spent_time_settlement equals to 0
             if ($this->spent_time_settlement == 0 || $this->spent_time_settlement == null) {

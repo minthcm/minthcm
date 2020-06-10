@@ -135,15 +135,6 @@ $dictionary['News'] = array(
             'studio' => 'visible',
             'dependency' => false,
         ),
-        'organizationalunits' => array(
-            'name' => 'organizationalunits',
-            'type' => 'link',
-            'relationship' => 'organizationalunits_news',
-            'source' => 'non-db',
-            'module' => 'OrganizationalUnits',
-            'bean_name' => 'OrganizationalUnits',
-            'vname' => 'LBL_ORGANIZATIONALUNITS',
-        ),
         'usersnews' => array(
             'name' => 'usersnews',
             'type' => 'link',

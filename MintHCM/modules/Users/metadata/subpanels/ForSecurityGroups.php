@@ -53,18 +53,6 @@ $subpanel_layout = array(
             'name'=>'phone_work',
             'vname' => 'LBL_LIST_PHONE',
             'width' => '10%',
-        ),      
-        'edit_button'=>array(
-            'widget_class' => 'SubPanelEditSecurityGroupUserButton',
-            'securitygroup_noninherit_id'=>'securitygroup_noninherit_id',
-            'module' => 'SecurityGroups',
-            'width' => '5%',
-        ),
-        'remove_button'=>array(
-            'widget_class' => 'SubPanelRemoveButton',
-            'module' => 'Users',
-            'width' => '4%',
-            'linked_field' => 'users',
-        ),
+        ), 
     ),
 );

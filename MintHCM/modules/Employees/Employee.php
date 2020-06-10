@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -51,7 +50,6 @@ require_once 'include/SugarObjects/templates/person/Person.php';
 // Employee is used to store customer information.
 class Employee extends Person
 {
-
     // Stored fields
     public $name = '';
     public $id;
@@ -190,9 +188,9 @@ class Employee extends Person
         $where_auto = " users.deleted = 0";
 
         if ($where != "") {
-            $query .= " WHERE $where AND " . $where_auto;
+            $query .= " WHERE $where AND ".$where_auto;
         } else {
-            $query .= " WHERE " . $where_auto;
+            $query .= " WHERE ".$where_auto;
         }
 
         if ($order_by != "") {
@@ -203,19 +201,18 @@ class Employee extends Person
 
         return $query;
     }
-
     //use parent class
 
     /**
      * Generate the name field from the first_name and last_name fields.
      */
     /*
-    function _create_proper_name_field() {
-    global $locale;
-    $full_name = $locale->getLocaleFormattedName($this->first_name, $this->last_name);
-    $this->name = $full_name;
-    $this->full_name = $full_name;
-    }
+      function _create_proper_name_field() {
+      global $locale;
+      $full_name = $locale->getLocaleFormattedName($this->first_name, $this->last_name);
+      $this->name = $full_name;
+      $this->full_name = $full_name;
+      }
      */
 
     public function preprocess_fields_on_save()
@@ -252,7 +249,8 @@ class Employee extends Person
         $parentbean = null,
         $singleSelect = false,
         $ifListForExport = false
-    ) {
+    )
+    {
         //create the filter for portal only users, as they should not be showing up in query results
         if (empty($where)) {
             $where = ' users.portal_only = 0 ';
@@ -262,19 +260,18 @@ class Employee extends Person
 
         //return parent method, specifying for array to be returned
         return parent::create_new_list_query(
-            $order_by,
-            $where,
-            $filter,
-            $params,
-            $show_deleted,
-            $join_type,
-            $return_array,
-            $parentbean,
-            $singleSelect,
-            $ifListForExport
+                $order_by,
+                $where,
+                $filter,
+                $params,
+                $show_deleted,
+                $join_type,
+                $return_array,
+                $parentbean,
+                $singleSelect,
+                $ifListForExport
         );
     }
-
     /*
      * Overwrite Sugar bean which returns the current objects custom fields.  Lets return User custom fields instead
      */
@@ -352,6 +349,12 @@ class Employee extends Person
         return $query;
     }
 
+    public function fetchAllSubordinates()
+    {
+        $query = "SELECT users.* FROM users WHERE users.deleted=0 AND users.reports_to_id='{$this->id}'";
+        return $query;
+    }
+
     public function bean_implements($interface)
     {
         $result = false;
@@ -359,6 +362,16 @@ class Employee extends Person
             $result = true;
         }
         return $result;
+    }
+
+    public function get_employeeinteractiontracking_for_subpanel()
+    {
+        $return_array['select'] = 'SELECT employeeinteractiontracking.id ';
+        $return_array['select'] = '';
+        $return_array['join'] = " INNER JOIN  users employeeinteractiontracking_rel ON employeeinteractiontracking.assigned_user_id=employeeinteractiontracking_rel.id AND employeeinteractiontracking_rel.deleted=0  ";
+        $return_array['where'] = " WHERE employeeinteractiontracking.assigned_user_id='{$this->id}' and employeeinteractiontracking.deleted=0 ";
+
+        return $return_array;
     }
 
     // MintHCM end

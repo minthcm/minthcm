@@ -862,7 +862,11 @@ EOF;
 }
 
 function runElasticSearchIndexerScheduler($data) {
-   return \SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer::schedulerJob(json_decode($data));
+   $options = [];
+   if(!empty($data)){
+      $options = json_decode(htmlspecialchars_decode($data->data), true);
+   }
+   return \SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer::schedulerJob($options);
 }
 
 require_once 'modules/Schedulers/schedulers/GenerateAppraisalAppraisalItemsJob.php';

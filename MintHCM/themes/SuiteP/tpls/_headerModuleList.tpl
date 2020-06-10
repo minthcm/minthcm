@@ -543,8 +543,13 @@
                                                                                                         </button>
                                                                                                         <ul class="dropdown-menu user-dropdown user-menu" role="menu" aria-labelledby="dropdownMenu2">
                                                                                                             <li role="presentation">
-                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                <a href='index.php?module=Employees&action=DetailView&record={$CURRENT_USER_ID}'>
                                                                                                                     {$APP.LBL_PROFILE}
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                            <li role="presentation">
+                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                    {$APP.LBL_SETTINGS}
                                                                                                                 </a>
                                                                                                             </li>
                                                                                                             {foreach from=$GCLS item=GCL name=gcl key=gcl_key}
@@ -637,8 +642,13 @@
                                                                                                         </button>
                                                                                                         <ul class="dropdown-menu user-dropdown user-menu" role="menu" aria-labelledby="dropdownMenu2">
                                                                                                             <li role="presentation">
-                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                <a href='index.php?module=Employees&action=DetailView&record={$CURRENT_USER_ID}'>
                                                                                                                     {$APP.LBL_PROFILE}
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                            <li role="presentation">
+                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                    {$APP.LBL_SETTINGS}
                                                                                                                 </a>
                                                                                                             </li>
                                                                                                             {foreach from=$GCLS item=GCL name=gcl key=gcl_key}
@@ -731,8 +741,13 @@
                                                                                                         </button>
                                                                                                         <ul class="dropdown-menu user-dropdown user-menu" role="menu" aria-labelledby="with-label">
                                                                                                             <li role="presentation">
-                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                <a href='index.php?module=Employees&action=DetailView&record={$CURRENT_USER_ID}'>
                                                                                                                     {$APP.LBL_PROFILE}
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                            <li role="presentation">
+                                                                                                                <a href='index.php?module=Users&action=EditView&record={$CURRENT_USER_ID}'>
+                                                                                                                    {$APP.LBL_SETTINGS}
                                                                                                                 </a>
                                                                                                             </li>
                                                                                                             {foreach from=$GCLS item=GCL name=gcl key=gcl_key}

@@ -62,9 +62,9 @@ class PDFTemplatesController extends SugarController {
    }
 
    function action_templates() {
-      global $moduleList;
-      if ( isset($_POST['rmodule']) && in_array($_POST['rmodule'], $moduleList) ) {
-         $rmodule = $_POST['rmodule'];
+      global $beanList;
+      if ( isset($_POST['rmodule']) && isset($beanList[$_POST['rmodule']]) ) {
+         $rmodule = $beanList[$_POST['rmodule']];
       }
       $query = "SELECT id AS value, name AS text, is_default FROM pdftemplates "
               . " WHERE pdftemplates.type='standard' AND pdftemplates.relatedmodule = '" . $rmodule . "' AND pdftemplates.deleted = 0 ORDER BY is_default DESC, name";

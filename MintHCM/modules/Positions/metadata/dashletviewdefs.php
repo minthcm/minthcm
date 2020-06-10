@@ -104,12 +104,12 @@ $dashletData['PositionsDashlet']['columns'] = array( 'name' => array(
       'width' => '10%',
       'default' => false,
    ),
-   'organizationalunits_leader_name' => array(
-      'name' => 'organizationalunits_leader_name',
+   'securitygroup_leader_name' => array(
+      'name' => 'securitygroup_leader_name',
       'type' => 'relate',
       'link' => true,
-      'label' => 'LBL_ORGANIZATIONALUNITS_LEADER_NAME',
-      'id' => 'ORGANIZATIONALUNITS_LEADER_NAME',
+      'label' => 'LBL_SECURITYGROUPS_LEADER_NAME',
+      'id' => 'SECURITYGROUPS_LEADER_ID',
       'width' => '10%',
       'default' => false,
    ),
