@@ -10,13 +10,80 @@ $modules_exempt_from_availability_check['ACLRoles'] = 'ACLRoles';
 $layout_defs['SecurityGroups'] = array(
    // list of what Subpanels to show in the DetailView 
    'subpanel_setup' => array(
-      'users' => array(
-         'top_buttons' => array(array('widget_class' => 'SubPanelCustomTopSelectButton', 'mode' => 'MultiSelect', 'popup_module' => 'Users'),),
+      'members' => array(
+         'order' => 100,
+         'module' => 'SecurityGroups',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_MEMBERS',
+         'get_subpanel_data' => 'members',
+         'add_subpanel_data' => 'member_id',
+         'top_buttons' =>
+         array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'positions_membership' => array(
+         'order' => 200,
+         'module' => 'Positions',
+         'subpanel_name' => 'ForOrganizationalUnits',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_POSITIONS_MEMBERSHIP',
+         'get_subpanel_data' => 'positions_membership',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'onboardingoffboardingelements' => array(
+         'order' => 200,
+         'module' => 'OnboardingOffboardingElements',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_ONBOARDINGOFFBOARDINGELEMENTS',
+         'get_subpanel_data' => 'onboardingoffboardingelements',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+         ),
+      ),
+      'employees' => array(
          'order' => 10,
+         'module' => 'Employees',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_EMPLOYEES',
+         'get_subpanel_data' => 'employees', 
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'users' => array(
+         'top_buttons' => array(),
+         'order' => 12,
          'module' => 'Users',
          'sort_by' => 'user_name',
          'sort_order' => 'asc',
-         'subpanel_name' => 'default',
+         'subpanel_name' => 'ForSecurityGroups',
          'override_subpanel_name' => 'ForSecurityGroups',
          'get_subpanel_data' => 'users',
          'add_subpanel_data' => 'user_id',

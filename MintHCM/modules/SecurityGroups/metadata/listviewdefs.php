@@ -18,6 +18,24 @@ $listViewDefs[$module_name] = array(
       'label' => 'LBL_GROUP_TYPE',
       'default' => true,
    ),
+   'PARENT_NAME' =>
+   array(
+      'type' => 'relate',
+      'link' => true,
+      'label' => 'LBL_MEMBER_OF',
+      'id' => 'PARENT_ID',
+      'width' => '10%',
+      'default' => true,
+   ),
+   'POSITION_LEADER_NAME' =>
+   array(
+      'type' => 'relate',
+      'link' => true,
+      'label' => 'LBL_POSITION_LEADER_NAME',
+      'id' => 'POSITION_LEADER_ID',
+      'width' => '10%',
+      'default' => true,
+   ),
    'ASSIGNED_USER_NAME' => array(
       'width' => '9',
       'label' => 'LBL_ASSIGNED_TO_NAME',
@@ -27,5 +45,13 @@ $listViewDefs[$module_name] = array(
       'width' => '9',
       'label' => 'LBL_NONINHERITABLE',
       'default' => true
+   ),
+   'EMPLOYEE_NAME' => array(
+      'type' => 'relate',
+      'link' => true,
+      'label' => 'LBL_CURRENT_MANAGER_NAME',
+      'id' => 'CURRENT_MANAGER_ID',
+      'width' => '10%',
+      'default' => true,
    ),
 );

@@ -16,6 +16,10 @@ option:checked {
     }
 }
 
+.date_input {
+    width: 50%!important;
+}
+
 #save_and_continue {
     background-color: $color-mint-darkgreen;
     color: $color-101;
@@ -60,4 +64,8 @@ option:checked {
 
 
 
+}
+
+.col-sm-6 .edit-view-field input[id="spent_time"]{
+    width: 30%;
 }

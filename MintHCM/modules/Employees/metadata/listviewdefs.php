@@ -59,9 +59,9 @@ $listViewDefs['Employees'] = array(
       'link' => true,
       'default' => true
    ),
-   'ORGANIZATIONALUNIT_NAME' => array(
+   'SECURITYGROUP_NAME' => array(
       'width' => '10',
-      'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+      'label' => 'LBL_SECURITYGROUP_NAME',
       'link' => true,
       'default' => true
    ),

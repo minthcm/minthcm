@@ -62,9 +62,9 @@ $subpanel_layout = array(
          'module' => 'Users',
          'width' => '25%',
       ),
-      'organizationalunit_name' => array(
+      'securitygroup_name' => array(
          'width' => '10%',
-         'vname' => 'LBL_ORGANIZATIONALUNIT_NAME',
+         'vname' => 'LBL_SECURITYGROUP_NAME',
          'widget_class' => 'SubPanelDetailViewLink',
       ),
       'REPORTS_TO_NAME' => array(

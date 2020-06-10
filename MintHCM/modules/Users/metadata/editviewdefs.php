@@ -85,8 +85,8 @@ $viewdefs['Users']['EditView'] = array(
             ),
                 'phone_work'),
             array(array(
-                'name' => 'organizationalunit_name',
-                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$ORGANIZATIONALUNIT_NAME_READONLY}{/if}',
+                'name' => 'securitygroup_name',
+                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$SG_NAME_READONLY}{/if}',
             ),
                 'phone_mobile'),
             array(array(

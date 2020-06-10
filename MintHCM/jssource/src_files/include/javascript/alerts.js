@@ -261,6 +261,10 @@ Alerts.prototype.updateManager = function () {
       var desktopNotificationsDiv = $( '.desktop_notifications' );
       var alertButtonDiv = $( '.alertsButton' );
 
+      if(typeof favicon === 'undefined') {
+         favicon = new Favico({animation: 'none'});
+      }
+      favicon.badge(alertCount);
 
       alertCountDiv.html( alertCount );
       if ( alertCount > 0 ) {

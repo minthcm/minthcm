@@ -68,7 +68,7 @@ $viewdefs[$module_name]['EditView'] = array(
                 'status',
             ),
             array(
-                'organizationalunits_leader_name',
+                'securitygroup_leader_name',
                 'positions_supervision_name',
             ),
             array(

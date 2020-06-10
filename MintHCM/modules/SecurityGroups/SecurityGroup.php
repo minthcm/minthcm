@@ -1,7 +1,7 @@
 <?php
 
 require_once 'modules/SecurityGroups/SecurityGroup_sugar.php';
-
+require_once('modules/SecurityGroups/SugarFeeds/SecurityGroupsFeed.php');
 class SecurityGroup extends SecurityGroup_sugar {
 
    /**
@@ -9,6 +9,24 @@ class SecurityGroup extends SecurityGroup_sugar {
     */
    public function __construct() {
       parent::__construct();
+   }
+
+   protected function postSave() {
+      $of = new SecurityGroupsFeed();
+      $of->pushFeed($this, null, null);
+   }
+
+   public function getMemberUnitsIDs() {
+      global $db;
+      $results = array();
+      $sql = "SELECT id FROM securitygroups WHERE parent_id = '{$this->id}' AND deleted = 0";
+      $result = $db->query($sql);
+      while ( $row = $db->fetchByAssoc($result) ) {
+         $results[] = $row['id'];
+         $organizational_unit = BeanFactory::getBean('SecurityGroups', $row['id']);
+         $results = array_merge($results, $organizational_unit->getMemberUnitsIDs());
+      }
+      return $results;
    }
 
    public $last_run = array( 'module' => '', 'record' => '', 'action' => '', 'response' => '' );

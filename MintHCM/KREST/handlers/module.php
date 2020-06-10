@@ -757,11 +757,14 @@ class KRESTModuleHandler
 
         $app_list_strings = return_app_list_strings_language($current_language);
         $modArray = array();
+        $mint_disabled_modules = getMintDisabledModulesList();
         foreach ($app_list_strings['moduleList'] as $module => $modulename) {
-            $modArray[] = array(
-                'module' => $module,
-                'name' => $modulename
-            );
+            if(!in_array($module,$mint_disabled_modules)){
+                $modArray[] = array(
+                    'module' => $module,
+                    'name' => $modulename
+                );
+            }   
         }
         return $modArray;
     }

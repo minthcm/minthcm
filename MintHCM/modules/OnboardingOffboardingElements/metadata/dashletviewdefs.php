@@ -58,7 +58,7 @@ $dashletData['OnboardingOffboardingElementsDashlet']['searchFields'] = array(
     'type' => array('default' => ''),
     'days_from_start' => array('default' => ''),
     'user_name' => array('default' => ''),
-    'organizationalunit_name' => array('default' => ''),
+    'securitygroup_unit_name' => array('default' => ''),
 );
 $dashletData['OnboardingOffboardingElementsDashlet']['columns']      = array(
     'name' => array(
@@ -105,9 +105,9 @@ $dashletData['OnboardingOffboardingElementsDashlet']['columns']      = array(
         'width' => '8',
         'label' => 'LBL_USERS_NAME'
     ),
-    'organizationalunit_name' => array(
+    'securitygroup_name' => array(
         'width' => '8',
-        'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
+        'label' => 'LBL_SECURITYGROUP_NAME',
         'default' => false
     ),
     'assigned_user_name' => array(

@@ -86,7 +86,6 @@ $themedef = array(
         'resources' => 'fa-people-carry',
         'trainings' => 'fa-user-graduate',
         'employeeroles' => 'fa-user-shield',
-        'organizationalunits' => 'fa-users',
         'news' => 'fa-bell',
         'ideas' => 'fa-lightbulb',
         'conclusions' => 'fa-hand-point-left',
@@ -118,6 +117,7 @@ $themedef = array(
         'workingmonths' => 'fa-calendar-week',
         'salaryranges' => 'fa-dollar-sign',
         'dictionaries' => 'fa-list',
+        'employeeinteractiontracking' => 'fa-handshake',
     ),
 );
 

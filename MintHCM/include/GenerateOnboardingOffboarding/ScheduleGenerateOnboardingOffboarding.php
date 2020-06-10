@@ -126,10 +126,10 @@ class ScheduleGenerateOnboardingOffboarding
                     }
                     break;
                 case 'organizational_unit_manager';
-                    $organizational_unit = BeanFactory::getBean('OrganizationalUnits', $element->organizationalunit_id);
+                    $organizational_unit = BeanFactory::getBean('SecurityGroups', $element->securitygroup_unit_id);
                     if (empty($errors[$element->kind_of_element][$organizational_unit->id]) && empty($organizational_unit->current_manager_id)) {
                         $errors[$element->kind_of_element][$organizational_unit->id] = [
-                            'module' => 'OrganizationalUnits',
+                            'module' => 'SecurityGroups',
                             'id' => $organizational_unit->id,
                             'name' => $organizational_unit->name,
                         ];

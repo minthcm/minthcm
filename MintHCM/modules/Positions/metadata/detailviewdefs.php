@@ -81,7 +81,7 @@ $viewdefs[$module_name]['DetailView'] = array(
                 'status',
             ),
             array(
-                'organizationalunits_leader_name',
+                'securitygroup_leader_name',
                 'positions_supervision_name',
             ),
             array(

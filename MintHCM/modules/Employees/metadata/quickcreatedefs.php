@@ -70,7 +70,7 @@ $viewdefs['Employees']['QuickCreate'] = array(
          ),
          array(
             array(
-               'name' => 'organizationalunit_name',
+               'name' => 'securitygroup_name',
                'customCode' => '{if  $EDIT_REPORTS_TO || $IS_ADMIN}@@FIELD@@{else}{$DEPT_READONLY}{/if}',
             ),
             'phone_work'
