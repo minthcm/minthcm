@@ -95,6 +95,24 @@ $dashletData['WorkSchedulesDashlet']['columns'] = array(
         'default' => false,
         'name' => 'name',
     ),
+    'date_start' => array(
+        'type' => 'datetimecombo',
+        'label' => 'LBL_DATE_START',
+        'width' => '10%',
+        'default' => false,
+    ),
+    'date_end' => array(
+        'type' => 'datetimecombo',
+        'label' => 'LBL_DATE_END',
+        'width' => '10%',
+        'default' => false,
+    ),
+    'spent_time_settlement' => array(
+        'type' => 'float',
+        'label' => 'LBL_SPENT_TIME_SETTLEMENT',
+        'width' => '10%',
+        'default' => false,
+    ),
     'delegation_duration' => array(
         'type' => 'float',
         'label' => 'LBL_DELEGATION_DURATION',

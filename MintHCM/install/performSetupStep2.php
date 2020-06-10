@@ -221,7 +221,6 @@ $enabled_tabs[] = 'TermsOfEmployment';
 $enabled_tabs[] = 'PeriodsOfEmployment';
 $enabled_tabs[] = 'Trainings';
 $enabled_tabs[] = 'Positions';
-$enabled_tabs[] = 'OrganizationalUnits';
 $enabled_tabs[] = 'OnboardingTemplates';
 $enabled_tabs[] = 'OffboardingTemplates';
 $enabled_tabs[] = 'ExitInterviews';

@@ -158,8 +158,9 @@ class AOW_WorkFlow extends Basic
 
         if (!empty($app_list_strings['moduleList'])) {
             $app_list_strings['aow_moduleList'] = $app_list_strings['moduleList'];
+            $mint_disabled_modules = getMintDisabledModulesList();
             foreach ($app_list_strings['aow_moduleList'] as $mkey => $mvalue) {
-                if (!isset($beanList[$mkey]) || str_begin($mkey, 'AOW_')) {
+                if (!isset($beanList[$mkey]) || str_begin($mkey, 'AOW_') || in_array($mkey, $mint_disabled_modules)) {
                     unset($app_list_strings['aow_moduleList'][$mkey]);
                 }
             }

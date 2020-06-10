@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -46,13 +46,15 @@ class AlertsController extends SugarController
 {
     public function action_get()
     {
-        global $current_user, $app_strings;
+        global $current_user, $app_strings, $aclModuleList;
         $bean = BeanFactory::getBean('Alerts');
-
+        $disabled_modules = ACLController::disabledModuleList($aclModuleList, 'access');
+        $disabled_modules_string = implode("','", $disabled_modules);
+        $disabled_modules_string_with_quotes = "'" . $disabled_modules_string . "'";
         $this->view_object_map['Flash'] = '';
-        $this->view_object_map['Results'] = $bean->get_full_list("alerts.date_entered","alerts.assigned_user_id = '".$current_user->id."' AND is_read != '1'");
-        if($this->view_object_map['Results'] == '') {
-            $this->view_object_map['Flash'] =$app_strings['LBL_NOTIFICATIONS_NONE'];
+        $this->view_object_map['Results'] = $bean->get_full_list("alerts.date_entered", "alerts.assigned_user_id = '" . $current_user->id . "' AND is_read != '1' AND (parent_type NOT IN (" . $disabled_modules_string_with_quotes . ") OR parent_type IS NULL)");
+        if ($this->view_object_map['Results'] == '') {
+            $this->view_object_map['Flash'] = $app_strings['LBL_NOTIFICATIONS_NONE'];
         }
         $this->view = 'default';
     }
@@ -70,45 +72,44 @@ class AlertsController extends SugarController
         $reminder_id = '';
         $type = 'info';
 
-
-        if(isset($_POST['name'])) {
+        if (isset($_POST['name'])) {
             $name = $_POST['name'];
         }
-        if(isset($_POST['description'])) {
+        if (isset($_POST['description'])) {
             $description = $_POST['description'];
         }
-        if(isset($_POST['is_read'])) {
+        if (isset($_POST['is_read'])) {
             $is_read = $_POST['is_read'];
         }
-        if(isset($_POST['url_redirect'])) {
+        if (isset($_POST['url_redirect'])) {
             $url_redirect = $_POST['url_redirect'];
         } else {
             $url_redirect = null;
         }
 
-        if($url_redirect == null) {
-            $url_redirect = 'index.php?fakeid='. uniqid('fake_', true);
+        if ($url_redirect == null) {
+            $url_redirect = 'index.php?fakeid=' . uniqid('fake_', true);
         }
 
-        if(isset($_POST['target_module'])) {
+        if (isset($_POST['target_module'])) {
             $target_module = $_POST['target_module'];
         }
-        if(isset($_POST['type'])) {
+        if (isset($_POST['type'])) {
             $type = $_POST['type'];
         }
-        if(isset($_POST['reminder_id'])) {
+        if (isset($_POST['reminder_id'])) {
             $reminder_id = $_POST['reminder_id'];
         }
 
         $shouldShowReminderPopup = false;
 
-        if(isset($_POST) && $reminder_id) {
+        if (isset($_POST) && $reminder_id) {
             $bean = BeanFactory::getBean('Alerts');
             $result = $bean->get_full_list(
                 "",
                 "alerts.assigned_user_id = '" . $current_user->id . "' AND reminder_id = '" . $reminder_id . "'"
             );
-            if(empty($result)) {
+            if (empty($result)) {
                 $bean = BeanFactory::newBean('Alerts');
                 $bean->name = $name;
                 $bean->description = $description;

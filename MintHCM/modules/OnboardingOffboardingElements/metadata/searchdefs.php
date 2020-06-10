@@ -78,15 +78,15 @@ $searchdefs[$module_name] = array(
             'label' => 'LBL_TYPE',
             'type' => 'enum',
          ),
-         'organizationalunit_name' =>
+         'securitygroup_unit_name' =>
          array(
             'type' => 'relate',
             'link' => true,
-            'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
-            'id' => 'ORGANIZATIONALUNIT_ID',
+            'label' => 'LBL_SECURITYGROUP_UNIT_NAME',
+            'id' => 'SECURITYGROUP_UNIT_ID',
             'width' => '10%',
             'default' => true,
-            'name' => 'organizationalunit_name',
+            'name' => 'securitygroup_unit_name',
          ),
          'days_from_start',
          'date_modified' =>

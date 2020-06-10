@@ -81,11 +81,11 @@ $listViewDefs[$module_name] = array(
         'id' => 'USERS_ID',
         'default' => true
     ),
-    'ORGANIZATIONALUNIT_NAME' => array(
+    'SECURITYGROUP_UNIT_NAME' => array(
         'width' => '9',
-        'label' => 'LBL_ORGANIZATIONALUNIT_NAME',
-        'module' => 'OrganizationalUnits',
-        'id' => 'ORGANIZATIONALUNIT_ID',
+        'label' => 'LBL_SECURITYGROUP_UNIT_NAME',
+        'module' => 'SecurityGroups',
+        'id' => 'SECURITYGROUP_UNIT_ID',
         'default' => false
     ),
     'ASSIGNED_USER_NAME' => array(

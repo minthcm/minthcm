@@ -75,14 +75,14 @@ $searchdefs[$module_name] = array(
       'advanced_search' => array(
          'name',
          'status',
-         'organizationalunits_leader_name' => array(
+         'securitygroup_leader_name' => array(
             'type' => 'relate',
             'link' => true,
-            'label' => 'LBL_ORGANIZATIONALUNITS_LEADER_NAME',
+            'label' => 'LBL_SECURITYGROUPS_LEADER_NAME',
             'width' => '10%',
             'default' => true,
-            'id' => 'organizationalunits_leader_id',
-            'name' => 'organizationalunits_leader_name',
+            'id' => 'securitygroup_leader_id',
+            'name' => 'securitygroup_leader_name',
          ),
          'positions_supervision_name' => array(
             'type' => 'relate',

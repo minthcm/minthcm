@@ -141,8 +141,13 @@ class PDFController {
       if ( empty($template_id) ) {
          $errors[] = translate('ERR_NO_TEMPLATE', 'PDFGenerator');
       } else {
+         global $beanList;
          $query = "Select relatedmodule FROM pdftemplates where id='$template_id' and deleted=0";
          $relatedmodule = $this->db->getOne($query);
+         $bean_list_flipped = array_flip($beanList);
+         if ( isset($relatedmodule) && in_array($relatedmodule, $beanList) && isset($bean_list_flipped[$relatedmodule]) ) {
+            $relatedmodule = $bean_list_flipped[$relatedmodule];
+         }
          if ( $relatedmodule == false ) {
             $errors[] = translate('ERR_WRONG_TEMPLATE_ID', 'PDFGenerator');
          } else if ( $relatedmodule != $module_name ) {

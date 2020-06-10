@@ -113,11 +113,11 @@ class News extends Basic {
    public function getRelatedOrganizationalUnitsIDs() {
       global $db;
       $results = array();
-      $sql = "SELECT organizationalunit_id as id FROM organizationalunits_news WHERE news_id = '{$this->id}' AND deleted = 0";
+      $sql = "SELECT securitygroup_id as id FROM securitygroups_records WHERE record_id = '{$this->id}' AND module='News' AND deleted = 0";
       $result = $db->query($sql);
       while ( $row = $db->fetchByAssoc($result) ) {
          $results[] = $row['id'];
-         $organizational_unit = BeanFactory::getBean('OrganizationalUnits', $row['id']);
+         $organizational_unit = BeanFactory::getBean('SecurityGroups', $row['id']);
          $results = array_merge($results, $organizational_unit->getMemberUnitsIDs());
       }
       return array_unique($results);
@@ -128,7 +128,7 @@ class News extends Basic {
       if ( empty($organizational_units_ids) ) {
          return true;
       }
-      $organizationalunits_controller = ControllerFactory::getController('OrganizationalUnits');
+      $organizationalunits_controller = ControllerFactory::getController('SecurityGroups');
       $users_ids = $organizationalunits_controller->getActiveUsers($organizational_units_ids);
       return in_array($user_id, $users_ids);
    }

@@ -77,14 +77,14 @@ $layout_defs["Positions"]["subpanel_setup"] = array(
             ),
         ),
     ),
-    'organizationalunits_membership' => array(
+    'securitygroups_membership' => array(
         'order' => 100,
-        'module' => 'OrganizationalUnits',
+        'module' => 'SecurityGroups',
         'subpanel_name' => 'default',
         'sort_order' => 'asc',
         'sort_by' => 'id',
-        'title_key' => 'LBL_ORGANIZATIONALUNITS_POSITIONS_MEMBERSHIP',
-        'get_subpanel_data' => 'organizationalunits_membership',
+        'title_key' => 'LBL_SECURITYGROUPS_POSITIONS_MEMBERSHIP',
+        'get_subpanel_data' => 'securitygroups_membership',
         'top_buttons' => array(
             array(
                 'widget_class' => 'SubPanelTopSelectButton',

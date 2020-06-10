@@ -56,20 +56,24 @@ class Related {
     * @param type $arguments
     */
    public function relatedRecalculation(SugarBean &$bean, $event = false, $arguments = false) {
-      include('include/ViewTools/Expressions/cache.php');
-      if ( isset($related_recalculation[$bean->table_name]) ) {
-         include ('cache/Relationships/relationships.cache.php');
-         foreach ( array_unique($related_recalculation[$bean->table_name]) as $relationship ) {
-            if ( $bean->load_relationship($relationship) ) {
-               $related_module_name = $bean->$relationship->getRelatedModuleName();
-               $related_fields_names = $this->getCalculatedFieldNamesBasedOnRelatedModule($related_module_name, $relationship);
-               if ( $this->shouldChildrenBeResaved($bean, $related_fields_names) ) {
-                  $ids = $bean->$relationship->get();
-                  foreach ( $ids as $related_record_id ) {
-                     $queue = new ViewToolsQueue();
-                     $queue->module_name = $related_module_name;
-                     $queue->record_id = $related_record_id;
-                     $queue->save();
+      if(file_exists('include/ViewTools/Expressions/cache.php')){
+         include('include/ViewTools/Expressions/cache.php');
+         if ( isset($related_recalculation[$bean->table_name]) ) {
+            if(file_exists('cache/Relationships/relationships.cache.php')){
+               include ('cache/Relationships/relationships.cache.php');
+               foreach ( array_unique($related_recalculation[$bean->table_name]) as $relationship ) {
+                  if ( $bean->load_relationship($relationship) ) {
+                     $related_module_name = $bean->$relationship->getRelatedModuleName();
+                     $related_fields_names = $this->getCalculatedFieldNamesBasedOnRelatedModule($related_module_name, $relationship);
+                     if ( $this->shouldChildrenBeResaved($bean, $related_fields_names) ) {
+                        $ids = $bean->$relationship->get();
+                        foreach ( $ids as $related_record_id ) {
+                           $queue = new ViewToolsQueue();
+                           $queue->module_name = $related_module_name;
+                           $queue->record_id = $related_record_id;
+                           $queue->save();
+                        }
+                     }
                   }
                }
             }

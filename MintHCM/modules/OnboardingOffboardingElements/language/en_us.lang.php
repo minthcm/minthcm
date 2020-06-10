@@ -44,8 +44,8 @@
 $mod_strings = array(
     'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
-    'LBL_SECURITYGROUPS' => 'Security Groups',
-    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Security Groups',
+    'LBL_SECURITYGROUPS' => 'Organizational Unit',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
     'LBL_ID' => 'ID',
     'LBL_DATE_ENTERED' => 'Date Created',
     'LBL_DATE_MODIFIED' => 'Date Modified',
@@ -93,8 +93,8 @@ $mod_strings = array(
     'LBL_MINSS_ABBREV' => 'm',
     'LBL_USERS_ONBOARDINGOFFBOARDINGELEMENTS' => 'Onboarding/Offboarding elements',
     'LBL_KIND_OF_ELEMENT' => 'Element Type',
-    'LBL_ORGANIZATIONALUNITS' => 'Organizational Units',
-    'LBL_ORGANIZATIONALUNIT_NAME' => 'Organizational Unit',
-    'LBL_ORGANIZATIONALUNIT_ID' => 'Organizational Unit (ID)',
+    'LBL_SECURITYGROUP_UNITS' => 'Organizational Units',
+    'LBL_SECURITYGROUP_UNIT_NAME' => 'Organizational Unit',
+    'LBL_SECURITYGROUP_UNIT_ID' => 'Organizational Unit (ID)',
     'LBL_RELATIONSHIP_TRAININGS_NAME' => 'Trainings',
 );

@@ -118,7 +118,7 @@ $viewdefs['Users']['DetailView'] = array(
                 1 => 'phone_work',
             ),
             2 => array(
-                0 => 'organizationalunit_name',
+                0 => 'securitygroup_name',
                 1 => 'phone_mobile',
             ),
             3 => array(

@@ -171,11 +171,11 @@ class UsersViewEdit extends ViewEdit {
             $text_filed .= "<input type='hidden' name='position_id' id='position_id' value='{$this->bean->position_id}'>";
             $this->ss->assign('POSITION_NAME_READONLY', $text_filed);
          }
-         if ( !empty($this->bean->organizationalunit_id) ) {
-            $ou = BeanFactory::getBean('OrganizationalUnits', $this->bean->organizationalunit_id);
-            $text_filed = "<input type='text' name='organizationalunit_name' id='organizationalunit_name' value='{$ou->name}' disabled>\n";
-            $text_filed .= "<input type='hidden' name='organizationalunit_id' id='organizationalunit_id' value='{$this->bean->organizationalunit_id}'>";
-            $this->ss->assign('ORGANIZATIONALUNIT_NAME_READONLY', $text_filed);
+         if ( !empty($this->bean->securitygroup_id) ) {
+            $ou = BeanFactory::getBean('SecurityGroups', $this->bean->securitygroup_id);
+            $text_filed = "<input type='text' name='securitygroup_name' id='securitygroup_name' value='{$ou->name}' disabled>\n";
+            $text_filed .= "<input type='hidden' name='securitygroup_id' id='securitygroup_id' value='{$this->bean->securitygroup_id}'>";
+            $this->ss->assign('SG_NAME_READONLY', $text_filed);
          }
       }
 

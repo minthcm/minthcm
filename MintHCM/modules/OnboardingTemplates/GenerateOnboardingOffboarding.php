@@ -251,7 +251,7 @@ class GenerateOnboardingOffboarding
                 }
                 break;
             case 'organizational_unit_manager';
-                $organizational_unit = BeanFactory::getBean('OrganizationalUnits', $element->organizationalunit_id);
+                $organizational_unit = BeanFactory::getBean('SecurityGroups', $element->securitygroup_unit_id);
                 if ($organizational_unit && !empty($organizational_unit->current_manager_id)) {
                     $assigned_user_id = $organizational_unit->current_manager_id;
                 }

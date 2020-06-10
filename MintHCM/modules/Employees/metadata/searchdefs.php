@@ -66,7 +66,7 @@ $searchdefs['Employees'] = array(
             'default' => true,
             'width' => '10%',
          ),
-         'organizationalunit_name',
+         'securitygroup_name',
          'email' =>
          array(
             'name' => 'email',

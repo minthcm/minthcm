@@ -3388,7 +3388,7 @@ class SugarBean {
      $dynamic_action=filter_input(INPUT_GET, "DynamicAction", FILTER_SANITIZE_SPECIAL_CHARS); //dashlet refresh
      $entry_point=filter_input(INPUT_GET, "entryPoint", FILTER_SANITIZE_SPECIAL_CHARS); //dashlet retrive	  
 
-     if($current_view->type=='list' || $action=="SubPanelViewer" || $dynamic_action=='displayDashlet' || $entry_point=="retrieve_dash_page" ){
+     if((!empty($current_view) && $current_view->type=='list') || $action=="SubPanelViewer" || $dynamic_action=='displayDashlet' || $entry_point=="retrieve_dash_page" ){
       $distinct = ' DISTINCT ';
      }else{
          if ( !empty($params['distinct']) ) { 

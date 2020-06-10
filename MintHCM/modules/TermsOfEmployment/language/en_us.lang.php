@@ -44,8 +44,8 @@
 $mod_strings = array(
     'LBL_ASSIGNED_TO_ID' => 'Assigned User ID',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
-    'LBL_SECURITYGROUPS' => 'Security Groups',
-    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Security Groups',
+    'LBL_SECURITYGROUPS' => 'Organizational Unit',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
     'LBL_ID' => 'ID',
     'LBL_DATE_ENTERED' => 'Date Created',
     'LBL_DATE_MODIFIED' => 'Date Modified',
@@ -93,7 +93,7 @@ $mod_strings = array(
     'LBL_PANEL_SALARY' => 'Salary',
     'LBL_TERMS_DATE_END_BEFORE_START' => "Terms' ending date cannot be set before starting date",
     'LBL_TERMS_NOT_ADJECENT' => "Terms' dates must directly follow one another",
-    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Security Groups',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
     'LBL_DOCUMENTS' => 'Documents',
     'LBL_POSITION_NAME' => 'Position',
 

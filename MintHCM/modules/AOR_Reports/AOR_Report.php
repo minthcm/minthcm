@@ -155,9 +155,9 @@ class AOR_Report extends Basic
         global $beanList, $app_list_strings;
 
         $app_list_strings['aor_moduleList'] = $app_list_strings['moduleList'];
-
+        $mint_disabled_modules = getMintDisabledModulesList();
         foreach ($app_list_strings['aor_moduleList'] as $mkey => $mvalue) {
-            if (!isset($beanList[$mkey]) || str_begin($mkey, 'AOR_') || str_begin($mkey, 'AOW_')) {
+            if (!isset($beanList[$mkey]) || str_begin($mkey, 'AOR_') || str_begin($mkey, 'AOW_') || in_array($mkey, $mint_disabled_modules)) {
                 unset($app_list_strings['aor_moduleList'][$mkey]);
             }
         }
@@ -167,7 +167,6 @@ class AOR_Report extends Basic
 
         asort($app_list_strings['aor_moduleList']);
     }
-
 
     function getReportFields()
     {

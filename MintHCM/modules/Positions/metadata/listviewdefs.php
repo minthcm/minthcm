@@ -70,10 +70,10 @@ $listViewDefs[$module_name] = array(
         'label' => 'LBL_STATUS',
         'default' => true,
     ),
-    'ORGANIZATIONALUNITS_LEADER_NAME' => array(
-        'name' => 'organizationalunits_leader_name',
-        'label' => 'LBL_ORGANIZATIONALUNITS_LEADER_NAME',
-        'id' => 'ORGANIZATIONALUNITS_LEADER_ID',
+    'SECURITYGROUP_LEADER_NAME' => array(
+        'name' => 'securitygroup_leader_name',
+        'label' => 'LBL_SECURITYGROUPS_LEADER_NAME',
+        'id' => 'SECURITYGROUPS_LEADER_ID',
         'enabled' => true,
         'default' => true,
     ),

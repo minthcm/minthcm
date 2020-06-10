@@ -181,46 +181,46 @@ $dictionary["Employee"]["fields"]["competencyratings"] = array(
     'source' => 'non-db',
     'vname' => 'LBL_COMPETENCYRATINGS',
 );
-$dictionary["Employee"]["fields"]["organizationalunits"] = array(
-    'name' => 'organizationalunits',
+$dictionary["Employee"]["fields"]["securitygroups_managers"] = array(
+    'name' => 'securitygroups_managers',
     'type' => 'link',
-    'relationship' => 'employees_organizationalunits',
+    'relationship' => 'employees_securitygroups',
     'source' => 'non-db',
-    'module' => 'OrganizationalUnits',
-    'bean_name' => 'OrganizationalUnits',
-    'vname' => 'LBL_RELATIONSHIP_ORGANIZATIONALUNITS_NAME',
+    'module' => 'SecurityGroups',
+    'bean_name' => 'SecurityGroup',
+    'vname' => 'LBL_RELATIONSHIP_SECURITYGROUPS_NAME',
     'side' => 'right',
 );
 
-$dictionary["Employee"]["fields"]["organizationalunit"] = array(
-    'name' => 'organizationalunit',
+$dictionary["Employee"]["fields"]["securitygroups"] = array(
+    'name' => 'securitygroups',
     'type' => 'link',
-    'relationship' => 'organizationalunits_employees',
+    'relationship' => 'securitygroups_employees',
     'source' => 'non-db',
-    'module' => 'OrganizationalUnits',
-    'bean_name' => 'OrganizationalUnits',
-    'vname' => 'LBL_ORGANIZATIONALUNITS_EMPLOYEES',
-    'id_name' => 'organizationalunit_id',
+    'module' => 'SecurityGroups',
+    'bean_name' => 'SecurityGroup',
+    'vname' => 'LBL_SECURITYGROUPS_EMPLOYEES',
+    'id_name' => 'securitygroup_id',
 );
-$dictionary["Employee"]["fields"]["organizationalunit_name"] = array(
-    'name' => 'organizationalunit_name',
+$dictionary["Employee"]["fields"]["securitygroup_name"] = array(
+    'name' => 'securitygroup_name',
     'type' => 'relate',
     'source' => 'non-db',
-    'vname' => 'LBL_ORGANIZATIONALUNIT_NAME',
+    'vname' => 'LBL_SECURITYGROUP_NAME',
     'save' => true,
-    'id_name' => 'organizationalunit_id',
-    'link' => 'organizationalunit',
-    'module' => 'OrganizationalUnits',
-    'table' => 'organizationalunits',
+    'id_name' => 'securitygroup_id',
+    'link' => 'securitygroups',
+    'module' => 'SecurityGroups',
+    'table' => 'securitygroups',
     'rname' => 'name',
 );
-$dictionary["Employee"]["fields"]["organizationalunit_id"] = array(
-    'name' => 'organizationalunit_id',
-    'relationship' => 'organizationalunits_employees',
+$dictionary["Employee"]["fields"]["securitygroup_id"] = array(
+    'name' => 'securitygroup_id',
+    'relationship' => 'securitygroups_employees',
     'type' => 'link',
-    'vname' => 'LBL_ORGANIZATIONALUNIT_ID',
+    'vname' => 'LBL_SECURITYGROUP_ID',
     'dbType' => 'id',
-    'join_name' => 'organizationalunits_employees',
+    'join_name' => 'securitygroups_employees',
 );
 $dictionary["Employee"]["fields"]["certificates"] = array(
     'name' => 'certificates',
@@ -238,6 +238,23 @@ $dictionary["Employee"]["fields"]["applications"] = array(
     'side' => 'right',
     'vname' => 'LBL_APPLICATIONS_SUBPANEL',
 );
+$dictionary["Employee"]["fields"]["employeeinteractiontracking_employee"] = array(
+    'name' => 'employeeinteractiontracking_employee',
+    'type' => 'link',
+    'relationship' => 'employeeinteractiontracking_employee',
+    'source' => 'non-db',
+    'side' => 'right',
+    'vname' => 'LBL_EMPLOYEEINTERACTIONTRACKING',
+);
+
+$dictionary["Employee"]["fields"]["employeeinteractiontracking_assigned_user"] = array(
+    'name' => 'employeeinteractiontracking_assigned_user',
+    'type' => 'link',
+    'relationship' => 'employeeinteractiontracking_assigned_user',
+    'source' => 'non-db',
+    'side' => 'right',
+    'vname' => 'LBL_EMPLOYEEINTERACTIONTRACKING',
+);
 
 $dictionary["Employee"]["audited"] = true;
 $dictionary["Employee"]["fields"]["employee_status"]["audited"] = true;
@@ -250,7 +267,7 @@ $dictionary["Employee"]["fields"]["phone_mobile"]["audited"] = true;
 $dictionary["Employee"]["fields"]["phone_home"]["audited"] = true;
 $dictionary["Employee"]["fields"]["phone_fax"]["audited"] = true;
 $dictionary["Employee"]["fields"]["phone_other"]["audited"] = true;
-$dictionary["Employee"]["fields"]["organizationalunit_name"]["audited"] = true;
+$dictionary["Employee"]["fields"]["securitygroup_name"]["audited"] = true;
 $dictionary["Employee"]["fields"]["reports_to_name"]["audited"] = true;
 $dictionary["Employee"]["fields"]["messenger_type"]["audited"] = true;
 $dictionary["Employee"]["fields"]["messenger_id"]["audited"] = true;

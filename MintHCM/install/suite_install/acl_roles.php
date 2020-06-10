@@ -641,6 +641,17 @@
         'massupdate' => '90',
         'edit' => '90',
       ),
+      'EmployeeInteractionTracking' => 
+      array (
+        'view' => '90',
+        'export' => '90',
+        'import' => '90',
+        'access' => '89',
+        'list' => '90',
+        'delete' => '90',
+        'massupdate' => '90',
+        'edit' => '90',
+      ),
       'Improvements' => 
       array (
         'view' => '90',
@@ -849,17 +860,6 @@
         'list' => '90',
         'access' => '89',
         'massupdate' => '90',
-      ),
-      'OrganizationalUnits' => 
-      array (
-        'edit' => '90',
-        'export' => '90',
-        'import' => '90',
-        'list' => '90',
-        'access' => '89',
-        'massupdate' => '90',
-        'delete' => '90',
-        'view' => '90',
       ),
       'OutboundEmailAccounts' => 
       array (
@@ -1851,13 +1851,13 @@
       ),
       'ExitInterviews' => 
       array (
-        'list' => '75',
-        'access' => '89',
-        'delete' => '75',
+        'list' => '90',
+        'access' => '90',
+        'delete' => '90',
         'massupdate' => '90',
-        'edit' => '75',
-        'view' => '75',
-        'export' => '75',
+        'edit' => '90',
+        'view' => '90',
+        'export' => '90',
         'import' => '90',
       ),
       'FP_Event_Locations' => 
@@ -1894,6 +1894,17 @@
         'massupdate' => '90',
       ),
       'Ideas' => 
+      array (
+        'import' => '90',
+        'delete' => '90',
+        'export' => '90',
+        'view' => '90',
+        'list' => '90',
+        'massupdate' => '90',
+        'access' => '89',
+        'edit' => '90',
+      ),
+      'EmployeeInteractionTracking' => 
       array (
         'import' => '90',
         'delete' => '90',
@@ -2112,17 +2123,6 @@
         'delete' => '90',
         'view' => '90',
         'edit' => '90',
-      ),
-      'OrganizationalUnits' => 
-      array (
-        'edit' => '90',
-        'view' => '90',
-        'list' => '90',
-        'export' => '90',
-        'access' => '89',
-        'massupdate' => '90',
-        'delete' => '90',
-        'import' => '90',
       ),
       'OutboundEmailAccounts' => 
       array (
@@ -3165,6 +3165,17 @@
         'massupdate' => '-99',
         'delete' => '75',
       ),
+      'EmployeeInteractionTracking' => 
+      array (
+        'edit' => '90',
+        'import' => '90',
+        'view' => '90',
+        'export' => '-99',
+        'list' => '80',
+        'access' => '89',
+        'massupdate' => '-99',
+        'delete' => '75',
+      ),
       'Improvements' => 
       array (
         'delete' => '90',
@@ -3373,17 +3384,6 @@
         'list' => '90',
         'edit' => '90',
         'massupdate' => '90',
-      ),
-      'OrganizationalUnits' => 
-      array (
-        'massupdate' => '-99',
-        'import' => '-99',
-        'list' => '90',
-        'edit' => '-99',
-        'access' => '89',
-        'view' => '90',
-        'delete' => '-99',
-        'export' => '-99',
       ),
       'OutboundEmailAccounts' => 
       array (
@@ -4421,6 +4421,17 @@
         'edit' => '80',
         'list' => '90',
       ),
+      'EmployeeInteractionTracking' => 
+      array (
+        'export' => '90',
+        'access' => '89',
+        'massupdate' => '90',
+        'delete' => '90',
+        'import' => '90',
+        'view' => '90',
+        'edit' => '80',
+        'list' => '90',
+      ),
       'Improvements' => 
       array (
         'access' => '89',
@@ -4629,17 +4640,6 @@
         'access' => '89',
         'view' => '90',
         'import' => '90',
-      ),
-      'OrganizationalUnits' => 
-      array (
-        'view' => '90',
-        'import' => '90',
-        'delete' => '90',
-        'edit' => '90',
-        'massupdate' => '90',
-        'export' => '90',
-        'access' => '89',
-        'list' => '90',
       ),
       'OutboundEmailAccounts' => 
       array (
