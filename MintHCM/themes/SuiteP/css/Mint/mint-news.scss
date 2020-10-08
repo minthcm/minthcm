@@ -3,120 +3,111 @@
     height: 100%; 
     background-color: rgba(0,0,0,0.5); 
     position:fixed; 
-    left: 0;
     top: 0;
+    left: 0;
     z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow-y: scroll;
 
-    .mintNews-container {
+    .close-button {
+        position: fixed;
+        color: #ffffff;
+        top: 30px;
+        right: 30px;
+        font-size: 20px;
+    }
+
+    > div {
         width: 1000px; 
-        max-height: 550px; 
-        background-color: white; 
-        position:fixed; 
-        top: 50%; 
-        left: 50%; 
-        margin-left: -500px; 
-        margin-top: -275px;
+        max-height: 500px;
+        margin: 20px 0;
 
         @media only screen and (max-width: 1024px) {
-            width: 80%; 
-            margin-left: -40%;
+            width: 100%;
         }
-    }
 
-    .mintNews-header {
-        text-transform: uppercase; 
-        color: white; 
-        background-color: #009975; 
-        padding: 8px 8px 8px 25px;
-
-        span {
-            font-size: 18px;
-            float: right;
+        .mintNews-box-header {
+            width: 100%;
+            padding: 8px;
+            word-wrap: break-word;
         }
-    }
 
-    .mintNews-boxes {
-        max-height: 500px;
-        overflow-y: auto;
-        padding-bottom: 20px;
+        .mintNews-box-content {
+            display: flex;
+            align-items: center;
+            min-height: 50px;
+            padding: 8px;
 
-        > div {
-            margin: 20px 20px 0 20px;
-
-            .mintNews-box-header {
-                width: 100%;
-                padding: 8px;
-                word-wrap: break-word;
+            @media only screen and (max-width: 1024px) {
+                display: block;
             }
 
-            .mintNews-box-content {
-                display: flex;
-                align-items: center;
-                min-height: 50px;
-                padding: 8px;
+            .mintNews-box-text {
+                width: 880px;
+                padding-right: 10px;
+                word-wrap: break-word;
 
                 @media only screen and (max-width: 1024px) {
-                    display: block;
-                }
-
-                .mintNews-box-text {
                     width: 100%;
-                    word-wrap: break-word;
+                    padding: 0;
                 }
+            }
 
-                .mintNews-box-button {
-                    width: 19%;
-                    display: flex;
+            .mintNews-box-button {
+                display: flex;
+                justify-content: flex-end;
+
+                @media only screen and (max-width: 1024px) {
+                    width: 100%;
+                    padding-top: 3px;
                     justify-content: center;
+                }
 
-                    @media only screen and (max-width: 1024px) {
-                        width: 100%;
-                        padding-top: 3px;
-                    }
-
-                    input {
-                        margin: 0;
-                    }
+                input {
+                    margin: 0;
                 }
             }
         }
+    }
 
-        .mintNews-announcement {
-            background-color: #63c19a;
+    .mintNews-announcement {
+        background-color: #63c19a;
 
-            .mintNews-box-header {
-                color: #ffffff;
-                background-color: #009975;
-            }
-
-            .mintNews-box-content .mintNews-box-text {
-                color: #ffffff;
-            }
+        .mintNews-box-header {
+            color: #ffffff;
+            background-color: #009975;
         }
 
+        .mintNews-box-content .mintNews-box-text {
+            color: #ffffff;
+        }
+    }
 
-        .mintNews-reminder {
-            background-color: #eaeaea;
 
-            .mintNews-box-header {
-                color: #EAEAEA;
-                background-color: #646464;
+    .mintNews-reminder {
+        background-color: #eaeaea;
+
+        .mintNews-box-header {
+            color: #EAEAEA;
+            background-color: #646464;
+        }
+
+        .mintNews-box-content {
+            .mintNews-box-text {
+                color: #009975;
             }
 
-            .mintNews-box-content {
-                .mintNews-box-text {
-                    color: #009975;
-                }
+            .mintNews-box-button { 
+                flex-direction: column;
+                align-items: center;
 
-                .mintNews-box-button { 
-                    flex-direction: column;
-                    align-items: center;
-
-                    input:nth-child(2) {
-                        font-size: 11px;
-                        padding: 0 10px 0 10px;
-                        margin-top: 5px;
-                    }
+                input:nth-child(2) {
+                    font-size: 11px;
+                    padding: 0 10px 0 10px;
+                    margin-top: 5px;
                 }
             }
         }

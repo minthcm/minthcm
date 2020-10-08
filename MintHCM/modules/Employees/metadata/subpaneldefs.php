@@ -234,20 +234,12 @@ $layout_defs['Employees'] = array(
         'securitygroups_managers' => array(
             'order' => 100,
             'module' => 'SecurityGroups',
-            'subpanel_name' => 'default',
+            'subpanel_name' => 'ForEmployees',
             'sort_order' => 'asc',
             'sort_by' => 'id',
-            'title_key' => 'LBL_RELATIONSHIP_SECURITYGROUPS_NAME',
+            'title_key' => 'LBL_SECURITYGROUPS_MANAGERS',
             'get_subpanel_data' => 'securitygroups_managers',
-            'top_buttons' => array(
-                array(
-                    'widget_class' => 'SubPanelTopButtonQuickCreate',
-                ),
-                array(
-                    'widget_class' => 'SubPanelTopSelectButton',
-                    'mode' => 'MultiSelect',
-                ),
-            ),
+            'top_buttons' => array(),
         ),
         'applications' => array(
             'order' => 100,

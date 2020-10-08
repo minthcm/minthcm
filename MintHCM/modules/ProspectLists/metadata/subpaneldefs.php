@@ -88,14 +88,26 @@ $layout_defs['ProspectLists'] = array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
             ),
         ),
-        'users' => array(
+        'employees' => array(
             'order' => 40,
-            'module' => 'Users',
+            'module' => 'Employees',
             'sort_by' => 'name',
             'sort_order' => 'asc',
-            'subpanel_name' => 'ForProspectLists',
-            'get_subpanel_data' => 'users',
-            'title_key' => 'LBL_USERS_SUBPANEL_TITLE',
+            'subpanel_name' => 'default',
+            'get_subpanel_data' => 'employees',
+            'title_key' => 'LBL_EMPLOYEES',
+            'top_buttons' => array(
+                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
+            ),
+        ),
+        'candidates' => array(
+            'order' => 40,
+            'module' => 'Candidates',
+            'sort_order' => 'asc',
+            'sort_by' => 'name',
+            'subpanel_name' => 'default',
+            'get_subpanel_data' => 'candidates',
+            'title_key' => 'LBL_CANDIDATES',
             'top_buttons' => array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
             ),

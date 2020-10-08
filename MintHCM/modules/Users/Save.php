@@ -87,7 +87,7 @@ if (empty($focus->user_name)) {
 
 if (!$current_user->is_admin && !$GLOBALS['current_user']->isAdminForModule('Users')
 ) {
-    if ($current_user->id != $focus->id || !empty($_POST['is_admin']) || (!empty($_POST['UserType']) && $_POST['UserType'] == 'Administrator')
+    if ($current_user->id != $focus->id || !empty($_POST['is_admin']) || (!empty($_POST['UserType']) && 'Administrator' == $_POST['UserType'])
     ) {
         $GLOBALS['log']->fatal("SECURITY:Non-Admin " . $current_user->id . " attempted to change settings for user:" . $focus->id);
         header("Location: index.php?module=Users&action=Logout");
@@ -98,10 +98,10 @@ if (!$current_user->is_admin && !$GLOBALS['current_user']->isAdminForModule('Use
 // Populate the custom fields
 $sfh = new SugarFieldHandler();
 foreach ($focus->field_defs as $fieldName => $field) {
-    if (isset($field['source']) && $field['source'] == 'custom_fields') {
+    if (isset($field['source']) && 'custom_fields' == $field['source']) {
         $type = !empty($field['custom_type']) ? $field['custom_type'] : $field['type'];
         $sf = $sfh::getSugarField($type);
-        if ($sf != null) {
+        if (null != $sf) {
             $sf->save($focus, $_POST, $fieldName, $field, '');
         } else {
             $GLOBALS['log']->fatal("Field '$fieldName' does not have a SugarField handler");
@@ -111,7 +111,7 @@ foreach ($focus->field_defs as $fieldName => $field) {
 
 $portal = array("user_name", "last_name", "status", "portal_only");
 $group = array("user_name", "last_name", "status", "is_group");
-if (isset($_POST['portal_only']) && ($_POST['portal_only'] == '1' || $focus->portal_only)) {
+if (isset($_POST['portal_only']) && ('1' == $_POST['portal_only'] || $focus->portal_only)) {
     foreach ($portal as $field) {
         if (isset($_POST[$field])) {
             $value = $_POST[$field];
@@ -120,7 +120,7 @@ if (isset($_POST['portal_only']) && ($_POST['portal_only'] == '1' || $focus->por
     }
 }
 
-if (isset($_POST['is_group']) && ($_POST['is_group'] == '1' || $focus->is_group)) {
+if (isset($_POST['is_group']) && ('1' == $_POST['is_group'] || $focus->is_group)) {
     foreach ($group as $field) {
         if (isset($_POST[$field])) {
             $value = $_POST[$field];
@@ -140,7 +140,7 @@ if (!$focus->is_group && !$focus->portal_only) {
         $field = $focus->field_defs[$fieldName];
         $type = !empty($field['custom_type']) ? $field['custom_type'] : $field['type'];
         $sf = $sfh::getSugarField($type);
-        if ($sf != null) {
+        if (null != $sf) {
             $sf->save($focus, $_POST, $fieldName, $field, '');
         } else {
             $GLOBALS['log']->fatal("Field '$fieldName' does not have a SugarField handler");
@@ -150,7 +150,7 @@ if (!$focus->is_group && !$focus->portal_only) {
         $field = $focus->field_defs[$fieldName];
         $type = !empty($field['custom_type']) ? $field['custom_type'] : $field['type'];
         $sf = $sfh::getSugarField($type);
-        if ($sf != null) {
+        if (null != $sf) {
             $sf->save($focus, $_POST, $fieldName, $field, '');
         } else {
             $GLOBALS['log']->fatal("Field '$fieldName' does not have a SugarField handler");
@@ -160,7 +160,7 @@ if (!$focus->is_group && !$focus->portal_only) {
     $focus->is_group = 0;
     $focus->portal_only = 0;
 
-    if (isset($_POST['status']) && $_POST['status'] == "Inactive") {
+    if (isset($_POST['status']) && "Inactive" == $_POST['status']) {
         $focus->employee_status = "Terminated";
     }
     //bug49972
@@ -168,8 +168,8 @@ if (!$focus->is_group && !$focus->portal_only) {
     if (isset($_POST['user_name'])) {
         $focus->user_name = $_POST['user_name'];
     }
-    if ((isset($_POST['is_admin']) && ($_POST['is_admin'] == 'on' || $_POST['is_admin'] == '1')) ||
-        (isset($_POST['UserType']) && $_POST['UserType'] == "Administrator")) {
+    if ((isset($_POST['is_admin']) && ('on' == $_POST['is_admin'] || '1' == $_POST['is_admin'])) ||
+        (isset($_POST['UserType']) && "Administrator" == $_POST['UserType'])) {
         $focus->is_admin = 1;
     } elseif (isset($_POST['is_admin']) && empty($_POST['is_admin'])) {
         $focus->is_admin = 0;
@@ -444,11 +444,11 @@ if (!$focus->verify_data()) {
     if (isset($focus->business_role)) {
         $sql = "SELECT id from dashboardmanager WHERE business_role = '{$focus->business_role}' AND deleted = 0";
         $dashboardmanager_id = $db->getOne($sql);
-        if(!empty($dashboardmanager_id)){
+        if (!empty($dashboardmanager_id)) {
             $dm_object = BeanFactory::getBean('DashboardManager', $dashboardmanager_id);
             $dd = new DashboardDeployer($dm_object);
             $dd->deployForRole($focus);
-        }   
+        }
     }
     //MINT END
 
@@ -456,18 +456,23 @@ if (!$focus->verify_data()) {
     $new_pwd = '';
     if ((isset($_POST['old_password']) || $focus->portal_only) &&
         (isset($_POST['new_password']) && !empty($_POST['new_password'])) &&
-        (isset($_POST['password_change']) && $_POST['password_change'] == 'true')) {
+        /* MintHCM #74303 START */
+        // (isset($_POST['password_change']) && $_POST['password_change'] == 'true')) {
+        (isset($_POST['password_change']) && 'true' == $_POST['password_change'])
+        && (!isset($_POST['password_change_attempt_made']) || true !== $_POST['password_change_attempt_made'])) {
+        $_POST['password_change_attempt_made'] = true;
+        /* eVolpe #74303 END */
         if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
 
             if ($focus->error_string) {
                 SugarApplication::appendErrorMessage($focus->error_string);
             }
 
-            if ((isset($_POST['page']) && $_POST['page'] == 'EditView')) {
+            if ((isset($_POST['page']) && 'EditView' == $_POST['page'])) {
                 header("Location: index.php?action=EditView&module=Users&record=" . $_POST['record'] . "&error_password=" . urlencode($focus->error_string));
                 exit;
             }
-            if ((isset($_POST['page']) && $_POST['page'] == 'Change')) {
+            if ((isset($_POST['page']) && 'Change' == $_POST['page'])) {
                 header("Location: index.php?action=ChangePassword&module=Users&record=" . $_POST['record'] . "&error_password=" . urlencode($focus->error_string));
                 exit;
             }
@@ -491,7 +496,7 @@ if (!$focus->verify_data()) {
     //saving their own username/password for the system account
     if (!$sysOutboundAccunt->isAllowUserAccessToSystemDefaultOutbound()) {
         $userOverrideOE = $sysOutboundAccunt->getUsersMailerForSystemOverride($focus->id);
-        if ($userOverrideOE != null) {
+        if (null != $userOverrideOE) {
             //User is alloweed to clear username and pass so no need to check for blanks.
             $userOverrideOE->mail_smtpuser = $_REQUEST['mail_smtpuser'];
             $userOverrideOE->mail_smtppass = $_REQUEST['mail_smtppass'];
@@ -551,16 +556,16 @@ if (!$focus->verify_data()) {
 
 //handle navigation from user wizard
 if (isset($_REQUEST['whatnext'])) {
-    if ($_REQUEST['whatnext'] == 'import') {
+    if ('import' == $_REQUEST['whatnext']) {
         header("Location:index.php?module=Import&action=step1&import_module=Administration");
         return;
-    } elseif ($_REQUEST['whatnext'] == 'users') {
+    } elseif ('users' == $_REQUEST['whatnext']) {
         header("Location:index.php?module=Users&action=index");
         return;
-    } elseif ($_REQUEST['whatnext'] == 'settings') {
+    } elseif ('settings' == $_REQUEST['whatnext']) {
         header("Location:index.php?module=Configurator&action=EditView");
         return;
-    } elseif ($_REQUEST['whatnext'] == 'studio') {
+    } elseif ('studio' == $_REQUEST['whatnext']) {
         header("Location:index.php?module=ModuleBuilder&action=index&type=studio");
         return;
     } else {
@@ -568,19 +573,19 @@ if (isset($_REQUEST['whatnext'])) {
     }
 }
 
-if (isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") {
+if (isset($_REQUEST['return_module']) && "" != $_REQUEST['return_module']) {
     $return_module = $_REQUEST['return_module'];
 } else {
     $return_module = "Users";
 }
 
-if (isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") {
+if (isset($_REQUEST['return_action']) && "" != $_REQUEST['return_action']) {
     $return_action = $_REQUEST['return_action'];
 } else {
     $return_action = "DetailView";
 }
 
-if (isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") {
+if (isset($_REQUEST['return_id']) && "" != $_REQUEST['return_id']) {
     $return_id = $_REQUEST['return_id'];
 }
 
@@ -589,9 +594,9 @@ $GLOBALS['log']->debug("Saved record with id of " . $return_id);
 $redirect = "index.php?action={$return_action}&module={$return_module}&record={$return_id}";
 $redirect .= isset($_REQUEST['type']) ? "&type={$_REQUEST['type']}" : ''; // cn: bug 6897 - detect redirect to Email compose
 $redirect .= isset($_REQUEST['return_id']) ? "&return_id={$_REQUEST['return_id']}" : '';
-$redirect .= ($new_pwd != '') ? "&pwd_set=" . $new_pwd : '';
+$redirect .= ('' != $new_pwd) ? "&pwd_set=" . $new_pwd : '';
 
-if (array_key_exists('do_not_redirect', $_REQUEST) && $_REQUEST['do_not_redirect'] === true) {
+if (array_key_exists('do_not_redirect', $_REQUEST) && true === $_REQUEST['do_not_redirect']) {
     // do nothing
 } else {
     header("Location: {$redirect}");

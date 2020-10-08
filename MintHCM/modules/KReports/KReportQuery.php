@@ -1037,6 +1037,9 @@ class KReportQuery {
                      require_once($beanFiles[$beanList[$this->joinSegments[$leftPath]['object']->$rightArrayEl->getRelatedModuleName()]]); //$rightArray[2]
                      $this->joinSegments[$thisPath]['object'] = new $beanList[$this->joinSegments[$leftPath]['object']->$rightArrayEl->getRelatedModuleName()](); //$rightArray[2]
                      //bugfix 2010-08-19, respect ACL role access for owner reuqired in select
+                /* MintHCM #70811 START */
+                if ($this->authChecklevel != 'none') {
+                /* MintHCM #70811 END */
                      if ( $this->joinSegments[$leftPath]['object']->bean_implements('ACL') && ACLController::requireOwner($this->joinSegments[$leftPath]['object']->module_dir, 'list') ) {
                         //2013-02-22 missing check if we have a wherestring at all
                         // Mint start #59708
@@ -1048,6 +1051,9 @@ class KReportQuery {
                         $this->whereString .= str_replace($this->joinSegments[$leftPath]['object']->table_name, $this->joinSegments[$leftPath]['alias'], $this->joinSegments[$leftPath]['object']->getOwnerWhere($GLOBALS['current_user']->id));
                         // Mint end #59708
                      }
+                /* MintHCM #70811 START */
+                }
+                /* MintHCM #70811 END */
 
                      // check for Custom Fields
                      if ( $this->joinSegments[$thisPath]['object']->hasCustomFields() ) {

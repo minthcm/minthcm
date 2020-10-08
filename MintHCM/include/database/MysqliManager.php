@@ -132,7 +132,7 @@ class MysqliManager extends MysqlManager {
       if ( stristr(strtolower($sql), 'workschedules ') && ( stristr(strtolower($sql), 'update ') || stristr(strtolower($sql), 'insert ') ) ) {
          $GLOBALS['log']->dev('Mysqli Query:' . $sql);
       }
-      // MintHCM end 
+      // MintHCM end
       parent::countQuery($sql);
       $GLOBALS['log']->info('Query:' . $sql);
       $this->checkConnection();
@@ -335,14 +335,19 @@ class MysqliManager extends MysqlManager {
       }
 
       // cn: using direct calls to prevent this from spamming the Logs
-
+      // Mint
       $collation = $this->getOption('collation');
+      $utf8mb4 = true;
+      if( !empty($collation) && strpos(strtolower($collation),"utf8mb4")===false){
+         $utf8mb4 = false;
+      }
+
       if ( !empty($collation) ) {
-         $names = "SET NAMES 'utf8' COLLATE '$collation'";
+         $names = "SET NAMES 'utf8".($utf8mb4?'mb4':'')."' COLLATE '$collation'";
          mysqli_query($this->database, $names);
       }
-      mysqli_set_charset($this->database, "utf8");
-
+      mysqli_set_charset($this->database, "utf8".($utf8mb4?'mb4':'')."");
+      //Mint end
       if ( $this->checkError('Could Not Connect', $dieOnError) ) {
          $GLOBALS['log']->info("connected to db");
       }

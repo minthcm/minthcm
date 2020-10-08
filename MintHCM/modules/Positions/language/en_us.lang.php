@@ -117,7 +117,7 @@ $mod_strings = array(
     'LBL_STATUS' => 'Status',
     'LBL_POSITIONS_CAREERPATHS_FROM_TITLE' => 'Career Paths',
     'LBL_POSITIONS_CAREERPATHS_TO_TITLE' => 'Career Paths (To)',
-    'LBL_SECURITYGROUPS_POSITIONS_MEMBERSHIP' => 'Organizational Units',
+    'LBL_SECURITYGROUPS_POSITIONS_MEMBERSHIP' => 'Is Member Of',
 
     'LBL_POSITIONS_POSITIONS_SUPERVISION' => 'Positions supervision',
     'LBL_POSITIONS_EMPLOYEES' => 'Stanowisko',

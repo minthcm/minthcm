@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,178 +36,176 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
-
-
 
 $module_name = 'Candidatures';
 $listViewDefs[$module_name] = array(
-   'NAME' => array(
-      'name' => 'name',
-      'label' => 'LBL_NAME',
-      'default' => true,
-      'enabled' => true,
-      'link' => true,
-   ),
-   'CANDIDATE_NAME' => array(
-      'name' => 'candidate_name',
-      'label' => 'LBL_CANDIDATES_TITLE',
-      'enabled' => true,
-      'module' => 'Candidates',
-      'id' => 'CANDIDATE_ID',
-      'link' => true,
-      'sortable' => false,
-      'default' => true,
-   ),
-   'status' => array(
-      'name' => 'status',
-      'label' => 'LBL_STATUS',
-      'enabled' => true,
-      'default' => true,
-   ),
-   'to_decision' => array(
-      'name' => 'to_decision',
-      'label' => 'LBL_TO_DECISION',
-      'enabled' => true,
-      'default' => true,
-   ),
-   'net_amount' => array(
-      'name' => 'net_amount',
-      'label' => 'LBL_NET_AMOUNT',
-      'enabled' => true,
-      'related_fields' => array(
-         'currency_id',
-      ),
-      'currency_format' => true,
-      'default' => true,
-   ),
-   'gross_amount' => array(
-      'name' => 'gross_amount',
-      'label' => 'LBL_GROSS_AMOUNT',
-      'enabled' => true,
-      'related_fields' => array(
-         'currency_id',
-      ),
-      'currency_format' => true,
-      'default' => true,
-   ),
-   'dg_amount' => array(
-      'name' => 'dg_amount',
-      'label' => 'LBL_DG_AMOUNT',
-      'enabled' => true,
-      'related_fields' => array(
-         'currency_id',
-      ),
-      'currency_format' => true,
-      'default' => true,
-   ),
-   'scoring' => array(
-      'name' => 'scoring',
-      'label' => 'SCORING',
-      'enabled' => true,
-      'default' => true,
-   ),
-   'assigned_user_name' => array(
-      'name' => 'assigned_user_name',
-      'label' => 'LBL_ASSIGNED_TO_NAME',
-      'default' => true,
-      'enabled' => true,
-      'link' => true,
-   ),
-   'LBL_DATE_MODIFIED' => array(
-      'label' => 'LBL_DATE_MODIFIED',
-      'enabled' => true,
-      'default' => true,
-      'name' => 'date_modified',
-      'readonly' => true,
-   ),
-   'SOURCE' => array(
-      'name' => 'source',
-      'label' => 'LBL_SOURCE',
-      'enabled' => true,
-      'default' => false,
-   ),
-   'START_DATE' => array(
-      'name' => 'start_date',
-      'label' => 'LBL_START_DATE',
-      'enabled' => true,
-      'default' => false,
-   ),
-   'NOTICE' => array(
-      'name' => 'notice',
-      'label' => 'LBL_NOTICE',
-      'enabled' => true,
-      'sortable' => false,
-      'default' => false,
-   ),
-   'NOTICE_FINAL_EXPECTATIONS' => array(
-      'name' => 'notice_final_expectations',
-      'label' => 'LBL_NOTICE_FINAL_EXPECTATIONS',
-      'enabled' => true,
-      'sortable' => false,
-      'default' => false,
-   ),
-   'FINAL_EMPLOYMENT_FORM' => array(
-      'name' => 'final_employment_form',
-      'label' => 'LBL_FINAL_EMPLOYMENT_FORM',
-      'enabled' => true,
-      'default' => false,
-   ),
-   'EMPLOYMENT_FORM' => array(
-      'name' => 'employment_form',
-      'label' => 'LBL_EMPLOYMENT_FORM',
-      'enabled' => true,
-      'default' => false,
-   ),
-   'RECRUITMENT_NAME' => array(
-      'name' => 'recruitment_name',
-      'label' => 'LBL_CANDIDATURES_RECRUITMENTS_FROM_RECRUITMENTS_TITLE',
-      'enabled' => true,
-      'id' => 'RECRUITMENT_ID',
-      'link' => true,
-      'sortable' => false,
-      'default' => false,
-      'module' => 'Recruitments',
-   ),
-   'RECRUITMENT_END_NAME' => array(
-      'name' => 'recruitment_end_name',
-      'label' => 'LBL_CANDIDATURES_RECRUITMENTS_END_FROM_RECRUITMENTS_TITLE',
-      'enabled' => true,
-      'id' => 'RECRUITMENT_END_ID',
-      'link' => true,
-      'sortable' => false,
-      'default' => false,
-      'module' => 'Recruitments',
-   ),
-   'SALARY_NET' => array(
-      'name' => 'salary_net',
-      'label' => 'LBL_SALARY_NET',
-      'enabled' => true,
-      'related_fields' => array(
-         'currency_id',
-      ),
-      'currency_format' => true,
-      'default' => false,
-   ),
-   'TASK_GRADE' => array(
-      'name' => 'task_grade',
-      'label' => 'LBL_TASK_GRADE',
-      'enabled' => true,
-      'default' => false,
-   ),
-   'REASON_FOR_REJECTION' => array(
-      'name' => 'reason_for_rejection',
-      'label' => 'LBL_REASON_FOR_REJECTION',
-      'enabled' => true,
-      'default' => false,
-   ),
+    'NAME' => array(
+        'name' => 'name',
+        'label' => 'LBL_NAME',
+        'default' => true,
+        'enabled' => true,
+        'link' => true,
+    ),
+    'CANDIDATE_NAME' => array(
+        'name' => 'candidate_name',
+        'label' => 'LBL_CANDIDATES_TITLE',
+        'enabled' => true,
+        'module' => 'Candidates',
+        'id' => 'CANDIDATE_ID',
+        'link' => true,
+        'sortable' => false,
+        'default' => true,
+    ),
+    'status' => array(
+        'name' => 'status',
+        'label' => 'LBL_STATUS',
+        'enabled' => true,
+        'default' => true,
+    ),
+    'to_decision' => array(
+        'name' => 'to_decision',
+        'label' => 'LBL_TO_DECISION',
+        'enabled' => true,
+        'default' => true,
+    ),
+    'net_amount' => array(
+        'name' => 'net_amount',
+        'label' => 'LBL_NET_AMOUNT',
+        'enabled' => true,
+        'related_fields' => array(
+            'currency_id',
+        ),
+        'currency_format' => true,
+        'default' => true,
+    ),
+    'gross_amount' => array(
+        'name' => 'gross_amount',
+        'label' => 'LBL_GROSS_AMOUNT',
+        'enabled' => true,
+        'related_fields' => array(
+            'currency_id',
+        ),
+        'currency_format' => true,
+        'default' => true,
+    ),
+    'dg_amount' => array(
+        'name' => 'dg_amount',
+        'label' => 'LBL_DG_AMOUNT',
+        'enabled' => true,
+        'related_fields' => array(
+            'currency_id',
+        ),
+        'currency_format' => true,
+        'default' => true,
+    ),
+    'scoring' => array(
+        'name' => 'scoring',
+        'label' => 'SCORING',
+        'enabled' => true,
+        'default' => true,
+    ),
+    'assigned_user_name' => array(
+        'name' => 'assigned_user_name',
+        'label' => 'LBL_ASSIGNED_TO_NAME',
+        'default' => true,
+        'enabled' => true,
+        'link' => true,
+    ),
+    'DATE_MODIFIED' => array(
+        'label' => 'LBL_DATE_MODIFIED',
+        'enabled' => true,
+        'default' => true,
+        'name' => 'date_modified',
+        'readonly' => true,
+    ),
+    'SOURCE' => array(
+        'name' => 'source',
+        'label' => 'LBL_SOURCE',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'START_DATE' => array(
+        'name' => 'start_date',
+        'label' => 'LBL_START_DATE',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'NOTICE' => array(
+        'name' => 'notice',
+        'label' => 'LBL_NOTICE',
+        'enabled' => true,
+        'sortable' => false,
+        'default' => false,
+    ),
+    'NOTICE_FINAL_EXPECTATIONS' => array(
+        'name' => 'notice_final_expectations',
+        'label' => 'LBL_NOTICE_FINAL_EXPECTATIONS',
+        'enabled' => true,
+        'sortable' => false,
+        'default' => false,
+    ),
+    'FINAL_EMPLOYMENT_FORM' => array(
+        'name' => 'final_employment_form',
+        'label' => 'LBL_FINAL_EMPLOYMENT_FORM',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'EMPLOYMENT_FORM' => array(
+        'name' => 'employment_form',
+        'label' => 'LBL_EMPLOYMENT_FORM',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'RECRUITMENT_NAME' => array(
+        'name' => 'recruitment_name',
+        'label' => 'LBL_CANDIDATURES_RECRUITMENTS_FROM_RECRUITMENTS_TITLE',
+        'enabled' => true,
+        'id' => 'RECRUITMENT_ID',
+        'link' => true,
+        'sortable' => false,
+        'default' => false,
+        'module' => 'Recruitments',
+    ),
+    'RECRUITMENT_END_NAME' => array(
+        'name' => 'recruitment_end_name',
+        'label' => 'LBL_CANDIDATURES_RECRUITMENTS_END_FROM_RECRUITMENTS_TITLE',
+        'enabled' => true,
+        'id' => 'RECRUITMENT_END_ID',
+        'link' => true,
+        'sortable' => false,
+        'default' => false,
+        'module' => 'Recruitments',
+    ),
+    'SALARY_NET' => array(
+        'name' => 'salary_net',
+        'label' => 'LBL_SALARY_NET',
+        'enabled' => true,
+        'related_fields' => array(
+            'currency_id',
+        ),
+        'currency_format' => true,
+        'default' => false,
+    ),
+    'TASK_GRADE' => array(
+        'name' => 'task_grade',
+        'label' => 'LBL_TASK_GRADE',
+        'enabled' => true,
+        'default' => false,
+    ),
+    'REASON_FOR_REJECTION' => array(
+        'name' => 'reason_for_rejection',
+        'label' => 'LBL_REASON_FOR_REJECTION',
+        'enabled' => true,
+        'default' => false,
+    ),
 );

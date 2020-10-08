@@ -55,13 +55,31 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
             if ($work_schedule == false) {
                 continue;
             }
+
+            if(NotificationManager::notificationForRecordWithId('Users',$work_schedule['id'],'WorkSchedulesNotPlandForTwoWeeks')){
+                continue;
+             }
+
+            $options = ['url_redirect' => 'index.php?module=WorkSchedules' ];
             $this->getNewNotification()
-                ->setAssignedUserId($work_schedule['id'])->setRelatedBean('', 'WorkSchedules')
-                ->setDescription(translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules'))
-                ->saveAsAlert();
+                ->setAssignedUserId($work_schedule['id'])->setRelatedBean($work_schedule['id'], 'Users')
+                ->setDescription(translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules'))->setType('WorkSchedulesNotPlandForTwoWeeks')
+                ->saveAsAlert(true,$options)->WebPush(true,true,$options);
         }
     }
 
+    public function isWebPushableNotification(){
+        return true;
+    }
+    public function getWebPushDescriptionConfig(){
+        return true;
+    }
+    public function getWebPushLinkConfig(){
+        return true;
+     }
+     public function getWebPushOverrideConfig(){
+        return $options = ['url_redirect' => 'index.php?module=WorkSchedules' ];
+     }
     protected function getNotPlannedWorkSchedules()
     {
         global $db;
@@ -70,7 +88,7 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
 
         $query = "SELECT COUNT(users.id) as 'days',users.id FROM users LEFT JOIN workschedules ON workschedules.assigned_user_id=users.id  AND " . $days_where . " WHERE users.status='Active' GROUP BY users.id HAVING days<" . self::PLAN_FOR_DAYS;
         $sql_result = $db->query($query);
-
+        error_log($sql_result);
         $return_data = array();
         while ($return_data[] = $db->fetchByAssoc($sql_result));
         return $return_data;

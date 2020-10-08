@@ -21,6 +21,9 @@ var MintHCMPopup = function (title, body, buttons, options, onShow) {
       } else {
          $('.MintHCMPopup-close').click(MintHCMPopup.close);
       }
+      if (typeof this.options.css !== 'undefined' && this.options.css) {
+         $('#MintHCMPopup > .MintHCMPopup-container').css(this.options.css);
+      }
       this.setButtonsEvents();
       if (this.onShow) {
          this.onShow();

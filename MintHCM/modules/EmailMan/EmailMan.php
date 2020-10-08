@@ -657,6 +657,8 @@ class EmailMan extends SugarBean
             $this->ref_email->load_relationship('contacts');
             $this->ref_email->load_relationship('leads');
             $this->ref_email->load_relationship('accounts');
+            $this->ref_email->load_relationship('candidates');
+            $this->ref_email->load_relationship('employees');
         }
 
         if (!empty($this->related_id) && !empty($this->related_type)) {
@@ -681,6 +683,12 @@ class EmailMan extends SugarBean
 
                 case 'Accounts':
                     $rel_name = "accounts";
+                    break;
+                case 'Candidates':
+                    $rel_name = "candidates";
+                    break;
+                case 'Employees':
+                    $rel_name = "employees";
                     break;
             }
 

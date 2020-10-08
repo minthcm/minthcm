@@ -71,8 +71,8 @@ $GLOBALS['tabStructure'] = array(
             20 => 'KReports',
         ),
     ),
-    'LBL_GROUPTAB7_1574082257' => array(
-        'label' => 'LBL_GROUPTAB7_1574082257',
+    'LBL_NAV_EMPLOYEE' => array(
+        'label' => 'LBL_NAV_EMPLOYEE',
         'modules' => array(
             0 => 'Goals',
             1 => 'Appraisals',
@@ -135,8 +135,8 @@ $GLOBALS['tabStructure'] = array(
             24 => 'KReports',
         ),
     ),
-    'LBL_GROUPTAB4_1574081420' => array(
-        'label' => 'LBL_GROUPTAB4_1574081420',
+    'LBL_NAV_DEFINITIONS' => array(
+        'label' => 'LBL_NAV_DEFINITIONS',
         'modules' => array(
             0 => 'SecurityGroups',
             1 => 'Positions',

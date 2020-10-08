@@ -249,7 +249,7 @@ if ( isset($GLOBALS['sugar_config']['developerMode']) && $GLOBALS['sugar_config'
       '/include/ViewTools/javascript/moment.min.js' => $group_file_name1
    ));
 }
-$js_groupings[] = $sugar_grp1;
+$js_groupings[0] = $sugar_grp1;
 /**
  * Check for custom additions to this code
  */

@@ -1,8 +1,7 @@
 <?php
 
-
-
-class VTExpression {
+class VTExpression
+{
 
    private static $record_id = null;
    private static $table_name = null;
@@ -40,7 +39,8 @@ class VTExpression {
     * @return boolean
     * Please set input params as Array
     */
-   public function backend($arguments = array()) {
+    public function backend($arguments = array())
+    {
       return false;
    }
 
@@ -50,7 +50,8 @@ class VTExpression {
     * @return type
     * Please set input params as Array
     */
-   public function frontend() {
+    public function frontend()
+    {
       return false;
    }
 
@@ -60,7 +61,8 @@ class VTExpression {
     * @return boolean
     * Please set input params as Array
     */
-   public function sqlbackend($arguments = array()) {
+    public function sqlbackend($arguments = array())
+    {
       return false;
    }
 
@@ -68,11 +70,14 @@ class VTExpression {
     * Warinng!
     * Methods defined below shoult not be overwrited in extended classes
     */
-   public function valueOf($value) {
+    public function valueOf($value)
+    {
       //Parse vardef validation fieldValue
       if ( substr($value, 0, 1) == '$' ) {
          $field = substr($value, 1, strlen($value) - 1);
-
+         if ($field == 'record') {
+             $field = 'id';
+         }
          if ( isset($_REQUEST['convert_lead']) && $_REQUEST['convert_lead'] == true ) {
             $field = $_REQUEST['convert_lead_module'] . $field;
          }
@@ -93,7 +98,8 @@ class VTExpression {
     * @param Array - multi-level array of arguments
     * @return Array - multi-level array of argument values
     */
-   protected function retrieveValuesFromArray($array) {
+    protected function retrieveValuesFromArray($array)
+    {
       $return_array = [];
       foreach ( $array as $key => $value ) {
          if ( is_array($value) ) {
@@ -105,7 +111,8 @@ class VTExpression {
       return $return_array;
    }
 
-   public function backendFormula($arguments) {
+    public function backendFormula($arguments)
+    {
       //get values of parsed arguments
       foreach ( $arguments as $key => $argument ) {
          if ( is_array($argument) ) {
@@ -129,7 +136,8 @@ class VTExpression {
    /**
     * 
     */
-   public function sqlFormula($arguments) {
+    public function sqlFormula($arguments)
+    {
       //get argument values
       foreach ( $arguments as $key => $argument ) {
          $tmpValue = $this->valueOf($arguments[$key]);
@@ -163,7 +171,8 @@ class VTExpression {
    /**
     * Convert datetime from user format to sql format
     */
-   public static function toSqlDateTime($field_value, $field_type) {
+    public static function toSqlDateTime($field_value, $field_type)
+    {
       global $timedate;
 
       $new_value = null;
@@ -190,7 +199,8 @@ class VTExpression {
     * QA - refactor needed
     * @param type $bean
     */
-   public static function loadBeanValues(&$bean) {
+    public static function loadBeanValues(&$bean)
+    {
       //Get actual values (before validation and save)
       self::$new_values = array();
       if ( !is_null($bean->field_defs) && is_array($bean->field_defs) ) {
@@ -206,7 +216,8 @@ class VTExpression {
       }
    }
 
-   protected static function loadValueForFieldBasedOnFetchedRowAndBeanValues($bean, $fieldName) {
+    protected static function loadValueForFieldBasedOnFetchedRowAndBeanValues($bean, $fieldName)
+    {
       if ( is_array($bean->fetched_row) && isset($bean->fetched_row[$fieldName]) && !is_null($bean->fetched_row[$fieldName]) ) {
          self::$new_values[$fieldName] = $bean->fetched_row[$fieldName];
       } else if ( is_array($bean->fetched_rel_row) && isset($bean->fetched_rel_row[$fieldName]) && !is_null($bean->fetched_rel_row[$fieldName]) ) {
@@ -220,7 +231,8 @@ class VTExpression {
       }
    }
 
-   public static function setValues($values = array()) {
+    public static function setValues($values = array())
+    {
       foreach ( $values as $field => $value ) {
          if ( is_array($value) ) {
             self::$new_values[$field] = $value;
@@ -236,7 +248,8 @@ class VTExpression {
     * @param reference $bean
     * @return Array
     */
-   public static function getValidationFields(&$bean) {
+    public static function getValidationFields(&$bean)
+    {
       self::setTableName($bean->table_name);
       global $dictionary;
       $moduleFields = array();
@@ -258,7 +271,8 @@ class VTExpression {
     * @param reference $bean
     * @return Array
     */
-   public static function getRequiredFields(&$bean) {
+    public static function getRequiredFields(&$bean)
+    {
       self::setTableName($bean->table_name);
       global $dictionary;
       $moduleFields = array();
@@ -277,7 +291,8 @@ class VTExpression {
     * @param reference $bean
     * @return Array
     */
-   public static function getReadonlyFields(&$bean) {
+    public static function getReadonlyFields(&$bean)
+    {
       static::setTableName($bean->table_name);
       global $dictionary;
       $moduleFields = array();
@@ -296,7 +311,8 @@ class VTExpression {
     * @param type $bean
     * @return Array
     */
-   public static function getCalculatedFields(&$bean) {
+    public static function getCalculatedFields(&$bean)
+    {
       self::setTableName($bean->table_name);
       global $dictionary;
       $moduleFields = array();
@@ -314,7 +330,8 @@ class VTExpression {
       return $moduleFields;
    }
 
-   public static function getDependencyFields(&$bean) {
+    public static function getDependencyFields(&$bean)
+    {
       self::setTableName($bean->table_name);
       global $dictionary;
       $moduleFields = array();
@@ -327,39 +344,48 @@ class VTExpression {
       return $moduleFields;
    }
 
-   public static function setTableName($table_name) {
+    public static function setTableName($table_name)
+    {
       self::$table_name = $table_name;
    }
 
-   public static function getTableName() {
+    public static function getTableName()
+    {
       return self::$table_name;
    }
 
-   public static function setRecordId($record_id) {
+    public static function setRecordId($record_id)
+    {
       self::$record_id = $record_id;
    }
 
-   public static function getModuleName() {
+    public static function getModuleName()
+    {
       return self::$module_name;
    }
 
-   public static function setModuleName($module_name) {
+    public static function setModuleName($module_name)
+    {
       self::$module_name = $module_name;
    }
 
-   public static function getRecordId() {
+    public static function getRecordId()
+    {
       return self::$record_id;
    }
 
-   public static function getValue($field_name) {
+    public static function getValue($field_name)
+    {
       return self::$new_values[$field_name];
    }
 
-   public static function getAction() {
+    public static function getAction()
+    {
       return self::$action;
    }
 
-   public static function setAction($action) {
+    public static function setAction($action)
+    {
       self::$action = $action;
    }
 

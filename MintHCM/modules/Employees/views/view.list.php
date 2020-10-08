@@ -125,8 +125,28 @@ EOHTML;
         return $theTitle;
     }
 
+    public function listViewPrepare()
+    {
+        require_once 'modules/MySettings/StoreQuery.php';
+
+        $storeQuery = new StoreQuery();
+        $storeQuery->loadQuery($this->module);
+        $storeQuery->SaveQuery($this->module);
+        if ($_REQUEST['clear_query'] != "true") {
+            $keys = array_keys($storeQuery->query);
+            foreach ($keys as $key) {
+                if (preg_match('/_basic$/', $key) == 1 || preg_match('/_advanced$/', $key) == 1) {
+                    unset($_REQUEST['query']);
+                    break;
+                }
+            }
+        }
+        parent::listViewPrepare();
+    }
+
     public function listViewProcess()
     {
+
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
 

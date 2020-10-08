@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,13 +34,15 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-(function(){if(SUGAR.EmailAddressWidget)return;SUGAR.EmailAddressWidget=function(module){if(!SUGAR.EmailAddressWidget.count[module])SUGAR.EmailAddressWidget.count[module]=0;this.count=SUGAR.EmailAddressWidget.count[module];SUGAR.EmailAddressWidget.count[module]++;this.module=module;this.id=this.count;if(document.getElementById(module+'_email_widget_id')){document.getElementById(module+'_email_widget_id').value=this.id;}
+(function(){if(SUGAR.EmailAddressWidget)
+return;SUGAR.EmailAddressWidget=function(module){if(!SUGAR.EmailAddressWidget.count[module])
+SUGAR.EmailAddressWidget.count[module]=0;this.count=SUGAR.EmailAddressWidget.count[module];SUGAR.EmailAddressWidget.count[module]++;this.module=module;this.id=this.count;if(document.getElementById(module+'_email_widget_id')){document.getElementById(module+'_email_widget_id').value=this.id;}
 SUGAR.EmailAddressWidget.instances[this.id]=this;}
 SUGAR.EmailAddressWidget.instances={};SUGAR.EmailAddressWidget.count={};SUGAR.EmailAddressWidget.prototype={totalEmailAddresses:0,replyToFlagObject:new Object(),verifying:false,enterPressed:false,tabPressed:false,emailView:"",emailIsRequired:false,tabIndex:-1,isIE:function(){var ua=window.navigator.userAgent;var msie=ua.indexOf("MSIE ");if(msie>0||!!navigator.userAgent.match(/Trident.*rv\:11\./))
 {return true;}
@@ -53,10 +55,13 @@ var event=this.getEvent(event);var targetEl=this.getEventElement(event);var inde
 this.verifyElementValue=$('#'+this.module+this.id+'emailAddressVerifiedValue'+index);verifyElementFlag.value=(trim(targetEl.value)==''||targetEl.value==this.verifyElementValue.value)?"true":"false"
 if(verifyElementFlag.parentNode.childNodes.length>1){verifyElementFlag.parentNode.removeChild(verifyElementFlag.parentNode.lastChild);}
 if(/emailAddress\d+$/.test(targetEl.id)&&isValidEmail(targetEl.value)&&!this.verifying&&verifyElementFlag.value=="false"){verifiedTextNode=document.createElement('span');verifyElementFlag.parentNode.appendChild(verifiedTextNode);verifiedTextNode.innerHTML=SUGAR.language.get('app_strings','LBL_VERIFY_EMAIL_ADDRESS');this.verifying=true;var cObj=jQuery.get('index.php?module=Contacts&action=RetrieveEmail&target='+targetEl.id+'&email='+targetEl.value).done(callbackFunction).fail(callbackFunction);}},handleKeyDown:function(event){var e=this.getEvent(event);var eL=this.getEventElement(e);if((kc=e["keyCode"])){this.enterPressed=(kc==13)?true:false;this.tabPressed=(kc==9)?true:false;if(this.enterPressed||this.tabPressed){this.retrieveEmailAddress(e);if(this.enterPressed)
-this.freezeEvent(e);}}},getEvent:function(event){return(event?event:window.event);},getEventElement:function(e){return(e.srcElement?e.srcElement:(e.target?e.target:e.currentTarget));},freezeEvent:function(e){if(e.preventDefault)e.preventDefault();e.returnValue=false;e.cancelBubble=true;if(e.stopPropagation)e.stopPropagation();return false;},addEmailAddress:function(tableId,address,primaryFlag,replyToFlag,optOutFlag,invalidFlag,emailId,optInFlag){_eaw=this;if(_eaw.addInProgress){return;}
+this.freezeEvent(e);}}},getEvent:function(event){return(event?event:window.event);},getEventElement:function(e){return(e.srcElement?e.srcElement:(e.target?e.target:e.currentTarget));},freezeEvent:function(e){if(e.preventDefault)
+e.preventDefault();e.returnValue=false;e.cancelBubble=true;if(e.stopPropagation)
+e.stopPropagation();return false;},addEmailAddress:function(tableId,address,primaryFlag,replyToFlag,optOutFlag,invalidFlag,emailId,optInFlag){_eaw=this;var primary_radio_button=$('.template.email-address-line-container').parent().find('input[name$="PrimaryFlag"]:checked');if(_eaw.addInProgress){return;}
 _eaw.addInProgress=true;if(!address){address="";}
 var lineContainer=$('.template.email-address-line-container').clone();lineContainer.removeClass('template');lineContainer.removeClass('hidden');lineContainer.attr('id',this.module+_eaw.id+'emailAddressRow'+_eaw.totalEmailAddresses);lineContainer.attr('name',this.module+_eaw.id+'emailAddressRow'+_eaw.totalEmailAddresses);$(lineContainer).appendTo('.email-address-lines-container');var tabIndexCount=0;if(typeof(SUGAR.TabFields)!='undefined'&&typeof(SUGAR.TabFields['email1'])!='undefined'){tabIndexCount=SUGAR.TabFields['email1'];}
 var emailField=lineContainer.find('input[type=email]');emailField.attr('name',this.module+_eaw.id+'emailAddress'+_eaw.totalEmailAddresses);emailField.attr('id',this.module+_eaw.id+'emailAddress'+_eaw.totalEmailAddresses);emailField.attr('tabindex',tabIndexCount);emailField.attr('enabled',"true");emailField.attr('value',address);emailField.eaw=_eaw;emailField.on('blur',function(e){emailField.eaw.retrieveEmailAddress(e);});emailField.on('keydown',function(e){emailField.eaw.handleKeyDown(e);});var removeButton=lineContainer.find('button#email-address-remove-button');removeButton.attr('name',_eaw.totalEmailAddresses);removeButton.attr('id',this.module+_eaw.id+"removeButton"+_eaw.totalEmailAddresses);removeButton.attr('tabindex',tabIndexCount);removeButton.attr('enabled',"true");removeButton.attr('data-row',this.module+_eaw.id+'emailAddressRow'+_eaw.totalEmailAddresses);removeButton.attr('module-id',_eaw.id);removeButton.attr('module-email-id',_eaw.totalEmailAddresses);removeButton.attr('module',this.module);removeButton.click(_eaw.removeEmailAddress);var recordId=lineContainer.find('input#record-id');recordId.attr('name',this.module+_eaw.id+"emailAddressId"+_eaw.totalEmailAddresses);recordId.attr('id',this.module+_eaw.id+'emailAddressId'+_eaw.totalEmailAddresses);recordId.attr('value',typeof(emailId)!='undefined'?emailId:'');recordId.attr('enabled',"true");var primaryCheckbox=lineContainer.find('input#email-address-primary-flag');primaryCheckbox.attr('name',_eaw.module+'0emailAddressPrimaryFlag');primaryCheckbox.attr('id',this.module+_eaw.id+'emailAddressPrimaryFlag');primaryCheckbox.attr('value',this.module+_eaw.id+'emailAddress');primaryCheckbox.attr('tabindex',tabIndexCount);primaryCheckbox.attr('enabled',"true");primaryCheckbox.attr("checked",(primaryFlag=='1'));if(_eaw.totalEmailAddresses==0&&primaryFlag!='1'){primaryCheckbox.prop("checked",true);}
+else{primary_radio_button.prop("checked",true);}
 if(this.module=='Users'&&primaryCheckbox.attr("checked")){removeButton.prop('disabled',true);}
 var replyToCheckbox=lineContainer.find('input#email-address-reply-to-flag');if(replyToCheckbox.length==1){replyToCheckbox.attr('name',this.module+_eaw.id+'emailAddressReplyToFlag');replyToCheckbox.attr('id',this.module+_eaw.id+'emailAddressReplyToFlag'+_eaw.totalEmailAddresses);replyToCheckbox.attr('value',this.module+_eaw.id+'emailAddress'+_eaw.totalEmailAddresses);replyToCheckbox.attr('tabindex',tabIndexCount);replyToCheckbox.attr('enabled',"true");replyToCheckbox.eaw=_eaw;replyToCheckbox.prop("checked",(replyToFlag=='1'));_eaw.replyToFlagObject[replyToCheckbox.attr('id')]=(replyToFlag=='1');}
 var optOutCheckbox=lineContainer.find('input#email-address-opt-out-flag');if(optOutCheckbox.length==1){optOutCheckbox.attr('name',this.module+_eaw.id+'emailAddressOptOutFlag[]');optOutCheckbox.attr('id',this.module+_eaw.id+'emailAddressOptOutFlag'+_eaw.totalEmailAddresses);optOutCheckbox.attr('value',this.module+_eaw.id+'emailAddress'+_eaw.totalEmailAddresses);optOutCheckbox.attr('tabindex',tabIndexCount);optOutCheckbox.attr('enabled',"true");optOutCheckbox.eaw=_eaw;optOutCheckbox.prop("checked",(optOutFlag=='1'));}

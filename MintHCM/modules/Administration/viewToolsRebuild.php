@@ -531,11 +531,16 @@ window.viewTools.cache.initMappings = ' . json_encode($parsedInitArray) . ';');
      * Get all field requirements
      */
     $field_requirements = array();
-    foreach ($GLOBALS["dictionary"] as $module) {
+    foreach ($GLOBALS["dictionary"] as $key => $module) {
         if (is_array($module['fields'])) {
             foreach ($module['fields'] as $params) {
                 if (isset($params['required'])) {
-                    $field_requirements[$module['table']][$params['name']] = (bool) $params['required'];
+                    $module_lowercase = $module['table'];
+                    switch ($key) {
+                        case 'Employee':
+                            $module_lowercase = 'employees';
+                    }
+                    $field_requirements[$module_lowercase][$params['name']] = (bool) $params['required'];
                 }
             }
         }
@@ -551,18 +556,23 @@ window.viewTools.cache.formulaRequirements = ' . json_encode($parsed_field_requi
      * Get duplicate fields from duplicate definitions
      */
     $duplicate_fields = array();
-    foreach ($GLOBALS["dictionary"] as $module) {
+    foreach ($GLOBALS["dictionary"] as $key => $module) {
+        $module_lowercase = $module['table'];
+        switch ($key) {
+            case 'Employee':
+                $module_lowercase = 'employees';
+        }
         if (isset($module['vt_duplicate']) && is_string($module['vt_duplicate'])) {
             $variables = array();
             $module['vt_duplicate'] = preg_replace('/\ /', '',
                 $module['vt_duplicate']);
             preg_match_all('/\$(\w+)/i', $module['vt_duplicate'], $variables);
             foreach ($variables[1] as $matchedVariable) {
-                $duplicate_fields[$module['table']][$matchedVariable] = $matchedVariable;
+                $duplicate_fields[$module_lowercase][$matchedVariable] = $matchedVariable;
             }
             preg_match_all('/\@(\w+)/i', $module['vt_duplicate'], $variables);
             foreach ($variables[1] as $matchedVariable) {
-                $duplicate_fields[$module['table']][$matchedVariable] = $matchedVariable;
+                $duplicate_fields[$module_lowercase][$matchedVariable] = $matchedVariable;
             }
         }
     }
@@ -574,9 +584,14 @@ window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_field
      * Get duplicate formulas from duplicate definitions
      */
     $duplicate_formulas = '';
-    foreach ($GLOBALS["dictionary"] as $module) {
+    foreach ($GLOBALS["dictionary"] as $key => $module) {
+        $module_lowercase = $module['table'];
+        switch ($key) {
+            case 'Employee':
+                $module_lowercase = 'employees';
+        }
         if (isset($module['vt_duplicate'])) {
-            $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'formula\']=\'' . str_replace("'",
+            $duplicate_formulas .= '$duplicate[\'' . $module_lowercase . '\'][\'formula\']=\'' . str_replace("'",
                 "\'", $module['vt_duplicate']) . '\';' . "\n";
 
             $variables = array();
@@ -584,8 +599,8 @@ window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_field
                 $module['vt_duplicate']);
             preg_match_all('/[\$@](\w+)/i', $module['vt_duplicate'], $variables);
             foreach ($variables[1] as $matchedVariable) {
-                $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'fields\'][\'' . $matchedVariable . '\']=\'' . $matchedVariable . '\';' . "\n";
-                $duplicate_formulas .= '$label[\'' . $module['table'] . '\'][\'' . $matchedVariable . '\']=\'' . $module['fields'][$matchedVariable]['vname'] . '\';' . "\n";
+                $duplicate_formulas .= '$duplicate[\'' . $module_lowercase . '\'][\'fields\'][\'' . $matchedVariable . '\']=\'' . $matchedVariable . '\';' . "\n";
+                $duplicate_formulas .= '$label[\'' . $module_lowercase . '\'][\'' . $matchedVariable . '\']=\'' . $module['fields'][$matchedVariable]['vname'] . '\';' . "\n";
             }
             if (isset($module['vt_duplicateColumns'])) {
                 $module['vt_duplicateColumns'] = preg_replace('/\ /', '',
@@ -593,8 +608,8 @@ window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_field
                 preg_match_all('/(\w+)/i', $module['vt_duplicateColumns'],
                     $columns);
                 foreach ($columns[1] as $matchedColumn) {
-                    $duplicate_formulas .= '$duplicate[\'' . $module['table'] . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $matchedColumn . '\';' . "\n";
-                    $duplicate_formulas .= '$label[\'' . $module['table'] . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $module['fields'][$matchedColumn]['vname'] . '\';' . "\n";
+                    $duplicate_formulas .= '$duplicate[\'' . $module_lowercase . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $matchedColumn . '\';' . "\n";
+                    $duplicate_formulas .= '$label[\'' . $module_lowercase . '\'][\'duplicateColumns\'][\'' . $matchedColumn . '\']=\'' . $module['fields'][$matchedColumn]['vname'] . '\';' . "\n";
                 }
             }
         }
