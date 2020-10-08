@@ -46,8 +46,6 @@ if (isset($_REQUEST['status_perm_advanced']) && !empty($_REQUEST['status_perm_ad
     $status = json_decode(str_replace('&quot;', '"', $_REQUEST['status_perm_advanced']));
     $_REQUEST['status_advanced'] = $status;
     $subqueries[] = "workschedules.status IN ('" . implode("','", $status) . "')";
-} else {
-    $_REQUEST['status_advanced'] = [];
 }
 
 if (isset($_REQUEST['assigned_to_perm_advanced']) && !empty($_REQUEST['assigned_to_perm_advanced'])) {

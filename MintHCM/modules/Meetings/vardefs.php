@@ -62,7 +62,7 @@ $dictionary['Meeting'] = array(
          'dbType' => 'varchar',
          'unified_search' => true,
          'full_text_search' =>array( 'boost' => 3 ),
-         'len' => '50',
+         'len' => '255',
          'comment' => 'Meeting name',
          'importable' => 'required',
          'audited' => true,

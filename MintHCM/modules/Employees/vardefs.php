@@ -188,7 +188,7 @@ $dictionary["Employee"]["fields"]["securitygroups_managers"] = array(
     'source' => 'non-db',
     'module' => 'SecurityGroups',
     'bean_name' => 'SecurityGroup',
-    'vname' => 'LBL_RELATIONSHIP_SECURITYGROUPS_NAME',
+    'vname' => 'LBL_SECURITYGROUPS_MANAGERS',
     'side' => 'right',
 );
 
@@ -254,6 +254,15 @@ $dictionary["Employee"]["fields"]["employeeinteractiontracking_assigned_user"] =
     'source' => 'non-db',
     'side' => 'right',
     'vname' => 'LBL_EMPLOYEEINTERACTIONTRACKING',
+);
+
+$dictionary["Employee"]["fields"]["prospect_lists"] = array(
+    'name' => 'prospect_lists',
+    'type' => 'link',
+    'relationship' => 'prospect_list_employees',
+    'module' => 'ProspectLists',
+    'source' => 'non-db',
+    'vname' => 'LBL_PROSPECT_LIST',
 );
 
 $dictionary["Employee"]["audited"] = true;

@@ -246,6 +246,8 @@ $enabled_tabs[] = 'Applications';
 $enabled_tabs[] = 'Skills';
 $enabled_tabs[] = 'Knowledge';
 $enabled_tabs[] = 'Attitudes';
+$enabled_tabs[] = 'ProspectLists';
+$enabled_tabs[] = 'Campaigns';
 //
 //Beginning of the scenario implementations
 //We need to load the tabs so that we can remove those which are scenario based and un-selected

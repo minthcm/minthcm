@@ -521,12 +521,14 @@ class MysqlManager extends DBManager {
       }
 
       // cn: using direct calls to prevent this from spamming the Logs
-      mysql_query("SET CHARACTER SET utf8", $this->database);
-      $names = "SET NAMES 'utf8'";
       $collation = $this->getOption('collation');
+      $character = $this->getCharacter($collation);
+      $names = "SET NAMES '{$character}'";
       if ( !empty($collation) ) {
          $names .= " COLLATE '$collation'";
       }
+      mysql_query("SET CHARACTER SET {$character}", $this->database);
+
       mysql_query($names, $this->database);
 
       if ( !$this->checkError('Could Not Connect:', $dieOnError) ) {
@@ -730,16 +732,16 @@ class MysqlManager extends DBManager {
       // cn: bug 9873 - module tables do not get created in utf8 with assoc collation
       $collation = $this->getOption('collation');
       if ( empty($collation) ) {
-         $collation = 'utf8_general_ci';
+         $collation = $this->getDefaultCollation();
       }
-      $sql = "CREATE TABLE $tablename ($columns $keys) CHARACTER SET utf8 COLLATE $collation";
-
+      $character  = $this->getCharacter($collation);
+      $sql = "CREATE TABLE $tablename ($columns $keys) CHARACTER SET {$character} COLLATE $collation";
       if ( !empty($engine) ) {
          $sql .= " ENGINE=$engine";
       }
-
       return $sql;
    }
+
 
    /**
     * Does this type represent text (i.e., non-varchar) value?
@@ -1084,8 +1086,20 @@ class MysqlManager extends DBManager {
     * @return string
     */
    public function getDefaultCollation() {
-      return "utf8_general_ci";
+      return "utf8mb4_general_ci";
    }
+   protected function getDefaultCharacter(){
+      return 'utf8mb4';
+   }
+   protected function getCharacter($collation=false){
+      $character = $this->getDefaultCharacter();
+      //if(isset($sugar_config['db']['dbconfigoption']['collation']) && $character !=$sugar_config['db']['dbconfigoption']['collation']){$character=$sugar_config['db']['dbconfigoption']['collation'];}
+      if($collation!==false && !empty($collation)  && strpos($collation,$character)===false){
+         $character = array_shift(explode('_',$collation));
+      }
+      return  $character;
+   }
+
 
    /**
     * List of available collation settings
@@ -1394,12 +1408,12 @@ class MysqlManager extends DBManager {
     * @param string $dbname
     */
    public function createDatabase($dbname) {
-      $this->query("CREATE DATABASE `$dbname` CHARACTER SET utf8 COLLATE utf8_general_ci", true);
+      $this->query("CREATE DATABASE `$dbname` CHARACTER SET ".$this->getDefaultCharacter()." COLLATE ".$this->getDefaultCollation(), true);
    }
 
    public function preInstall() {
-      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT CHARACTER SET utf8", true);
-      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT COLLATE utf8_general_ci", true);
+      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT CHARACTER SET ".$db->getDefaultCharacter(), true);
+      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT COLLATE ".$db->getDefaultCollation(), true);
    }
 
    /**

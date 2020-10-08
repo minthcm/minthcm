@@ -58,14 +58,27 @@ class WorkSchedulesDayValid extends NotificationPlugin {
             continue;
          }
 
+         if(NotificationManager::notificationForRecordWithId('WorkSchedules',$work_schedule['id'],'WorkSchedulesDayValid')){
+            continue;
+         }
+
          $this->getNewNotification()
                  ->setDescription(sprintf(translate('LBL_APPROVED_ALERT', 'WorkSchedules'), $this->getWorkScheduleStartDate($work_schedule['id'])))
                  ->setAssignedUserId($work_schedule['assigned_user_id'])
                  ->setRelatedBean($work_schedule['id'], 'WorkSchedules')
-                 ->saveAsAlert();
+                 ->setType('WorkSchedulesDayValid')
+                 ->saveAsAlert()->WebPush();
       }
 
-      $wrong_notifications = NotificationManager::getWrongNotifications();
+      $this->removeIncorrectNotifications();
+
+   }
+   public function isWebPushableNotification(){
+      return true;
+   }
+
+   protected function removeIncorrectNotifications(){
+      $wrong_notifications = $this->getWrongNotifications();
       foreach ( $wrong_notifications as $wrong_notification ) {
          $notification = BeanFactory::getBean('Alerts', $wrong_notification['id']);
          if ( !empty($notification->id) ) {
@@ -82,7 +95,20 @@ class WorkSchedulesDayValid extends NotificationPlugin {
 
    protected function getNotClosedWorkSchedules() {
       global $db;
-      $sql_result = $db->query("SELECT id, assigned_user_id FROM `workschedules` WHERE `status`!='Closed' AND `deleted`=0 AND `date_end` < CURDATE();");
+      $sql_result = $db->query("SELECT id, assigned_user_id FROM workschedules WHERE status!='Closed' AND deleted=0 AND date_end < CURDATE();");
+      $result = array();
+      while ( $result[] = $db->fetchByAssoc($sql_result) );
+      return $result;
+   }
+
+   public function getWrongNotifications() {
+      global $db;
+      $sql = "SELECT alerts.id,alerts.name,alerts.type,workschedules.id,workschedules.name,workschedules.deleted,alerts.deleted,alerts.url_redirect,alerts.parent_id
+      FROM alerts 
+      LEFT JOIN workschedules ON alerts.parent_type='WorkSchedules'
+            AND alerts.parent_id=workschedules.id AND workschedules.deleted=0 
+                 WHERE alerts.deleted=0 AND ( workschedules.id IS NULL OR alerts.assigned_user_id <> workschedules.assigned_user_id)  AND alerts.alert_type='WorkSchedulesDayValid' AND alerts.type IS NULL  ";
+      $sql_result = $db->query($sql);
       $result = array();
       while ( $result[] = $db->fetchByAssoc($sql_result) );
       return $result;

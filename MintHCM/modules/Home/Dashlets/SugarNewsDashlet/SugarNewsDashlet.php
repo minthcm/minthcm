@@ -52,7 +52,7 @@ require_once('modules/Home/Dashlets/iFrameDashlet/iFrameDashlet.php');
 class SugarNewsDashlet extends iFrameDashlet {
     var $displayTpl = 'modules/Home/Dashlets/SugarNewsDashlet/display.tpl';
     var $configureTpl = 'modules/Home/Dashlets/SugarNewsDashlet/configure.tpl';
-    var $defaultURL = 'https://minthcm.org/';
+    var $defaultURL = 'https://minthcm.org/news/';
     var $url;
 
     public function __construct($id, $options = null)

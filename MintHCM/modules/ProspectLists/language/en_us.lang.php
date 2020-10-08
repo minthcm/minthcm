@@ -92,6 +92,8 @@ $mod_strings = array(
     'LBL_LIST_PROSPECTLIST_NAME' => 'Name',
 
     'LBL_EMAIL_MARKETING' => 'Email Marketing',
+    'LBL_EMPLOYEES' => 'Employees',
+    'LBL_CANDIDATES' => 'Candidates',
 
 );
 

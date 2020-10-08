@@ -46,7 +46,7 @@ $listViewDefs[$module_name] = array(
       'label' => 'LBL_NONINHERITABLE',
       'default' => true
    ),
-   'EMPLOYEE_NAME' => array(
+   'CURRENT_MANAGER_NAME' => array(
       'type' => 'relate',
       'link' => true,
       'label' => 'LBL_CURRENT_MANAGER_NAME',

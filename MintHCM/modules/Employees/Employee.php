@@ -46,9 +46,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once 'include/SugarObjects/templates/person/Person.php';
+require_once __DIR__ . '/../../include/EmailInterface.php';
 
 // Employee is used to store customer information.
-class Employee extends Person
+class Employee extends Person implements EmailInterface
 {
     // Stored fields
     public $name = '';

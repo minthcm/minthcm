@@ -118,8 +118,10 @@ $themedef = array(
         'salaryranges' => 'fa-dollar-sign',
         'dictionaries' => 'fa-list',
         'employeeinteractiontracking' => 'fa-handshake',
+        'kreports' => 'fa-chart-bar',
     ),
 );
+
 
 if (!empty($app_strings['LBL_SUBTHEMES'])) {
     // if statement removes the php notice
@@ -129,4 +131,11 @@ if (!empty($app_strings['LBL_SUBTHEMES'])) {
         ),
     );
     $themedef['config_options']['sub_themes']['default'] = 'Mint';
+}
+$custom_files = scandir('custom/themes/SuiteP/themedefs');
+foreach($custom_files as $file_name){
+    preg_match('/^themedef[.]\w*\.php/', $file_name, $matches);
+    if(isset($matches[0])){
+        include 'custom/themes/SuiteP/themedefs/'.$file_name;
+    }
 }

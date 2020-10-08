@@ -1062,7 +1062,20 @@ $($.fullCalendar).ready(function () {
                   window.location.href = url;
                   return false;
                }
-               CAL.dialog_create(date_start, date_end, user_id);
+               viewTools.api.callCustomApi({
+                  module: 'Users',
+                  action: 'isUserAllowedToCreateCalendarEvents',
+                  callback: function (data) {
+                     if (data) {
+                        CAL.dialog_create(date_start, date_end, user_id);
+                     } else {
+                        viewTools.GUI.statusBox.showStatus(
+                           viewTools.language.get('app_strings', 'LBL_CANNOT_CREATE_CALENDAR_EVENTS'),
+                           'notice'
+                        );
+                     }
+                  }
+               });
             }
          },
          eventClick: function (calEvent, jsEvent, view) {

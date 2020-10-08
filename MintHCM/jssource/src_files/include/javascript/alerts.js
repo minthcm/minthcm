@@ -116,6 +116,7 @@ Alerts.prototype.show = function ( AlertObj ) {
    Alerts.prototype.requestPermission();
    if ( ("Notification" in window) ) {
       if ( Notification.permission === "granted" ) {
+         
          if ( typeof AlertObj.options !== "undefined" ) {
             if ( typeof AlertObj.options.target_module !== "undefined" ) {
                SUGAR.themes.theme_name = undefined;
@@ -236,13 +237,29 @@ Alerts.prototype.redirectToLogin = function () {
  * Update Alert Manager (Navigation bar element)
  */
 Alerts.prototype.updateManager = function () {
-   var url = 'index.php?module=Alerts&action=get&to_pdf=1';
+   var url = 'index.php?module=Alerts&action=get&to_pdf=1&view=json';
    $.ajax( url ).done( function ( data ) {
       if ( data === 'lost session' ) {
          Alerts.prototype.redirectToLogin();
          return false;
       }
-
+      // MintHCM #70313 end
+      // Detect format and parse
+      data = JSON.parse(data);
+      if(!!data.mint && !!data.mint.notifications && data.mint.notifications.length>0){
+         let webpush_enabled = ("Notification" in window) && Notification.permission === "granted";
+         for(mint_notification=0;mint_notification<data.mint.notifications.length; mint_notification++){
+            if(webpush_enabled){
+               Alerts.prototype.show(data.mint.notifications[mint_notification]);
+            }
+            Alerts.prototype.markAsRead(data.mint.notifications[mint_notification].id);
+         }
+      }
+      if(!!data.standard){
+         data = data.standard;
+      }   
+      // MintHCM #70313 end
+      
       // remove the jsAlert message
       for ( var replaceMessage in Alerts.prototype.replaceMessages ) {
          data = data.replace(

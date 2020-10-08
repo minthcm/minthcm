@@ -46,8 +46,8 @@
 require_once 'include/Notifications/NotificationManager.php';
 require_once 'include/Notifications/NotificationAbstractClass.php';
 require_once 'include/Notifications/NotificationNull.php';
-
-class Notification extends NotificationAbstractClass
+require_once 'include/WebPushNotifications/NotificationTypes/WebPushBeanNotification.php';
+class Notification  extends NotificationAbstractClass
 {
 
     public function setRelatedBean($related_bean_id, $related_bean_type)
@@ -56,6 +56,14 @@ class Notification extends NotificationAbstractClass
         $this->related_bean_id = $related_bean_id;
         return $this;
     }
+
+    public function setRelatedBeanFromBean($related_bean)
+    {
+        $this->related_bean_type = $related_bean->module_dir;
+        $this->related_bean_id = $related_bean->id;
+        return $this;
+    }
+
     public function setAssignedUserId($assigned_user_id)
     {
         if (!NotificationManager::isValidUser($assigned_user_id)) {
@@ -76,30 +84,81 @@ class Notification extends NotificationAbstractClass
         $this->description = $description;
         return $this;
     }
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
 
-    public function saveAsAlert()
+
+    public function saveAsAlert($description = true,$override = array())
     {
         if ($this->skip_uniq_validate || $this->isUnique()) {
-            $bean = BeanFactory::newBean('Alerts');
-            $bean->name = $bean->date_entered ? $bean->date_entered : date("Y-m-d") . ' ' . NotificationManager::getUserFullName($this->assigned_user_id);
-            $bean->description = $this->description;
-            $bean->parent_type = $this->related_bean_type;
-            $bean->parent_id = $this->related_bean_id;
-            $bean->assigned_user_id = $this->assigned_user_id;
-            $bean->is_read = 0;
-            $bean->alert_type = 'custom';
-
-            if (!empty($bean->parent_id)) {
-                $bean->url_redirect = 'index.php?module=' . $bean->parent_type . '&action=DetailView&record=' . $bean->parent_id;
-            } else {
-                $bean->url_redirect = 'index.php?module=' . $bean->parent_type;
-            }
-
-            $bean->save();
+            $this->simpleAlert($description, $override);
         } else {
             $this->setActive();
         }
         return $this;
     }
+    /*
+     * WebPush - use only after saveAsAlert or simpleAlert
+    */
+    public function WebPush($desc = true,$link = true,$override = array())
+    {
+        if($this->alert_bean instanceof Alert){
+            if (!$desc) {
+                $this->alert_bean->description = '';
+            }
+    
+            if (count($override)) {
+                foreach ($override as $element_name => $element_value) {
+                    $this->alert_bean->$element_name = $element_value;
+                }
+            }
+            $webpush = new WebPushBeanNotification($this->alert_bean);
+            if ($link) {
+                $webpush->setUrl($this->alert_bean->url_redirect);
+            }
 
+            $webpush->setType($this->alert_bean->alert_type)->push();
+        }
+    }
+
+    public function simpleAlert($link = true,$override = array())
+    {
+        if(empty($this->type)){
+            $GLOBALS['log']->fatal("Every notification has to have type defined, no type for ". $this->name);
+            return new NotificationNull;
+        }
+
+        $bean = BeanFactory::newBean('Alerts');
+        
+        $bean->name = $bean->date_entered ? $bean->date_entered : date("Y-m-d") . ' ' . NotificationManager::getUserFullName($this->assigned_user_id);
+        $bean->parent_type = $this->related_bean_type;
+        $bean->parent_id = $this->related_bean_id;
+        $bean->assigned_user_id = $this->assigned_user_id;
+        $bean->is_read = 0;
+        $bean->alert_type = $this->type;
+        $bean->description = $this->description;
+
+        if ($link) {
+            if (!empty($bean->parent_id)) {
+                $bean->url_redirect = 'index.php?&module=' . $bean->parent_type . '&action=DetailView&record=' . $bean->parent_id;
+            } else {
+                $bean->url_redirect = 'index.php?module=' . $bean->parent_type;
+            }
+        }
+        
+        if (count($override)) {
+            foreach ($override as $element_name => $element_value) {
+                $bean->$element_name = $element_value;
+            }
+        }
+
+        
+
+        $this->alert_bean = $bean;
+        $this->alert_bean->save();
+        return $this;
+    }
 }

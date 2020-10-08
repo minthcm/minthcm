@@ -113,4 +113,5 @@ $mod_strings = array(
    'LBL_ERR_DATE_END_BEFORE_DATE_START' => 'Date end should be after date start.',
    'LBL_NEW_FORM_TITLE' => 'Log Spent Time',
    'LBL_SPENT_TIME_CATEGORY' => 'Category',
+    'LBL_HOMEPAGE_TITLE' => 'My Spent Time',
 );

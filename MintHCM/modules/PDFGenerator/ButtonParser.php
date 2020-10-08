@@ -75,11 +75,6 @@ class ButtonParser {
    }
 
    public function rebuild($module) {
-      global $beanList;
-      $bean_list_flipped = array_flip($beanList);
-      if (in_array($module, $beanList) && isset($bean_list_flipped[$module])){
-         $module = $bean_list_flipped[$module];
-      }
       $change = $this->addButtons(array( $module ));
       if ( $change ) {
          $this->clearTpls(array( $module ));
@@ -87,14 +82,7 @@ class ButtonParser {
    }
 
    protected function clearTpls($module_list) {
-      global $beanList;   
-      $bean_list_flipped = array_flip($beanList);
       if ( is_array($module_list) && !empty($module_list) ) {
-         foreach($module_list as $module){
-            if(in_array($module,$bean_list_flipped)){
-               $module = $beanList[$module];
-            }
-         }
          $clear_cache = new RepairAndClear();
          $clear_cache->module_list = $module_list;
          $clear_cache->clearTpls();

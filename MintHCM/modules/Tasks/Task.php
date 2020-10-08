@@ -111,13 +111,13 @@ class Task extends SugarBean
     {
         if (empty($this->status)) {
             $this->status = $this->getDefaultStatus();
-		}
+        }
 
         require_once 'modules/Onboardings/OnboardingStatus.php';
         $status_before = $this->fetched_row['status'];
         $id = parent::save($check_notify);
-        if (!empty($this->parent_id) && $this->status != $status_before 
-        && ($this->status == 'Completed' || $this->status == 'Deferred')) {
+        if (!empty($this->parent_id) && $this->status != $status_before
+            && ($this->status == 'Completed' || $this->status == 'Deferred') && $this->parent_type != 'Candidatures') {
             $boarding_bean = BeanFactory::getBean($this->parent_type, $this->parent_id);
             $onboarding_status = new OnboardingStatus();
             $onboarding_status->closeIfActivitiesAreHeld($boarding_bean);

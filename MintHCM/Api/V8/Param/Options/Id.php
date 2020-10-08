@@ -13,9 +13,6 @@ class Id extends BaseOption
     {
         $resolver
             ->setRequired('id')
-            ->setAllowedTypes('id', 'string')
-            ->setAllowedValues('id', $this->validatorFactory->createClosure([
-                new Assert\Regex('/^(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i')
-            ]));
+            ->setAllowedTypes('id', 'string');
     }
 }

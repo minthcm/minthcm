@@ -99,6 +99,12 @@ $viewdefs [$module_name] = array(
                   'label' => 'LBL_MOBILE_PHONE',
                ),
                array(
+                  'name' => 'recr_contact_agree',
+                  'label' => 'LBL_RECR_CONTACT_AGREE',
+               ),
+            ),
+            array(
+               array(
                   'name' => 'email1',
                   'label' => 'LBL_EMAIL',
                ),

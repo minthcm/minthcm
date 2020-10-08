@@ -220,6 +220,20 @@ $dictionary['ProspectList'] = array(
             'len' => '255',
             'source' => 'non-db',
         ),
+        'candidates' => array(
+            'name' => 'candidates',
+            'vname' => 'LBL_CANDIDATES',
+            'type' => 'link',
+            'relationship' => 'prospect_list_candidates',
+            'source' => 'non-db',
+        ),
+        'employees' => array(
+            'name' => 'employees',
+            'vname' => 'LBL_EMPLOYEES',
+            'type' => 'link',
+            'relationship' => 'prospect_list_employees',
+            'source' => 'non-db',
+        ),
     ),
 
     'indices' => array(

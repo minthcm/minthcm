@@ -36,14 +36,17 @@ generateOnboardingOffboarding = {
       let result = true;
       viewTools.GUI.fieldErrorUnmark();
       let employee_field = $('#' + this.form_name + ' #' + this.relate_field_name + '_id');
-      let date_start_date = $('#' + this.form_name + ' #goo_date_start_date');
+      let date_start = $('#' + this.form_name + ' #goo_date_start');
       let parent_id = $('#' + this.form_name + ' #parent_id');
       if (_.isEmpty(employee_field.val())) {
          viewTools.GUI.fieldErrorMark(employee_field, viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_EMPLOYEE_NAME'));
          result = false;
       }
-      if (_.isEmpty(date_start_date.val())) {
-         viewTools.GUI.fieldErrorMark(date_start_date, viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE'));
+      if (_.isEmpty($('#goo_date_start_date').val())) {
+         viewTools.GUI.fieldErrorMark($('#goo_date_start_date'), viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE'));
+         result = false;
+      }if (_.isEmpty($('#goo_date_start_hours').val())) {
+         viewTools.GUI.fieldErrorMark($('#goo_date_start_hours'), viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE'));
          result = false;
       }
       if (_.isEmpty(parent_id.val())) {
@@ -51,11 +54,7 @@ generateOnboardingOffboarding = {
          result = false;
       }
       if (result) {
-         let date_start = date_start_date.val() + " " + $('#goo_date_start_hours').val() + ":" + $('#goo_date_start_minutes').val();
-         if ($('#goo_date_start_meridiem').length === 1) {
-            let date_start = date_start + $('#goo_date_start_meridiem').val();
-         }
-         callback(employee_field.val(), date_start, parent_id.val());
+         callback(employee_field.val(), date_start.val(), parent_id.val());
       }
    },
    sendRecords: function (module_name, template_id, employee_id, date_start) {

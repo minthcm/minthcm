@@ -71,16 +71,14 @@ class NotificationManager {
    }
 
    public function run() {
-      self::setInactiveNotifications();
+      $this->clearOldWebPush();
       foreach ( $this->plugins_collection as $plugin_class ) {
          $plugin = new $plugin_class();
          $plugin->run();
       }
    }
 
-   protected static function setInactiveNotifications() {
-      $GLOBALS['db']->query("UPDATE `alerts` SET `is_read`=1 WHERE `alert_type`='custom';");
-   }
+
 
    protected static function getClassFromFile($file) {
       $r = substr($file, 0, -4);
@@ -119,27 +117,28 @@ class NotificationManager {
       return $output_string;
    }
 
-   public static function getWrongNotifications() {
-      global $db;
-      $sql = "SELECT
-              `alert`.`id` AS id
-            FROM
-              `alerts` AS alert
-            LEFT JOIN
-              `workschedules` AS work_schedule
-                ON `alert`.`parent_type`='WorkSchedules'
-                AND `alert`.`parent_id`=`work_schedule`.`id`
-                AND `work_schedule`.`deleted`=0
-            WHERE
-              `alert`.`deleted`=0
-              AND    (
-                `work_schedule`.`id` IS NULL
-                OR `alert`.`assigned_user_id` <> `work_schedule`.`assigned_user_id`
-              );";
-      $sql_result = $db->query($sql);
-      $result = array();
-      while ( $result[] = $db->fetchByAssoc($sql_result) );
-      return $result;
+   public static function NotificationForBeanExists($bean,$type) {
+     return self::NotificationExists($bean->parent_type,$bean->id,$type);
    }
+
+   public static function notificationForRecordWithId($module,$record_id,$type){
+      return self::NotificationExists($module,$record_id,$type);
+   }
+
+   public static function NotificationExists($module,$record_id,$type){
+      global $db;
+      $sql = "SELECT id FROM alerts WHERE parent_type='{$module}' AND parent_id='{$record_id}' AND alert_type='{$type}' AND is_read=0 AND (type != 'webpush' OR type IS NULL)";
+      $GLOBALS['log']->fatal($sql);
+      $sql_result = $db->getOne($sql);
+      $GLOBALS['log']->fatal(var_export(!empty($sql_result),true));
+      return !empty($sql_result);
+   }
+
+
+   public function clearOldWebPush(){
+      global $db;
+      $db->query("DELETE FROM alerts WHERE type='webpush' AND is_read=1 AND DATE(date_entered) = DATE( DATE_SUB( NOW() , INTERVAL 30 DAY ) )" );
+   }
+   
 
 }

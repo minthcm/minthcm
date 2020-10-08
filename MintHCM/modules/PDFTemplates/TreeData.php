@@ -103,11 +103,8 @@ function get_module_related()
 function getModuleRelated()
 {
     global $beanList, $moduleList, $beanFiles;
-    $bean_list_flipped = array_flip($beanList);
-    if (in_array($_POST['relatedmodule'], $moduleList)) {
+    if (in_array($_POST['relatedmodule'], $moduleList) || $_POST['relatedmodule'] == 'Employees') {
         return $_POST['relatedmodule'];
-    } else if (in_array($_POST['relatedmodule'], $beanList) && isset($bean_list_flipped[$_POST['relatedmodule']])) {
-        return $bean_list_flipped[$_POST['relatedmodule']];
     } else if (isset($_REQUEST['record']) && isset($_REQUEST['module'])) {
         $bean = $beanList[clean_string($_REQUEST['module'])];
         require_once $beanFiles[$bean];

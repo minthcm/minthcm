@@ -52,6 +52,8 @@
     <footer>
         <div id="copyright_data">
             <div id="dialog2" title="{$APP.LBL_SUITE_SUPERCHARGED}">
+                <p>{$APP.LBL_MINT_DESC}</p>
+                <br>
                 <p>{$APP.LBL_SUITE_DESC1}</p>
                 <br>
                 <p>{$APP.LBL_SUITE_DESC2}</p>

@@ -1,9 +1,12 @@
 <?php
 
-function getDictionary($param, $name, $value, $view, $additional_params)
+function getDictionary($param, $name, $value, $view, $additional_params = '')
 {
     global $db;
-    $sql = "SELECT id, name FROM dictionaries WHERE list_type LIKE '{$additional_params}' AND is_active = 1 AND deleted = 0";
+    $sql = "SELECT id, name FROM dictionaries WHERE is_active = 1 AND deleted = 0";
+    if(!empty($additional_params)){
+        $sql .= " AND list_type LIKE '{$additional_params}'";
+    }
     $types = array();
     $types[''] = '';
     $result = $db->query($sql);
