@@ -443,9 +443,5 @@ FROM prospect_lists_prospects plp
 		}
 		return false;
 	}
-        
-        public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
-            return false;
-        }
 
 }

@@ -41,4 +41,4 @@ MintHCM requirements: **PHP 7.1** and **MySQL 5.5-5.7** or **MariaDB 10**. All w
 
 ## License 🌐
 
-The MintHCM is released under the under terms of the [GNU General Public License](LICENSE).
+The MintHCM is released under the under terms of the [GNU Affero General Public License Version 3](LICENSE).

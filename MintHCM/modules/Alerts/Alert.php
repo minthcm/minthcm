@@ -83,4 +83,18 @@ class Alert extends Basic {
         return false;
     }
 
+    function getWebPushNotifications(){
+        global $current_user;
+        $list = $this->get_full_list("alerts.date_entered", "alerts.assigned_user_id = '".$current_user->id."' AND alerts.is_read != '1' AND alerts.deleted != '1' AND alerts.type ='webpush'");
+        $return = [];
+        if (count($list)) {
+            foreach ($list as $notification) {
+                $return[] = array("id" => $notification->id, "title" => $notification->name,
+                    "options" => array("url_redirect" => $notification->url_redirect,
+                        "body" => htmlspecialchars_decode($notification->description)));
+            }
+        }
+        return $return;
+    }
+
 }

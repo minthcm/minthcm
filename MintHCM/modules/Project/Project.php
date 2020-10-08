@@ -48,45 +48,44 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class Project extends SugarBean {
 	// database table columns
-	var $id;
-	var $date_entered;
-	var $date_modified;
-	var $assigned_user_id;
-	var $modified_user_id;
-	var $created_by;
-	var $name;
-	var $description;
-	var $deleted;
-
+    public $id;
+    public $date_entered;
+    public $date_modified;
+    public $assigned_user_id;
+    public $modified_user_id;
+    public $created_by;
+    public $name;
+    public $description;
+    public $deleted;
 
 	// related information
-	var $assigned_user_name;
-	var $modified_by_name;
-	var $created_by_name;
+    public $assigned_user_name;
+    public $modified_by_name;
+    public $created_by_name;
 
-	var $account_id;
-	var $contact_id;
-	var $opportunity_id;
-	var $email_id;
-    var $estimated_start_date;
+    public $account_id;
+    public $contact_id;
+    public $opportunity_id;
+    public $email_id;
+    public $estimated_start_date;
 
 	// calculated information
-	var $total_estimated_effort;
-	var $total_actual_effort;
+    public $total_estimated_effort;
+    public $total_actual_effort;
 
-	var $object_name = 'Project';
-	var $module_dir = 'Project';
-	var $new_schema = true;
-	var $table_name = 'project';
+    public $object_name = 'Project';
+    public $module_dir = 'Project';
+    public $new_schema = true;
+    public $table_name = 'project';
 
 	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = array(
+    public $additional_column_fields = array(
 		'account_id',
 		'contact_id',
 		'opportunity_id',
 	);
 
-	var $relationship_fields = array(
+    public $relationship_fields = array(
 		'account_id' => 'accounts',
 		'contact_id'=>'contacts',
 		'opportunity_id'=>'opportunities',
@@ -108,12 +107,12 @@ class Project extends SugarBean {
     /**
      * @deprecated deprecated since version 7.6, PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code, use __construct instead
      */
-    public function Project(){
+    public function Project()
+    {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
@@ -127,7 +126,7 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function fill_in_additional_detail_fields()
+    public function fill_in_additional_detail_fields()
 	{
 	    parent::fill_in_additional_detail_fields();
 
@@ -139,7 +138,7 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function fill_in_additional_list_fields()
+    public function fill_in_additional_list_fields()
 	{
 	    parent::fill_in_additional_list_fields();
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
@@ -152,7 +151,7 @@ class Project extends SugarBean {
     *
     * @param $is_update true if this save is an update.
     */
-    function save_relationship_changes($is_update, $exclude=array())
+    public function save_relationship_changes($is_update, $exclude = array())
     {
         parent::save_relationship_changes($is_update, $exclude);
         $new_rel_id = false;
@@ -186,7 +185,7 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function _get_total_estimated_effort($project_id)
+    public function _get_total_estimated_effort($project_id)
 	{
 		$return_value = '';
 
@@ -196,8 +195,7 @@ class Project extends SugarBean {
 
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 		$row = $this->db->fetchByAssoc($result);
-		if($row != null)
-		{
+        if ($row != null) {
 			$return_value = $row['total_estimated_effort'];
 		}
 
@@ -207,7 +205,7 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function _get_total_actual_effort($project_id)
+    public function _get_total_actual_effort($project_id)
 	{
 		$return_value = '';
 
@@ -217,8 +215,7 @@ class Project extends SugarBean {
 
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 		$row = $this->db->fetchByAssoc($result);
-		if($row != null)
-		{
+        if ($row != null) {
 			$return_value = $row['total_actual_effort'];
 		}
 
@@ -228,7 +225,7 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function get_summary_text()
+    public function get_summary_text()
 	{
 		return $this->name;
 	}
@@ -236,30 +233,33 @@ class Project extends SugarBean {
 	/**
 	 *
 	 */
-	function build_generic_where_clause ($the_query_string)
+    public function build_generic_where_clause($the_query_string)
 	{
 		$where_clauses = array();
 		$the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
 		array_push($where_clauses, "project.name LIKE '%$the_query_string%'");
 
 		$the_where = '';
-		foreach($where_clauses as $clause)
-		{
-			if($the_where != '') $the_where .= " OR ";
+        foreach ($where_clauses as $clause) {
+            if ($the_where != '') {
+                $the_where .= " OR ";
+            }
+
 			$the_where .= $clause;
 		}
 
 		return $the_where;
 	}
 
-	function get_list_view_data()
+    public function get_list_view_data()
 	{
 		$field_list = $this->get_list_view_array();
 		$field_list['USER_NAME'] = empty($this->user_name) ? '' : $this->user_name;
 		$field_list['ASSIGNED_USER_NAME'] = $this->assigned_user_name;
 		return $field_list;
 	}
-	  function bean_implements($interface){
+    public function bean_implements($interface)
+    {
 		switch($interface){
 			case 'ACL':return true;
 		}
@@ -282,10 +282,11 @@ class Project extends SugarBean {
 
         $where_auto = " project.deleted=0 ";
 
-        if($where != "")
+        if ($where != "") {
         	$query .= "where ($where) AND ".$where_auto;
-        else
+        } else {
             $query .= "where ".$where_auto;
+        }
 
         if(!empty($order_by)){
            	//check to see if order by variable already has table name by looking for dot "."

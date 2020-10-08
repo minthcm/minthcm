@@ -57,7 +57,8 @@ class ScheduleGenerateOnboardingOffboarding
         $this->employee_id = $employee_id;
         $this->date_start = $date_start;
         if (!empty($this->date_start)) {
-            $this->date_start = $timedate->to_db($this->date_start);
+            $ds = getDateTimeObject($this->date_start);
+            $this->date_start = $ds->format($timedate->get_db_date_time_format());
         }
     }
 

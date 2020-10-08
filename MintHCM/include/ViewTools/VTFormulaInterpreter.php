@@ -88,6 +88,9 @@ class VTFormulaInterpreter {
    }
 
    public function validateFields(SugarBean &$bean) {
+      if($bean->skip_vt_validation === true) {
+         return;
+      }
       VTExpression::loadBeanValues($bean);
       $moduleFields = VTExpression::getValidationFields($bean);
       //If validation definition is set to at least one field, 

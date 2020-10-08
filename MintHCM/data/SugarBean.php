@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 if ( !defined('sugarEntry') || !sugarEntry ) {
@@ -2255,7 +2255,7 @@ class SugarBean {
       unset($custom_logic_arguments);
       #MintHCM start
       $this->preSave();
-      #MintHCM end 
+      #MintHCM end
       // View Tools start #38123
       if ( $this->vt_prevent_saving !== true || $this->skip_vt_validation === true ) {
          // View Tools end #38123
@@ -2304,13 +2304,13 @@ class SugarBean {
          }
          #MintHCM start
          $this->postSave();
-         #MintHCM end 
+         #MintHCM end
          $this->call_custom_logic('after_save', '');
          #MintHCM start
          SugarAutoLoader::requireWithCustom("include/ViewTools/globalhooks/related.php");
          $vt_related = new Related();
          $vt_related->relatedRecalculation($this);
-         #MintHCM end 
+         #MintHCM end
 
          $this->auditBean($isUpdate);
 
@@ -2421,7 +2421,7 @@ class SugarBean {
                   case 'currency':
                   case 'float':
                      if ( $this->$field === '' || $this->$field == null || $this->$field == 'NULL' ) {
-                        continue;
+                     break;
                      }
                      if ( is_string($this->$field) ) {
                         $this->$field = ( float ) unformat_number($this->$field);
@@ -2435,7 +2435,7 @@ class SugarBean {
                   case 'tinyint':
                   case 'int':
                      if ( $this->$field === '' || $this->$field == null || $this->$field == 'NULL' ) {
-                        continue;
+                     break;
                      }
                      if ( is_string($this->$field) ) {
                         $this->$field = ( int ) unformat_number($this->$field);
@@ -3381,22 +3381,22 @@ class SugarBean {
          }
       }
       /* END - SECURITY GROUPS */
-      
+
       // View Tools start #60131
-      #if ( !empty($params['distinct']) ) { 
+      #if ( !empty($params['distinct']) ) {
      $action=filter_input(INPUT_GET, "action", FILTER_SANITIZE_SPECIAL_CHARS); //subpanel
      $dynamic_action=filter_input(INPUT_GET, "DynamicAction", FILTER_SANITIZE_SPECIAL_CHARS); //dashlet refresh
-     $entry_point=filter_input(INPUT_GET, "entryPoint", FILTER_SANITIZE_SPECIAL_CHARS); //dashlet retrive	  
+     $entry_point=filter_input(INPUT_GET, "entryPoint", FILTER_SANITIZE_SPECIAL_CHARS); //dashlet retrive
 
      if((!empty($current_view) && $current_view->type=='list') || $action=="SubPanelViewer" || $dynamic_action=='displayDashlet' || $entry_point=="retrieve_dash_page" ){
       $distinct = ' DISTINCT ';
      }else{
-         if ( !empty($params['distinct']) ) { 
+         if ( !empty($params['distinct']) ) {
                $distinct = ' DISTINCT ';
             }
          }
-      #} 
-      // View Tools end #60131      
+      #}
+      // View Tools end #60131
       if ( empty($filter) ) {
          $ret_array['select'] = " SELECT $distinct $this->table_name.* ";
       } else {
@@ -4988,7 +4988,7 @@ class SugarBean {
          $this->call_custom_logic("before_delete", $custom_logic_arguments);
          #MintHCM start
          $this->preMarkDeleted();
-         #MintHCM end 
+         #MintHCM end
          $this->deleted = 1;
          $this->mark_relationships_deleted($id);
          if ( isset($this->field_defs['modified_user_id']) ) {
@@ -5012,9 +5012,9 @@ class SugarBean {
 
 
          $this->deleteFiles();
-         #MintHCM start 
+         #MintHCM start
          $this->postMarkDeleted();
-         #MintHCM end 
+         #MintHCM end
          // call the custom business logic
          $this->call_custom_logic("after_delete", $custom_logic_arguments);
       }
@@ -5424,7 +5424,7 @@ class SugarBean {
     * @param $list_form
     */
    public function list_view_parse_additional_sections(&$list_form) {
-      
+
    }
 
    /**
@@ -5582,7 +5582,7 @@ class SugarBean {
     * @param $value
     */
    public function build_generic_where_clause($value) {
-      
+
    }
 
    /**
@@ -5922,7 +5922,7 @@ class SugarBean {
    public function populateRelatedBean(
            SugarBean $new_bean
    ) {
-      
+
    }
 
    /**
@@ -5930,7 +5930,7 @@ class SugarBean {
     * importing a record
     */
    public function beforeImportSave() {
-      
+
    }
 
    /**
@@ -5938,7 +5938,7 @@ class SugarBean {
     * importing a record
     */
    public function afterImportSave() {
-      
+
    }
 
    /**
@@ -5985,19 +5985,19 @@ class SugarBean {
    }
 
    protected function preSave() {
-      
+
    }
 
    protected function postSave() {
-      
+
    }
 
    protected function preMarkDeleted() {
-      
+
    }
 
    protected function postMarkDeleted() {
-      
+
    }
 
 }

@@ -95,4 +95,6 @@ $mod_strings = array(
     'LBL_NEWS_ANNOUNCEMENT_BTN' => "Close",
     'LBL_NEWS_REMINDER_BTN' => "Don't show it to me again",
     'LBL_PUBLICATION_DATE' => "Date of Publication",
+    'LBL_NEW_USERS_NEWS' => "There is a new information avaiable",
+    'LBL_NEW_USERS_NEWS_UPDATED' => "There is an updated information avaiable",
 );

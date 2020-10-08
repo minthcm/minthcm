@@ -75,6 +75,14 @@ $listViewDefs [$module_name] = array(
       'width' => '10%',
       'default' => false,
    ),
+   'RECR_CONTACT_AGREE' =>
+   array(
+      'width' => '5%',
+      'label' => 'LBL_RECR_CONTACT_AGREE_SHORT',
+      'link' => false,
+      'default' => false,
+
+   ),
    'POTENTIAL' =>
    array(
       'type' => 'enum',

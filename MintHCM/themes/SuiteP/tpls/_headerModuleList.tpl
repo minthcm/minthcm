@@ -490,6 +490,7 @@
                                                                                                             <li><a href="index.php?module=Tasks&action=EditView&return_module=Tasks&return_action=DetailView">{sugar_translate module="Tasks" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Calls&action=EditView&return_module=Calls&return_action=DetailView">{sugar_translate module="Calls" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Meetings&action=EditView&return_module=Meetings&return_action=DetailView">{sugar_translate module="Meetings" label="LBL_LIST_TITLE"}</a></li>
+                                                                                                            {include file='custom/themes/SuiteP/tpls/SubNavigateCreateMenu.tpl'}
                                                                                                                 {* View Tools END #51289, Mint #62602 *}
                                                                                                         </ul>
                                                                                                     </li>
@@ -580,6 +581,7 @@
                                                                                                             <li><a href="index.php?module=Tasks&action=EditView&return_module=Tasks&return_action=DetailView">{sugar_translate module="Tasks" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Calls&action=EditView&return_module=Calls&return_action=DetailView">{sugar_translate module="Calls" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Meetings&action=EditView&return_module=Meetings&return_action=DetailView">{sugar_translate module="Meetings" label="LBL_LIST_TITLE"}</a></li>
+                                                                                                            {include file='custom/themes/SuiteP/tpls/SubNavigateCreateMenu.tpl'}
                                                                                                                 {* View Tools END #51289, Mint #62602 *}
                                                                                                         </ul>
                                                                                                     </li>
@@ -679,6 +681,7 @@
                                                                                                             <li><a href="index.php?module=Tasks&action=EditView&return_module=Tasks&return_action=DetailView">{sugar_translate module="Tasks" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Calls&action=EditView&return_module=Calls&return_action=DetailView">{sugar_translate module="Calls" label="LBL_LIST_TITLE"}</a></li>
                                                                                                             <li><a href="index.php?module=Meetings&action=EditView&return_module=Meetings&return_action=DetailView">{sugar_translate module="Meetings" label="LBL_LIST_TITLE"}</a></li>
+                                                                                                            {include file='custom/themes/SuiteP/tpls/SubNavigateCreateMenu.tpl'}
                                                                                                                 {* View Tools END #51289, Mint #62602 *}
                                                                                                         </ul>
                                                                                                     </li>

@@ -15,8 +15,9 @@
  */
 require_once 'modules/Candidates/Candidates_sugar.php';
 require_once 'modules/Candidates/SugarFeeds/CandidatesFeed.php';
+require_once __DIR__ . '/../../include/EmailInterface.php';
 
-class Candidates extends Candidates_sugar {
+class Candidates extends Candidates_sugar implements EmailInterface {
 
    public function save($check_notify = false) {
       $old_bean = $this->fetched_row;

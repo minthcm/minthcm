@@ -18,6 +18,8 @@ if (!window.TWSDashlet) {
         }
         this.$dateInput = this.$toolForm.find('input.date_input');
         this.$dateCalendar = this.$dateInput.next();
+        this.$calendarNext = this.$toolForm.find('.calendar_next');
+        this.$calendarBefore = this.$toolForm.find('.calendar_before');
         this.$planSelect = this.$toolForm.find('select');
         this.$showPlanButton = this.$toolForm.find('img.showPlanButton');
         this.$editPlanButton = this.$toolForm.find('img.editPlanButton');
@@ -35,6 +37,26 @@ if (!window.TWSDashlet) {
         this.$dateInput.blur(function () {
             _this.$content.hide();
             _this.changeDisplayByDate(getDateObject(this.value));
+        });
+        this.$calendarBefore.click(function () {
+            var current_date = getDateObject(_this.$dateInput.val());
+            var next_date = current_date.setDate(current_date.getDate() - 1);
+            var finished_date = new Date(next_date);
+            var sugar_date = toSugarDate(finished_date);
+            _this.$dateInput.val(sugar_date);
+            _this.$content.hide();
+            _this.changeDisplayByDate(getDateObject(sugar_date));
+
+        });
+        this.$calendarNext.click(function () {
+            var current_date = getDateObject(_this.$dateInput.val());
+            var next_date = current_date.setDate(current_date.getDate() + 1);
+            var finished_date = new Date(next_date);
+            var sugar_date = toSugarDate(finished_date);
+            _this.$dateInput.val(sugar_date);
+            _this.$content.hide();
+            _this.changeDisplayByDate(getDateObject(sugar_date));
+
         });
         this.$planSelect.change(function () {
             var items = [];
@@ -234,6 +256,9 @@ if (!window.TWSDashlet) {
             f.returned = r;
             return new Promise(f);
         }
+    };
+    TWSDashlet.prototype.calculateNextPreviousDate = function (date, type) {
+
     };
     TWSDashlet.prototype.changeDisplayByDate = function (date) {
         var _this = this;

@@ -39,67 +39,68 @@
  * ****************************************************************************** */
 
 $vardefs = array(
-   'fields' => array(
-      'employee_id' =>
-      array(
-         'name' => 'employee_id',
-         'rname' => 'user_name',
-         'id_name' => 'employee_id',
-         'vname' => 'LBL_EMPLOYEE_ID',
-         'group' => 'employee_name',
-         'type' => 'relate',
-         'table' => 'users',
-         'module' => 'Employees',
-         'reportable' => true,
-         'isnull' => 'false',
-         'dbType' => 'id',
-         'audited' => true,
-         'comment' => 'Employee assigned to record',
-         'duplicate_merge' => 'disabled'
-      ),
-      'employee_name' =>
-      array(
-         'name' => 'employee_name',
-         'link' => 'employee_link',
-         'vname' => 'LBL_EMPLOYEE_NAME',
-         'rname' => 'full_name',
-         'fields' => array(
-            'first_name',
-            'last_name'
-         ),
-         'db_concat_fields' => array(
-            0 => 'first_name',
-            1 => 'last_name'
-         ),
-         'type' => 'relate',
-         'reportable' => false,
-         'source' => 'non-db',
-         'table' => 'users',
-         'id_name' => 'employee_id',
-         'module' => 'Employees',
-         'duplicate_merge' => 'disabled'
-      ),
-      'employee_link' =>
-      array(
-         'name' => 'employee_link',
-         'type' => 'link',
-         'relationship' => strtolower($module) . '_employee',
-         'vname' => 'LBL_EMPLOYEE',
-         'link_type' => 'one',
-         'module' => 'Employees',
-         'bean_name' => 'Employee',
-         'source' => 'non-db',
-         'duplicate_merge' => 'enabled',
-         'rname' => 'full_name',
-         'id_name' => 'employee_id',
-         'table' => 'users',
-      ),
-   ),
-   'relationships' => array(
-      strtolower($module) . '_employee' => array(
-         'lhs_module' => 'Employees', 'lhs_table' => 'users', 'lhs_key' => 'id',
-         'rhs_module' => $module, 'rhs_table' => $table_name, 'rhs_key' => 'employee_id',
-         'relationship_type' => 'one-to-many'
-      )
-   )
+    'fields' => array(
+        'employee_id' => array(
+            'name' => 'employee_id',
+            'rname' => 'user_name',
+            'id_name' => 'employee_id',
+            'vname' => 'LBL_EMPLOYEE_ID',
+            'group' => 'employee_name',
+            'type' => 'relate',
+            'table' => 'users',
+            'module' => 'Employees',
+            'reportable' => true,
+            'isnull' => 'false',
+            'dbType' => 'id',
+            'audited' => true,
+            'comment' => 'Employee assigned to record',
+            'duplicate_merge' => 'disabled',
+        ),
+        'employee_name' => array(
+            'name' => 'employee_name',
+            'link' => 'employee_link',
+            'vname' => 'LBL_EMPLOYEE_NAME',
+            'rname' => 'full_name',
+            'fields' => array(
+                'first_name',
+                'last_name',
+            ),
+            'db_concat_fields' => array(
+                0 => 'first_name',
+                1 => 'last_name',
+            ),
+            'type' => 'relate',
+            'reportable' => false,
+            'source' => 'non-db',
+            'table' => 'users',
+            'id_name' => 'employee_id',
+            'module' => 'Employees',
+            'duplicate_merge' => 'disabled',
+        ),
+        'employee_link' => array(
+            'name' => 'employee_link',
+            'type' => 'link',
+            'relationship' => strtolower($module) . '_employee',
+            'vname' => 'LBL_EMPLOYEE',
+            'link_type' => 'one',
+            'module' => 'Employees',
+            'bean_name' => 'Employee',
+            'source' => 'non-db',
+            'duplicate_merge' => 'enabled',
+            'rname' => 'full_name',
+            'id_name' => 'employee_id',
+            'table' => 'users',
+        ),
+    ),
+    'relationships' => array(
+        strtolower($module) . '_employee' => array(
+            'lhs_module' => $module,
+            'lhs_table' => $table_name,
+            'lhs_key' => 'employee_id',
+            'rhs_module' => 'Employees',
+            'rhs_table' => 'users',
+            'rhs_key' => 'id',
+            'relationship_type' => 'one-to-many',
+        ),
+    ),
 );

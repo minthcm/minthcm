@@ -46,9 +46,25 @@
 
 abstract class NotificationPlugin {
 
-   protected function getNewNotification() {
+   public function getNewNotification() {
       return new Notification;
    }
 
    abstract public function run();
+
+   public function isWebPushableNotification(){
+      return false;
+   }
+
+   public function getWebPushDescriptionConfig(){
+      return false;
+   }
+   public function getWebPushLinkConfig(){
+      return false;
+   }
+   public function getWebPushOverrideConfig(){
+      return array();
+   }
+
+
 }

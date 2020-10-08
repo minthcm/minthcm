@@ -5740,18 +5740,18 @@ function getAppString($key)
 function getDateTimeObject($date_string)
 {
     global $timedate;
-    $date_object = DateTime::createFromFormat($timedate->get_date_format(),
+    $date_object = SugarDateTime::createFromFormat($timedate->get_date_format(),
         $date_string);
     if (!$date_object) {
-        $date_object = DateTime::createFromFormat($timedate->get_db_date_format(),
+        $date_object = SugarDateTime::createFromFormat($timedate->get_db_date_format(),
             $date_string);
     }
     if (!$date_object) {
-        $date_object = DateTime::createFromFormat($timedate->get_date_time_format(),
+        $date_object = SugarDateTime::createFromFormat($timedate->get_date_time_format(),
             $date_string);
     }
     if (!$date_object) {
-        $date_object = DateTime::createFromFormat($timedate->get_db_date_time_format(),
+        $date_object = SugarDateTime::createFromFormat($timedate->get_db_date_time_format(),
             $date_string);
     }
     return $date_object;

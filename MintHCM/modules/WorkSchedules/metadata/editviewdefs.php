@@ -59,6 +59,7 @@ $viewdefs[$module_name] = array(
                 'hidden' => array(
                     '<input type="hidden" name="current_user_is_admin" id="current_user_is_admin" value="{$CURRENT_USER_IS_ADMIN}">',
                     '<input type="hidden" name="redirected_from_calendar" id="redirected_from_calendar" value="{$REDIRECTED_FROM_CALENDAR}">',
+                    '<input type="hidden" name="previous_diff_minutes" id="previous_diff_minutes" value="{$PREVIOUS_DIFF_MINUTES}">',
                     '<input type="hidden" name="return_module" id="return_module" value="{$RETURN_MODULE}">',
                 ),
                 'maxColumns' => '2',

@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 if ( !defined('sugarEntry') || !sugarEntry ) {
@@ -636,8 +636,8 @@ function handleDbCharsetCollation() {
 
    if ( $_SESSION['setup_db_type'] == 'mysql' ) {
       $db = getDbConnection();
-      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT CHARACTER SET utf8", true);
-      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT COLLATE utf8_general_ci", true);
+      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT CHARACTER SET ".$db->getDefaultCharacter(), true);
+      $db->query("ALTER DATABASE `{$setup_db_database_name}` DEFAULT COLLATE ".$db->getDefaultCollation(), true);
    }
 }
 
@@ -1291,6 +1291,8 @@ function insert_default_settings() {
     'Attitudes',
     'SalaryRanges',
     'EmployeeCertificates',
+    'ProspectLists',
+    'Campaigns',
     );
 
    $hidden_subpanels = array (
@@ -1311,7 +1313,7 @@ function insert_default_settings() {
     'aos_products' => 'aos_products',
     'aos_invoices' => 'aos_invoices',
   );
-   
+
    $configs = [
       [ 'category' => 'notify', 'name' => 'fromaddress', 'value' => $fromAddress, ],
       [ 'category' => 'notify', 'name' => 'fromname', 'value' => $fromName, ],
@@ -1786,7 +1788,7 @@ function getInstalledLanguages() {
    $langs = array();
    while ( $file = readdir($dh) ) {
       if ( substr($file, -3) == 'php' ) {
-         
+
       }
    }
 }

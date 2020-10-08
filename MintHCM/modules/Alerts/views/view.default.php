@@ -76,7 +76,16 @@ class AlertsViewDefault extends SugarView {
    public function display() {
       $this->ss->assign('Flash', $this->view_object_map['Flash']);
       $this->ss->assign('Results', $this->view_object_map['Results']);
-      echo $this->ss->fetch('modules/Alerts/templates/default.tpl');
+      // MintHCM #70313 begin
+      $standard = $this->ss->fetch('modules/Alerts/templates/default.tpl');
+
+      $result = array(
+         'standard' => $standard,
+         'mint' => array('notifications' => $this->bean->getWebPushNotifications()),
+      );
+      echo json_encode($result);
+      // MintHCM #70313 end
+
       die();
    }
 
