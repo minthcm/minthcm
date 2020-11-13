@@ -619,6 +619,14 @@ slot {
   min-height: 30px;
 }
 
+.dataLabel {
+    margin: 15px;
+}
+
+.workWrapper {
+    align-items: center;
+}
+
 .detail-view-field {
   display: inline;
   font-size: 14px;
@@ -760,16 +768,17 @@ option[selected] {
 }
 
 .edit tr td {
-  font-weight: normal;
-  vertical-align: top;
+    font-weight: normal;
+    vertical-align: top;
+    padding: 18px 0 18px 0;
 }
 
-.edit tr td[scope=row] {
-  padding: 0 10px 0 0;
-  line-height: 40px;
-  text-align: left;
-  height: 40px;
-  vertical-align: top;
+.edit tr td[scope="row"] {
+    padding: 12px 12px 0 0;
+    line-height: 40px;
+    text-align: left;
+    height: 40px;
+    vertical-align: top;
 }
 
 .edit tr th {
@@ -1478,7 +1487,7 @@ td.edit.view td[align=right] {
 }
 
 #popup_query_form {
-  padding-left: 0;
+  padding-left: 20px;
   padding-right: 0;
 }
 
@@ -1820,7 +1829,7 @@ a.tabFormAdvLink:hover {
 .evenListRowS1 td,
 .oddListRowS1 td {
   color: $main-font-color;
-
+  padding-left: 20px;
 }
 
 .evenListRowS1 td {
@@ -4367,6 +4376,7 @@ tr:hover img.info {
 }
 
 h3 span {
+  padding-left: 20px;
   font-weight: bold;
 }
 

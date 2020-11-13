@@ -106,8 +106,8 @@
                         <h2>{$strings.filters}</h2>
                     </td>
                 </tr>
+                <tr>
                 {if $showMyItemsOnly}
-                    <tr>
                         <td>
                             <input type='checkbox' {if $myItemsOnly == 'true'}checked{/if} name='myItemsOnly'
                                    value='true'>
@@ -131,18 +131,8 @@
                         <td scope='row' style='margin-left: 5px'>
                             {$strings.mySubordinates}
                         </td>
-                    </tr>
                 {/if}
-                {if $showMySubordinates}
-                    <tr>
-                        <td scope='row'>
-                            {$strings.mySubordinates}
-                        </td>
-                        <td>
-                            <input type='checkbox' {if $mySubordinates == 'true'}checked{/if} name='mySubordinates' value='true'>
-                        </td>
-                    </tr>
-                {/if}
+				</tr>
                 <tr>
                 {foreach name=searchIteration from=$searchFields key=name item=params}
                     <td  scope='row' valign='top'>
@@ -151,10 +141,8 @@
                     <td  valign='top' style='padding-bottom: 5px'>
                         {$params.input}
                     </td>
-                    {if ($smarty.foreach.searchIteration.iteration is even) and $smarty.foreach.searchIteration.iteration != $smarty.foreach.searchIteration.last}                        </tr>
+                    {if ($smarty.foreach.searchIteration.iteration is even) and $smarty.foreach.searchIteration.iteration != $smarty.foreach.searchIteration.last}
                         </tr>
-
-                        <tr style='margin-bottom: 15px'>
                     {/if}
                 {/foreach}
 

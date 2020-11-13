@@ -45,10 +45,6 @@
  */
 
 $dashletData['TrainingsDashlet']['searchFields'] = array(
-   'name' =>
-   array(
-      'default' => '',
-   ),
    'date_start' =>
    array(
       'default' => '',

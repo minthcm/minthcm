@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,53 +36,51 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $mod_strings = array(
-   'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
-   'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
-   'LBL_SECURITYGROUPS' => 'Organizational Unit',
-   'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
-   'LBL_ID' => 'ID',
-   'LBL_DATE_ENTERED' => 'Date Created',
-   'LBL_DATE_MODIFIED' => 'Date Modified',
-   'LBL_MODIFIED' => 'Modified by',
-   'LBL_MODIFIED_ID' => 'Modified by Id',
-   'LBL_MODIFIED_NAME' => 'Modified by Name',
-   'LBL_CREATED' => 'Created by',
-   'LBL_CREATED_ID' => 'Created by Id',
-   'LBL_DESCRIPTION' => 'Description',
-   'LBL_DELETED' => 'Deleted',
-   'LBL_NAME' => 'Name',
-   'LBL_CREATED_USER' => 'Created by User',
-   'LBL_MODIFIED_USER' => 'Modified by User',
-   'LBL_LIST_NAME' => 'Name',
-   'LBL_EDIT_BUTTON' => 'Edit',
-   'LBL_REMOVE' => 'Remove',
-   'LBL_LIST_FORM_TITLE' => 'Survey Responses List',
-   'LBL_MODULE_NAME' => 'Survey Responses',
-   'LBL_MODULE_TITLE' => 'Survey Responses',
-   'LBL_HOMEPAGE_TITLE' => 'My Survey Responses',
-   'LNK_NEW_RECORD' => 'Create Survey Responses',
-   'LNK_LIST' => 'View Survey Responses',
-   'LNK_IMPORT_SURVEYRESPONSES' => 'Import Survey Responses',
-   'LBL_SEARCH_FORM_TITLE' => 'Search Survey Responses',
-   'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
-   'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
-   'LBL_SURVEYRESPONSES_SUBPANEL_TITLE' => 'Survey Responses',
-   'LBL_NEW_FORM_TITLE' => 'New Survey Responses',
-   'LBL_HAPPINESS' => 'Happiness',
-   'LBL_EMAIL_RESPONSE_SENT' => 'Email Response Sent',
-   'LBL_SURVEYRESPONSES_SURVEYQUESTIONRESPONSES_FROM_SURVEYQUESTIONRESPONSES_TITLE' => 'Survey Question Responses',
-   'LBL_SURVEYRESPONSES_CONTACTS_FROM_CONTACTS_TITLE' => 'Contact',
-   'LBL_SURVEYRESPONSES_ACCOUNTS_FROM_ACCOUNTS_TITLE' => 'Account',
-   'LBL_SURVEYS_SURVEYRESPONSES_FROM_SURVEYS_TITLE' => 'Survey',
-   'LBL_QUESTION_RESPONSES_DISPLAY' => 'Question Responses',
-   'LBL_SURVEYRESPONSES_CAMPAIGNS_FROM_CAMPAIGNS_TITLE' => 'Campaign',
-   'LBL_QUESTION' => 'Question',
-   'LBL_RESPONSE' => 'Responses',
+    'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
+    'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
+    'LBL_SECURITYGROUPS' => 'Organizational Unit',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
+    'LBL_ID' => 'ID',
+    'LBL_DATE_ENTERED' => 'Date Created',
+    'LBL_DATE_MODIFIED' => 'Date Modified',
+    'LBL_MODIFIED' => 'Modified by',
+    'LBL_MODIFIED_ID' => 'Modified by Id',
+    'LBL_MODIFIED_NAME' => 'Modified by Name',
+    'LBL_CREATED' => 'Created by',
+    'LBL_CREATED_ID' => 'Created by Id',
+    'LBL_DESCRIPTION' => 'Description',
+    'LBL_DELETED' => 'Deleted',
+    'LBL_NAME' => 'Name',
+    'LBL_CREATED_USER' => 'Created by User',
+    'LBL_MODIFIED_USER' => 'Modified by User',
+    'LBL_LIST_NAME' => 'Name',
+    'LBL_EDIT_BUTTON' => 'Edit',
+    'LBL_REMOVE' => 'Remove',
+    'LBL_LIST_FORM_TITLE' => 'Survey Responses List',
+    'LBL_MODULE_NAME' => 'Survey Responses',
+    'LBL_MODULE_TITLE' => 'Survey Responses',
+    'LBL_HOMEPAGE_TITLE' => 'My Survey Responses',
+    'LNK_NEW_RECORD' => 'Create Survey Responses',
+    'LNK_LIST' => 'View Survey Responses',
+    'LNK_IMPORT_SURVEYRESPONSES' => 'Import Survey Responses',
+    'LBL_SEARCH_FORM_TITLE' => 'Search Survey Responses',
+    'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
+    'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
+    'LBL_SURVEYRESPONSES_SUBPANEL_TITLE' => 'Survey Responses',
+    'LBL_NEW_FORM_TITLE' => 'New Survey Responses',
+    'LBL_HAPPINESS' => 'Happiness',
+    'LBL_EMAIL_RESPONSE_SENT' => 'Email Response Sent',
+    'LBL_SURVEYRESPONSES_SURVEYQUESTIONRESPONSES_FROM_SURVEYQUESTIONRESPONSES_TITLE' => 'Survey Question Responses',
+    'LBL_SURVEYS_SURVEYRESPONSES_FROM_SURVEYS_TITLE' => 'Survey',
+    'LBL_QUESTION_RESPONSES_DISPLAY' => 'Question Responses',
+    'LBL_SURVEYRESPONSES_CAMPAIGNS_FROM_CAMPAIGNS_TITLE' => 'Campaign',
+    'LBL_QUESTION' => 'Question',
+    'LBL_RESPONSE' => 'Responses',
 );

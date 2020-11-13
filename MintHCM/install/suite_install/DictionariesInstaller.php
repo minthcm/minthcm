@@ -29,6 +29,10 @@ class DictionariesInstaller
         ('c4ba0266-f0ab-8540-d543-5eb17ce41615', 'Careers Office', '2020-05-05 14:48:39', '2020-05-05 14:48:39', '1', '1', NULL, 0,  'Candidatures-source', 'Candidatures', 1),
         ('d7e51783-6f9a-a91b-aec0-5eb17cf093d0', 'Facebook', '2020-05-05 14:49:22', '2020-05-05 14:49:22', '1', '1', NULL, 0,  'Candidatures-source', 'Candidatures', 1),
         ('f30e8596-0769-42e9-92c8-c7d4710123f0', 'RocketJobs', '2020-05-05 14:49:22', '2020-05-05 14:49:22', '1', '1', NULL, 0,  'Candidatures-source', 'Candidatures', 1),
+        ('681ce4fe-2e48-f092-9077-5f7af730b9a6', 'Mail Merge', '2020-10-05 10:36:32', '2020-10-05 10:36:32', '1', '1', 'NULL', '0', 'Documents-type', 'Documents','1'),
+        ('590a8602-ce79-d8b6-653d-5f7afb9dd592', 'EULA', '2020-10-05 10:56:34', '2020-10-05 10:56:34', '1', '1', 'NULL', '0', 'Documents-type', 'Documents','1'),
+        ('9527717f-64c0-06a0-3610-5f7afb8db76f', 'NDA', '2020-10-05 10:56:48', '2020-10-05 10:56:48', '1', '1', 'NULL', '0', 'Documents-type', 'Documents','1'),
+        ('f27326ff-8cc3-28a5-395f-5f7afb4f57ae', 'License Agreement', '2020-10-05 10:56:59', '2020-10-05 10:56:59', '1', '1', 'NULL', '0', 'Documents-type', 'Documents','1'),
         ('e2324f8d-0a14-8ec3-164f-5eb17c3b28b3', 'Recommendation', '2020-05-05 14:47:57', '2020-05-05 14:47:57', '1', '1', NULL, 0,  'Candidatures-source', 'Candidatures', 1);";
         return $dictionaries_data;
     }

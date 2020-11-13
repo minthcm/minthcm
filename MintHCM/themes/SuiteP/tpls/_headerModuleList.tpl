@@ -735,7 +735,10 @@
                                                                                                                 <span class="suitepicon suitepicon-action-current-user"></span>
                                                                                                             {else}
                                                                                                                 <span class="suitepicon current-user-avatar" >
-                                                                                                                    <img src="index.php?entryPoint=download&id={$CURRENT_USER_ID}_photo&type=Users" />
+                                                                                                                    {* MintHCM #69752 START *}
+                                                                                                                    {* <img src="index.php?entryPoint=download&id={$CURRENT_USER_ID}_photo&type=Users" /> *}
+                                                                                                                    <img src="index.php?entryPoint=download&id={$CURRENT_USER_ID}_photo&type=Users&time={$CURRENT_USER_DATE_MODIFIED}" />
+                                                                                                                    {* MintHCM #69752 END *}
                                                                                                                 </span>
                                                                                                             {/if}
                                                                                                             {* MintHCM #63083 END *}

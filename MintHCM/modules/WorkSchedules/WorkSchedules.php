@@ -147,6 +147,7 @@ class WorkSchedules extends Basic
                 $this->spent_time_settlement = 8;
                 break;
             case "sick":
+            case "sick-care":
             case "holiday":
             case "delegation":
             case 'office':
@@ -405,7 +406,7 @@ class WorkSchedules extends Basic
     {
         global $timedate;
         $return = 1;
-        if (!in_array($this->type, ['holiday', 'sick', 'occasional_leave', 'overtime', 'excused_absence', 'leave_at_request'])) {
+        if (!in_array($this->type, ['holiday', 'sick', 'sick-care', 'occasional_leave', 'overtime', 'excused_absence', 'leave_at_request'])) {
 
             $db_format = $timedate->get_db_date_time_format();
 

@@ -1,10 +1,10 @@
 <?php
 $module_name = 'SurveyResponses';
-$viewdefs [$module_name] = array(
+$viewdefs[$module_name] = array(
     'EditView' => array(
         'templateMeta' => array(
             'maxColumns' => '2',
-            'widths'     => array(
+            'widths' => array(
                 0 => array(
                     'label' => '10',
                     'field' => '30',
@@ -15,7 +15,7 @@ $viewdefs [$module_name] = array(
                 ),
             ),
         ),
-        'panels'       => array(
+        'panels' => array(
             'default' => array(
                 0 => array(
                     0 => 'name',
@@ -24,22 +24,14 @@ $viewdefs [$module_name] = array(
                 1 => array(
                     0 => 'description',
                     1 => array(
-                        'name' => 'contact_name',
-                    ),
-                ),
-                2 => array(
-                    0 => array(
-                        'name' => 'account_name',
-                    ),
-                    1 => array(
                         'name' => 'survey_name',
                     ),
                 ),
-                3 => array(
+                2 => array(
                     0 => 'campaign_name',
+                    1 => 'employee_name',
                 ),
             ),
         ),
     ),
 );
-?>
