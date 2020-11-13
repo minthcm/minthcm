@@ -6,7 +6,7 @@
       <input type='hidden' name='to_pdf' value='true'>
       <input type='hidden' name='configure' value='true'>
       <table width="400" cellpadding="0" cellspacing="0" border="0" class="edit view" align="center">
-         <tr>
+         <tr class="workWrapper">
             <td class='dataLabel'>
                {$titleLbl}
             </td>
@@ -15,8 +15,8 @@
             </td>
          </tr>
          {if $isRefreshable}
-            <tr>
-               <td>
+            <tr class="workWrapper">
+               <td class='dataLabel'>
                   {$autoRefresh}
                </td>
                <td>

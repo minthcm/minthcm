@@ -3561,7 +3561,10 @@ $app_list_strings['moduleList']['SurveyQuestionResponses'] = 'Survey Question Re
 $app_list_strings['moduleList']['SurveyQuestions'] = 'Survey Questions';
 $app_list_strings['moduleList']['SurveyQuestionOptions'] = 'Survey Question Options';
 $app_list_strings['survey_status_list']['Draft'] = 'Draft';
-$app_list_strings['survey_status_list']['Public'] = 'Public';
+//MintHCM #74241 START
+//$app_list_strings['survey_status_list']['Public'] = 'Public';
+$app_list_strings['survey_status_list']['Active'] = 'Active';
+//MintHCM #74241 END
 $app_list_strings['survey_status_list']['Closed'] = 'Closed';
 $app_list_strings['surveys_question_type']['Text'] = 'Text';
 $app_list_strings['surveys_question_type']['Textbox'] = 'Textbox';
@@ -3755,6 +3758,7 @@ $app_list_strings['workschedule_type_list'] = [
     'delegation' => 'Delegation',
     'holiday' => 'Holiday',
     'sick' => 'Sick',
+    'sick-care' => 'Sick - Care',
     'occasional_leave' => 'Occasional Leave',
     'leave_at_request' => 'Leave at Request',
     'overtime' => 'Free Overtime',
@@ -4075,6 +4079,7 @@ $app_list_strings['list_type_list'] = array(
     'Meetings-type' => 'Meetings - Type',
     'SpentTime-category' => 'Spent Time - Category',
     'Candidatures-source' => 'Candidatures - Source',
+    'Documents-type' => 'Documents - Type',
 );
 
 $app_list_strings['reservations_parent_type_list'] = array(

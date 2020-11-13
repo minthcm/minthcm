@@ -69,3 +69,17 @@ option:checked {
 .col-sm-6 .edit-view-field input[id="spent_time"]{
     width: 30%;
 }
+
+@media (min-width: 1600px) {
+    .col-sm-6 .col-sm-8.edit-view-field input.sqsDisabled {
+        width: 72.25%
+    }
+}
+
+input#btn_ConditionLine.button[type="button"] {
+    color: $color-mint-darkgreen-darker;
+}
+
+input#btn_ActionLine.button[type="button"] {
+    color: $color-mint-darkgreen-darker;
+}

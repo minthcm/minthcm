@@ -85,7 +85,6 @@ $subpanel_layout = array(
 			 'vname' => 'LBL_LIST_CONTACT',
 			 'width' => '11%',
 		),
-		
 		'parent_name'=>array(
 			 'vname' => 'LBL_LIST_RELATED_TO',
 			 'width' => '22%',
@@ -94,6 +93,10 @@ $subpanel_layout = array(
 			 'widget_class' => 'SubPanelDetailViewLink',
 			 'sortable'=>false,
 		),
+		'date_start' => array(
+            'vname' => 'LBL_START_DATE',
+            'width' => '10%',
+        ),
 		'date_modified'=>array(
 			 'vname' => 'LBL_LIST_DATE_MODIFIED',
 			 'width' => '10%',

@@ -5,7 +5,7 @@
                 {$mod.LBL_RESPONSE_ANSWER}
             </th>
             <th>
-                {$mod.LBL_RESPONSE_CONTACT}
+                {$mod.LBL_RESPONSE_EMPLOYEE}
             </th>
             <th>
                 {$mod.LBL_RESPONSE_TIME}
@@ -17,13 +17,11 @@
                     {$response.answer}
                 </td>
                 <td>
-                    {if $response.contact}
-                        <a href="index.php?module=Contacts&action=DetailView&record={$response.contact.id}">
-                            {$response.contact.name}
-                        </a>
-                    {else}
-                        {$mod.LBL_UNKNOWN_CONTACT}
-                    {/if}
+                {if $response.employee}
+                    <a href="index.php?module=Employees&action=DetailView&record={$response.employee.id}">
+                        {$response.employee.id}
+                    </a>
+                {/if}
                 </td>
                 <td>
                     {$response.time}

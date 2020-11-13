@@ -52,6 +52,7 @@ class WorkSchedulesApi {
       $work_off_types = array(
          'holiday',
          'sick',
+         'sick-care',
          'occasional_leave',
          'leave_at_request',
          'overtime',

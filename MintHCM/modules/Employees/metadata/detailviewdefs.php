@@ -134,7 +134,7 @@ $viewdefs['Employees'] = array(
                                 'title' => '{$MOD.LBL_GENERATE_ONBOARDING_OFFBOARDING}',
                                 'onClick' => 'generateOnboardingOffboarding.init(generateOnboardingOffboarding)',
                             ),
-                            'template' => '{if $bean->aclAccess("edit")}[CONTENT]{/if}',
+                            'template' => '{if isset($IF_USER_HAS_ACCESS_TO_ONBOARD_TEMPLATES_OR_OFFBOARD_TEMPLATES) && $IF_USER_HAS_ACCESS_TO_ONBOARD_TEMPLATES_OR_OFFBOARD_TEMPLATES}[CONTENT]{/if}',
                         ),
                     ),
                 ),
