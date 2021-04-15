@@ -22,7 +22,7 @@ This repository contains a source code of MintHCM system.
 
 ## Installation 🧩
 
-The installation process is described on a official wiki [link](https://wiki.minthcm.org/index.php?title=Process:Installation_guide).
+The installation process is described on our [official wiki](https://wiki.minthcm.org/index.php?title=Process:Installation_guide).
 
 ## Community and Contributions 🤝
 
