@@ -88,7 +88,6 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
 
         $query = "SELECT COUNT(users.id) as 'days',users.id FROM users LEFT JOIN workschedules ON workschedules.assigned_user_id=users.id  AND " . $days_where . " WHERE users.status='Active' GROUP BY users.id HAVING days<" . self::PLAN_FOR_DAYS;
         $sql_result = $db->query($query);
-        error_log($sql_result);
         $return_data = array();
         while ($return_data[] = $db->fetchByAssoc($sql_result));
         return $return_data;

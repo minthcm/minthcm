@@ -93,8 +93,8 @@ $viewdefs[$module_name]['DetailView'] = array(
       'lbl_editview_panel1' =>
       array(
          array(
+            'employee_name',
             'assigned_user_name',
-            '',
          ),
          array(
             array(

@@ -175,6 +175,11 @@ class SugarWidgetSubPanelTopSelectButton extends SugarWidgetSubPanelTopButton {
       }
       //acl_roles_users_selectuser_button
 
+    if ($this->module_name == 'SecurityGroups')
+    {
+        $initial_filter = '&group_type_advanced[]=business_unit&group_type_advanced[]=department&group_type_advanced[]=team&group_type_advanced[]=other&group_type_advanced[]=standard';
+    }
+
       $json_encoded_php_array = $this->_create_json_encoded_popup_request($popup_request_data);
       return ' <input type="button" name="' . $this->getWidgetId() . '" id="' . $this->getWidgetId() . '" class="button"' . "\n"
          . ' title="' . $this->title . '"'

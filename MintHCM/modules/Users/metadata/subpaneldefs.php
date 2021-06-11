@@ -45,6 +45,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+ 
 $layout_defs['Users'] = array(
    // default subpanel provided by this SugarBean
    'subpanel_setup' => array(
@@ -58,6 +59,16 @@ $layout_defs['Users'] = array(
          'get_subpanel_data' => 'aclroles',
          'add_subpanel_data' => 'aclroles',
       ),
+      'onboardingoffboardingelements' => array(
+         'order' => 100,
+         'module' => 'OnboardingOffboardingElements',
+         'subpanel_name' => 'for_Users',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_USERS_ONBOARDINGOFFBOARDINGELEMENTS',
+         'get_subpanel_data' => 'onboardingoffboardingelements',
+         'top_buttons' => array(),
+      )
    ),
    'default_subpanel_define' => array(
       'subpanel_title' => 'LBL_DEFAULT_SUBPANEL_TITLE',
@@ -191,17 +202,3 @@ if ( is_admin($current_user) ) {
    $layout_defs['Users']['subpanel_setup']['securitygroups']['top_buttons'] = array();
 }
 
-$layout_defs['Users'] = array(
-   'subpanel_setup' => array(
-      'onboardingoffboardingelements' => array(
-         'order' => 100,
-         'module' => 'OnboardingOffboardingElements',
-         'subpanel_name' => 'for_Users',
-         'sort_order' => 'asc',
-         'sort_by' => 'id',
-         'title_key' => 'LBL_USERS_ONBOARDINGOFFBOARDINGELEMENTS',
-         'get_subpanel_data' => 'onboardingoffboardingelements',
-         'top_buttons' => array(),
-      )
-   )
-);

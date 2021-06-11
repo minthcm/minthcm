@@ -75,7 +75,8 @@ $vardefs = array(
             'table' => 'users',
             'id_name' => 'employee_id',
             'module' => 'Employees',
-            'duplicate_merge' => 'disabled',
+         'duplicate_merge' => 'disabled',
+         'join_name' => 'employee_related',
         ),
         'employee_link' => array(
             'name' => 'employee_link',

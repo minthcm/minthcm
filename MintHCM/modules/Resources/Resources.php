@@ -78,8 +78,41 @@ class Resources extends Basic {
       }
       return false;
    }
-
+   public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
+   {
+      switch (strtolower($view)) {
+         case 'edit':
+            break;
+         case 'editview':
+            break;
+         case 'delete':
+             if ($this->roomRelationshipExists()) {
+                 return false;
+             }
+             break;
+         default:
+             break;
+     }
+     return true;
+   }
+   protected function roomRelationshipExists()
+   {
+      $this->load_relationship('rooms_resources');
+      if(!empty($this->rooms_resources->getBeans()))
+         return true;
+      else
+         return false;
+   }
    protected function postSave() {
+      $this->load_relationship('rooms_resources');
+      $rooms = $this->rooms_resources->getBeans();
+      if(!empty($rooms)){
+         $room=end($rooms);
+         if($room->name!=$this->name){
+            $room->name=$this->name;
+            $room->save();
+         }
+      }
       $rf = new ResourcesFeed();
       $rf->pushFeed($this, null, null);
    }

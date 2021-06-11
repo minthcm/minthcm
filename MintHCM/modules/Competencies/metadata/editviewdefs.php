@@ -70,9 +70,10 @@ array(
             'default' => array(
                 0 => array(
                     0 => 'name',
+                    'competencies_type',
                 ),
                 1 => array(
-                    'competencies_type',
+                    'employee_name',
                     'assigned_user_name',
                 ),
                 2 => array(

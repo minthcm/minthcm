@@ -112,6 +112,7 @@ $viewdefs[$module_name] = array(
             ),
             'LBL_PANEL_ASSIGNMENT' => array(
                 array(
+                    'employee_name',
                     'assigned_user_name',
                 ),
                 array(

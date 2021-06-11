@@ -65,7 +65,7 @@ class PrivateGroup extends SecurityGroup {
 
    public function create() {
       $this->security_group = BeanFactory::newBean(self::SECURITY_GROUPS_MODULE_NAME);
-      $this->security_group->name = $this->user->last_name . ' ' . $this->user->first_name . ' - Private Group';
+      $this->security_group->name = $this->user->first_name . ' ' . $this->user->last_name . ' - Private Group';
       $this->security_group->group_type = 'private';
       $this->security_group->assigned_user_id = $this->user->id;
       $this->security_group->save();

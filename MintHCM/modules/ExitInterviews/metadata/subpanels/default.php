@@ -88,6 +88,11 @@ $subpanel_layout = array(
          'width' => '10%',
          'default' => true,
       ),
+      'assigned_user_name' =>array(
+         'vname' => 'LBL_ASSIGNED_TO_NAME',
+         'default' => true,
+         'width' => '10%',
+   ),
       'edit_button' =>
       array(
          'vname' => 'LBL_EDIT_BUTTON',

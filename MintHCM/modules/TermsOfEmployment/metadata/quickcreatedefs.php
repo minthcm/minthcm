@@ -63,6 +63,10 @@ $viewdefs[$module_name]['QuickCreate'] = array(
          ),
          array(
             'date_of_signing',
+            '',
+         ),
+         array(
+            'employee_name',
             'assigned_user_name',
          ),
       ),

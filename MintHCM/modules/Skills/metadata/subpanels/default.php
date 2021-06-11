@@ -28,6 +28,11 @@ $subpanel_layout = array(
             'widget_class' => 'SubPanelDetailViewLink',
             'target_module' => 'Users',
             'target_record_key' => 'assigned_user_id',
+        ),        
+        'employee_name' => array(
+            'vname' => 'LBL_EMPLOYEE_NAME',
+            'widget_class' => 'SubPanelDetailViewLink',
+            'width' => '20%',
         ),
         'date_entered' => array(
             'type' => 'datetime',

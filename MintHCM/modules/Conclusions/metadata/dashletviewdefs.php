@@ -105,6 +105,11 @@ $dashletData['ConclusionsDashlet']['columns'] = array(
       'label' => 'LBL_LIST_ASSIGNED_USER',
       'default' => true
    ),
+   'employee_name' => array(
+      'label' => 'LBL_EMPLOYEE_NAME',
+      'name' => 'employee_name',
+      'width' => '8%',
+   ),
    'meeting_name' => array(
       'name' => 'meeting_name',
       'type' => 'relate',

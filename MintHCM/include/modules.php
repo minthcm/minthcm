@@ -201,6 +201,7 @@ $beanFiles['Role'] = 'modules/Roles/Role.php';
 $beanFiles['Document'] = 'modules/Documents/Document.php';
 $beanFiles['DocumentRevision'] = 'modules/DocumentRevisions/DocumentRevision.php';
 $beanFiles['FieldsMetaData'] = 'modules/DynamicFields/FieldsMetaData.php';
+
 //$beanFiles['Audit']           = 'modules/Audit/Audit.php';
 
 // deferred
@@ -558,6 +559,11 @@ $beanFiles['Costs'] = 'modules/Costs/Costs.php';
 $beanFiles['Delegations'] = 'modules/Delegations/Delegations.php';
 $beanFiles['DelegationsLocale'] = 'modules/DelegationsLocale/DelegationsLocale.php';
 $beanFiles['Ideas'] = 'modules/Ideas/Ideas.php';
+
+$beanFiles['Rooms'] = 'modules/Rooms/Rooms.php';
+$beanFiles['Allocations'] = 'modules/Allocations/Allocations.php';
+$beanFiles['Workplaces'] = 'modules/Workplaces/Workplaces.php';
+
 $beanFiles['EmployeeInteractionTracking'] = 'modules/EmployeeInteractionTracking/EmployeeInteractionTracking.php';
 $beanFiles['Positions'] = 'modules/Positions/Positions.php';
 $beanFiles['Recruitments'] = 'modules/Recruitments/Recruitments.php';
@@ -608,6 +614,9 @@ $beanFiles['SalaryRanges'] = 'modules/SalaryRanges/SalaryRanges.php';
 $beanFiles['EmployeeCertificates'] = 'modules/EmployeeCertificates/EmployeeCertificates.php';
 $beanFiles['Dictionaries'] = 'modules/Dictionaries/Dictionaries.php';
 //
+$beanFiles['Comments'] = 'modules/Comments/Comments.php';
+$beanFiles['Reactions'] = 'modules/Reactions/Reactions.php';
+//
 
 $beanList['Skills'] = 'Skills';
 $beanList['Attitudes'] = 'Attitudes';
@@ -624,6 +633,9 @@ $beanList['Costs'] = 'Costs';
 $beanList['Delegations'] = 'Delegations';
 $beanList['DelegationsLocale'] = 'DelegationsLocale';
 $beanList['Ideas'] = 'Ideas';
+$beanList['Rooms'] = 'Rooms';
+$beanList['Allocations'] = 'Allocations';
+$beanList['Workplaces'] = 'Workplaces';
 $beanList['EmployeeInteractionTracking'] = 'EmployeeInteractionTracking';
 $beanList['Positions'] = 'Positions';
 $beanList['Recruitments'] = 'Recruitments';
@@ -674,17 +686,21 @@ $beanList['SalaryRanges'] = 'SalaryRanges';
 $beanList['EmployeeCertificates'] = 'EmployeeCertificates';
 $beanList['Dictionaries'] = 'Dictionaries';
 //
+$beanList['Comments'] = 'Comments';
+$beanList['Reactions'] = 'Reactions';
+//
 $moduleList[] = 'ReservationsCalendar';
 $moduleList[] = 'ResponsibilityActivities';
 $moduleList[] = 'Improvements';
 $moduleList[] = 'Conclusions';
-$moduleList[] = 'CompetencyRatings';
-$moduleList[] = 'SpentTime';
 $moduleList[] = 'Problems';
 $moduleList[] = 'Candidates';
 $moduleList[] = 'Candidatures';
 $moduleList[] = 'Delegations';
 $moduleList[] = 'Ideas';
+$moduleList[] = 'Rooms';
+$moduleList[] = 'Allocations';
+$moduleList[] = 'Workplaces';
 $moduleList[] = 'EmployeeInteractionTracking';
 $moduleList[] = 'Positions';
 $moduleList[] = 'Recruitments';

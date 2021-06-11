@@ -139,5 +139,12 @@ $popupMeta = array(
             'id' => 'SECURITYGROUP_UNIT_ID',
             'default' => false,
         ),
+        'EMPLOYEE_NAME' => array(
+            'width' => '9%',
+            'label' => 'LBL_EMPLOYEE_NAME',
+            'module' => 'Employees',
+            'id' => 'EMPLOYEE_ID',
+            'default' => true,
+        ),
     ),
 );

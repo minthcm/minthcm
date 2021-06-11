@@ -75,7 +75,7 @@ $dashletData['ApplicationsDashlet']['columns'] = array(
       'width' => '15%',
       'label' => 'LBL_STATUS',
       'name' => 'status',
-      'default' => false,
+      'default' => true,
    ),
    'type' =>
    array(
@@ -83,7 +83,7 @@ $dashletData['ApplicationsDashlet']['columns'] = array(
       'width' => '15%',
       'label' => 'LBL_TYPE',
       'name' => 'type',
-      'default' => false,
+      'default' => true,
    ),
    'employee_name' => array(
       'width' => '15',

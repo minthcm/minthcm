@@ -89,6 +89,20 @@ $searchdefs[$module_name] = array(
             'default' => true,
             'name' => 'date_modified',
          ),
+         'employee_id' => array(
+            'name' => 'employee_id',
+            'label' => 'LBL_EMPLOYEE_NAME',
+            'type' => 'enum',
+            'function' => array(
+                'name' => 'get_user_array',
+                'params' => array(
+                    false,
+                    '',
+                ),
+            ),
+            'default' => true,
+            'width' => '10%',
+        ),
          'created_by' =>
          array(
             'type' => 'assigned_user_name',

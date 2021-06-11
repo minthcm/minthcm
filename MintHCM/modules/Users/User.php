@@ -2432,7 +2432,7 @@ EOQ;
             $private_group = new PrivateGroup($user);
             $private_group->delete();
         }
-        parent::mark_deleted($id);
+       parent::mark_deleted($id);
     }
 
     public function getUserSupervisiorID($id)

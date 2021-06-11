@@ -15,6 +15,13 @@ array(
         'id' => 'ASSIGNED_USER_ID',
         'default' => true,
     ),
+    'EMPLOYEE_NAME' => array(
+        'width' => '9%',
+        'label' => 'LBL_EMPLOYEE_NAME',
+        'module' => 'Employees',
+        'id' => 'EMPLOYEE_ID',
+        'default' => true,
+    ),
     'DESCRIPTION' => array(
         'type' => 'text',
         'label' => 'LBL_DESCRIPTION',

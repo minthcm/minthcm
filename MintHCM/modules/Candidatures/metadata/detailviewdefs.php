@@ -210,6 +210,7 @@ $viewdefs[$module_name]['DetailView'] = array(
       ),
       'LBL_SHOW_MORE_INFORMATION' => array(
          array(
+            'employee_name',
             'assigned_user_name',
          ),
          array(

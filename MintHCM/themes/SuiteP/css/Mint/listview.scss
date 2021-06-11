@@ -140,9 +140,13 @@ div.list-view-rounded-corners > table, tr.pagination-unique {
 }
 
 .chooserList .ui-sortable-handle {
-    border: 2px solid #b2b4b3;
-    border-radius: 10px;
-    padding: 5px;
-    margin-bottom: 5px;
-    background-color: #CCCCCC;
+    border-radius: 3px;
+    padding: 9px;
+    margin-bottom: 8px;
+    background-color: #00BF93;
+    color: white;
+    box-shadow: 0 8px 6px -6px #ccc; 
+  }
+div.chooserContent > .ui-sortable {
+    min-height: 40px;
 }

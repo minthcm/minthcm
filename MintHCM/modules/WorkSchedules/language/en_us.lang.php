@@ -45,6 +45,7 @@
 
 $mod_strings = array(
     'ERR_CLOSE_PLAN' => 'You cannot approve this plan, because there are gaps between Spent times or its time frames do not coincide with related working times',
+    'ERR_CLOSE_PLAN_WORK' => 'You cannot approve this plan, because workplace has not been selected.',
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
@@ -135,4 +136,9 @@ $mod_strings = array(
     'LBL_APPROVED_ALERT' => "Note! Your work plan %s has not been approved by you.",
     'LBL_LIST_TITLE' => 'Work Schedule',
     'LBL_SPENT_TIME_CATEGORY' => 'Category',
+    'LBL_RELATIONSHIP_WORKPLACE_NAME' => 'Workplace',
+    'LBL_RELATIONSHIP_WORKPLACE_ID' => 'Workplace ID',
+    'LBL_ERR_STATUS_NOT_ACTIVE' => 'Selected Workplace must be active.',
+    'LBL_ERR_WORKPLACE_NOT_ACTIVE' => 'Selected Workplace does not have valid allocation for you.',
+    'LBL_ERR_CANNOT_CHANGE_WORK_SCHEDULE_STATUS' => 'You cannot change status to "Closed" because there are gaps between spent times or his time frames do not coincide with working times',
 );

@@ -95,14 +95,16 @@ $dashletData['DelegationsDashlet']['columns'] = array(
          'obtained_sum',
       ),
    ),
+   'start_date' => array(
+    'type' => 'datetimecombo',
+    'label' => 'LBL_START_DATE',
+    'width' => '10%',
+    'default' => true,
+   ),
    'end_date' => array(
       'type' => 'datetimecombo',
       'label' => 'LBL_END_DATE',
       'width' => '10%',
-   ),
-   'start_date' => array(
-      'type' => 'datetimecombo',
-      'label' => 'LBL_START_DATE',
-      'width' => '10%',
+      'default' => true,
    ),
 );

@@ -1,75 +1,30 @@
 <?php
-
-/**
- *
- * SugarCRM Community Edition is a customer relationship management program developed by
- * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
- *
- * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2019 MintHCM
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Affero General Public License version 3 as published by the
- * Free Software Foundation with the addition of the following permission added
- * to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED WORK
- * IN WHICH THE COPYRIGHT IS OWNED BY SUGARCRM, SUGARCRM DISCLAIMS THE WARRANTY
- * OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Affero General Public License along with
- * this program; if not, see http://www.gnu.org/licenses or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301 USA.
- *
- * You can contact SugarCRM, Inc. headquarters at 10050 North Wolfe Road,
- * SW2-130, Cupertino, CA 95014, USA. or at email address contact@sugarcrm.com.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
- * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
- */
-
 $module_name = 'WorkSchedules';
-$viewdefs[$module_name] = array(
+$viewdefs[$module_name] =
+array(
     'DetailView' => array(
         'templateMeta' => array(
             'form' => array(
                 'buttons' => array(
-                    'EDIT',
-                    'DUPLICATE',
-                    'DELETE',
-                    'FIND_DUPLICATES',
-                    array(
-                        'customCode' => '{include file="modules/WorkSchedules/tpls/CloseButton.tpl"}'
-                        . '{include file="modules/WorkSchedules/tpls/AcceptWorkPlanButton.tpl"}'
-                        . '{include file="modules/WorkSchedules/tpls/UndoAcceptanceButton.tpl"}',
+                    0 => 'EDIT',
+                    1 => 'DUPLICATE',
+                    2 => 'DELETE',
+                    3 => 'FIND_DUPLICATES',
+                    4 => array(
+                        'customCode' => '{include file="modules/WorkSchedules/tpls/CloseButton.tpl"}{include file="modules/WorkSchedules/tpls/AcceptWorkPlanButton.tpl"}{include file="modules/WorkSchedules/tpls/UndoAcceptanceButton.tpl"}',
                     ),
                 ),
                 'hidden' => array(
-                    '<input type="hidden" name="current_user_is_admin" id="current_user_is_admin" value="{$CURRENT_USER_IS_ADMIN}">',
+                    0 => '<input type="hidden" name="current_user_is_admin" id="current_user_is_admin" value="{$CURRENT_USER_IS_ADMIN}">',
                 ),
             ),
             'maxColumns' => '2',
             'widths' => array(
-                array(
+                0 => array(
                     'label' => '10',
                     'field' => '30',
                 ),
-                array(
+                1 => array(
                     'label' => '10',
                     'field' => '30',
                 ),
@@ -80,102 +35,110 @@ $viewdefs[$module_name] = array(
                     'newTab' => true,
                     'panelDefault' => 'expanded',
                 ),
+                '' => array(
+                    'newTab' => false,
+                    'panelDefault' => 'expanded',
+                ),
                 'LBL_PANEL_ASSIGNMENT' => array(
                     'newTab' => true,
                     'panelDefault' => 'expanded',
                 ),
             ),
             'includes' => array(
-                array(
+                0 => array(
                     'file' => 'include/javascript/moment.min.js',
                 ),
-                array(
+                1 => array(
                     'file' => 'modules/WorkSchedules/js/detail.js',
                 ),
-                array(
+                2 => array(
                     'file' => 'modules/WorkSchedules/tpls/TimeTrackingPane.js',
                 ),
             ),
         ),
         'panels' => array(
             'default' => array(
-                array(
-                    'name',
-                    'assigned_user_name',
+                0 => array(
+                    0 => 'name',
+                    1 => 'assigned_user_name',
                 ),
-                array(
-                    array(
+                1 => array(
+                    0 => array(
                         'name' => 'type',
                         'studio' => 'visible',
                         'label' => 'LBL_TYPE',
                     ),
-                    array(
+                    1 => array(
                         'name' => 'status',
                         'studio' => 'visible',
                         'label' => 'LBL_STATUS',
                     ),
                 ),
-                array(
-                    array(
+                2 => array(
+                    0 => array(
                         'name' => 'comments',
                         'label' => 'LBL_COMMENTS',
                     ),
-                    array(
+                    1 => array(
                         'name' => 'occasional_leave_type',
                         'label' => 'LBL_OCCASIONAL_LEAVE_TYPE',
                     ),
                 ),
-                array(
-                    array(
+                3 => array(
+                    0 => array(
                         'name' => 'date_start',
                         'label' => 'LBL_DATE_START',
                     ),
-                    array(
+                    1 => array(
                         'name' => 'date_end',
                         'label' => 'LBL_DATE_END',
                     ),
                 ),
-                array(
-                    'spent_time',
-                    'spent_time_settlement',
+                4 => array(
+                    0 => 'spent_time',
+                    1 => '',
                 ),
-                array(
-                    array(
-                        'label' => 'LBL_DURATION',
-                        'customCode' => '{$fields.duration_hours.value} <span class="dateFormat">{$MOD.LBL_HOURS_HOURS}</span>&nbsp;{$fields.duration_minutes.value} <span class="dateFormat">{$MOD.LBL_HOURS_MINUTES}</span>',
-                    ),
-                    'delegation_name',
+                5 => array(
+                    0 => 'spent_time_settlement',
+                    1 => 'delegation_name',
                 ),
-                array(
-                    array(
+                6 => array(
+                    0 => array(
                         'name' => 'supervisor_acceptance',
                         'studio' => 'visible',
                         'label' => 'LBL_SUPERVISOR_ACCEPTANCE',
                     ),
+                    1 => '',
+                ),
+                7 => array(
+                    0 => array(
+                        'name' => 'workplace_name',
+                        'label' => 'LBL_RELATIONSHIP_WORKPLACE_NAME',
+                    ),
                     '',
                 ),
-                array(
-                    'delegation_duration',
+                8 => array(
+                    0 => 'delegation_duration',
                 ),
-                array(
-                    'description',
+                9 => array(
+                    0 => 'description',
                 ),
             ),
             '' => array(
-                array(
-                    array(
+                0 => array(
+                    0 => array(
                         'name' => 'time_tracking_pane',
                         'customCode' => '{include file="modules/WorkSchedules/tpls/TimeTrackingPane.tpl"}',
                     ),
                 ),
             ),
             'LBL_PANEL_ASSIGNMENT' => array(
-                array(
-                    array(
+                0 => array(
+                    0 => array(
                         'name' => 'date_entered',
                         'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
                     ),
-                    array(
+                    1 => array(
                         'name' => 'date_modified',
                         'label' => 'LBL_DATE_MODIFIED',
                         'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',

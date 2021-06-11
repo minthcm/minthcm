@@ -76,7 +76,13 @@
                     {{/foreach}}
                     {{/if}}
                     {if !$config.enable_action_menu}
+                    {* MintHCM #81007 START*}
+                    {if empty($smarty.request.minthcm_popup)}
+                    {* MintHCM #81007 END*}
                         {{include file="themes/SuiteP/include/DetailView/actions_buttons.tpl"}}
+                    {* MintHCM #81007 START*}
+                    {/if}
+                    {* MintHCM #81007 END*}
                     {/if}
                 </form>
 

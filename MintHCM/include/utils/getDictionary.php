@@ -10,6 +10,7 @@ function getDictionary($param, $name, $value, $view, $additional_params = '')
     if(!empty($additional_params) && is_string($additional_params)){
         $sql .= " AND list_type LIKE '{$additional_params}'";
     }
+	$sql .= " ORDER BY name";
     $types = array();
     $types[''] = '';
     $result = $db->query($sql);

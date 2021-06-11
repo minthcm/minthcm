@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,10 +34,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 (function($){$.fn.EmailsComposeViewModal=function(options){"use strict";var self=this;var opts=$.extend({},$.fn.EmailsComposeViewModal.defaults,options);self.handleClick=function(e){"use strict";var self=this;self.emailComposeView=null;var opts=$.extend({},$.fn.EmailsComposeViewModal.defaults);var composeBox=$('<div></div>').appendTo(opts.contentSelector);composeBox.messageBox({"showHeader":false,"showFooter":false,"size":'lg'});composeBox.setBody('<div class="email-in-progress"><img src="themes/'+SUGAR.themes.theme_name+'/images/loading.gif"></div>');composeBox.show();$.ajax({type:"GET",cache:false,url:'index.php?module=Emails&action=ComposeView&in_popup=1'}).done(function(data){if(data.length===0){console.error("Unable to display ComposeView");composeBox.setBody(SUGAR.language.translate('','ERR_AJAX_LOAD'));return;}

@@ -261,7 +261,9 @@ Datetimecombo.prototype.update = function ( updateListeners ) {
    if ( trim( newdate ) == "" + this.timeseparator + "" ) {
       newdate = '';
    }
-   YAHOO.util.Selector.query( 'input#' + this.fieldname )[0].value = newdate;
+//Mint Start #67794
+   YAHOO.util.Selector.query( 'input#' + this.fieldname )[YAHOO.util.Selector.query( 'input#' + this.fieldname ).length -1].value = newdate;
+//// Mint end #67794
    //Check for onchange actions and fire them
    if ( updateListeners )
       SUGAR.util.callOnChangeListers( this.fieldname );

@@ -74,8 +74,8 @@ $viewdefs[$module_name] = array(
                     'position_name',
                 ),
                 array(
+                    'employee_name',
                     'assigned_user_name',
-                    '',
                 ),
                 array(
                     'description',

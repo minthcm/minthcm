@@ -23,7 +23,7 @@
         <input type="text" name="<%= relate_field_name %>_name" class="vt_formulaSelector sqsEnabled yui-ac-input" tabindex="" id="<%= relate_field_name %>_name" size="" value="<%= employee_name %>" title="" autocomplete="off">
         <input class="vt_formulaSelector" type="hidden" name="<%= relate_field_name %>_id" id="<%= relate_field_name %>_id" value="<%= employee_id %>">
         <span class="id-ff multiple">
-            <button type="button" name="btn_<%= relate_field_name %>_name" id="btn_<%= relate_field_name %>_name" tabindex="" title="Wybierz użytkownika" class="button firstChild" value="Wybierz użytkownika" onclick="open_popup( '<%= relate_field_target_module %>', 600, 400, '', true, false,
+            <button type="button" name="btn_<%= relate_field_name %>_name" id="btn_<%= relate_field_name %>_name" tabindex="" title="Wybierz użytkownika" class="button firstChild" value="Wybierz użytkownika" onclick="open_popup( '<%= relate_field_target_module %>', 600, 400, '&employee_status_advanced[]=Active', true, false,
                     {&quot;call_back_function&quot;:&quot;viewTools.form.function.set_return&quot;,&quot;form_name&quot;:&quot;<%= form_name %>&quot;,&quot;field_to_name_array&quot;:{&quot;id&quot;:&quot;<%= relate_field_name %>_id&quot;,&quot;name&quot;:&quot;<%= relate_field_name %>_name&quot;}}, 'single', true );">
                 <img src="themes/SuiteP/images/id-ff-select.png">
             </button>

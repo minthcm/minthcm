@@ -154,6 +154,8 @@ class GenerateOnboardingOffboarding
         $bean->parent_type = $this->process->module_name;
         $bean->parent_id = $this->process->id;
         $bean->save();
+        $this->addSecurityGroupToRecord($bean,
+        $this->user_scheduled_onboarding->getUserPrivateGroup());
         return $bean;
     }
 
@@ -176,6 +178,8 @@ class GenerateOnboardingOffboarding
         $bean->parent_type = $this->process->module_name;
         $bean->parent_id = $this->process->id;
         $bean->save();
+        $this->addSecurityGroupToRecord($bean,
+        $this->user_scheduled_onboarding->getUserPrivateGroup());
         return $bean;
     }
 

@@ -75,6 +75,7 @@ $searchFields['Candidatures'] = array(
          'id'
       )
    ),
+   'employee_id' => array('query_type' => 'default'),
    'range_date_entered' => array(
       'query_type' => 'default',
       'enable_range_search' => true,

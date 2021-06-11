@@ -90,4 +90,7 @@ $mod_strings = array(
    'LBL_SHOW_RESERVATION_CALENDAR_BTN' => 'Show Reservation Calendar',
    'LBL_MEETINGS' => 'Meetings',
    'LBL_CALLS' => 'Calls',
+   'LBL_ROOM_NAME' => 'Room',
+   'LBL_ROOM_ID' => 'Room ID',
+   'LBL_ROOMS_RESOURCES_TITLE' => 'Rooms',
 );

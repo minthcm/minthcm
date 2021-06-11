@@ -94,4 +94,9 @@ $dashletData['CandidaturesDashlet']['columns'] = array(
    'assigned_user_name' => array(
       'label' => 'LBL_LIST_ASSIGNED_USER'
    ),
+   'employee_name' => array(
+      'label' => 'LBL_EMPLOYEE_NAME',
+      'name' => 'employee_name',
+      'width' => '8%',
+   ),
 );

@@ -57,6 +57,7 @@ $searchFields[$module_name] = array(
         'type' => 'bool',
     ),
     'assigned_user_id' => array('query_type' => 'default'),
+    'employee_id' => array('query_type' => 'default'),
     'contract_id' => array('query_type' => 'default'),
     'contracted_employee' => array(
         'query_type' => 'default',

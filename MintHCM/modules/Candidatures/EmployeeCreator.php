@@ -90,7 +90,6 @@ class EmployeeCreator
     {
         $employee_bean = BeanFactory::newBean(self::EMPLOYEES_MODULE_NAME);
 
-        $employee_bean->user_name = $this->candidate_bean->first_name;
         $employee_bean->first_name = $this->candidate_bean->first_name;
         $employee_bean->last_name = $this->candidate_bean->last_name;
         $employee_bean->position_id = $this->position_bean->id;
@@ -110,10 +109,11 @@ class EmployeeCreator
 
     protected function addCandidateRelationToUser(Employee $employee_bean)
     {
+        $relation_name = self::CANDIDATES_USERS_RELATION;
+
         $user_bean = BeanFactory::getBean(self::USERS_MODULE_NAME, $employee_bean->id);
-        $user_bean->load_relationship(self::CANDIDATES_USERS_RELATION);
-        $asd = self::CANDIDATES_USERS_RELATION;
-        $user_bean->candidates->add($this->candidate_bean);
+        $user_bean->load_relationship($relation_name);
+        $user_bean->$relation_name->add($this->candidate_bean);
     }
 
     protected function updateExistingEmployeeRecord(): Employee
@@ -150,7 +150,7 @@ class EmployeeCreator
         if (!is_null($this->latest_appraisal_bean) && !empty($this->latest_appraisal_items_beans)) {
 
             foreach ($this->latest_appraisal_items_beans as $one_appraisal_item_bean) {
-                if (!is_null($one_appraisal_item_bean->id) && $one_appraisal_item_bean->parent_type == self::COMPETENCIES_MODULE_NAME) {
+                if (!is_null($one_appraisal_item_bean->id) && self::COMPETENCIES_MODULE_NAME == $one_appraisal_item_bean->parent_type) {
                     $create_competency_rating = new CompetencyRatingCreator($one_appraisal_item_bean, $related_employee_bean);
                     $create_competency_rating->createOrUpdateRecords();
                 }

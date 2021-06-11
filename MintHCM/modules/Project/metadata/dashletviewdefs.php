@@ -26,10 +26,10 @@ $dashletData['ProjectDashlet']['columns'] = array (
   'status' => 
   array (
     'type' => 'enum',
-    'default' => true,
     'label' => 'LBL_STATUS',
     'width' => '10%',
     'name' => 'status',
+    'default' => true,
   ),
   'estimated_start_date' => 
   array (
