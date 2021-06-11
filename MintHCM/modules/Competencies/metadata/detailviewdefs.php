@@ -91,8 +91,8 @@ array(
             ),
             'LBL_PANEL_ASSIGNMENT' => array(
                 0 => array(
-                    0 => 'assigned_user_name',
-                    1 => '',
+                    0 => 'employee_name',
+                    1 => 'assigned_user_name',
                 ),
                 1 => array(
                     0 => array(

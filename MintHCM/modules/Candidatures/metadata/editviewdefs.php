@@ -136,6 +136,7 @@ $viewdefs[$module_name]['EditView'] = array(
       ),
       'LBL_SHOW_MORE_INFORMATION' => array(
          array(
+            'employee_name',
             'assigned_user_name',
          ),
          array(

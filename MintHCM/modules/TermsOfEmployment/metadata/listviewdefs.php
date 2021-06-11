@@ -49,55 +49,62 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $module_name = 'TermsOfEmployment';
 $listViewDefs[$module_name] = array(
     'NAME' => array(
-        'width' => '25',
+        'width' => '25%',
         'label' => 'LBL_NAME',
         'default' => true,
         'link' => true,
     ),
     'CONTRACT_NAME' => array(
-        'width' => '20',
+        'width' => '20%',
         'label' => 'LBL_CONTRACT_NAME',
         'default' => true,
         'module' => 'Contracts',
         'id' => 'CONTRACT_ID',
     ),
     'POSITION_NAME' => array(
-        'width' => '20',
+        'width' => '20%',
         'label' => 'LBL_POSITION_NAME',
         'default' => false,
     ),
     'TERM_STARTING_DATE' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_TERM_STARTING_DATE',
         'default' => true,
     ),
     'TERM_ENDING_DATE' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_TERM_ENDING_DATE',
         'default' => true,
     ),
     'DATE_OF_SIGNING' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_DATE_OF_SIGNING',
         'default' => true,
     ),
     'GROSS' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_GROSS',
         'default' => true,
     ),
     'NET' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_NET',
         'default' => true,
     ),
     'EMPLOYER_COST' => array(
-        'width' => '15',
+        'width' => '15%',
         'label' => 'LBL_EMPLOYER_COST',
         'default' => true,
     ),
+    'EMPLOYEE_NAME' => array(
+        'width' => '9%',
+        'label' => 'LBL_EMPLOYEE_NAME',
+        'module' => 'Employees',
+        'id' => 'EMPLOYEE_ID',
+        'default' => true,
+    ),
     'ASSIGNED_USER_NAME' => array(
-        'width' => '9',
+        'width' => '9%',
         'label' => 'LBL_ASSIGNED_TO_NAME',
         'module' => 'Employees',
         'id' => 'ASSIGNED_USER_ID',

@@ -27,16 +27,20 @@ array(
             'default' => array(
                 0 => array(
                     0 => 'name',
-                    1 => 'assigned_user_name',
+                    1 => '',
                 ),
                 1 => array(
+                    0 => 'employee_name',
+                    1 => 'assigned_user_name',
+                ),
+                2 => array(
                     0 => array(
                         'name' => 'description',
                         'comment' => 'Full text of the note',
                         'label' => 'LBL_DESCRIPTION',
                     ),
                 ),
-                2 => array(
+                3 => array(
                     0 => array(
                         'name' => 'date_entered',
                         'comment' => 'Date record created',

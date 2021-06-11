@@ -439,7 +439,7 @@ FROM prospect_lists_prospects plp
 
 	 function bean_implements($interface){
 		switch($interface){
-			case 'ACL':return false;
+			case 'ACL':return true;
 		}
 		return false;
 	}

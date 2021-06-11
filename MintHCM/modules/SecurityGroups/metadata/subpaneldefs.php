@@ -103,6 +103,17 @@ $layout_defs['SecurityGroups'] = array(
       ),
    ),
 );
+$layout_defs["SecurityGroups"]["subpanel_setup"]['securitygroups_rooms'] = array (
+   'order' => 100,
+   'module' => 'Rooms',
+   'subpanel_name' => 'default',
+   'sort_order' => 'asc',
+   'sort_by' => 'id',
+   'title_key' => 'LBL_RELATIONSHIP_ROOMS_NAME',
+   'get_subpanel_data' => 'securitygroups_rooms',             
+   'top_buttons' => array (
+   ),
+);
 $layout_defs['SecurityGroupRoles'] = array(
    // sets up which panels to show, in which order, and with what linked_fields
    'subpanel_setup' => array(

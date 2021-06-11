@@ -146,7 +146,9 @@ function populateFromRow(&$focus, $row)
     // Also add custom fields
     $sfh = new SugarFieldHandler();
     foreach ($focus->field_defs as $fieldName => $field) {
-        if (isset($field['source']) && $field['source'] == 'custom_fields') {
+        if (
+            (isset($field['source']) && $field['source'] == 'custom_fields')
+            || $fieldName == 'photo') {
             $type = !empty($field['custom_type']) ? $field['custom_type'] : $field['type'];
             $sf = $sfh->getSugarField($type);
             if ($sf != null) {

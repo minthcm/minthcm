@@ -168,6 +168,16 @@ class SugarFieldRelate extends SugarFieldBase {
       }
       $json = getJSONobj();
       $displayParams['popupData'] = '{literal}' . $json->encode($popup_request_data) . '{/literal}';
+      if(
+          empty($displayParams['initial_filter'])
+          && "SecurityGroups" == $vardef['module']
+      ){
+        $displayParams['initial_filter'] = '';
+        $group_types = ['business_unit', 'department', 'team', 'other', 'standard'];
+        foreach($group_types as $group_type){
+            $displayParams['initial_filter'] .= "&group_type_advanced[]={$group_type}";
+        }
+      }
       // MintHCM START
       $displayParams['initial_filter'] = '{literal}' . addslashes(trim($json->encode($displayParams['initial_filter'], JSON_HEX_TAG), '"')) . '{/literal}';
       // MintHCM END

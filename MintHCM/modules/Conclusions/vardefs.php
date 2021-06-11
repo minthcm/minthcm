@@ -121,6 +121,6 @@ $dictionary['Conclusions'] = array(
 if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
-VardefManager::createVardef('Conclusions', 'Conclusions', array( 'basic', 'assignable', 'security_groups' ));
+VardefManager::createVardef('Conclusions', 'Conclusions', array( 'basic', 'assignable', 'security_groups', 'employee_related' ));
 
 $dictionary['Conclusions']['fields']['name']['audited'] = true;

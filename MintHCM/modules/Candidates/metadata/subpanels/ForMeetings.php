@@ -84,7 +84,6 @@ $subpanel_layout = array(
       'phone_work' => array(
          'width' => '10%',
          'vname' => 'LBL_WORK_PHONE',
-         'default' => true,
       ),
       'assigned_user_name' => array(
          'link' => true,
@@ -94,7 +93,11 @@ $subpanel_layout = array(
          'widget_class' => 'SubPanelDetailViewLink',
          'module' => 'Users',
          'width' => '10%',
-         'default' => true,
+      ),
+      'employee_name' => array(
+         'vname' => 'LBL_EMPLOYEE_NAME',
+         'widget_class' => 'SubPanelDetailViewLink',
+         'width' => '20%',
       ),
       'email1' => array(
          'name' => 'email1',

@@ -135,4 +135,6 @@ $mod_strings = array(
    'LBL_MEMBERS' => 'Member Units',
    'LBL_POSITIONS_MEMBERSHIP' => 'Member Positions',
    'LBL_EMPLOYEES' => 'Employees',
+
+   'LBL_RELATIONSHIP_ROOMS_NAME' => 'Rooms',
 );

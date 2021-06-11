@@ -3,6 +3,7 @@
 <input type="hidden" name='first_day_of_week' id="first_day_of_week" value='{$firstDayOfWeek}'>
 <input type="hidden" name='current_user_is_admin' id="current_user_is_admin" value='{$current_user_is_admin}'>
 <input type="hidden" name='current_user_id' id="current_user_id" value='{$current_user_id}'>
+<input type="hidden" name='dashlet_id' id="dashlet_id" value='{$id}'>
 <div align="center">
     <div class="TWSDashlet">
         {include file="modules/Home/Dashlets/TodaysWorkScheduleDashlet/Toolbar.tpl"}

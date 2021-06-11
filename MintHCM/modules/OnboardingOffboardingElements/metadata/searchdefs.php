@@ -68,6 +68,20 @@ $searchdefs[$module_name] = array(
             'function' => array( 'name' => 'get_user_array', 'params' => array( false ) ),
             'name' => 'user_id',
          ),
+         'employee_id' => array(
+            'name' => 'employee_id',
+            'label' => 'LBL_EMPLOYEE_NAME',
+            'type' => 'enum',
+            'function' => array(
+                'name' => 'get_user_array',
+                'params' => array(
+                    false,
+                    '',
+                ),
+            ),
+            'default' => true,
+            'width' => '10%',
+        ),
          'kind_of_element' => array(
             'name' => 'kind_of_element',
             'label' => 'LBL_KIND_OF_ELEMENT',

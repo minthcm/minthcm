@@ -152,6 +152,20 @@ $searchdefs[$module_name] = array(
             'width' => '10%',
             'name' => 'task_grade',
          ),
+         'employee_id' => array(
+            'name' => 'employee_id',
+            'label' => 'LBL_EMPLOYEE_NAME',
+            'type' => 'enum',
+            'function' => array(
+                'name' => 'get_user_array',
+                'params' => array(
+                    false,
+                    '',
+                ),
+            ),
+            'default' => true,
+            'width' => '10%',
+        ),
       ),
    ),
 );

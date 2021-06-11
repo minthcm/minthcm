@@ -1154,7 +1154,7 @@ function validate_form( formname, startsWith ) {
 
                                  isError = true;
                                  //jc:#12287 - adding translation for the is not before message
-                                 add_error_style( formname, validate[formname][i][nameIndex], validate[formname][i][msgIndex] + "(" + date1 + ") " + SUGAR.language.get( 'app_strings', 'MSG_IS_NOT_BEFORE' ) + ' ' + date2 );
+                                 add_error_style( formname, validate[formname][i][nameIndex], validate[formname][i][msgIndex] + " (" + date1 + ") " + SUGAR.language.get( 'app_strings', 'MSG_IS_NOT_BEFORE' ) + ' ' + date2 );
                               }
                            }
                         }

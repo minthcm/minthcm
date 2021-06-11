@@ -82,4 +82,4 @@ $dictionary['Attitudes'] = array(
 if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
-VardefManager::createVardef('Attitudes', 'Attitudes', array('basic', 'assignable', 'security_groups'));
+VardefManager::createVardef('Attitudes', 'Attitudes', array('basic', 'assignable', 'security_groups', 'employee_related'));

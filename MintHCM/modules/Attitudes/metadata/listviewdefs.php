@@ -8,6 +8,13 @@ array(
         'default' => true,
         'link' => true,
     ),
+    'EMPLOYEE_NAME' => array(
+        'width' => '9%',
+        'label' => 'LBL_EMPLOYEE_NAME',
+        'module' => 'Employees',
+        'id' => 'EMPLOYEE_ID',
+        'default' => true,
+    ),
     'ASSIGNED_USER_NAME' => array(
         'width' => '9%',
         'label' => 'LBL_ASSIGNED_TO_NAME',

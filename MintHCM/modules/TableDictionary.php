@@ -69,6 +69,8 @@ include "metadata/prospect_list_campaignsMetaData.php";
 include "metadata/prospect_lists_prospectsMetaData.php";
 include "metadata/roles_modulesMetaData.php";
 include "metadata/roles_usersMetaData.php";
+include "metadata/allocations_employeesMetaData.php";
+include "metadata/rooms_resourcesMetaData.php";
 //include("metadata/project_relationMetaData.php");
 include "metadata/outboundEmailMetaData.php";
 include "metadata/addressBookMetaData.php";
@@ -177,6 +179,7 @@ include 'metadata/Skills_CompetenciesMetaData.php';
 include 'metadata/Attitudes_CompetenciesMetaData.php';
 //
 include 'metadata/Appraisals_EmployeesMetaData.php';
+include 'metadata/last_next_contacts_queueMetaData.php';
 if (file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
     include 'custom/application/Ext/TableDictionary/tabledictionary.ext.php';
 }

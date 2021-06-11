@@ -461,7 +461,7 @@ if (!$focus->verify_data()) {
         (isset($_POST['password_change']) && 'true' == $_POST['password_change'])
         && (!isset($_POST['password_change_attempt_made']) || true !== $_POST['password_change_attempt_made'])) {
         $_POST['password_change_attempt_made'] = true;
-        /* eVolpe #74303 END */
+        /*  #74303 END */
         if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
 
             if ($focus->error_string) {

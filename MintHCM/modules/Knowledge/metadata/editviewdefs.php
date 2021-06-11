@@ -27,9 +27,13 @@ array(
             'default' => array(
                 0 => array(
                     0 => 'name',
-                    1 => 'assigned_user_name',
+                    1 => '',
                 ),
                 1 => array(
+                    0 => 'employee_name',
+                    1 => 'assigned_user_name',
+                ),
+                2 => array(
                     'description',
                 ),
             ),

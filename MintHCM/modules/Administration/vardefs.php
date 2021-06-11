@@ -80,6 +80,12 @@ $dictionary['Administration'] = array(
          'type' => 'text',
          'comment' => 'The value given to the setting'
       ),
+      'dlnc_flag' => array(
+        'name' => 'dlnc_flag',
+        'type' => 'text',
+	    'source' => 'non-db',
+        'vname' => 'LBL_DLNC_CHECKBOX',
+      ),
    ),
    'indices' => array(
       array(

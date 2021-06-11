@@ -50,6 +50,12 @@ $dashletData['CandidatesDashlet']['searchFields'] = array(
     'recr_contact_agree' => array(
         'default' => '',
     ),
+    'last_time_contact' => array(
+        'default' => '',
+    ),
+    'date_planned_contact' => array(
+        'default' => '',
+    ),
     'date_entered' => array(
         'default' => '',
     ),
@@ -107,6 +113,18 @@ $dashletData['CandidatesDashlet']['columns'] = array(
         'default' => false,
         'name' => 'recr_contact_agree',
     ),
+    'last_time_contact' => array(
+        'width' => '15%',
+        'label' => 'LBL_LAST_TIME_CONTACT',
+        'default' => false,
+        'name' => 'last_time_contact',
+    ),
+    'date_planned_contact' => array(
+        'width' => '15%',
+        'label' => 'LBL_DATE_PLANNED_CONTACT',
+        'default' => false,
+        'name' => 'date_planned_contact',
+    ),
     'date_entered' => array(
         'width' => '15%',
         'label' => 'LBL_DATE_ENTERED',
@@ -137,6 +155,11 @@ $dashletData['CandidatesDashlet']['columns'] = array(
         'label' => 'LBL_LIST_ASSIGNED_USER',
         'name' => 'assigned_user_name',
         'default' => false,
+    ),
+    'employee_name' => array(
+        'label' => 'LBL_EMPLOYEE_NAME',
+        'name' => 'employee_name',
+        'width' => '8%',
     ),
     'phone_mobile' => array(
         'type' => 'phone',

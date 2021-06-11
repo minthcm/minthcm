@@ -85,6 +85,20 @@ $popupMeta = array(
          ),
          'width' => '10%',
       ),
+      'employee_id' => array(
+         'name' => 'employee_id',
+         'label' => 'LBL_EMPLOYEE_NAME',
+         'type' => 'enum',
+         'function' => array(
+             'name' => 'get_user_array',
+             'params' => array(
+                 false,
+                 '',
+             ),
+         ),
+         'default' => true,
+         'width' => '10%',
+     ), 
       'meeting_name' => array(
          'type' => 'relate',
          'link' => true,
@@ -120,5 +134,13 @@ $popupMeta = array(
          'default' => true,
          'name' => 'meeting_name',
       ),
+      'EMPLOYEE_NAME' => array(
+         'width' => '9%',
+         'label' => 'LBL_EMPLOYEE_NAME',
+         'module' => 'Employees',
+         'id' => 'EMPLOYEE_ID',
+         'default' => true,
+     ),
+    
    )
 );

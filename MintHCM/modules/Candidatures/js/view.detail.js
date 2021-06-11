@@ -1,26 +1,56 @@
 convertToEmployee = {
-   dialog_name: 'convertCandidatureToEmployeeDialog',
-   module_name: 'Candidatures',
-   action_name: 'convertToEmployee',
+    dialog_name: 'convertCandidatureToEmployeeDialog',
+    module_name: 'Candidatures',
+    action_name: 'convertToEmployee',
 
-   LBL_CANCEL: viewTools.language.get( 'Candidatures', 'LBL_CANCEL_BUTTON' ),
-   LBL_OK: viewTools.language.get( 'Candidatures', 'LBL_OK_BUTTON' ),
+    LBL_CANCEL: viewTools.language.get('Candidatures', 'LBL_CANCEL_BUTTON'),
+    LBL_OK: viewTools.language.get('Candidatures', 'LBL_OK_BUTTON'),
 
-   LBL_ALERT_TITLE: viewTools.language.get( 'Candidatures', 'LBL_ALERT_TITLE' ),
-   LBL_ALERT_LOGIN: viewTools.language.get( 'Candidatures', 'LBL_ALERT_LOGIN' ),
-   LBL_ALERT_NOTE: viewTools.language.get( 'Candidatures', 'LBL_ALERT_NOTE' ),
+    LBL_ALERT_TITLE: viewTools.language.get('Candidatures', 'LBL_ALERT_TITLE'),
+    LBL_ALERT_LOGIN: viewTools.language.get('Candidatures', 'LBL_ALERT_LOGIN'),
+    LBL_ALERT_NOTE: viewTools.language.get('Candidatures', 'LBL_ALERT_NOTE'),
+    LBL_CREATE_USER: viewTools.language.get('Candidatures', 'LBL_CREATE_USER'),
+    LBL_CREATE_EMPLOYEE: viewTools.language.get('Candidatures', 'LBL_CREATE_EMPLOYEE'),
+    LBL_ALERT_CREATE_USER: viewTools.language.get('Candidatures', 'LBL_ALERT_CREATE_USER'),
+    LBL_ALERT_CREATE_Employee: viewTools.language.get('Candidatures', 'LBL_ALERT_CREATE_Employee'),
+    LBL_FAIL: viewTools.language.get('Candidatures', 'LBL_FAILED_CONVERTING_CANDIDATURE'),
+    LBL_INFO: viewTools.language.get('Candidatures', 'LBL_INFO'),
+    initialize: function () {
+        const _this = this;
+        const recordData = _this.getRecordData();
 
-   LBL_FAIL: viewTools.language.get( 'Candidatures', 'LBL_FAILED_CONVERTING_CANDIDATURE' ),
-
-   initialize: function () {
-      const _this = this;
-      const recordData = _this.getRecordData();
-
-      const popupBody = `
+        const popupBody = `
+            <script>
+            $('input[type=radio][name=convertType]').change(function() {
+                viewTools.GUI.fieldErrorUnmark()
+                if (this.value == 'createUser') {
+                    $('#input_login').show()
+                    $('#note').text("${_this.LBL_ALERT_CREATE_USER}")
+                }
+                else if (this.value == 'createEmployee') {
+                    $('#input_login').hide()
+                    $('#note').text("${_this.LBL_ALERT_CREATE_Employee}")
+                 }
+            });
+            </script>
+            <div id="div_radio" >
+            <span id="info">${_this.LBL_INFO}</span>
+            <form name="type">
+            <input type="radio" name="convertType" value="createUser" id="createUser"/><labal for="createUser">${_this.LBL_CREATE_USER}</label>  
+            <input type="radio" name="convertType" value="createEmployee" id="createEmployee"/><labal for="createEmployee">${_this.LBL_CREATE_EMPLOYEE} </label>  
+            </form>
+            </div>
+            <div id="input_login" class="Input_login">
             <b>${_this.LBL_ALERT_LOGIN}</b>
-            <input type="text" id="MintHCMPopup_login"/>
-            <span>${_this.LBL_ALERT_NOTE}</span>
+            <form name="login">
+            <input type="text" name="MintHCMPopup_login" id="MintHCMPopup_login"/>
+            <form>
+            </div>
+            <span id="note"></span>
             <style>
+                .Input_login{
+                    display: none;
+                }
                 .MintHCMPopup-body{
                     display: grid;
                     grid-gap: 10px;
@@ -33,56 +63,76 @@ convertToEmployee = {
             </style>
         `;
 
-      function callbackButtonOK() {
-         const login = $( "#MintHCMPopup_login" ).val();
-         _this.ajaxRequest( recordData.record_id, recordData.module_name, login, _this.LBL_FAIL );
-      }
+        function callbackButtonOK() {
+            let login = $("#MintHCMPopup_login").val();
+            const convertType = $("input[name='convertType']:checked").val();
 
-      function callbackButtonCancel() {
-         MintHCMPopup.close();
-      }
 
-      const popupButtons = [
-         {
-            text: _this.LBL_OK,
-            click: callbackButtonOK
-         },
-         {
-            text: _this.LBL_CANCEL,
-            click: callbackButtonCancel
-         }
-      ];
+            if (convertType == undefined) {
+                viewTools.GUI.fieldErrorMark($('#createUser'), viewTools.language.get('Candidatures', 'LBL_ERROR_INPUT_RADIO'));
+            } else if (convertType == "createUser" && login == "") {
+                viewTools.GUI.fieldErrorMark($("#MintHCMPopup_login"), viewTools.language.get('Candidatures', 'LBL_ERROR_LOGIN'));
+            }
+            else if (convertType == "createEmployee") {
+                login = "";
+                _this.ajaxRequest(recordData.record_id, recordData.module_name, login, _this.LBL_FAIL, convertType);
+            }
+            else {
+                _this.ajaxRequest(recordData.record_id, recordData.module_name, login, _this.LBL_FAIL, convertType);
+            }
+        }
 
-      let popup = MintHCMPopup(
-              _this.LBL_ALERT_TITLE,
-              popupBody,
-              popupButtons,
-              {}
-      );
-   },
 
-   getRecordData: function () {
-      return {
-         record_id: $( '#formDetailView input[name="record"]' ).val(),
-         module_name: $( '#formDetailView input[name="module"]' ).val()
-      };
-   },
+        function callbackButtonCancel() {
+            MintHCMPopup.close();
+        }
 
-   ajaxRequest: function ( record_id, module_name, login, LBL_FAIL ) {
-      const ajax_link = `index.php?sugar_body_only=1&action=${this.action_name}&module=${module_name}&record_id=${record_id}&login=${login}`;
+        const popupButtons = [
+            {
+                text: _this.LBL_OK,
+                click: callbackButtonOK
+            },
+            {
+                text: _this.LBL_CANCEL,
+                click: callbackButtonCancel
+            }
+        ];
 
-      $.ajax( {
-         type: "GET",
-         url: ajax_link,
-         success: function ( id ) {
-            window.location.href = `index.php?module=Employees&return_module=Employees&action=DetailView&record=${id}`;
-         },
-         error: function ( jqXHR, exception ) {
-            viewTools.GUI.statusBox.showStatus( LBL_FAIL, 'error', 3500 );
-            console.log( 'There was a problem handling Ajax request' );
-         }
-      } );
-   }
+        let popup = MintHCMPopup(
+            _this.LBL_ALERT_TITLE,
+            popupBody,
+            popupButtons,
+            {}
+        );
+
+    },
+
+    getRecordData: function () {
+        return {
+            record_id: $('#formDetailView input[name="record"]').val(),
+            module_name: $('#formDetailView input[name="module"]').val()
+        };
+    },
+
+    ajaxRequest: function (record_id, module_name, login, LBL_FAIL, convert_type) {
+        const ajax_link = `index.php?sugar_body_only=1&action=${this.action_name}&module=${module_name}&record_id=${record_id}&login=${login}`;
+
+        $.ajax({
+            type: "GET",
+            url: ajax_link,
+            success: function (id) {
+                if (convert_type == "createEmployee") {
+                    window.location.href = `index.php?module=Employees&return_module=Employees&action=DetailView&record=${id}`;
+                } else if (convert_type == "createUser") {
+                    window.location.href = `index.php?module=Users&return_module=Users&action=DetailView&record=${id}`;
+                }
+            },
+            error: function (jqXHR, exception) {
+                viewTools.GUI.statusBox.showStatus(LBL_FAIL, 'error', 3500);
+                console.log('There was a problem handling Ajax request');
+            }
+        });
+    },
 
 };
 

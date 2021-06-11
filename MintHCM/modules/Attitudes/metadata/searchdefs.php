@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -61,6 +62,20 @@ $searchdefs[$module_name] = array(
                 'label' => 'LBL_ASSIGNED_TO',
                 'type' => 'enum',
                 'function' => array('name' => 'get_user_array', 'params' => array(false)),
+            ),
+            'employee_id' => array(
+                'name' => 'employee_id',
+                'label' => 'LBL_EMPLOYEE_NAME',
+                'type' => 'enum',
+                'function' => array(
+                    'name' => 'get_user_array',
+                    'params' => array(
+                        false,
+                        '',
+                    ),
+                ),
+                'default' => true,
+                'width' => '10%',
             ),
         ),
     ),

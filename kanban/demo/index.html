@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <link rel="icon" href="favicon.ico">
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <title>Kanban</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+</head>
+
+<body>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        kanban-view {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+    <kanban-view />
+    <script src="vue.min.js"></script>
+    <script src="../dist/kanban-view.min.js"></script>
+</body>
+
+<script>
+    const kanban = document.getElementsByTagName('kanban-view')[0].vueComponent;
+    kanban.$on('item-add', function (status) { debugger; }.bind(kanban));
+    kanban.$on('item-click', function (itemID) { debugger; }.bind(kanban));
+    kanban.$on('item-cart-click', function (itemID) { debugger; }.bind(kanban));
+    kanban.$on('item-change', function (itemID, oldOrder, newOrder, oldStatus, newStatus) { debugger; }.bind(kanban));
+    kanban.$data.defs = {
+        columns_field: 'entry_status',
+        order_field: 'entry_order',
+        columns: 
+        {
+            'new': 'Nowe',
+            'coordinator': 'Koordynator',
+            'realization_contrain': 'W realizacji – Naprawa Contrain',
+            'realization_owner': 'W realizacji – Naprawa właściciel',
+            'verification': 'Weryfikacja',
+            'finished': 'Zakończone',
+            'rejected': 'Odrzucone',
+        },
+        expired_excluded_columns:
+        [
+            'finished',
+            'rejected'
+        ],
+        roles_actions: 
+        {
+            "housing-manager": [],
+            "head-of-operations": [],
+            "operations-manager": 
+            {
+                "verification":
+                [
+                    "new",
+                    "finished"
+                ],
+                "finished":
+                [
+                    "new",
+                    "verification"
+                ],
+                "coordinator":
+                [
+                    "verification",
+                    "finished"
+                ]
+            },
+            "technical-coordinator":
+            {
+                "realization_contrain":
+                [
+                    "verification",
+                    "finished"
+                ],
+                "verification":
+                [
+                    "realization_contrain",
+                    "finished"
+                ],
+                "finished":
+                [
+                    "realization_contrain",
+                    "verification"
+                ]
+            }
+        },
+        roles_allow_create:
+        {
+            "housing-manager": [],
+            "head-of-operations": [],
+            "operations-manager":
+            [
+                "new",
+                "coordinator"
+            ],
+            'technical-coordinator':
+            [
+                "new",
+                "realization_contrain"
+            ]
+        },
+        user_date_format: 'DD.MM.YYYY',
+        user_time_format: 'HH:mm',
+        current_user: {
+            roles: [
+                "operations-manager"
+            ]
+        }
+    }
+    setTimeout(function () {
+        kanban.$data.items = {
+            new: [
+                {
+                    id: '2',
+                    name: 'Bloczek 22',
+                    accommodation_name: 'Nazwa zakwaterowania',
+                    entry_subject: 'cos_zostało_zmienione1235',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'new',
+                    has_something_changed: true,
+                    returning_entry: "0",
+                },
+                {
+                    id: '3',
+                    name: 'Bloczek 33',
+                    entry_subject: 'widok szczegółowy, high',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'new',
+                    detailview: true
+                },
+                {
+                    id: '4',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'new'
+                }
+            ],
+            coordinator: [
+                {
+                    id: '2',
+                    name: 'Bloczek 22',
+                    entry_subject: 'editable + zakupy',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'coordinator',
+                    editable: true,
+                    has_shopping: true
+                },
+                {
+                    id: '3',
+                    name: 'Bloczek 33',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'coordinator',
+                    editable: false,
+                    has_shopping: true
+                },
+                {
+                    id: '4',
+                    name: 'Bloczek 44',
+                    entry_subject: 'widok szczegółowy',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'coordinator',
+                    detailview: true
+                }
+            ],
+            realization_contrain: [
+                {
+                    id: '2',
+                    name: 'Bloczek 22',
+                    entry_subject: 'cos_zostało_zmienione1235',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_contrain',
+                    has_something_changed: true
+                },
+                {
+                    id: '3',
+                    name: 'Bloczek 33',
+                    accommodation_name: 'Nazwa zakwaterowania',
+                    entry_subject: 'powracające, zakupy',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_contrain',
+                    has_shopping: true,
+                    returning_entry: "1"
+                },
+                {
+                    id: '4',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_contrain'
+                }
+            ],
+            realization_owner: [
+                {
+                    id: '2',
+                    name: 'Bloczek 22',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_owner',
+                    has_shopping: true
+                },
+                {
+                    id: '3',
+                    name: 'Bloczek 33',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_owner',
+                    has_shopping: true
+                },
+                {
+                    id: '4',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'realization_owner',
+                    has_shopping: true
+                }
+            ],
+            verification: [
+                {
+                    id: '2',
+                    name: 'Bloczek 22',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'verification',
+                    editable: true,
+                    has_shopping: true
+                },
+                {
+                    id: '3',
+                    name: 'Bloczek 33',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'verification',
+                    editable: true
+                },
+                {
+                    id: '4',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'verification',
+                    editable: true,
+                    has_shopping: true
+                }
+            ],
+            finished: [
+                {
+                    id: '5',
+                    name: 'Bloczek 33',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'finished'
+                },
+                {
+                    id: '6',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'finished',
+                    has_shopping: true
+                }
+            ],
+            rejected: [
+                {
+                    id: '7',
+                    name: 'Bloczek 33',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'medium',
+                    module_name: 'ev_Entries',
+                    entry_status: 'rejected'
+                },
+                {
+                    id: '7',
+                    name: 'Bloczek 44',
+                    entry_subject: 'Dwadzieściapięćznaków1235',
+                    planned_realization_date: '2020-09-10 14:00:00',
+                    entry_priority: 'high',
+                    module_name: 'ev_Entries',
+                    entry_status: 'rejected'
+                }
+            ]
+        }
+    }, 1000)
+</script>
+
+</html>

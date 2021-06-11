@@ -45,7 +45,7 @@ generateOnboardingOffboarding = {
       if (_.isEmpty($('#goo_date_start_date').val())) {
          viewTools.GUI.fieldErrorMark($('#goo_date_start_date'), viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE'));
          result = false;
-      }if (_.isEmpty($('#goo_date_start_hours').val())) {
+      } if (_.isEmpty($('#goo_date_start_hours').val())) {
          viewTools.GUI.fieldErrorMark($('#goo_date_start_hours'), viewTools.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS') + ' ' + viewTools.language.get('app_strings', 'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE'));
          result = false;
       }
@@ -182,11 +182,26 @@ generateOnboardingOffboarding = {
    },
    getParentTypeOptions: function () {
       let selected = '';
-      const module = $('input[name=module]:not(.form-control)').val();
+      const module = $('input[name=module]:not(.form-control)').val().slice(0,-1) + "Templates";
       const templates = viewTools.language.get('app_list_strings', 'template_type_list');
       let options = '';
+
+      switch (module) {
+         case 'Onboardings':
+         case 'OnboardingTemplates':
+            type_template = 'OnboardingTemplates';
+            break;
+
+         case 'Offboardings':
+         case 'OffboardingTemplates':
+            type_template = 'OffboardingTemplates'
+            break;
+
+         default:
+            break;
+      }
       for (let module_name in templates) {
-         selected = (module_name == module) ? ' selected' : '';
+         selected = (type_template == module_name) ? ' selected' : '';
          options += '<option value="' + module_name + '"' + selected + '>' + templates[module_name] + '</option>';
       }
       return options;

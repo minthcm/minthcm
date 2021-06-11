@@ -72,6 +72,11 @@ $viewdefs ['Employees'] = array(
                'panelDefault' => 'expanded',
             ),
          ),
+         'includes' => array(
+            array(
+                'file' => 'modules/Employees/js/view.edit.js',
+            ),
+        ),
       ),
       'panels' =>
       array(
@@ -79,6 +84,7 @@ $viewdefs ['Employees'] = array(
          array(
             array(
                'employee_status',
+               'photo',
             ),
             array(
                'first_name',
@@ -103,7 +109,7 @@ $viewdefs ['Employees'] = array(
             array(
                array(
                   'name' => 'securitygroup_name',
-                  'customCode' => '<input type="text" name="{$fields.securitygroup_name.name}" class="sqsEnabled" tabindex="0" id="{$fields.securitygroup_name.name}" size="" value="{$fields.securitygroup_name.value}" title="" autocomplete="off" >{$REPORTS_TO_JS}<input type="hidden" name="{$fields.securitygroup_id.name}" id="{$fields.securitygroup_id.name}" value="{$fields.securitygroup_id.value}"> <span class="id-ff multiple"><button type="button" name="btn_{$fields.securitygroup_name.name}" tabindex="0" title="{$APP.LBL_SELECT_BUTTON_TITLE}" class="button firstChild" value="{$APP.LBL_SELECT_BUTTON_LABEL}" onclick=\'open_popup("{$fields.securitygroup_name.module}", 600, 400, "", true, false, {literal}{"call_back_function":"set_return","form_name":"EditView","field_to_name_array":{"id":"securitygroup_id","name":"securitygroup_name"}}{/literal}, "single", true);\'><span class="suitepicon suitepicon-action-select"></span></button><button type="button" name="btn_clr_{$fields.securitygroup_name.name}" tabindex="0" title="{$APP.LBL_CLEAR_BUTTON_TITLE}" class="button lastChild" onclick="this.form.{$fields.securitygroup_name.name}.value = \'\'; this.form.{$fields.securitygroup_id.name}.value = \'\';" value="{$APP.LBL_CLEAR_BUTTON_LABEL}"><span class="suitepicon suitepicon-action-clear"></span></button></span>',
+                  'customCode' => '<input type="text" name="{$fields.securitygroup_name.name}" class="sqsEnabled" tabindex="0" id="{$fields.securitygroup_name.name}" size="" value="{$fields.securitygroup_name.value}" title="" autocomplete="off" >{$REPORTS_TO_JS}<input type="hidden" name="{$fields.securitygroup_id.name}" id="{$fields.securitygroup_id.name}" value="{$fields.securitygroup_id.value}"> <span class="id-ff multiple"><button type="button" name="btn_{$fields.securitygroup_name.name}" tabindex="0" title="{$APP.LBL_SELECT_BUTTON_TITLE}" class="button firstChild" value="{$APP.LBL_SELECT_BUTTON_LABEL}" onclick=\'open_popup("{$fields.securitygroup_name.module}", 600, 400, "&group_type_advanced[]=business_unit&group_type_advanced[]=department&group_type_advanced[]=team&group_type_advanced[]=other&group_type_advanced[]=standard", true, false, {literal}{"call_back_function":"set_return","form_name":"EditView","field_to_name_array":{"id":"securitygroup_id","name":"securitygroup_name"}}{/literal}, "single", true);\'><span class="suitepicon suitepicon-action-select"></span></button><button type="button" name="btn_clr_{$fields.securitygroup_name.name}" tabindex="0" title="{$APP.LBL_CLEAR_BUTTON_TITLE}" class="button lastChild" onclick="this.form.{$fields.securitygroup_name.name}.value = \'\'; this.form.{$fields.securitygroup_id.name}.value = \'\';" value="{$APP.LBL_CLEAR_BUTTON_LABEL}"><span class="suitepicon suitepicon-action-clear"></span></button></span>',
                ),
                'phone_mobile',
             ),
