@@ -169,6 +169,9 @@ $viewdefs['Employees'] = array(
                     'employee_status',
                 ),
                 array(
+                    'photo',
+                ),
+                array(
                     'name',
                 ),
                 array(

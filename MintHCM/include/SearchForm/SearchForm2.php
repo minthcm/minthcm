@@ -853,7 +853,10 @@ class SearchForm {
     */
    public function generateSearchWhere($add_custom_fields = false, $module = '') {
       global $timedate;
-
+      // MintHCM begin #70311
+      include 'modules/Employees/access_config.php';
+      $employee_assignable = isset($GLOBALS["dictionary"][$this->seed->object_name]["templates"]['employee_related'])? true:false;
+      // MintHCM end #70311
       $db = $this->seed->db;
       $this->searchColumns = array();
       $values = $this->searchFields;
@@ -1308,14 +1311,35 @@ class SearchForm {
                         $where .= $db_field . ' not in (' . $field_value . ')';
                         break;
                      case 'in':
-                        $where .= $db_field . ' in (' . $field_value . ')';
+                        // MintHCM begin #70311
+                        if(!empty($parms['my_subordinates'])){
+                           if($employee_assignable){
+                              $where .= " (". $db_field . ' IN (' . $field_value . ') OR employee_id IN (' . $field_value . ') ) ';
+                           } else {
+                              $where .= " ". $db_field . ' IN (' . $field_value . ') ';
+                           }
+                           
+                        } else {
+                           $where .= $db_field . ' in (' . $field_value . ')';
+                        }
+                        // MintHCM end #70311
                         break;
                      case '=':
+                        // MintHCM begin #70311
                         if ( $type == 'bool' && $field_value == 0 ) {
                            $where .= "($db_field = 0 OR $db_field IS NULL)";
-                        } else {
+                        } 
+                        else if(!empty($parms['my_items'])){  
+                           if($employee_assignable){
+                              $where .= " (".$db_field . " = " . $db->quoteType($type, $field_value). " OR employee_id = ".$db->quoteType($type, $field_value).")";
+                           } else {
+                              $where .= " (".$db_field . " = " . $db->quoteType($type, $field_value). ")"; 
+                           }
+                           
+                        }else {
                            $where .= $db_field . " = " . $db->quoteType($type, $field_value);
                         }
+                        // MintHCM end #70311
                         break;
                      // tyoung bug 15971 - need to add these special cases into the $where query
                      case 'custom_enum':
@@ -1402,7 +1426,7 @@ class SearchForm {
                   }
                }
             }
-
+            
             if ( !empty($where) ) {
                if ( $itr > 1 ) {
                   array_push($where_clauses, '( ' . $where . ' )');
@@ -1412,7 +1436,7 @@ class SearchForm {
             }
          }
       }
-
+      
       return $where_clauses;
    }
 
@@ -1471,11 +1495,22 @@ class SearchForm {
          $searchdefs[$module]['layout']['advanced_search'][] = array('name' => 'my_subordinates', 'label' => 'LBL_SUBORDINATES_FILTER', 'type' => 'bool');
          $searchFields[$module]['my_subordinates'] = array(
            'query_type' => 'default',
-           'db_field' => array('assigned_user_id'),
            'my_subordinates' => true,
            'vname' => 'LBL_SUBORDINATES_FILTER',
            'type' => 'bool',
          );
+         if($module == 'Employees') {
+            $searchFields[$module]['my_subordinates']['db_field'] = array('id');
+         }
+         else {
+            $bean = BeanFactory::getBean($module);
+            if(empty($bean->field_defs['employee_id'])) {
+               $searchFields[$module]['my_subordinates']['db_field'] = array('assigned_user_id');
+            }
+           else {
+               $searchFields[$module]['my_subordinates']['db_field'] = array('employee_id');
+           }
+         }
       }
       return array( 'searchdefs' => $searchdefs, 'searchFields' => $searchFields );
    }

@@ -61,6 +61,10 @@ $dashletData['CompetenciesDashlet']['searchFields'] = array(
    array(
       'default' => '',
    ),
+   'employee_name' =>
+   array(
+      'default' => '',
+   ),
 );
 $dashletData['CompetenciesDashlet']['columns'] = array(
    'name' =>
@@ -85,6 +89,12 @@ $dashletData['CompetenciesDashlet']['columns'] = array(
       'name' => 'assigned_user_name',
       'default' => true,
    ),
+   'employee_name' => array(
+      'label' => 'LBL_EMPLOYEE_NAME',
+      'name' => 'employee_name',
+      'width' => '8%',
+   ),
+
    'date_entered' =>
    array(
       'width' => '15%',

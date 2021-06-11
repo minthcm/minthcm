@@ -108,7 +108,24 @@ if (!window.TWSDashlet) {
                     alert(SUGAR.language.get('app_strings', 'LBL_CANNOT_ADD_TIME_FOR_PREV_MONTHS'));
                 } else {
                     var planName = _this.getCurrentPlanValue('name') || '';
-                    open("index.php?module=SpentTime&action=EditView&" + "workschedule_id=" + planId + "&workschedule_name=" + planName + "&return_module=Home&return_action=index", '_self');
+
+                    MintHCMDynamicPopupView.init(        
+                        SUGAR.language.get('app_strings', 'LBL_WORKSCHEDULES'),
+                        'SpentTime',
+                        "",
+                        {
+                        "fields" : 
+                            {
+                            "workschedule_id":planId,
+                            "workschedule_name":planName
+                            },
+                            postSaveCallback: function () {
+                                SUGAR.mySugar.retrieveDashlet( $('#dashlet_id').val() );
+                                return false;
+                            }.bind(this),
+                        
+                        }
+                    );
                 }
             } else {
                 alert(SUGAR.language.get('app_strings', 'LBL_PLAN_NOT_CHOOSED'));
@@ -117,6 +134,7 @@ if (!window.TWSDashlet) {
         this.initListBody();
         $(this.initInstance.bind(this));
     };
+
     TWSDashlet.ATTR_TAKS_ID = 'task-id';
     TWSDashlet.initialized = false;
     TWSDashlet.instances = [];

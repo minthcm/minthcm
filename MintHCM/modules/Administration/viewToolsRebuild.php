@@ -420,10 +420,11 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                     if (in_array($paramName,
                         array('vt_calculated', 'vt_dependency', 'vt_required',
                             'vt_readonly'))) {
+                        $module_lowercase = vtr_getModuleLowercase($moduleName, $moduleData);
                         if (is_array($paramData)) {
                             foreach ($paramData as $paramDataField => $paramDataValue) {
                                 if (substr($paramDataValue, 0, 1) == '$') {
-                                    $initArray[$moduleData['table']][substr($paramDataValue,
+                                    $initArray[$module_lowercase][substr($paramDataValue,
                                         1)][$fieldName] = $fieldName;
                                 }
                             }
@@ -433,7 +434,7 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                             $paramData = preg_replace('/\ /', '', $paramData);
                             preg_match_all('/\$(\w+)/i', $paramData, $variables);
                             foreach ($variables[1] as $matchedVariable) {
-                                $initArray[$moduleData['table']][$matchedVariable][$fieldName]
+                                $initArray[$module_lowercase][$matchedVariable][$fieldName]
                                 = $fieldName;
                             }
                             //check all relation definitions
@@ -453,7 +454,7 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                                         foreach ($focus->field_defs as $field) {
                                             if ($field['id_name'] == $def["join_key_" . $get_foreign_key_from]
                                                 && $field['link'] == $matchedVariable) {
-                                                $initArray[$moduleData['table']][$field['name']][$fieldName]
+                                                $initArray[$module_lowercase][$field['name']][$fieldName]
                                                 = $fieldName;
                                                 break;
                                             }
@@ -461,12 +462,12 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                                     } else {
                                         //lhs_key
                                         if (isset($def['lhs_key'])) {
-                                            $initArray[$moduleData['table']][$def['lhs_key']][$fieldName]
+                                            $initArray[$module_lowercase][$def['lhs_key']][$fieldName]
                                             = $fieldName;
                                         }
                                         //rhs_key
                                         if (isset($defs[$matchedVariable]['rhs_key'])) {
-                                            $initArray[$moduleData['table']][$def['rhs_key']][$fieldName]
+                                            $initArray[$module_lowercase][$def['rhs_key']][$fieldName]
                                             = $fieldName;
                                         }
                                     }
@@ -475,11 +476,11 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                                 $add_table = $def['relationships'];
                                 //join_key_lhs
                                 if ( isset($add_table['join_key_lhs']) ) {
-                                $initArray[$moduleData['table']][$add_table['join_key_lhs']][$fieldName] = $fieldName;
+                                $initArray[$module_lowercase][$add_table['join_key_lhs']][$fieldName] = $fieldName;
                                 }
                                 //join_key_rhs
                                 if ( isset($add_table['join_key_rhs']) ) {
-                                $initArray[$moduleData['table']][$add_table['join_key_rhs']][$fieldName] = $fieldName;
+                                $initArray[$module_lowercase][$add_table['join_key_rhs']][$fieldName] = $fieldName;
                                 }
                                 }
                                  */
@@ -488,24 +489,24 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
                                     $relationship = $relationships[$matchedVariable];
                                     //lhs_key
                                     if (isset($relationship['lhs_key'])) {
-                                        $initArray[$moduleData['table']][$relationship['lhs_key']][$fieldName]
+                                        $initArray[$module_lowercase][$relationship['lhs_key']][$fieldName]
                                         = $fieldName;
                                     }
                                     //rhs_key
                                     if (isset($relationships[$matchedVariable]['rhs_key'])) {
-                                        $initArray[$moduleData['table']][$relationship['rhs_key']][$fieldName]
+                                        $initArray[$module_lowercase][$relationship['rhs_key']][$fieldName]
                                         = $fieldName;
                                     }
                                     if (isset($relationship['relationships'])) {
                                         $add_table = $relationship['relationships'];
                                         //join_key_lhs
                                         if (isset($add_table['join_key_lhs'])) {
-                                            $initArray[$moduleData['table']][$add_table['join_key_lhs']][$fieldName]
+                                            $initArray[$module_lowercase][$add_table['join_key_lhs']][$fieldName]
                                             = $fieldName;
                                         }
                                         //join_key_rhs
                                         if (isset($add_table['join_key_rhs'])) {
-                                            $initArray[$moduleData['table']][$add_table['join_key_rhs']][$fieldName]
+                                            $initArray[$module_lowercase][$add_table['join_key_rhs']][$fieldName]
                                             = $fieldName;
                                         }
                                     }
@@ -535,11 +536,7 @@ window.viewTools.cache.initMappings = ' . json_encode($parsedInitArray) . ';');
         if (is_array($module['fields'])) {
             foreach ($module['fields'] as $params) {
                 if (isset($params['required'])) {
-                    $module_lowercase = $module['table'];
-                    switch ($key) {
-                        case 'Employee':
-                            $module_lowercase = 'employees';
-                    }
+                    $module_lowercase = vtr_getModuleLowercase($key, $module);
                     $field_requirements[$module_lowercase][$params['name']] = (bool) $params['required'];
                 }
             }
@@ -557,11 +554,7 @@ window.viewTools.cache.formulaRequirements = ' . json_encode($parsed_field_requi
      */
     $duplicate_fields = array();
     foreach ($GLOBALS["dictionary"] as $key => $module) {
-        $module_lowercase = $module['table'];
-        switch ($key) {
-            case 'Employee':
-                $module_lowercase = 'employees';
-        }
+        $module_lowercase = vtr_getModuleLowercase($key, $module);
         if (isset($module['vt_duplicate']) && is_string($module['vt_duplicate'])) {
             $variables = array();
             $module['vt_duplicate'] = preg_replace('/\ /', '',
@@ -585,11 +578,7 @@ window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_field
      */
     $duplicate_formulas = '';
     foreach ($GLOBALS["dictionary"] as $key => $module) {
-        $module_lowercase = $module['table'];
-        switch ($key) {
-            case 'Employee':
-                $module_lowercase = 'employees';
-        }
+        $module_lowercase = vtr_getModuleLowercase($key, $module);
         if (isset($module['vt_duplicate'])) {
             $duplicate_formulas .= '$duplicate[\'' . $module_lowercase . '\'][\'formula\']=\'' . str_replace("'",
                 "\'", $module['vt_duplicate']) . '\';' . "\n";
@@ -664,4 +653,14 @@ window.viewTools.cache.formulaDuplicateFields = ' . json_encode($duplicate_field
     fclose($jscache);
 } catch (Exception $e) {
     echo $e->getMessage();
+}
+
+function vtr_getModuleLowercase($key, $module) {
+    global $beanList;
+    $flipped = array_flip($beanList);
+    $module_lowercase = strtolower($flipped[$key]);
+    if(empty($module_lowercase)){
+        $module_lowercase = $module['table'];
+    }
+    return $module_lowercase;
 }

@@ -173,4 +173,25 @@ class AdministrationController extends SugarController
             $GLOBALS['log']->error($mod_strings['LBL_SPRITES_NOT_SUPPORTED']);
         }
     }
+
+    //  DateLastNextContact package start
+    public function action_DLNCSettings()
+    {
+        $this->view = "dlncsettings";
+    }
+
+    public function action_save_dlncsettings_config()
+    {
+
+        $lock_config_var = ['dlnc_flag' => 0];
+        if (isset($_REQUEST['save_config']) && $_REQUEST['save_config'] != '') {
+            $lock_config_var['dlnc_flag'] = $_REQUEST['dlnc_flag'];
+        }
+        $config = new Administration();
+        $config->retrieveSettings('DLNC');
+        $config->saveSetting('DLNC', 'flag', $lock_config_var['dlnc_flag']);
+
+        SugarApplication::redirect("index.php?module=Administration&action=index");
+    }
+    //  DateLastNextContact package end
 }

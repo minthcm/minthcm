@@ -57,7 +57,7 @@ $dictionary['Task'] = array(
             'vname' => 'LBL_SUBJECT',
             'dbType' => 'varchar',
             'type' => 'name',
-            'len' => '50',
+            'len' => '255',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
             'importable' => 'required',

@@ -64,6 +64,20 @@ $searchdefs[$module_name] = array(
             'type' => 'enum',
             'function' => array( 'name' => 'get_user_array', 'params' => array( false ) )
          ),
+         'employee_id' => array(
+            'name' => 'employee_id',
+            'label' => 'LBL_EMPLOYEE_NAME',
+            'type' => 'enum',
+            'function' => array(
+                'name' => 'get_user_array',
+                'params' => array(
+                    false,
+                    '',
+                ),
+            ),
+            'default' => true,
+            'width' => '10%',
+        ),  
          'date_entered' =>
          array(
             'type' => 'datetime',

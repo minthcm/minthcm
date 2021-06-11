@@ -56,8 +56,13 @@
 {assign var='place' value="_FOOTER"} <!-- to be used for id for buttons with custom code in def files-->
 {{if empty($form.button_location) || $form.button_location == 'bottom'}}
 
+{* MintHCM #81007 START*}
+{if empty($smarty.request.minthcm_popup)}
+{* MintHCM #81007 END*}
 {{sugar_include type='smarty' file='include/EditView/actions_buttons.tpl'}}
-
+{* MintHCM #81007 START*}
+{/if}
+{* MintHCM #81007 END*}
 {{/if}}
 </form>
 {{if $externalJSFile}}

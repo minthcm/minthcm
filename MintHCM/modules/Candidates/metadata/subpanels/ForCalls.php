@@ -96,6 +96,11 @@ $subpanel_layout = array(
          'width' => '10%',
          'default' => true,
       ),
+      'employee_name' => array(
+         'vname' => 'LBL_EMPLOYEE_NAME',
+         'widget_class' => 'SubPanelDetailViewLink',
+         'width' => '20%',
+      ),
       'email1' => array(
          'name' => 'email1',
          'vname' => 'LBL_LIST_EMAIL',

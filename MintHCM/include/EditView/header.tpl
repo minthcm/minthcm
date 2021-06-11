@@ -83,6 +83,9 @@
 {{$field}}   
 {{/foreach}}
 {{/if}}
+{* MintHCM #81007 START *}
+{if empty($smarty.request.minthcm_popup)}
+{* MintHCM #81007 END*}
 {{if empty($form.button_location) || $form.button_location == 'top'}}
 {{if !empty($form) && !empty($form.buttons)}}
    {{foreach from=$form.buttons key=val item=button}}
@@ -97,6 +100,9 @@
 {{/if}}
 {{/if}}
 {{sugar_action_menu buttons=$header_buttons class="fancymenu" flat=true}}
+{* MintHCM #81007 START *}
+{/if}
+{* MintHCM #81007 END*}
 </td>
 <td align='right' class="edit-view-pagination">{{$ADMIN_EDIT}}
 {{if $panelCount == 0}}

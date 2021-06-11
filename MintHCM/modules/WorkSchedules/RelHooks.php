@@ -70,8 +70,10 @@ class WorkSchedulesRelHooks {
       $bean->retrieve($bean->id);
       if ( !empty($bean->workschedule_id) ) {
          $ws = BeanFactory::getBean('WorkSchedules', $bean->workschedule_id);
-         $ws->spent_time = self::sumSpentTime($bean->workschedule_id);
-         $ws->save();
+		 if($bean->workschedule_id==$ws->id){
+           $ws->spent_time = self::sumSpentTime($bean->workschedule_id);
+           $ws->save();
+        }
       }
    }
 

@@ -277,6 +277,17 @@ class EditView {
 
          $this->focus->fill_in_additional_detail_fields();
          $this->focus->assigned_user_id = $current_user->id;
+
+         // MintHCM begin #70311
+         include 'modules/Employees/access_config.php';
+         if(isset($GLOBALS["dictionary"][$this->focus->object_name]["templates"]['employee_related']) && in_array($this->focus->module_dir,$employee_related_copy_assigned)  && empty($this->focus->employee_id)){
+            $this->focus->employee_id = isset($this->focus->assigned_user_id)?  $this->focus->assigned_user_id : "";
+            if(!empty($this->focus->employee_id)){
+               $this->focus->employee_name = get_assigned_user_name($this->focus->employee_id);
+            }
+         }
+         // MintHCM end #70311
+
       }
    }
 

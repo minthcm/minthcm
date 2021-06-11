@@ -197,4 +197,6 @@ $mod_strings = array(
     'LBL_SUBORDINATES' => 'Subordinates',
     'LBL_EMPLOYEEINTERACTIONTRACKING' => 'Employee Interaction Tracking',
     'LBL_SECURITYGROUPS_MANAGERS' => 'Manager in Organizational Units',
+
+    'LBL_LINKED_ALLOCATIONS_TITLE' => 'Allocations',
 );

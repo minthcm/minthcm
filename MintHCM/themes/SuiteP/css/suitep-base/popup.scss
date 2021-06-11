@@ -23,6 +23,19 @@
   .list.view .sugar_action_button {
     line-height: 26px;
   }
+
+  @media (max-width: 768px) {
+    .view tr {
+      padding: 5px 0 5px 0;
+    }
+}
+
+  @media (min-width:769px) {
+  .view tr {
+      padding: 5px 0 5px 0;
+      height: 54px
+  }
+}
 }
 
 .popup {

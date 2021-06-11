@@ -92,12 +92,20 @@ function checkIfCanBeClosed() {
          id: workschedule_id
       },
       callback: function ( call_constroller_data ) {
-         if ( call_constroller_data == false ) {
+         if ( call_constroller_data != "1" ) {
             var dialog_buttons = {};
             dialog_buttons[SUGAR.language.get( 'app_strings', 'LBL_DIALOG_OK' )] = function () {
                $( this ).dialog( "close" );
             };
-            dialog.html( '<p>' + SUGAR.language.get( 'app_strings', 'ERR_CLOSE_PLAN' ).replace( '{name}', schedule_name ) + '</p>' ).dialog( {buttons: dialog_buttons} ).dialog( 'open' ).show();
+            if(call_constroller_data == "3"){
+               dialog.html( '<p>' + SUGAR.language.get( 'app_strings', 'ERR_CLOSE_PLAN' ).replace( '{name}', schedule_name ) + '</p>' ).dialog( {buttons: dialog_buttons} ).dialog( 'open' ).show();
+            }
+            else if(call_constroller_data == "2"){
+               dialog.html( '<p>' + SUGAR.language.get( 'app_strings', 'ERR_CLOSE_PLAN_WORK' ).replace( '{name}', schedule_name ) + '</p>' ).dialog( {buttons: dialog_buttons} ).dialog( 'open' ).show();
+            }
+            else if(call_constroller_data == "4"){
+               dialog.html( '<p>' + SUGAR.language.get( 'app_strings', 'ERR_WORKPLACE_IS_NOT_ACTIVE' ).replace( '{name}', schedule_name ) + '</p>' ).dialog( {buttons: dialog_buttons} ).dialog( 'open' ).show();
+            }
             result = false;
          }
       }

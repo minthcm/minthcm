@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 /*
@@ -66,7 +66,7 @@ $dictionary['Candidates'] = array(
             'importable' => 'true',
             'reportable' => true,
             'audited' => true,
-            'duplicate_merge' => 'enabled',    
+            'duplicate_merge' => 'enabled',
             'size' => 30,
         ),
         'first_name' => array(
@@ -437,13 +437,12 @@ $dictionary['Candidates'] = array(
             'studio' => 'visible',
             'dependency' => false,
         ),
-        'm_accept_status_fields' =>
-        array(
+        'm_accept_status_fields' => array(
             'name' => 'm_accept_status_fields',
             'rname' => 'id',
             'relationship_fields' => array(
                 'id' => 'accept_status_id',
-                'accept_status' => 'accept_status_name'
+                'accept_status' => 'accept_status_name',
             ),
             'vname' => 'LBL_LIST_ACCEPT_STATUS',
             'type' => 'relate',
@@ -455,13 +454,12 @@ $dictionary['Candidates'] = array(
             'duplicate_merge' => 'disabled',
             'studio' => false,
         ),
-        'c_accept_status_fields' =>
-        array(
+        'c_accept_status_fields' => array(
             'name' => 'c_accept_status_fields',
             'rname' => 'id',
             'relationship_fields' => array(
                 'id' => 'accept_status_id',
-                'accept_status' => 'accept_status_name'
+                'accept_status' => 'accept_status_name',
             ),
             'vname' => 'LBL_LIST_ACCEPT_STATUS',
             'type' => 'relate',
@@ -473,18 +471,16 @@ $dictionary['Candidates'] = array(
             'duplicate_merge' => 'disabled',
             'studio' => false,
         ),
-        'accept_status_id' =>
-        array(
+        'accept_status_id' => array(
             'name' => 'accept_status_id',
             'type' => 'varchar',
             'source' => 'non-db',
             'vname' => 'LBL_LIST_ACCEPT_STATUS',
             'studio' => array(
-                'listview' => false
+                'listview' => false,
             ),
         ),
-        'accept_status_name' =>
-        array(
+        'accept_status_name' => array(
             'massupdate' => false,
             'name' => 'accept_status_name',
             'type' => 'enum',
@@ -493,53 +489,19 @@ $dictionary['Candidates'] = array(
             'options' => 'dom_meeting_accept_status',
             'importable' => 'false',
         ),
-        'meetings' =>
-        array(
+        'meetings' => array(
             'name' => 'meetings',
             'type' => 'link',
             'relationship' => 'meetings_candidates',
             'source' => 'non-db',
             'vname' => 'LBL_MEETINGS',
         ),
-        'calls' =>
-        array(
+        'calls' => array(
             'name' => 'calls',
             'type' => 'link',
             'relationship' => 'calls_candidates',
             'source' => 'non-db',
             'vname' => 'LBL_CALLS',
-        ),
-        'employees' => array(
-            'name' => 'employees',
-            'type' => 'link',
-            'relationship' => 'candidates_employees',
-            'source' => 'non-db',
-            'module' => 'Employees',
-            'bean_name' => 'Employee',
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_LINK_FROM_CANDIDATE',
-            'id_name' => 'employee_id',
-        ),
-        'employee_name' => array(
-            'name' => 'employee_name',
-            'type' => 'relate',
-            'source' => 'non-db',
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_RELATE_FROM_CANDIDATE',
-            'save' => true,
-            'id_name' => 'employee_id',
-            'link' => 'employees',
-            'table' => 'users',
-            'module' => 'Employees',
-            'rname' => 'name',
-        ),
-        'employee_id' => array(
-            'name' => 'employee_id',
-            'type' => 'link',
-            'relationship' => 'candidates_employees',
-            'source' => 'non-db',
-            'reportable' => false,
-            'side' => 'left',
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_ID_FROM_CANDIDATE',
-            'audited' => true,
         ),
         "employeecertificates" => array(
             'name' => 'employeecertificates',
@@ -557,10 +519,41 @@ $dictionary['Candidates'] = array(
             'source' => 'non-db',
             'vname' => 'LBL_PROSPECT_LIST',
         ),
+        "employee" => array(
+            'name' => 'employee',
+            'type' => 'link',
+            'relationship' => 'candidates_employees',
+            'source' => 'non-db',
+            'module' => 'Users',
+            'bean_name' => false,
+            'vname' => 'LBL_CANDIDATE_EMPLOYEE_LINK_FROM_EMPLOYEE',
+            'id_name' => 'employee_id',
+        ),
+        "employee_name" => array(
+            'name' => 'employee_name',
+            'type' => 'relate',
+            'source' => 'non-db',
+            'vname' => 'LBL_CANDIDATE_EMPLOYEE_RELATE_FROM_EMPLOYEE',
+            'save' => true,
+            'id_name' => 'employee_id',
+            'link' => 'candidates_employees',
+            'table' => 'users',
+            'module' => 'Users',
+            'rname' => 'name',
+        ),
+        "employee_id" => array(
+            'name' => 'employee_id',
+            'type' => 'link',
+            'relationship' => 'candidates_employees',
+            'source' => 'non-db',
+            'reportable' => false,
+            'side' => 'right',
+            'vname' => 'LBL_CANDIDATE_EMPLOYEE_ID_FROM_EMPLOYEE',
+            'audited' => true,
+        ),
     ),
     'relationships' => array(
-        'candidates_candidatures' =>
-        array(
+        'candidates_candidatures' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -569,8 +562,7 @@ $dictionary['Candidates'] = array(
             'rhs_key' => 'candidate_id',
             'relationship_type' => 'one-to-many',
         ),
-        'candidates_calls' =>
-        array(
+        'candidates_calls' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -581,8 +573,7 @@ $dictionary['Candidates'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidates_meetings' =>
-        array(
+        'candidates_meetings' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -593,8 +584,7 @@ $dictionary['Candidates'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidates_emails' =>
-        array(
+        'candidates_emails' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -608,8 +598,7 @@ $dictionary['Candidates'] = array(
             'join_key_lhs' => 'bean_id',
             'relationship_role_column' => 'bean_module',
         ),
-        'candidates_notes' =>
-        array(
+        'candidates_notes' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -620,8 +609,7 @@ $dictionary['Candidates'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidates_tasks' =>
-        array(
+        'candidates_tasks' => array(
             'lhs_module' => 'Candidates',
             'lhs_table' => 'candidates',
             'lhs_key' => 'id',
@@ -643,7 +631,7 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Candidates', 'Candidates',
-    array('basic', 'assignable', 'person', 'security_groups'));
+    array('basic', 'assignable', 'person', 'security_groups', 'employee_related'));
 
 $dictionary['Candidates']['fields']['date_reviewed']['audited'] = false;
 $dictionary['Candidates']['fields']['date_reviewed']['reportable'] = false;
@@ -651,3 +639,42 @@ $dictionary['Candidates']['fields']['lawful_basis_source']['audited'] = false;
 $dictionary['Candidates']['fields']['lawful_basis_source']['reportable'] = false;
 $dictionary['Candidates']['fields']['lawful_basis']['audited'] = false;
 $dictionary['Candidates']['fields']['lawful_basis']['reportable'] = false;
+
+// DLNC start
+$dictionary['Candidates']['fields']['last_time_contact'] = array(
+    'name' => 'last_time_contact',
+    'label' => 'LBL_LAST_TIME_CONTACT',
+    'vname' => 'LBL_LAST_TIME_CONTACT',
+    'required' => false,
+    'readonly' => true,
+    'type' => 'datetimecombo',
+    'audited' => false,
+    'massupdate' => false,
+    'options' => 'date_range_search_dom',
+    'importable' => false,
+    'duplicate_merge' => false,
+    'reportable' => true,
+    'unified_search' => false,
+    'enforced' => false,
+    'enable_range_search' => true,
+    'duplicate_on_record_copy' => 'no',
+);
+
+$dictionary['Candidates']['fields']['date_planned_contact'] = array(
+    'name' => 'date_planned_contact',
+    'label' => 'LBL_DATE_PLANNED_CONTACT',
+    'vname' => 'LBL_DATE_PLANNED_CONTACT',
+    'required' => false,
+    'readonly' => true,
+    'type' => 'datetimecombo',
+    'audited' => false,
+    'massupdate' => false,
+    'options' => 'date_range_search_dom',
+    'importable' => false,
+    'duplicate_merge' => false,
+    'reportable' => true,
+    'unified_search' => false,
+    'enable_range_search' => true,
+    'duplicate_on_record_copy' => 'no',
+);
+// DLNC end

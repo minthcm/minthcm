@@ -107,4 +107,6 @@ $entry_point_registry = array(
    'viewToolsJSGroupings' => array( 'file' => 'modules/Administration/viewJSGroupings.php', 'auth' => true ),
    'viewToolsQuickRepair' => array( 'file' => 'modules/Administration/viewToolsQuickRepair.php', 'auth' => true ),
    'viewToolsApi' => array( 'file' => 'include/ViewTools/viewToolsApi.php', 'auth' => true ),
+   'CalculateDLNC' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCindex.php'),
+   'CalculateDLNCcalc' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCcalc.php'),
 );

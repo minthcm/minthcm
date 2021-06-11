@@ -181,4 +181,4 @@ $dictionary['CompetencyRatings'] = array(
 if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
-VardefManager::createVardef('CompetencyRatings', 'CompetencyRatings', array('basic', 'assignable', 'security_groups'));
+VardefManager::createVardef('CompetencyRatings', 'CompetencyRatings', array('basic', 'assignable', 'security_groups', 'employee_related'));

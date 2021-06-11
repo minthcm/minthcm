@@ -119,4 +119,12 @@ $dashletData['WorkSchedulesDashlet']['columns'] = array(
         'width' => '10%',
         'default' => false,
     ),
+    'workplace_name' => array(
+        'type' => 'relate',
+        'link' => true,
+        'label' => 'LBL_RELATIONSHIP_WORKPLACE_NAME',
+        'id' => 'WORKPLACE_ID',
+        'width' => '10%',
+        'default' => true,
+    ),
 );

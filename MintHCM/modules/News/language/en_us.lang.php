@@ -97,4 +97,5 @@ $mod_strings = array(
     'LBL_PUBLICATION_DATE' => "Date of Publication",
     'LBL_NEW_USERS_NEWS' => "There is a new information avaiable",
     'LBL_NEW_USERS_NEWS_UPDATED' => "There is an updated information avaiable",
+    'LBL_REACTIONS' => "Reactions",
 );

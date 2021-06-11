@@ -119,6 +119,9 @@ $themedef = array(
         'dictionaries' => 'fa-list',
         'employeeinteractiontracking' => 'fa-handshake',
         'kreports' => 'fa-chart-bar',
+        'rooms' => 'fa-door-open',
+        'allocations' => 'fa-sign-in-alt',
+        'workplaces' => 'fa-pencil-ruler',
     ),
 );
 

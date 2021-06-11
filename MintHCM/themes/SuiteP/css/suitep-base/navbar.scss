@@ -1474,7 +1474,7 @@
     height: 28px;
     background-color: $mobile-navbar-toolbar-bg;
     line-height:  $navbar-toolbar-height;
-    font-size:  $navbar-toolbar-height / 2;
+    font-size:  $navbar-toolbar-height * 0.75;
     color: $navbar-mobile-toolbar-color;
   }
 

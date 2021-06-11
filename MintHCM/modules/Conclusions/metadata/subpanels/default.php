@@ -70,6 +70,11 @@ $subpanel_layout = array(
          'vname' => 'LBL_ASSIGNED_TO_NAME',
          'width' => '15%',
       ),
+      'employee_name' => array(
+         'vname' => 'LBL_EMPLOYEE_NAME',
+         'widget_class' => 'SubPanelDetailViewLink',
+         'width' => '20%',
+      ),
       'edit_button' => array(
          'vname' => 'LBL_EDIT_BUTTON',
          'widget_class' => 'SubPanelEditButton',

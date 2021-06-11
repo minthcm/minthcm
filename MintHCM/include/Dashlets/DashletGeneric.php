@@ -337,6 +337,10 @@ class DashletGeneric extends Dashlet {
         foreach($this->filters as $name=>$params) {
             if(!empty($params)) {
                 if($name == 'assigned_user_id' && $this->myItemsOnly)  continue; // don't handle assigned user filter if filtering my items only
+                // MintHCM Begin #70311
+                if($name == 'assigned_user_id' && $this->mySubordinates)  continue;
+                // MintHCM end #70311
+
                 $widgetDef = $this->seedBean->field_defs[$name];
 
                 $widgetClass = $this->layoutManager->getClassFromWidgetDef($widgetDef, true);
@@ -386,19 +390,34 @@ class DashletGeneric extends Dashlet {
                 }
             }
         }
+        // MintHCM Begin #70311
+        include 'modules/Employees/access_config.php';
+        $controller = ControllerFactory::getController('Users');
+        $subordinates_ids = $controller::getIDOfSubordinates(array($current_user->id));
 
-        if($this->myItemsOnly) array_push($returnArray, $this->seedBean->table_name . '.' . "assigned_user_id = '" . $current_user->id . "'");
+        if($this->myItemsOnly) {
+            $my_items_sql = $this->seedBean->table_name . '.' . "assigned_user_id = '" . $current_user->id . "'";
+            if ( isset($GLOBALS["dictionary"][$this->seedBean->object_name]["templates"]['employee_related']) && !in_array($this->seedBean->module_dir,$employee_related_exclude_modules)){
+                $my_items_sql = " (".$my_items_sql." OR ".$this->seedBean->table_name . '.' . "employee_id = '" . $current_user->id . "'"." )";
+            }
+            array_push($returnArray, $my_items_sql);
+        }
+        // MintHCM end #70311
         if($this->myFavorites){
             $favorites_sql = "{$this->seedBean->table_name}.id IN (SELECT parent_id FROM favorites WHERE parent_type = '{$this->seedBean->module_name}' AND assigned_user_id = '{$current_user->id}' AND deleted = '0' )";
 
             array_push($returnArray, $favorites_sql);
         } 
-        if($this->mySubordinates){
-            $subordinates_sql = "{$this->seedBean->table_name}.assigned_user_id IN (SELECT id FROM users WHERE deleted=0 AND reports_to_id = '{$current_user->id}')";
+        // MintHCM Begin #70311
+        if($this->mySubordinates && !$this->myItemsOnly){
+            $subordinates_sql = "{$this->seedBean->table_name}.assigned_user_id IN('".join("','",$subordinates_ids)."')";
+            if ( isset($GLOBALS["dictionary"][$this->seedBean->object_name]["templates"]['employee_related']) && !in_array($this->seedBean->module_dir,$employee_related_exclude_modules)){
+                $subordinates_sql = " (".$subordinates_sql." OR "."{$this->seedBean->table_name}.employee_id IN('".join("','",$subordinates_ids)."')"." )";
+            }
 
             array_push($returnArray, $subordinates_sql);
         } 
-
+        // MintHCM end #70311
         return $returnArray;
     }
 

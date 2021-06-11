@@ -120,7 +120,7 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => true,
-            'len' => '18',
+            'len' => '5',
             'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
@@ -333,7 +333,7 @@ $dictionary['SpentTime'] = array(
         ),
         'workschedule_id' => array(
             'name' => 'workschedule_id',
-            'type' => 'link',
+            'type' => 'id',
             'relationship' => 'workschedules_spenttime',
             'source' => 'non-db',
             'reportable' => false,

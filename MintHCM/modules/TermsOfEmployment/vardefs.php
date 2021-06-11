@@ -386,4 +386,5 @@ VardefManager::createVardef('TermsOfEmployment', 'TermsOfEmployment',
         'basic',
         'assignable',
         'security_groups',
+        'employee_related',
     ));

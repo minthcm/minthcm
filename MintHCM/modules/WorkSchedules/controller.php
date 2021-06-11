@@ -50,8 +50,8 @@ class WorkSchedulesController extends SugarController
     {
         global $timedate;
         if (isset($_GET['redirected_from_calendar'])) {
-            if (!ACLController::checkAccess('WorkSchedules', 'edit')) {
-                if (ACLController::checkAccess('Meetings', 'edit')) {
+            if (!ACLController::checkAccess('WorkSchedules', 'edit', true)) {
+                if (ACLController::checkAccess('Meetings', 'edit', true)) {
                     $date_end = getDateTimeObject($_GET['date_end']);
                     $date_diff = $date_end->diff(getDateTimeObject($_GET['date_start']));
                     if ($date_diff->i == 30 && $date_diff->h == 0) {
@@ -60,7 +60,7 @@ class WorkSchedulesController extends SugarController
                     } else {
                         SugarApplication::redirect('index.php?module=Meetings&action=EditView&return_module=Home&date_start=' . $_GET['date_start'] . '&date_end=' . $_GET['date_end'] . '&assigned_user_id=' . $_GET['assigned_user_id']);
                     }
-                } else if (ACLController::checkAccess('Calls', 'edit')) {
+                } else if (ACLController::checkAccess('Calls', 'edit', true)) {
                     SugarApplication::redirect('index.php?module=Calls&action=EditView&return_module=Home&date_start=' . $_GET['date_start'] . '&assigned_user_id=' . $_GET['assigned_user_id']);
                 }
             }

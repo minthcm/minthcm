@@ -70,12 +70,12 @@ option:checked {
     width: 30%;
 }
 
+
 @media (min-width: 1600px) {
     .col-sm-6 .col-sm-8.edit-view-field input.sqsDisabled {
         width: 72.25%
     }
 }
-
 input#btn_ConditionLine.button[type="button"] {
     color: $color-mint-darkgreen-darker;
 }

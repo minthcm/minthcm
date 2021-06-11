@@ -121,7 +121,14 @@ $listViewDefs[$module_name] = array(
         'enabled' => true,
         'link' => true,
     ),
-    'DATE_MODIFIED' => array(
+   'EMPLOYEE_NAME' => array(
+      'width' => '9%',
+      'label' => 'LBL_EMPLOYEE_NAME',
+      'module' => 'Employees',
+      'id' => 'EMPLOYEE_ID',
+      'default' => true,
+   ),
+   'DATE_MODIFIED' => array(
         'label' => 'LBL_DATE_MODIFIED',
         'enabled' => true,
         'default' => true,

@@ -149,6 +149,7 @@ $searchFields['Candidates'] = array(
       'vname' => 'LBL_CURRENT_USER_FILTER',
       'type' => 'bool',
    ),
+   'employee_id' => array('query_type' => 'default'),
    'favorites_only' =>
    array(
       'query_type' => 'format',

@@ -1584,33 +1584,36 @@ class SugarBean {
     * @return bool
     */
    public function isOwner($user_id) {
+      // MintHCM Begin #70311 - whole isOwner function redesigned
+      $controller = ControllerFactory::getController('Users');
+      $subordinates_ids = $controller::getIDOfSubordinates(array($user_id));
+      $is_owner = false;
+      include 'modules/Employees/access_config.php';
+      
       //if we don't have an id we must be the owner as we are creating it
       if ( !isset($this->id) || $this->id == "[SELECT_ID_LIST]" ) {
          return true;
       }
       //if there is an assigned_user that is the owner
-      if ( !empty($this->fetched_row['assigned_user_id']) ) {
-         if ( $this->fetched_row['assigned_user_id'] == $user_id ) {
+      if ( !empty($this->fetched_row['assigned_user_id']) && $this->fetched_row['assigned_user_id'] == $user_id) {
             return true;
-         }
-         return false;
-      } elseif ( isset($this->assigned_user_id) ) {
-         if ( $this->assigned_user_id == $user_id ) {
-            return true;
-         }
-         return false;
-      } else {
-         //other wise if there is a created_by that is the owner
-         if ( isset($this->created_by) && $this->created_by == $user_id ) {
-            return true;
-         }
+      } elseif ( isset($this->assigned_user_id) && ($this->assigned_user_id == $user_id || in_array($this->assigned_user_id, $subordinates_ids)) ) {         
+            $is_owner = true;      
+      } 
+      elseif (isset($GLOBALS["dictionary"][$this->object_name]["templates"]['employee_related']) && !in_array($this->module_dir,$employee_related_exclude_modules)
+       && !empty($this->employee_id) && ($this->employee_id == $user_id || in_array($this->employee_id, $subordinates_ids))
+      ) {
+            $is_owner = true;
       }
-      //other wise if there is a created_by that is the owner
-      if ( isset($this->created_by) && $this->created_by == $user_id ) {
-         return true;
+      else {
+         //other wise if there is a created_by that is the owner
+         if (!$is_owner &&  isset($this->created_by) && $this->created_by == $user_id ) {
+            $is_owner =  true;
+         }
       }
 
-      return false;
+      return $is_owner;
+      // MintHCM End #70311
    }
 
    /**
@@ -2226,8 +2229,13 @@ class SugarBean {
          if ( !$this->new_with_id ) {
             $this->id = create_guid();
          }
+         // MintHCM begin #70311
+         include 'modules/Employees/access_config.php';
+         if(isset($GLOBALS["dictionary"][$this->object_name]["templates"]['employee_related']) && in_array($this->module_dir,$employee_related_copy_assigned)  && empty($this->employee_id)){
+            $this->employee_id = isset($this->assigned_user_id)? $this->assigned_user_id : "";
+         }
+         // MintHCM end #70311
       }
-
 
       require_once("data/BeanFactory.php");
       BeanFactory::registerBean($this->module_name, $this);
@@ -3309,13 +3317,37 @@ class SugarBean {
     * @return string
     */
    public function getOwnerWhere($user_id) {
+      // MintHCM Begin #70311 - whole isOwner function redesigned
+      include 'modules/Employees/access_config.php';
+
+      $controller = ControllerFactory::getController('Users');
+      $subordinates_ids = $controller::getIDOfSubordinates(array($user_id));
+      $is_owner = '';
+      $owners_array = [];
       if ( isset($this->field_defs['assigned_user_id']) ) {
-         return " $this->table_name.assigned_user_id ='$user_id' ";
+         $owners_array[] = " $this->table_name.assigned_user_id ='$user_id' ";
+         if(count($subordinates_ids)){
+            $owners_array[] = " $this->table_name.assigned_user_id IN('".join("','",$subordinates_ids)."')";
+         }
       }
+
+      if ( isset($GLOBALS["dictionary"][$this->object_name]["templates"]['employee_related']) && !in_array($this->module_dir,$employee_related_exclude_modules)) {
+         $owners_array[] = " $this->table_name.employee_id ='$user_id' ";
+         if(count($subordinates_ids)){
+            $owners_array[] = " $this->table_name.employee_id IN('".join("','",$subordinates_ids)."')";
+         }
+      }
+
+      if(count($owners_array)){
+         return " (".join(") OR (",$owners_array). ") ";
+      }
+      
       if ( isset($this->field_defs['created_by']) ) {
          return " $this->table_name.created_by ='$user_id' ";
       }
+      
       return '';
+      // MintHCM End #70311 - whole isOwner function redesigned
    }
 
    /**
@@ -3832,15 +3864,20 @@ class SugarBean {
       global $current_user;
       $skipped_modules = [];
       $group_where = SecurityGroup::getGroupWhere($this->table_name, $this->module_dir, $current_user->id);
+      
+      if (strpos($ret_array['where'], $group_where) !== false && !in_array($this->module_name, $skipped_modules) ) { //Mint #60146
+         $n = " LEFT JOIN securitygroups_records secr ON secr.deleted=0  AND secr.module='{$this->module_dir}' AND secr.record_id={$this->table_name}.id 
+         LEFT JOIN securitygroups secg on secg.id=secr.securitygroup_id AND secg.deleted=0 LEFT JOIN securitygroups_users secu
+          ON secg.id=secu.securitygroup_id AND secu.deleted=0 AND secu.user_id='{$current_user->id}' ";
 
-      if ( strpos($ret_array['where'], $group_where) !== false && !in_array($this->module_name, $skipped_modules) ) { //Mint #60146
-         $n = " LEFT JOIN securitygroups_records secr ON secr.deleted=0  AND secr.module='{$this->module_dir}' AND secr.record_id={$this->table_name}.id INNER JOIN securitygroups secg on secg.id=secr.securitygroup_id AND secg.deleted=0 INNER JOIN securitygroups_users secu ON secg.id=secu.securitygroup_id AND secu.deleted=0 AND secu.user_id='{$current_user->id}' ";
          foreach ( array( 'from', 'from_min', 'secondary_from' ) as $eVSecGroupUpdKey ) {
             if ( isset($ret_array[$eVSecGroupUpdKey]) && strpos($ret_array[$eVSecGroupUpdKey], $n) === false ) {
                $ret_array[$eVSecGroupUpdKey] .= $n;
             }
          }
-         $ret_array['where'] = str_replace($group_where, "secg.id is not null", $ret_array['where']);
+         $optimization_replacer = " (secg.id is not null OR ( ".$this->getOwnerWhere($current_user->id) .")) ";
+
+         $ret_array['where'] = str_replace($group_where, $optimization_replacer, $ret_array['where']);
       }
       // Mint end SG optimization
       //make call to process the order by clause
@@ -5835,6 +5872,7 @@ class SugarBean {
          require_once("modules/SecurityGroups/SecurityGroup.php");
          $in_group = SecurityGroup::groupHasAccess($this->module_dir, $this->id, $view);
       }
+      
       return ACLController::checkAccess($this->module_dir, $view, $is_owner, $this->acltype, $in_group);
    }
 

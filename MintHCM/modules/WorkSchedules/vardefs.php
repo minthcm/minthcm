@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -199,6 +198,7 @@ $dictionary['WorkSchedules'] = array(
          'options' => 'workschedules_status_dom',
          'studio' => 'visible',
          'dependency' => false,
+         'vt_validation' => "AEM(callCustomApi(WorkSchedules,canChangeWorkScheduleStatus,\$id, \$status),'LBL_ERR_CANNOT_CHANGE_WORK_SCHEDULE_STATUS')",
       ),
       'supervisor_acceptance' => array(
          'required' => false,
@@ -484,13 +484,56 @@ $dictionary['WorkSchedules'] = array(
          'isnull' => 'true',
          'dbType' => 'id',
       ),
+      "workplaces_workschedules" => array(
+         'name' => 'workplaces_workschedules',
+         'type' => 'link',
+         'relationship' => 'workplaces_workschedules',
+         'source' => 'non-db',
+         'module' => 'Workplaces',
+         'bean_name' => 'Workplaces',
+         'vname' => 'LBL_RELATIONSHIP_WORKPLACE_NAME',
+         'id_name' => 'workplace_id',
+      ),
+      "workplace_name" => array(
+         'name' => 'workplace_name',
+         'type' => 'relate',
+         'source' => 'non-db',
+         'vname' => 'LBL_RELATIONSHIP_WORKPLACE_NAME',
+         'id_name' => 'workplace_id',
+         'link' => 'workplaces_workschedules',
+         'module' => 'Workplaces',
+         'table' => 'workplaces',
+         'rname' => 'name',
+         'vt_dependency' => "equals(\$type,'office')",
+         'vt_validation' => array(
+            "AEM(callCustomApi(WorkSchedules,validateWorkplaceStatus,\$workplace_id),'LBL_ERR_STATUS_NOT_ACTIVE')",
+            "AEM(callCustomApi(WorkSchedules,validateWorkplaceAllocationPeriods,\$workplace_id,\$date_start,\$date_end),'LBL_ERR_WORKPLACE_NOT_ACTIVE')",
+         ),
+      ),
+      "workplace_id" => array(
+         'name' => 'workplace_id',
+         'relationship' => 'workplaces_workschedules',
+         'type' => 'id',
+         'vname' => 'LBL_RELATIONSHIP_WORKPLACE_ID', 
+         'audited' => true,
+      ),
    ),
-   'relationships' => array(),
+   'relationships' => array(
+      "workplaces_workschedules" => array(
+         'lhs_module' => 'Workplaces',
+         'lhs_table' => 'workplaces',
+         'lhs_key' => 'id',
+         'rhs_module' => 'WorkSchedules',
+         'rhs_table' => 'workschedules',
+         'rhs_key' => 'workplace_id',
+         'relationship_type' => 'one-to-many',
+      ),
+   ),
    'optimistic_locking' => true,
    'unified_search' => true,
 );
 if ( !class_exists('VardefManager') ) {
-   require_once ('include/SugarObjects/VardefManager.php');
+    require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('WorkSchedules', 'WorkSchedules', array(
    'basic',

@@ -70,6 +70,11 @@ $subpanel_layout = array(
          'vname' => 'LBL_DATE_OF_SIGNING',
          'width' => '20%',
       ),
+      'employee_name' => array(
+         'vname' => 'LBL_EMPLOYEE_NAME',
+         'widget_class' => 'SubPanelDetailViewLink',
+         'width' => '20%',
+      ),
       'assigned_user_name' => array(
          'vname' => 'LBL_ASSIGNED_TO_NAME',
          'widget_class' => 'SubPanelDetailViewLink',

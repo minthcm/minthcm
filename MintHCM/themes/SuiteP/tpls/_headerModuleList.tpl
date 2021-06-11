@@ -540,7 +540,7 @@
                                                                                                     <li id="globalLinks" class="dropdown nav navbar-nav globalLinks-mobile">
 
                                                                                                         <button id="usermenucollapsed" class="dropdown-toggle btn btn-default usermenucollapsed" data-toggle="dropdown" aria-expanded="true">
-                                                                                                            <span class="suitepicon suitepicon-action-user-small"></span>
+                                                                                                            <span class="suitepicon suitepicon-action-current-user"></span>
                                                                                                         </button>
                                                                                                         <ul class="dropdown-menu user-dropdown user-menu" role="menu" aria-labelledby="dropdownMenu2">
                                                                                                             <li role="presentation">
@@ -742,7 +742,7 @@
                                                                                                                 </span>
                                                                                                             {/if}
                                                                                                             {* MintHCM #63083 END *}
-                                                                                                            <span>{$CURRENT_USER}</span>
+                                                                                                            <span>{$CURRENT_USER_FIRST_NAME}</span>
                                                                                                             <span class="suitepicon suitepicon-action-caret"></span>
                                                                                                         </button>
                                                                                                         <ul class="dropdown-menu user-dropdown user-menu" role="menu" aria-labelledby="with-label">

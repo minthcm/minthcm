@@ -264,6 +264,15 @@ $dictionary["Employee"]["fields"]["prospect_lists"] = array(
     'source' => 'non-db',
     'vname' => 'LBL_PROSPECT_LIST',
 );
+$dictionary["Employee"]["fields"]["allocations_employees"] = array(
+    'name' => "allocations_employees",
+    'type' => 'link',
+    'relationship' => "allocations_employees",
+    'source' => 'non-db',
+    'module' => 'Allocations',
+    'bean_name' => 'Allocations',
+    'vname' => 'LBL_LINKED_ALLOCATIONS_TITLE',
+);
 
 $dictionary["Employee"]["audited"] = true;
 $dictionary["Employee"]["fields"]["employee_status"]["audited"] = true;
