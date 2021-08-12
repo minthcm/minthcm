@@ -47,6 +47,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'include/SugarObjects/templates/person/Person.php';
 require_once __DIR__ . '/../../include/EmailInterface.php';
+// eVolpe #77675 start
+require_once 'modules/SecurityGroups/PrivateGroup.php';
+// eVolpe #77675 end
 
 // Employee is used to store customer information.
 class Employee extends Person implements EmailInterface
@@ -320,6 +323,12 @@ class Employee extends Person implements EmailInterface
                 return false;
             }
         }
+        // eVolpe 77675 start
+        if ($this->reports_to_id != $this->fetched_row['reports_to_id']) {
+            $private_group = new PrivateGroup($this);
+            $private_group->update($this->reports_to_id, $this->fetched_row['reports_to_id']);
+        }
+        // eVolpe 77675 end
 
         return parent::save($check_notify);
     }

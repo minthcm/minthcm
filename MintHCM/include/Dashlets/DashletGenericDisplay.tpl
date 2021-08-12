@@ -122,7 +122,9 @@
 					<!-- dashlet: {$dashletId} -->
 	                <a href='#' onclick='return SUGAR.mySugar.retrieveDashlet("{$dashletId}", "{$pageData.urls.orderBy}{$params.orderBy|default:$colHeader|lower}&sugar_body_only=1&id={$dashletId}", false, false, true, $(this).closest("div[id^=pageNum_][id$=_div]").parent().parent())' class='listViewThLinkS1' title="{$arrowAlt}">{sugar_translate label=$params.label module=$pageData.bean.moduleDir}</a>&nbsp;&nbsp;
 	                {if $params.orderBy|default:$colHeader|lower == $pageData.ordering.orderBy}
-	                    {if $pageData.ordering.sortOrder == 'ASC'}
+	                    {* MintHCM #82984 START *}
+						{if $pageData.ordering.sortOrder == 'DESC'}
+						{* MintHCM #82984 END *}
                             {capture assign="imageName"}arrow_down.{$arrowExt}{/capture}
                             {capture assign="alt_sort"}{sugar_translate label='LBL_ALT_SORT_DESC'}{/capture}
 							<span class="suitepicon suitepicon-action-sorting-descending" title="{$alt_sort}"></span>

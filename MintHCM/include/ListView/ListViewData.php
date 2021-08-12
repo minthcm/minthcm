@@ -137,7 +137,14 @@ class ListViewData {
 	 * @return  STRING (ASC or DESC)
 	 */
 	function getReverseSortOrder($current_order){
-		return (strcmp(strtolower($current_order), 'asc') == 0)?'DESC':'ASC';
+         /* MintHCM #82984 START */
+         if (empty($current_order)){
+            return 'DESC';
+        }
+        else{
+        /* MintHCM #82984 END */
+            return (strcmp(strtolower($current_order), 'asc') == 0)?'DESC':'ASC';
+        }
 	}
 	/**
 	 * gets the limit of how many rows to show per page

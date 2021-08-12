@@ -141,4 +141,6 @@ $mod_strings = array(
     'LBL_ERR_STATUS_NOT_ACTIVE' => 'Selected Workplace must be active.',
     'LBL_ERR_WORKPLACE_NOT_ACTIVE' => 'Selected Workplace does not have valid allocation for you.',
     'LBL_ERR_CANNOT_CHANGE_WORK_SCHEDULE_STATUS' => 'You cannot change status to "Closed" because there are gaps between spent times or his time frames do not coincide with working times',
+    'LBL_ERR_DELEGATION_DURATION_NOT_VALID' => 'Delegation Duration (h) can\'t be a negative number',
+    
 );

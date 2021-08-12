@@ -109,8 +109,9 @@ SugarWidgetListView.prototype.display = function () {
 
       html += '<tr class="' + className + '">';
       html += '<td><span class="suitepicon suitepicon-module-' + bean.module.toLowerCase().replace( '_', '-' ) + '"></span></td>';
-      // MintHCM #54195 #59793 Start
-      if ( bean.module == 'Resources' ) {
+        // MintHCM #54195 #59793  #43484 Start
+        if (bean.module == 'Resources' || bean.module == "SecurityGroup") {
+        // MintHCM #43484 End
          html += '<td>' + bean.fields.name + '</td><td></td><td></td>';
       } else {
          html += '<td>' + bean.fields.full_name + '</td>';
@@ -121,7 +122,7 @@ SugarWidgetListView.prototype.display = function () {
             html += '<td>' + bean.fields.phone_work + '</td>';
          }
       }
-      // MintHCM #54195 #59793 End
+        // MintHCM #54195 #59793 
       html += '<td align="right">';
       //	hidden = 'hidden';
       hidden = 'visible';
@@ -138,7 +139,45 @@ SugarWidgetListView.prototype.display = function () {
 
    div.innerHTML = html;
 }
+// MintHCM #43484 Start
+SugarWidgetSchedulerAttendees.get_users = function (list_row) {
 
+    if (typeof (GLOBAL_REGISTRY.result_list[list_row]) != 'undefined') {
+        viewTools.api.callCustomApi( {
+            module: 'Meetings',
+            action: 'getUsers',
+            dataPOST: {
+               id: GLOBAL_REGISTRY.result_list[list_row].fields.id
+            },
+            callback: function ( data ) {
+                data.forEach((person) => {
+                if(!SugarWidgetSchedulerAttendees.userOnList(person.id)){
+                    item = {
+                        fields:person,
+                        module:"User"
+                    }
+                    GLOBAL_REGISTRY.focus.users_arr.push(item)
+                }
+
+              });
+              
+            }
+         } );
+    }
+}
+
+SugarWidgetSchedulerAttendees.userOnList = function (id){
+    var user_on_list = false;
+    for(var i = 0; i<GLOBAL_REGISTRY.focus.users_arr.length; i++){
+        if(GLOBAL_REGISTRY.focus.users_arr[i].fields.id == id){
+            user_on_list = true;
+            break;
+        }
+    }
+    return user_on_list;
+}
+
+// MintHCM #43484 End
 SugarWidgetListView.prototype.display_loading = function () {
 
 }
@@ -183,10 +222,10 @@ SugarWidgetSchedulerSearch.submit = function ( form ) {
    }
 
    var query = {
-      // MintHCM #54195 #59793 Start
-      "modules": [ "Users", "Contacts", "Leads", "Candidates", "Resources" ],
+        // MintHCM #54195 #59793 #43484 Start
+        "modules": ["Users", "Contacts", "Leads", "Candidates", "Resources", "SecurityGroups"],
       "field_list": [ 'id', 'name', 'full_name', 'email1', 'phone_work', 'phone_mobile' ],
-      // MintHCM #54195 #59793 End
+        // MintHCM #54195 #59793 #43484 End
       "group": "and",
       "conditions": conditions
    };
@@ -196,7 +235,6 @@ SugarWidgetSchedulerSearch.submit = function ( form ) {
 }
 
 SugarWidgetSchedulerSearch.prototype.refresh_list = function ( rslt ) {
-
    GLOBAL_REGISTRY['result_list'] = rslt['list'];
 
    if ( rslt['list'].length > 0 ) {
@@ -574,7 +612,8 @@ SugarWidgetScheduler.getScheduleDetails = function ( beans, ids ) {
            );
    // MintHCM #59793 Start
    if ( _.contains( beans, 'Reservationss' ) ) {
-      viewTools.api.callCustomApi( {module: 'Reservations', action: 'getReservations', dataPOST: {reservations_ids: ids}, callback: function ( data ) {
+        viewTools.api.callCustomApi({
+            module: 'Reservations', action: 'getReservations', dataPOST: { reservations_ids: ids }, callback: function (data) {
             if ( !_.isEmpty( data ) ) {
                var innerHTML = "";
                var reservationTemplate = _.template( '<div><div><a href="index.php?module=Reservations&action=DetailView&record=<%= id %>"><%= name %></a></div><div><%= starting_date %></div><div><%= employee %></div></div><br />' );
@@ -583,7 +622,8 @@ SugarWidgetScheduler.getScheduleDetails = function ( beans, ids ) {
                } );
                $dialog.html( innerHTML );
             }
-         }} );
+            }
+        });
    } else if ( _.contains( beans, 'Candidates' ) || _.contains( beans, 'Resources' ) ) {
       var bean_name = $( '#schedulerTable tr[data-id="' + ids[0] + '"][data-module="' + beans[0] + '"] td:first-child' ).text();
       if ( bean_name ) {
@@ -842,11 +882,22 @@ SugarWidgetSchedulerAttendees.prototype.display = function () {
       // MintHCM #59793 End
    }
 }
+SugarWidgetSchedulerAttendees.form_add_attendee = function (list_row) {
 
-SugarWidgetSchedulerAttendees.form_add_attendee = function ( list_row ) {
-   if ( typeof (GLOBAL_REGISTRY.result_list[list_row]) != 'undefined' && typeof (GLOBAL_REGISTRY.focus.users_arr_hash[ GLOBAL_REGISTRY.result_list[list_row].fields.id]) == 'undefined' ) {
+    if (typeof (GLOBAL_REGISTRY.result_list[list_row]) != 'undefined' && typeof (GLOBAL_REGISTRY.focus.users_arr_hash[GLOBAL_REGISTRY.result_list[list_row].fields.id]) == 'undefined' &&
+    // MintHCM #43484 Start
+    GLOBAL_REGISTRY.result_list[list_row].module !="SecurityGroup"
+    // MintHCM #43484 End
+    ) {
       GLOBAL_REGISTRY.focus.users_arr[ GLOBAL_REGISTRY.focus.users_arr.length ] = GLOBAL_REGISTRY.result_list[list_row];
    }
+
+
+    // MintHCM #43484 Start
+    if(GLOBAL_REGISTRY.result_list[list_row].module == 'SecurityGroup'){
+        SugarWidgetSchedulerAttendees.get_users(list_row);
+    }
+        // MintHCM #43484 End
    GLOBAL_REGISTRY.scheduler_attendees_obj.display();
 }
 

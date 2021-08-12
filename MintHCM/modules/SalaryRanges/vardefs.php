@@ -57,6 +57,8 @@ $dictionary['SalaryRanges'] = array(
                 'compareto' => 'end_date',
                 'blank' => true,
             ),
+            'enable_range_search' => true,
+            'options' => 'date_range_search_dom',
         ),
         'end_date' => array(
             'name' => 'end_date',
@@ -67,6 +69,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => true,
             'audited' => true,
             'enable_range_search' => true,
+            'options' => 'date_range_search_dom',
         ),
         'gross_value_from' => array(
             'name' => 'gross_value_from',
@@ -387,10 +390,11 @@ if (!class_exists('VardefManager')) {
 VardefManager::createVardef('SalaryRanges', 'SalaryRanges', array('basic', 'assignable', 'security_groups'));
 
 $dictionary['SalaryRanges']['fields']['name']['vt_readonly'] = true;
-$dictionary['SalaryRanges']['fields']['name']['audited'] = true;
+$dictionary['SalaryRanges']['fields']['name']['audited'] = false;
 $dictionary['SalaryRanges']['fields']['name']['related_fields'] = array(
     'position_name',
     'start_date',
     'end_date',
 );
 $dictionary['SalaryRanges']['fields']['name']['disable_num_format'] = 1;
+$dictionary['SalaryRanges']['fields']['description']['audited'] = true;

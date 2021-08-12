@@ -48,4 +48,28 @@ $searchFields['SalaryRanges'] = array(
     'position_name' => array(
         'query_type' => 'default',
     ),
+    'start_range_start_date' => 
+    array (
+      'query_type' => 'default',
+      'enable_range_search' => true,
+      'is_date_field' => true,
+    ),
+    'end_range_start_date' => 
+    array (
+      'query_type' => 'default',
+      'enable_range_search' => true,
+      'is_date_field' => true,
+    ),
+    'start_range_end_date' => 
+    array (
+      'query_type' => 'default',
+      'enable_range_search' => true,
+      'is_date_field' => true,
+    ),
+    'end_range_end_date' => 
+    array (
+      'query_type' => 'default',
+      'enable_range_search' => true,
+      'is_date_field' => true,
+    ),
 );

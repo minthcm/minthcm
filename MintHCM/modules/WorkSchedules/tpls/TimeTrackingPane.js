@@ -248,7 +248,7 @@ if ( !window.TimePanel ) { // avoid multi-declaration
          end.setMinutes( end.getMinutes() + Math.abs( this.timeline.start.getTimezoneOffset() ) );
          if ( !i.$el ) {
             var css_classes = this.getTimeCellCssClasses( i );
-            i.$el = $( '<a target="_blank" href="index.php?module=SpentTime&action=DetailView&record=' + i.id + '" class="' + css_classes + '">' + i.spent_time + '</a>' );
+            i.$el = $('<span class="' + css_classes + '">' + i.spent_time + '</span>');
             var task_number_desc = '';
             if ( i.spendtime_projecttask_id != undefined && i.spendtime_projecttask_id != '' ) {
                task_number_desc = ' #' + i.spendtime_projecttask_id;
@@ -256,6 +256,21 @@ if ( !window.TimePanel ) { // avoid multi-declaration
             i.$el.attr( 'title', toSugarTime( start ) + ' - ' + toSugarTime( end ) + task_number_desc + ' ' + i.description );
             parent_el.append( i.$el );
          }
+
+         i.$el.click(function () {
+            MintHCMDynamicPopupView.init(
+               SUGAR.language.get('app_strings', 'LBL_WORKSCHEDULES'),
+               'SpentTime',
+               i.id,
+               {
+                  postSaveCallback: function () {
+                     SUGAR.mySugar.retrieveDashlet($('#dashlet_id').val());
+                     return false;
+                  }.bind(this),
+
+               }
+            );
+         });
 
          i.$el.css( {
             width: Math.ceil( minutes * div ) - 2 + 'px',

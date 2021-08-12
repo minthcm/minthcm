@@ -723,7 +723,7 @@ class MysqlManager extends DBManager {
       if ( empty($columns) ) {
          return false;
       }
-
+      $indices=$this->trimIndexLength($indices,$fieldDefs);// MINT NEW
       $keys = $this->keysSQL($indices);
       if ( !empty($keys) ) {
          $keys = ",$keys";
@@ -741,6 +741,79 @@ class MysqlManager extends DBManager {
       }
       return $sql;
    }
+   protected function trimAndRemoveOrGetLength($field_string)
+    {
+        $matches = null;
+        if (preg_match_all('/([^()]*)\\((.*)\\)/', $field_string, $matches)) {
+            return [trim($matches[1][0]), trim($matches[2][0])];
+        }
+        return [$field_string, false];
+    }
+    protected function trimIndexLength($indices, $fieldDefs)
+    {
+        foreach ($indices as $k => $index) {
+            if (!empty($index['db']) && $index['db'] != $this->dbType) {
+                continue;
+            }
+            if (isset($index['source']) && $index['source'] != 'db') {
+                continue;
+            }
+            if (isset($index['type']) && $index['type'] === 'primary') {
+                continue;
+            }
+            $type = $index['type'];
+
+            $fields = $index['fields'];
+            if (!is_array($index['fields'])) {
+                $fields = expolode(", ", $index['fields']);
+            }
+            $indices[$k]['fields'] = [];
+            $fields_count = 0;
+            $fields_len = 0;
+            foreach ($fields as $field) {
+                list($field_name, $len) = $this->trimAndRemoveOrGetLength(trim($field));
+
+                if (isset($fieldDefs[$field_name]) && $this->isTextColumnType($fieldDefs[$field_name])) {
+                    $fields_count++;
+                    $max = 255;
+                    if ($fieldDefs[$field_name]['type'] == 'id') {
+                        $max = 36;
+                    }
+                    $fields_len = max($len, isset($fieldDefs[$field_name]['len']) ? $fieldDefs[$field_name]['len'] : $max);
+                }
+            }
+            $m = 190;
+            if ($fields_len >= 190) {
+                $m = (int) (190 / $fields_count);
+            }
+            foreach ($fields as $field) {
+                list($field_name, $len) = $this->trimAndRemoveOrGetLength(trim($field));
+                if (isset($fieldDefs[$field_name]) && $this->isTextColumnType($fieldDefs[$field_name])) {
+                    if ($len === false && isset($fieldDefs[$field_name]['len']) && $fieldDefs[$field_name]['len'] < $m) {
+                        $indices[$k]['fields'][] = $field;
+                        continue;
+                    }
+                    if (($fieldDefs[$field_name]['type'] === 'id' || $fieldDefs[$field_name]['dbType'] === 'id') && (!isset($fieldDefs[$field_name]['len']) || $fieldDefs[$field_name]['len'] == 36)) {
+                        $indices[$k]['fields'][] = $field;
+                        continue;
+                    }
+                    if ($len !== false && $len < $m) {
+                        $indices[$k]['fields'][] = $field . "($len)";
+                        continue;
+                    }
+                    $indices[$k]['fields'][] = $field . "($m)";
+                } else {
+                    $indices[$k]['fields'][] = $field;
+                }
+            }
+        }
+        return $indices;
+    }
+    protected function isTextColumnType($fieldDef)
+    {
+        $textTypes = ['text', 'varchar', 'name', 'blob', 'longblob', 'longtext', 'id'];
+        return in_array($fieldDef['type'], $textTypes) || in_array(isset($fieldDef['dbType']) ? $fieldDef['dbType'] : '', $textTypes);
+    }
 
 
    /**
@@ -1436,16 +1509,37 @@ class MysqlManager extends DBManager {
     * Check DB version
     * @see DBManager::canInstall()
     */
-   public function canInstall() {
-      $db_version = $this->version();
-      if ( empty($db_version) ) {
-         return array( 'ERR_DB_VERSION_FAILURE' );
-      }
-      if ( version_compare($db_version, '4.1.2') < 0 ) {
-         return array( 'ERR_DB_MYSQL_VERSION', $db_version );
-      }
-      return true;
-   }
+    public function canInstall() {
+        $db_version = $this->version();
+        if ( empty($db_version) ) {
+           return array( 'ERR_DB_VERSION_FAILURE' );
+        }
+        if ( version_compare($db_version, '5.6') < 0 ) {
+           return array( 'ERR_DB_MYSQL_VERSION', $db_version );
+        }
+        $db_provider = $this->versionName();
+        if('maria'===$db_provider &&  version_compare($db_version, '10.2') >= 0 ) {
+              return array( 'ERR_DB_MYSQL_VERSION', $db_version );
+        }
+        if('mysql'===$db_provider &&  version_compare($db_version, '8.0.0') >= 0 ) {
+          return array( 'ERR_DB_MYSQL_VERSION', $db_version );
+       }
+        return true;
+     }
+   /**
+    * @see DBManager::version()
+    */
+    public function versionName() {
+        $result = $this->getOne("SELECT @version_comment ");
+        $db_sub_provider = strtolower(is_array($result)?join(",",$result):$result) ;
+        if(-1===strpos($db_sub_provider,'mariadb')){
+            return 'maria';
+        }
+        elseif(-1===strpos($db_sub_provider,'percona')){
+            return 'mysql';
+        }
+        return 'mysql';
+     }
 
    public function installConfig() {
       return array(
