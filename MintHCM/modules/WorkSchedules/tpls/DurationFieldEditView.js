@@ -59,7 +59,6 @@ function updateDuration() {
       var duration_hours = 8;
       switch (type) {
          case "overtime":
-         case "home":
             duration_hours = 1;
             break;
       }

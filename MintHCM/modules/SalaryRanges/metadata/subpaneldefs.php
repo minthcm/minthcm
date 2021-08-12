@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -41,20 +43,25 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
-}
-
-include 'include/MVC/preDispatch.php';
-$startTime = microtime(true);
-require_once 'include/entryPoint.php';
-ob_start();
-require_once 'include/MVC/SugarApplication.php';
-
-require_once('include/SugarMetric/Manager.php');
-SugarMetric_Manager::getInstance()->setMetricClass('background')->setTransactionName('index');
-
-$app = new SugarApplication();
-$app->startSession();
-$app->execute();
+$layout_defs["SalaryRanges"]["subpanel_setup"] = array(
+    'securitygroups' => array(
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopSelectButton',
+                'mode' => 'MultiSelect',
+            ),
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+        ),
+        'order' => 900,
+        'sort_by' => 'name',
+        'sort_order' => 'asc',
+        'module' => 'SecurityGroups',
+        'refresh_page' => 1,
+        'subpanel_name' => 'default',
+        'get_subpanel_data' => 'SecurityGroups',
+        'add_subpanel_data' => 'securitygroup_id',
+        'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
+    ),
+);

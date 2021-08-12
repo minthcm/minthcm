@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -7,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -328,7 +329,7 @@ $mod_strings = array(
     'LBL_TITLE_ARE_YOU_READY' => 'Are you ready to install?',
     'REQUIRED_SYS_COMP' => 'Required System Components',
     'REQUIRED_SYS_COMP_MSG' =>
-        'Before you begin, please be sure that you have the supported versions of the following system components:<br>
+    'Before you begin, please be sure that you have the supported versions of the following system components:<br>
                       <ul>
                       <li> Database/Database Management System (Examples: MariaDB, MySQL or SQL Server)</li>
                       <li> Web Server (Apache, IIS)</li>
@@ -337,7 +338,7 @@ $mod_strings = array(
                       compatible system components for the MintHCM version that you are installing.<br>',
     'REQUIRED_SYS_CHK' => 'Initial System Check',
     'REQUIRED_SYS_CHK_MSG' =>
-        'When you begin the installation process, a system check will be performed on the web server on which the MintHCM files are located in order to
+    'When you begin the installation process, a system check will be performed on the web server on which the MintHCM files are located in order to
                       make sure the system is configured properly and has all of the necessary components
                       to successfully complete the installation. <br><br>
                       The system checks all of the following:<br>
@@ -358,7 +359,7 @@ $mod_strings = array(
 
     'REQUIRED_INSTALLTYPE' => 'Typical or Custom install',
     'REQUIRED_INSTALLTYPE_MSG' =>
-        'After the system check is performed, you can choose either
+    'After the system check is performed, you can choose either
                       the Typical or the Custom installation.<br><br>
                       For both <b>Typical</b> and <b>Custom</b> installations, you will need to know the following:<br>
                       <ul>
@@ -433,7 +434,7 @@ $mod_strings = array(
         'description' => 'This template is used when the System Administrator sends a new password to a user.',
         'body' => '<div><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width="550" align=\"\&quot;\&quot;center\&quot;\&quot;\"><tbody><tr><td colspan=\"2\"><p>Here is your account username and temporary password:</p><p>Username : $contact_user_user_name </p><p>Password : $contact_user_user_hash </p><br><p>$config_site_url</p><br><p>After you log in using the above password, you may be required to reset the password to one of your own choice.</p>   </td>         </tr><tr><td colspan=\"2\"></td>         </tr> </tbody></table> </div>',
         'txt_body' =>
-            '
+        '
 Here is your account username and temporary password:
 Username : $contact_user_user_name
 Password : $contact_user_user_hash
@@ -449,7 +450,7 @@ After you log in using the above password, you may be required to reset the pass
         'description' => "This template is used to send a user a link to click to reset the user's account password.",
         'body' => '<div><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width="550" align=\"\&quot;\&quot;center\&quot;\&quot;\"><tbody><tr><td colspan=\"2\"><p>You recently requested on $contact_user_pwd_last_changed to be able to reset your account password. </p><p>Click on the link below to reset your password:</p><p> $contact_user_link_guid </p>  </td>         </tr><tr><td colspan=\"2\"></td>         </tr> </tbody></table> </div>',
         'txt_body' =>
-            '
+        '
 You recently requested on $contact_user_pwd_last_changed to be able to reset your account password.
 
 Click on the link below to reset your password:
@@ -465,7 +466,7 @@ $contact_user_link_guid',
         'description' => "This template is used to send a user a code for Two Factor Authentication.",
         'body' => '<div><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width="550" align=\"\&quot;\&quot;center\&quot;\&quot;\"><tbody><tr><td colspan=\"2\"><p>Two Factor Authentication code is <b>$code</b>.</p>  </td>         </tr><tr><td colspan=\"2\"></td>         </tr> </tbody></table> </div>',
         'txt_body' =>
-            'Two Factor Authentication code is $code.',
+        'Two Factor Authentication code is $code.',
         'name' => 'Two Factor Authentication email',
     ),
 
@@ -554,19 +555,23 @@ $contact_user_link_guid',
     'ERR_ADMIN_EMAIL' => 'Administrator Email Address is incorrect.',
     'ERR_SITE_URL' => 'Site URL is required.',
 
-	'STAT_CONFIGURATION' => 'Configuration relationships...',
-	'STAT_CREATE_DB' => 'Create database...',
+    'STAT_CONFIGURATION' => 'Configuration relationships...',
+    'STAT_CREATE_DB' => 'Create database...',
 
-	'STAT_CREATE_DEFAULT_SETTINGS' => 'Create default settings...',
-	'STAT_INSTALL_FINISH' => 'Install finish...',
-	'STAT_INSTALL_FINISH_LOGIN' => 'Installation process finished, <a href="%s">please log in...</a>',
-	'LBL_LICENCE_TOOLTIP' => 'Please accept license first',
+    'STAT_CREATE_DEFAULT_SETTINGS' => 'Create default settings...',
+    'STAT_INSTALL_FINISH' => 'Install finish...',
+    'STAT_INSTALL_FINISH_LOGIN' => 'Installation process finished, <a href="%s">please log in...</a>',
+    'LBL_LICENCE_TOOLTIP' => 'Please accept license first',
 
     'LBL_MORE_OPTIONS_TITLE' => 'More options',
     'LBL_START' => '',
     'LBL_DB_CONN_ERR' => 'Database error',
     'LBL_OLD_PHP' => 'Old PHP Version Detected!',
-    'LBL_OLD_PHP_MSG' => 'The recommended PHP version to install MintHCM is %s <br />Although the minimum PHP version required is %s, is not recommended due to the large number of fixed bugs, including security fixes, released in the more modern versions.<br />You are using PHP version %s, which is EOL: <a href="http://php.net/eol.php">http://php.net/eol.php</a>.<br />Please consider upgrading your PHP version. Instructions on <a href="http://php.net/migration70">http://php.net/migration70</a>. ',
+    'LBL_OLD_PHP_MSG' => 'The recommended PHP version to install MintHCM is %s <br />Although the minimum PHP version required is %s, ' .
+        //' is not recommended due to the large number of fixed bugs, including security fixes, released in the more modern versions.'.
+        '<br />You are using PHP version %s, witch is not supported by MintHCM ' .
+        //' which is EOL: <a href="http://php.net/eol.php">http://php.net/eol.php</a>.<br />Please consider upgrading your PHP version. Instructions on <a href="http://php.net/migration70">http://php.net/migration70</a>. '
+        '',
     'LBL_OLD_PHP_OK' => 'I\'m aware of the risks and wish to continue.',
 
     'LBL_DBCONF_TITLE_USER_INFO_LABEL' => 'User',
@@ -577,4 +582,3 @@ $contact_user_link_guid',
     'LBL_DBCONFIG_B_MSG1_LABEL' => '', // this label dynamically needed in install/installConfig.php:293
     'LBL_DBCONFIG_B_MSG1' => 'The username and password of a database administrator who can create database tables and users and who can write to the database is necessary in order to set up the MintHCM database.'
 );
-

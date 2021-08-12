@@ -397,6 +397,9 @@ $dictionary['WorkSchedules'] = array(
          'options' => 'numeric_range_search_dom',
          'precision' => '2',
          'vt_dependency' => "equals(\$type,'delegation')",
+         // MintHCM #66889 START
+         'vt_validation' => "AEM(callCustomApi(WorkSchedules,validateDelegationDurationValue,\$delegation_duration),'LBL_ERR_DELEGATION_DURATION_NOT_VALID')",
+         // MintHCM #66889 END
       ),
       'comments' => array(
          'name' => 'comments',

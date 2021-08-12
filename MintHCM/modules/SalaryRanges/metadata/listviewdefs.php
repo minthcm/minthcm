@@ -82,5 +82,51 @@ $listViewDefs[$module_name] = array(
         'default' => true,
         'name' => 'gross_value_to',
     ),
-
+    'NET_VALUE_FROM' => array(
+        'label' => 'LBL_NET_VALUE_FROM',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'net_value_from',
+    ),
+    'NET_VALUE_TO' => array(
+        'label' => 'LBL_NET_VALUE_TO',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'net_value_to',
+    ),
+    'EMPLOYER_COSTS_FROM' => array(
+        'label' => 'LBL_EMPLOYER_COSTS_FROM',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'employer_costs_from',
+    ),
+    'EMPLOYER_COSTS_TO' => array(
+        'label' => 'LBL_EMPLOYER_COSTS_TO',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'employer_costs_to',
+    ),
+    'DATE_MODIFIED' => array(
+        'label' => 'LBL_DATE_MODIFIED',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'DATE_MODIFIED',
+    ),
+    'MODIFIED_BY_NAME' => array(
+        'width' => '5%',
+        'label' => 'LBL_MODIFIED',
+        'default' => false,
+        'name' => 'modified_by_name',
+    ),
+    'CREATED_BY_NAME' => array(
+        'label' => 'LBL_CREATED_USER',
+        'width' => '10%',
+        'default' => false,
+        'name' => 'CREATED_BY_NAME',
+    ),
+    'DATE_ENTERED' => array(
+        'width' => '10%',
+        'label' => 'LBL_DATE_ENTERED',
+        'default' => false,
+    ),
 );

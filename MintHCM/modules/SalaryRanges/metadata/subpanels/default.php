@@ -60,13 +60,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $subpanel_layout = array(
     'top_buttons' => array(
         array('widget_class' => 'SubPanelTopCreateButton'),
-        array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'SalaryRanges'),
     ),
     'where' => '',
     'list_fields' => array(
         'name' => array(
             'name' => 'name',
             'vname' => 'LBL_NAME',
+            'widget_class' => 'SubPanelDetailViewLink',
         ),
         'start_date' => array(
             'name' => 'start_date',
@@ -76,14 +76,6 @@ $subpanel_layout = array(
             'name' => 'end_date',
             'vname' => 'LBL_END_DATE',
         ),
-        'gross_value_from' => array(
-            'name' => 'gross_value_from',
-            'vname' => 'LBL_GROSS_VALUE_FROM',
-        ),
-        'gross_value_to' => array(
-            'name' => 'gross_value_to',
-            'vname' => 'LBL_GROSS_VALUE_TO',
-        ),
         'edit_button' => array(
             'vname' => 'LBL_EDIT_BUTTON',
             'widget_class' => 'SubPanelEditButton',
@@ -91,7 +83,7 @@ $subpanel_layout = array(
         ),
         'remove_button' => array(
             'vname' => 'LBL_REMOVE',
-            'widget_class' => 'SubPanelRemoveButton',
+            'widget_class' => 'SubPanelDeleteButton',
             'module' => 'SalaryRanges',
         ),
     ),

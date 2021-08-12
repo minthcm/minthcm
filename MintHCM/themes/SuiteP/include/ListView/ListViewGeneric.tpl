@@ -173,7 +173,9 @@
 							{sugar_translate label=$params.label module=$pageData.bean.moduleDir}
 						&nbsp;&nbsp;  {/if}
 							{if $params.orderBy|default:$colHeader|lower == $pageData.ordering.orderBy}
-								{if $pageData.ordering.sortOrder == 'ASC'}
+								{* MintHCM #82984 START *}
+								{if $pageData.ordering.sortOrder == 'DESC'}
+								{* MintHCM #82984 END *}
 									{capture assign="imageName"}arrow_down.{$arrowExt}{/capture}
 									{capture assign="alt_sort"}{sugar_translate label='LBL_ALT_SORT_DESC'}{/capture}
 									<span class="suitepicon suitepicon-action-sorting-descending" title="{$alt_sort}"></span>
