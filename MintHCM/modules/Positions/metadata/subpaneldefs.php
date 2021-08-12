@@ -238,10 +238,6 @@ $layout_defs["Positions"]["subpanel_setup"] = array(
         'get_subpanel_data' => 'salaryranges',
         'top_buttons' => array(
             array(
-                'widget_class' => 'SubPanelTopSelectButton',
-                'mode' => 'MultiSelect',
-            ),
-            array(
                 'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
         ),

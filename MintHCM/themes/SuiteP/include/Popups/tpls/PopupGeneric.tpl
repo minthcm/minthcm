@@ -68,8 +68,10 @@
 	                {if $params.sortable|default:true}
                                 <a href="{$pageData.urls.orderBy}{$params.orderBy|default:$colHeader|lower}" onclick='sListView.save_checks(0, "{$moduleString}");' class='listViewThLinkS1'>{sugar_translate label=$params.label module=$pageData.bean.moduleDir}&nbsp;&nbsp;
 						{if $params.orderBy|default:$colHeader|lower == $pageData.ordering.orderBy}
-							{if $pageData.ordering.sortOrder == 'ASC'}
-                                {capture assign="arrowAlt"}{sugar_translate label='LBL_ALT_SORT_DESC'}{/capture}
+							{* MintHCM #82984 START *}
+							{if $pageData.ordering.sortOrder == 'DESC'}
+                            {* MintHCM #82984 END *}
+								{capture assign="arrowAlt"}{sugar_translate label='LBL_ALT_SORT_DESC'}{/capture}
 								<span class="suitepicon suitepicon-action-sorting-descending"></span>
 							{else}
                                 {capture assign="arrowAlt"}{sugar_translate label='LBL_ALT_SORT_ASC'}{/capture}

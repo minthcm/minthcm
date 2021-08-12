@@ -72,6 +72,14 @@ $viewdefs[$module_name] = array(
                     'newTab' => true,
                     'panelDefault' => 'expanded',
                 ),
+                'LBL_DETAILS' => array(
+                    'newTab' => true,
+                    'panelDefault' => 'expanded',
+                ),
+                'LBL_OTHER' => array(
+                    'newTab' => true,
+                    'panelDefault' => 'expanded',
+                ),
             ),
         ),
         'panels' => array(
@@ -84,20 +92,35 @@ $viewdefs[$module_name] = array(
                     'start_date',
                     'end_date',
                 ),
-                array(
-                    'gross_value_from',
-                    'gross_value_to',
-                ),
+            ),
+            'LBL_DETAILS'=>array(
                 array(
                     'net_value_from',
                     'net_value_to',
+                ),
+                array(
+                    'gross_value_from',
+                    'gross_value_to',
                 ),
                 array(
                     'employer_costs_from',
                     'employer_costs_to',
                 ),
             ),
-
+            'LBL_OTHER'=> array(
+                array(
+                    array(
+                        'name' => 'date_entered',
+                        'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
+                        'label' => 'LBL_DATE_ENTERED',
+                    ),
+                    array(
+                        'name' => 'date_modified',
+                        'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
+                        'label' => 'LBL_DATE_MODIFIED',
+                    ),
+                )
+            ),
         ),
     ),
 );

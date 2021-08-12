@@ -58,6 +58,10 @@ $user_name = isset($_REQUEST['user_name'])
 $password = isset($_REQUEST['username_password'])
     ? $_REQUEST['username_password'] : '';
 
+/* MintHCM START */
+$user_name = trim($user_name);
+/* MintHCM END */
+
 $authController->login($user_name, $password);
 // authController will set the authenticated_user_id session variable
 if(isset($_SESSION['authenticated_user_id'])) {

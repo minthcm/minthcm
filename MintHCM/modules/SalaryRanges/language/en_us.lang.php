@@ -56,5 +56,13 @@ $mod_strings = array(
     'LBL_POSITION_ID' => 'Position (ID)',
     'LBL_POSITION_NAME' => 'Position',
     'LBL_RECORDVIEW_PANEL1' => 'BASIC',
+    'LBL_OTHER'=>'Other',
+    'LBL_DETAILS'=>'Details',
+    'LBL_EMPLOYER_COSTS_FROM_USDOLLAR'=> 'Employer Costs UoP from (Default Currency)',
+    'LBL_EMPLOYER_COSTS_TO_USDOLLAR' => 'Employer Costs UoP to (Default Currency)',
+    'LBL_GROSS_VALUE_FROM_USDOLLAR' => 'Gross Value UoP from (Default Currency)',
+    'LBL_GROSS_VALUE_TO_USDOLLAR' => 'Gross Value UoP to (Default Currency)',
+    'LBL_NET_VALUE_FROM_USDOLLAR' => 'Net Value UoP from (Default Currency)',
+    'LBL_NET_VALUE_TO_USDOLLAR' => 'Net Value UoP to (Default Currency)',
 
 );

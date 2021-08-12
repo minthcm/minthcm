@@ -186,6 +186,16 @@ class WorkSchedulesApi
         if ($status == 'closed' && $work_schedule->canBeConfirmed() != "1") {
             $return = false;
         }
+
         return $return;
-    }
-}
+    }    public function validateDelegationDurationValue($delegation_duration)
+    {
+        if (is_numeric($delegation_duration) && $delegation_duration >= 0) {
+            return true;
+
+        }
+
+        else {
+            return false;
+        }
+    }}

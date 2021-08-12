@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -77,10 +78,10 @@ if (check_php_version() === -1) {
     $msg .= constant('SUITECRM_PHP_REC_VERSION') . '<br />';
     $msg .= 'Although the minimum PHP version required is ';
     $msg .= constant('SUITECRM_PHP_MIN_VERSION') . ', ';
-    $msg .= 'is not recommended due to the large number of fixed bugs, including security fixes, ';
-    $msg .= 'released in the more modern versions.<br />';
-    $msg .= 'You are using PHP version  ' . constant('PHP_VERSION') . ', which is EOL: <a href="http://php.net/eol.php">http://php.net/eol.php</a>.<br />';
-    $msg .= 'Please consider upgrading your PHP version. Instructions on <a href="http://php.net/migration70">http://php.net/migration70</a>. ';
+    //  $msg .= 'is not recommended due to the large number of fixed bugs, including security fixes, ';
+    // $msg .= 'released in the more modern versions.<br />';
+    $msg .= 'You are using PHP version  ' . constant('PHP_VERSION') . ', witch is not supported by MintHCM '; // ', which is EOL: <a href="http://php.net/eol.php">http://php.net/eol.php</a>.<br />';
+    //$msg .= 'Please consider upgrading your PHP version. Instructions on <a href="http://php.net/migration70">http://php.net/migration70</a>. ';
     die($msg);
 }
 
@@ -384,8 +385,10 @@ $web_root = "http://$web_root";
 
 if (!isset($_SESSION['oc_install']) || $_SESSION['oc_install'] == false) {
     //$workflow[] = 'siteConfig_a.php';
-    if (isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) &&
-        $_SESSION['install_type'] == 'custom') {
+    if (
+        isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) &&
+        $_SESSION['install_type'] == 'custom'
+    ) {
         $workflow[] = 'siteConfig_b.php';
     }
 } else {
@@ -411,19 +414,19 @@ if (!isset($_SESSION['setup_system_name']) || empty($_SESSION['setup_system_name
 }
 if (!isset($_SESSION['setup_site_session_path']) || empty($_SESSION['setup_site_session_path'])) {
     $_SESSION['setup_site_session_path'] = (isset($sugar_config['session_dir']))
-    ? $sugar_config['session_dir'] : '';
+        ? $sugar_config['session_dir'] : '';
 }
 if (!isset($_SESSION['setup_site_log_dir']) || empty($_SESSION['setup_site_log_dir'])) {
     $_SESSION['setup_site_log_dir'] = (isset($sugar_config['log_dir'])) ? $sugar_config['log_dir']
-    : '.';
+        : '.';
 }
 if (!isset($_SESSION['setup_site_guid']) || empty($_SESSION['setup_site_guid'])) {
     $_SESSION['setup_site_guid'] = (isset($sugar_config['unique_key'])) ? $sugar_config['unique_key']
-    : '';
+        : '';
 }
 if (!isset($_SESSION['cache_dir']) || empty($_SESSION['cache_dir'])) {
     $_SESSION['cache_dir'] = isset($sugar_config['cache_dir']) ? $sugar_config['cache_dir']
-    : 'cache/';
+        : 'cache/';
 }
 
 //$workflow[] = 'confirmSettings.php';
@@ -433,8 +436,10 @@ $workflow[] = 'performSetupStep3.php';
 $workflow[] = 'performSetup.php';
 
 if (!isset($_SESSION['oc_install']) || $_SESSION['oc_install'] == false) {
-    if (isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) && $_SESSION['install_type']
-        == 'custom') {
+    if (
+        isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) && $_SESSION['install_type']
+        == 'custom'
+    ) {
         //$workflow[] = 'download_patches.php';
         $workflow[] = 'download_modules.php';
     }
@@ -512,9 +517,11 @@ EOHTML;
 
 $exclude_files = array('complete_install.php', 'register.php', 'download_modules.php');
 
-if (isset($next_step) && isset($workflow[$next_step]) && !in_array($workflow[$next_step], $exclude_files)
+if (
+    isset($next_step) && isset($workflow[$next_step]) && !in_array($workflow[$next_step], $exclude_files)
     && isset($sugar_config['installer_locked']) && $sugar_config['installer_locked']
-    == true) {
+    == true
+) {
     $the_file = 'installDisabled.php';
     $disabled_title = $mod_strings['LBL_DISABLED_DESCRIPTION'];
     $disabled_title_2 = $mod_strings['LBL_DISABLED_TITLE_2'];
@@ -529,7 +536,7 @@ if (isset($next_step) && isset($workflow[$next_step]) && !in_array($workflow[$ne
 EOQ;
 } else {
     $validation_errors = array();
-// process the data posted
+    // process the data posted
     if ($next_clicked) {
         // store the submitted data because the 'Next' button was clicked
         switch ($workflow[trim($_REQUEST['current_step'])]) {
@@ -541,7 +548,7 @@ EOQ;
             case 'welcome.php':
                 $_SESSION['language'] = $_REQUEST['language'];
                 $_SESSION['setup_site_admin_user_name'] = 'admin';
-//        break;
+                //        break;
                 //      case 'license.php':
                 $_SESSION['setup_license_accept'] = get_boolean_from_request('setup_license_accept');
                 $_SESSION['license_submitted'] = true;
@@ -556,11 +563,11 @@ EOQ;
 
                 if (!isset($_SESSION['setup_db_type'])) {
                     $_SESSION['setup_db_type'] = empty($sugar_config['dbconfig']['db_type'])
-                    ? $default_db_type : $sugar_config['dbconfig']['db_type'];
+                        ? $default_db_type : $sugar_config['dbconfig']['db_type'];
                 }
 
                 break;
-            //TODO--low: add this functionality to installConfig.php
+                //TODO--low: add this functionality to installConfig.php
             case 'installType.php':
                 $_SESSION['install_type'] = $_REQUEST['install_type'];
                 if (isset($_REQUEST['setup_license_key']) && !empty($_REQUEST['setup_license_key'])) {
@@ -585,8 +592,10 @@ EOQ;
                 //validation is now done through ajax call to checkDBSettings.php
                 if (isset($_REQUEST['setup_db_drop_tables'])) {
                     $_SESSION['setup_db_drop_tables'] = $_REQUEST['setup_db_drop_tables'];
-                    if ($_SESSION['setup_db_drop_tables'] === true || $_SESSION['setup_db_drop_tables']
-                        == 'true') {
+                    if (
+                        $_SESSION['setup_db_drop_tables'] === true || $_SESSION['setup_db_drop_tables']
+                        == 'true'
+                    ) {
                         $_SESSION['setup_db_create_database'] = false;
                     }
                 }
@@ -688,8 +697,10 @@ EOQ;
             if (is_readable('config.php') && (filesize('config.php') > 0)) {
                 include_once 'config.php';
 
-                if (!isset($sugar_config['installer_locked']) || $sugar_config['installer_locked']
-                    == true) {
+                if (
+                    !isset($sugar_config['installer_locked']) || $sugar_config['installer_locked']
+                    == true
+                ) {
                     $the_file = 'installDisabled.php';
                     $disabled_title = $mod_strings['LBL_DISABLED_DESCRIPTION'];
                     $disabled_title_2 = $mod_strings['LBL_DISABLED_TITLE_2'];
@@ -704,9 +715,11 @@ EOQ;
 EOQ;
                     //if this is an offline client installation but the conversion did not succeed,
                     //then try to convert again
-                    if (isset($sugar_config['disc_client']) && $sugar_config['disc_client']
+                    if (
+                        isset($sugar_config['disc_client']) && $sugar_config['disc_client']
                         == true && isset($sugar_config['oc_converted']) && $sugar_config['oc_converted']
-                        == false) {
+                        == false
+                    ) {
                         header('Location: index.php?entryPoint=oc_convert&first_time=true');
                         exit();
                     }

@@ -78,6 +78,9 @@ if (!is_windows()) {
     }
 }
 
+require_once('include/SugarMetric/Manager.php');
+SugarMetric_Manager::getInstance()->setMetricClass('background')->setTransactionName('cron');
+
 if(empty($current_language)) {
 	$current_language = $sugar_config['default_language'];
 }

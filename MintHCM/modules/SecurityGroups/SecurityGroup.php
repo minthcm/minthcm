@@ -51,7 +51,22 @@ class SecurityGroup extends SecurityGroup_sugar {
                     and secu.user_id = '$user_id'
                 where secg.deleted = 0
             )";
-      } else {
+         } elseif ($module == 'Employees') {
+            $focus = BeanFactory::getBean($module);
+            $sql = ' OR ( ' . str_replace($focus->table_name, $table_name, $focus->getOwnerWhere($user_id)) . ' ) ';
+
+            return " EXISTS (SELECT  1
+                  FROM    securitygroups secg
+                          INNER JOIN securitygroups_users secu
+                            ON secg.id = secu.securitygroup_id
+                               AND secu.deleted = 0
+                               AND secu.user_id = '$user_id'
+                                   INNER JOIN
+                          securitygroups_users secr_list ON secr_list.securitygroup_id = secu.securitygroup_id
+                AND secr_list.deleted = 0
+                       WHERE   secr_list.user_id = " . $table_name . '.id
+                               AND secg.deleted = 0)' . $sql;
+        } else {
          //MintHcm start #60146
          $focus = BeanFactory::getBean($module);
          $sql = ' OR ( ' . str_replace( $focus->table_name, $table_name,  $focus->getOwnerWhere($user_id)) . ' ) ';

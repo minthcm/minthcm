@@ -3297,6 +3297,10 @@ function check_php_version($sys_php_version = '')
         return 0;
     }
 
+    if (version_compare( $sys_php_version, constant('MINTHCM_PHP_MAX_VERSION'), '>=' ) === true) {
+        return -1;
+    }
+
     // Everything else is fair game
     return 1;
 }

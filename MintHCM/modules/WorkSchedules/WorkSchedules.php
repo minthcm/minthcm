@@ -144,8 +144,6 @@ class WorkSchedules extends Basic
 
         switch ($this->type) {
             case "occasional_leave":
-                $this->spent_time_settlement = 8;
-                break;
             case "sick":
             case "sick-care":
             case "holiday":

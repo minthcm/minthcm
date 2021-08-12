@@ -82,7 +82,11 @@ class SalaryRanges extends Basic
 
     public function save($check_notify = false)
     {
-        $this->name = $this->position_name . ' - ' . $this->start_date . ' - ' . $this->end_date;
+        global $timedate;
+        $db_start_date =$timedate->to_db_date($this->start_date);
+        $db_end_date =$timedate->to_db_date($this->end_date);
+        
+        $this->name = $this->position_name . ' - ' . $db_start_date . ' - ' . $db_end_date;
         parent::save();
     }
 
