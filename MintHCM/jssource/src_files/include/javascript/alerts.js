@@ -328,3 +328,8 @@ $( document ).ready( function () {
    };
    setTimeout( updateMissed, 2000 );
 } );
+
+Alerts.prototype.showHideDescription = function(event) {
+    event.stopPropagation();
+    $(event.currentTarget).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+}

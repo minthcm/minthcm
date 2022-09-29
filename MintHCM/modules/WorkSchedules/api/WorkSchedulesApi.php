@@ -46,9 +46,11 @@
 class WorkSchedulesApi
 {
 
-    public function canChangeTypeToWorkOff($id, $type)
+    public function canChangeTypeToWorkOff($args)
     {
       global $db;
+      $id = $args['id'];
+      $type = $args['type'];
       $result = true;
       $work_off_types = array(
          'holiday',
@@ -104,8 +106,9 @@ class WorkSchedulesApi
       return null;
    }
 
-    public function validateWorkplaceStatus($workplace_id)
+    public function validateWorkplaceStatus($args)
     {
+        $workplace_id = $args['id'];
         $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
         if (!$workplace || empty($workplace->id) || 'active' == $workplace->availability) {
             return true;
@@ -115,11 +118,12 @@ class WorkSchedulesApi
 
     }
 
-    public function validateWorkplaceAllocationPeriods($workplace_id, $date_start, $date_end)
+    public function validateWorkplaceAllocationPeriods($args)
     {
-        $db = DBManagerFactory::getInstance();
         global $timedate;
-        $db_format = $timedate->get_db_date_time_format();
+        $workplace_id = $args['workplace_id'];
+        $date_start = $args['date_start'];
+        $date_end = $args['ate_end'];
         $return = true;
         $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
         if ($workplace) {
@@ -179,8 +183,10 @@ class WorkSchedulesApi
         return $result;
     }
 
-    public function canChangeWorkScheduleStatus($id, $status)
+    public function canChangeWorkScheduleStatus($args)
     {
+        $id = $args['id'];
+        $status = $args['status'];
         $return = true;
         $work_schedule = BeanFactory::getBean('WorkSchedules', $id);
         if ($status == 'closed' && $work_schedule->canBeConfirmed() != "1") {
@@ -188,14 +194,21 @@ class WorkSchedulesApi
         }
 
         return $return;
-    }    public function validateDelegationDurationValue($delegation_duration)
+
+    }
+
+    public function validateDelegationDurationValue($args)
     {
-        if (is_numeric($delegation_duration) && $delegation_duration >= 0) {
+        $delegation_duration = unformat_number($args['delegation_duration']);
+        if (!empty($delegation_duration)) {
+            if (is_numeric($delegation_duration) && $delegation_duration >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return true;
-
         }
+    }
+}
 
-        else {
-            return false;
-        }
-    }}

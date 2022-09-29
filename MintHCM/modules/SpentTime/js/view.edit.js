@@ -54,15 +54,15 @@ $( document ).ready( function () {
         } );
  }
 
- viewTools.form.beforeSave( function () {
-    var result_1 = validateWorkSchedule();
-    var result_2 = validateDates();
-    var result_6 = validateDescription();
+ viewTools.form.beforeSave( function (form_name) {
+    var result_1 = validateWorkSchedule(form_name);
+    var result_2 = validateDates(form_name);
+    var result_6 = validateDescription(form_name);
  
     return result_1 && result_2 && result_6;
  } );
  
- function validateWorkSchedule() {
+ function validateWorkSchedule(form_name) {
     var result = false;
     viewTools.api.callCustomApi( {
        module: 'SpentTime',
@@ -70,14 +70,14 @@ $( document ).ready( function () {
        format: 'JSON',
        async: true,
        dataPOST: {
-          workschedule_id: $( '#workschedule_id' ).val(),
+          workschedule_id: $( "#" + form_name + " #workschedule_id" ).val(),
        },
        callback: function ( data ) {
           result = data.result;
           if ( !result ) {
              $.each( data.errors, function ( i, v ) {
                 if ( $.inArray( v, [ 'ERR_METHOD_ERROR_ISMYWORKSCHEDULEINCURRENTMONTH' ] ) > -1 ) {
-                   viewTools.GUI.fieldErrorMark( $( "#workschedule_name" ), viewTools.language.get( 'SpentTime', 'LBL_ERR_CANNOT_ADD_SPENT_TIME_TO_THE_PAST_WORK_SCHEDULE' ) );
+                   viewTools.GUI.fieldErrorMark( $( "#" + form_name + " #workschedule_name" ), viewTools.language.get( 'SpentTime', 'LBL_ERR_CANNOT_ADD_SPENT_TIME_TO_THE_PAST_WORK_SCHEDULE' ) );
                 }
              } );
           }
@@ -86,32 +86,32 @@ $( document ).ready( function () {
     return result;
  }
  
- function validateDates() {
+ function validateDates(form_name) {
     var result_1 = true;
     var result_2 = true;
     var result_3 = true;
     var result_4 = true;
  
-    var work_schedules_dates = getWorkSchedulesDates();
+    var work_schedules_dates = getWorkSchedulesDates(form_name);
     if ( work_schedules_dates !== false ) {
        var work_schedule_datetime_start = work_schedules_dates.work_schedule_datetime_start;
        var work_schedule_datetime_end = work_schedules_dates.work_schedule_datetime_end;
-       result_1 = validateWorkDateEqualsToDateStart();
-       result_2 = validateDateFieldIDIsInWorkDates( "date_start", work_schedule_datetime_start, work_schedule_datetime_end );
-       result_3 = validateDateFieldIDIsInWorkDates( "date_end", work_schedule_datetime_start, work_schedule_datetime_end );
-       result_4 = validateUniqueSpentTime();
+       result_1 = validateWorkDateEqualsToDateStart(form_name);
+       result_2 = validateDateFieldIDIsInWorkDates( "#" + form_name + " #date_start", work_schedule_datetime_start, work_schedule_datetime_end );
+       result_3 = validateDateFieldIDIsInWorkDates( "#" + form_name + " #date_end", work_schedule_datetime_start, work_schedule_datetime_end );
+       result_4 = validateUniqueSpentTime(form_name);
     }
  
     return result_1 && result_2 && result_3 && result_4;
  }
  
- function validateDescription() {
+ function validateDescription(form_name) {
     var not_found_characters = true;
     var invalid_characters = [ '\'', '"', '&' ];
-    var description = $( '#description' ).val();
+    var description = $( '#' + form_name + ' #description' ).val();
     $( invalid_characters ).each( function ( index, character ) {
        if ( description.indexOf( character ) !== -1 ) {
-          viewTools.GUI.fieldErrorMark( $( "#description" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_INVALID_CHAR_IN_DESCRIPTION' ) );
+          viewTools.GUI.fieldErrorMark( $( "#" + form_name + " #description" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_INVALID_CHAR_IN_DESCRIPTION' ) );
           not_found_characters = false;
           return false;
        }
@@ -141,9 +141,9 @@ $( document ).ready( function () {
     $( '#work_date' ).val( $( '#date_start_date' ).val() );
  }
  
- function getWorkSchedulesDates() {
+ function getWorkSchedulesDates(form_name) {
     var result = false;
-    var workschedule_id = $( '#workschedule_id' ).val();
+    var workschedule_id = $( "#" + form_name + " #workschedule_id" ).val();
     if ( workschedule_id != '' ) {
        viewTools.api.callController( {
           module: "WorkSchedules",
@@ -151,7 +151,7 @@ $( document ).ready( function () {
           dataType: 'json',
           async: false,
           dataGET: {
-             record: $( '#workschedule_id' ).val()
+             record: $( "#" + form_name + " #workschedule_id" ).val()
           },
           callback: function ( call_constroller_data ) {
              if ( $.isEmptyObject( call_constroller_data ) == false ) {
@@ -163,25 +163,25 @@ $( document ).ready( function () {
     return result;
  }
  
- function validateWorkDateEqualsToDateStart() {
+ function validateWorkDateEqualsToDateStart(form_name) {
     var result = true;
-    var work_date = $( "#work_date" ).val();
-    var date_start_date = $( "#date_start_date" ).val();
+    var work_date = $( "#" + form_name + " #work_date" ).val();
+    var date_start_date = $( "#" + form_name + " #date_start_date" ).val();
     if ( work_date != date_start_date ) {
-       viewTools.GUI.fieldErrorMark( $( "#work_date" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_WORK_DATE_NOT_EQUALS_TO_DATE_START' ) );
+       viewTools.GUI.fieldErrorMark( $( "#" + form_name + " #work_date" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_WORK_DATE_NOT_EQUALS_TO_DATE_START' ) );
        result = false;
     }
     return result;
  }
  
- function validateDateFieldIDIsInWorkDates( date_field_id, work_schedule_datetime_start, work_schedule_datetime_end ) {
+ function validateDateFieldIDIsInWorkDates( date_field_selector, work_schedule_datetime_start, work_schedule_datetime_end ) {
     var result = true;
-    var spendtime_datetime_start = convertDateTimeStringToMoment( $( "#" + date_field_id ).val() );
+    var spendtime_datetime_start = convertDateTimeStringToMoment( $( date_field_selector ).val() );
     var work_datetime_start = convertDateTimeStringToMoment( work_schedule_datetime_start );
     var work_datetime_end = convertDateTimeStringToMoment( work_schedule_datetime_end );
     if ( spendtime_datetime_start != false && work_datetime_start != false && work_datetime_end != false ) {
        if ( spendtime_datetime_start.format( "YYYY-MM-DD" ) != work_datetime_start.format( "YYYY-MM-DD" ) && spendtime_datetime_start.format( "YYYY-MM-DD" ) != work_datetime_end.format( "YYYY-MM-DD" ) ) {
-          viewTools.GUI.fieldErrorMark( $( "#" + date_field_id ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_DATE_ARE_NOT_BETWEEN_WORK_SCHEDULES_DATES' ) );
+          viewTools.GUI.fieldErrorMark( $( date_field_selector ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_DATE_ARE_NOT_BETWEEN_WORK_SCHEDULES_DATES' ) );
           result = false;
        }
     }
@@ -199,12 +199,12 @@ $( document ).ready( function () {
     return result;
  }
  
- function validateUniqueSpentTime() {
+ function validateUniqueSpentTime(form_name) {
     var result = true;
     var record_id = getRecordID();
-    var assigned_user_id = $( '#assigned_user_id' ).val();
-    var date_start = $( "#date_start" ).val();
-    var date_end = $( "#date_end" ).val();
+    var assigned_user_id = $( "#" + form_name + " #assigned_user_id" ).val();
+    var date_start = $( "#" + form_name + " #date_start" ).val();
+    var date_end = $( "#" + form_name + " #date_end" ).val();
     if ( assigned_user_id != '' && date_start != '' && date_end != '' ) {
        viewTools.api.callController( {
           module: "SpentTime",
@@ -220,7 +220,7 @@ $( document ).ready( function () {
           callback: function ( call_constroller_data ) {
              if ( $.isEmptyObject( call_constroller_data ) == false && call_constroller_data.result == false ) {
                 result = false;
-                viewTools.GUI.fieldErrorMark( $( "#date_end" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_SPENT_TIME_NOT_UNIQUED' ) );
+                viewTools.GUI.fieldErrorMark( $( "#" + form_name + " #date_end" ), SUGAR.language.get( 'SpentTime', 'LBL_ERR_SPENT_TIME_NOT_UNIQUED' ) );
              }
           }
        } );

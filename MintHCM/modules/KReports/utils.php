@@ -188,7 +188,11 @@ if (!function_exists("formatEnumArray")) {
         $parse_array = false;
         if (is_array($a)) {
             $first_element = array_slice($a, 0, 1, true);
-            if (is_array($first_element) && !isset($first_element['value'])) {
+            if (
+                is_array($first_element)
+                && !isset($first_element['value'])
+                && !isset(array_values($a)[0]['value'])
+            ) {
                 $parse_array = true;
             }
         }

@@ -197,6 +197,8 @@ class GenerateOnboardingOffboarding
         $meeting_bean->date_start = $date_start_object->format($timedate->get_db_date_time_format());
         $duration_hours = (int) $element->task_duration_hours;
         $duration_minutes = (int) $element->task_duration_minutes;
+        $meeting_bean->duration_hours =$duration_hours;
+        $meeting_bean->duration_minutes = $duration_minutes;
         $meeting_bean->date_end = $date_start_object->modify("+{$duration_hours} hours {$duration_minutes} minutes")->format($timedate->get_db_date_time_format());
         $meeting_bean->parent_type = $this->process->module_name;
         $meeting_bean->parent_id = $this->process->id;

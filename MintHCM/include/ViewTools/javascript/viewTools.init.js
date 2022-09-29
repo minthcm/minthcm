@@ -32,9 +32,10 @@ viewTools.form.startViewToolsValidation = function () {
    }
    //Defined enforced actions before save
    var form_beforeSave = true;
+   let form_name = form.attr( 'name' );
    for ( key in viewTools.cache.form_beforeSave_enforced ) {
       var tmp_function = viewTools.cache.form_beforeSave_enforced[key];
-      if ( tmp_function() === false ) {
+      if ( tmp_function(form_name) === false ) {
          form_beforeSave = false;
          viewTools.form.error_count++;
       }
@@ -48,7 +49,7 @@ viewTools.form.startViewToolsValidation = function () {
       for ( key in viewTools.cache.form_beforeSave ) {
          if ( form_beforeSave === true ) {
             var tmp_function = viewTools.cache.form_beforeSave[key];
-            if ( tmp_function() === false ) {
+            if ( tmp_function(form_name) === false ) {
                form_beforeSave = false;
                viewTools.form.error_count++;
             }
@@ -66,7 +67,7 @@ viewTools.form.startViewToolsValidation = function () {
       for ( var key in viewTools.cache.form_afterSave ) {
          if ( form_afterSave === true ) {
             var tmp_function = viewTools.cache.form_afterSave[key];
-            if ( tmp_function() === false ) {
+            if ( tmp_function(form_name) === false ) {
                form_afterSave = false;
                viewTools.form.onValidationEnd();
                return false;

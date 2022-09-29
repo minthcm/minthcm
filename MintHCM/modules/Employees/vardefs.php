@@ -273,7 +273,24 @@ $dictionary["Employee"]["fields"]["allocations_employees"] = array(
     'bean_name' => 'Allocations',
     'vname' => 'LBL_LINKED_ALLOCATIONS_TITLE',
 );
-
+$dictionary["Employee"]["fields"]["trainings"] = array(
+    'name' => 'trainings',
+    'type' => 'link',
+    'relationship' => 'trainings_assigned_user',
+    'source' => 'non-db',
+    'module' => 'Trainings',
+    'bean_name' => 'Trainings',
+    'vname' => 'LBL_TRAININGS',
+);
+$dictionary["Employee"]["fields"]["tasks"] = array(
+    'name' => 'tasks',
+    'type' => 'link',
+    'relationship' => 'tasks_assigned_user',
+    'source' => 'non-db',
+    'module' => 'Tasks',
+    'bean_name' => 'Tasks',
+    'vname' => 'LBL_TASKS',
+);
 $dictionary["Employee"]["audited"] = true;
 $dictionary["Employee"]["fields"]["employee_status"]["audited"] = true;
 $dictionary["Employee"]["fields"]["first_name"]["audited"] = true;

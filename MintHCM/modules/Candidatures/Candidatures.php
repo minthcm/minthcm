@@ -38,9 +38,11 @@ class Candidatures extends Candidatures_sugar {
 
       $this->calculateCurrencies();
 
-      parent::save($check_notify);
+      $id = parent::save($check_notify);
 
       $this->pushFeed();
+      
+      return $id;
    }
 
    protected function pushFeed() {

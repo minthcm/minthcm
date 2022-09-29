@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -42,9 +44,20 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
+
+global $mod_strings, $app_strings;
+if (ACLController::checkAccess('Candidatures', 'edit', true)) {
+    $module_menu[] = array("index.php?module=Candidatures&action=EditView&return_module=Candidatures&return_action=DetailView", $mod_strings['LNK_NEW_RECORD'], "Create");
 }
 
-$minthcm_version = '3.1.2';
-$minthcm_timestamp = '2021-07-30-09:00:00';
+if (ACLController::checkAccess('Candidatures', 'list', true)) {
+    $module_menu[] = array("index.php?module=Candidatures&action=index&return_module=Candidatures&return_action=DetailView", $mod_strings['LNK_LIST'], "List");
+}
+
+if (ACLController::checkAccess('Candidatures', 'import', true)) {
+    $module_menu[] = array("index.php?module=Import&action=Step1&import_module=Candidatures&return_module=Candidatures&return_action=index", $mod_strings['LNK_IMPORT_CANDIDATURES'], "Import", 'Contacts');
+}
+
+if (ACLController::checkAccess('Candidatures', 'list', true)) {
+    $module_menu[] = array('index.php?module=Candidatures&action=kanban&return_module=Candidatures&return_action=DetailView', $app_strings['LNK_KANBAN'], 'View', 'Candidatures');
+}

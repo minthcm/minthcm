@@ -10,8 +10,7 @@
                     -webkit-font-smoothing: antialiased;
                 }
                 .moduleTitle .module-title-text {
-                    float: none;
-                    text-align: center;
+                    display:none;
                 }
             </style>
         {/literal}

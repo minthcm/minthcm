@@ -174,7 +174,7 @@ $dictionary['WorkSchedules'] = array(
          'options' => 'workschedule_type_list',
          'studio' => 'visible',
          'dependency' => false,
-         'vt_validation' => "AEM(callCustomApi(WorkSchedules,canChangeTypeToWorkOff,\$id,\$type),'LBL_ERR_CANT_CHANGE_TYPE_TO_WORK_OFF')",
+         'vt_validation' => "AEM(callCustomApi(WorkSchedules,canChangeTypeToWorkOff,{id:\$id,type:\$type}),'LBL_ERR_CANT_CHANGE_TYPE_TO_WORK_OFF')",
       ),
       'status' => array(
          'required' => false,
@@ -198,7 +198,7 @@ $dictionary['WorkSchedules'] = array(
          'options' => 'workschedules_status_dom',
          'studio' => 'visible',
          'dependency' => false,
-         'vt_validation' => "AEM(callCustomApi(WorkSchedules,canChangeWorkScheduleStatus,\$id, \$status),'LBL_ERR_CANNOT_CHANGE_WORK_SCHEDULE_STATUS')",
+         'vt_validation' => "AEM(callCustomApi(WorkSchedules,canChangeWorkScheduleStatus,{id:\$id,status:\$status}),'LBL_ERR_CANNOT_CHANGE_WORK_SCHEDULE_STATUS')",
       ),
       'supervisor_acceptance' => array(
          'required' => false,
@@ -398,7 +398,7 @@ $dictionary['WorkSchedules'] = array(
          'precision' => '2',
          'vt_dependency' => "equals(\$type,'delegation')",
          // MintHCM #66889 START
-         'vt_validation' => "AEM(callCustomApi(WorkSchedules,validateDelegationDurationValue,\$delegation_duration),'LBL_ERR_DELEGATION_DURATION_NOT_VALID')",
+         'vt_validation' => "AEM(callCustomApi(WorkSchedules,validateDelegationDurationValue,{delegation_duration:\$delegation_duration}),'LBL_ERR_DELEGATION_DURATION_NOT_VALID')",
          // MintHCM #66889 END
       ),
       'comments' => array(
@@ -509,8 +509,8 @@ $dictionary['WorkSchedules'] = array(
          'rname' => 'name',
          'vt_dependency' => "equals(\$type,'office')",
          'vt_validation' => array(
-            "AEM(callCustomApi(WorkSchedules,validateWorkplaceStatus,\$workplace_id),'LBL_ERR_STATUS_NOT_ACTIVE')",
-            "AEM(callCustomApi(WorkSchedules,validateWorkplaceAllocationPeriods,\$workplace_id,\$date_start,\$date_end),'LBL_ERR_WORKPLACE_NOT_ACTIVE')",
+            "AEM(callCustomApi(WorkSchedules,validateWorkplaceStatus,{id:\$workplace_id}),'LBL_ERR_STATUS_NOT_ACTIVE')",
+            "AEM(callCustomApi(WorkSchedules,validateWorkplaceAllocationPeriods,{workplace_id:\$workplace_id,date_start:\$date_start,date_end:\$date_end}),'LBL_ERR_WORKPLACE_NOT_ACTIVE')",
          ),
       ),
       "workplace_id" => array(

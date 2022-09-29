@@ -1034,6 +1034,13 @@ $app_list_strings = array(
         'next_year' => 'Next Year',
         'between' => 'Is Between',
         'over_n_months_ago' => 'More Than n Months Ago',
+        'last_week' => 'Last Week',
+        'this_week' => 'This Week',
+        'next_week' => 'Next Week',
+        'in_the_past' => 'In The Past',
+        'in_the_future' => 'In The Future',
+        'last_n_days' => 'Last n Days',
+        'next_n_days' => 'Next n Days',
     ),
     'numeric_range_search_dom' => array(
         '=' => 'Equals',
@@ -2141,6 +2148,8 @@ $app_strings = array(
     'LBL_GENERATEONBOARDINGOFFBOARDING_ERROR_EMPLOYEE_MANAGER' => 'Manager is not set for: ',
     'LBL_GENERATEONBOARDINGOFFBOARDING_ERROR_ORGANIZATIONAL_UNIT_MANAGER' => 'The following Organizational Units do not have Manager set:',
     'LBL_SUBORDINATES_FILTER' => 'My Subordinates',
+    'LBL_SHOW_MORE' => 'Show More',
+    'LBL_SHOW_LESS' => 'Show Less'
 );
 
 $app_list_strings['moduleList']['Library'] = 'Library';
@@ -4178,6 +4187,9 @@ $app_strings['LBL_MY_CALLS_DASHLET'] = 'My Calls';
 $app_strings['LBL_RECRUITMENTS_DASHLET'] = 'Recruitments';
 $app_strings['LBL_CANDIDATURES_DASHLET'] = 'Candidatures';
 $app_strings['LBL_CANNOT_CREATE_CALENDAR_EVENTS'] = 'You cannot create events for that calendar';
+$app_strings['LBL_INSTANCE_ADDRESS'] = 'Server Address';
+$app_strings['LBL_UNSAVED_WARNING'] = 'Warning! You are trying to leave unsaved record. Continue?';
+$app_strings['LBL_BAD_REQUEST_INSTANCE'] = 'Bad request, check server properties';
 
 $app_list_strings['record_type_display_comments'] = array(
    'News' => 'News',
@@ -4210,3 +4222,5 @@ $app_list_strings['reaction_icons_list'] = array(
 $app_strings['LNK_KANBAN'] = 'Board';
 $app_strings['ERR_KANBAN_COL_ERROR'] = 'Column for Kanban is not defined. Property "column" is missing for kanbanviewdefs.';
 $app_strings['LBL_KANBAN_SAVING_ERROR'] = 'Record saving failed'; 
+
+$app_strings['LBL_WORKSCHEDULES'] = 'Work Schedules';

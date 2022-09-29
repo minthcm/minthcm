@@ -1211,6 +1211,7 @@
 .desktop_notifications .has-alerts p {
   padding: 8px 15px 8px 15px;
   margin: 0;
+  word-break: break-word;
 }
 
 .desktop_notifications .has-alerts .alert-header {
@@ -1252,6 +1253,28 @@
 
 .navbar-inverse .dropdown-menu.mobile_menu li:last-of-type a {
   border-bottom: none;
+}
+
+.addReadMore.showlesscontent .SecSec,
+.addReadMore.showlesscontent .readLess {
+    display: none;
+}
+
+.addReadMore.showmorecontent .readMore {
+    display: none;
+}
+
+.addReadMore .readMore,
+.addReadMore .readLess {
+    font-weight: bold;
+    margin-left: 2px;
+    color: #009976;
+    cursor: pointer;
+}
+
+.addReadMoreWrapTxt.showmorecontent .SecSec,
+.addReadMoreWrapTxt.showmorecontent .readLess {
+    display: block;
 }
 
 

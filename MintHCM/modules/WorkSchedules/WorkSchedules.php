@@ -434,20 +434,30 @@ LEFT JOIN allocations a ON a.id=ae.allocation_id AND a.deleted=0 AND a.workplace
 WHERE ae.employee_id='{$this->assigned_user_id}' AND ae.deleted=0";
         }
         $result = $db->query($sql);
-        if ($result->num_rows > 0) {
+        if (
+            !empty($result)
+            && $result->num_rows > 0
+        ) {
             while ($row = $db->fetchByAssoc($result)) {
                 $allocation = BeanFactory::getBean('Allocations', $row['id']);
                 $start_date = getDateTimeObject($allocation->date_from);
                 $end_date = getDateTimeObject($allocation->date_to);
-                $start_date->setTime(0, 0, 0);
-                $end_date->setTime(23, 59, 0);
-                if ($work_date >= $start_date) {
+                if(!empty($start_date)){
+                    $start_date->setTime(0, 0, 0);
+                }
+                if(!empty($end_date)){
+                    $end_date->setTime(23, 59, 0);
+                }
+                if (
+                    !empty($start_date) 
+                    && $work_date >= $start_date
+                ) {
                     if (!empty($end_date)) {
                         if ($work_date >= $end_date) {
                             $return = 4;
                         }
                     } else {
-                        $return = 4;
+                        $return = 1;
                         break;
                     }
                 }

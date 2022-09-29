@@ -92,7 +92,7 @@ class JsonRPCServerUtils {
                $cond_arr[] = $table . DBManagerFactory::getInstance()->getValidDBName($condition['name']) . " like '$like'";
             } else { // starts_with
                // MintHCM #59793 start
-               if ( $module == "Resources" && ($condition['name'] == "first_name" || $condition['name'] == "last_name") ) {
+               if ( in_array($module , ["Resources", "SecurityGroups"]) && ($condition['name'] == "first_name" || $condition['name'] == "last_name") ) {
                   $cond_arr[] = $table . "name like '" . DBManagerFactory::getInstance()->quote($condition['value']) . "%'";
                } else {
                   $cond_arr[] = $table . DBManagerFactory::getInstance()->getValidDBName($condition['name']) . " like '" . DBManagerFactory::getInstance()->quote($condition['value']) . "%'";
