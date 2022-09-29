@@ -112,7 +112,7 @@ class SpentTime extends Basic {
          return $parent_result;
       } else {
          $formula_parser = new VTFormulaParser();
-         $formula_parser->appendErrorMessage($mod_strings['LBL_SPENT_TIME_RECORD_FOR_THIS_PERIOD_ALREADY_EXISTS']);
+         $formula_parser->appendErrorMessage($mod_strings['LBL_SPENT_TIME_RECORD_FOR_THIS_PERIOD_ALREADY_EXISTS'], $this, 'date_end');
       }
       return false;
    }
@@ -219,7 +219,7 @@ class SpentTime extends Basic {
          case 'delete':
             if ( !$current_user->is_admin && $this->load_relationship('workschedules') ) {
                $beans = $this->workschedules->getBeans();
-               if ( count($beans) && $plan[0]->status === 'closed' ) {
+               if ( count($beans) && array_shift(array_values($beans))->status === 'closed' ) {
                   $result = false;
                }
             }

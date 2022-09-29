@@ -154,7 +154,7 @@ $mod_strings = array(
     'LBL_FAILED_CONVERTING_CANDIDATURE' => 'There was an error converting Candidature',
     'LBL_DOCUMENTS' => 'Documents',
 
-    'LBL_ALERT_TITLE' => 'Convert To Employee',
+    'LBL_ALERT_TITLE' => 'Convert To User',
     'LBL_ALERT_LOGIN' => 'Login',
     'LBL_ALERT_NOTE' => 'If you will choose Create User system creates active user. If you will choose Create Employee, the user is inactive.',
     'LBL_ALERT_CREATE_USER' => 'Please note that in case of this option a system user will be created',
@@ -162,6 +162,7 @@ $mod_strings = array(
     'LBL_CREATE_USER' => 'Create User',
     'LBL_CREATE_EMPLOYEE' => 'Create Employee',
     'LBL_ERROR_LOGIN' => 'You must enter a login',
+    'LBL_ERROR_LOGIN_DUPLICATE' => 'You must enter unique login',
     'LBL_ERROR_INPUT_RADIO' => 'You must select one of the fields',
     'LBL_INFO' => 'Select one of the following options:',
 );

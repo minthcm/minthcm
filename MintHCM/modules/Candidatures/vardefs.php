@@ -132,7 +132,7 @@ $dictionary['Candidatures'] = array(
         'reason_for_rejection' =>
         array(
             'vt_dependency' => 'equals($status,\'Rejected\')',
-            'required' => true,
+            'vt_required' => 'equals($status,\'Rejected\')',
             'name' => 'reason_for_rejection',
             'vname' => 'LBL_REASON_FOR_REJECTION',
             'type' => 'enum',

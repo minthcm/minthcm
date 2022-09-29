@@ -67,26 +67,6 @@ $subpanel_layout = array(
          'vname' => 'LBL_TYPE',
          'width' => '10%',
       ),
-      'contact_name' => array(
-         'widget_class' => 'SubPanelDetailViewLink',
-         'target_record_key' => 'contact_id',
-         'target_module' => 'Contacts',
-         'module' => 'Contacts',
-         'vname' => 'LBL_LIST_CONTACT',
-         'width' => '11%',
-         'sortable' => false,
-      ),
-      'contact_id' => array(
-         'usage' => 'query_only',
-      ),
-      'contact_name_owner' => array(
-         'usage' => 'query_only',
-         'force_exists' => true
-      ),
-      'contact_name_mod' => array(
-         'usage' => 'query_only',
-         'force_exists' => true
-      ),
       'date_start' => array(
          'vname' => 'LBL_LIST_DUE_DATE',
          'width' => '10%',

@@ -182,24 +182,17 @@ generateOnboardingOffboarding = {
    },
    getParentTypeOptions: function () {
       let selected = '';
-      const module = $('input[name=module]:not(.form-control)').val().slice(0,-1) + "Templates";
+      const module = $('input[name=module]:not(.form-control)').val();
       const templates = viewTools.language.get('app_list_strings', 'template_type_list');
       let options = '';
-
-      switch (module) {
-         case 'Onboardings':
-         case 'OnboardingTemplates':
-            type_template = 'OnboardingTemplates';
-            break;
-
-         case 'Offboardings':
-         case 'OffboardingTemplates':
-            type_template = 'OffboardingTemplates'
-            break;
-
-         default:
-            break;
+      let type_template = '';
+      
+      if (module.indexOf("Onboarding") >= 0) {
+         type_template = 'OnboardingTemplates';
+      } else if (module.indexOf("Offboarding") >= 0) {
+         type_template = 'OffboardingTemplates';
       }
+
       for (let module_name in templates) {
          selected = (type_template == module_name) ? ' selected' : '';
          options += '<option value="' + module_name + '"' + selected + '>' + templates[module_name] + '</option>';

@@ -199,4 +199,5 @@ $mod_strings = array(
     'LBL_SECURITYGROUPS_MANAGERS' => 'Manager in Organizational Units',
 
     'LBL_LINKED_ALLOCATIONS_TITLE' => 'Allocations',
+    'LBL_TRAININGS' => 'Trainings',
 );

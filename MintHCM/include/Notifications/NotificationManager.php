@@ -128,9 +128,7 @@ class NotificationManager {
    public static function NotificationExists($module,$record_id,$type){
       global $db;
       $sql = "SELECT id FROM alerts WHERE parent_type='{$module}' AND parent_id='{$record_id}' AND alert_type='{$type}' AND is_read=0 AND (type != 'webpush' OR type IS NULL)";
-      $GLOBALS['log']->fatal($sql);
       $sql_result = $db->getOne($sql);
-      $GLOBALS['log']->fatal(var_export(!empty($sql_result),true));
       return !empty($sql_result);
    }
 

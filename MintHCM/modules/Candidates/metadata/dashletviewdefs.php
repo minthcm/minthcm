@@ -109,7 +109,7 @@ $dashletData['CandidatesDashlet']['columns'] = array(
     ),
     'recr_contact_agree' => array(
         'width' => '5%',
-        'label' => 'LBL_RECR_CONTACT_AGREE',
+        'label' => 'LBL_RECR_CONTACT_AGREE_SHORT',
         'default' => false,
         'name' => 'recr_contact_agree',
     ),
