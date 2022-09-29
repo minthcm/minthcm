@@ -217,6 +217,34 @@ $layout_defs['Employees'] = array(
             'get_subpanel_data' => 'offboardings',
             'top_buttons' => array(),
         ),
+        "trainings" => array(
+            'order' => 100,
+            'module' => 'Trainings',
+            'subpanel_name' => 'default',
+            'sort_order' => 'asc',
+            'sort_by' => 'id',
+            'title_key' => 'LBL_TRAININGS',
+            'get_subpanel_data' => 'trainings',
+            'top_buttons' => array(
+                array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+            ),
+        ),
+        "tasks" => array(
+            'order' => 100,
+            'module' => 'Tasks',
+            'subpanel_name' => 'default',
+            'sort_order' => 'asc',
+            'sort_by' => 'id',
+            'title_key' => 'LBL_TASKS',
+            'get_subpanel_data' => 'tasks',
+            'top_buttons' => array(
+                array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+            ),
+        ),
         "competencyratings" => array(
             'order' => 100,
             'module' => 'CompetencyRatings',

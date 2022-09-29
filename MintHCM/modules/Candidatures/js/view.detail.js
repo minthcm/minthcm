@@ -67,21 +67,25 @@ convertToEmployee = {
             let login = $("#MintHCMPopup_login").val();
             const convertType = $("input[name='convertType']:checked").val();
 
-
             if (convertType == undefined) {
                 viewTools.GUI.fieldErrorMark($('#createUser'), viewTools.language.get('Candidatures', 'LBL_ERROR_INPUT_RADIO'));
-            } else if (convertType == "createUser" && login == "") {
-                viewTools.GUI.fieldErrorMark($("#MintHCMPopup_login"), viewTools.language.get('Candidatures', 'LBL_ERROR_LOGIN'));
+            } else if (convertType == "createUser") {
+                if(login == ""){
+                    viewTools.GUI.fieldErrorUnmark();
+                    viewTools.GUI.fieldErrorMark($("#MintHCMPopup_login"), viewTools.language.get('Candidatures', 'LBL_ERROR_LOGIN'));
+                } else if (_this.checkUserDuplicate(login)) {
+                    viewTools.GUI.fieldErrorUnmark();
+                    viewTools.GUI.fieldErrorMark($("#MintHCMPopup_login"), viewTools.language.get('Candidatures', 'LBL_ERROR_LOGIN_DUPLICATE'));
+                } else {
+                    _this.ajaxRequest(recordData.record_id, recordData.module_name, login, _this.LBL_FAIL, convertType);
+                }
             }
             else if (convertType == "createEmployee") {
                 login = "";
-                _this.ajaxRequest(recordData.record_id, recordData.module_name, login, _this.LBL_FAIL, convertType);
-            }
-            else {
+                _this.setStatusHiredAndRejected(recordData.record_id);
                 _this.ajaxRequest(recordData.record_id, recordData.module_name, login, _this.LBL_FAIL, convertType);
             }
         }
-
 
         function callbackButtonCancel() {
             MintHCMPopup.close();
@@ -107,11 +111,38 @@ convertToEmployee = {
 
     },
 
+    checkUserDuplicate: function(login){
+        var result = "";
+        viewTools.api.callCustomApi( {
+            module: 'Users',
+            action: 'checkUserDuplicate',
+            async:false,
+            dataPOST: {
+                login: login,
+            },
+            callback: function ( data ) {
+                result = data;
+            }
+         } );
+         return result;
+    },
+
     getRecordData: function () {
         return {
             record_id: $('#formDetailView input[name="record"]').val(),
             module_name: $('#formDetailView input[name="module"]').val()
         };
+    },
+
+    setStatusHiredAndRejected: function(record_id){
+        viewTools.api.callCustomApi( {
+            module: 'Candidatures',
+            action: 'setStatusHiredAndRejected',
+            async:false,
+            dataPOST: {
+                record_id: record_id,
+            },
+         } );
     },
 
     ajaxRequest: function (record_id, module_name, login, LBL_FAIL, convert_type) {
@@ -120,6 +151,7 @@ convertToEmployee = {
         $.ajax({
             type: "GET",
             url: ajax_link,
+            async: false,
             success: function (id) {
                 if (convert_type == "createEmployee") {
                     window.location.href = `index.php?module=Employees&return_module=Employees&action=DetailView&record=${id}`;

@@ -625,9 +625,14 @@ EOQ;
          echo $json->encode(array( 'status' => 'success', 'get' => '' ));
          exit;
       }
-
+      // MintHCM #99476 Start
+      if (isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'SubPanelViewer') {
+        // module=Candidates&action=SubPanelViewer&record=b057a593-d886-248a-f583-61a7b889264d
+        header("Location: index.php?module=" . $_REQUEST['return_module'] . "&action=SubPanelViewer&record=" . $_REQUEST['return_id']);
+      }
+      // MintHCM #99476 End
       // MintHCM #42401 START
-      if ( isset($_REQUEST['return_module']) && ( $_REQUEST['return_module'] == 'Calendar' || $_REQUEST['return_module'] == 'Home' ) ) {
+      else if ( isset($_REQUEST['return_module']) && ( $_REQUEST['return_module'] == 'Calendar' || $_REQUEST['return_module'] == 'Home' ) ) {
          header("Location: index.php?module=" . $_REQUEST['return_module'] . "&action=index");
          // MintHCM #42401 END
       } else if ( $redirect ) {

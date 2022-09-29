@@ -1175,6 +1175,13 @@ EOHTML;
         }
         // end
 
+        // START #85450: Numer wersji na dole strony
+        if (file_exists('minthcm_version.php')) {
+            include 'minthcm_version.php';
+            $ss->assign('MINTHCM_VERSION', $minthcm_version);
+        }
+        // END #85450: Numer wersji na dole strony
+
         $ss->display(SugarThemeRegistry::current()->getTemplate('footer.tpl'));
     }
 

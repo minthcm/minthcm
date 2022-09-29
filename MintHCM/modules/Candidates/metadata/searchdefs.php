@@ -174,6 +174,9 @@ $searchdefs[$module_name] = array(
                     'name' => 'get_user_array',
                     'params' => array(false),
                 ),
+                'default' => true,
+                'width' => '10%',
+            ),
                 'employee_id' => array(
                     'name' => 'employee_id',
                     'label' => 'LBL_EMPLOYEE_NAME',
@@ -188,7 +191,6 @@ $searchdefs[$module_name] = array(
                     'default' => true,
                     'width' => '10%',
                 ),
-            ),
         ),
         'templateMeta' => array(
             'maxColumns' => '3',

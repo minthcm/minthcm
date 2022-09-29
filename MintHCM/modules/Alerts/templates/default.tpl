@@ -44,14 +44,22 @@
                {/if}
                </span>
          </h4>
-
-         <p class="alert-body">
-            {$result->name|nl2br}<br/>
-            {$result->description|nl2br}
-         </p>
-         {if $result->url_redirect != null}
+        {if $result->url_redirect != null}
          </a>
          {/if}
+         <p class="alert-body addReadMore showlesscontent">
+            {$result->name|nl2br}<br/>
+            {assign var="fulldesc" value=$result->description|nl2br}
+            {assign var="firstSet" value=$fulldesc|truncate:200:"...":true}
+            {assign var="desc_count" value=$fulldesc|count_characters:true}
+            {assign var="secdHalf" value=$fulldesc|@substr:200:$desc_count}
+            {$firstSet}
+            {if $desc_count > 200}
+            <span class='SecSec'>{$secdHalf}</span>
+            <span onclick="Alerts.prototype.showHideDescription(event)" class='readMore'  title='{sugar_translate label="LBL_SHOW_MORE"}'>{sugar_translate label="LBL_SHOW_MORE"}</span>
+            <span onclick="Alerts.prototype.showHideDescription(event)" class='readLess' title='{sugar_translate label="LBL_SHOW_LESS"}'> {sugar_translate label="LBL_SHOW_LESS"} </span>
+            {/if}
+         </p>
       {/if}
    </div>
 {/foreach}

@@ -526,14 +526,14 @@ $dictionary['Candidates'] = array(
             'source' => 'non-db',
             'module' => 'Users',
             'bean_name' => false,
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_LINK_FROM_EMPLOYEE',
+            'vname' => 'LBL_EMPLOYEE',
             'id_name' => 'employee_id',
         ),
         "employee_name" => array(
             'name' => 'employee_name',
             'type' => 'relate',
             'source' => 'non-db',
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_RELATE_FROM_EMPLOYEE',
+            'vname' => 'LBL_EMPLOYEE_NAME',
             'save' => true,
             'id_name' => 'employee_id',
             'link' => 'candidates_employees',
@@ -548,7 +548,7 @@ $dictionary['Candidates'] = array(
             'source' => 'non-db',
             'reportable' => false,
             'side' => 'right',
-            'vname' => 'LBL_CANDIDATE_EMPLOYEE_ID_FROM_EMPLOYEE',
+            'vname' => 'LBL_EMPLOYEE_ID',
             'audited' => true,
         ),
     ),
@@ -631,7 +631,7 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Candidates', 'Candidates',
-    array('basic', 'assignable', 'person', 'security_groups', 'employee_related'));
+    array('basic', 'assignable', 'person', 'security_groups'));
 
 $dictionary['Candidates']['fields']['date_reviewed']['audited'] = false;
 $dictionary['Candidates']['fields']['date_reviewed']['reportable'] = false;

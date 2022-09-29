@@ -132,7 +132,10 @@ class MyMeetingsDashlet extends DashletGeneric
                 $this->lvs->data['data'][$rowNum]['DURATION'] .= $this->seedBean->minutes_values[$this->lvs->data['data'][$rowNum]['DURATION_MINUTES']];
             }
             $this->lvs->data['data'][$rowNum]['DURATION'] .= $mod_strings['LBL_MINSS_ABBREV'];
-            if (!empty($this->lvs->data['data'][$rowNum]['STATUS']) && $this->lvs->data['data'][$rowNum]['STATUS'] == $app_list_strings['meeting_status_dom']['Planned']) {
+            // MyMeetingsDashlet_hotfix START
+            // if (!empty($this->lvs->data['data'][$rowNum]['STATUS']) && $this->lvs->data['data'][$rowNum]['STATUS'] == $app_list_strings['meeting_status_dom']['Planned']) {
+            if (!empty($this->lvs->data['data'][$rowNum]['STATUS']) && 'Planned' == $this->lvs->data['data'][$rowNum]['STATUS']) {
+            // MyMeetingsDashlet_hotfix END
                 if ($this->lvs->data['data'][$rowNum]['ACCEPT_STATUS'] == '') {
                     //if no status has been set, then do not show accept options
                     $this->lvs->data['data'][$rowNum]['SET_ACCEPT_LINKS'] = "<div id=\"accept" . $this->id . "\" class=\"acceptMeeting\"></div>";

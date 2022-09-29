@@ -326,9 +326,11 @@ function showSubPanel(child_field, url, force_load, layout_def_key) {
 
     set_div_cookie(subpanel.cookie_name, '');
 
-    if (current_child_field != '' && child_field != current_child_field) {
-      hideSubPanel(current_child_field);
-    }
+    //MintHCM Start #89450
+    // if (current_child_field != '' && child_field != current_child_field) {
+    //     hideSubPanel(current_child_field);
+    // }
+    //MintHCM END #89450
 
     current_child_field = child_field;
 

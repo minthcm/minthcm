@@ -76,14 +76,6 @@ $subpanel_layout = array(
              'force_exists'			=> true,
 		     'force_default'		=> 0,
 		),
-		'contact_name'=>array(
-			 'widget_class'			=> 'SubPanelDetailViewLink',
-			 'target_record_key'	=> 'contact_id',
-			 'target_module'		=> 'Contacts',
-			 'module'				=> 'Contacts',
-			 'vname'				=> 'LBL_LIST_CONTACT',
-			 'width'				=> '11%',
-		),
 		'parent_id'=>array(
             'usage'=>'query_only',
 			'force_exists'=>true

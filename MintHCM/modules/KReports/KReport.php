@@ -463,12 +463,14 @@ class KReport extends SugarBean
         //        }
         parent::save($checkNotify);
 
-        switch ($sugar_config['KReports']['authCheck']) {
-            case 'SecurityGroups':
-                $this->db->query("DELETE FROM securitygroups_records WHERE record_id = '" . $this->id . "'");
-                $this->db->query("INSERT INTO securitygroups_records (id, securitygroup_id, record_id, module, modified_user_id, created_by, deleted) values ('" . create_guid() . "', '" . $_REQUEST['authaccess_id'] . "', '" . $this->id . "', 'KReports', '" . $GLOBALS['current_user']->id . "', '" . $GLOBALS['current_user']->id . "', 0)");
-                break;
-        }
+        //MintHCM #107136 start
+        // switch ($sugar_config['KReports']['authCheck']) {
+        //     case 'SecurityGroups':
+        //         $this->db->query("DELETE FROM securitygroups_records WHERE record_id = '" . $this->id . "'");
+        //         $this->db->query("INSERT INTO securitygroups_records (id, securitygroup_id, record_id, module, modified_user_id, created_by, deleted) values ('" . create_guid() . "', '" . $_REQUEST['authaccess_id'] . "', '" . $this->id . "', 'KReports', '" . $GLOBALS['current_user']->id . "', '" . $GLOBALS['current_user']->id . "', 0)");
+        //         break;
+        // }
+        //MintHCM #107136 end
     }
 
     //2013-02-02 added html formattng support to the description if it is in the listview
@@ -2297,7 +2299,12 @@ class KReportRenderer
                 $fielName = $this->report->fieldNameMap[$fieldid]['fields_name_map_entry']['function']['include'];
                 require_once $fielName;
                 $functionName = $this->report->fieldNameMap[$fieldid]['fields_name_map_entry']['function']['name'];
-                $fieldValue = $functionName(null, $this->report->fieldNameMap[$fieldid]['fieldname'], $record[$fieldid]);
+                if(isset($this->report->fieldNameMap[$fieldid]['fields_name_map_entry']['function']['additional_params'])) {
+                    $options_list = $functionName(null, null, null, null, $this->report->fieldNameMap[$fieldid]['fields_name_map_entry']['function']['additional_params']);
+                    $fieldValue = $options_list[$record[$fieldid]];
+                } else {
+                    $fieldValue = $functionName(null, $this->report->fieldNameMap[$fieldid]['fieldname'], $record[$fieldid]);
+                }
             } else {
                 // Mint start #41967
                 $fieldValue = $app_list_strings[$field_list][$record[$fieldid]];

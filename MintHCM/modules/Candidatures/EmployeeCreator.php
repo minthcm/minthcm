@@ -95,7 +95,7 @@ class EmployeeCreator
         $employee_bean->position_id = $this->position_bean->id;
         if (strlen($this->converted_candidature_login) > 0) {
             $employee_bean->user_name = $this->converted_candidature_login;
-            $employee_bean->status = 'Active';
+            $employee_bean->status = 'Inactive';
         } else {
             $employee_bean->status = 'Inactive';
         }
