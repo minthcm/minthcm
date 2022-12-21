@@ -109,4 +109,5 @@ $entry_point_registry = array(
    'viewToolsApi' => array( 'file' => 'include/ViewTools/viewToolsApi.php', 'auth' => true ),
    'CalculateDLNC' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCindex.php'),
    'CalculateDLNCcalc' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCcalc.php'),
+   'OrganizationalStructure' => array('file' => 'include/OrganizationalStructure/OrganizationalStructureEntrypoint.php', 'auth' => true),
 );

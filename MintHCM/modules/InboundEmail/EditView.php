@@ -105,6 +105,55 @@ $GLOBALS['log']->info("InboundEmail Edit View");
 /* End standard EditView setup logic */
 
 /* Start custom setup logic */
+
+// MintHCM #110041 START
+// providers requiring OAuth2
+$authInfo = [
+    'google_oauth2' => [
+        'application' => 'GoogleEmail',
+        'auth_warning' => '',
+        'server_url' => 'imap.gmail.com',
+        'port' => '993',
+        'auth_url' => null,
+        'eapm_id' => '',
+        'authorized_account' => '',
+        'email_user' => '',
+        'dataSource' => 'googleEmailRedirect',
+    ],
+    'exchange_online' => [
+        'application' =>'MicrosoftEmail',
+        'auth_warning' => '',
+        'server_url' => 'outlook.office365.com',
+        'port' => '993',
+        'auth_url' => null,
+        'eapm_id' => '',
+        'authorized_account' => '',
+        'email_user' => '',
+        'dataSource' => 'microsoftEmailRedirect',
+    ],
+];
+
+// get extra auth info
+require_once 'modules/EAPM/OAuth2InfoObtainer.php';
+$infoObtainer = new OAuth2InfoObtainer();
+
+foreach ($authInfo as $key => $value) {
+    try {
+        $info = $infoObtainer->getAuthInfo($value['application']);
+    } catch (Exception $e) {
+        $info = [];
+    }
+    $authInfo[$key] = array_merge($value, $info);
+    if ($key === $focus->email_provider) {
+        $authInfo[$key]['eapm_id'] = $focus->eapm_id;
+        $authInfo[$key]['authorized_account'] = $focus->authorized_account;
+        $authInfo[$key]['email_user'] = $focus->email_user;
+    }
+}
+
+$email_provider = get_select_options_with_id($app_list_strings['dom_imaptype_options'], $focus->email_provider);
+// MintHCM #110041 END
+
 // status drop down
 $status = get_select_options_with_id_separate_key($app_list_strings['user_status_dom'],$app_list_strings['user_status_dom'], $focus->status);
 // default MAILBOX value
@@ -284,6 +333,14 @@ $xtpl->assign('NOTLS', $notls);
 $xtpl->assign('CERT', $cert);
 $xtpl->assign('NOVALIDATE_CERT', $novalidate_cert);
 $xtpl->assign('SSL', $ssl);
+
+// MintHCM #110041 START
+$xtpl->assign('AUTH_INFO', json_encode($authInfo));
+$xtpl->assign('EMAIL_PROVIDER', $email_provider);
+$xtpl->assign('EAPM_ID', $focus->eapm_id);
+$xtpl->assign('AUTHORIZED_ACCOUNT', $focus->authorized_account);
+$xtpl->assign('AUTH_TYPE', $focus->auth_type);
+// MintHCM #110041 END
 
 $protocol = filterInboundEmailPopSelection($app_list_strings['dom_email_server_type']);
 $xtpl->assign('PROTOCOL', get_select_options_with_id($protocol, $focus->protocol));

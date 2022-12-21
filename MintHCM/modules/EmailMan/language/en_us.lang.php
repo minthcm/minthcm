@@ -143,4 +143,6 @@ $mod_strings = array(
     'LBL_OUTBOUND_EMAIL_ACCOUNT_VIEW' => 'View Outbound Email Accounts',
     'LBL_ALLOW_SEND_AS_USER' => 'Users may send as themselves:',
     'LBL_ALLOW_SEND_AS_USER_DESC' => 'When enabled, <b>all</b> users can send email using the outgoing mail server, using their own primary email address as the &quot;From:&quot; address.<br>This feature might not work with SMTP servers that do not allow sending from a different email account than the server account.',
+    'LBL_AUTH_STATUS' => 'Status',
+    'LBL_AUTHORIZED_ACCOUNT' => 'Authorized Email Address',
 );

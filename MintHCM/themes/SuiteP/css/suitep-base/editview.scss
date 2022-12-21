@@ -58,8 +58,19 @@ div#searchResults {
 }
 
 #scheduler .schedulerDiv table tr.schedulerTimeRow td {
-  border-left: 0;
+  /* MintHCM #75792 START */
+  /* border-left: 0; */
+  border: 0;
+  /* MintHCM #75792 END */
 }
+/* MintHCM #75792 START */
+#scheduler .schedulerDiv table tr.schedulerTimeRow th {
+    border: 1px solid #dddddd;
+}
+#scheduler .schedulerDiv table tr.schedulerTimeRow td:first-child {
+    border-right: 1px solid #dddddd;
+}
+/* MintHCM #75792 END */
 
 #scheduler .schedulerDiv table tr.schedulerTimeRow th[scope=col] {
   padding-left: 4px;
@@ -88,7 +99,9 @@ div#searchResults {
 }
 
 #scheduler .schedulerDiv table tr.schedulerAttendeeRow td.schedulerSlotCellStartTime {
-  background-color: $default-btn-color;
+/* MintHCM #75792 START */
+/*  background-color: $default-btn-color; */
+/* MintHCM #75792 END */
   border-left: 4px solid $scheduler-start-color ;
 }
 
@@ -129,6 +142,42 @@ div#searchResults {
   background-color: $scheduler-busy-color;
   border-color: $scheduler-free-border-color;
 }
+/* MintHCM #75792 START */
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-excused_absence {
+    box-shadow: inset 0 -4px 0 $scheduler-excused_absence-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-overtime {
+    box-shadow: inset 0 -4px 0 $scheduler-overtime-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-leave_at_request {
+    box-shadow: inset 0 -4px 0 $scheduler-leave_at_request-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-occasional_leave {
+    box-shadow: inset 0 -4px 0 $scheduler-occasional_leave-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-sick_care {
+    box-shadow: inset 0 -4px 0 $scheduler-sick_care-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-sick {
+    box-shadow: inset 0 -4px 0 $scheduler-sick-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-holiday {
+    box-shadow: inset 0 -4px 0 $scheduler-holiday-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-delegation {
+    box-shadow: inset 0 -4px 0 $scheduler-delegation-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-home {
+    box-shadow: inset 0 -4px 0 $scheduler-home-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow td.ws-office {
+    box-shadow: inset 0 -4px 0 $scheduler-office-color;
+}
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow:hover td:first-child,
+#scheduler .schedulerDiv table tr.schedulerAttendeeRow:hover td.schedulerAttendeeDeleteCell {
+    background-color: $scheduler-slot-bg;
+}
+/* MintHCM #75792 END */
 
 #create-invitees {
   background-color: $panel-bg;

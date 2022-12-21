@@ -137,7 +137,10 @@
 
         // query and create the FREEBUSY lines for SugarCRM Meetings and Calls and
         // return the string
-        function create_sugar_freebusy($user_bean, $start_date_time, $end_date_time) {
+        /* MintHCM #75792 START */
+        // function create_sugar_freebusy($user_bean, $start_date_time, $end_date_time) {
+        function create_sugar_freebusy($user_bean, $start_date_time, $end_date_time, $with_workschedulers = false) {
+        /* MintHCM #75792 END */
 
             $ical_array = array();
             global $DO_USER_TIME_OFFSET, $timedate, $current_user;
@@ -150,6 +153,11 @@
             $activityList = array(
                 "Meetings" => array("showCompleted" => true, "start" => "date_start", "end" => "date_end"), "Calls" => array("showCompleted" => true, "start" => "date_start", "end" => "date_end"), "Tasks" => array("showCompleted" => true, "start" => "date_start", "end" => "date_due")
             );
+            /* MintHCM #75792 START */
+            if ($with_workschedulers) {
+                $activityList['WorkSchedules'] = array("showCompleted" => true, "start" => "date_start", "end" => "date_end");
+            }
+            /* MintHCM #75792 END */
 
             $acts_arr = CalendarActivity::get_activities($activityList, $user_bean->id, false, $start_date_time, $end_date_time, 'freebusy');
             // loop thru each activity, get start/end time in UTC, and return FREEBUSY strings
@@ -167,7 +175,14 @@
                 $endTimeUTC = $act->end_time->format(self::UTC_FORMAT);
                 $ical_array[] = array("FREEBUSY", $startTimeUTC . "/" . $endTimeUTC);
                 $ical_array[] = array("X-FREEBUSY-ID", $ID);
-                $ical_array[] = array("X-FREEBUSY-TYPE", get_class($act->sugar_bean));
+                /* MintHCM #75792 START */
+                // $ical_array[] = array("X-FREEBUSY-TYPE", get_class($act->sugar_bean));
+                $sugar_bean_class = get_class($act->sugar_bean);
+                if($sugar_bean_class == 'WorkSchedules'){
+                    $sugar_bean_class .= "___{$act->sugar_bean->type}";
+                }
+                $ical_array[] = array("X-FREEBUSY-TYPE", $sugar_bean_class);
+                /* MintHCM #75792 END */
                 //$ical_array[] = array(array("X-FREEBUSYID", $ID), array("FREEBUSY", $startTimeUTC ."/". $endTimeUTC));
             }
 
@@ -177,7 +192,10 @@
         }
 
         // return a freebusy vcal string
-        function get_vcal_freebusy($user_focus, $cached = true) {
+        /* MintHCM #75792 START */
+        // function get_vcal_freebusy($user_focus, $cached = true) {
+        function get_vcal_freebusy($user_focus, $cached = true, $with_workschedulers = false) {
+        /* MintHCM #75792 END */
 
             global $locale, $timedate;
             $ical_array = array();
@@ -230,7 +248,10 @@
                 //               {
                 //$freebusy = self::create_ical_string_from_array($user_focus,$start_date_time,$end_date_time);
 
-                $str .= $this->create_sugar_freebusy($user_focus, $start_date_time, $end_date_time);
+                /* MintHCM #75792 START */
+                // $str .= $this->create_sugar_freebusy($user_focus, $start_date_time, $end_date_time);
+                $str .= $this->create_sugar_freebusy($user_focus, $start_date_time, $end_date_time, $with_workschedulers);
+                /* MintHCM #75792 END */
                 //               }
             }
 

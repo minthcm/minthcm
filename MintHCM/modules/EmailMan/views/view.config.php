@@ -55,9 +55,67 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('include/MVC/View/SugarView.php');
 require_once('modules/EmailMan/Forms.php');
+// MintHCM #110041 START
+require_once 'modules/EAPM/OAuth2InfoObtainer.php';
+// MintHCM #110041 END
 
 class ViewConfig extends SugarView
 {
+    // MintHCM #110041 START
+    /**
+     * SMTP providers requiring OAuth2.
+     *
+     * @var array
+     */
+    private $oauth2Types = [
+        'google_oauth2' => [
+            'application' => 'GoogleEmail',
+            'auth_warning' => '',
+            'auth_url' => null,
+            'eapm_id' => '',
+            'authorized_account' => '',
+            'dataSource' => 'googleEmailRedirect',
+        ],
+        'exchange_online' => [
+            'application' =>'MicrosoftEmail',
+            'auth_warning' => '',
+            'auth_url' => null,
+            'eapm_id' => '',
+            'authorized_account' => '',
+            'dataSource' => 'microsoftEmailRedirect',
+        ],
+    ];
+
+    /**
+     * Gets auth info for oauth2 providers.
+     *
+     * @param array $settings
+     * @return string
+     */
+    protected function getAuthInfo(array $settings): string
+    {
+        $infoObtainer = new OAuth2InfoObtainer();
+
+        $authInfo = $this->oauth2Types;
+        foreach ($authInfo as $key => $value) {
+            try {
+                $info = $infoObtainer->getAuthInfo($value['application']);
+            } catch (Exception $e) {
+                $info = [];
+            }
+
+            $authInfo[$key] = array_merge($value, $info);
+            if ($key === $settings['mail_smtptype']) {
+                $authInfo[$key]['eapm_id'] = $settings['eapm_id'];
+                $authInfo[$key]['authorized_account'] = $settings['authorized_account'];
+                $authInfo[$key]['mail_smtpuser'] = $settings['mail_smtpuser'];
+            }
+        }
+        // convert to json string
+        return json_encode($authInfo);
+    }
+    // MintHCM #110041 END
+
     /**
      * @see SugarView::_getModuleTitleParams()
      */
@@ -180,7 +238,12 @@ class ViewConfig extends SugarView
         } else {
             LoggerManager::getLogger()->warn('EmailMan view display error: mail allow user send is not set for focus');
         }
-        
+        // MintHCM #110041 START
+        $this->ss->assign("eapm_id", isset($focus->settings['eapm_id']) ? $focus->settings['eapm_id'] : '');
+        $this->ss->assign("authorized_account", isset($focus->settings['authorized_account']) ? $focus->settings['authorized_account'] : '');
+        $this->ss->assign("mail_authtype", $focus->settings['mail_authtype']);
+        $this->ss->assign("js_authinfo", $this->getAuthInfo($focus->settings));
+        // MintHCM #110041 END
         
         $this->ss->assign("mail_smtptype", $mailSmtpType);
         $this->ss->assign("mail_smtpserver", $mailSmtpServer);

@@ -51,5 +51,7 @@ require_once "include/utils/additional_details.php";
 
 function additionalDetailsMeeting($fields, SugarBean $bean = null, $params = array())
 {
+    global $app_list_strings;
+    $fields['STATUS'] = $app_list_strings['meeting_status_dom'][$fields['STATUS']];
     return additional_details($fields, $bean, $params);
 }

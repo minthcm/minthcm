@@ -105,6 +105,24 @@ $color-101: #FFFFFF; // MintHCMPopup container background color
 $color-102: #009975; // MintHCMPopup header background color
 $color-103: #FFFFFF; // MintHCMPopup header text color
 
+/* MintHCM #75792 START */
+$color-104: #61616D; // MintHCM Attendee Scheduler - Meeting/Call Start Border
+$color-105: #61616D; // MintHCM Attendee Scheduler - Meeting/Call End Border
+$color-106: #F0F0F0; // MintHCM Attendee Scheduler - Empty Slot Background
+$color-107: #63C29A; // MintHCM Attendee Scheduler - One Meeting/Call Slot Background
+$color-108: #009976; // MintHCM Attendee Scheduler - Two or More Meetings/Calls Slot Background
+$color-109: rgba(255, 255, 255, 0.5); // MintHCM Attendee Scheduler - Meeting/Call Slot Border
+$color-110: #B2B4B3; // MintHCM Attendee Scheduler - Office WorkSchedule Slot Border
+$color-111: #A7D3F1; // MintHCM Attendee Scheduler - Home WorkSchedule Slot Border
+$color-112: #E1B7C6; // MintHCM Attendee Scheduler - Delegation WorkSchedule Slot Border
+$color-113: #FFFF99; // MintHCM Attendee Scheduler - Holiday WorkSchedule Slot Border
+$color-114: #F08475; // MintHCM Attendee Scheduler - Sick WorkSchedule Slot Border
+$color-115: #6BA5C1; // MintHCM Attendee Scheduler - Sick Care WorkSchedule Slot Border
+$color-116: #FFCF99; // MintHCM Attendee Scheduler - Occasional Leave WorkSchedule Slot Border
+$color-117: #6BA5C1; // MintHCM Attendee Scheduler - Leave at Request WorkSchedule Slot Border
+$color-118: #ADEBAD; // MintHCM Attendee Scheduler - Overtime WorkSchedule Slot Border
+$color-119: #ADFF2F; // MintHCM Attendee Scheduler - Excused Absence WorkSchedule Slot Border
+/* MintHCM #75792 END */
 // Mint development color color-palette
 $color-mint-lightgreen: #63c29a;
 $color-mint-lightgreen-lighter: #69CFA4;

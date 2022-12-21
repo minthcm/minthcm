@@ -93,8 +93,8 @@ $viewdefs[$module_name] = array(
                     'employee_name',
                 ),
                 array(
-                    'description'
-                )
+                    'description',
+                ),
             ),
             'LBL_RECORDVIEW_PANEL' => array(
                 array(

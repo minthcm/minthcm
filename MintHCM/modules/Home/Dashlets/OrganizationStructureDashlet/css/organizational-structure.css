@@ -201,3 +201,13 @@ img.face {
     margin-left: 5px;
 	color: #ccc;
 }
+
+#structure_full_screen > img {
+    width: 40px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+#structure_full_screen > img:hover {
+    border: 1px solid #f77;
+}

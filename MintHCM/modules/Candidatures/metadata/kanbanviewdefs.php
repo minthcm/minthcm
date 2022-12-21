@@ -5,11 +5,31 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $app_list_strings;
 
+function extractSublist($listDef, $sublistIdentifiers) {
+    $result = [];
+    foreach ($sublistIdentifiers as $identifier) {
+        $result[$identifier] = $listDef[$identifier];
+    }
+    return $result;
+}
+
 $module_name = 'Candidatures';
 $kanbanViewDefs[$module_name] = array(
     'columns_field' => 'status',
     'order_field' => '',
-    'columns' => $app_list_strings['status_list'],
+    'columns' => extractSublist($app_list_strings['status_list'], [
+        // Displayed Kanban columns
+        'New',
+        'InProgress',
+        'EntryInterview',
+        'AfterEntryInterview',
+        'PracticalTask',
+        'Scored',
+        'MeetingPrimary',
+        'Scored2',
+        'MeetingAdditional',
+        'Offer',
+    ]),
     'black_list' => array(
         'CandidateResignation',
         'Hired',

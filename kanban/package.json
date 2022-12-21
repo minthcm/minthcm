@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build:web": "vue-cli-service build --target wc --name kanban-view \"src/Kanban.vue\""
   },
   "dependencies": {
     "core-js": "^3.6.5",

@@ -262,13 +262,22 @@ function send_back_selected(module, form, field, error_message, request_data) {
   closePopup();
 
   SUGAR.util.globalEval("var call_back_function = window.opener." + request_data.call_back_function);
+//MintHCM #81369 Start
+  //   var result_data = {
+//     "form_name": form_name,
+//     "selection_list": selection_list_array,
+//     "passthru_data": passthru_data,
+//     "select_entire_list": form.select_entire_list.value,
+//     "current_query_by_page":form.current_query_by_page.value,
+//   };
   var result_data = {
     "form_name": form_name,
     "selection_list": selection_list_array,
     "passthru_data": passthru_data,
     "select_entire_list": form.select_entire_list.value,
-    "current_query_by_page": form.current_query_by_page.value
+    "current_query_by_page":form.current_query_by_page.value.replaceAll("&#38;",''),
   };
+  //MintHCM #81369 End
   call_back_function(result_data);
 }
 

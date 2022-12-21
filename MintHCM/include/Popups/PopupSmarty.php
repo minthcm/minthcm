@@ -265,10 +265,7 @@ class PopupSmarty extends ListViewSmarty {
          $this->_popupMeta['create']['createButton'] = translate($this->_popupMeta['create']['createButton']);
       }
       $this->th->ss->assign('popupMeta', $this->_popupMeta);
-      //viewTools #46476 START
-      //$this->th->ss->assign('current_query', htmlentities(json_encode(($_REQUEST))));
-      $this->th->ss->assign('current_query', base64_encode(serialize($_REQUEST)));  // Błąd podczas powiązywania większej liczby kontrahentów z kampanią sprzedażową
-      //viewTools #46476 END
+      $this->th->ss->assign('current_query', htmlentities(json_encode(($_REQUEST))));
       $this->th->ss->assign('customFields', $this->customFieldDefs);
       $this->th->ss->assign('numCols', NUM_COLS);
       $this->th->ss->assign('massUpdateData', $this->massUpdateData);

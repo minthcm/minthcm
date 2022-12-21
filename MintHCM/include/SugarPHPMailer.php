@@ -48,6 +48,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 use PHPMailer\PHPMailer\PHPMailer;
+// MintHCM #110041 START
+use PHPMailer\PHPMailer\OAuth;
+// MintHCM #110041 END
 
 require_once 'include/OutboundEmail/OutboundEmail.php';
 
@@ -57,6 +60,13 @@ require_once 'include/OutboundEmail/OutboundEmail.php';
  */
 class SugarPHPMailer extends PHPMailer
 {
+    // MintHCM #110041 START
+    const ApiMap = [
+        'Google' => 'GoogleEmail',
+        'Microsoft' => 'MicrosoftEmail',
+    ];
+    // MintHCM #110041 END
+
     /*
      * var OutboundEmail
      */
@@ -113,6 +123,12 @@ class SugarPHPMailer extends PHPMailer
         $this->protocol = ($this->oe->mail_smtpssl == 1) ? 'ssl://' : $this->protocol;
         $this->SMTPAutoTLS = false;
 
+        // MintHCM #110041 START
+        if ($this->oe->mail_authtype === 'oauth2') {
+            $this->AuthType = 'XOAUTH2';
+            $this->setOAuth($this->getOAuth2Config($this->oe->eapm_id));
+        }
+        // MintHCM #110041 END
     }
 
     /**
@@ -512,4 +528,49 @@ eoq;
         return $ret;
     }
 
+    // MintHCM #110041 START
+    protected function getOAuth2Config($eapm_id)
+    {
+        if (empty($eapm_id)) {
+            return null;
+        }
+
+        $eapm = BeanFactory::getBean('EAPM', $eapm_id);
+        $api = $this->getExternalApi($eapm->application);
+        if (empty($api)) {
+            return null;
+        }
+
+        $client = $api->getClient();
+        $client_id = $client->getClientId();
+        $client_secret = $client->getClientSecret();
+        $redirect_uri = $client->getRedirectUri();
+
+        $api_data = json_decode(html_entity_decode($eapm->api_data), true);
+        $refresh_token = $api_data['refresh_token'];
+        $email_addr = $api->getEmailAddress($eapm_id);
+
+        $providerClass = $api->getPHPMailerOAuth2ProviderClass();
+        $provider = new $providerClass([
+            'clientId' => $client_id,
+            'clientSecret' => $client_secret,
+            'redirectUri' => $redirect_uri,
+            'accessType' => 'offline'
+        ]);
+
+        return new OAuth([
+            'provider' => $provider,
+            'clientId' => $client_id,
+            'clientSecret' => $client_secret,
+            'refreshToken' => $refresh_token,
+            'userName' => $email_addr,
+        ]);
+    }
+
+    protected function getExternalApi($application)
+    {
+        $application = self::ApiMap[$application] ?? '';
+        return ExternalAPIFactory::loadAPI($application, true);
+    }
+    // MintHCM #110041 END
 } // end class definition

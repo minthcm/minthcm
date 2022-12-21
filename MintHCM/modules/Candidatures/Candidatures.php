@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /*
  * Your installation or use of this SugarCRM file is subject to the applicable
@@ -16,9 +16,11 @@
 require_once 'modules/Candidatures/Candidatures_sugar.php';
 require_once 'modules/Candidatures/SugarFeeds/CandidaturesFeed.php';
 
-class Candidatures extends Candidatures_sugar {
+class Candidatures extends Candidatures_sugar
+{
 
-   public function save($check_notify = false) {
+    public function save($check_notify = false)
+    {
 
       $old_bean = $this->fetched_row;
 
@@ -26,7 +28,7 @@ class Candidatures extends Candidatures_sugar {
          $this->to_decision = 0;
       }
 
-      if ( !strlen($this->name) > 0 || $old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['recruitment_end_id'] != $this->recruitment_end_id || $old_bean['candidate_id'] != $this->candidate_id ) {
+        if (!strlen($this->name) > 0 || $old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['recruitment_end_id'] != $this->recruitment_end_id || $old_bean['parent_id'] != $this->parent_id) {
          $this->generateName();
       }
       $this->change_relation = false;
@@ -45,17 +47,19 @@ class Candidatures extends Candidatures_sugar {
       return $id;
    }
 
-   protected function pushFeed() {
+    protected function pushFeed()
+    {
       $candidatures_feed = new CandidaturesFeed();
       $candidatures_feed->pushFeed($this, '', array());
    }
 
-   public function generateName() {
+    public function generateName()
+    {
       global $db;
 
       $name = "";
       $sql = "Select CONCAT( COALESCE( first_name, '' ), IF( first_name IS NULL, '', ' ' ), last_name ) "
-              . " from candidates where id = '{$this->candidate_id}' ";
+            . " from candidates where id = '{$this->parent_id}' ";
 
       $res = $db->getOne($sql);
 
@@ -71,8 +75,9 @@ class Candidatures extends Candidatures_sugar {
       $this->name = $name;
    }
 
-   private function setCountEmployees($recruitment_end_id, $change_rel = true) {
-      if ( $recruitment_end_id != '' ) {
+    private function setCountEmployees($recruitment_end_id, $change_rel = true)
+    {
+        if ('' != $recruitment_end_id) {
          $recruitment = BeanFactory::getBean('Recruitments', $recruitment_end_id);
          if ( $recruitment->load_relationship('candidatures_end') ) {
             $employees_number = $this->countEmployees($recruitment, $change_rel);
@@ -85,7 +90,8 @@ class Candidatures extends Candidatures_sugar {
       }
    }
 
-   private function countEmployees($recruitment, $change_rel = true) {
+    private function countEmployees($recruitment, $change_rel = true)
+    {
       $result = 0;
       $candidatures = $recruitment->candidatures_end->getBeans();
       if ( $this->change_relation ) {
@@ -96,14 +102,15 @@ class Candidatures extends Candidatures_sugar {
          }
       }
       foreach ( $candidatures as $candidature ) {
-         if ( $candidature->status == 'Hired' ) {
+            if ('Hired' == $candidature->status) {
             $result++;
          }
       }
       return $result;
    }
 
-   protected function calculateCurrencies() {
+    protected function calculateCurrencies()
+    {
       $currency = new Currency();
       $currency->retrieve($this->currency_id);
       if ( isset($this->dg_amount) ) {

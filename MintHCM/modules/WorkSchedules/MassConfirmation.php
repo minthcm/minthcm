@@ -63,19 +63,23 @@ class MassConfirmation {
       $this->user_id = $id;
    }
 
-   public function confirm() {
-      $this->success = [];
-      $this->errors = [];
-      foreach ( $this->ids as $id ) {
-         $work_schedule = BeanFactory::getBean('WorkSchedules', $id);
-         if ( $work_schedule->confirm() ) {
-            $this->success[] = $work_schedule;
-         } else {
-            $this->errors[] = $work_schedule;
-         }
-      }
-      $this->createAlert();
-   }
+    public function confirm() {
+        $this->success = [];
+        $this->errors = [];
+        foreach ( $this->ids as $id ) {
+        $work_schedule = BeanFactory::getBean('WorkSchedules', $id);
+            if ($work_schedule->canBeConfirmed() == 1) {
+                if ( $work_schedule->confirm() ) {
+                    $this->success[] = $work_schedule;
+                } else {
+                    $this->errors[] = $work_schedule;
+                }
+            } else {
+                $this->errors[] = $work_schedule;
+            }
+        }
+        $this->createAlert();
+    }
 
    public function createAlert() {
       $notification = new Notification();

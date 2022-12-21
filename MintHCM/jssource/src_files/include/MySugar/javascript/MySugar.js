@@ -258,7 +258,10 @@ initMySugar = function () {
           url += '&dynamic=true';
         }
         SUGAR.mySugar.currentDashlet = document.getElementById('dashlet_entire_' + id);
-        $.ajax({"method": "GET", "url": url}).done(function (data, textStatus, jqXHR) {
+        // MintHCM #94842 START
+        $.ajax({"method": "GET", "url": url, async: true}).done(function (data, textStatus, jqXHR) {
+        // MintHCM #94842 END
+
           var updateDashlet = null;
           if ($(data).find('#dashlet_entire_' + id).length == 0) {
             // Suite7 & SuiteR

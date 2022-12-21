@@ -67,117 +67,157 @@
 	<input type="hidden" name="personal" value="{PERSONAL}">
 	<input type="hidden" name="searchField" value="">
 	<input type="hidden" id="mailbox_type" name="mailbox_type" value="{MAILBOX_TYPE}">
+    <!--
+    MintHCM #110041 START
+    -->
+	<input type="hidden" name="eapm_id" id="eapm_id" value="{EAPM_ID}" />
+	<input type="hidden" name="authorized_account" id="authorized_account" value="{AUTHORIZED_ACCOUNT}" />
+	<input type="hidden" name="auth_type" id="auth_type" value="{AUTH_TYPE}" />
+	<!--
+    MintHCM #110041 END
+    -->
 
 	<table width="100%" cellpadding="0" cellspacing="0" border="0">
 		<tr>
 			<td>
-				<input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; {CHOOSER_SCRIPT} this.form.return_id.value='{RETURN_ID}'; return checkformdata()" type="submit" name="button" id="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " {IE_DISABLED}>
+                <!--
+                MintHCM #110041 START
+                -->
+				<input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; {CHOOSER_SCRIPT} this.form.return_id.value='{RETURN_ID}'; return save_form_data()" type="submit" name="button" id="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " {IE_DISABLED}>
 				<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" id="emailCancel" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'; if(this.form.record.value == '' && this.form.origin_id.value != '') this.form.record.value=this.form.origin_id.value;" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
 				<input title="{MOD.LBL_TEST_BUTTON_TITLE}"
 					type='button'
 					class="button"
 					id="emailTestSettings"
-					onClick='ie_test_open_popup_with_submit("InboundEmail", "Popup", "Popup", 400, 300, trim(this.form.server_url.value), this.form.protocol.value, trim(this.form.port.value), trim(this.form.email_user.value), Rot13.write(this.form.email_password.value), trim(this.form.mailbox.value), this.form.ssl.checked, this.form.personal.value, "EditView", this.form.origin_id.value?this.form.origin_id.value:this.form.record.value);'
+					onClick='ie_test_open_popup_with_submit("InboundEmail", "Popup", "Popup", 400, 300, trim(this.form.server_url.value), this.form.protocol.value, trim(this.form.port.value), trim(this.form.email_user.value), Rot13.write(this.form.email_password.value), trim(this.form.mailbox.value), this.form.ssl.checked, this.form.personal.value, "EditView", this.form.origin_id.value?this.form.origin_id.value:this.form.record.value, this.form.eapm_id.value);'
 					name="button" value="  {MOD.LBL_TEST_SETTINGS}  " {IE_DISABLED}>
+				<!--
+                MintHCM #110041 END
+                -->
 			</td>
 			<td align="right" width="20%" NOWRAP><span class="required">{APP.LBL_REQUIRED_SYMBOL}</span> {APP.NTC_REQUIRED}</td>
 			<td align='right'>{ADMIN_EDIT}</td>
 		</tr>
 	</table>
 
-    <div class="edit view">
+    <div class="edit view" style="padding: 20px">
 	<table width="100%" border=0 cellspacing="{GRIDLINE}" cellpadding="0">
+        <!--
+        MintHCM #110041 START
+        -->
 		<tr>
 		      <th align="left" scope="row" colspan="1"><h4>{MOD.LBL_BASIC}</h4></th>
 		</tr>
+		<tr id="prefill">
+            <td>&nbsp;</td>
+            <td style="vertical-align:bottom;"><a href="javascript:void(0);" id="prefill_gmail_defaults_link" onclick="javascript:prefillGmailDefaults();">{APP.LBL_EMAIL_ACCOUNTS_GMAIL_DEFAULTS}</a>&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" scope="row" width="15%" NOWRAP>
+                <span>{MOD.LBL_NAME}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
+            <td valign="top" width="35%">
+                <span><input name='name' id='name' tabindex='10' size='30' maxlength='255' type="text" value="{NAME}" {IE_DISABLED}></span></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" scope="row" width="15%" NOWRAP>
+                <span>{MOD.LBL_EMAIL_PROVIDER}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
+            <td valign="top" colspan="3">
+                <span><select name='email_provider' id="email_provider" onchange="toggle_email_provider(true);" {IE_DISABLED}>{EMAIL_PROVIDER}</select></span></td>
+        </tr>
+        <tr id="auth_block" style="display:none">
+            <td colspan="4">
+                <div id="auth_warning" style="color:#BA0F1B;font-weight:bold;padding:5px;margin:2px">
+                Placeholder
+                </div>
+                <button type="button" id="auth_button" name="auth_button" class="btn btn-danger" onclick="authorize();">{APP.LBL_EMAIL_AUTHORIZE}</button>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" scope="row">
+                <slot>{MOD.LBL_STATUS}:&nbsp;</slot></td>
+            <td valign="top"  width="35%"><slot>
+                <select name='status' tabindex='60' {IE_DISABLED}>{STATUS}</select></slot></td>
+            <td valign="top" scope="row" id="email_user_label">
+                <slot>{MOD.LBL_LOGIN}:
+                <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</slot></td>
+            <td valign="top"  width="35%" id="email_user_field">
+                <slot><input name='email_user' id='email_user' tabindex='70' size='30' maxlength='100' type="text" value="{USER}" autocomplete="off" {IE_DISABLED}></slot></td>
+            <td valign="top" scope="row" id="auth_status_label" style="display:none">
+                <slot>{MOD.LBL_AUTH_STATUS}:&nbsp;</slot></td>
+            <td valign="top"  width="35%" id="auth_status_field" style="display:none">
+                <slot><input id='auth_status' name='auth_status' size='30' maxlength='100' type="text" value="" {IE_DISABLED} disabled></slot></td>
+		</tr>
 		<tr>
-		<td>&nbsp;</td>
-		<td style="vertical-align:bottom;"><a href="javascript:void(0);" id="prefill_gmail_defaults_link" onclick="javascript:prefillGmailDefaults();">{APP.LBL_EMAIL_ACCOUNTS_GMAIL_DEFAULTS}</a>&nbsp;</td>
+            <td valign="top" scope="row">
+                <slot>{MOD.LBL_SERVER_URL}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</slot></td>
+            <td valign="top"  width="35%">
+                <slot><input id='server_url' name='server_url' tabindex='20' size='30' maxlength='100' type="text" value="{SERVER_URL}" {IE_DISABLED}></slot></td>
+            <td valign="top" scope="row" id="email_password_label">
+                <slot>{MOD.LBL_PASSWORD}:
+                <span class="required">{EMAIL_PASS_REQ_SYMB}&nbsp;</slot></td>
+            <td valign="top"  width="35%" id="email_password_field">
+                <slot>
+                <input name='email_password' id="email_password" tabindex='80' size='30' {PASSWORD_MAX_LENGTH_ATTRIBUTE}type="password" autocomplete="off" {IE_DISABLED}>
+                <a href="javascript:void(0)" id='email_password_link' onClick="SUGAR.util.setEmailPasswordEdit('email_password')" style="display: none">{APP.LBL_CHANGE_PASSWORD}</a>
+                </slot></td>
+            <td valign="top" scope="row" id="auth_email_label" style="display:none">
+                <slot>{MOD.LBL_AUTHORIZED_ACCOUNT}:&nbsp;</slot></td>
+            <td valign="top"  width="35%" id="auth_email_field" style="display:none">
+                <slot><input id='auth_email' name='auth_email' size='30' maxlength='100' type="text" value="" {IE_DISABLED} disabled></slot></td>
 		</tr>
 		<tr>
 			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span>{MOD.LBL_NAME}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
+				<slot>{MOD.LBL_SERVER_TYPE}:
+				<span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</slot></td>
 			<td valign="top"  width="35%">
-				<span><input name='name' id='name' tabindex='10' size='30' maxlength='255' type="text" value="{NAME}" {IE_DISABLED}></span></td>
-			<td valign="top" scope="row">
-				<span>{MOD.LBL_STATUS}:&nbsp;</span></td>
-			<td valign="top"  width="35%"><span>
-				<select name='status' tabindex='60' {IE_DISABLED}>{STATUS}</select></span></td>
-		</tr>
-		<tr>
-			<td valign="top" scope="row">
-					<span>{MOD.LBL_SERVER_URL}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
-			<td valign="top"  width="35%">
-				<span><input id='server_url' name='server_url' tabindex='20' size='30' maxlength='100' type="text" value="{SERVER_URL}" {IE_DISABLED}></span></td>
-			<td valign="top" scope="row">
-				<span>{MOD.LBL_LOGIN}:
-				<span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
-			<td valign="top"  width="35%">
-				<span><input name='email_user' id='email_user' tabindex='70' size='30' maxlength='100' type="text" value="{USER}" autocomplete="off" {IE_DISABLED}></span></td>
-		</tr>
+				<slot>
+				<select name='protocol' id="protocol" tabindex='30' onchange="toggle_monitored_folder(this); setPortDefault();" {IE_DISABLED}>{PROTOCOL}</select></slot></td>
+            <td id="mailboxRow" valign="top" scope="row" width="15%" NOWRAP>
+                <slot><span id="label_inbox">{MOD.LBL_MAILBOX}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span></span>&nbsp;</slot></td>
+            <td id="mailboxRow1" valign="top"  width="35%">
+                <slot><input id="mailbox" name='mailbox' tabindex='90' size='30' maxlength='500' type="text" value="{MAILBOX}">
+                    <input type="button" id="subscribeFolderButton" style="display:none;" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.mailbox.value, this.form.ssl.checked, this.form.personal.value, this.form.searchField.value, "EditView", this.form.eapm_id.value);' value="{MOD.LBL_SELECT}">
+                </slot></td>
+        </tr>
 		<tr>
 			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span>{MOD.LBL_SERVER_TYPE}:
-				<span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
+				<slot>{MOD.LBL_PORT}:
+				<span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</slot></td>
 			<td valign="top"  width="35%">
-				<span>
-				<select name='protocol' id="protocol" tabindex='30' onchange="toggle_monitored_folder(this); setPortDefault();" {IE_DISABLED}>{PROTOCOL}</select></span></td>
-			<td valign="top" scope="row">
-				<span>{MOD.LBL_PASSWORD}:
-				<span class="required">{EMAIL_PASS_REQ_SYMB}&nbsp;</span></td>
-			<td valign="top"  width="35%">
-				<span>
-				<input name='email_password' id="email_password" tabindex='80' size='30' maxlength='100' type="password" autocomplete="off" {IE_DISABLED}>
-				<a href="javascript:void(0)" id='email_password_link' onClick="SUGAR.util.setEmailPasswordEdit('email_password')" style="display: none">{APP.LBL_CHANGE_PASSWORD}</a>
-				</span></td>
-		</tr>
-		<tr>
-			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span>{MOD.LBL_PORT}:
-				<span class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
-			<td valign="top"  width="35%">
-				<span>
+				<slot>
 				<input name='port' id='port' tabindex="40" value="{PORT}" size='10' {IE_DISABLED}>
+            <td id="trashFolderRow" valign="top" scope="row" width="15%" NOWRAP>
+                <slot>{MOD.LBL_TRASH_FOLDER}:
+                <span name="trashRequiredSpan" id="trashRequiredSpan" class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</slot></td>
+            <td id="trashFolderRow1" valign="top"  width="35%">
+                <slot>
+                <input name='trashFolder' id='trashFolder' tabindex="92" value="{TRASHFOLDER}" size='30' maxlength='100' type="text">
+                <input type="button" id="trashFolderButton" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.trashFolder.value, this.form.ssl.checked, this.form.personal.value, "trash", "EditView", this.form.eapm_id.value);' value="{MOD.LBL_SELECT}">
+        </tr>
+        <tr>
 			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span><span id="label_inbox" >{MOD.LBL_MAILBOX}: <span class="required">{APP.LBL_REQUIRED_SYMBOL}</span></span>&nbsp;</span></td>
-			<td valign="top"  width="35%">
-				<span><input id="mailbox" name='mailbox' tabindex='90' size='30' maxlength='500' type="text" value="{MAILBOX}">
-					<input type="button" id="subscribeFolderButton" style="display:none;" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.mailbox.value, this.form.ssl.checked, this.form.personal.value, this.form.searchField.value, "EditView");' value="{MOD.LBL_SELECT}">
-				</span></td>
-		</tr>
-		<tr>
-			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span><span>{MOD.LBL_SSL}:&nbsp;{TIPS.LBL_SSL_DESC}</span></span>
+				<slot><span>{MOD.LBL_SSL}:&nbsp;{TIPS.LBL_SSL_DESC}</span></slot>
 			</td>
 			<td valign="top"  width="35%">
-				<span>
+				<slot>
 				<input name='ssl' id='ssl' tabindex='45' {CERT} value='1' type='checkbox' {SSL} onClick="setPortDefault();" {IE_DISABLED}>
-				</span>
+				</slot>
 			</td>
-			<td id="trashFolderRow" valign="top" scope="row" width="15%" NOWRAP>
-				<span>{MOD.LBL_TRASH_FOLDER}:
-				<span name="trashRequiredSpan" id="trashRequiredSpan" class="required">{APP.LBL_REQUIRED_SYMBOL}</span>&nbsp;</span></td>
-			<td id="trashFolderRow1" valign="top"  width="35%">
-				<span>
-				<input name='trashFolder' id='trashFolder' tabindex="92" value="{TRASHFOLDER}" size='30' maxlength='100' type="text">
-				<input type="button" id="trashFolderButton" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.trashFolder.value, this.form.ssl.checked, this.form.personal.value, "trash", "EditView");' value="{MOD.LBL_SELECT}">
+            <td id="sentFolderRow" valign="top" scope="row" width="15%" NOWRAP>
+                <slot>{MOD.LBL_SENT_FOLDER}:</slot></td>
+            <td id="sentFolderRow1" valign="top"  width="35%">
+                <slot><input id="sentFolder" name='sentFolder' tabindex='95' size='30' maxlength='100' type="text" value="{SENTFOLDER}">
+                    <input type="button" id="sentFolderButton" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.sentFolder.value, this.form.ssl.checked, this.form.personal.value, "sent", "EditView", this.form.eapm_id.value);' value="{MOD.LBL_SELECT}">
+                </slot>
+            </td>
 		</tr>
-		<tr id="sentFolderRow">
-			<td valign="top" scope="row">
-				<span>&nbsp;</span></td>
-			<td valign="top"  width="35%"><span>
-				&nbsp;</span></td>
-			<td valign="top" scope="row" width="15%" NOWRAP>
-				<span>{MOD.LBL_SENT_FOLDER}:</span></td>
-			<td valign="top"  width="35%">
-				<span><input id="sentFolder" name='sentFolder' tabindex='95' size='30' maxlength='100' type="text" value="{SENTFOLDER}">
-					<input type="button" id="sentFolderButton" class="button" onclick='javascript:getFoldersListForInboundAccount("InboundEmail", "ShowInboundFoldersList", "Popup", 400, 300, this.form.server_url.value, this.form.protocol.value, this.form.port.value, this.form.email_user.value, Rot13.write(this.form.email_password.value), this.form.sentFolder.value, this.form.ssl.checked, this.form.personal.value, "sent", "EditView");' value="{MOD.LBL_SELECT}">
-				</span>
-			</td>
-		</tr>
+        <!--
+        MintHCM #110041 END
+        -->
 	</table>
 	</div>
-    <div class="edit view">
+    <div class="edit view" style="padding: 20px">
 	<table width="100%" border="0" cellspacing="{GRIDLINE}" cellpadding="0">
 		<tr>
 		<th align="left" scope="row" colspan="4"><h4>{EMAIL_OPTIONS}</h4></th>
@@ -345,11 +385,133 @@
 
 <script type="text/javascript" lang="Javascript" src="modules/InboundEmail/InboundEmail.js?v={VERSION_MARK}"></script>
 <script type="text/javascript">
+// MintHCM #110041 START
+var authInfo = {AUTH_INFO};
+
+function save_form_data() {
+    var eapmId = document.getElementById('EditView').eapm_id.value;
+    var authAccount = document.getElementById('authorized_account').value;
+    var authType = document.getElementById('auth_type').value;
+
+    if (authType === 'oauth2' && (trim(eapmId) === '' || trim(authAccount) === '')) {
+        errorMessage = "{APP.LBL_EMAIL_PLEASE_AUTHORIZE}";
+        alert(errorMessage);
+        return false;
+    }
+    return checkformdata();
+}
+// MintHCM #110041 END
 
 var fieldToSetValue = '';
 function checkformdata() {
 	return (check_form('EditView') && checkOtherFields() && checkTrashFolder() );
 }
+// MintHCM #110041 START
+function toggle_email_provider(resetFields) {
+    var provider = document.getElementById('EditView').email_provider.value;
+    if (authInfo[provider]) {
+        document.getElementById('EditView').auth_type.value = 'oauth2';
+        document.getElementById('EditView').authorized_account.value = authInfo[provider].authorized_account || '';
+        document.getElementById('EditView').eapm_id.value = authInfo[provider].eapm_id || '';
+        document.getElementById('EditView').auth_status.value = authInfo[provider].eapm_id ? '{APP.LBL_EMAIL_AUTHORIZED}' : '{APP.LBL_EMAIL_NOT_AUTHORIZED}';
+        document.getElementById('EditView').auth_email.value = authInfo[provider].authorized_account || '';
+        document.getElementById('EditView').email_user.value = authInfo[provider].email_user || '';
+        document.getElementById('EditView').email_password.value = 'N/A';
+        document.getElementById('EditView').server_url.value = authInfo[provider].server_url || '';
+        document.getElementById('EditView').port.value = authInfo[provider].port || '';
+        document.getElementById('protocol').value = 'imap';
+        document.getElementById('ssl').checked = true;
+        if (!authInfo[provider]['auth_url']) {
+            document.getElementById("auth_warning").style.display = 'block';
+            document.getElementById("auth_warning").innerHTML = authInfo[provider]['auth_warning'];
+            document.getElementById("auth_button").disabled = true;
+        } else {
+            document.getElementById("auth_warning").style.display = 'none';
+            document.getElementById("auth_button").disabled = false;
+        }
+        if (document.getElementById('EditView').eapm_id.value === '') {
+            document.getElementById("subscribeFolderButton").disabled = true;
+            document.getElementById("trashFolderButton").disabled = true;
+            document.getElementById("sentFolderButton").disabled = true;
+            document.getElementById("emailTestSettings").disabled = true;
+        } else {
+            document.getElementById("subscribeFolderButton").disabled = false;
+            document.getElementById("trashFolderButton").disabled = false;
+            document.getElementById("sentFolderButton").disabled = false;
+            document.getElementById("emailTestSettings").disabled = false;
+        }
+        document.getElementById("auth_block").style.display = '';
+        document.getElementById("auth_status_label").style.display = '';
+        document.getElementById("auth_status_field").style.display = '';
+        document.getElementById("auth_email_label").style.display = '';
+        document.getElementById("auth_email_field").style.display = '';
+        document.getElementById("prefill").style.display = 'none';
+        document.getElementById("email_user_label").style.display = 'none';
+        document.getElementById("email_password_label").style.display = 'none';
+        document.getElementById("email_user_field").style.display = 'none';
+        document.getElementById("email_password_field").style.display = 'none';
+    } else if (resetFields) {
+        document.getElementById('EditView').auth_type.value = '';
+        document.getElementById('EditView').authorized_account.value = '';
+        document.getElementById('EditView').eapm_id.value = '';
+        document.getElementById('EditView').email_user.value = '';
+        document.getElementById('EditView').email_password.value = '';
+        document.getElementById("auth_block").style.display = 'none';
+        document.getElementById("auth_status_label").style.display = 'none';
+        document.getElementById("auth_status_field").style.display = 'none';
+        document.getElementById("auth_email_label").style.display = 'none';
+        document.getElementById("auth_email_field").style.display = 'none';
+        document.getElementById("prefill").style.display = 'block';
+        document.getElementById("email_user_label").style.display = '';
+        document.getElementById("email_password_label").style.display = '';
+        document.getElementById("email_user_field").style.display = '';
+        document.getElementById("email_password_field").style.display = '';
+        document.getElementById("subscribeFolderButton").disabled = false;
+        document.getElementById("trashFolderButton").disabled = false;
+        document.getElementById("sentFolderButton").disabled = false;
+        document.getElementById("emailTestSettings").disabled = false;
+    }
+}
+
+function authorize() {
+    var provider = document.getElementById('EditView').email_provider.value;
+    if (authInfo[provider]['auth_url']) {
+        window.addEventListener('message', handleOauthComplete);
+        var height = 600;
+        var width = 600;
+        var left = (window.parent.screen.width - width) / 2;
+        var top = (window.parent.screen.height - height) / 4;
+        var submitWindow = window.open('/', '_blank', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',resizable=1');
+        submitWindow.location.href = 'about:blank';
+        submitWindow.location.href = authInfo[provider]['auth_url'];
+    }
+}
+
+function handleOauthComplete(e) {
+    var provider = document.getElementById('EditView').email_provider.value;
+    var data = JSON.parse(e.data);
+    if (!data.dataSource || !authInfo[provider] || data.dataSource !== authInfo[provider]['dataSource']) {
+        return;
+    }
+    if (data.eapmId && data.emailAddress) {
+        authInfo[provider]['eapm_id'] = data.eapmId;
+        authInfo[provider]['authorized_account'] = data.emailAddress;
+        authInfo[provider]['email_user'] = data.userName || data.emailAddress;
+        document.getElementById('eapm_id').value = data.eapmId;
+        document.getElementById('auth_status').value = '{APP.LBL_EMAIL_AUTHORIZED}';
+        document.getElementById('authorized_account').value = data.emailAddress;
+        document.getElementById('auth_email').value = data.emailAddress;
+        document.getElementById('email_user').value = data.userName || data.emailAddress;
+        document.getElementById("subscribeFolderButton").disabled = false;
+        document.getElementById("trashFolderButton").disabled = false;
+        document.getElementById("sentFolderButton").disabled = false;
+        document.getElementById("emailTestSettings").disabled = false;
+    } else {
+        alert('{APP.LBL_EMAIL_AUTH_FAILURE}');
+    }
+    window.removeEventListener('message', handleOauthComplete);
+}
+// MintHCM #110041 END
 
 function prefillGmailDefaults(){
 

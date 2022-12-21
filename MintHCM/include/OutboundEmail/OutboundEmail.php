@@ -71,6 +71,11 @@ class OutboundEmail
         'mail_smtpssl',
         'smtp_from_name',
         'smtp_from_addr',
+        // MintHCM #110041 START
+        'mail_authtype',
+        'eapm_id',
+        'authorized_account',
+        // MintHCM #110041 END
     );
 
     /**
@@ -92,6 +97,11 @@ class OutboundEmail
     public $mail_smtpssl; // bool
     public $mail_smtpdisplay; // calculated value, not in DB
     public $new_with_id = false;
+    // MintHCM #110041 START
+    public $eapm_id;
+    public $authorized_account;
+    public $mail_authtype;
+    // MintHCM #110041 END
 
     /**
      * Sole constructor

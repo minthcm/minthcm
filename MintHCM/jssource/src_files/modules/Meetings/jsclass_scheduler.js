@@ -352,7 +352,6 @@ SugarWidgetSchedulerSearch.prototype.display = function () {
    div.style.height = '100%';
    div.style.display = 'none';
    this.parentNode.appendChild( div );
-   
    this.list_view = new SugarWidgetListView();
    this.list_view.load( div );
 }
@@ -734,9 +733,19 @@ SugarWidgetSchedulerAttendees.prototype.init = function () {
    GLOBAL_REGISTRY.focus.fields.datetime_start = SugarDateTime.mysql2jsDateTime( GLOBAL_REGISTRY.focus.fields.date_start, GLOBAL_REGISTRY.focus.fields.time_start );
 
    this.timeslots = new Array();
-   this.hours = 9;
+   /* MintHCM #75792 START */
+   /* this.hours = 9; */
+   this.hours = parseInt(document.forms[form_name].duration_hours.value) + (parseInt(document.forms[form_name].duration_minutes.value) > 0 ? 1 : 0);
+   if (this.hours > 12) {
+       this.hours = 12;
+   }
+   /* MintHCM #75792 END */
    this.segments = 4;
-   this.start_hours_before = 4;
+   /* MintHCM #75792 START */
+   /* this.start_hours_before = 4; */
+   this.start_hours_before = 2;
+   this.hours += this.start_hours_before * 2;
+   /* MintHCM #75792 END */
 
    var minute_interval = 15;
    var dtstart = GLOBAL_REGISTRY.focus.fields.datetime_start;
@@ -1089,11 +1098,23 @@ SugarWidgetScheduleRow.prototype.add_freebusy_nodes = function ( tr, attendee ) 
       if ( is_loaded ) {
          // if there's a freebusy stack in this slice
          if ( typeof (GLOBAL_REGISTRY['freebusy_adjusted'][this.focus_bean.fields.id][this.timeslots[i].hash]) != 'undefined' ) {
-            $( td ).addClass( 'free' );
+            /* MintHCM #75792 START */
+            /*  $( td ).addClass( 'free' ); */
+            /* MintHCM #75792 START */
 
             var dataid = '',
                     module = '';
             $.each( GLOBAL_REGISTRY['freebusy_adjusted'][this.focus_bean.fields.id][this.timeslots[i].hash]['records'], function ( index, value ) {
+               /* MintHCM #75792 START */
+               if (value.startsWith('WorkSchedules')) {
+                   var ws_type = value.split('___')[1];
+                   if (ws_type != undefined) {
+                       $(td).addClass('ws-' + ws_type);
+                   }
+                   return;
+               }
+               $( td ).addClass( 'free' );
+               /* MintHCM #75792 END */
                if ( dataid == '' )
                   dataid = index;
                else

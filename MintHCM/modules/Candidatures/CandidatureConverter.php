@@ -81,7 +81,7 @@ class CandidatureConverter
         if (!is_null($this->latest_appraisal_bean) && !empty($this->latest_appraisal_items_beans) && !$employee['candidate_employee_relation']) {
 
             foreach ($this->latest_appraisal_items_beans as $one_appraisal_item_bean) {
-                if ($one_appraisal_item_bean->parent_type == self::COMPETENCIES_MODULE_NAME) {
+                if (self::COMPETENCIES_MODULE_NAME == $one_appraisal_item_bean->parent_type) {
 
                     $create_competency_rating = new CompetencyRatingCreator($one_appraisal_item_bean, $employee['employee_bean']);
                     $create_competency_rating->createOrUpdateRecords();
@@ -133,7 +133,7 @@ class CandidatureConverter
     protected function getCandidateBean(): Candidates
     {
         global $db;
-        $sql = "SELECT candidate_id FROM candidatures WHERE id='{$this->converted_candidature_bean->id}'";
+        $sql = "SELECT parent_id FROM candidatures WHERE id='{$this->converted_candidature_bean->id}'";
         $result_candidate_id = $db->getOne($sql);
 
         return BeanFactory::getBean(self::CANDIDATES_MODULE_NAME, $result_candidate_id);

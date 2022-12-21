@@ -46,7 +46,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  * ****************************************************************************** */
 
-global $current_user, $sugar_version, $sugar_config, $beanFiles;
+// MintHCM #94842 START
+global $current_user, $sugar_version, $sugar_config, $beanFiles, $dashlet_initial_loading;
+// MintHCM #94842 END
 
 require_once 'include/MySugar/MySugar.php';
 
@@ -242,7 +244,12 @@ foreach ($pages[$activePage]['columns'] as $colNum => $column) {
                     $dashlet->is_locked = true;
                     $sugar_smarty->assign('lock_homepage', true);
                 }
-                $dashlet->process($lvsParams);
+
+                // MintHCM #94842 START
+                $dashlet_initial_loading = true;
+                $dashlet->process($lvsParams, $id);
+                $dashlet_initial_loading = false;
+                // MintHCM #94842 STOP
                 try {
                     $display[$colNum]['dashlets'][$id]['display'] = $dashlet->display();
                     $display[$colNum]['dashlets'][$id]['displayHeader'] = $dashlet->getHeader();

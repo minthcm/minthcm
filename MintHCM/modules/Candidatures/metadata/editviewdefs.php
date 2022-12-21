@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -56,93 +55,92 @@
  */
 $module_name = 'Candidatures';
 $viewdefs[$module_name]['EditView'] = array(
-   'templateMeta' => array(
-      'includes' => array(
-         array(
-            'file' => 'modules/Candidatures/js/view.edit.js',
-         ),
-      ),
-      'maxColumns' => '2',
-      'widths' => array(
-         array( 'label' => '10', 'field' => '30' ),
-         array( 'label' => '10', 'field' => '30' )
-      ),
-   ),
-   'panels' => array(
-      'LBL_RECORDVIEW_PANEL3' => array(
-         array(
-            'status',
-            'to_decision',
-         ),
-         array(
-            'work_start',
-            'training_date',
-         ),
-         array(
-            'reason_for_rejection',
-         ),
-         array(
-            'candidate_name',
+    'templateMeta' => array(
+        'includes' => array(
             array(
-               'name' => 'recruitment_name',
-               'displayParams' => array(
-                  'call_back_function' => 'recruitmentNameCallBack',
-               ),
+                'file' => 'modules/Candidatures/js/view.edit.js',
             ),
-         ),
-         array(
-            'start_date',
-            'recruitment_end_name',
-         ),
-         array(
-            'status_information',
-         ),
-         array(
-            'entry_interview',
-         ),
-         array(
-            'source',
-            'task_grade',
-         ),
-         array(
-            'scoring',
-            '',
-         ),
-      ),
-      'LBL_RECORDVIEW_PANEL5' => array(
-         array(
-            'employment_form',
-         ),
-         array(
-            'dg_amount',
-            'currency_id',
-         ),
-         array(
-            'net_amount',
-            'gross_amount',
-         ),
-         array(
-            'notice',
-         ),
-      ),
-      'LBL_RECORDVIEW_PANEL4' => array(
-         array(
-            'final_employment_form',
-            'salary_net',
-         ),
-         array(
-            'notice_final_expectations',
-         ),
-      ),
-      'LBL_SHOW_MORE_INFORMATION' => array(
-         array(
-            'employee_name',
-            'assigned_user_name',
-         ),
-         array(
-            'description',
-         ),
-      ),
-   ),
+        ),
+        'maxColumns' => '2',
+        'widths' => array(
+            array('label' => '10', 'field' => '30'),
+            array('label' => '10', 'field' => '30'),
+        ),
+    ),
+    'panels' => array(
+        'LBL_RECORDVIEW_PANEL3' => array(
+            array(
+                'status',
+                'to_decision',
+            ),
+            array(
+                'work_start',
+                'training_date',
+            ),
+            array(
+                'reason_for_rejection',
+            ),
+            array(
+                'parent_name',
+                array(
+                    'name' => 'recruitment_name',
+                    'displayParams' => array(
+                        'call_back_function' => 'recruitmentNameCallBack',
+                    ),
+                ),
+            ),
+            array(
+                'start_date',
+                'recruitment_end_name',
+            ),
+            array(
+                'status_information',
+            ),
+            array(
+                'entry_interview',
+            ),
+            array(
+                'source',
+                'task_grade',
+            ),
+            array(
+                'scoring',
+                '',
+            ),
+        ),
+        'LBL_RECORDVIEW_PANEL5' => array(
+            array(
+                'employment_form',
+            ),
+            array(
+                'dg_amount',
+                'currency_id',
+            ),
+            array(
+                'net_amount',
+                'gross_amount',
+            ),
+            array(
+                'notice',
+            ),
+        ),
+        'LBL_RECORDVIEW_PANEL4' => array(
+            array(
+                'final_employment_form',
+                'salary_net',
+            ),
+            array(
+                'notice_final_expectations',
+            ),
+        ),
+        'LBL_SHOW_MORE_INFORMATION' => array(
+            array(
+                'employee_name',
+                'assigned_user_name',
+            ),
+            array(
+                'description',
+            ),
+        ),
+    ),
 );
-?>

@@ -161,6 +161,11 @@ class Administration extends SugarBean {
             if ( strpos($def, "smtp") !== false ) {
                $this->settings[$def] = $oe->$def;
             }
+            // MintHCM #110041 START
+            if ($def === 'eapm_id' || $def === 'authorized_account') {
+                $this->settings[$def] = $oe->$def;
+            }
+            // MintHCM #110041 END
          }
       }
 

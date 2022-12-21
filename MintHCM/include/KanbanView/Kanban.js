@@ -26,6 +26,7 @@ class Kanban {
         this.component.$on('item-click', this.handleItemClick.bind(this));
         this.component.$on('item-add', this.handleItemAdd.bind(this));
         this.component.$on('item-change', this.handleItemChange.bind(this));
+        this.component.$on('open-fullscreen', this.handleOpenFullscreen.bind(this));
     }
     handleItemClick (item) {
         if(item.id == undefined){
@@ -33,31 +34,18 @@ class Kanban {
                 id:item,
             };
         }
-        if(item.editable) {
-            MintHCMDynamicPopupView.init(
-                viewTools.language.get(this.module, 'LBL_MODULE_NAME'),
-                this.module,
-                item.id,
-                {
-                    postSaveCallback: function () {
-                        this.loadItems()
-                    }.bind(this)
-                }
-            );
-        }
-        else {
-            MintHCMDynamicPopupView.init(
-                viewTools.language.get(this.module, 'LBL_MODULE_NAME'),
-                this.module,
-                item.id,
-                {
-                    postSaveCallback: function () {
-                        this.loadItems()
-                    }.bind(this),
-                    isDetailView: true
-                }
-            );
-        }
+
+        MintHCMDynamicPopupView.init(
+            viewTools.language.get(this.module, 'LBL_MODULE_NAME'),
+            this.module,
+            item.id,
+            {
+                postSaveCallback: function () {
+                    this.loadItems()
+                }.bind(this),
+                isDetailView: true,
+            }
+        );
     }
     handleItemAdd (status) {
         MintHCMDynamicPopupView.init(
@@ -188,6 +176,10 @@ class Kanban {
             'error',
             2000
         );
+    }
+    handleOpenFullscreen (item) {
+        const url = `index.php?module=${item.module_name}&action=DetailView&record=${item.id}`;
+        window.open(url, '_blank').focus();
     }
 }
 window.Kanban = Kanban;

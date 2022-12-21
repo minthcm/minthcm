@@ -80,7 +80,7 @@ $viewdefs[$module_name]['QuickCreate'] = array(
                 'reason_for_rejection',
             ),
             array(
-                'candidate_name',
+                'parent_name',
                 'recruitment_name',
             ),
             array(

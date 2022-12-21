@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,46 +36,50 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 
 $module = $_POST['module'];
 $action = $_POST['action'];
-if ( $module != '' && $action != '' ) {
-   try {
-      //require api file from custom/modules
-      if ( file_exists("custom/modules/{$module}/api/{$module}Api.php") ) {
-         require_once("custom/modules/{$module}/api/{$module}Api.php");
-      } else if ( file_exists("modules/{$module}/api/{$module}Api.php") ) {
-         require_once("modules/{$module}/api/{$module}Api.php");
-      } else {
-         die('Api file not found for this module');
-      }
-      $className = $module . 'Api';
-      $apiObj = new $className();
-      $return = $apiObj->$action($_POST);
-   } catch ( Exception $e ) {
-      $return = $e;
-   }
-   if ( !isJson($return) ) {
-      $return = json_encode($return);
-   }
-   echo $return;
+if ($module != '' && $action != '') {
+    try {
+        //require api file from custom/modules
+        if (file_exists("custom/modules/{$module}/api/{$module}Api.php")) {
+            require_once "custom/modules/{$module}/api/{$module}Api.php";
+        } else if (file_exists("modules/{$module}/api/{$module}Api.php")) {
+            require_once "modules/{$module}/api/{$module}Api.php";
+        } else {
+            die('Api file not found for this module');
+        }
+        $className = 'Custom' . $module . 'Api';
+        if (!class_exists($className)) {
+            $className = $module . 'Api';
+        }
+        $apiObj = new $className();
+        $return = $apiObj->$action($_POST);
+    } catch (Exception $e) {
+        $return = $e;
+    }
+    if (!isJson($return)) {
+        $return = json_encode($return);
+    }
+    echo $return;
 }
 
-function isJson($string) {
-   if ( is_string($string) ) {
-      $w = json_decode($string);
-      return ($w !== NULL);
-   } else {
-      return false;
-   }
+function isJson($string)
+{
+    if (is_string($string)) {
+        $w = json_decode($string);
+        return ($w !== null);
+    } else {
+        return false;
+    }
 }

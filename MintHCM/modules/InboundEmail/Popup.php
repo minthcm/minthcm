@@ -112,7 +112,15 @@ if(isset($_REQUEST['ssl']) && ($_REQUEST['ssl'] == "true" || $_REQUEST['ssl'] ==
 $ie                 = new InboundEmail();
 if(!empty($_REQUEST['ie_id'])) {
     $ie->retrieve($_REQUEST['ie_id']);
+    // MintHCM #110041 START
+    if (!empty($ie->email_password)) {
+        $ie->email_password = html_entity_decode($ie->email_password, ENT_QUOTES);
+    }
+    // MintHCM #110041 END
 }
+// MintHCM #110041 START
+$ie->eapm_id        = $_REQUEST['eapm_id'];
+// MintHCM #110041 END
 $ie->email_user     = $_REQUEST['email_user'];
 $ie->server_url     = $_REQUEST['server_url'];
 $ie->port           = $_REQUEST['port'];

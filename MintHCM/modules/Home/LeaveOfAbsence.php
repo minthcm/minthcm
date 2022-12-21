@@ -69,7 +69,7 @@ WHERE (
          (
                A.type = 'holiday'     
             OR A.type='sick'
-            OR A.type='sick-care'
+            OR A.type='sick_care'
             OR A.type='delegation'
             OR A.type='occasional_leave'
             OR A.type='leave_at_request'

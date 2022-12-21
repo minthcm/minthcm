@@ -251,4 +251,13 @@ class EAPMController extends SugarController
         parent::remapAction();
     }
 
+    public function action_GoogleOauth2Redirect()
+    {
+        $this->view = 'googleoauth2redirect';
+    }
+
+    public function action_MicrosoftOauth2Redirect()
+    {
+        $this->view = 'microsoftoauth2redirect';
+    }
 }

@@ -145,7 +145,7 @@ class WorkSchedules extends Basic
         switch ($this->type) {
             case "occasional_leave":
             case "sick":
-            case "sick-care":
+            case "sick_care":
             case "holiday":
             case "delegation":
             case 'office':
@@ -382,7 +382,7 @@ class WorkSchedules extends Basic
     {
         global $timedate;
         $return = 1;
-        if (!in_array($this->type, ['holiday', 'sick', 'sick-care', 'occasional_leave', 'overtime', 'excused_absence', 'leave_at_request'])) {
+        if (!in_array($this->type, ['holiday', 'sick', 'sick_care', 'occasional_leave', 'overtime', 'excused_absence', 'leave_at_request'])) {
 
             $db_format = $timedate->get_db_date_time_format();
 

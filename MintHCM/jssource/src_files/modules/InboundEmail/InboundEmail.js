@@ -119,7 +119,9 @@ function getEncryptedPassword(login, password, mailbox) {
 	return words;
 } // fn
 
-function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, formName, ie_id)
+// MintHCM #110041 START
+function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, formName, ie_id, eapm_id)
+// MintHCM #110041 END
 {
 	if (!formName) formName = "testSettingsView";
 	var words = getEncryptedPassword(login, password, mailbox);
@@ -147,7 +149,10 @@ function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, 
 		+ '&mailbox=' + words[2]
 		+ '&ssl=' + ssl
 		+ '&ie_id=' + ie_id
-		+ '&personal=' + isPersonal;
+        // MintHCM #110041 START
+        + '&personal=' + isPersonal
+        + '&eapm_id=' + eapm_id;
+        // MintHCM #110041 END
 
 	var SI = SUGAR.inboundEmail;
 	if (!SI.testDlg) {
@@ -224,7 +229,9 @@ function isDataValid(formName, validateMonitoredFolder) {
 
 } // fn
 
-function getFoldersListForInboundAccount(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, searchFieldValue, formName) {
+// MintHCM #110041 START
+function getFoldersListForInboundAccount(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, searchFieldValue, formName, eapm_id) {
+// MintHCM #110041 END
 	if (!formName) formName = "testSettingsView";
 
 	var words = getEncryptedPassword(login, password, mailbox);
@@ -245,7 +252,10 @@ function getFoldersListForInboundAccount(module_name, action, pageTarget, width,
         + '&mailbox=' + words[2]
         + '&ssl=' + ssl
         + '&personal=' + isPersonal
+        // MintHCM #110041 START
 		+ '&searchField='+ searchFieldValue;
+        + '&eapm_id='+ eapm_id;
+        // MintHCM #110041 END
 
 	var SI = SUGAR.inboundEmail;
     if (!SI.listDlg) {

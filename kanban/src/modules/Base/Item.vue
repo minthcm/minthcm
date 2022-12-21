@@ -11,12 +11,14 @@
     }"
     @click="$emit('item-click', item)"
   >
+    <FullscreenButton @open-fullscreen="() => $emit('open-fullscreen', item)" />
     {{ item.name }}
   </VCard>
 </template>
 
 <script>
 import { VCard } from "vuetify/lib";
+import FullscreenButton from '../../components/FullscreenButton.vue'
 
 export default {
   name: "Base-Item",
@@ -26,6 +28,7 @@ export default {
   },
   components: {
     VCard,
+    FullscreenButton,
   },
 };
 </script>

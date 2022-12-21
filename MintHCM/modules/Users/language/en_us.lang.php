@@ -73,6 +73,7 @@ $mod_strings = array(
     'ERR_RULES_NOT_MET' => 'The password you entered did not meet the password requirements. Please try again.',
     'ERR_USER_NAME_EXISTS_1' => 'The user name ',
     'ERR_USER_NAME_EXISTS_2' => ' already exists. Duplicate user names are not allowed. Please change the user name to be unique.',
+    'ERR_USER_NAME_EXISTS_3' => 'The user name already exists',
     'ERR_USER_IS_LOCKED_OUT' => 'This user is locked out of the MintHCM application and cannot log in using his/her existing password.',
     'ERR_PASSWORD_MINPWDLENGTH' => 'Password should contain at least %d characters.',
     'ERR_PASSWORD_ONEUPPER' => 'Password should contain uppercase characters.',

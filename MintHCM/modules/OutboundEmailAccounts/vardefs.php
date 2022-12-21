@@ -411,6 +411,24 @@ $dictionary["OutboundEmailAccounts"] = array(
                 'include' => 'modules/OutboundEmailAccounts/OutboundEmailAccounts.php'
             ),
         ),
+        'mail_authtype' => array(
+            'name' => 'mail_authtype',
+            'type' => 'varchar',
+            'len' => 20,
+            'reportable' => false,
+        ),
+        'eapm_id' => array(
+            'name' => 'eapm_id',
+            'type' => 'char',
+            'len' => 36,
+            'reportable' => false,
+        ),
+        'authorized_account' => array(
+            'name' => 'authorized_account',
+            'type' => 'varchar',
+            'len' => 100,
+            'reportable' => false,
+        ),
     ),
     'relationships' =>
     array(

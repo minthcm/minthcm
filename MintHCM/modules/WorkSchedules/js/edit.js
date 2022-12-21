@@ -15,15 +15,18 @@ $(document).ready(function () {
     }
 });
 
-viewTools.form.beforeSave(function () {
-    viewTools.GUI.fieldErrorUnmark();
-    var result_1 = validateUniqueWorkSchedules();
-    var result_2 = validateDatesEndAfterStart();
-    var result_3 = validateWorkScheduleLength();
-    var result_4 = validateWorkScheduleCreatedByPeriodicity();
+if (!window.workSchedulerSaveHandlerAlreadyInitialized) {
+    viewTools.form.beforeSave(function () {
+        viewTools.GUI.fieldErrorUnmark();
+        var result_1 = validateUniqueWorkSchedules();
+        var result_2 = validateDatesEndAfterStart();
+        var result_3 = validateWorkScheduleLength();
+        var result_4 = validateWorkScheduleCreatedByPeriodicity();
 
-    return result_1 && result_2 && result_3 && result_4;
-});
+        return result_1 && result_2 && result_3 && result_4;
+    });
+    window.workSchedulerSaveHandlerAlreadyInitialized = true;
+}
 
 function getRecordID() {
     var record_id = "";

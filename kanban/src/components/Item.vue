@@ -7,6 +7,7 @@
       :defs="defs"
       :classesFromParent="classesFromParent"
       @item-click="(item) => $emit('item-click', item)"
+      @open-fullscreen="(item) => $emit('open-fullscreen', item)"
     />
   </keep-alive>
 </template>

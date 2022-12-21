@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,38 +36,40 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-class CandidaturesLogicHook {
+class CandidaturesLogicHook
+{
 
-   protected $rel_map = array(
-      'Calls' => 'candidates',
-      'Meetings' => 'candidates',
-   );
+    protected $rel_map = array(
+        'Calls' => 'candidates',
+        'Meetings' => 'candidates',
+    );
 
-   public function afterActivitySave($bean) {
-      if ( in_array($bean->module_name, array_keys($this->rel_map)) ) {
-         $rel = $this->rel_map[$bean->module_name];
+    public function afterActivitySave($bean)
+    {
+        if (in_array($bean->module_name, array_keys($this->rel_map))) {
+            $rel = $this->rel_map[$bean->module_name];
 
-         if ( $bean->fetched_row['parent_id'] !== $bean->parent_id && $bean->fetched_row['parent_type'] === 'Candidatures' ) {
-            $candidature = BeanFactory::getBean('Candidatures', $bean->fetched_row['parent_id']);
-            if ( $candidature && $candidature->id && $bean->load_relationship($rel) ) {
-               $bean->$rel->delete($candidature->candidate_id);
+            if ($bean->fetched_row['parent_id'] !== $bean->parent_id && 'Candidatures' === $bean->fetched_row['parent_type']) {
+                $candidature = BeanFactory::getBean('Candidatures', $bean->fetched_row['parent_id']);
+                if ($candidature && $candidature->id && $bean->load_relationship($rel)) {
+                    $bean->$rel->delete($candidature->parent_id);
+                }
             }
-         }
 
-         if ( $bean->fetched_row['parent_id'] !== $bean->parent_id && $bean->parent_type === 'Candidatures' ) {
-            $candidature = BeanFactory::getBean('Candidatures', $bean->parent_id);
-            if ( $candidature && $candidature->id && $bean->load_relationship($rel) ) {
-               $bean->$rel->add($candidature->candidate_id);
+            if ($bean->fetched_row['parent_id'] !== $bean->parent_id && 'Candidatures' === $bean->parent_type) {
+                $candidature = BeanFactory::getBean('Candidatures', $bean->parent_id);
+                if ($candidature && $candidature->id && $bean->load_relationship($rel)) {
+                    $bean->$rel->add($candidature->parent_id);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
 }

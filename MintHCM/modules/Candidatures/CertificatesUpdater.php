@@ -66,7 +66,7 @@ class CertificatesUpdater
     protected function fetchAllCertificatesForCandidate(): array
     {
         global $db;
-        $sql = "SELECT id FROM employeecertificates WHERE deleted=0 AND candidate_id='{$this->candidate_bean->id}'";
+        $sql = "SELECT id FROM employeecertificates WHERE deleted=0 AND parent_id='{$this->candidate_bean->id}'";
         $certificates = [];
         $result = $db->query($sql);
         while ($row = $db->fetchByAssoc($result)) {

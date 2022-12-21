@@ -54,13 +54,17 @@ $( document ).ready( function () {
         } );
  }
 
- viewTools.form.beforeSave( function (form_name) {
-    var result_1 = validateWorkSchedule(form_name);
-    var result_2 = validateDates(form_name);
-    var result_6 = validateDescription(form_name);
+ if (!window.spentTimeSaveHandlerAlreadyInitialized) {
+    viewTools.form.beforeSave( function (form_name) {
+        var result_1 = validateWorkSchedule(form_name);
+        var result_2 = validateDates(form_name);
+        var result_6 = validateDescription(form_name);
+    
+        return result_1 && result_2 && result_6;
+    } );
+    window.spentTimeSaveHandlerAlreadyInitialized = true;
+ }
  
-    return result_1 && result_2 && result_6;
- } );
  
  function validateWorkSchedule(form_name) {
     var result = false;
@@ -120,7 +124,15 @@ $( document ).ready( function () {
  }
  
  function getRecordID() {
-    return $( '#EditView input[name=record]' ).val();
+    var record_id = '';
+    if ($("#formDetailView input[name=record]").length > 0) {
+        record_id = $("#formDetailView input[name=record]").val();
+    } else if ($('#EditView input[name=record]').length > 0) {
+        record_id = $("#EditView input[name=record]").val();
+    } else if ($("#CloseButton").length > 0) {
+       record_id = $( "#CloseButton" ).parent().parent().find( 'select' ).val();
+    }
+    return record_id;
  }
  
  function lockFields() {

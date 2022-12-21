@@ -56,12 +56,12 @@ $listViewDefs[$module_name] = array(
         'enabled' => true,
         'link' => true,
     ),
-    'CANDIDATE_NAME' => array(
-        'name' => 'candidate_name',
+    'PARENT_NAME' => array(
+        'name' => 'parent_name',
         'label' => 'LBL_CANDIDATES_TITLE',
         'enabled' => true,
         'module' => 'Candidates',
-        'id' => 'CANDIDATE_ID',
+        'id' => 'PARENT_ID',
         'link' => true,
         'sortable' => false,
         'default' => true,
@@ -121,14 +121,14 @@ $listViewDefs[$module_name] = array(
         'enabled' => true,
         'link' => true,
     ),
-   'EMPLOYEE_NAME' => array(
-      'width' => '9%',
-      'label' => 'LBL_EMPLOYEE_NAME',
-      'module' => 'Employees',
-      'id' => 'EMPLOYEE_ID',
-      'default' => true,
-   ),
-   'DATE_MODIFIED' => array(
+    'EMPLOYEE_NAME' => array(
+        'width' => '9%',
+        'label' => 'LBL_EMPLOYEE_NAME',
+        'module' => 'Employees',
+        'id' => 'EMPLOYEE_ID',
+        'default' => true,
+    ),
+    'DATE_MODIFIED' => array(
         'label' => 'LBL_DATE_MODIFIED',
         'enabled' => true,
         'default' => true,

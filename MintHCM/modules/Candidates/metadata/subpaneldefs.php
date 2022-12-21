@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $layout_defs["Candidates"]["subpanel_setup"] = array(
@@ -107,53 +106,42 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
         'type' => 'collection',
         'subpanel_name' => 'history',
         'module' => 'History',
-        'top_buttons' =>
-        array(
-            0 =>
-            array(
+        'top_buttons' => array(
+            0 => array(
                 'widget_class' => 'SubPanelTopCreateNoteButton',
             ),
-            1 =>
-            array(
+            1 => array(
                 'widget_class' => 'SubPanelTopArchiveEmailButton',
             ),
-            2 =>
-            array(
+            2 => array(
                 'widget_class' => 'SubPanelTopSummaryButton',
             ),
-            3 =>
-            array(
-                'widget_class' => 'SubPanelTopFilterButton'
+            3 => array(
+                'widget_class' => 'SubPanelTopFilterButton',
             ),
         ),
-        'collection_list' =>
-        array(
-            'meetings' =>
-            array(
+        'collection_list' => array(
+            'meetings' => array(
                 'module' => 'Meetings',
                 'subpanel_name' => 'ForHistory',
                 'get_subpanel_data' => 'meetings',
             ),
-            'tasks' =>
-            array(
+            'tasks' => array(
                 'module' => 'Tasks',
                 'subpanel_name' => 'ForHistory',
                 'get_subpanel_data' => 'tasks',
             ),
-            'calls' =>
-            array(
+            'calls' => array(
                 'module' => 'Calls',
                 'subpanel_name' => 'ForHistory',
                 'get_subpanel_data' => 'calls',
             ),
-            'notes' =>
-            array(
+            'notes' => array(
                 'module' => 'Notes',
                 'subpanel_name' => 'ForHistory',
                 'get_subpanel_data' => 'notes',
             ),
-            'emails' =>
-            array(
+            'emails' => array(
                 'module' => 'Emails',
                 'subpanel_name' => 'ForHistory',
                 'get_subpanel_data' => 'emails',
@@ -168,8 +156,7 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
         ),
         'get_subpanel_data' => 'history',
         'searchdefs' => array(
-            'collection' =>
-            array(
+            'collection' => array(
                 'name' => 'collection',
                 'label' => 'LBL_COLLECTION_TYPE',
                 'type' => 'enum',
@@ -177,22 +164,19 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
                 'default' => true,
                 'width' => '10%',
             ),
-            'name' =>
-            array(
+            'name' => array(
                 'name' => 'name',
                 'default' => true,
                 'width' => '10%',
             ),
-            'current_user_only' =>
-            array(
+            'current_user_only' => array(
                 'name' => 'current_user_only',
                 'label' => 'LBL_CURRENT_USER_FILTER',
                 'type' => 'bool',
                 'default' => true,
                 'width' => '10%',
             ),
-            'date_modified' =>
-            array(
+            'date_modified' => array(
                 'name' => 'date_modified',
                 'default' => true,
                 'width' => '10%',
@@ -207,8 +191,7 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
         'sort_by' => 'id',
         'title_key' => 'LBL_DOCUMENTS',
         'get_subpanel_data' => 'documents',
-        'top_buttons' =>
-        array(
+        'top_buttons' => array(
             array(
                 'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
@@ -218,7 +201,7 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
             ),
         ),
     ),
-	'employeecertificates' => array(
+    'employeecertificates' => array(
         'order' => 100,
         'module' => 'EmployeeCertificates',
         'subpanel_name' => 'default',
@@ -234,7 +217,7 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
     ),
     'securitygroups' => array(
         'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton',
-                'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect'),),
+            'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect')),
         'order' => 900,
         'sort_by' => 'name',
         'sort_order' => 'asc',

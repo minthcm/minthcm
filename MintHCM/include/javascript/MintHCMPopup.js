@@ -49,10 +49,10 @@ class MintHCMPopupClass {
         };
 
         this.getButtons = function () {
-            var button = _.template( '<input type="button" value="<%= text %>" />' );
+            var button = _.template( '<input type="button" value="<%= text %>" accesskey="<%= accesskey %>" />' );
             var buttons = "";
             this.buttons.forEach( function ( btn ) {
-                buttons += button( {text: btn.text} );
+                buttons += button({ text: btn.text, accesskey: btn.accesskey });
             } );
             return buttons;
         };

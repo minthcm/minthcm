@@ -78,10 +78,31 @@ if(!empty($_REQUEST['mail_smtppass'])) {
         $pass = $oe->mail_smtppass;
     }
 }
+
+// MintHCM #110041 START
+$smtpType = !empty($_REQUEST['mail_smtptype']) ? $_REQUEST['mail_smtptype'] : '';
+$authType = !empty($_REQUEST['mail_authtype']) ? $_REQUEST['mail_authtype'] : '';
+$eapmId = !empty($_REQUEST['eapm_id']) ? $_REQUEST['eapm_id'] : '';
+$authAccount = !empty($_REQUEST['authorized_account']) ? $_REQUEST['authorized_account'] : '';
+
 $email = new Email();
-$out = $email->sendEmailTest($_REQUEST['mail_smtpserver'], $_REQUEST['mail_smtpport'], $_REQUEST['mail_smtpssl'],
-        							($_REQUEST['mail_smtpauth_req'] == 'true' ? 1 : 0), $_REQUEST['mail_smtpuser'],
-        							$pass, $_REQUEST['outboundtest_from_address'], $_REQUEST['outboundtest_to_address'], $_REQUEST['mail_sendtype'], $_REQUEST['mail_from_name']);
+$out = $email->sendEmailTest(
+    $_REQUEST['mail_smtpserver'],
+    $_REQUEST['mail_smtpport'],
+    $_REQUEST['mail_smtpssl'],
+    ($_REQUEST['mail_smtpauth_req'] == 'true' ? 1 : 0),
+    $_REQUEST['mail_smtpuser'],
+    $pass,
+    $_REQUEST['outboundtest_from_address'],
+    $_REQUEST['outboundtest_to_address'],
+    $_REQUEST['mail_sendtype'],
+    (!empty($_REQUEST['mail_from_name']) ? $_REQUEST['mail_from_name'] : ''),
+    $smtpType,
+    $authType,
+    $eapmId,
+    $authAccount
+);
+// MintHCM #110041 END
 
 $out = $json->encode($out);
 echo $out;

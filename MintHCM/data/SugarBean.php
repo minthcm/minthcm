@@ -3862,7 +3862,7 @@ class SugarBean {
       }
       //Mint start SG optimization
       global $current_user;
-      $skipped_modules = [ 'ev_RedmineProjectTask' ]; //Mint #62980
+      $skipped_modules = [ '' ]; //Mint #62980
       $group_where = SecurityGroup::getGroupWhere($this->table_name, $this->module_dir, $current_user->id);
 
       if (strpos($ret_array['where'], $group_where) !== false && !in_array($this->module_name, $skipped_modules) ) { //Mint #60146

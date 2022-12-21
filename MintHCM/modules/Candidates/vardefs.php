@@ -115,10 +115,7 @@ $dictionary['Candidates'] = array(
             'source' => 'non-db',
             'module' => 'Candidatures',
             'bean_name' => 'Candidatures',
-            'vname' => 'LBL_CANDIDATES_TITLE',
-            'id_name' => 'candidate_id',
-            'link-type' => 'many',
-            'side' => 'left',
+            'vname' => 'LBL_CANDIDATURES_TITLE',
         ),
         'collaboration' => array(
             'name' => 'collaboration',
@@ -559,8 +556,10 @@ $dictionary['Candidates'] = array(
             'lhs_key' => 'id',
             'rhs_module' => 'Candidatures',
             'rhs_table' => 'candidatures',
-            'rhs_key' => 'candidate_id',
+            'relationship_role_column_value' => 'Candidates',
+            'rhs_key' => 'parent_id',
             'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
         ),
         'candidates_calls' => array(
             'lhs_module' => 'Candidates',

@@ -270,7 +270,14 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
         function http_GET()
         {
             global $log;
-
+            
+            /* MintHCM #75792 START */
+            if ($this->vcal_type == 'vfbws')
+           {
+             $this->http_status("200 OK");
+             echo $this->vcal_focus->get_vcal_freebusy($this->user_focus, true, true);
+           } else
+            /* MintHCM #75792 END */
            if ($this->vcal_type == 'vfb')
            {
              $this->http_status("200 OK");

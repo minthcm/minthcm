@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -84,7 +84,7 @@ class EAPM extends Basic
     public function bean_implements($interface)
     {
         switch ($interface) {
-            case 'ACL': return true;
+            case 'ACL':return true;
         }
 
         return false;
@@ -109,16 +109,16 @@ class EAPM extends Basic
             }
             $eapmBean = $eapmBean->retrieve_by_string_fields($queryArray, false);
 
-           // Don't cache the include inactive results
-           if (!$includeInactive) {
-               if ($eapmBean != null) {
-                   $_SESSION['EAPM'][$application] = $eapmBean->toArray();
-               } else {
-                   $_SESSION['EAPM'][$application] = '';
+            // Don't cache the include inactive results
+            if (!$includeInactive) {
+                if ($eapmBean != null) {
+                    $_SESSION['EAPM'][$application] = $eapmBean->toArray();
+                } else {
+                    $_SESSION['EAPM'][$application] = '';
 
-                   return;
-               }
-           }
+                    return;
+                }
+            }
         }
 
         if (isset($eapmBean->password)) {
@@ -140,11 +140,22 @@ class EAPM extends Basic
             if (empty($where)) {
                 $where = $owner_where;
             } else {
-                $where .= ' AND '.$owner_where;
+                $where .= ' AND ' . $owner_where;
             }
         }
 
         return parent::create_new_list_query($order_by, $where, $filter, $params, $show_deleted, $join_type, $return_array, $parentbean, $singleSelect);
+    }
+
+    public function getOwnerWhere($user_id)
+    {
+        if (isset($this->field_defs['assigned_user_id'])) {
+            return " $this->table_name.assigned_user_id ='$user_id' ";
+        }
+        if (isset($this->field_defs['created_by'])) {
+            return " $this->table_name.created_by ='$user_id' ";
+        }
+        return '';
     }
 
     public function save($check_notify = false)
@@ -160,10 +171,10 @@ class EAPM extends Basic
 
         $parentRet = parent::save($check_notify);
 
-       // Nuke the EAPM cache for this record
-       if (isset($_SESSION['EAPM'][$this->application])) {
-           unset($_SESSION['EAPM'][$this->application]);
-       }
+        // Nuke the EAPM cache for this record
+        if (isset($_SESSION['EAPM'][$this->application])) {
+            unset($_SESSION['EAPM'][$this->application]);
+        }
 
         return $parentRet;
     }
@@ -171,9 +182,9 @@ class EAPM extends Basic
     public function mark_deleted($id)
     {
         // Nuke the EAPM cache for this record
-       if (isset($_SESSION['EAPM'][$this->application])) {
-           unset($_SESSION['EAPM'][$this->application]);
-       }
+        if (isset($_SESSION['EAPM'][$this->application])) {
+            unset($_SESSION['EAPM'][$this->application]);
+        }
 
         return parent::mark_deleted($id);
     }
@@ -184,18 +195,18 @@ class EAPM extends Basic
             return false;
         }
         // Don't use save, it will attempt to revalidate
-       $adata = DBManagerFactory::getInstance()->quote(isset($this->api_data) ? $this->api_data : null);
+        $adata = DBManagerFactory::getInstance()->quote(isset($this->api_data) ? $this->api_data : null);
         DBManagerFactory::getInstance()->query("UPDATE eapm SET validated=1,api_data='$adata'  WHERE id = '{$this->id}' AND deleted = 0");
         if (!$this->deleted && !empty($this->application)) {
             // deactivate other EAPMs with same app
-           $sql = "UPDATE eapm SET deleted=1 WHERE application = '{$this->application}' AND id != '{$this->id}' AND deleted = 0 AND assigned_user_id = '{$this->assigned_user_id}'";
+            $sql = "UPDATE eapm SET deleted=1 WHERE application = '{$this->application}' AND id != '{$this->id}' AND deleted = 0 AND assigned_user_id = '{$this->assigned_user_id}'";
             DBManagerFactory::getInstance()->query($sql, true);
         }
 
-       // Nuke the EAPM cache for this record
-       if (isset($_SESSION['EAPM'][$this->application])) {
-           unset($_SESSION['EAPM'][$this->application]);
-       }
+        // Nuke the EAPM cache for this record
+        if (isset($_SESSION['EAPM'][$this->application])) {
+            unset($_SESSION['EAPM'][$this->application]);
+        }
     }
 
     protected function fillInName()

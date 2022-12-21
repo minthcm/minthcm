@@ -9,7 +9,7 @@ class MeetingsApi
         if(!empty($args['id']) && is_string($args['id'])){
             $list = $users_bean->get_list(
                 "",
-                "users.securitygroup_id = '{$users_bean->db->quote($args['id'])}' "
+                "users.employee_status = 'Active' AND users.status = 'Active' AND users.securitygroup_id = '{$users_bean->db->quote($args['id'])}' "
             );
         }
         $users_id=[];

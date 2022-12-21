@@ -443,6 +443,9 @@ class DashletGeneric extends Dashlet {
      * Does all dashlet processing, here's your chance to modify the rows being displayed!
      */
     function process($lvsParams = array(), $id = null) {
+        // MintHCM #94842 START
+        global $dashlet_initial_loading;
+        // MintHCM #94842 END
         $currentSearchFields = array();
         $configureView = true; // configure view or regular view
         $query = false;
@@ -531,6 +534,9 @@ class DashletGeneric extends Dashlet {
             }
 
             $this->lvs->ss->assign('dashletId', $this->id);
+            // MintHCM #94842 START
+            $this->lvs->ss->assign('dashletInitialLoading', !empty($dashlet_initial_loading) ? $dashlet_initial_loading : false);
+            // MintHCM #94842 END
         }
     }
 

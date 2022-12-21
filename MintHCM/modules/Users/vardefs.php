@@ -71,6 +71,7 @@ $dictionary['User'] = array(
                 'advanced_search' => false,
             ),
             'api-visible' => false,
+            'vt_validation' => 'AEM(isUnique(user_name,$user_name),\'ERR_USER_NAME_EXISTS_3\')'
         ),
         'user_hash' => array(
             'name' => 'user_hash',

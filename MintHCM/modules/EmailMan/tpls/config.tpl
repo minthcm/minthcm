@@ -55,6 +55,9 @@ function change_state(radiobutton) {
 		radiobutton.form['massemailer_tracking_entities_location'].value=null;
 	}
 }
+// MintHCM #110041 START
+var authInfo = {/literal}{$js_authinfo}{literal}
+// MintHCM #110041 END
 -->
 </script>
 {/literal}
@@ -65,12 +68,19 @@ function change_state(radiobutton) {
 	<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
 	<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
 	<input type="hidden" name="source_form" value="config" />
+    <!-- MintHCM #110041 START -->
+    <input type="hidden" name="eapm_id" id="eapm_id" value="{$eapm_id}" />
+    <input type="hidden" name="authorized_account" id="authorized_account" value="{$authorized_account}" />
+    <input type="hidden" name="mail_authtype" id="mail_authtype" value="{$mail_authtype}" />
+    <!-- MintHCM #110041 END -->
 
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 
 		<td>
-			<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="button primary" onclick="this.form.action.value='Save';return verify_data(this);" type="submit" name="button" id="btn_save" value=" {$APP.LBL_SAVE_BUTTON_LABEL} ">
+            <!-- MintHCM #110041 START -->
+			<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="button primary" onclick="this.form.action.value='Save';return save_data(this);" type="submit" name="button" id="btn_save" value=" {$APP.LBL_SAVE_BUTTON_LABEL} ">
+            <!-- MintHCM #110041 END -->
 			<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{$RETURN_ACTION}'; this.form.module.value='{$RETURN_MODULE}';" type="submit" name="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} ">
 		</td>
 		<td align="right" nowrap>
@@ -120,41 +130,78 @@ function change_state(radiobutton) {
 						<tr>
 							<td colspan="4">
 								<div id="smtpButtonGroup" class="yui-buttongroup">
-				<span id="gmail" class="yui-button yui-radio-button{if $mail_smtptype == 'gmail'} yui-button-checked{/if}">
-					<span class="first-child">
-						<button type="button" name="mail_smtptype" value="gmail" class="btn btn-danger">
-							&nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_GMAIL}&nbsp;&nbsp;&nbsp;&nbsp;
-						</button>
-					</span>
-				</span>
-									<span id="yahoomail" class="yui-button yui-radio-button{if $mail_smtptype == 'yahoomail'} yui-button-checked{/if}">
-					<span class="first-child">
-						<button type="button" name="mail_smtptype" value="yahoomail" class="btn btn-danger">
-							&nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_YAHOO}&nbsp;&nbsp;&nbsp;&nbsp;
-						</button>
-					</span>
-				</span>
-									<span id="exchange" class="yui-button yui-radio-button{if $mail_smtptype == 'exchange'} yui-button-checked{/if}">
-					<span class="first-child">
-						<button type="button" name="mail_smtptype" value="exchange" class="btn btn-danger">
-							&nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_EXCHANGE}&nbsp;&nbsp;&nbsp;&nbsp;
-						</button>
-					</span>
-				</span>
-									<span id="other" class="yui-button yui-radio-button{if $mail_smtptype == 'other' || empty($mail_smtptype)} yui-button-checked{/if}">
-					<span class="first-child">
-						<button type="button" name="mail_smtptype" value="other" class="btn btn-danger">
-							&nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_OTHER}&nbsp;&nbsp;&nbsp;&nbsp;
-						</button>
-					</span>
-				</span>
+                                    <!-- MintHCM #110041 START -->
+                                    <span id="google_oauth2" class="yui-button yui-radio-button{if $mail_smtptype == 'google_oauth2'} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="google_oauth2" class="btn btn-danger">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_GOOGLE_OAUTH2}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <span id="exchange_online" class="yui-button yui-radio-button{if $mail_smtptype == 'exchange_online'} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="exchange_online" class="btn btn-danger">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_EXCHANGE_ONLINE}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <span id="yahoomail" class="yui-button yui-radio-button{if $mail_smtptype == 'yahoomail'} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="yahoomail" class="btn btn-danger">
+                                                {sugar_getimage alt=$mod_strings.LBL_YAHOO_MAIL_LOGO name="yahoomail_logo" ext=".png" other_attributes=''}
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_YAHOO}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <span id="exchange" class="yui-button yui-radio-button{if $mail_smtptype == 'exchange'} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="exchange" class="btn btn-danger">
+                                                {sugar_getimage alt=$mod_strings.LBL_EXCHANGE_LOGO name="exchange_logo" ext=".png" other_attributes=''}
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_EXCHANGE}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <span id="gmail" class="yui-button yui-radio-button{if $mail_smtptype == 'gmail'} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="gmail" class="btn btn-danger">
+                                                {sugar_getimage alt=$mod_strings.LBL_GMAIL_LOGO name="gmail_logo" ext=".png" other_attributes=''}
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_GMAIL}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <span id="other" class="yui-button yui-radio-button{if $mail_smtptype == 'other' || empty($mail_smtptype)} yui-button-checked{/if}">
+                                        <span class="first-child">
+                                            <button type="button" name="mail_smtptype" value="other" class="btn btn-danger">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SMTPTYPE_OTHER}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <!-- MintHCM #110041 END -->
 								</div>
 							</td>
 						</tr>
+                        <!-- MintHCM #110041 START -->
+                        <tr id="auth_block" style="display:none">
+                            <td colspan="4">
+                                <div id="auth_warning">
+                                Placeholder
+                                </div>
+                                <button type="button" id="auth_button" name="auth_button" style="margin:10px 2px" onclick="authorize();">{$APP.LBL_EMAIL_AUTHORIZE}</button>
+                            </td>
+                        </tr>
+                        <!-- MintHCM #110041 END -->
 						<tr>
 							<td colspan="4">
 								<div id="smtp_settings">
 									<table width="100%" cellpadding="0" cellspacing="0">
+                                        <!-- MintHCM #110041 START -->
+                                        <tr id="mailsettings0">
+                                            <td width="20%" scope="row"><span id="auth_status_label">{$MOD.LBL_AUTH_STATUS}</span></td>
+                                            <td width="30%" ><input type="text" id="auth_status" name="auth_status" tabindex="1" size="25" maxlength="64" value="{if !empty($eapm_id)}{$APP.LBL_EMAIL_AUTHORIZED}{/if}{if empty($eapm_id)}{$APP.LBL_EMAIL_NOT_AUTHORIZED}{/if}" disabled></td>
+                                            <td width="20%" scope="row"><span id="auth_email_label">{$MOD.LBL_AUTHORIZED_ACCOUNT}</span></td>
+                                            <td width="30%" ><input type="text" id="auth_email" name="auth_email" size="25" maxlength="64" value="{$authorized_account}" tabindex='1' disabled></td>
+                                        </tr>
+                                        <!-- MintHCM #110041 END -->
 										<tr id="mailsettings1">
 											<td width="20%" scope="row"><span id="mail_smtpserver_label">{$MOD.LBL_MAIL_SMTPSERVER}</span> <span class="required">{$APP.LBL_REQUIRED_SYMBOL}</span></td>
 											<td width="30%" ><input type="text" id="mail_smtpserver" name="mail_smtpserver" tabindex="1" size="25" maxlength="255" value="{$mail_smtpserver}"></td>
@@ -249,12 +296,24 @@ function change_state(radiobutton) {
 							<td scope="row" width="17%"></td>
 							<td></td>
 						</tr>
+                        <!-- MintHCM #110041 START -->
+                        <tr>
+							<td width="20%" scope="row" valign='top'>
+								{$MOD.LBL_EMAIL_WARNING_NOTIFICATIONS}:&nbsp;
+							</td>
+							<td width="30%"  valign='top'>
+								<input type='checkbox' class='checkbox' name='email_warning_notifications' value="1" {$LBL_EMAIL_WARNING_NOTIFICATIONS}>
+							</td>
+						</tr>
+                        <!-- MintHCM #110041 END -->
 						<tr>
 							<td width="20%" scope="row" valign='top'>
 								{$MOD.LBL_EMAIL_DEFAULT_DELETE_ATTACHMENTS}:&nbsp;
 							</td>
 							<td width="30%"  valign='top'>
-								<input type='checkbox' name='email_default_delete_attachments' value="1" {$DEFAULT_EMAIL_DELETE_ATTACHMENTS}>
+                                <!-- MintHCM #110041 START -->
+								<input type='checkbox' class='checkbox' name='email_default_delete_attachments' value="1" {$DEFAULT_EMAIL_DELETE_ATTACHMENTS}>
+                                <!-- MintHCM #110041 END -->
 							</td>
 
 							<td scope="row" width="20%">
@@ -501,7 +560,9 @@ function change_state(radiobutton) {
 </div>
 
 <div style="padding-top:2px;">
-			<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" class="button primary" onclick="this.form.action.value='Save';return verify_data(this);" type="submit" name="button" value=" {$APP.LBL_SAVE_BUTTON_LABEL} ">
+            <!-- MintHCM #110041 START -->
+			<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" class="button primary" onclick="this.form.action.value='Save';return save_data(this);" type="submit" name="button" value=" {$APP.LBL_SAVE_BUTTON_LABEL} ">
+            <!-- MintHCM #110041 END -->
 			<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" class="button" onclick="this.form.action.value='{$RETURN_ACTION}'; this.form.module.value='{$RETURN_MODULE}';" type="submit" name="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} ">
 </div>
 
@@ -543,6 +604,18 @@ function testOutboundSettings() {
     var smtpPort = document.getElementById('mail_smtpport').value;
     var smtpssl  = document.getElementById('mail_smtpssl').value;
     var mailsmtpauthreq = document.getElementById('mail_smtpauth_req');
+    // MintHCM #110041 START
+    var smtpType = document.getElementById('EditView').mail_smtptype.value;
+    var eapmId = document.getElementById('EditView').eapm_id.value;
+    var authAccount = document.getElementById('authorized_account').value;
+    var authType = document.getElementById('mail_authtype').value;
+
+    if(authType === 'oauth2' && (trim(eapmId) === '' || trim(authAccount) === '')) {
+        errorMessage = "{/literal}{$APP.LBL_EMAIL_PLEASE_AUTHORIZE_TESTING}{literal}" + "<br/>";
+        overlay("{/literal}{$APP.LBL_EMAIL_ACCOUNT_NOT_AUTHORIZED}{literal}", errorMessage, 'alert');
+        return false;
+    }
+    // MintHCM #110041 END
     if(trim(smtpServer) == '') {
         isError = true;
         errorMessage += "{/literal}{$APP.LBL_EMAIL_ACCOUNTS_SMTPSERVER}{literal}" + "<br/>";
@@ -607,13 +680,20 @@ function sendTestEmail()
     var smtpssl  = document.getElementById('mail_smtpssl').value;
     var mailsmtpauthreq = document.getElementById('mail_smtpauth_req');
     var mail_sendtype = document.getElementById('mail_sendtype').value;
-
+    // MintHCM #110041 START
+    var smtppass = trim(document.getElementById('mail_smtppass').value);
+    var smtpType = document.getElementById('EditView').mail_smtptype.value;
+    var eapmId = document.getElementById('EditView').eapm_id.value;
+    var authAccount = document.getElementById('authorized_account').value;
+    var authType = document.getElementById('mail_authtype').value;
     var from_name = document.getElementById('notify_fromname').value;
+    
 	var postDataString = 'mail_type=system&mail_sendtype=' + mail_sendtype + '&mail_smtpserver=' + smtpServer + "&mail_smtpport=" + smtpPort + "&mail_smtpssl=" + smtpssl +
 	                      "&mail_smtpauth_req=" + mailsmtpauthreq.checked + "&mail_smtpuser=" + trim(document.getElementById('mail_smtpuser').value) +
-	                      "&mail_smtppass=" + trim(document.getElementById('mail_smtppass').value) + "&outboundtest_to_address=" + encodeURIComponent(toAddress) +
-                          "&outboundtest_from_address=" + fromAddress + "&mail_from_name=" + from_name;
+	                      "&mail_smtppass=" + encodeURIComponent(smtppass) + "&outboundtest_to_address=" + encodeURIComponent(toAddress) +
+                          "&outboundtest_from_address=" + fromAddress + "&mail_from_name=" + from_name + "&mail_smtptype=" + smtpType  + "&mail_authtype=" + authType + "&eapm_id=" + eapmId + "&authorized_account=" + authAccount;
 
+    // MintHCM #110041 END
 	YAHOO.util.Connect.asyncRequest("POST", "index.php?action=testOutboundEmail&module=EmailMan&to_pdf=true&sugar_body_only=true", callbackOutboundTest, postDataString);
 }
 function testOutboundSettingsDialog() {
@@ -651,10 +731,14 @@ function notify_setrequired(f) {
 
 	document.getElementById("smtp_settings").style.display = (f.mail_sendtype.value == "SMTP") ? "inline" : "none";
 	document.getElementById("smtp_settings").style.visibility = (f.mail_sendtype.value == "SMTP") ? "visible" : "hidden";
-	document.getElementById("smtp_auth1").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
-	document.getElementById("smtp_auth1").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
-	document.getElementById("smtp_auth2").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
-	document.getElementById("smtp_auth2").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
+    // MintHCM #110041 START
+    if (document.getElementById('EditView').mail_authtype.value !== 'oauth2') {
+        document.getElementById("smtp_auth1").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
+        document.getElementById("smtp_auth1").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
+        document.getElementById("smtp_auth2").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
+        document.getElementById("smtp_auth2").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
+    }
+    // MintHCM #110041 END
 	if( document.getElementById('mail_smtpauth_req').checked)
 	   YAHOO.util.Dom.removeClass('mail_allow_user', "yui-hidden");
 	else
@@ -663,24 +747,20 @@ function notify_setrequired(f) {
 	return true;
 }
 
-function setDefaultSMTPPort() 
+// MintHCM #110041 START
+function setDefaultSMTPPort()
 {
-    if (!first_load)
-    {
-        useSSLPort = !document.getElementById("mail_smtpssl").options[0].selected;
-
-        if ( useSSLPort && document.getElementById("mail_smtpport").value == '25' ) {
-            document.getElementById("mail_smtpport").value = '465';
-        }
-        if ( !useSSLPort && document.getElementById("mail_smtpport").value == '465' ) {
-            document.getElementById("mail_smtpport").value = '25';
-        }
-    }
-    else
-    {
+    var smtpPortField;
+    var smtpProtocol;
+    if (!first_load) {
+        smtpPortField = document.getElementById('mail_smtpport');
+        smtpProtocol  = document.getElementById('mail_smtpssl').value;
+        smtpPortField.value = smtpProtocol === '1' ? '465' : smtpProtocol === '2' ? '587' : '25';
+    } else {
         first_load = false;
     }
 }
+// MintHCM #110041 END
 
 /**
 *  If the outlook options are all set on page load then enable the outlook field so that the user has an indication
@@ -709,9 +789,80 @@ function setOutlookDefault()
 YAHOO.util.Event.onDOMReady(setOutlookDefault);
 notify_setrequired(document.ConfigureSettings);
 
+// MintHCM #110041 START
+function authorize() {
+    var smtpType = document.getElementById('EditView').mail_smtptype.value;
+    if (authInfo[smtpType]['auth_url']) {
+        window.addEventListener('message', handleOauthComplete);
+        var height = 600;
+        var width = 600;
+        var left = (window.parent.screen.width - width) / 2;
+        var top = (window.parent.screen.height - height) / 4;
+        var submitWindow = window.open('/', "_blank", 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',resizable=1');
+        submitWindow.location.href = 'about:blank';
+        submitWindow.location.href = authInfo[smtpType]['auth_url'];
+    }
+}
+function handleOauthComplete(e) {
+    var smtpType = document.getElementById('EditView').mail_smtptype.value;
+    var data = JSON.parse(e.data);
+    if (!data.dataSource || !authInfo[smtpType] || data.dataSource !== authInfo[smtpType]['dataSource']) {
+        return;
+    }
+    if (data.eapmId && data.emailAddress && data.userName) {
+        authInfo[smtpType]['eapm_id'] = data.eapmId;
+        authInfo[smtpType]['authorized_account'] = data.emailAddress;
+        authInfo[smtpType]['mail_smtpuser'] = data.userName;
+        document.getElementById('eapm_id').value = data.eapmId;
+        document.getElementById('auth_status').value = '{/literal}{$APP.LBL_EMAIL_AUTHORIZED}{literal}';
+        document.getElementById('authorized_account').value = data.emailAddress;
+        document.getElementById('auth_email').value = data.emailAddress;
+        document.getElementById('mail_smtpuser').value = data.userName;
+    } else {
+        alert('{/literal}{$APP.LBL_EMAIL_AUTH_FAILURE}{literal}');
+    }
+    window.removeEventListener('message', handleOauthComplete);
+}
+function save_data(form) {
+    var eapmId = document.getElementById('EditView').eapm_id.value;
+    var authAccount = document.getElementById('authorized_account').value;
+    var authType = document.getElementById('mail_authtype').value;
+
+    if(authType === 'oauth2' && (trim(eapmId) === '' || trim(authAccount) === '')) {
+        errorMessage = "{/literal}{$APP.LBL_EMAIL_PLEASE_AUTHORIZE}{literal}";
+        alert(errorMessage);
+        return false;
+    }
+
+    var smtpReq = document.getElementById('mail_smtpauth_req');
+    var tmp = smtpReq.disabled
+    smtpReq.disabled = false;
+    var result = verify_data(form);
+    if (!result) {
+        smtpReq.disabled = tmp;
+    }
+    return result;
+}
+// MintHCM #110041 END
+
 function changeEmailScreenDisplay(smtptype, clear)
 {
+    // MintHCM #110041 START
+    document.getElementById("auth_block").style.display = 'none';
+    document.getElementById("mailsettings0").style.display = 'none';
+    document.getElementById("smtp_auth1").style.display = '';
+    document.getElementById("smtp_auth2").style.display = '';
+    document.getElementById("smtp_auth1").style.visibility = 'visible';
+    document.getElementById("smtp_auth2").style.visibility = 'visible';
+    document.getElementById("mail_smtpauth_req").disabled = false;
+    // MintHCM #110041 END
+
     if(clear) {
+        // MintHCM #110041 START
+	    document.getElementById("mail_authtype").value = '';
+        document.getElementById("eapm_id").value = '';
+        document.getElementById("authorized_account").value = '';
+        // MintHCM #110041 END
 	    document.getElementById("mail_smtpserver").value = '';
 	    document.getElementById("mail_smtpport").value = '25';
 	    document.getElementById("mail_smtpauth_req").checked = true;
@@ -759,6 +910,26 @@ function changeEmailScreenDisplay(smtptype, clear)
         document.getElementById("mail_smtppass_label").innerHTML = '{/literal}{$MOD.LBL_GMAIL_SMTPPASS}{literal}';
         document.getElementById("mail_smtpuser_label").innerHTML = '{/literal}{$MOD.LBL_GMAIL_SMTPUSER}{literal}';
         break;
+    // MintHCM #110041 START
+    case 'exchange_online':
+        document.getElementById("mail_smtpport_label").innerHTML = '{/literal}{$MOD.LBL_EXCHANGE_SMTPPORT}{literal}';
+        document.getElementById("mail_smtpserver_label").innerHTML = '{/literal}{$MOD.LBL_EXCHANGE_SMTPSERVER}{literal}';
+        var defaults = {
+            mail_smtpserver: 'smtp.office365.com',
+            mail_smtpport: '587',
+            mail_smtpssl: '2'
+        };
+        handleOauth2TabSwitch(smtptype, defaults);
+        break;
+    case 'google_oauth2':
+        var defaults = defaults || {
+            mail_smtpserver: 'smtp.gmail.com',
+            mail_smtpport: '587',
+            mail_smtpssl: '2'
+        };
+        handleOauth2TabSwitch(smtptype, defaults);
+        break;
+    // MintHCM #110041 END
     case "exchange":
         if ( document.getElementById("mail_smtpserver").value == 'smtp.mail.yahoo.com'
                 || document.getElementById("mail_smtpserver").value == 'smtp.gmail.com' ) {
@@ -777,6 +948,43 @@ function changeEmailScreenDisplay(smtptype, clear)
     setDefaultSMTPPort();
     notify_setrequired(document.ConfigureSettings);
 }
+// MintHCM #110041 START
+var handleOauth2TabSwitch = function(smtptype, defaults) {
+	// Hide the username/password fields
+	document.getElementById("smtp_auth1").style.display = 'none';
+	document.getElementById("smtp_auth2").style.display = 'none';
+	document.getElementById("smtp_auth1").style.visibility = 'hidden';
+	document.getElementById("smtp_auth2").style.visibility = 'hidden';
+
+	// Show the OAuth2 fields
+	document.getElementById("auth_block").style.display = '';
+	document.getElementById("mailsettings0").style.display = '';
+	if (!authInfo[smtptype]['auth_url']) {
+		document.getElementById("auth_warning").style.display = 'block';
+		document.getElementById("auth_warning").innerHTML = authInfo[smtptype]['auth_warning'];
+		document.getElementById("auth_button").disabled = true;
+	} else {
+		document.getElementById("auth_warning").style.display = 'none';
+		document.getElementById("auth_button").disabled = false;
+	}
+
+	// Set the default values for the selected tab
+	document.getElementById("mail_authtype").value = 'oauth2';
+	document.getElementById("mail_smtpauth_req").disabled = true;
+	document.getElementById("mail_smtpauth_req").checked = true;
+	_.each(defaults, function(value, key) {
+		document.getElementById(key).value = value;
+	});
+
+	// Set the authorized values of the oauth fields if they exist
+	document.getElementById("authorized_account").value = authInfo[smtptype]['authorized_account'] || '';
+	document.getElementById("auth_email").value = authInfo[smtptype]['authorized_account'] || '';
+	document.getElementById("eapm_id").value = authInfo[smtptype]['eapm_id'] || '';
+	document.getElementById("mail_smtpuser").value = authInfo[smtptype]['mail_smtpuser'] || '';
+	document.getElementById('auth_status').value = authInfo[smtptype]['eapm_id'] ?
+			'{/literal}{$APP.LBL_EMAIL_AUTHORIZED}{literal}' : '{/literal}{$APP.LBL_EMAIL_NOT_AUTHORIZED}{literal}';
+}
+// MintHCM #110041 END
 var oButtonGroup = new YAHOO.widget.ButtonGroup("smtpButtonGroup");
 oButtonGroup.subscribe('checkedButtonChange', function(e)
 {

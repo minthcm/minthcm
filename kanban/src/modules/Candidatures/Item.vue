@@ -12,6 +12,7 @@
     }"
     @click="$emit('item-click', item)"
   >
+    <FullscreenButton @open-fullscreen="() => $emit('open-fullscreen', item)"/>
     <p class="ma-0 mb-2 font-weight-bold">{{item.name}}</p>
     <p
       v-if="item.start_date"
@@ -30,12 +31,13 @@
     </p>
     <p class="ma-0 mb-2">{{item.task_grade}}</p>
     <p class="ma-0 mb-2">{{item.assigned_user_name}}</p>
-      
+
   </VCard>
 </template>
 
 <script>
 import { VCard, VIcon } from 'vuetify/lib'
+import FullscreenButton from '../../components/FullscreenButton.vue'
 import moment from 'moment'
 require('moment/locale/pl')
 moment.locale('pl')
@@ -49,7 +51,8 @@ export default {
   },
   components: {
     VCard,
-    VIcon
+    VIcon,
+    FullscreenButton
   },
   computed: {
     expired () {

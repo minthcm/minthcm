@@ -727,6 +727,7 @@
   height: 48px;
   width: 48px;
   line-height: 20px;
+  box-shadow: none !important;
 }
 
 .usermenucollapsed.btn-default:hover {
@@ -871,6 +872,11 @@
 #quickcreatelinks {
   font-size: 1.1em;
   margin: 0 0 15px 12px;
+}
+
+.quickcreate-link {
+    display: flex !important;
+    align-items: center;
 }
 
 .navbar-fixed-top {
@@ -1496,7 +1502,7 @@
     width: 28px;
     height: 28px;
     background-color: $mobile-navbar-toolbar-bg;
-    line-height:  $navbar-toolbar-height;
+    margin-bottom: 5px !important;
     font-size:  $navbar-toolbar-height * 0.75;
     color: $navbar-mobile-toolbar-color;
   }
@@ -1655,15 +1661,9 @@
 
   .tablet-bar > .toolbar > li > .btn {
     margin: 0;
-    height: 48px;
-    width: $navbar-toolbar-height;
     padding: 0;
     line-height: normal;
     background-size: 40px auto;
-  }
-
-  .tablet-bar > .toolbar > li > .btn.alertsButton {
-    padding: 4px 0 0 0;
   }
 
   .tablet-bar > .toolbar > li > .btn.searchbutton {
@@ -2168,13 +2168,7 @@
 
   .desktop-bar > .toolbar > li > .btn {
     margin: 0;
-    height: $navbar-toolbar-height;
-    width: $navbar-toolbar-height;
     padding: 0;
-  }
-
-  .desktop-bar > .toolbar > li > .btn.alertsButton {
-    padding: 4px 0 0 0;
   }
 
   .desktop-bar > .toolbar > li > .btn.searchbutton {
@@ -2467,7 +2461,6 @@
     border-bottom-right-radius: 2px;
   }
   .navbar-form.searchform .input-group-btn .btn {
-    padding: 0 10px;
     height: 36px;
   }
 
@@ -2853,4 +2846,17 @@
 
 button#searchbutton {
     box-shadow: none;
+
+    &::before {
+        padding: 0 5px;
+    }
+}
+
+.toolbar .suitepicon:before {
+    vertical-align: middle;
+}
+
+.navbar .suitepicon-action-caret {
+    display: inline-block;
+    transform: translateY(-3px);
 }

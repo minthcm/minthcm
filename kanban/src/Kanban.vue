@@ -6,6 +6,7 @@
       @item-change="(itemID, oldOrder, newOrder, oldStatus, newStatus) => $emit('item-change', itemID, oldOrder, newOrder, oldStatus, newStatus)"
       @item-add="(key) => $emit('item-add', key)"
       @item-click="(itemID) => $emit('item-click', itemID)"
+      @open-fullscreen="(itemID) => $emit('open-fullscreen', itemID)"
     />
   </VApp>
 </template>

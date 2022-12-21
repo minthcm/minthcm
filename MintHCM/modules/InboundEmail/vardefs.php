@@ -255,6 +255,41 @@ $dictionary['InboundEmail'] = array('table' => 'inbound_email', 'comment' => 'In
 			'reportable'=>false,
 			'comment' => 'Unique identifier'
 		),
+        'eapm_id' => array(
+            'name' => 'eapm_id',
+            'vname' => 'LBL_EAPM_ID',
+            'type' => 'id',
+            'readonly' => true,
+        ),
+        'authorized_account' => array(
+            'name' => 'authorized_account',
+            'vname' => 'LBL_AUTHORIZED_ACCOUNT',
+            'type' => 'varchar',
+            'readonly' => true,
+        ),
+        'auth_type' => array(
+            'name' => 'auth_type',
+            'vname' => 'LBL_MAIL_AUTHTYPE',
+            'type' => 'varchar',
+            'len' => '10',
+            'readonly' => true,
+        ),
+        'email_provider' => array(
+            'name' => 'email_provider',
+            'vname' => 'LBL_EMAIL_PROVIDER',
+            'type' => 'enum',
+            'options' => 'mail_imaptype_options',
+            'len' => 20,
+            'default' => 'other',
+            'required' => true,
+        ),
+        'emails' => array(
+            'name' => 'emails',
+            'type' => 'link',
+            'relationship' => 'inbound_email_emails',
+            'source' => 'non-db',
+            'vname' => 'LBL_EMAILS',
+        ),
 	), /* end fields() */
 	'indices' => array (
 		array(

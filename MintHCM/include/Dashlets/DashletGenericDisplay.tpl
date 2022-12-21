@@ -44,6 +44,10 @@
 
 *}
 
+{* MintHCM #94842 START *}
+<link rel="stylesheet" type="text/css" href="include/Dashlets/DashletGenericDisplayStyle.css" />
+{* MintHCM #94842 END *}
+
 {assign var="alt_start" value=$navStrings.start}
 {assign var="alt_next" value=$navStrings.next}
 {assign var="alt_prev" value=$navStrings.previous}
@@ -108,6 +112,15 @@
             </table>
         </td>
     </tr>
+    {* MintHCM #94842 START *}
+    {if $dashletInitialLoading }
+    <tr height='20'>
+        <td class="dashlet-loader-container">
+            <div class="lds-dual-ring"></div>
+        </td>
+    </tr>
+    {else}
+    {* MintHCM #94842 END *}
     <tr height='20'>
         {counter start=0 name="colCounter" print=false assign="colCounter"}
         {assign var='datahide' value=""}
@@ -151,6 +164,9 @@
 		<td  class='td_alt' nowrap="nowrap" width='1%'>&nbsp;</td>
 		{/if}
     </tr>
+    {* MintHCM #94842 START *}
+    {/if}
+    {* MintHCM #94842 END *}
 	</thead>
 	{foreach name=rowIteration from=$data key=id item=rowData}
 		{if $smarty.foreach.rowIteration.iteration is odd}
@@ -201,9 +217,16 @@
 	    	</tr>
 	{foreachelse}
 	<tr height='20' class='{$rowColor[0]}S1'>
-	    <td colspan="{$colCount}">
-	        <em>{$APP.LBL_NO_DATA}</em>
-	    </td>
+        {* MintHCM #94842 START *}
+        {if $dashletInitialLoading }
+        <td colspan="{$colCount}" class="dashlet-loader-container">
+            <em>{$APP.LBL_DASHLETS_PROCESSING}</em>
+        {else}
+        <td colspan="{$colCount}">
+            <em>{$APP.LBL_NO_DATA}</em>
+        {/if}
+        </td>
+        {* MintHCM #94842 END *}
 	</tr>
 	{/foreach}
 </table>

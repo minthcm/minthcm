@@ -47,6 +47,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once __DIR__ . '/ImapHandler.php';
+// MintHCM #110041 START
+require_once __DIR__ . '/ImapHandlerOAuth2.php';
+// MintHCM #110041 END
 require_once __DIR__ . '/ImapHandlerException.php';
 
 /**
@@ -182,7 +185,9 @@ class ImapHandlerFactory
      * @return ImapHandlerInterface
      * @throws ImapHandlerException
      */
-    public function getImapHandler($testSettings = null)
+    // MintHCM #110041 START
+    public function getImapHandler($testSettings = null, $useOauth2 = false)
+    // MintHCM #110041 END
     {
         if (null === $this->interfaceObject) {
             global $sugar_config;
@@ -198,7 +203,9 @@ class ImapHandlerFactory
                 $logCalls = false;
             }
 
-            $interfaceClass = ImapHandler::class;
+            // MintHCM #110041 START
+            $interfaceClass = $useOauth2 ? ImapHandlerOauth2::class : ImapHandler::class;
+            // MintHCM #110041 END
             if ($test) {
                 $this->loadTestSettings($testSettings);
             } else {

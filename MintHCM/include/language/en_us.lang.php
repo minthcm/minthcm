@@ -3786,7 +3786,7 @@ $app_list_strings['workschedule_type_list'] = [
     'delegation' => 'Delegation',
     'holiday' => 'Holiday',
     'sick' => 'Sick',
-    'sick-care' => 'Sick - Care',
+    'sick_care' => 'Sick - Care',
     'occasional_leave' => 'Occasional Leave',
     'leave_at_request' => 'Leave at Request',
     'overtime' => 'Free Overtime',
@@ -3967,15 +3967,14 @@ $app_list_strings['status_list'] = array(
     'InProgress' => 'CV Acceptance',
     'MeetingAdditional' => 'Meeting - Additional',
     'MeetingPrimary' => 'Meeting - Preliminary',
-    'MeetingTask' => 'Meeting - Task',
     'Negotation' => 'Negotations',
     'New' => 'New',
     'Offer' => 'Make an Offer',
-    'PracticalTask' => 'Practical Task',
+    'PracticalTask' => 'Recruitment Task',
     'Preselection' => 'Preselection',
     'Rejected' => 'Rejected',
-    'Scored' => 'Scored Stage 1',
-    'Scored2' => 'Scored Stage 2',
+    'Scored' => 'Task Scored',
+    'Scored2' => 'After Preliminary Meeting',
 );
 
 $app_list_strings['project_status_list'] = array(
@@ -4219,8 +4218,39 @@ $app_list_strings['reaction_icons_list'] = array(
    'dislike' => 'thumbs-down',
 );
 
+$app_list_strings['parent_type_display_for_candidatures'] = array(
+    'Candidates' => 'Candidate',
+    'Employees' => 'Employee',
+);
+
 $app_strings['LNK_KANBAN'] = 'Board';
 $app_strings['ERR_KANBAN_COL_ERROR'] = 'Column for Kanban is not defined. Property "column" is missing for kanbanviewdefs.';
-$app_strings['LBL_KANBAN_SAVING_ERROR'] = 'Record saving failed'; 
 
 $app_strings['LBL_WORKSCHEDULES'] = 'Work Schedules';
+$app_strings['LBL_KANBAN_SAVING_ERROR'] = 'Record saving failed';
+$app_strings['LBL_DASHLETS_PROCESSING'] = 'Dashlet Processing...';
+
+$app_strings['LBL_WORKSCHEDULES'] = 'Work Schedules';
+
+$app_strings['LBL_EMAIL_AUTHORIZE'] = 'Authorize';
+$app_strings['LBL_EMAIL_AUTHORIZED'] = 'Authorized';
+$app_strings['LBL_EMAIL_NOT_AUTHORIZED'] = 'Not Authorized';
+$app_strings['LBL_EMAIL_AUTH_WARNING'] = 'An administrator must configure the {0} Connector via Admin > Connectors before you can set up this account.';
+
+$app_strings['LBL_SMTPTYPE_MICROSOFT'] = 'Microsoft';
+$app_strings['LBL_SMTPTYPE_GMAIL'] = 'Google Basic Authentication';
+$app_strings['LBL_SMTPTYPE_EXCHANGE'] = 'Exchange Basic Authentication';
+$app_strings['LBL_SMTPTYPE_GOOGLE_OAUTH2'] = 'Google';
+$app_strings['LBL_SMTPTYPE_EXCHANGE_ONLINE'] = 'Exchange Online';
+
+$app_strings['LBL_EMAIL_PLEASE_AUTHORIZE_TESTING'] = 'Account Not Authorized';
+$app_strings['LBL_EMAIL_ACCOUNT_NOT_AUTHORIZED'] = 'Account Not Authorized';
+$app_strings['LBL_EMAIL_PLEASE_AUTHORIZE'] = 'Please authorize the account before saving.';
+
+$app_list_strings['dom_imaptype_options'] = array(
+    'google_oauth2' => 'Google Mail',
+    'exchange_online' => 'Exchange Online',
+    'other' => 'Other',
+);
+
+$app_strings['LBL_RN_108842_SETOAUTH2MAILINGCONFIGURATION'] = 'Configure oauth2 mailing';

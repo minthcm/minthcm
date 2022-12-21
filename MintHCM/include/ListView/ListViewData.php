@@ -551,6 +551,15 @@ class ListViewData {
             }
         }
 
+        //MintHCM #104078 Start
+        if ('asc' == $_POST["lvso"]) {
+            $pageData["ordering"]["sortOrder"] = 'DESC';
+        }
+        if ('desc' == $_POST["lvso"]) {
+            $pageData["ordering"]["sortOrder"] = 'ASC';
+        }
+        //MintHCM #104078 End
+
 		return array('data'=>$data , 'pageData'=>$pageData, 'query' => $queryString);
 	}
 

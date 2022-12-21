@@ -129,6 +129,18 @@ EOHTML;
     {
         require_once 'modules/MySettings/StoreQuery.php';
 
+        // MintHCM #107081 START
+        if (empty($_REQUEST['clear_query'])
+            && !isset($_REQUEST['open_only_active_users_basic'])
+            && !isset($_REQUEST['lvso'])
+        ) {
+            $_REQUEST['searchFormTab'] = $_POST['searchFormTab'] = 'basic_search';
+            $_REQUEST['open_only_active_users_basic'] = $_POST['open_only_active_users_basic'] = '1';
+        }
+
+        echo "<script src=\"modules/Employees/js/view.list.js\" defer></script>";
+        // MintHCM #107081 END
+
         $storeQuery = new StoreQuery();
         $storeQuery->loadQuery($this->module);
         $storeQuery->SaveQuery($this->module);

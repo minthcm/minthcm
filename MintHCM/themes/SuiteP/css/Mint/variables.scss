@@ -1279,13 +1279,34 @@ $yui-picker-panel-footer-bg: $color-68;
 
 
 // Schedule bar
-$scheduler-slot-bg: $gray-lighter;
+/* MintHCM #75792 START */
+// $scheduler-slot-bg: $gray-lighter;
+$scheduler-slot-bg: $color-106;
+/* MintHCM #75792 END */
 $scheduler-slot-border-color: $panel-default-border;
-$scheduler-start-color: $color-21;
-$scheduler-end-color: $color-30;
-$scheduler-free-color: $color-17;
-$scheduler-free-border-color: $color-80;
-$scheduler-busy-color: $color-70;
+/* MintHCM #75792 START */
+// $scheduler-start-color: $color-21;
+// $scheduler-end-color: $color-30;
+// $scheduler-free-color: $color-17;
+// $scheduler-free-border-color: $color-80;
+// $scheduler-busy-color: $color-70;
+$scheduler-start-color: $color-104;
+$scheduler-end-color: $color-105;
+$scheduler-free-color: $color-107;
+$scheduler-free-border-color: $color-109;
+$scheduler-busy-color: $color-108;
+$scheduler-office-color: $color-110;
+$scheduler-home-color: $color-111;
+$scheduler-delegation-color: $color-112;
+$scheduler-holiday-color: $color-113;
+$scheduler-sick-color: $color-114;
+$scheduler-sick_care-color: $color-115;
+$scheduler-occasional_leave-color: $color-116;
+$scheduler-leave_at_request-color: $color-117;
+$scheduler-overtime-color: $color-118;
+$scheduler-excused_absence-color: $color-119;
+/* MintHCM #75792 END */
+
 
 
 // AOR

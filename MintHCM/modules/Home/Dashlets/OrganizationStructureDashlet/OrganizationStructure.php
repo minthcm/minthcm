@@ -159,4 +159,21 @@ class OrganizationStructure
         $tree = $this->buildTree($organizationalunits);
         return json_encode($tree);
     }
+
+    public function displayFullScreen($id)
+    {
+        require_once 'modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.php';
+        $OSD = new OrganizationStructureDashlet($id, []);
+        $ss = new Sugar_Smarty();
+        $ss->assign('id', $this->id);
+        $ss->assign('height', '1500');
+        $ss->assign('use_image', true);
+        $ss->assign('rootElement', $OSD->getRootElement());
+        $ss->assign('fullscreen', true);
+
+        $jsonTree = $this->getTree();
+        $ss->assign('jsonTree', $jsonTree);
+        $str = $ss->fetch('modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.tpl');
+        return $str;
+    }
 }

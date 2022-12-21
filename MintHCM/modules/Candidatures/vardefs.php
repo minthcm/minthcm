@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 /*
@@ -67,8 +66,7 @@ $dictionary['Candidatures'] = array(
             'dbType' => 'varchar',
             'len' => '255',
             'unified_search' => true,
-            'full_text_search' =>
-            array(
+            'full_text_search' => array(
                 'boost' => '3',
                 'enabled' => true,
             ),
@@ -89,18 +87,16 @@ $dictionary['Candidatures'] = array(
             'enforced' => true,
             'size' => '20',
         ),
-        'currency_id' =>
-        array(
+        'currency_id' => array(
             'name' => 'currency_id',
             'type' => 'id',
             'group' => 'currency_id',
             'vname' => 'LBL_CURRENCY',
             'function' => array('name' => 'getCurrencyDropDown', 'returns' => 'html'),
             'reportable' => false,
-            'comment' => 'Currency used for display purposes'
+            'comment' => 'Currency used for display purposes',
         ),
-        'currency_name' =>
-        array(
+        'currency_name' => array(
             'name' => 'currency_name',
             'rname' => 'name',
             'id_name' => 'currency_id',
@@ -114,8 +110,7 @@ $dictionary['Candidatures'] = array(
             'studio' => 'false',
             'duplicate_merge' => 'disabled',
         ),
-        'currency_symbol' =>
-        array(
+        'currency_symbol' => array(
             'name' => 'currency_symbol',
             'rname' => 'symbol',
             'id_name' => 'currency_id',
@@ -129,8 +124,7 @@ $dictionary['Candidatures'] = array(
             'studio' => 'false',
             'duplicate_merge' => 'disabled',
         ),
-        'reason_for_rejection' =>
-        array(
+        'reason_for_rejection' => array(
             'vt_dependency' => 'equals($status,\'Rejected\')',
             'vt_required' => 'equals($status,\'Rejected\')',
             'name' => 'reason_for_rejection',
@@ -151,14 +145,14 @@ $dictionary['Candidatures'] = array(
             'len' => 100,
             'size' => '20',
             'options' => 'reason_for_rejection_list',
-            'default' => NULL,
+            'default' => null,
         ),
         'dg_amount' => array(
             'name' => 'dg_amount',
             'label' => 'LBL_DG_AMOUNT',
             'vname' => 'LBL_DG_AMOUNT',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'currency',
             'max_size' => '26',
             'require_option' => '0',
@@ -178,8 +172,8 @@ $dictionary['Candidatures'] = array(
         'dg_amount_usdollar' => array(
             'name' => 'dg_amount_usdollar',
             'vname' => 'LBL_DG_AMOUNT_USDOLLAR',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'currency',
             'max_size' => '26',
             'require_option' => '0',
@@ -243,8 +237,8 @@ $dictionary['Candidatures'] = array(
             'name' => 'net_amount',
             'label' => 'LBL_NET_AMOUNT',
             'vname' => 'LBL_NET_AMOUNT',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'currency',
             'max_size' => '26',
             'require_option' => '0',
@@ -264,8 +258,8 @@ $dictionary['Candidatures'] = array(
         'net_amount_usdollar' => array(
             'name' => 'net_amount_usdollar',
             'vname' => 'LBL_NET_AMOUNT_USDOLLAR',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'currency',
             'max_size' => '26',
             'require_option' => '0',
@@ -286,12 +280,12 @@ $dictionary['Candidatures'] = array(
             'name' => 'notice',
             'label' => 'LBL_NOTICE',
             'vname' => 'LBL_NOTICE',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'text',
-            'max_size' => NULL,
+            'max_size' => null,
             'require_option' => '0',
-            'default_value' => NULL,
+            'default_value' => null,
             'deleted' => '0',
             'massupdate' => false,
             'duplicate_merge' => '1',
@@ -310,12 +304,12 @@ $dictionary['Candidatures'] = array(
             'name' => 'notice_final_expectations',
             'label' => 'LBL_NOTICE_FINAL_EXPECTATIONS',
             'vname' => 'LBL_NOTICE_FINAL_EXPECTATIONS',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'text',
-            'max_size' => NULL,
+            'max_size' => null,
             'require_option' => '0',
-            'default_value' => NULL,
+            'default_value' => null,
             'deleted' => '0',
             'massupdate' => false,
             'duplicate_merge' => '1',
@@ -428,12 +422,12 @@ $dictionary['Candidatures'] = array(
             'name' => 'start_date',
             'label' => 'LBL_START_DATE',
             'vname' => 'LBL_START_DATE',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'date',
-            'max_size' => NULL,
+            'max_size' => null,
             'require_option' => '1',
-            'default_value' => NULL,
+            'default_value' => null,
             'deleted' => '0',
             'massupdate' => true,
             'duplicate_merge' => '1',
@@ -502,7 +496,7 @@ $dictionary['Candidatures'] = array(
             'comments' => '',
             'help' => '',
             'type' => 'text',
-            'max_size' => NULL,
+            'max_size' => null,
             'require_option' => '0',
             'default_value' => '',
             'deleted' => '0',
@@ -610,12 +604,12 @@ $dictionary['Candidatures'] = array(
             'name' => 'entry_interview',
             'label' => 'LBL_ENTRY_INTERVIEW',
             'vname' => 'LBL_ENTRY_INTERVIEW',
-            'comments' => NULL,
-            'help' => NULL,
+            'comments' => null,
+            'help' => null,
             'type' => 'text',
-            'max_size' => NULL,
+            'max_size' => null,
             'require_option' => '0',
-            'default_value' => NULL,
+            'default_value' => null,
             'deleted' => '0',
             'massupdate' => false,
             'duplicate_merge' => '1',
@@ -630,44 +624,65 @@ $dictionary['Candidatures'] = array(
             'enforced' => '',
             'dependency' => '',
         ),
-        "candidates" => array(
-            'name' => 'candidates',
+        'parent_id' => array(
+            'name' => 'parent_id',
+            'type' => 'id',
+            'group' => 'parent_name',
+            'vname' => 'LBL_PARENT_ID',
+            'label' => 'LBL_PARENT_ID',
+            'importable' => 'true',
+            'reportable' => true,
+            'audited' => false,
+        ),
+        'parent_type' => array(
+            'name' => 'parent_type',
+            'vname' => 'LBL_PARENT_TYPE',
+            'label' => 'LBL_PARENT_TYPE',
+            'type' => 'parent_type',
+            'dbType' => 'varchar',
+            'group' => 'parent_name',
+            'options' => 'parent_type_display_for_candidatures',
+            'importable' => 'true',
+            'reportable' => true,
+            'audited' => true,
+        ),
+        'parent_name' => array(
+            'name' => 'parent_name',
+            'parent_type' => 'parent_type_display_for_candidatures',
+            'type_name' => 'parent_type',
+            'id_name' => 'parent_id',
+            'vname' => 'LBL_LIST_RELATED_TO',
+            'label' => 'LBL_LIST_RELATED_TO',
+            'type' => 'parent',
+            'group' => 'parent_name',
+            'source' => 'non-db',
+            'options' => 'parent_type_display_for_candidatures',
+            'importable' => 'true',
+            'required' => true,
+            'reportable' => true,
+            'audited' => true,
+            'massupdate' => false,
+            'sortable' => false,
+        ),
+        'candidate' => array(
+            'name' => 'candidate',
             'type' => 'link',
-            'relationship' => 'candidates_candidatures',
+            'relationship' => 'candidate_candidatures',
             'source' => 'non-db',
             'module' => 'Candidates',
             'bean_name' => 'Candidates',
-            'side' => 'right',
-            'vname' => 'LBL_CANDIDATE_TITLE',
-            'id_name' => 'candidate_id',
-            'link-type' => 'one',
+            'vname' => 'LBL_CANDIDATE',
+            'label' => 'LBL_CANDIDATE',
         ),
-        "candidate_name" => array(
-            'required' => true,
-            'name' => 'candidate_name',
-            'type' => 'relate',
+        'employee' => array(
+            'name' => 'employee',
+            'type' => 'link',
+            'relationship' => 'employee_candidatures',
             'source' => 'non-db',
-            'vname' => 'LBL_CANDIDATES_TITLE',
-            'id_name' => 'candidate_id',
-            'link' => 'candidates',
-            'table' => 'candidates',
-            'module' => 'Candidates',
-            'rname' => 'name',
-            'db_concat_fields' =>
-            array(
-                0 => 'first_name',
-                1 => 'last_name',
-            ),
-        ),
-        "candidate_id" => array(
-            'name' => 'candidate_id',
-            'type' => 'id',
-            'relationship' => 'candidates_candidatures',
-            'vname' => 'LBL_CANDIDATE_TITLE_ID',
-            'reportable' => false,
-            'rname' => 'id',
-            'isnull' => 'true',
-            'dbType' => 'id'
+            'module' => 'Employees',
+            'bean_name' => 'Employee',
+            'vname' => 'LBL_EMPLOYEE',
+            'label' => 'LBL_EMPLOYEE',
         ),
         "recruitments" => array(
             'name' => 'recruitments',
@@ -701,7 +716,7 @@ $dictionary['Candidatures'] = array(
             'reportable' => false,
             'rname' => 'id',
             'isnull' => 'true',
-            'dbType' => 'id'
+            'dbType' => 'id',
         ),
         "recruitments_end" => array(
             'name' => 'recruitments_end',
@@ -735,7 +750,7 @@ $dictionary['Candidatures'] = array(
             'reportable' => false,
             'rname' => 'id',
             'isnull' => 'true',
-            'dbType' => 'id'
+            'dbType' => 'id',
         ),
         "calls" => array(
             'name' => 'calls',
@@ -801,8 +816,29 @@ $dictionary['Candidatures'] = array(
         ),
     ),
     'relationships' => array(
-        'candidatures_calls' =>
-        array(
+        'candidate_candidatures' => array(
+            'lhs_module' => 'Candidates',
+            'lhs_table' => 'candidates',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Candidatures',
+            'rhs_table' => 'candidatures',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Candidates',
+        ),
+        'employee_candidatures' => array(
+            'lhs_module' => 'Employees',
+            'lhs_table' => 'users',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Candidatures',
+            'rhs_table' => 'candidatures',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Employees',
+        ),
+        'candidatures_calls' => array(
             'lhs_module' => 'Candidatures',
             'lhs_table' => 'candidatures',
             'lhs_key' => 'id',
@@ -813,8 +849,7 @@ $dictionary['Candidatures'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidatures_meetings' =>
-        array(
+        'candidatures_meetings' => array(
             'lhs_module' => 'Candidatures',
             'lhs_table' => 'candidatures',
             'lhs_key' => 'id',
@@ -825,8 +860,7 @@ $dictionary['Candidatures'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidatures_notes' =>
-        array(
+        'candidatures_notes' => array(
             'lhs_module' => 'Candidatures',
             'lhs_table' => 'candidatures',
             'lhs_key' => 'id',
@@ -837,8 +871,7 @@ $dictionary['Candidatures'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
         ),
-        'candidatures_tasks' =>
-        array(
+        'candidatures_tasks' => array(
             'lhs_module' => 'Candidatures',
             'lhs_table' => 'candidatures',
             'lhs_key' => 'id',

@@ -170,5 +170,9 @@ $mod_strings = array(
     'LBL_SERVICE' => 'Service',
     'LBL_STORED_OPTIONS' => 'Stored Options',
     'LBL_GROUP_ID' => 'Group ID',
+
+    'LBL_EMAIL_PROVIDER' => 'Email Provider',
+    'LBL_AUTH_STATUS' => 'Authorization Status',
+    'LBL_AUTHORIZED_ACCOUNT' => 'Email Address',
 );
 

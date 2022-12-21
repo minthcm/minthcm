@@ -154,7 +154,7 @@ $popupMeta = array(
             'default' => true,
             'name' => 'employee_name',
         ),
-        'CANDIDATE_NAME' => array(
+        'candidate_name' => array(
             'type' => 'relate',
             'link' => true,
             'label' => 'LBL_RELATIONSHIP_CANDIDATE_NAME',

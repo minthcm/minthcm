@@ -342,9 +342,31 @@ function toggleSubpanelCookie(tab) {
   set_div_cookie(get_module_name() + '_' + tab + '_v', !$('#subpanel_' + tab).is(":visible"));
 }
 
+// MintHCM #84287 start
+function hideQCSubpanelForm() {
+  let quickCreateDiv = YAHOO.util.Selector.query("div.quickcreate", null, true); 
+  if (quickCreateDiv) { 
+      let form = YAHOO.util.Selector.query("form", quickCreateDiv, true); 
+      if (form) { 
+          let moduleName = YAHOO.util.Selector.query('input[name=module]', form, true).value; 
+          let cancelButtonName = moduleName + "_subpanel_cancel_button";
+          isVisible = $('#' + cancelButtonName).is(":visible");
+          if (isVisible) {
+              SUGAR.subpanelUtils.cancelCreate(cancelButtonName, function () { cancelled = true; });
+          }
+      }
+  }
+}
+// MintHCM #84287 end
+
+function toggleSubpanelCookie(tab) {
+  set_div_cookie(get_module_name() + '_' + tab + '_v', !$('#subpanel_' + tab).is(":visible"), /* MintHCM #84287 start */ hideQCSubpanelForm() /* MintHCM #84287 end */);
+}
+
 function markSubPanelLoaded(child_field) {
   child_field_loaded[child_field] = 2;
 }
+
 function hideSubPanel(child_field) {
   var subpanel = document.getElementById('subpanel_' + child_field);
   subpanel.style.display = 'none';

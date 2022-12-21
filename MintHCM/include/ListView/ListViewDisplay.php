@@ -153,6 +153,9 @@ class ListViewDisplay
         $id_field = 'id',
         $id = null
     ) {
+        // MintHCM #94842 START
+        global $dashlet_initial_loading;
+        // MintHCM #94842 END
         $this->should_process = true;
         if (isset($seed->module_dir) && !$this->shouldProcess($seed->module_dir)) {
             return false;
@@ -175,17 +178,23 @@ class ListViewDisplay
 
         $filter_fields = $this->setupFilterFields($filter_fields);
 
-        $data = $this->lvd->getListViewData(
-            $seed,
-            $where,
-            $offset,
-            $limit,
-            $filter_fields,
-            $params,
-            $id_field,
-            true,
-            $id
-        );
+        // MintHCM #94842 START
+        if($dashlet_initial_loading){
+            $data = [];
+        } else {
+            $data = $this->lvd->getListViewData(
+                $seed,
+                $where,
+                $offset,
+                $limit,
+                $filter_fields,
+                $params,
+                $id_field,
+                true,
+                $id
+            );
+        }
+        // MintHCM #94842 END
 
         $this->fillDisplayColumnsWithVardefs();
 
@@ -247,11 +256,16 @@ class ListViewDisplay
      */
     public function process($file, $data, $htmlVar)
     {
+        // MintHCM #94842 START
+        global $dashlet_initial_loading;
+        // MintHCM #94842 END
         if (!is_array($data['data'])) {
             LoggerManager::getLogger()->warn('Row data must be an array, ' . gettype($data['data']) . ' given and converting to an array.');
         }
         $this->rowCount = count((array)$data['data']);
-        if (!isset($data['pageData']['bean'])) {
+        // MintHCM #94842 START
+        if (empty($dashlet_initial_loading) && !isset($data['pageData']['bean'])) {
+            // MintHCM #94842 END
             $GLOBALS['log']->warn("List view process error: Invalid data, bean is not set");
             return false;
         }
