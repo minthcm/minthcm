@@ -74,6 +74,9 @@ class CandidatureConverter
     public function convert()
     {
         $beans_for_employee = $this->setModulesBeans();
+        if (empty($beans_for_employee)) {
+            return false;
+        }
 
         $create_employee = new EmployeeCreator($beans_for_employee);
         $employee = $create_employee->createOrUpdate();
@@ -97,9 +100,12 @@ class CandidatureConverter
 
     protected function setModulesBeans()
     {
-        $appraisals = new AppraisalsLoader();
-
         $this->converted_candidature_bean = $this->getConvertedCandidatureBean();
+        if ($this->converted_candidature_bean->parent_type !== 'Candidates') {
+            return null;
+        }
+
+        $appraisals = new AppraisalsLoader();
         $this->latest_appraisal_bean = $appraisals->getLatestAppraisalBean($this->converted_candidature_bean);
         $this->latest_appraisal_items_beans = $appraisals->getLatestAppraisalItemsBeans($this->latest_appraisal_bean);
 

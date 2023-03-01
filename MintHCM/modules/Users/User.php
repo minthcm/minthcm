@@ -1390,7 +1390,9 @@ EOQ;
             $messages[] = $mod_strings['ERR_PASSWORD_ONENUMBER'];
         }
 
-        if ($onespecial && false === strpbrk($newPassword, "#$%^&*()+=-[]';,./{}|:<>?~")) {
+        // MintHCM #103191 start
+        if ($onespecial && false === strpbrk($newPassword, "!@#$%^&*()+=-[]';,./{}|:<>?~")) {
+        // MintHCM #103191 end
             $messages[] = $mod_strings['ERR_PASSWORD_SPECCHARS'];
         }
 

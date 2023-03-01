@@ -43,46 +43,38 @@
  */
 
 *}
-<table border="0" cellpadding="0" cellspacing="0">
-<tr valign="middle">
-<td nowrap>
-<input autocomplete="off" type="text" id="{{sugarvar key='name'}}_date" value="{$fields[{{sugarvar key='name' stringFormat=true}}].value}" size="11" maxlength="10" title='{{$vardef.help}}' {{if !empty($tabindex)}} tabindex='{{$tabindex}}' {{/if}}  onblur="combo_{{sugarvar key='name'}}.update(); {{if isset($displayParams.updateCallback)}}{{$displayParams.updateCallback}}{{/if}}">
-{capture assign="other_attributes"}alt="{$APP.LBL_ENTER_DATE}" style="position:relative; top:6px" border="0" id="{{sugarvar key='name'}}_trigger"{/capture}
-	<button id="{{sugarvar key='name'}}_trigger" class="btn btn-danger"><span class="suitepicon suitepicon-module-calendar" alt="{$APP.LBL_ENTER_DATE}"></span></button>
-{{if empty($displayParams.splitDateTime)}}
-</td>
-<td nowrap>
-{{else}}
-<br>
-{{/if}}
-<div id="{{sugarvar key='name'}}_time_section"></div>
-{{if $displayParams.showNoneCheckbox}}
-<script type="text/javascript">
-function set_{{sugarvar key='name'}}_values(form) {ldelim}
- if(form.{{sugarvar key='name'}}_flag.checked)  {ldelim}
-	form.{{sugarvar key='name'}}_flag.value=1;
-	form.{{sugarvar key='name'}}.value="";
-	form.{{sugarvar key='name'}}.readOnly=true;
- {rdelim} else  {ldelim}
-	form.{{sugarvar key='name'}}_flag.value=0;
-	form.{{sugarvar key='name'}}.readOnly=false;
- {rdelim}
-{rdelim}
-</script>
-{{/if}}
-</td>
-</tr>
-{{if $displayParams.showFormats}}
-<tr valign="middle">
-<td nowrap>
-<span class="dateFormat">{$USER_DATEFORMAT}</span>
-</td>
-<td nowrap>
-<span class="dateFormat">{$TIME_FORMAT}</span>
-</td>
-</tr>
-{{/if}}
-</table>
+{* MintHCM #76706 START*}
+<div class="row">
+    <div class="col-sm-12">
+        <input autocomplete="off" type="text" id="{{sugarvar key='name'}}_date" value="{$fields[{{sugarvar key='name' stringFormat=true}}].value}" size="11" maxlength="10" title='{{$vardef.help}}' {{if !empty($tabindex)}} tabindex='{{$tabindex}}' {{/if}}  onblur="combo_{{sugarvar key='name'}}.update(); {{if isset($displayParams.updateCallback)}}{{$displayParams.updateCallback}}{{/if}}">
+        {capture assign="other_attributes"}alt="{$APP.LBL_ENTER_DATE}" style="position:relative; top:6px" border="0" id="{{sugarvar key='name'}}_trigger"{/capture}
+            <button type="button" id="{{sugarvar key='name'}}_trigger" class="btn btn-danger"><span class="suitepicon suitepicon-module-calendar" alt="{$APP.LBL_ENTER_DATE}"></span></button>
+        {{if empty($displayParams.splitDateTime)}}
+        {{else}}
+        <br>
+        {{/if}}
+        <div style="display:inline;" id="{{sugarvar key='name'}}_time_section"></div>
+        {{if $displayParams.showNoneCheckbox}}
+        <script type="text/javascript">
+        function set_{{sugarvar key='name'}}_values(form) {ldelim}
+        if(form.{{sugarvar key='name'}}_flag.checked)  {ldelim}
+            form.{{sugarvar key='name'}}_flag.value=1;
+            form.{{sugarvar key='name'}}.value="";
+            form.{{sugarvar key='name'}}.readOnly=true;
+        {rdelim} else  {ldelim}
+            form.{{sugarvar key='name'}}_flag.value=0;
+            form.{{sugarvar key='name'}}.readOnly=false;
+        {rdelim}
+        {rdelim}
+        </script>
+        {{/if}}
+    </div>
+    {{if $displayParams.showFormats}}
+        <span class="dateFormat">{$USER_DATEFORMAT}</span>
+        <span class="dateFormat">{$TIME_FORMAT}</span>
+    {{/if}}
+</div>
+{* MintHCM #76706 END*}
 <input type="hidden" id="{{sugarvar key='name'}}" name="{{sugarvar key='name'}}" value="{$fields[{{sugarvar key='name' stringFormat=true}}].value}">
 <script type="text/javascript" src="{sugar_getjspath file='include/SugarFields/Fields/Datetimecombo/Datetimecombo.js'}"></script>
 <script type="text/javascript">

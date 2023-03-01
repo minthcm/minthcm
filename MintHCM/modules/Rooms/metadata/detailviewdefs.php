@@ -34,6 +34,10 @@ array (
           'field' => '30',
         ),
       ),
+      'includes' => array(
+        array('file' => "modules/Rooms/js/jquery.magnify.min.js"),
+        array('file' => "modules/Rooms/js/view.detail.js"),
+      ),
       'useTabs' => true,
       'tabDefs' => 
       array (
@@ -84,6 +88,11 @@ array (
             'name' => 'room_plan',
             'studio' => 'visible',
             'label' => 'LBL_ROOM_PLAN',
+            'customCode' => (function() {
+                $id = '{$fields.id.value}';
+                $url = "index.php?entryPoint=download&type=Rooms&id={$id}_room_plan";
+                return "<img data-magnify='gallery' data-src='{$url}' src='{$url}' style='max-width: 120px;'>";
+            })(),
           ),
         ),
         3 => 

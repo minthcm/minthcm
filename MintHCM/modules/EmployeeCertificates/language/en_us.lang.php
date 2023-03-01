@@ -98,4 +98,5 @@ $mod_strings = array(
     'LBL_CERTIFICATE_ID' => 'Certificate ID',
     'LBL_CANDIDATE_OR_EMPLOYEE_HAVE_TO_BE_SET' => 'Candidate or Employee have to be set',
     'LBL_EMPLOYEES' => 'Employee',
+    'LBL_EMPLOYEES_ID' => 'Employee ID',
 );

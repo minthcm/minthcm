@@ -86,8 +86,10 @@ class ViewModulelabels extends SugarView
 	    	$selected_lang = $GLOBALS['sugar_config']['default_language'];
 		}
 	        //need to change the following to interface with MBlanguage.
-
         $smarty->assign('MOD', $mbModule->getModStrings($selected_lang));
+        // MintHCM #101863 START
+        $smarty->assign('MOD_LABELS',$mbModule->getModStrings($selected_lang));
+        // MintHCM #101863 END //
 		$smarty->assign('APP', $GLOBALS['app_strings']);
 		$smarty->assign('selected_lang', $selected_lang);
 		$smarty->assign('view_package', $package_name);

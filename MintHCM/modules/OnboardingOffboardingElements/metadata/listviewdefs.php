@@ -95,13 +95,6 @@ $listViewDefs[$module_name] = array(
         'id' => 'ASSIGNED_USER_ID',
         'default' => false
     ),
-    'EMPLOYEE_NAME' => array(
-        'width' => '9%',
-        'label' => 'LBL_EMPLOYEE_NAME',
-        'module' => 'Employees',
-        'id' => 'EMPLOYEE_ID',
-        'default' => true,
-    ),
     'DATE_MODIFIED' =>
     array(
         'type' => 'datetime',

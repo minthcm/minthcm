@@ -76,4 +76,5 @@ $mod_strings = array(
     'LBL_SURVEYQUESTIONOPTIONS_SUBPANEL_TITLE'                                             => 'Survey Question Options',
     'LBL_NEW_FORM_TITLE'                                                                   => 'New Survey Question Options',
     'LBL_SURVEYQUESTIONOPTIONS_SURVEYQUESTIONRESPONSES_FROM_SURVEYQUESTIONRESPONSES_TITLE' => 'Survey Question Responses',
+    'LBL_SORT_ORDER'                                                                       => 'Sort Order',
 );

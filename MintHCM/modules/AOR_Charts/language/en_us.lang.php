@@ -74,4 +74,7 @@ $mod_strings = array(
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_AOR_CHARTS_SUBPANEL_TITLE' => 'Charts',
     'LBL_NEW_FORM_TITLE' => 'New Charts',
+    'LBL_Y_FIELD' => 'Y Field',
+    'LBL_X_FIELD' => 'X Field',
+    'LBL_TYPE' => 'Type',
 );

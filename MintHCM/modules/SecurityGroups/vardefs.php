@@ -159,6 +159,7 @@ $dictionary['SecurityGroup'] = [
             'link' => 'member_of',
             'unified_search' => true,
             'importable' => 'true',
+            'vt_validation' => "AEM(callCustomApi(SecurityGroups, checkSubordinatedGroups, {id:\$id, parent_id:\$parent_id}), 'LBL_PARENT_GROUP_ERROR')",
         ),
         "current_manager" => array(
             'name' => 'current_manager',

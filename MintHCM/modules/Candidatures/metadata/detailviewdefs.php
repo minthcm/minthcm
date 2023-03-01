@@ -88,6 +88,7 @@ $viewdefs[$module_name]['DetailView'] = array(
                         'onClick' => 'convertToEmployee.initialize()',
                     ),
                 ),
+                'template' => '{if $fields.parent_type.value == "Candidates"}[CONTENT]{/if}'
             ),
         ),
     ),

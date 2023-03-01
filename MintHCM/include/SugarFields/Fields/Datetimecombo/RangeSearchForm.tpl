@@ -65,7 +65,7 @@
 <div id="{$id}_range_div" style="{if preg_match('/^\[/', $smarty.request.{{$id_range}})  || $starting_choice == 'between'}display:none{else}display:''{/if};">
     <input autocomplete="off" type="text" name="range_{$id}" id="range_{$id}" value='{if empty($smarty.request.{{$id_range}}) && !empty($smarty.request.{{$original_id}})}{$smarty.request.{{$original_id}}}{else}{$smarty.request.{{$id_range}}}{/if}' title='{{$vardef.help}}' {{$displayParams.field}} {{if !empty($tabindex)}} tabindex='{{$tabindex}}' {{/if}} size="11" class="dateRangeInput">
     {{if !$displayParams.hiddeCalendar}}
-    <button id="{$id}_trigger" type="button" onclick="return false;" class="btn btn-danger" {if $starting_choice == 'over_n_months_ago'}style='display: none'{/if}><span class="suitepicon suitepicon-module-calendar"  alt="{$APP.LBL_ENTER_DATE}"></span></button>
+    <button id="{$id}_trigger" type="button" onclick="return false;" class="btn btn-danger" {if $starting_choice == 'over_n_months_ago' || $starting_choice == 'last_n_days' || $starting_choice == 'next_n_days'}style='display: none'{/if}><span class="suitepicon suitepicon-module-calendar"  alt="{$APP.LBL_ENTER_DATE}"></span></button>
         {{/if}}
         {{if $displayParams.showFormats}}
     &nbsp;(<span class="dateFormat">{$USER_DATEFORMAT}</span>)
@@ -144,7 +144,7 @@
                      document.getElementById( "range_{$id}" ).value = '';
                      document.getElementById( "{$id}_range_div" ).style.display = 'none';
                      document.getElementById( "{$id}_between_range_div" ).style.display = '';
-    {rdelim} else if ( val == '=' || val == 'not_equal' || val == 'greater_than' || val == 'less_than' || val == 'over_n_months_ago' ) {ldelim}
+    {rdelim} else if ( val == '=' || val == 'not_equal' || val == 'greater_than' || val == 'less_than' || val == 'over_n_months_ago' || val == 'last_n_days' || val == 'next_n_days' ) {ldelim}
               if ( (/^\[.*\]$/).test( document.getElementById( "range_{$id}" ).value ) )
     {ldelim}
                  document.getElementById( "range_{$id}" ).value = '';
@@ -154,7 +154,7 @@
               document.getElementById( "{$id}_range_div" ).style.display = '';
               document.getElementById( "{$id}_between_range_div" ).style.display = 'none';
               document.getElementById( "range_{$id}" ).value = '';
-              if ( val == 'over_n_months_ago' ) {ldelim}
+              if ( val == 'over_n_months_ago' || val == 'last_n_days' || val == 'next_n_days' ) {ldelim}
                            document.getElementById( "{$id}_trigger" ).style.display = 'none';
     {rdelim} else {ldelim}
                  document.getElementById( "{$id}_trigger" ).style.display = '';

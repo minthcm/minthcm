@@ -85,4 +85,5 @@ $mod_strings = array(
   'LBL_PARAMETER' => 'Parameter',
     'LBL_CONDITION_AND' => 'AND',
     'LBL_CONDITION_OR' => 'OR',
+    'LBL_PARENTHESIS' => 'Parenthesis',
 );

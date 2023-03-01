@@ -42,7 +42,7 @@ $dictionary['KReport'] = array( 'table' => 'kreports',
       'reportoptions' => array(
          'name' => 'reportoptions',
          'type' => 'text',
-         'vname' => 'LBL_REPORTOPTIONS'
+         'vname' => 'LBL_REPORT_OPTIONS'
       ),
       'listtype' => array(
          'name' => 'listtype',
@@ -59,7 +59,7 @@ $dictionary['KReport'] = array( 'table' => 'kreports',
          'name' => 'selectionlimit',
          'type' => 'varchar',
          'len' => '25',
-         'vname' => 'LBL_SELECTIONLIMIT',
+         'vname' => 'LBL_SELECTION_LIMIT',
          'massupdate' => false,
       ),
       'presentation_params' => array(

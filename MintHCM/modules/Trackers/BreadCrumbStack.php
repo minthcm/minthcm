@@ -242,7 +242,9 @@ class BreadCrumbStack {
     *
     * @return array of breadcrumbs
     */
-   public function getBreadCrumbList($filter_module='') {
+   // MintHCM #100495 START
+   public function getBreadCrumbList($filter_module='', $limit = 10) {
+   // MintHCM #100495 END
    	  if(!empty($filter_module)) {
    	  	 $s2 = array();
    	  	 if(is_array($filter_module)) {
@@ -259,18 +261,22 @@ class BreadCrumbStack {
 	   	  	 }
    	  	 }
 
-   	  	 $s2 = array_reverse($s2);
-   	     if(count($s2) > 10) {
-   	  	 	$s2 = array_slice($s2, 0, 10);
+         $s2 = array_reverse($s2);
+         // MintHCM #100495 START
+         if(count($s2) > $limit) {
+             $s2 = array_slice($s2, 0, $limit);
    	  	 }
+         // MintHCM #100495 END
    	  	 return $s2;
    	  }
 
    	  $s = $this->stack;
    	  $s = array_reverse($s);
-   	  if(count($s) > 10) {
-   	  	 $s = array_slice($s, 0, 10);
+      // MintHCM #100495 START
+      if(count($s) > $limit) {
+          $s = array_slice($s, 0, $limit);
    	  }
+      // MintHCM #100495 END
       return $s;
    }
 }

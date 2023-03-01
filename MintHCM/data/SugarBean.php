@@ -3168,7 +3168,10 @@ class SugarBean {
       if ( in_array('set_notification_body', get_class_methods($this)) ) {
          $xtpl = $this->set_notification_body($xtpl, $this);
       } else {
-         $xtpl->assign("OBJECT", translate('LBL_MODULE_NAME', $this->module_name));
+        // MintHCM #75607 START
+        //$xtpl->assign("OBJECT", translate('LBL_MODULE_NAME', $this->module_name));
+        $xtpl->assign("OBJECT", return_app_list_strings_language($current_language)['moduleList'][$this->module_name] ?? $this->module_name);
+        // MintHCM #75607 END
          $template_name = "Default";
       }
       if ( !empty($_SESSION["special_notification"]) && $_SESSION["special_notification"] ) {
@@ -3862,7 +3865,7 @@ class SugarBean {
       }
       //Mint start SG optimization
       global $current_user;
-      $skipped_modules = [ '' ]; //Mint #62980
+      $skipped_modules = [ 'ev_RedmineProjectTask' ]; //Mint #62980
       $group_where = SecurityGroup::getGroupWhere($this->table_name, $this->module_dir, $current_user->id);
 
       if (strpos($ret_array['where'], $group_where) !== false && !in_array($this->module_name, $skipped_modules) ) { //Mint #60146

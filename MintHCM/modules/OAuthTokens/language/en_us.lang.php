@@ -63,4 +63,5 @@ $mod_strings = array(
     'LBL_SECRET' => 'Secret',
     'LBL_TSTATE' => 'TState',
     'LBL_VERIFY' => 'Verify',
+    'LBL_ASSIGNED_TO_ID' => 'User (ID)',
 );
