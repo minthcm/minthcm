@@ -114,10 +114,4 @@ $dashletData['OnboardingOffboardingElementsDashlet']['columns']      = array(
         'width' => '8',
         'label' => 'LBL_LIST_ASSIGNED_USER'
     ),
-    'employee_name' => array(
-        'label' => 'LBL_EMPLOYEE_NAME',
-        'name' => 'employee_name',
-        'width' => '8%',
-     ),
-  
 );

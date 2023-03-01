@@ -59,6 +59,9 @@ if (empty($basePath)) {
 
 $restrict_str = <<<EOQ
 # BEGIN SUGARCRM RESTRICTIONS
+# MINTHCM #110405 START
+Header always edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=None;
+# MINTHCM #110405 END
 RedirectMatch 403 {$ignoreCase}.*\.log$
 RedirectMatch 403 {$ignoreCase}/+not_imported_.*\.txt
 RedirectMatch 403 {$ignoreCase}/+(soap|cache|xtemplate|data|examples|include|log4php|metadata|modules)/+.*\.(php|tpl)

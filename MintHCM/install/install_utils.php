@@ -956,7 +956,9 @@ function handleHtaccess() {
    $restrict_str = <<<EOQ
 
 # BEGIN SUGARCRM RESTRICTIONS
-
+# MINTHCM #110405 START
+Header always edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=None;
+# MINTHCM #110405 END
 EOQ;
    if ( ini_get('suhosin.perdir') !== false && strpos(ini_get('suhosin.perdir'), 'e') !== false ) {
       $restrict_str .= "php_value suhosin.executor.include.whitelist upload\n";

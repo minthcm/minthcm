@@ -106,7 +106,7 @@ array(
                         'name' => 'workplace_name',
                         'label' => 'LBL_RELATIONSHIP_WORKPLACE_NAME',
                         'displayParams' => array(
-                            'class' => 'sqsDisabled',
+                            // 'class' => 'sqsDisabled',
                             'initial_filter' => '&for_employee_id="+this.form.{$fields.assigned_user_id.name}.value+"&availability_advanced=active',
                         ),
                     ),

@@ -110,12 +110,7 @@ class WorkSchedulesApi
     {
         $workplace_id = $args['id'];
         $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
-        if (!$workplace || empty($workplace->id) || 'active' == $workplace->availability) {
-            return true;
-        } else {
-            return false;
-}
-
+        return !$workplace || empty($workplace->id) || 'active' == $workplace->availability;
     }
 
     public function validateWorkplaceAllocationPeriods($args)
@@ -154,33 +149,38 @@ class WorkSchedulesApi
     {
         $db = \DBManagerFactory::getInstance();
         $user_id = $db->quote($args['assigned_user_id']);
-        $result = [];
-
         if (!empty($user_id)) {
-            $sqlResult = $db->query("SELECT
-            WP.id,
-            WP.name
-         FROM
-             allocations AS AL
-         INNER JOIN workplaces AS WP
-         ON
-             AL.workplace_id = WP.id
-         WHERE
-             WP.deleted = 0
-            AND AL.deleted = 0
-            AND AL.assigned_user_id = 1
-            AND AL.mode = 'permanent'
-            AND WP.availability = 'active'
-            AND AL.date_from <= CURDATE() 
-            AND AL.date_to >= CURDATE() "
-            );
-}
-        if (1 === $sqlResult->num_rows) {
-            $result = $db->fetchByAssoc($sqlResult);
-        } else {
-            return;
+            $query = $db->query("SELECT
+                    wp.id
+                    , wp.name
+                FROM
+                    workplaces AS wp
+                INNER JOIN
+                    allocations AS al
+                    ON
+                        al.deleted = '0'
+                        AND al.workplace_id = wp.id
+                        AND al.assigned_user_id = '{$user_id}'
+                        AND al.mode = 'permanent'
+                        AND al.date_from <= CURDATE()
+                        AND (
+                            al.date_to IS NULL
+                            OR al.date_to >= CURDATE()
+                        )
+                WHERE
+                    wp.deleted = '0'
+            ");
+            while ($row = $db->fetchByAssoc($query)) {
+                return [
+                    'id' => $row['id'],
+                    'name' => $row['name'],
+                ];
+            }
         }
-        return $result;
+        return [
+            'id' => '',
+            'name' => '',
+        ];
     }
 
     public function canChangeWorkScheduleStatus($args)

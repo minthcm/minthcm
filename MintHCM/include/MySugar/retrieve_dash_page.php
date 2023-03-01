@@ -186,8 +186,10 @@ if (empty($pages)) {
 
 $sugar_smarty = new Sugar_Smarty();
 
-$activePage = isset($_REQUEST['page_id']) && $_REQUEST['page_id'] ? $_REQUEST['page_id']
-        : 0;
+$activePage = 0;
+if (isset($_REQUEST['page_id']) && is_numeric($_REQUEST['page_id'])) {
+    $activePage = (int)$_REQUEST['page_id'];
+}
 
 $divPages[] = $activePage;
 

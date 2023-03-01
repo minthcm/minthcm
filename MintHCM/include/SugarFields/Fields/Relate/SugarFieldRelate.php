@@ -178,8 +178,6 @@ class SugarFieldRelate extends SugarFieldBase {
             $displayParams['initial_filter'] .= "&group_type_advanced[]={$group_type}";
         }
       }
-      // MintHCM START
-      $displayParams['initial_filter'] = '{literal}' . addslashes(trim($json->encode($displayParams['initial_filter'], JSON_HEX_TAG), '"')) . '{/literal}';
       // MintHCM END
       if ( !isset($displayParams['readOnly']) ) {
          $displayParams['readOnly'] = '';

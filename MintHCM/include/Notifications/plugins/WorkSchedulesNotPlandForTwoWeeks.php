@@ -42,6 +42,7 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+require_once 'include/Notifications/NotificationPlugin.php';
 
 class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
 {

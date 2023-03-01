@@ -62,6 +62,17 @@ $layout_defs['SecurityGroups'] = array(
             ),
          ),
       ),
+      'employees_in_department' => array(
+         'order' => 10,
+         'module' => 'Employees',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_EMPLOYEES_IN_DEPARTEMENTS',
+         'get_subpanel_data' => 'employees', 
+         'top_buttons' => array(
+         ),
+      ),
       'employees' => array(
          'order' => 10,
          'module' => 'Employees',
@@ -69,7 +80,7 @@ $layout_defs['SecurityGroups'] = array(
          'sort_order' => 'asc',
          'sort_by' => 'id',
          'title_key' => 'LBL_EMPLOYEES',
-         'get_subpanel_data' => 'employees', 
+         'get_subpanel_data' => 'users', 
          'top_buttons' => array(
             array(
                'widget_class' => 'SubPanelTopSelectButton',

@@ -115,10 +115,14 @@ class Tracker extends SugarBean
 			$breadCrumb = $_SESSION['breadCrumbs'];
 	        $module_query = '';
 	        if(!empty($modules)) {
-	           $history_max_viewed = 10;
+               // MintHCM #100495 START
+	           $history_max_viewed = 20;
+               // MintHCM #100495 END
 	           $module_query = is_array($modules) ? ' AND module_name IN (\'' . implode("','" , $modules) . '\')' :  ' AND module_name = \'' . $modules . '\'';
 	        } else {
-	           $history_max_viewed = (!empty($GLOBALS['sugar_config']['history_max_viewed']))? $GLOBALS['sugar_config']['history_max_viewed'] : 50;
+               // MintHCM #100495 START
+	           $history_max_viewed = (!empty($GLOBALS['sugar_config']['history_max_viewed']))? $GLOBALS['sugar_config']['history_max_viewed'] : 20;
+               // MintHCM #100495 END
 	        }
 
 	        $query = 'SELECT item_id, item_summary, module_name, id FROM ' . $this->table_name . ' WHERE id = (SELECT MAX(id) as id FROM ' . $this->table_name . ' WHERE user_id = \'' . $user_id . '\' AND deleted = 0 AND visible = 1' . $module_query . ')';
@@ -128,7 +132,9 @@ class Tracker extends SugarBean
 	        }
         }
 
-        $list = $breadCrumb->getBreadCrumbList($modules);
+        // MintHCM #100495 START
+        $list = $breadCrumb->getBreadCrumbList($modules, $history_max_viewed);
+        // MintHCM #100495 END
         $GLOBALS['log']->info("Tracker: retrieving ".count($list)." items");
         return $list;
     }

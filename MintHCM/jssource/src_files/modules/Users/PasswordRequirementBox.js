@@ -40,8 +40,11 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-
-
+// MintHCM #102411 START
+$(function(){
+    $("#old_password").val('')
+});
+// MintHCM #102411 END
 function password_confirmation() {
     var new_pwd=document.getElementById('new_password').value;
     var old_pwd=document.getElementById('old_password').value;
