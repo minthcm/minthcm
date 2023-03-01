@@ -55,24 +55,25 @@ class Candidatures extends Candidatures_sugar
 
     public function generateName()
     {
-      global $db;
+        $parent_table = $this->getParentTableName();
+        $sql = "SELECT CONCAT(COALESCE(first_name, ''), IF(first_name IS NULL, '', ' '), last_name)
+            FROM {$parent_table}
+            WHERE id = '{$this->parent_id}'
+        ";
+        $candidate_name = $this->db->getOne($sql);
 
-      $name = "";
-      $sql = "Select CONCAT( COALESCE( first_name, '' ), IF( first_name IS NULL, '', ' ' ), last_name ) "
-            . " from candidates where id = '{$this->parent_id}' ";
+        $recruitement_id = $this->recruitment_end_id ?? $this->recruitment_id;
+        $sql = "SELECT p.name
+            FROM positions p
+            WHERE p.id = (
+                SELECT r.position_id
+                FROM recruitments r
+                where r.id = '{$recruitement_id}'
+            )
+        ";
+        $position_name = $this->db->getOne($sql);
 
-      $res = $db->getOne($sql);
-
-      $name .= $res;
-
-      $recruitement = (empty($this->recruitment_end_id) ? $this->recruitment_id : $this->recruitment_end_id);
-
-      $sql = "Select p.name from positions p where p.id = ( Select r.position_id from recruitments r where r.id = '{$recruitement}' )";
-      $res = $db->getOne($sql);
-
-      $name .= " " . $res;
-
-      $this->name = $name;
+        $this->name = "{$candidate_name} {$position_name}";
    }
 
     private function setCountEmployees($recruitment_end_id, $change_rel = true)
@@ -131,4 +132,11 @@ class Candidatures extends Candidatures_sugar
       }
    }
 
+    protected function getParentTableName() {
+        if ($this->parent_type === 'Employees') {
+            return 'users';
+        } else if ($this->parent_type === 'Candidates') {
+            return 'candidates';
+}
+    }
 }

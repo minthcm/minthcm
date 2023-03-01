@@ -87,4 +87,5 @@ $mod_strings = array(
     'LBL_AUDIT_TABLE' => 'Audit table',
     'LBL_TOTAL' => 'Total',
     'LBL_FORMAT' => 'Format Options',
+    'LBL_GROUP_DISPLAY' => 'Group Display',
 );

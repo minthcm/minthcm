@@ -71,14 +71,15 @@ class SecurityGroupsController extends SugarController {
    public function getActiveUsers($organizational_units_ids) {
       global $db;
       $results = array();
-      $sql = "SELECT id FROM users WHERE status='Active' AND deleted = 0";
-      if ( !empty($organizational_units_ids) ) {
-         $sql .= " AND securitygroup_id IN ('" . implode('\',\'', $organizational_units_ids) . "')";
+      if (is_array($organizational_units_ids)) {
+          $query = "SELECT DISTINCT u.id FROM securitygroups_users sg_u
+    LEFT JOIN users u ON u.status='Active' AND u.deleted=0 AND u.id=sg_u.user_id
+    WHERE sg_u.deleted=0 AND sg_u.securitygroup_id IN ('" . implode('\',\'', $organizational_units_ids) . "') ORDER BY u.last_name";
+          $result = $db->query($query);
+          while ($row = $db->fetchByAssoc($result)) {
+              $results[] = $row['id'];
+          }
       }
-      $result = $db->query($sql);
-      while ( $row = $db->fetchByAssoc($result) ) {
-         $results[] = $row['id'];
-      }
-      return $results;
+      return array_unique($results);
    }
 }

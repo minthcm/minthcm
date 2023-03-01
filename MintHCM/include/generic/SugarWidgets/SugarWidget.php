@@ -109,8 +109,11 @@ class SugarWidget {
 
    // MintHCM #57338 START
    protected function checkAccess($subpanel_module) {
-      return $this->parent_bean->ACLAccess('edit') && ACLController::checkAccess($subpanel_module, 'edit');
+      if($subpanel_module == "SecurityGroups"){
+         return $this->parent_bean->ACLAccess('edit');   
+      } else {
+         return $this->parent_bean->ACLAccess('edit') && ACLController::checkAccess($subpanel_module, 'edit');
+      }
    }
-
    // MintHCM #57338 END
 }

@@ -51,7 +51,7 @@ $mod_strings = array(
     'LBL_PANEL_OPEN' => 'open',
     'LBL_PANEL_COLLAPSED' => 'collapsed',
     'LBL_OPTIONS_MENUITEMS' => 'Toolbar Items',
-    'LBL_ADVANCEDOPTIONS_MENUITEMS' => 'Advanced Options',
+    'LBL_ADVANCEDOPTIONS' => 'Advanced Options',
     'LBL_AOP_EXPORTTOPLANNING' => 'Export to Planning Nodes',
     'LBL_TOOLBARITEMS_FS' => 'Toolbar Items',
     'LBL_TOOLBARITEMS_SHOW' => 'Show',
@@ -1064,3 +1064,8 @@ $mod_strings['LNK_REPORT_LIST'] = 'View Advanced Reports';
 $mod_strings['LBL_EXCEL_EXPORT'] = 'Export to XLSX';
 
 $mod_strings['LBL_AUTH_CHECK_TITLE'] = 'Authorization';
+
+$mod_strings['LBL_INTEGRATION_PARAMS'] = 'Integration Params';
+$mod_strings['LBL_VISUALIZATION_PARAMS'] = 'Visualization Params';
+$mod_strings['LBL_WHERECONDITION'] = 'Where Condition';
+$mod_strings['LBL_WHEREGROUPS'] = 'Where Groups';

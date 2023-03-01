@@ -171,10 +171,11 @@ $mod_strings = array(
    'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE_SUBJECT' => "Find Spent times assign to different user that is in work schedule",
    'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE_BODY' => "Find Spent times assign to different user that is in work schedule\n",
    'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE' => 'Find Spent times assign to different user that is in work schedule',
-
-   'LBL_SENDCHATNOTIFICATION' => 'Wysyła powiadomienia na RocketChat',
-   'LBL_CLEARVCALCRON' => 'Wyczyść vCal',
+    //MintHCM #102685 START
+   'LBL_SENDCHATNOTIFICATION' => 'Sends RocketChat Notifications',
+   'LBL_CLEARVCALCRON' => 'Clear vCal',
    'LBL_UPDATE_NEWS_DISPLAY_DATE' => 'Update News Display Date',
+   //MintHCM #102685 END
    'LBL_REBUILDVIEWTOOLS' => 'Rebuild View Tools',
    'LBL_EXECUTEVIEWTOOLSQUEUE' => 'Execute View Tools Queue',
    

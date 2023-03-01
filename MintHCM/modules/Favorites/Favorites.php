@@ -128,7 +128,9 @@ class Favorites extends Basic
                     $currentUserIdQuote . "' AND deleted = 0 ORDER BY date_entered DESC";
         }
 
-        $result = $db->query($query);
+        // MintHCM #100495 START
+        $result = $db->limitQuery($query,0,10,true,$query);
+        // MintHCM #100495 END
 
         $i = 0;
         while ($row = $db->fetchByAssoc($result)) {

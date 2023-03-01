@@ -55,6 +55,15 @@ $hook_array['before_relationship_add'][] = Array(
    'clearUserRelationshipsWithDM'
 );
 
+$hook_array['after_relationship_add'] = Array();
+$hook_array['after_relationship_add'][] = Array(
+   101,
+   'Add relationships for security groups',
+   'modules/SecurityGroups/SecurityGroupUserRelationshipLogicHooks.php',
+   'SecurityGroupUserRelationshipLogicHooks',
+   'afterRelationshipAdd'
+);
+
 $hook_array['after_login'] = Array();
 $hook_array['after_login'][] = Array(
    1,

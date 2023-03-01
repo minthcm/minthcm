@@ -84,9 +84,6 @@ $job_strings = array(
    16 => 'trimSugarFeeds',
    17 => 'syncGoogleCalendar',
    18 => 'runElasticSearchIndexerScheduler',
-   19 => 'executeViewToolsQueue.php',
-   20 => 'rebuildViewTools.php',
-   21 => 'KScheduleReports.ScheduleReports.php',
 );
 
 /**

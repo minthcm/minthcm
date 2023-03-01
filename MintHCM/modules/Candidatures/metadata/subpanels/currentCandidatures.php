@@ -87,9 +87,4 @@ $subpanel_layout['list_fields'] = array(
         'widget_class' => 'SubPanelEditButton',
         'module' => $module_name,
     ),
-    'remove_button' => array(
-        'vname' => 'LBL_REMOVE',
-        'widget_class' => 'SubPanelRemoveButton',
-        'module' => $module_name,
-    ),
 );

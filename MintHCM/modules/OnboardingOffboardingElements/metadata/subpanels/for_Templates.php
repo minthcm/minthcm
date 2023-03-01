@@ -72,11 +72,6 @@ $subpanel_layout = array(
             'target_record_key' => 'user_id',
             'target_module' => 'Users',
         ),
-        'employee_name' => array(
-            'vname' => 'LBL_EMPLOYEE_NAME',
-            'widget_class' => 'SubPanelDetailViewLink',
-            'width' => '20%',
-         ),
         'kind_of_element' => array(
             'vname' => 'LBL_KIND_OF_ELEMENT',
             'width' => '15%',

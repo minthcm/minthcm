@@ -116,7 +116,9 @@
                                             {foreach from=$recentRecords item=item name=lastViewed }
                                                 {if $smarty.foreach.lastViewed.iteration < 4} {* limit to 3 results *}
                                                         <li class="recentlinks" role="presentation">
-                                                            <a title="{$item.module_name}"
+                                                            {* MINTHCM  #100529 START *}
+                                                            <a title="{$item.item_summary}"
+                                                            {* MINTHCM  #100529 END *}
                                                                accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                href="{sugar_link module=$item.module_name action='DetailView' record=$item.item_id link_only=1}" class="recent-links-detail">
                                                                 <span class="{get_module_icon_class module_name=$item.module_name}"></span>
@@ -139,7 +141,9 @@
                                                                 {foreach from=$favoriteRecords item=item name=lastViewed}
                                                                     {if $smarty.foreach.lastViewed.iteration < 4} {* limit to 3 results *}
                                                                             <li class="favoritelinks" role="presentation">
-                                                                                <a title="{$item.module_name}"
+                                                                                {* MINTHCM  #100529 START *}
+                                                                                <a title="{$item.item_summary}"
+                                                                                {* MINTHCM  #100529 END *}
                                                                                    accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                    href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}"  class="favorite-links-detail">
                                                                                     <span class="{get_module_icon_class module_name=$item.module_name}"></span>
@@ -223,7 +227,9 @@
                                                                                                     {foreach from=$recentRecords item=item name=lastViewed}
                                                                                                         {if $item.module_name == $name and $submoduleRecentRecords < 3}
                                                                                                             <li class="recentlinks" role="presentation">
-                                                                                                                <a title="{$item.module_name}"
+                                                                                                                {* MINTHCM  #100529 START *}
+                                                                                                                <a title="{$item.item_summary}"
+                                                                                                                {* MINTHCM  #100529 END *}
                                                                                                                    accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                                                    href="{sugar_link module=$item.module_name action='DetailView' record=$item.item_id link_only=1}" class="recent-links-detail">
 
@@ -255,7 +261,9 @@
                                                                                                     {foreach from=$favoriteRecords item=item name=lastViewed}
                                                                                                         {if $item.module_name == $name and $submoduleFavoriteRecords < 3}
                                                                                                             <li class="favoritelinks" role="presentation">
-                                                                                                                <a title="{$item.module_name}"
+                                                                                                                {* MINTHCM  #100529 START *}
+                                                                                                                <a title="{$item.item_summary}"
+                                                                                                                {* MINTHCM  #100529 END *}
                                                                                                                    accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                                                    href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}" class="favorite-links-detail">
                                                                                                                     <span class="{get_module_icon_class module_name=$item.module_name}"></span>
@@ -370,7 +378,9 @@
                                                                                                                         {foreach from=$recentRecords item=item name=lastViewed}
                                                                                                                             {if $item.module_name == $submodule and $submoduleRecentRecords < 3}
                                                                                                                                 <li class="recentlinks" role="presentation">
-                                                                                                                                    <a title="{$item.module_name}"
+                                                                                                                                    {* MINTHCM  #100529 START *}
+                                                                                                                                    <a title="{$item.item_summary}"
+                                                                                                                                    {* MINTHCM  #100529 END *}
                                                                                                                                        accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                                                                        href="{sugar_link module=$item.module_name action='DetailView' record=$item.item_id link_only=1}" class="recent-links-detail">
                                                                                                                                         <span aria-hidden="true">{$item.item_summary_short}</span>
@@ -397,7 +407,9 @@
                                                                                                                         {foreach from=$favoriteRecords item=item name=lastViewed}
                                                                                                                             {if $item.module_name == $submodule and $submoduleFavoriteRecords < 3}
                                                                                                                                 <li class="favoritelinks" role="presentation">
-                                                                                                                                    <a title="{$item.module_name}"
+                                                                                                                                    {* MINTHCM  #100529 START *}
+                                                                                                                                    <a title="{$item.item_summary}"
+                                                                                                                                    {* MINTHCM  #100529 END *}
                                                                                                                                        accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                                                                        href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}" class="favorite-links-detail">
                                                                                                                                         <span aria-hidden="true">{$item.item_summary_short}</span>
@@ -413,19 +425,25 @@
                                                                                                         </li>
                                                                                                     {/if}
                                                                                                 {/foreach}
-                                                                                                <li class="topnav overflow-toggle-menu">
-                                                                                                    <span class="notCurrentTabLeft">&nbsp;</span>
-                                                                                                    <span class="dropdown-toggle headerlinks notCurrentTab"><a href="#">{$APP.LBL_MORE}</a></span>
-                                                                                                    <span class="notCurrentTabRight">&nbsp;</span>
-                                                                                                    <ul id="overflow-menu" class="dropdown-menu" role="menu">
-                                                                                                        <!--nav items without actions -->
-                                                                                                        {foreach from=$modules.extra item=submodulename key=submodule}
-                                                                                                            <li class="topnav without-actions">
-                                                                                                                <span class=" notCurrentTab"> <a href="{sugar_link module=$submodule link_only=1 extraparams=$extraparams}">{$submodulename}</a> </span>
-                                                                                                            </li>
-                                                                                                        {/foreach}
-                                                                                                    </ul>
-                                                                                                </li>
+                                                                                                {* MintHCM #102680 START *}
+                                                                                                {if count($moduleExtraMenu) > 0}
+                                                                                                {* MintHCM #102680 END *}
+                                                                                                    <li class="topnav overflow-toggle-menu">
+                                                                                                        <span class="notCurrentTabLeft">&nbsp;</span>
+                                                                                                        <span class="dropdown-toggle headerlinks notCurrentTab"><a href="#">{$APP.LBL_MORE}</a></span>
+                                                                                                        <span class="notCurrentTabRight">&nbsp;</span>
+                                                                                                        <ul id="overflow-menu" class="dropdown-menu" role="menu">
+                                                                                                            <!--nav items without actions -->
+                                                                                                            {foreach from=$modules.extra item=submodulename key=submodule}
+                                                                                                                <li class="topnav without-actions">
+                                                                                                                    <span class=" notCurrentTab"> <a href="{sugar_link module=$submodule link_only=1 extraparams=$extraparams}">{$submodulename}</a> </span>
+                                                                                                                </li>
+                                                                                                            {/foreach}
+                                                                                                        </ul>
+                                                                                                    </li>
+                                                                                                {* MintHCM #102680 START *}
+                                                                                                {/if}
+                                                                                                {* MintHCM #102680 END *}
                                                                                             </ul>
                                                                                             <div class="hidden hidden-actions"></div>
                                                                                             {* Hide nav items when the window size is too small to display them *}
@@ -807,17 +825,26 @@
                                                                                                             {/foreach}
                                                                                                             </div>
 
+                                                                                                            <!-- MintHCM #100495 START -->
+                                                                                                            
                                                                                                             <div id="recentlyViewedSidebar" class="recentlyViewedSidebar">
+   
+                                                                                                            <!-- MintHCM #100495 END -->
                                                                                                                 {if is_array($recentRecords) && count($recentRecords) > 0}
                                                                                                                     <h2 class="recent_h3">{$APP.LBL_LAST_VIEWED}</h2>
                                                                                                                 {/if}
+                                                                                                                <!-- MintHCM #100495 START -->
+                                                                                                                <div class='hiddenScroll'>
+                                                                                                                <!-- MintHCM #100495 END -->
                                                                                                                 <ul class="nav nav-pills nav-stacked">
                                                                                                                     {foreach from=$recentRecords item=item name=lastViewed}
                                                                                                                         {if $item.module_name != 'Emails' && $item.module_name != 'InboundEmail' && $item.module_name != 'EmailAddresses'}<!--Check to ensure that recently viewed emails or email addresses are not displayed in the recently viewed panel.-->
-                                                                                                                            {if $smarty.foreach.lastViewed.index < 5}
+                                                                                                                            {if $smarty.foreach.lastViewed.index <= 20}
                                                                                                                                 <div class="recently_viewed_link_container_sidebar">
                                                                                                                                     <li class="recentlinks" role="presentation">
-                                                                                                                                        <a title="{$item.module_name}"
+                                                                                                                                        {* MINTHCM  #100529 START *}
+                                                                                                                                        <a title="{$item.item_summary}"
+                                                                                                                                        {* MINTHCM  #100529 END *}
                                                                                                                                            accessKey="{$smarty.foreach.lastViewed.iteration}"
                                                                                                                                            href="{sugar_link module=$item.module_name action='DetailView' record=$item.item_id link_only=1}"
                                                                                                                                            class="recent-links-detail">
@@ -831,17 +858,41 @@
                                                                                                                         {/if}
                                                                                                                     {/foreach}
                                                                                                                 </ul>
+                                                                                                                <!-- MintHCM #100495 START -->
+                                                                                                                </div>
+                                                                                                                <!-- MintHCM #100495 END -->
                                                                                                             </div>
+                                                                                                            <!-- MintHCM #100495 START -->
+                                                                                                            <!--
                                                                                                             <div id="favoritesSidebar" class="favoritesSidebar">
+                                                                                                            -->
+                                                                                                            <div id="favoritesSidebar" class="favoritesSidebar" style="
+                                                                                                                {if is_array($recentRecords) && count($recentRecords) > 0}
+                                                                                                                    height:28%;
+                                                                                                                {else}
+                                                                                                                    height:100%;
+                                                                                                                {/if}
+                                                                                                            ">
+                                                                                                            <!-- MintHCM #100495 END -->
                                                                                                                 {if is_array($favoriteRecords) && count($favoriteRecords) > 0}
                                                                                                                     <h2 class="recent_h3">{$APP.LBL_FAVORITES}</h2>
                                                                                                                 {/if}
+                                                                                                                <!-- MintHCM #100495 START -->
+                                                                                                                <div class='hiddenScroll'>
+                                                                                                                <!-- MintHCM #100495 END -->
                                                                                                                 <ul class="nav nav-pills nav-stacked">
                                                                                                                     {foreach from=$favoriteRecords item=item name=lastViewed}
+                                                                                                                        <!-- MintHCM #100495 START -->
+                                                                                                                        {*}
                                                                                                                         {if $smarty.foreach.lastViewed.index < 5}
+                                                                                                                        *}
+                                                                                                                        {if $smarty.foreach.lastViewed.index <= 20}
+                                                                                                                        <!-- MintHCM #100495 END -->
                                                                                                                             <div class="recently_viewed_link_container_sidebar">
                                                                                                                                 <li class="recentlinks" role="presentation">
-                                                                                                                                    <a title="{$item.module_name}" accessKey="{$smarty.foreach.lastViewed.iteration}" href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}" class="favorite-links-detail">
+                                                                                                                                    {* MINTHCM  #100529 START *}
+                                                                                                                                    <a title="{$item.item_summary}" accessKey="{$smarty.foreach.lastViewed.iteration}" href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}" class="favorite-links-detail">
+                                                                                                                                    {* MINTHCM  #100529 END *}
                                                                                                                                         <span class="{get_module_icon_class module_name=$item.module_name}"></span>
                                                                                                                                         <span aria-hidden="true">{$item.item_summary_short}</span>
                                                                                                                                     </a>
@@ -851,8 +902,51 @@
                                                                                                                         {/if}
                                                                                                                     {/foreach}
                                                                                                                 </ul>
+                                                                                                            <!-- MintHCM #100495 START -->
+                                                                                                            </div>
+                                                                                                            <!-- MintHCM #100495 END -->
                                                                                                             </div>
                                                                                                         </div>
+
+                                                                                                        {* MintHCM #100495 START *}
+                                                                                                        {literal}
+                                                                                                            <style type="text/css">
+                                                                                                                div.sidebar {
+                                                                                                                    display: flex;
+                                                                                                                    flex-direction: column;
+                                                                                                                }
+
+                                                                                                                #recentlyAndFavorites {
+                                                                                                                    flex-grow: 1;
+                                                                                                                    overflow-y: hidden;
+                                                                                                                }
+
+                                                                                                                #recentlyAndFavorites #recentlyViewedSidebar {
+                                                                                                                    display: flex;
+                                                                                                                    flex-direction: column;
+                                                                                                                }
+
+                                                                                                                #recentlyAndFavorites #favoritesSidebar {
+                                                                                                                    display: flex;
+                                                                                                                    flex-direction: column;
+                                                                                                                }
+
+                                                                                                                div.hiddenScroll {
+                                                                                                                    overflow-y: scroll;
+                                                                                                                    -ms-overflow-style: none;
+                                                                                                                    /* for Internet Explorer, Edge */
+                                                                                                                    scrollbar-width: none;
+                                                                                                                    /* for Firefox */
+                                                                                                                }
+
+                                                                                                                div.hiddenScroll::-webkit-scrollbar {
+                                                                                                                    display: none;
+                                                                                                                    /* for Chrome, Safari, and Opera */
+                                                                                                                }
+                                                                                                            </style>
+                                                                                                        {/literal}
+                                                                                                        {* MintHCM #100495 END *}
+
                                                                                                         <!--</div>-->
                                                                                                     </div>
                                                                                                     <!--End Responsive Sidebar -->

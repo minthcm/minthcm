@@ -10,9 +10,17 @@ $(document).ready(function () {
         })
         .change();
 
-    if ($("#type :selected").val() === "office") {
+    if (
+        $("#type").val() == "office"
+        && $('#record').val() == ''
+    ) {
         setAssignedWorkingRoom();
     }
+    $("#type").change(() => {
+        if ($("#type :selected").val() === "office") {
+            setAssignedWorkingRoom();
+        }
+    });
 });
 
 if (!window.workSchedulerSaveHandlerAlreadyInitialized) {
@@ -40,12 +48,6 @@ function isUserAdmin() {
     return $("#current_user_is_admin").val() == true;
 }
 
-$("#type").change(() => {
-    if ($("#type :selected").val() === "office") {
-        setAssignedWorkingRoom();
-    }
-});
-
 function setAssignedWorkingRoom() {
     let assigned_user_id = $("#assigned_user_id").val();
     viewTools.api.callCustomApi({
@@ -56,16 +58,18 @@ function setAssignedWorkingRoom() {
         dataPOST: {
             assigned_user_id: assigned_user_id,
         },
-        callback: function ({ name, id }) {
-            try {
-                if (id !== "" && name !== "") {
-                    $("#workplace_id").val(id);
-                    $("#workplace_name").val(name);
-                }
-            } catch (error) {
-                return;
+        callback: function ( response ) {
+            if(
+                response !== undefined
+                && response.id !== undefined
+                && response.name !== undefined
+                && response.id !== ''
+                && response.name !== ''
+            ){
+                $("#workplace_id").val(response.id);
+                $("#workplace_name").val(response.name);
             }
-        },
+        }
     });
 }
 
@@ -299,14 +303,15 @@ function createActivitySelectDialog() {
 }
 
 function validateWorkScheduleCreatedByPeriodicity() {
-    var result = true;
-    var type = $("select[name=repeat_type]").val();
+    let result = true;
+    let type = $("select[name=repeat_type]").val();
+    let repeat_end_type = document.querySelector('input[name="repeat_end_type"]:checked')?.value ?? "";
     if (type !== "") {
         var data = {
             type: type,
             interval: $("select[name=repeat_interval]").val(),
-            count: $("input[name=repeat_count]").val(),
-            until: $("input[name=repeat_until]").val(),
+            count: repeat_end_type=="number" ? $("input[name=repeat_count]").val() : "",
+            until: repeat_end_type=="date" ? $("input[name=repeat_until]").val(): "",
             dow: $("#repeat_dow").val(),
             date_start: $("#date_start").val(),
             duration_hours: $("#duration_hours").val(),
