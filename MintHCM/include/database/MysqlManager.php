@@ -1530,12 +1530,12 @@ class MysqlManager extends DBManager {
     * @see DBManager::version()
     */
     public function versionName() {
-        $result = $this->getOne("SELECT @version_comment ");
+        $result = $this->getOne("SELECT @@version_comment");
         $db_sub_provider = strtolower(is_array($result)?join(",",$result):$result) ;
-        if(-1===strpos($db_sub_provider,'mariadb')){
+        if(false!==strpos($db_sub_provider,'mariadb')){
             return 'maria';
         }
-        elseif(-1===strpos($db_sub_provider,'percona')){
+        elseif(false!==strpos($db_sub_provider,'percona')){
             return 'mysql';
         }
         return 'mysql';
