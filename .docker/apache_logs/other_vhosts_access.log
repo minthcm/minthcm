@@ -1,3 +1,0 @@
-localhost:80 172.20.0.1 - - [02/Jun/2023:16:05:43 +0000] "GET /install.php HTTP/1.1" 403 493 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
-localhost:80 172.20.0.1 - - [02/Jun/2023:16:07:22 +0000] "GET /install.php HTTP/1.1" 403 493 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
-localhost:80 172.20.0.1 - - [02/Jun/2023:16:07:37 +0000] "GET /install.php HTTP/1.1" 403 493 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
