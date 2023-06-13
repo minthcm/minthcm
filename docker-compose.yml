@@ -1,0 +1,51 @@
+version: "3.9"
+
+volumes:
+  minthcm:
+  db_conf:
+  db_data:
+  db_logs:
+
+services:  
+  app:
+    build:
+      context: .
+    env_file: .env
+    environment:
+      APACHE_RUN_USER: www-data
+      APACHE_RUN_GROUP: www-data
+      APACHE_LOG_DIR: /var/log/apache2
+      APACHE_RUN_DIR: /var/run/apache2
+      APACHE_LOCK_DIR: /var/lock/apache2
+      APACHE_PID_FILE: /var/run/apache2.pid
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+     - minthcm:/var/www/html
+     - ./.docker/apache_logs:/var/log/apache2
+    depends_on:
+      - db
+  
+  db:
+    image: mariadb:10.3
+    command: "--default-authentication-plugin=mysql_native_password"
+    env_file: .env
+    restart: always
+    volumes: 
+      - db_data:/var/lib/mysql/data
+      - db_logs:/var/lib/mysql/logs
+      - db_conf:/var/docker/mariadb/conf
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      PMA_ARBITRARY: 1    
+      PMA_HOST: db
+      PMA_USER: ${MARIADB_ROOT_USER}
+      PMA_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    depends_on:
+      - db
