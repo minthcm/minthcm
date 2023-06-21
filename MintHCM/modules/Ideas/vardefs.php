@@ -135,6 +135,16 @@ $dictionary['Ideas'] = array(
          'bean_name' => 'Note',
          'vname' => 'LBL_NOTES',
       ),
+      'files' => array(
+        'name' => 'files',
+        'type' => 'link',
+        'relationship' => 'ideas_files',
+        'source' => 'non-db',
+        'module' => 'Files',
+        'bean_name' => 'Files',
+        'vname' => 'LBL_FILES',
+        'label' => 'LBL_FILES',
+    ),
    ),
    'relationships' => array(
       "users_ideas" => array(

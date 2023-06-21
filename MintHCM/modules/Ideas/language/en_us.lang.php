@@ -88,4 +88,5 @@ $mod_strings = array(
     'LBL_NOTES' => 'Notes',
     'LBL_DEFAULT' => 'General',
     'LBL_LIST_TITLE' => 'Idea',
+    'LBL_FILES' => 'Files',
 );

@@ -110,4 +110,12 @@ $mod_strings = array(
     'LBL_SURVEYS_SENT' => 'Surveys Sent',
     'LBL_DISTINCT_SURVEYS_SENT' => 'Distinct Surveys Sent',
     'LBL_OPTIONS' => 'Options',
+    //MintHCM #102681 START
+    'LBL_SURVEY_CLOSED' => 'Thanks for your interest but this survey is now closed',
+    'LBL_SURVEY_THANKS_FOR_COMPLETING' => 'Thanks for completing this survey',
+    'LBL_SURVEY_RETURN_BUTTON' => 'Return to system',
+    'LBL_SURVEY_ALREADY_FILLED' => 'This survey has already been completed by you',
+    'LBL_SURVEY_EMPLOYEE_NOT_EXSIST' => 'Sorry, you do not have access to this survey',
+    'LBL_SURVEY_YOUR_ANSWER_PLACEHOLDER' => 'Your answer',
+    //MintHCM #102681 END
 );

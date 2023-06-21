@@ -199,13 +199,29 @@ class WorkSchedulesController extends SugarController
             $timedate = TimeDate::getInstance();
         }
 
-        $q = "SELECT t.* FROM spenttime AS t
-            INNER JOIN workschedules_spenttime AS w
-            ON t.id=w.spenttime_id AND w.deleted=0
-            WHERE t.deleted=0 AND w.workschedule_id='{$this->bean->id}'
-            ORDER BY date_start";
-        $r = $db->query($q);
-        while ($row = $db->fetchByAssoc($r)) {
+        $sql = "SELECT
+                    t.*
+                    , r.name AS spendtime_projecttask_name
+            FROM
+                    spenttime AS t
+            INNER JOIN
+                    workschedules_spenttime AS w
+                ON
+                        t.id = w.spenttime_id
+                    AND w.deleted = 0
+            LEFT JOIN
+                ev_redmineprojecttask AS r
+                ON
+                    r.id = t.spendtime_projecttask_id
+            WHERE
+                    t.deleted = 0
+                AND w.workschedule_id = '{$this->bean->id}'
+            ORDER BY
+                    t.date_start
+        ";
+
+        $query = $db->query($sql);
+        while ($row = $db->fetchByAssoc($query)) {
             array_push($times['items'], $row);
         }
         ob_clean();

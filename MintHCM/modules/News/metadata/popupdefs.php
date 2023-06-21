@@ -49,14 +49,12 @@ $popupMeta = array(
     'orderBy' => 'news.name',
     'whereClauses' => array(
         'name' => 'news.name',
-        'news_type' => 'news.news_type',
         'assigned_user_name' => 'news.assigned_user_name',
         'news_status' => 'news.news_status',
         'publication_date' => 'news.news_stapublication_datetus',
     ),
     'searchInputs' => array(
         'name',
-        'news_type',
         'assigned_user_name',
         'news_status',
         'publication_date',
@@ -65,13 +63,6 @@ $popupMeta = array(
         'name' => array(
             'name' => 'name',
             'width' => '10%',
-        ),
-        'news_type' => array(
-            'type' => 'enum',
-            'studio' => 'visible',
-            'label' => 'LBL_NEWS_TYPE',
-            'width' => '10%',
-            'name' => 'news_type',
         ),
         'assigned_user_name' => array(
             'link' => true,

@@ -182,4 +182,5 @@ $mod_strings = array(
     'LBL_DATE_PLANNED_CONTACT' => 'Date Planned Contact',
     'LBL_LAST_NEXT_CONTACT_PANEL' => 'Contact with Client',
     // DLNC end
+    'LBL_FILES' => 'Files',
 );

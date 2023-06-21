@@ -119,7 +119,20 @@
         </td>
     {/if}
 </tr>
-
+{* MintHCM #75984 START *}
+<tr>  
+    <td nowrap width="10%" scope="row">
+        {$MOD.LBL_LOCALE_DISPLAY_WEEK_NUMBER}: 
+    </td>  
+    
+    {if !empty($config.display_week_number)}
+        {assign var='display_week_number' value='CHECKED'}
+    {else}
+        {assign var='display_week_number' value=''}
+    {/if}
+    <td width="25%" ><input type='hidden' name='display_week_number' value='false'><input name='display_week_number'  type="checkbox" value="true" {$display_week_number}></td> 
+</tr>
+{* MintHCM #75984 END *}
 </table>
 
 

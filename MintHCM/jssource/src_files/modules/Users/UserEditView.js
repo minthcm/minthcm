@@ -383,8 +383,16 @@ function set_chooser()
 function add_checks(f) {
     return true;
 }
-
-
+// MintHCM #111578 Start
+function handleSubmitWithEnter() {
+    $('#EditView').keypress(function(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            $('#SAVE_FOOTER').click();
+        }
+    });
+}
+// MintHCM #111578 End
 // Autoruns
 function onUserEditView() {
     YAHOO.util.Event.onContentReady('user_theme_picker',function() {
@@ -403,4 +411,7 @@ function onUserEditView() {
     setSymbolValue(document.getElementById('currency_select').options[document.getElementById('currency_select').selectedIndex].value);
     setSigDigits();
     user_status_display(document.getElementById('UserType'));
+    // MintHCM #111578 Start
+    handleSubmitWithEnter();
+    // MintHCM #111578 End
 }

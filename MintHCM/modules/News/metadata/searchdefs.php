@@ -60,14 +60,6 @@ $searchdefs[$module_name] = array(
                 'default' => true,
                 'width' => '10%',
             ),
-            'news_type' => array(
-                'type' => 'enum',
-                'studio' => 'visible',
-                'label' => 'LBL_NEWS_TYPE',
-                'width' => '10%',
-                'default' => true,
-                'name' => 'news_type',
-            ),
             'news_status' => array(
                 'type' => 'enum',
                 'default' => true,

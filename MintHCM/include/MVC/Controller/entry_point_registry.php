@@ -110,4 +110,5 @@ $entry_point_registry = array(
    'CalculateDLNC' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCindex.php'),
    'CalculateDLNCcalc' => array('file' => 'include/LastNextContacts/entrypoints/CalculateDLNCcalc.php'),
    'OrganizationalStructure' => array('file' => 'include/OrganizationalStructure/OrganizationalStructureEntrypoint.php', 'auth' => true),
+   'SaveFileFromDropzone' => array('file' => 'include/Dropzone/SaveFileFromDropzone.php', 'auth' => true),
 );

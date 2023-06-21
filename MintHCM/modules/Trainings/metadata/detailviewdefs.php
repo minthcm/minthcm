@@ -53,8 +53,30 @@ $viewdefs[$module_name] = array(
                     'DUPLICATE',
                     'DELETE',
                     'FIND_DUPLICATES',
+                    //* MintHCM #114934 START */
+                    [
+                        'customCode' => true,
+                        'sugar_html' => [
+                            'type' => 'button',
+                            'value' => '{$MOD.LBL_CLOSE_TRAINING_BUTTON}',
+                            'htmlOptions' => [
+                                'class' => 'button',
+                                'name' => 'close_training',
+                                'id' => 'close_training_button',
+                                'title' => '{$MOD.LBL_CLOSE_TRAINING_BUTTON}',
+                                'onclick' => 'window.TrainingsDetailView.closeTraining()',
+                            ],
+                            'template' => '{if $CLOSE_TRAINING_SHOW == true}[CONTENT]{/if}',
+                        ],
+                    ],                
+                    /* MintHCM #114934 END */
                 ),
             ),
+            'includes' => [
+                [
+                    'file' => 'modules/Trainings/js/view.detail.js',
+                ],
+            ],
             'maxColumns' => '2',
             'widths' => array(
                 array(

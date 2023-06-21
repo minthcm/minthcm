@@ -48,6 +48,9 @@ $viewdefs['Users']['EditView'] = array(
             'headerTpl' => 'modules/Users/tpls/EditViewHeader.tpl',
             'footerTpl' => 'modules/Users/tpls/EditViewFooter.tpl',
         ),
+        'includes' => array(
+            array('file' => 'modules/Users/js/view.edit.js'),
+        ),
     ),
     'panels' => array(
         'LBL_USER_INFORMATION' => array(

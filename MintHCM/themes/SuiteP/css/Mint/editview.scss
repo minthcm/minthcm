@@ -83,3 +83,12 @@ input#btn_ConditionLine.button[type="button"] {
 input#btn_ActionLine.button[type="button"] {
     color: $color-mint-darkgreen-darker;
 }
+
+.edit-view-row .edit-view-row-item .label, .edit-view-field label {
+    color: #000;
+    font-weight: 100;
+}
+
+.edit-view-row .edit-view-row-item .bold_required_field, .bold_required_field {
+    font-weight: bold;
+}

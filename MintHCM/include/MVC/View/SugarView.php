@@ -1770,6 +1770,10 @@ EOHTML;
             $config_js[] =
                 $this->prepareConfigVarForJs('overrideAjaxBannedModules', $sugar_config['overrideAjaxBannedModules']);
         }
+        if (!empty($sugar_config['upload_maxsize'])) {
+            $config_js[] =
+                $this->prepareConfigVarForJs('uploadMaxsize', $sugar_config['upload_maxsize'] / (10**6));
+        }
         if (!empty($sugar_config['js_available']) && is_array($sugar_config['js_available'])) {
             foreach ($sugar_config['js_available'] as $configKey) {
                 if (isset($sugar_config[$configKey])) {

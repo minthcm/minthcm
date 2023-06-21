@@ -28,10 +28,23 @@
 
                         {*<!-- LABEL -->*}
                         {{if $smarty.foreach.colIteration.total > 1 && $colData.colspan != 3}}
-                            <div class="col-xs-12 col-sm-4 label" data-label="{{$fields[$colData.field.name].vname}}">
-                        {{else}}
-                             <div class="col-xs-12 col-sm-2 label" data-label="{{$fields[$colData.field.name].vname}}">
-                        {{/if}}
+
+                            {{if ($fields[$colData.field.name].required && (!isset($colData.field.displayParams.required) || $colData.field.displayParams.required)) || (isset($colData.field.displayParams.required) && $colData.field.displayParams.required)}}
+                                    {*<!-- MintHCM #87912 Start -->*}
+                                    <div class="col-xs-12 col-sm-4 label bold_required_field" data-label="{{$fields[$colData.field.name].vname}}">
+                                    {*<!-- MintHCM #87912 End -->*}
+                                {{else}}
+                                    <div class="col-xs-12 col-sm-4 label" data-label="{{$fields[$colData.field.name].vname}}">
+                            {{/if}}
+                            {{else}}
+                                    {{if ($fields[$colData.field.name].required && (!isset($colData.field.displayParams.required) || $colData.field.displayParams.required)) || (isset($colData.field.displayParams.required) && $colData.field.displayParams.required)}}
+                                        {*<!-- MintHCM #87912 Start -->*}
+                                            <div class="col-xs-12 col-sm-2 label bold_required_field" data-label="{{$fields[$colData.field.name].vname}}">
+                                            {*<!-- MintHCM #87912 End -->*}
+                                        {{else}}
+                                            <div class="col-xs-12 col-sm-2 label" data-label="{{$fields[$colData.field.name].vname}}">
+                                    {{/if}}
+                            {{/if}}
 
                                 {*label*}
                                 {minify}

@@ -70,8 +70,17 @@ class SugarWidgetSubPanelCloseButton extends SugarWidgetField
 			case 'Tasks':
 				$new_status = 'Completed';
 				break;
+            /* MintHCM #114934 START */
+            case 'Trainings':
+                $new_status = 'held';
+                $training = BeanFactory::getBean("Trainings",$record_id);
+                if(strtolower($training->status === "held")){
+                    return '';
+                }
+                break;
+            /* MintHCM #114934 END */
 		}
-        
+
 		if ($layout_def['EditView']) {
 		    $html = "<a id=\"$unique_id\" onclick='SUGAR.util.closeActivityPanel.show(\"$module_name\",\"$record_id\",\"$new_status\",\"subpanel\",\"{$layout_def['subpanel_id']}\");' >".$app_strings['LNK_CLOSE']."</a>";
 		    return $html;

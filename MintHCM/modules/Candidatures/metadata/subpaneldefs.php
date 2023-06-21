@@ -223,4 +223,12 @@ $layout_defs["Candidatures"]["subpanel_setup"] = array(
             ),
         ),
     ),
+    'files' => array(
+        'order' => 100,
+        'module' => 'Files',
+        'subpanel_name' => 'default',
+        'title_key' => 'LBL_FILES',
+        'get_subpanel_data' => 'files',
+        'dropzone' => true
+    ),
 );

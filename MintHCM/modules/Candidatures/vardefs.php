@@ -814,6 +814,16 @@ $dictionary['Candidatures'] = array(
             'source' => 'non-db',
             'vname' => 'LBL_DOCUMENTS',
         ),
+        'files' => array(
+            'name' => 'files',
+            'type' => 'link',
+            'relationship' => 'candidatures_files',
+            'source' => 'non-db',
+            'module' => 'Files',
+            'bean_name' => 'Files',
+            'vname' => 'LBL_FILES',
+            'label' => 'LBL_FILES',
+        ),
     ),
     'relationships' => array(
         'candidate_candidatures' => array(

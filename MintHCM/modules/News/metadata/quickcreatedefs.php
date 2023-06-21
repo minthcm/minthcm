@@ -75,7 +75,7 @@ $viewdefs[$module_name] = array(
             'default' => array(
                 array(
                     'name',
-                    'news_type',
+                    '',
                 ),
                 array(
                     'assigned_user_name',

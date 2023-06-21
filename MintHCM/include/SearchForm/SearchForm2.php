@@ -247,6 +247,14 @@ class SearchForm {
             $this->tabs[$tabkey]['displayDiv'] = 'display:none';
          }
       }
+      /* MintHCM #92823 START */
+        if(!empty($_REQUEST['displayColumns'])){
+            $this->th->ss->assign('DISPLAY_COLUMNS',$_REQUEST['displayColumns']);
+        } else {
+            $this->th->ss->assign('DISPLAY_COLUMNS',$_REQUEST['mint_displayColumns']);
+        }      
+      /* MintHCM #92823 END */
+
 
       $this->th->ss->assign('TAB_ARRAY', $this->tabs);
 

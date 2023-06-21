@@ -131,6 +131,8 @@
         <input type='hidden' name='module' value='{$module}'/>
         <input type='hidden' name='action' value='{$action}'/>
         <input type='hidden' name='query' value='true'/>
+        <input type='hidden' id='mint_displayColumns' name='mint_displayColumns' value='{$DISPLAY_COLUMNS}' />
+        <input type='hidden' id='displayColumns' name='displayColumns' value='{$DISPLAY_COLUMNS}' />
         {foreach name=tabIteration from=$TAB_ARRAY key=tabkey item=tabData}
             <div id='{$module}{$tabData.name}_searchSearchForm' style='{$tabData.displayDiv}'
                  class="edit view search {$tabData.name}">{if $tabData.displayDiv}{else}{$return_txt}{/if}</div>

@@ -100,7 +100,14 @@
 <div class="row monthHeader" {if !$controls}style="background:#778591"{/if}>
     {*Mint #42390 END*}
     <div class="col-xs-1">{$previous}</div>
-    <div class="col-xs-10 text-center"><h3>{$date_info}</h3></div>
+    <div class="col-xs-10 text-center">
+    {*Mint #75984 START*}
+        <p style="font-weight:bold; padding-bottom: 15px;">{$date_info}</p>
+        {if $config.display_week_number}
+        <p style="font-weight:bold;">{$week_info}</p>
+        {/if}
+    {*Mint #75984 END*}
+    </div>
     <div class="col-xs-1 text-right">{$next}</div>
     <br>
 </div>

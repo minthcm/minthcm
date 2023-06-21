@@ -90,3 +90,12 @@ $layout_defs["Workplaces"]["subpanel_setup"]['workplaces_allocations'] = array (
     'top_buttons' => array (
     ),
  );
+
+ $layout_defs["Workplaces"]["subpanel_setup"]['files'] = array (
+    'order' => 100,
+    'module' => 'Files',
+    'subpanel_name' => 'default',
+    'title_key' => 'LBL_FILES',
+    'get_subpanel_data' => 'files',
+    'dropzone' => true
+ );
