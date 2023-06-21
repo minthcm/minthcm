@@ -62,13 +62,6 @@ $subpanel_layout = array(
             'width' => '45%',
             'default' => true,
         ),
-        'news_type' => array(
-            'type' => 'enum',
-            'studio' => 'visible',
-            'vname' => 'LBL_NEWS_TYPE',
-            'width' => '10%',
-            'default' => true,
-        ),
         'news_status' => array(
             'type' => 'enum',
             'default' => true,

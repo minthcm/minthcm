@@ -103,8 +103,8 @@ $mod_strings = array(
     'LBL_ONBOARDINGTEMPLATES_POSITIONS_TITLE' => 'Onboarding Templates',
     'LBL_OFFBOARDINGTEMPLATES_POSITIONS_FROM_OFFBOARDINGTEMPLATES_TITLE' => 'Offboarding Templates',
     'LBL_OFFBOARDINGTEMPLATES_POSITIONS_TITLE' => 'Offboarding Templates',
-    'LBL_POSITIONS_SUPERVISION_NAME' => 'Supervisor',
-    'LBL_POSITIONS_SUPERVISION_ID' => 'Supervisor (ID)',
+    'LBL_POSITIONS_SUPERVISION_NAME' => 'Supervisor (Position)',
+    'LBL_POSITIONS_SUPERVISION_ID' => 'Supervisor (Position) (ID)',
     'LBL_POSITIONS_POSITIONS_SUPERVISION_LEFT' => 'Supervised Positions',
     'LBL_DOCUMENTS' => 'Documents',
     'LBL_EMPLOYEES' => 'Employees on Position',
@@ -129,4 +129,5 @@ $mod_strings = array(
     'LBL_PARENT_SUPERVISION_ERROR' => 'Selected Position is a child Unit of this Position',
     'LBL_OFFBOARDINGTEMPLATE_ID' => 'Offboarding Template (ID)',
     'LBL_ONBOARDINGTEMPLATE_ID' => 'Onboarding Template (ID)',
+    'LBL_FILES' => 'Files',
 );

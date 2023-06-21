@@ -156,6 +156,11 @@ class CalendarDisplay {
       $ss->assign('editview_height', SugarConfig::getInstance()->get('calendar.editview_height', 600));
 
       $ss->assign('a_str', json_encode($cal->items));
+        /* MintHCM #84212 START */
+        if (!ACLController::checkAccess('Calendar', 'list', true)) {  
+            return;
+        }      
+        /* MintHCM #84212 END */
 
       $start = $current_user->getPreference('day_start_time');
       if ( is_null($start) ) {
@@ -490,6 +495,17 @@ class CalendarDisplay {
       return $str;
    }
 
+    /* MintHCM #75984 START */
+    public function get_week_info($datetime){
+      $week = intval($datetime->format("W"));
+        if($datetime->format("D") === "Sun"){
+          $week++;
+        }
+        return translate('LBL_CALENDAR_WEEK_NUMBER','Calendar').": ".$week;
+    }
+    /* MintHCM #75984 END */
+   
+
    /**
     * Get link to next date range
     * @return string
@@ -529,14 +545,17 @@ class CalendarDisplay {
     * @param boolean $controls display ui contol itmes
     */
    public function display_calendar_header($controls = true) {
-      global $cal_strings;
+      global $cal_strings,$sugar_config;
 
       $ss = new Sugar_Smarty();
       $ss->assign("MOD", $cal_strings);
       $ss->assign("view", $this->cal->view);
 
       $ss->assign('print', $this->cal->isPrint());
-
+      if (!ACLController::checkAccess('Calendar', 'list', true)) {
+            echo '<script>function set_focus(){}</script><p class="error" style="margin:auto;">' . translate('LBL_NO_ACCESS', 'ACL') . '</p>'; 
+            return;
+      }
       if ( $controls ) {
          $current_date = str_pad($this->cal->date_time->month, 2, '0', STR_PAD_LEFT) . "/" . str_pad($this->cal->date_time->day, 2, '0', STR_PAD_LEFT) . "/" . $this->cal->date_time->year;
 
@@ -563,6 +582,10 @@ class CalendarDisplay {
       $ss->assign('next', $this->get_next_calendar());
 
       $ss->assign('date_info', $this->get_date_info($this->cal->view, $this->cal->date_time));
+      /* MintHCM #75984 START */
+      $ss->assign('config', $sugar_config);
+      $ss->assign('week_info', $this->get_week_info($this->cal->date_time));
+      /* MintHCM #75984 END */
 
       $header = get_custom_file_if_exists("modules/Calendar/tpls/header.tpl");
       echo $ss->fetch($header);

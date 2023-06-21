@@ -290,6 +290,21 @@ h5.calSharedUser  {
   height: 54px;
 }
 
+@media (max-width:767px) {
+    
+    .fc-time-grid .fc-event, .fc-time-grid .fc-bgevent {
+        margin-right: 0 !important;
+        opacity: .9;
+    }
+    
+    .fc-title {
+        line-height: 18px;
+    }
+
+    .fc-view-container .monthCalBody {
+        display: none;
+    }
+}
 
 div.monthFooter {
   background-color: $calendar-header-bg;

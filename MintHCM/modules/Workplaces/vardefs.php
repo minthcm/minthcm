@@ -125,6 +125,16 @@ $dictionary['Workplaces'] = array(
             'type' => 'id',
             'vname' => 'LBL_RELATIONSHIP_ROOM_ID',
          ),
+         'files' => array(
+            'name' => 'files',
+            'type' => 'link',
+            'relationship' => 'workplaces_files',
+            'source' => 'non-db',
+            'module' => 'Files',
+            'bean_name' => 'Files',
+            'vname' => 'LBL_FILES',
+            'label' => 'LBL_FILES',
+        ),
     ),
     'relationships' => array(
         "rooms_workplaces" => array(

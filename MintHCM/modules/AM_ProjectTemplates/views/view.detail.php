@@ -67,7 +67,9 @@ class AM_ProjectTemplatesViewDetail extends ViewDetail {
                 <p class="p_form">
                      <form id="project_form" name="project_form" action="index.php?module=AM_ProjectTemplates&action=create_project" method="post">
                         <fieldset style="border: none;">
-                             <label for="name">'.$mod_strings['LBL_PROJECT_NAME'].':<span class="required">*</span></label>
+                             <!--MintHCM #116937 Start->
+                             <label for="name" class="bold_required_field">'.$mod_strings['LBL_PROJECT_NAME'].':<span class="required">*</span></label>
+                             <!--MintHCM #116937 End -> 
                              <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="p_name" id="p_name" class="text ui-widget-content ui-corner-all" />
 
                              <label for="start_date">'.$mod_strings['LBL_START_DATE'].':</label>

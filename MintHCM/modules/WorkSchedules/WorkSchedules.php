@@ -45,6 +45,7 @@
 
 require_once 'include/CalendarActivities/CalendarActivities.php';
 require_once 'include/DateFunctions/DateFormatter.php';
+require_once 'modules/WorkSchedules/AcceptWorkScheduleValidator.php';
 
 class WorkSchedules extends Basic
 {
@@ -380,92 +381,7 @@ class WorkSchedules extends Basic
 
     public function canBeConfirmed()
     {
-        global $timedate;
-        $return = 1;
-        if (!in_array($this->type, ['holiday', 'sick', 'sick_care', 'occasional_leave', 'overtime', 'excused_absence', 'leave_at_request'])) {
-
-            $db_format = $timedate->get_db_date_time_format();
-
-            $sql = "SELECT date_start, date_end FROM workschedules WHERE id ='{$this->id}'";
-            $result = $this->db->query($sql);
-            while ($row = $this->db->fetchByAssoc($result)) {
-                $date_start = DateTime::createFromFormat($db_format, $row['date_start']);
-                $date_end = DateTime::createFromFormat($db_format, $row['date_end']);
-            }
-            $sql = "SELECT * FROM spenttime r
-            LEFT JOIN workschedules_spenttime wr ON r.id=wr.spenttime_id
-            WHERE r.deleted = 0 AND wr.deleted=0 AND wr.workschedule_id= '{$this->id}' ORDER BY r.date_start ASC ";
-            $result = $this->db->query($sql);
-            $last_row = array();
-            while ($row = $this->db->fetchByAssoc($result)) {
-                $last_row = $row;
-                $row_ds = DateTime::createFromFormat($db_format, $row['date_start']);
-                if ($date_start == $row_ds) {
-                    $date_start = DateTime::createFromFormat($db_format, $row['date_end']);
-                } else {
-                    $return = 3;
-                    break;
-                }
-            }
-            $row_de = DateTime::createFromFormat($db_format, $last_row['date_end']);
-            if ($return && $date_end != $row_de) {
-                $return = 3;
-            }
-            $sql = "SELECT workplace_id FROM workschedules WHERE id ='{$this->id}'";
-            $workplace_id = $this->db->getOne($sql);
-            if (($this->type === 'office') && (!empty($workplace_id) && ($return == 1))) {
-                $return = $this->checkAllocation($workplace_id);
-            }
-        }
-        return $return;
-    }
-
-    protected function checkAllocation(string $workplace_id) {
-        $db = DBManagerFactory::getInstance();
-        $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
-
-        $return = 1;
-        $work_date = getDateTimeObject($this->date_start);
-        if ($workplace->mode == "permanent") {
-            $sql = "SELECT id FROM allocations WHERE assigned_user_id = '{$this->assigned_user_id}' AND deleted=0 AND workplace_id='{$workplace_id}'";
-        } else {
-            $sql = "SELECT ae.allocation_id id FROM allocations_employees ae
-LEFT JOIN allocations a ON a.id=ae.allocation_id AND a.deleted=0 AND a.workplace_id='{$workplace_id}'
-WHERE ae.employee_id='{$this->assigned_user_id}' AND ae.deleted=0";
-        }
-        $result = $db->query($sql);
-        if (
-            !empty($result)
-            && $result->num_rows > 0
-        ) {
-            while ($row = $db->fetchByAssoc($result)) {
-                $allocation = BeanFactory::getBean('Allocations', $row['id']);
-                $start_date = getDateTimeObject($allocation->date_from);
-                $end_date = getDateTimeObject($allocation->date_to);
-                if(!empty($start_date)){
-                    $start_date->setTime(0, 0, 0);
-                }
-                if(!empty($end_date)){
-                    $end_date->setTime(23, 59, 0);
-                }
-                if (
-                    !empty($start_date) 
-                    && $work_date >= $start_date
-                ) {
-                    if (!empty($end_date)) {
-                        if ($work_date >= $end_date) {
-                            $return = 4;
-                        }
-                    } else {
-                        $return = 1;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $return = 4;
-        }
-        return $return;
+        return (new AcceptWorkScheduleValidator($this))->validate();
     }
 
     public function confirm() {

@@ -51,13 +51,6 @@ $listViewDefs[$module_name] = array(
         'default' => true,
         'link' => true,
     ),
-    'NEWS_TYPE' => array(
-        'type' => 'enum',
-        'studio' => 'visible',
-        'label' => 'LBL_NEWS_TYPE',
-        'width' => '10%',
-        'default' => true,
-    ),
     'NEWS_STATUS' => array(
         'type' => 'enum',
         'default' => true,

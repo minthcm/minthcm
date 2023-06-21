@@ -47,9 +47,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'include/SugarObjects/templates/person/Person.php';
 require_once __DIR__ . '/../../include/EmailInterface.php';
-// eVolpe #77675 start
+// MintHCM #77675 start
 require_once 'modules/SecurityGroups/PrivateGroup.php';
-// eVolpe #77675 end
+// MintHCM #77675 end
 
 // Employee is used to store customer information.
 class Employee extends Person implements EmailInterface
@@ -323,12 +323,12 @@ class Employee extends Person implements EmailInterface
                 return false;
             }
         }
-        // eVolpe 77675 start
+        // MintHCM 77675 start
         if ($this->reports_to_id != $this->fetched_row['reports_to_id']) {
             $private_group = new PrivateGroup($this);
             $private_group->update($this->reports_to_id, $this->fetched_row['reports_to_id']);
         }
-        // eVolpe 77675 end
+        // MintHCM 77675 end
 
         return parent::save($check_notify);
     }
@@ -384,5 +384,37 @@ class Employee extends Person implements EmailInterface
         return $return_array;
     }
 
+    // MintHCM end
+
+    // MintHCM start
+
+    public function getActiveWorkplaces($workplace_id = null, $date_start = null, $date_end = null) {
+        $date_start = empty($date_start) ? 'UTC_TIMESTAMP' : "{$this->db->quoted($date_start)}";
+        $date_end = empty($date_end) ? 'UTC_TIMESTAMP' : "{$this->db->quoted($date_end)}";
+        $sql = "SELECT w.id, w.name
+                FROM (SELECT a.id, a.workplace_id, a.date_from, a.date_to
+                    FROM allocations a
+                    WHERE a.deleted = 0
+                        AND a.assigned_user_id = {$this->db->quoted($this->id)}
+                    UNION
+                    SELECT ae.allocation_id, a.workplace_id, a.date_from, a.date_to id
+                    FROM allocations_employees ae
+                            LEFT JOIN allocations a ON a.id = ae.allocation_id AND ae.deleted = 0
+                    WHERE ae.employee_id = {$this->db->quoted($this->id)}) all_allocations
+                        INNER JOIN workplaces w ON w.id = workplace_id AND w.deleted = 0 AND w.availability = 'active'
+                WHERE ( ({$date_start} BETWEEN all_allocations.date_from AND all_allocations.date_to)
+                AND ({$date_end} BETWEEN all_allocations.date_from AND all_allocations.date_to) )
+                OR  {$date_start} >= all_allocations.date_from AND all_allocations.date_to IS NULL
+                ";
+        if (!empty($workplace_id)) {
+            $sql .= "AND w.id = {$this->db->quoted($workplace_id)}";
+        }
+        $result = [];
+        $query = $this->db->query($sql);
+        while ($row = $this->db->fetchByAssoc($query)) {
+            array_push($result, $row);
+        }
+        return $result;
+    }
     // MintHCM end
 }

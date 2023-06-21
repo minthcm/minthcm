@@ -57,10 +57,8 @@ class CommentsApi
             if ($bean->id === $args['comments_record_id']) {
 
                 echo display_comments_for_record($bean, $args['comments_record_id'], true);
-                //return '';
             }
         }
-        echo '';
         return '';
     }
 

@@ -106,6 +106,7 @@ class CalendarDashlet extends Dashlet
      */
     public function display()
     {
+        
         ob_start();
 
         if (isset($GLOBALS['cal_strings'])) {
@@ -115,23 +116,20 @@ class CalendarDashlet extends Dashlet
         require_once 'modules/Calendar/Calendar.php';
         require_once 'modules/Calendar/CalendarDisplay.php';
         require_once "modules/Calendar/CalendarGrid.php";
-
         global $cal_strings, $current_language;
         $cal_strings = return_module_language($current_language, 'Calendar');
 
-        if (!ACLController::checkAccess('Calendar', 'list', true)) {
-            ACLController::displayNoAccess(true);
-        }
+
 
         $cal = new Calendar($this->view);
         $cal->dashlet = true;
         $cal->add_activities($GLOBALS['current_user']);
         $cal->load_activities();
-
+        
         $display = new CalendarDisplay($cal, $this->id);
         $display->display_calendar_header(false);
-
         $display->display();
+
 
         $str = ob_get_contents();
         ob_end_clean();
@@ -207,7 +205,6 @@ class CalendarDashlet extends Dashlet
         $template->assign('DASHLET_BUTTON_ARIA_EDIT', translate('LBL_DASHLET_EDIT', 'Home'));
         $template->assign('DASHLET_BUTTON_ARIA_REFRESH', translate('LBL_DASHLET_REFRESH', 'Home'));
         $template->assign('DASHLET_BUTTON_ARIA_DELETE', translate('LBL_DASHLET_DELETE', 'Home'));
-
         return $template->fetch('include/Dashlets/DashletHeader.tpl');
     }
 }

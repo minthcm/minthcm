@@ -548,6 +548,16 @@ $dictionary['Candidates'] = array(
             'vname' => 'LBL_EMPLOYEE_ID',
             'audited' => true,
         ),
+        'files' => array(
+            'name' => 'files',
+            'type' => 'link',
+            'relationship' => 'candidates_files',
+            'source' => 'non-db',
+            'module' => 'Files',
+            'bean_name' => 'Files',
+            'vname' => 'LBL_FILES',
+            'label' => 'LBL_FILES',
+        )
     ),
     'relationships' => array(
         'candidates_candidatures' => array(

@@ -14,13 +14,14 @@ $(document).ready(function () {
         $("#type").val() == "office"
         && $('#record').val() == ''
     ) {
-        setAssignedWorkingRoom();
+        setDefaultWorkPlace();
     }
     $("#type").change(() => {
         if ($("#type :selected").val() === "office") {
-            setAssignedWorkingRoom();
+            setDefaultWorkPlace();
         }
     });
+    setDefaultWorkPlace();
 });
 
 if (!window.workSchedulerSaveHandlerAlreadyInitialized) {
@@ -46,31 +47,6 @@ function getRecordID() {
 
 function isUserAdmin() {
     return $("#current_user_is_admin").val() == true;
-}
-
-function setAssignedWorkingRoom() {
-    let assigned_user_id = $("#assigned_user_id").val();
-    viewTools.api.callCustomApi({
-        module: "WorkSchedules",
-        action: "setAssignedWorkingRoom",
-        dataType: "json",
-        async: true,
-        dataPOST: {
-            assigned_user_id: assigned_user_id,
-        },
-        callback: function ( response ) {
-            if(
-                response !== undefined
-                && response.id !== undefined
-                && response.name !== undefined
-                && response.id !== ''
-                && response.name !== ''
-            ){
-                $("#workplace_id").val(response.id);
-                $("#workplace_name").val(response.name);
-            }
-        }
-    });
 }
 
 function parseTimeNumberValue(element) {
@@ -341,4 +317,25 @@ function validateWorkScheduleCreatedByPeriodicity() {
         });
     }
     return result;
+}
+
+function setDefaultWorkPlace() {
+    if ($('#workplace_name').val() || $('#workplace_id').val()) {
+        return;
+    }
+    viewTools.api.callCustomApi({
+        module: "WorkSchedules",
+        action: "getWorkplaces",
+        dataPOST: {
+            assigned_user_id: $("#assigned_user_id").val(),
+            date_start: $('#date_start').val(), 
+            date_end: $('#date_end').val(), 
+        },
+        callback: function (result) {
+            if (result.length === 1) {
+                $('#workplace_name').val(result[0].name);
+                $('#workplace_id').val(result[0].id);
+            }
+        },
+    });
 }

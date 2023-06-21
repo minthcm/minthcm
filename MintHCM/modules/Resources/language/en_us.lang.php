@@ -93,4 +93,5 @@ $mod_strings = array(
    'LBL_ROOM_NAME' => 'Room',
    'LBL_ROOM_ID' => 'Room ID',
    'LBL_ROOMS_RESOURCES_TITLE' => 'Rooms',
+   'LBL_FILES' => 'Files',
 );
