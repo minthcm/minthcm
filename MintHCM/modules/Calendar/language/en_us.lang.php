@@ -163,6 +163,7 @@ $mod_strings = array(
    'LBL_WORKSCHEDULES_LENGHT_OVER_ONE_DAY' => 'The work schedule plan length can\'t be greater than 24 hours',
    'LBL_WORKSCHEDULES_DATE_END_BEFORE_START' => 'Date end can\'t be before date start',
    'LBL_WORKSCHEDULES_DURATION_LESS_OR_EQUAL_ZERO' => 'Duration must be greater than zero',
+   'LBL_CALENDAR_WEEK_NUMBER' => 'Week number',
 );
 
 

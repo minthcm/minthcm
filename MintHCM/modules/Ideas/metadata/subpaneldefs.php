@@ -71,4 +71,12 @@ $layout_defs["Ideas"]["subpanel_setup"] = array(
       'add_subpanel_data' => 'securitygroup_id',
       'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
    ),
+   'files' => array(
+       'order' => 100,
+       'module' => 'Files',
+       'subpanel_name' => 'default',
+       'title_key' => 'LBL_FILES',
+       'get_subpanel_data' => 'files',
+       'dropzone' => true
+    ),
 );

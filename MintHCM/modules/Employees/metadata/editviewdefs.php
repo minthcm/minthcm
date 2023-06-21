@@ -50,7 +50,28 @@ $viewdefs ['Employees'] = array(
    'EditView' =>
    array(
       'templateMeta' =>
-      array(
+         array(
+            'form' => array (
+               'buttons' => array(
+                  array(
+                     'customCode' => true,
+                     'sugar_html' => array(
+                        'type' => 'button',
+                        'value' => '{$APP.LBL_SAVE_BUTTON_TITLE}',
+                        'htmlOptions' => array(
+                              'class' => 'button primary',
+                              'name' => 'button',
+                              'id' => 'SAVE',
+                              'title' => '{$APP.LBL_SAVE_BUTTON_TITLE}',
+                              'accessKey' => '{$APP.LBL_SAVE_BUTTON_KEY}',
+                              'onClick' => "var _form = document.getElementById('EditView'); _form.action.value='Save'; if(check_form('EditView') && getSupervisedUnitsIfEmployeeIsSupervisor())SUGAR.ajaxUI.submitForm(_form);return false;",
+                        ),
+                        'template' => '{if $bean->aclAccess("save")}[CONTENT]{/if}',
+                     ),
+                  ),
+                  'CANCEL',
+            ),
+         ),
          'maxColumns' => '2',
          'widths' =>
          array(

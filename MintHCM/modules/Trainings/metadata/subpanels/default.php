@@ -136,5 +136,11 @@ $subpanel_layout = array(
             'width' => '5%',
             'default' => true,
         ),
+        'close_button'=>array(
+			'widget_class' => 'SubPanelCloseButton',
+			'vname' => 'LBL_LIST_CLOSE',
+			'width' => '6%',
+			'sortable'=>false,
+		),
     ),
 );

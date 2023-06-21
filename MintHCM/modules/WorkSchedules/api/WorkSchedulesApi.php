@@ -145,44 +145,6 @@ class WorkSchedulesApi
         return $return;
     }
 
-    public function setAssignedWorkingRoom($args)
-    {
-        $db = \DBManagerFactory::getInstance();
-        $user_id = $db->quote($args['assigned_user_id']);
-        if (!empty($user_id)) {
-            $query = $db->query("SELECT
-                    wp.id
-                    , wp.name
-                FROM
-                    workplaces AS wp
-                INNER JOIN
-                    allocations AS al
-                    ON
-                        al.deleted = '0'
-                        AND al.workplace_id = wp.id
-                        AND al.assigned_user_id = '{$user_id}'
-                        AND al.mode = 'permanent'
-                        AND al.date_from <= CURDATE()
-                        AND (
-                            al.date_to IS NULL
-                            OR al.date_to >= CURDATE()
-                        )
-                WHERE
-                    wp.deleted = '0'
-            ");
-            while ($row = $db->fetchByAssoc($query)) {
-                return [
-                    'id' => $row['id'],
-                    'name' => $row['name'],
-                ];
-            }
-        }
-        return [
-            'id' => '',
-            'name' => '',
-        ];
-    }
-
     public function canChangeWorkScheduleStatus($args)
     {
         $id = $args['id'];
@@ -209,6 +171,17 @@ class WorkSchedulesApi
         } else {
             return true;
         }
+    }
+
+    public function getActiveWorkplaces($args) {
+        global $timedate;
+        $employee = BeanFactory::getBean('Employees', $args['assigned_user_id']);
+        $date_start = $timedate->to_db_date($args['date_start']);
+        $date_end = $timedate->to_db_date($args['date_end']);
+        if (empty($employee->id)) {
+            return;
+        }   
+        return $employee->getActiveWorkplaces(null, $date_start, $date_end);
     }
 }
 

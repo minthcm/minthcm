@@ -699,4 +699,7 @@ $mod_strings = array(
     'LBL_FACTOR_AUTH' => 'Factor Auth',
     'LBL_FACTOR_AUTH_INTERFACE' => 'Factor Auth Interface',
     'LBL_BUSINESS_ROLE' => 'Business role',
+    'LBL_USERS_CONFIRMATION_BUTTON_CONFIRM' => 'YES',
+    'LBL_USERS_CONFIRMATION_BUTTON_CANCEL' => 'NO',
+    'LBL_USER_DEACTIVE_SUPERVISOR'=>'The employee you want to deactivate is the current manager of the unit</br> <URL>In order to correctly generate the organizational structure of the department, a new manager should be indicated. Do you want to continue with deactivation?'
 ); // END STRINGS DEFS

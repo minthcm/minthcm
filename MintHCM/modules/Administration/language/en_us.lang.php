@@ -982,4 +982,5 @@ $mod_strings = array(
    'LBL_CALCULATE_DLNC' => 'Calculate Date Last Next Contact',
    'LBL_CALCULATE_DLNC_CANDIDATES' => 'Candidates',
    // DLNC end
+   'LBL_LOCALE_DISPLAY_WEEK_NUMBER' => 'Display week number in calendar'
 );

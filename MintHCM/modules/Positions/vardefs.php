@@ -335,6 +335,16 @@ $dictionary['Positions'] = array(
             'side' => 'right',
             'vname' => 'LBL_TERMSOFEMPLOYMENT',
         ),
+        'files' => array(
+            'name' => 'files',
+            'type' => 'link',
+            'relationship' => 'positions_files',
+            'source' => 'non-db',
+            'module' => 'Files',
+            'bean_name' => 'Files',
+            'vname' => 'LBL_FILES',
+            'label' => 'LBL_FILES',
+        ),
     ),
     'relationships' => array(
         'onboardingtemplates_positions' => array(

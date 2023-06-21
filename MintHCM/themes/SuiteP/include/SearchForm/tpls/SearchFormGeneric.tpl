@@ -44,6 +44,9 @@
 
 *}
 {{* If templateMeta.maxColumnsBasic is not set, use maxColumns *}}
+{{* MintHCM #92823 START *}}
+<input type='hidden' id='displayColumns' name='displayColumns' value='{$DISPLAY_COLUMNS}' />
+{{* MintHCM #92823 END *}}
 <input type='hidden' id="orderByInput" name='orderBy' value=''/>
 <input type='hidden' id="sortOrder" name='sortOrder' value=''/>
 {if !isset($templateMeta.maxColumnsBasic)}

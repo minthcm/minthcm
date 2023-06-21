@@ -740,6 +740,9 @@ $moduleList[] = 'Knowledge';
 $moduleList[] = 'SalaryRanges';
 $moduleList[] = 'EmployeeCertificates';
 //
+$beanList['Files'] = 'Files';
+$beanFiles['Files'] = 'modules/Files/Files.php';
+$moduleList[] = 'Files';
 if (file_exists('include/modules_override.php')) {
     include 'include/modules_override.php';
 }

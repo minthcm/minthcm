@@ -356,13 +356,20 @@ window.viewTools.form = {
       return false;
    },
    setRequirementSign( handler, required ) {
-      var label_object = handler.closest( ".edit-view-row-item" ).children( ".label" );
-      if ( required === true ) {
-         label_object.append( "<span class='required'>*</span>" );
-      } else {
-         label_object.children( "span.required" ).remove();
-      }
-   },
+    var label_object = handler.closest( ".edit-view-row-item" ).children( ".label" );
+    if ( required === true ) {
+      label_object.append( "<span class='required'>*</span>" );
+      //MintHCM #116937 Start
+      label_object.addClass('bold_required_field');
+      //MintHCM #116937 End
+    } 
+    else {
+      label_object.children( "span.required" ).remove();
+      //MintHCM #116937 Start
+      label_object.removeClass('bold_required_field');
+      //MintHCM #116937 End
+    }
+ },
    setFieldReadonly: function ( handler, is_readonly ) {
       var form_name = handler.closest( 'form' ).attr( 'name' );
       if ( form_name !== undefined && (is_readonly === true || is_readonly === false) ) {

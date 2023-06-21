@@ -163,6 +163,9 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         } elseif ($file_type == 'notes') {
             $query = "SELECT filename name, file_mime_type FROM notes ";
             $query .= "WHERE notes.id = '" . $db->quote($_REQUEST['id']) . "'";
+        } elseif ($file_type == 'files') {
+            $query = "SELECT filename name, file_mime_type FROM files ";
+            $query .= "WHERE files.id = '" . $db->quote($_REQUEST['id']) . "'";
         } elseif (!isset($_REQUEST['isTempFile']) && !isset($_REQUEST['tempName']) && isset($_REQUEST['type']) && $file_type != 'temp' && isset($image_field)) { //make sure not email temp file.
             $file_type = ($file_type == "employees") ? "users" : $file_type;
             //$query = "SELECT " . $image_field ." FROM " . $file_type . " LEFT JOIN " . $file_type . "_cstm cstm ON cstm.id_c = " . $file_type . ".id ";

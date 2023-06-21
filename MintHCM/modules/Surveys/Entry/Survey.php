@@ -24,7 +24,49 @@ if ($survey->status != 'Active') {
 }
 
 $employeeId = $_REQUEST['employee'];
+//MintHCM #102681 START
+if (empty($employeeId)) {
+    if(empty($_SESSION['authenticated_user_id'])){
+        header("HTTP/1.0 404 Not Found");
+        exit();  
+    } else {
+        $employeeId = $_SESSION['authenticated_user_id'];
+    }
+}
 
+
+
+$db = DBManagerFactory::getInstance();
+
+$sql1 = "
+SELECT
+    id
+FROM
+    surveyresponses
+WHERE
+    survey_id = '{$surveyId}'
+AND
+    employee_id = '{$employeeId}'
+AND
+    deleted = '0'";
+
+$sql2 = "
+SELECT
+    id
+FROM
+    users
+WHERE
+    id = '{$employeeId}'";
+
+if (!empty($db->fetchOne($sql1))) {
+    displayAlreadyFilledPage($survey);
+    return;
+}
+if (empty($db->fetchOne($sql2))) {
+    displayEmployeeNotExsistPage($survey);
+    return;
+}
+//MintHCM #102681 END
 $trackerId = !empty($_REQUEST['tracker']) ? $_REQUEST['tracker'] : '';
 
 $themeObject = SugarThemeRegistry::current();
@@ -69,28 +111,38 @@ EOF;
         <title><?=$survey->name;?></title>
 
         <link href="themes/SuiteP/css/bootstrap.min.css" rel="stylesheet">
+        <!-- MintHCM #102681 START -->
+        <link href="themes/SuiteP/css/Mint/style.css" rel="stylesheet">
+        <!-- MintHCM #102681 END -->
         <link href="modules/Surveys/javascript/rating/rating.min.css" rel="stylesheet">
         <link href="modules/Surveys/javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet">
         <link href="include/javascript/jquery/themes/base/jquery.ui.all.css" rel="stylesheet">
     </head>
-    <body>
+    <!-- MintHCM #102681 START -->
+    <body style="background-color: #ffffff;">
     <div class="container">
-        <div class="row">
-            <div class="col-md-offset-3 col-md-6">
-                <div class="text-center">
-                    <img src="<?php echo $companyLogoURL ?>" style="max-width: 100%;"/>
+        <div class="survey">
+            <div class="row">
+                <div class="col-md-12" style="text-align:center;margin-bottom: 10px;">
+                    <div class="text-center">
+                        <img src="<?php echo $companyLogoURL ?>" style="max-width: 100%; max-height: 100px;"/>
+                </div>
             </div>
-        </div>
-        </div>
-        <div class="row well">
-            <div class="col-md-offset-2 col-md-8">
-                <h1><?=$survey->name;?></h1>
-                <!-- MintHCM #74238 START -->
-                <?=displaySurvey($survey, $employeeId, $trackerId);?>
-                <!-- MintHCM #74238 END -->
+            </div>
+            <div class="row well">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="first_panel panel-default panel">
+                        <h1><?=$survey->name;?></h1>
+                        <span class="survey-description"><?=$survey->description;?></span>
+                    </div>
+                    <!-- MintHCM #74238 START -->
+                    <?=displaySurvey($survey, $employeeId, $trackerId);?>
+                    <!-- MintHCM #74238 END -->
+                </div>
             </div>
         </div>
     </div>
+    <!-- MintHCM #102681 END -->
     <script src="include/javascript/jquery/jquery-min.js"></script>
     <script src="include/javascript/jquery/jquery-ui-min.js"></script>
     <script src="modules/Surveys/javascript/datetimepicker/jquery-ui-timepicker-addon.js"></script>
@@ -151,7 +203,7 @@ $questions = $survey->get_linked_beans('surveys_surveyquestions', 'SurveyQuestio
         displayQuestion($survey, $question);
     }
     ?>
-        <button class="btn btn-primary" type="submit"><?php echo $survey->getSubmitText(); ?></button>
+        <button class="btn btn-primary send-button" type="submit"><?php echo $survey->getSubmitText(); ?></button>
     </form>
     <?php
 }
@@ -161,7 +213,16 @@ function displayQuestion($survey, $question)
     ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><label for="question<?=$question->id;?>"><?=$question->name;?></label></h3>
+        <!-- MintHCM #102681 START -->
+        <?php
+            if('Checkbox'==$question->type){
+                echo '';
+            }
+            else{
+                echo "<h3 class='panel-title'><label for='question".$question->id."'>".$question->name."</label></h3>";
+            }
+        ?>
+        <!-- MintHCM #102681 END -->
         </div>
         <div class="panel-body">
             <div class="form-group">
@@ -186,19 +247,32 @@ $options = array();
             $question->id .
                 "]'></textarea>";
             break;
+        //MintHCM #102681 START
         case "Checkbox":
-            echo "<div class='checkbox'><label>";
+            echo "<div class='checkbox checkbox-lg'><label>";
             echo "<input id='question" .
             $question->id .
             "' name='question[" .
             $question->id .
                 "]' type='checkbox'/>";
+            echo $question->name;
             echo "</label></div>";
             break;
+        case "Multiselect": 
+            $multi = $question->type == 'Multiselect' ? ' multiple="true" ' : '';
+            $name =
+            $question->type == 'Multiselect' ? "question[" . $question->id . "][]" :
+            "question[" . $question->id . "]";
+            echo "<select class=\"form-control\" style='height:75px;' id='question" . $question->id . "' name='$name' $multi>";
+            foreach ($options as $option) {
+                echo "<option value='" . $option['id'] . "'>" . $option['name'] . "</option>";
+            }
+            echo "</select>";
+            break;
+        //MintHCM #102681 END
         case "Radio":
             foreach ($options as $option) {
-                echo "<div class='radio'>";
-                echo "<label>";
+                echo "<div class='custom-radio'>";
                 echo "<input  id='question" .
                 $question->id .
                 "' name='question[" .
@@ -206,11 +280,13 @@ $options = array();
                     "]' value='" .
                     $option['id'] .
                     "' type='radio'/>";
+                echo "<label>";
                 echo $option['name'];
                 echo "</label>";
                 echo "</div>";
             }
             break;
+ 
         case "Dropdown":
         case "Multiselect":
             $multi = $question->type == 'Multiselect' ? ' multiple="true" ' : '';
@@ -255,8 +331,12 @@ function displayTextField($question)
     echo "<input class=\"form-control\" id='question" .
     $question->id .
     "' name='question[" .
+    //MintHCM #102681 START
     $question->id .
-        "]' type='text'/>";
+        "]'  type='text'
+        placeholder='".translate('LBL_SURVEY_YOUR_ANSWER_PLACEHOLDER', 'Surveys')."'
+        />";
+    //MintHCM #102681 END
 }
 
 function displayScaleField($question)
@@ -368,14 +448,59 @@ function displayClosedPage($survey)
     <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-3 col-md-6">
-                <img height=100 src="modules/Surveys/Entry/survey_logo.jpg"/>
+            <!-- MintHCM #102681 START -->
+            <div class="col-md-12" style="text-align:center;margin-bottom: 10px;">
+                <div class="text-center">
+                    <img src="<?php echo SugarThemeRegistry::current()->getImageURL('company_logo.png'); ?>" style="max-width: 100%; max-height: 100px;"/>
+                </div>
+            </div>
+            <!-- MintHCM #102681 END -->
+        </div>
+        <div class="row well">
+            <!-- MintHCM #102681 START -->
+            <div class="text-center col-md-12">
+                <h1><?=$survey->name;?></h1>
+                <p style="font-size:16px;"><?php echo translate('LBL_SURVEY_CLOSED', 'Surveys') ?></p>
+            </div>
+            <!-- MintHCM #102681 END -->
+        </div>
+    </div>
+    <script src="include/javascript/jquery/jquery-min.js"></script>
+    </body>
+    </html>
+    <?php
+}
+//MintHCM #102681 START
+function displayAlreadyFilledPage($survey)
+{
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title><?=$survey->name;?></title>
+
+        <link href="themes/SuiteP/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;margin-bottom: 10px;">
+                <div class="text-center">
+                    <img src="<?php echo SugarThemeRegistry::current()->getImageURL('company_logo.png'); ?>" style="max-width: 100%; max-height: 100px;"/>
+                </div>
             </div>
         </div>
         <div class="row well">
-            <div class="col-md-offset-2 col-md-8">
+            <div class="text-center col-md-12">
                 <h1><?=$survey->name;?></h1>
-                <p>Thanks for your interest but this survey is now closed.</p>
+                <p style="font-size:16px;"><?php echo translate('LBL_SURVEY_ALREADY_FILLED', 'Surveys') ?></p>
+                <button type="button" tabindex="0" class="btn btn-success" onclick="window.location.href = 'index.php?module=Home&action=index'">
+                    <?php echo translate('LBL_SURVEY_RETURN_BUTTON', 'Surveys') ?>
+                </button>
             </div>
         </div>
     </div>
@@ -384,3 +509,39 @@ function displayClosedPage($survey)
     </html>
     <?php
 }
+function displayEmployeeNotExsistPage($survey)
+{
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title><?=$survey->name;?></title>
+
+        <link href="themes/SuiteP/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;margin-bottom: 10px;">
+                <div class="text-center">
+                    <img src="<?php echo SugarThemeRegistry::current()->getImageURL('company_logo.png'); ?>" style="max-width: 100%; max-height: 100px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="row alert alert-danger">
+            <div class="text-center col-md-12">
+                <h1><?=$survey->name;?></h1>
+                <p style="font-size:16px;"><?php echo translate('LBL_SURVEY_EMPLOYEE_NOT_EXSIST', 'Surveys') ?></p>
+            </div>
+        </div>
+    </div>
+    <script src="include/javascript/jquery/jquery-min.js"></script>
+    </body>
+    </html>
+    <?php
+}
+//MintHCM #102681 END

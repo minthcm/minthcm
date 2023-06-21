@@ -1,0 +1,89 @@
+.container > .survey > .well {
+    border: none;
+    background: #ffffff;
+  }
+  
+  .container .survey .first_panel {
+    background-color: #ffffff;
+    color: #3aa037;
+    padding: 20px;
+  }
+  
+  .container .survey .checkbox {
+    display: table-header-group;
+    background: none;
+  }
+  
+  .container .survey .panel-default {
+    border: 1px solid transparent;
+    border-color: #ddd;
+    padding-left: 20px;
+  }
+  
+  .container .survey input[type=text] {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-right-radius: unset;
+    border-bottom-left-radius: unset;
+  }
+  
+  .container .survey input[type=text]:focus {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-right-radius: unset;
+    border-bottom-left-radius: unset;
+    border-color: #adadad;
+  }
+
+  .container .survey .form-group {
+    margin-right: 5%;
+    font-size: 16px;
+    color: #3aa037;
+  }
+  
+  .container .survey .custom-radio label {
+    display: block;
+    font-size: 16px;
+  }
+  
+  .container .survey .custom-radio {
+    margin-right: 5%;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .container .survey .send-button {
+    width: 100%;
+    margin-top: 35px;
+  }
+  
+  .container .survey .panel-title {
+    color: #3aa037;
+    background: #ffffff;
+    padding-top: 10px;
+  }
+  
+  .container .survey .panel-heading {
+    background: #ffffff;
+    text-transform: none;
+  }
+
+  .container .survey .survey-description {
+    font-size: 18px;
+  }
+  
+  .container > .survey .checkbox input[type=checkbox] {
+    margin-top: 3px;
+  }  
+  .container .survey .form-group select option {
+    color: #3aa037;
+  }
+  
+  .container .survey .form-group select option:first-child {
+    color: #3aa037;
+  }
+  .container .survey textarea{
+    background-color: #ffffff;
+  }

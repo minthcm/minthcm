@@ -389,6 +389,12 @@ class SubPanelTiles {
          }
 // View Tools #56822 #60768 END
 
+        // MintHCM #116942 START
+        if (!empty($subPanelDef['dropzone'])) {
+            $tabs_properties[$t]['dropzone'] = true;
+        }
+        // MintHCM #116942 END
+
          array_push($tab_names, $tab);
       }
 

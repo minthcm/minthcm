@@ -282,7 +282,6 @@ class json_config {
 
       $noAccessFields = array(
          'Users' => array(
-            'show_on_employees' => true,
             'portal_only' => true,
             'is_group' => true,
             'system_generated_password' => true,

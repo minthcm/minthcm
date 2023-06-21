@@ -222,12 +222,12 @@ SugarWidgetSchedulerSearch.submit = function ( form ) {
    }
 
    var query = {
-        // MintHCM #54195 #59793 #43484 Start
+        // MintHCM #54195 #59793 #43484 #117141 Start
         "modules": ["Users", "Contacts", "Leads", "Candidates", "Resources", "SecurityGroups"],
-      "field_list": [ 'id', 'name', 'full_name', 'email1', 'phone_work', 'phone_mobile' ],
-        // MintHCM #54195 #59793 #43484 End
-      "group": "and",
-      "conditions": conditions
+        "field_list": [ 'id', 'name', 'full_name', 'email1', 'phone_work', 'phone_mobile', 'show_on_employees', 'group_type'],
+        // MintHCM #54195 #59793 #43484 #117141 End
+        "group": "and",
+        "conditions": conditions
    };
    global_request_registry[req_count] = [ this, 'display' ];
    req_id = global_rpcClient.call_method( 'query', query );

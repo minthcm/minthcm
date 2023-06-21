@@ -1,0 +1,85 @@
+.comment {
+    display: flex;
+    margin: 20px 0;
+    padding: 0 16px;
+    width: 100%;
+  }
+  
+  .comment__avatar {
+    margin-right: 16px;
+    padding-top: 4px;
+  }
+  
+  @media (max-width: 360px) {
+    .comment__avatar {
+      margin-right: 8px;
+    }
+  }
+  .comment__header {
+    font-family: 'Roboto', sans-serif;
+    border-radius: 7px;
+    padding: 7px;
+    width: 100%;
+    max-width: 505px;
+  }
+  
+  .comment__header--primary {
+    background-color: $color-7;
+    color: $color-32;
+  }
+  
+  .comment__header--secondary {
+    background-color: $color-7;
+    color: $color-32;
+  }
+  
+  .comment__header .header {
+    padding: 5px;
+    font-weight: 700;
+  }
+  
+  .comment__text {
+    padding: 5px;
+  }
+  
+  .comment__footer {
+    padding: 5px;
+  }
+  
+  .comment__footer--primary {
+    color: $color-17;
+  }
+  
+  .comment__footer--secondary {
+    color: $color-17;
+  }
+  
+  .comment__input {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .comment__textarea {
+    width: 100% !important;
+    max-width: 505px;
+    max-height: 150px;
+    resize: none;
+  }
+  
+  .comment__button {
+    align-self: flex-end;
+    margin-top: 8px !important;
+    margin-right: 0 !important;
+  }
+  
+  .comment__reply {
+      color: $color-18
+  }
+  
+  .comment__reply:hover {
+      color: $color-17
+  }
+  
+  .comment__reply {
+      margin-left: 50px;
+  }

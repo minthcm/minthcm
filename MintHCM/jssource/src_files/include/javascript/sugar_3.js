@@ -5062,6 +5062,10 @@ SUGAR.append( SUGAR.util, {
          SUGAR.util.closeActivityPanel.panel.setHeader( SUGAR.language.get( "app_strings", "LBL_CLOSE_ACTIVITY_HEADER" ) );
          SUGAR.util.closeActivityPanel.panel.render( document.body );
          SUGAR.util.closeActivityPanel.panel.show();
+         // MintHCM 114934 START
+         $("#closeActivityDialog .container-close").text(SUGAR.language.get( "app_strings", "LNK_CLOSE"));
+         $("#closeActivityDialog .container-close").css("margin-right","10px");
+        // MintHCM 114934 END
       }
    },
 

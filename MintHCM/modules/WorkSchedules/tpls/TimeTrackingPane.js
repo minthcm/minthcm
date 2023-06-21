@@ -257,9 +257,9 @@ if (!window.TimePanel) { // avoid multi-declaration
                 /* MintHCM #93842 END */
                 var task_number_desc = '';
                 if (i.spendtime_projecttask_id != undefined && i.spendtime_projecttask_id != '') {
-                    task_number_desc = ' #' + i.spendtime_projecttask_id;
+                    task_number_desc = ' #' + i.spendtime_projecttask_id + ' ' + i.spendtime_projecttask_name;
                 }
-                i.$el.attr('title', toSugarTime(start) + ' - ' + toSugarTime(end) + task_number_desc + ' ' + i.description);
+                i.$el.attr('title', toSugarTime(start) + ' - ' + toSugarTime(end) + task_number_desc + "\n> " + i.description);
                 parent_el.append(i.$el);
             }
 

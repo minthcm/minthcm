@@ -45,7 +45,7 @@
  */
 
 class SpentTimeActionAccess {
-
+    const ALLOWED_TIME = '11';
    protected $bean;
    protected $errors = array();
    protected $actions = array(
@@ -55,7 +55,8 @@ class SpentTimeActionAccess {
             'isAdmin',
             'isSuperiorOfUserAssignedToWorkSchedule',
             'isMyWorkScheduleInCurrentMonth',
-            'amISuperiorOfAnyOneAndItIsMyWorkSchedule'
+            'amISuperiorOfAnyOneAndItIsMyWorkSchedule',
+            'isValidDatetimeLastDayOfMonth'
          ),
          'conditions' => 'OR'
       ),
@@ -127,6 +128,16 @@ class SpentTimeActionAccess {
       $now = new SugarDateTime();
       $date = SugarDateTime::createFromFormat($timedate->get_date_format(), $this->bean->schedule_date);
       return ($this->bean->assigned_user_id == $current_user->id && $date->format('m') == $now->format('m'));
+   }
+
+   protected function isValidDatetimeLastDayOfMonth(){
+    global $timedate;
+    $now = new SugarDateTime();
+    $date = SugarDateTime::createFromFormat($timedate->get_date_format(), $this->bean->schedule_date);
+    return  !$this->isMyWorkScheduleInCurrentMonth() 
+            && $now->format('G') <= static::ALLOWED_TIME
+            && $now->format('j') != '1'
+            && abs($now->format('n') - $date->format('n')) == '1';
    }
 
    protected function isSuperiorOfUserAssignedToWorkSchedule() {

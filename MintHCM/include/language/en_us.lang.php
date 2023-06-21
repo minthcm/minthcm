@@ -2137,6 +2137,7 @@ $app_strings = array(
     'LBL_NAV_RECRUITMENT_EB' => 'Recruitment',
     'LBL_NAV_TIME_TRACKING' => 'Time Tracking',
     'LBL_NAV_COMPANY_LIFE' => 'Company Life',
+    'LBL_NAV_DEFINITIONS' => 'Definitions',
     'LBL_NAV_EMPLOYEE' => 'Employee',
     'LBL_GENERATEONBOARDINGOFFBOARDING_EMPLOYEE_NAME' => 'Employee',
     'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE' => 'Start Date',
@@ -3787,8 +3788,8 @@ $app_list_strings['workschedule_type_list'] = [
     'home' => 'Remote Work',
     'delegation' => 'Delegation',
     'holiday' => 'Holiday',
-    'sick' => 'Sick',
-    'sick_care' => 'Sick - Care',
+    'sick' => 'Sick Leave',
+    'sick-care' => 'Childcare Leave',
     'occasional_leave' => 'Occasional Leave',
     'leave_at_request' => 'Leave at Request',
     'overtime' => 'Free Overtime',
@@ -4256,3 +4257,30 @@ $app_list_strings['dom_imaptype_options'] = array(
 );
 
 $app_strings['LBL_RN_108842_SETOAUTH2MAILINGCONFIGURATION'] = 'Configure oauth2 mailing';
+$app_strings['ERR_WORKPLACE_REQUIRED_IF_ASSIGNED_TO_USER'] = 'Workplace is required if user has at least one workplace assigned!';
+
+$app_list_strings['dropzone_labels'] = [
+    'dictDefaultMessage' => "Drop files here or click to upload<br />(Maximum file size is 3MB)",
+    'dictFallbackMessage' => 'Your browser does not support drag\'n\'drop file uploads',
+    'dictFileTooBig' => 'The file size is too large',
+    'dictInvalidFileType' => 'You can\'t upload files of this type',
+    'dictResponseError' => 'The file upload has failed',
+    'dictCancelUpload' => 'Cancel upload',
+    'dictUploadCanceled' => 'Upload canceled',
+    'dictCancelUploadConfirmation' => 'Are you sure you want to cancel this upload?',
+    'dictRemoveFile' => 'Remove file',
+    'dictMaxFilesExceeded' => 'You can not upload any more files',
+];
+$app_strings['LBL_TO_LARGE_FILE_ERROR'] = 'File is too large. Max Filesize is {upload_maxsize} MB';
+$app_strings['LBL_DEFAULT_DROPZONE_MESSAGE'] = "Drop files here or click to upload<br />(Maximum file size is {upload_maxsize} MB)";
+$app_list_strings['moduleList']['Files'] = 'Files';
+$app_list_strings['moduleListSingular']['Files'] = 'File';
+$app_list_strings['parent_type_display_for_files'] = array(
+    'Candidatures' => 'Candidature',
+    'Candidates' => 'Candidate',
+    'Resources' => 'Resource',
+    'Positions' => 'Position',
+    'Workplaces' => 'Workplace',
+    'Trainings' => 'Training',
+    'Ideas' => 'Idea',
+);

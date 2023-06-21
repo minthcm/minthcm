@@ -110,6 +110,7 @@ $dictionary['News'] = array(
             'options' => 'news_type_list',
             'studio' => 'visible',
             'dependency' => false,
+            'default' => 'announcement',
         ),
         'news_status' => array(
             'required' => false,

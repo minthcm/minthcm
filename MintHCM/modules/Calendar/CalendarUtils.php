@@ -323,6 +323,9 @@ class CalendarUtils
          * @var SugarDateTime $start Recurrence start date.
          */
         $start = SugarDateTime::createFromFormat($GLOBALS['timedate']->get_date_time_format(), $date_start);
+        if(empty($start)){
+            $start = new SugarDateTime($date_start);
+        }
         /**
          * @var SugarDateTime $end Recurrence end date. Used if recurrence ends by date.
          */
@@ -463,7 +466,6 @@ class CalendarUtils
                                     VALUES
                     ";
         }
-
         $arr = array();
         $i = 0;
         foreach ($time_arr as $date_start) {
@@ -478,8 +480,12 @@ class CalendarUtils
             $clone->recurring_source = "Sugar";
             $clone->repeat_parent_id = $id;
             $clone->update_vcal = false;
-            $clone->save(false);
-
+            $clone->save(true);
+            //MintHCM #111325 START
+            if(empty($users_rel_arr)){
+                $users_rel_arr = $clone->users_arr;
+            }
+            //MintHCM #111325 END
             if ($clone->id) {
                 foreach ($users_rel_arr as $user_id) {
                     if ($users_filled) {

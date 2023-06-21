@@ -131,7 +131,11 @@ class ViewList extends SugarView
     public function listViewPrepare()
     {
         $module = isset($GLOBALS['module']) ? $GLOBALS['module'] : null;
-
+        /* MintHCM #92823 START */
+        if(empty($_REQUEST['displayColumns'])) {
+            $_REQUEST['displayColumns'] = $_REQUEST['mint_displayColumns'];
+        }
+        /* MintHCM #92823 END */
         if (!isset($module)) {
             LoggerManager::getLogger()->fatal('Undefined module for list view prepare');
             return false;

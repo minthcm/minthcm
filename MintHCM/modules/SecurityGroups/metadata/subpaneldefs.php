@@ -100,18 +100,6 @@ $layout_defs['SecurityGroups'] = array(
          'add_subpanel_data' => 'user_id',
          'title_key' => 'LBL_USERS_SUBPANEL_TITLE',
       ),
-      'aclroles' => array(
-         'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'ACLRoles'),),
-         'order' => 20,
-         'sort_by' => 'name',
-         'sort_order' => 'asc',
-         'module' => 'ACLRoles',
-         'subpanel_name' => 'default',
-         'get_subpanel_data' => 'aclroles',
-         'add_subpanel_data' => 'role_id',
-         'refresh_page' => 1,
-         'title_key' => 'LBL_ROLES_SUBPANEL_TITLE',
-      ),
    ),
 );
 $layout_defs["SecurityGroups"]["subpanel_setup"]['securitygroups_rooms'] = array (

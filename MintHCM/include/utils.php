@@ -237,6 +237,7 @@ function make_sugar_config(&$sugar_config)
             'max_cron_runtime' => 60, // max runtime for cron jobs
             'min_cron_interval' => 30, // minimal interval between cron jobs
         ),
+        'display_week_number' => false,
     );
 }
 
@@ -455,6 +456,7 @@ function get_sugar_config_defaults()
             'max_cron_runtime' => 30, // max runtime for cron jobs
             'min_cron_interval' => 30, // minimal interval between cron jobs
         ),
+        'display_week_number' => false,
     );
 
     if (!is_object($locale)) {
@@ -756,7 +758,7 @@ function get_user_array($add_blank = true, $status = 'Active', $user_id = '',
     }
 
     if ($from_cache) {
-        $key_name = $add_blank . $status . $user_id . $use_real_name . $user_name_filter . $portal_filter;
+		$key_name = $current_user->id . $add_blank . $status . $user_id . $use_real_name . $user_name_filter . $portal_filter;
         $user_array = get_register_value('user_array', $key_name);
     }
 
@@ -772,9 +774,9 @@ function get_user_array($add_blank = true, $status = 'Active', $user_id = '',
         /* BEGIN - SECURITY GROUPS */
         global $current_user, $sugar_config;
         if (!is_admin($current_user) && isset($sugar_config['securitysuite_filter_user_list'])
-            && $sugar_config['securitysuite_filter_user_list'] == true && (empty($_REQUEST['module'])
-                || $_REQUEST['module'] != 'Home') && (empty($_REQUEST['action']) || $_REQUEST['action']
-                != 'DynamicAction')
+            && true == $sugar_config['securitysuite_filter_user_list'] && (empty($_REQUEST['module'])
+                || 'Home' != $_REQUEST['module']) && (empty($_REQUEST['action']) || 'DynamicAction'
+                != $_REQUEST['action'])
         ) {
             require_once 'modules/SecurityGroups/SecurityGroup.php';
             global $current_user;
@@ -799,9 +801,9 @@ function get_user_array($add_blank = true, $status = 'Active', $user_id = '',
             $order_by_string = ' user_name ASC ';
             $firstNamePos = strpos($formatString, 'f');
             $lastNamePos = strpos($formatString, 'l');
-            if ($firstNamePos !== false || $lastNamePos !== false) {
+            if (false !== $firstNamePos || false !== $lastNamePos) {
                 //its possible for first name to be skipped, check for this
-                if ($firstNamePos === false) {
+                if (false === $firstNamePos) {
                     $order_by_string = 'last_name ASC';
                 } else {
                     $order_by_string = ($lastNamePos < $firstNamePos) ? 'last_name, first_name ASC'
@@ -812,16 +814,21 @@ function get_user_array($add_blank = true, $status = 'Active', $user_id = '',
 
         $query = $query . ' ORDER BY ' . $order_by_string;
         $GLOBALS['log']->debug("get_user_array query: $query");
+
+        $query_md5 = md5($query);
+        if(!empty($_SESSION['get_user_array'][$query_md5]) ) {
+            return $_SESSION['get_user_array'][$query_md5];
+        }
         $result = $db->query($query, true, 'Error filling in user array: ');
 
-        if ($add_blank == true) {
+        if (true == $add_blank) {
             // Add in a blank row
             $temp_result[''] = '';
         }
 
         // Get the id and the name.
         while ($row = $db->fetchByAssoc($result)) {
-            if ($use_real_name == true || showFullName()) {
+            if (true == $use_real_name || showFullName()) {
                 if (isset($row['last_name'])) { // cn: we will ALWAYS have both first_name and last_name (empty value if blank in db)
                     $temp_result[$row['id']] = $locale->getLocaleFormattedName($row['first_name'],
                         $row['last_name']);
@@ -834,6 +841,12 @@ function get_user_array($add_blank = true, $status = 'Active', $user_id = '',
         }
 
         $user_array = $temp_result;
+
+        if(empty($_SESSION['get_user_array'])) {
+            $_SESSION['get_user_array'] = [];
+        }
+        $_SESSION['get_user_array'][$query_md5] = $user_array;
+
         if ($from_cache) {
             set_register_value('user_array', $key_name, $temp_result);
         }
