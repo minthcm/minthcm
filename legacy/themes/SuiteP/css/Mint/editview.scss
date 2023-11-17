@@ -1,0 +1,134 @@
+.button:active, .button:focus {
+    background-color: $edit-view-button-background-active;
+}
+
+option:checked {
+    color: $edit-view-option-checked-color;
+}
+
+.col-sm-12 .col-sm-8.edit-view-field textarea {
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .col-sm-12 .col-sm-8.edit-view-field textarea {
+        width: 120%;
+    }
+}
+
+.date_input {
+    width: 50%!important;
+}
+
+#save_and_continue {
+    background-color: $color-mint-darkgreen;
+    color: $color-101;
+}
+
+.pagination-label{
+    color: $color-101;
+}
+
+.col-sm-12 div[field="appraisal_items_inline"].edit-view-field {
+    width: 100%;
+
+    textarea[name^="appraisal_item_description["] {
+        font-weight: normal; padding-top: 5px;
+    }
+
+    input[name^="parent_name"]{
+        margin-top: 0px; margin-left: 10px;
+    }
+
+    @media (max-width: 1023px) {
+        input[name^="parent_name"]{
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        input[name^="parent_name"]{
+            width: 50%;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        input[name^="parent_name"]{
+            width: 45%;
+        }
+    }
+
+    span.id-ff button {
+        margin: 0px;
+    }
+
+
+
+}
+
+.col-sm-6 .edit-view-field input[id="spent_time"]{
+    width: 30%;
+}
+
+
+@media (min-width: 1600px) {
+    .col-sm-6 .col-sm-8.edit-view-field input.sqsDisabled {
+        width: 72.25%
+    }
+}
+input#btn_ConditionLine.button[type="button"] {
+    color: $color-mint-darkgreen-darker;
+}
+
+input#btn_ActionLine.button[type="button"] {
+    color: $color-mint-darkgreen-darker;
+}
+
+.edit-view-row .edit-view-row-item .label, .edit-view-field label {
+    color: #000;
+    font-weight: 100;
+}
+
+.edit-view-row .edit-view-row-item .bold_required_field, .bold_required_field {
+    font-weight: bold;
+}
+#EditView div[type='bool'] input[type='checkbox'] {
+    vertical-align: bottom;
+    position      : relative;
+    top           : 9px;
+}
+
+.dcQuickEdit .buttons {
+    margin-top: 30px;
+}
+
+.buttons input {
+    margin-right: 8px;
+}
+
+.buttons input:first-child{
+    margin-left: 10px;
+}
+
+table.subpanel-table ul.clickMenu.fancymenu.SugarActionMenu {
+    padding-left: 10px !important;
+}
+
+.edit tr td[scope='row'] {
+    padding: 0px;
+}
+
+.edit tr td {
+    padding: 0px;
+}
+
+#EditView select.datetimecombo_time {
+    height: 33px;
+}
+
+.emailAddressFieldContainer .col-xs-12 {
+    padding: 0px;
+}
+.pagination_subpanelview{
+    padding-right: 5px;
+}

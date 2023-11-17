@@ -1,0 +1,12 @@
+#!/usr/bin/php
+<?php
+
+require 'legacy/MintCLI/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$application->add(new MintHCM\MintCLI\Commands\Install());
+
+$application->run();

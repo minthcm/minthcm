@@ -1,0 +1,135 @@
+input[type=button], input.button[type=button], input.button[type=submit]  {
+    //MintHCM #120479 START
+    // background: $button-light-bg;
+    // border: 1px solid $button-light-border;
+    // color: $button-light-color;   
+    background: #fff;
+    border: 1.5px solid $lm-secondary-accent;
+    color: $lm-secondary-accent;
+    //MintHCM #120479 END
+}
+
+input[type=button]:hover, input.button[type=button]:hover, .buttons .button:hover{
+    background-color: $button-light-bg-hover;
+}
+
+input[type=button][selected], .buttons .button[selected] {
+    background: $color-mint-lightgreen;
+    color: #fff;
+}
+
+input[type=button][selected]:hover, .buttons .button[selected]:hover {
+    background: $color-mint-lightgreen-lighter;
+    color: #fff;
+}
+#EditView a.button {
+    padding: 0 10px;
+    margin: 4px;
+    background-color: $color-32;
+    border: 1px solid $color-99;
+    color: $color-99;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    height: 32px;
+    display: inline-block;
+}
+
+#EditView a.button:hover {
+    background-color: $color-mint-white-hover;
+}
+.detail-view-field .dataField input.button {
+    background-color: $color-36;
+}
+
+.detail-view-field .dataField input.button:hover {
+    background-color: $color-94;
+}
+
+.nav-tabs > li.tab-inline-pagination .btn-pagination[disabled]:hover {
+    background-color: $color-94;
+    color: $color-52;
+    cursor: default;
+}
+
+.nav-tabs > li.tab-inline-pagination .btn-pagination:hover {
+    background-color: $color-43;
+    color: $color-22;
+}
+.pagination button.button[disabled],
+.pagination button.button[disabled]:hover, .pagination button.button[disabled] .suitepicon {
+    color: $color-mint-grey-lighter;
+}
+
+table.subpanel-table .pagination .sugar_action_button:hover {
+    background-color: $color-97;
+}
+ul.clickMenu li a:hover {
+    color: $color-93;
+}
+ul.clickMenu.SugarActionMenu li.single a:hover,
+table.subpanel-table li.sugar_action_button:hover{
+    background-color: $color-100;
+}
+
+.sub-panel tbody tr td .sugar_action_button > a:link:hover,
+.sub-panel .table-responsive.list > tbody > tr > td ul.subnav a:hover{
+    color: $color-93;
+
+}
+
+.detail-view-row .label{
+    line-height: 1.1;
+}
+
+.btn-pagination .pagination-label{
+    color: #63c29a;
+}
+
+.reactionsWrapper {
+    float: right;
+}
+  
+.reactionsWrapper button {
+    height: 28px;
+    line-height: 18px;
+    font-size: 10px;
+    padding: 0 10px 0 10px;
+    border-radius: 3px;
+    background: #fff;
+    border: 1px solid #63c29a;
+    color: #63c29a;
+    font-weight: 600;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.reactionsWrapper button:hover {
+    background: #fcfafa;
+}
+
+.reactionsWrapper button[active] {
+    background: #009976;
+    border: none;
+    color: #fff;
+}
+
+.reactionsWrapper button[active]:hover {
+    background: #008062;
+}
+
+// MintHCM #120479 START
+#EditView #CANCEL{
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    font-size: $page-font-size;
+    font-weight: 600;
+    line-height: 0;
+    background: #fff;
+    border: 1.5px solid $lm-secondary-accent;
+    color: $lm-secondary-accent;
+    cursor: pointer;
+    padding: 15px 10px 0 10px;
+    margin: 0 0 0 0;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    height: $button-line-height;
+    text-transform: uppercase;
+}
+// MintHCM #120479 END

@@ -1,0 +1,82 @@
+.dropzone.dz-started.dz-clickable .dz-message {
+    display: block;
+}
+
+.dropzone.dz-started.dz-clickable .dz-message span.note {
+    display: block;
+}
+
+.dropzone {
+    /* max-width: 1000px; */
+}
+
+.dropzone .dz-image {
+    display: flex!important;
+    justify-content: center;
+    align-items: center;
+    width: 60px!important;
+    height: 60px!important;
+}
+
+.dropzone .dz-details .dz-size, .dropzone .dz-details .dz-filename {
+    display: none;
+}
+
+.dz-custom-thumbnail-name {
+    display: block;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    color: #000;
+    font-size: 11px;
+    word-break:break-all
+}
+
+.dropzone .dz-preview {
+    max-width: 60px;
+    line-break: auto;
+}
+
+.dropzone .dz-progress {
+   display: none!important;
+}
+
+.dropzone .dz-button {
+    padding-bottom: 16px!important;
+}
+
+.dropzone .dz-preview:hover .dz-image img {
+    filter: blur(0)!important;
+}
+
+.dropzone .dz-error-message {
+    top: 80px!important;
+    left: -40px!important;
+}
+
+.dropzone .dz-error-mark svg, .dropzone .dz-success-mark svg {
+    max-width: 24px!important;
+    max-height: 24px!important;
+}
+
+.dropzone .dz-error-mark, .dropzone .dz-success-mark {
+    top: 44px!important;
+    left: 44px!important;
+}
+
+.edit-view-row-item .dropzone, .detail-view-row .dropzone {
+    max-width: none;
+}
+
+.edit-view-row-item .dropzone {
+    width: 120%;
+}
+
+.dropzone .dz-preview .dz-remove {
+    font-size: 10px;
+}
+.dropzone .dz-preview.dz-image-preview .dz-details {
+    cursor: pointer;
+}

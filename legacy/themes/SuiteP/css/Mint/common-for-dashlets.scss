@@ -1,0 +1,193 @@
+.dashletPanel td, .dashletPanel th {
+    padding: 0px;
+    //padding-left: $mint-rem;
+}
+
+#dlg .bd {
+    overflow-y: scroll !important;
+}
+
+.dashletcontainer > ul > li > .dashletPanel {
+  @include BoxShadow(1);
+  border-radius: 4px;
+  overflow-x: hidden;
+}
+
+.TWSDashlet {
+    margin-top: 0;
+    //MintHCM #120479 START
+    //  padding: 0 $mint-rem;
+    padding: 0;
+    //MintHCM #120479 END
+
+    table {
+        min-height: 54px;
+    }
+//MintHCM #120479 START
+    .toolbar_container {
+        gap: 16px;
+        padding: 16px;
+        > div {
+            padding: 0;
+        }
+    }
+
+    .monthHeader a svg g#layer1 {
+        transform: translate(8px, -1036.3622px);
+    }
+}
+//MintHCM #120479 END
+.TWSListBody td {
+    text-align: left;
+}
+//MintHCM #120479 START
+.TWSListBody a img {
+    filter: saturate(3.5);
+}
+//MintHCM #120479 END
+.TWSToolbar {
+    margin-bottom: 0;
+}
+
+.card {
+  padding: $mint-rem $mint-rem * 2;
+  @include BoxShadow(1);
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.TimePanel .time-cell {
+
+
+  &.orangeColor {
+    background-color: $color-mint-orange;
+    @include BoxShadow(1);
+    color: #fff;
+    &:hover {
+      background-color: $color-mint-orange-lighter;
+    }
+  }
+
+  &.yellowColor {
+    background-color: $color-mint-yellow;
+    @include BoxShadow(1);
+    color: #000;
+    &:hover {
+      background-color: $color-mint-yellow-lighter;
+    }
+  }
+
+}
+
+.bd-center > br {
+  display: none;
+}
+
+select {
+  height: $mint-rem * 2;
+  line-height: $mint-rem * 2;
+  max-width: unset !important;
+}
+
+input[type=text] {
+  background: none;
+}
+
+.fc-event {
+  border: none !important;
+  border-radius: 0px !important;
+  border-left: 3px solid !important;
+  @include BoxShadow(1);
+  padding: $mint-rem / 4;
+}
+
+.listViewButtons input[type=submit] {
+  //color: #fff;
+}
+//MintHCM #120479 START
+.TWSList {
+    th:not(:first-child) {
+        padding-left: 8px;
+    }
+   
+        &Body {
+
+        tr {
+            height: 54px;
+        }
+
+        tr[task-id] td {
+            padding: 8px;
+            color: unset !important;
+            border-bottom: 1px solid $lm-list-border;
+            border-top: 1px solid $lm-list-border;
+            transition: background-color .2s;
+
+            &:first-child {
+                padding-left: 16px;
+            }
+
+            &:last-child {
+                padding-right: 16px !important;
+            }
+
+            & > div > div {
+                display: grid;
+                grid-gap: 12px;
+
+                @media(hover: hover) and (pointer: fine) {
+                    // visibility: hidden;
+                    opacity: 0;
+                    transition: opacity .2s;
+                }
+
+                
+            
+                & > a {
+                    grid-row: 1;
+            
+                    & img {
+                        margin-left: unset !important;
+                    }
+                }
+            }
+            
+            a {
+                margin-left: unset;
+
+                img {
+                    margin-left: unset;
+                }
+            }
+        } 
+        
+        @media(hover: hover) and (pointer: fine) {
+            tr[task-id]:hover > td {
+                background-color: $lm-hover-bg;
+    
+                & > div > div {
+                    // visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+        
+    }
+    
+    &Footer {
+        padding: 16px 0 16px 16px !important;
+
+        .TimePanel {
+            table {
+                min-height: unset;
+            }
+
+            .TimePanelMiddle {
+                border-radius: 4px !important;
+                background-color: $lm-list-border !important;
+                padding: 2px 0;
+            }
+        }
+    }
+}
+//MintHCM #120479 END

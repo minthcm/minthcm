@@ -1,0 +1,13 @@
+<?php
+
+require './vendor/autoload.php';
+
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Containers\Doctrine\DoctrineContainerBuilder;
+
+$doctrineContainerBuilder = new DoctrineContainerBuilder();
+$container = $doctrineContainerBuilder->build();
+$entityManager = $container->get(EntityManagerInterface::class);
+$helperSet = ConsoleRunner::createHelperSet($entityManager);
+return ConsoleRunner::run($helperSet, []);

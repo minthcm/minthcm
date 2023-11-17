@@ -1,0 +1,41 @@
+@use 'vuetify' with (
+    $body-font-family: Barlow
+);
+    
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap');
+
+html {
+    overflow-y: auto !important;
+}
+
+.v-application {
+    background-image: url('../bg.jpg');
+    background-size: cover;
+}
+
+// scrollbar
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: rgb(var(--v-theme-surface));
+}
+::-webkit-scrollbar-thumb {
+    background: rgb(var(--v-theme-secondary));
+    border-radius: 5px;
+}
+
+// list animation
+.list-move,
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.3s ease;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+}
+.list-leave-active {
+    position: absolute;
+}

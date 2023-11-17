@@ -1,0 +1,60 @@
+<?php
+
+$sugar_config_si = array(
+   'setup_db_host_name' => '_DB_HOST_',
+   'setup_db_sugarsales_user' => '_DB_USER_',
+   'setup_db_sugarsales_password' => '_DB_PASSWORD_',
+   'setup_db_database_name' => '_DB_NAME_',
+   'setup_db_port_num' => '_DB_PORT_',
+   'setup_db_type' => 'mysql',
+   'setup_db_pop_demo_data' => false,
+   'demoData' => '_INSTALL_DD_',
+   'setup_db_create_database' => 1,
+   'setup_db_create_sugarsales_user' => 0,
+//   'dbUSRData' => 'create',
+   'setup_db_drop_tables' => 0,
+   'setup_db_username_is_privileged' => true,
+   'setup_db_admin_user_name' => '_DB_USER_',
+   'setup_db_admin_password' => '_DB_PASSWORD_',
+   'setup_site_url' => '_SITE_URL_',
+   'setup_site_admin_user_name' => '_MINT_USER_',
+   'setup_site_admin_password' => '_MINT_PASS_',
+   //'setup_license_key' => '_LICENSE_KEY_',
+   //'setup_license_key_users' => {slkeyusers},
+   //'setup_license_key_expire_date' => '{slkeyexpiredate}',
+   //'setup_license_key_oc_licences' => {slkey_oc_licenses},
+   'setup_site_sugarbeet_automatic_checks' => false,
+   'default_currency_iso4217' => 'USD',
+   'default_currency_name' => 'US Dollar',
+   'default_currency_significant_digits' => '2',
+   'default_currency_symbol' => '$',
+   'default_date_format' => 'Y-m-d',
+   'default_time_format' => 'H:i',
+   'default_decimal_seperator' => '.',
+   'default_export_charset' => 'UTF-8',
+   'default_language' => 'en_us',
+   'default_locale_name_format' => 's f l',
+   'default_number_grouping_seperator' => ',',
+   'export_delimiter' => ',',
+   'setup_system_name' => '_SETUP_SYSTEM_NAME_',
+   'setup_db_options' => array(
+      'persistent' => true,
+      'autofree' => false,
+      'debug' => 0,
+      'ssl' => false,
+      'collation' => '_DB_COLLATION_',
+      'charset' => 'utf8mb4',
+   ),
+   'search' => array(
+      'ElasticSearch' => array(
+        'enabled' => true,
+        'host' => '_ELASTIC_HOST_',
+        'user' => '_ELASTIC_USER_',
+        'pass' => '_ELASTIC_PASS_',
+        'index' => '_',
+        'search_wildcard_char' => '%',
+        'search_wildcard_infront' => true
+      )
+   )
+);
+?>

@@ -1,0 +1,18 @@
+{
+    "name": "minthcm/mint-cli",
+    "description": "MintHCM CLI",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MintHCM\\MintCLI\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Szymon Rydza"
+        }
+    ],
+    "require": {
+        "symfony/console": "^5.4"
+    }
+}

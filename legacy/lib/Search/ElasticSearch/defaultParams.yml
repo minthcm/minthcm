@@ -1,0 +1,54 @@
+fields: &fields
+  keyword:
+    type: keyword
+    ignore_above: 256
+name_fields: &name_fields
+  type: text
+  copy_to: named
+  fields: *fields
+date_type: &date_type
+  type: date
+  format: yyyy-MM-dd HH:mm:ss||yyyy-MM-dd
+text_type: &text_type
+  type: text
+  fields: *fields
+boolean_type: &boolean_type
+  type: boolean
+long_type: &long_type
+  type: long
+
+mappings:
+  _default_:
+    properties:
+      meta:
+        properties:
+          created:
+            properties:
+              date: *date_type
+          modified:
+            properties:
+              date: *date_type
+      name:
+        properties:
+          name: *name_fields
+      named: *text_type
+  Calls:
+    properties:
+      parent_name: *text_type
+      date_start: *date_type
+      date_end: *date_type
+  Candidates:
+    properties:
+      address:
+        properties:
+          alt:
+            properties:
+              street: *text_type
+          primary:
+            properties:
+              street: *text_type
+      recr_contact_agree: *boolean_type
+      relocation: *boolean_type
+      collaboration: *boolean_type
+      last_time_contact: *date_type
+      date_planned_contact: *date_type
