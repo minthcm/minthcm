@@ -1,0 +1,19 @@
+{
+    "name": "name.name.keyword",
+    "first_name": "name.first.keyword",
+    "last_name": "name.last.keyword",
+    "date_entered": "meta.created.date",
+    "created_by": "meta.created.user_id.keyword",
+    "date_modified": "meta.modified.date",
+    "modified_user_id": "meta.modified.user_id.keyword",
+    "assigned_user_id": "meta.assigned.user_id.keyword",
+    "modified_by_name": "meta.modified.user_name.keyword",
+    "created_by_name": "meta.created.user_name.keyword",
+    "assigned_user_name": "meta.assigned.user_name.keyword",
+    "phone_mobile": "phone.mobile.keyword",
+    "primary_address_city": "address.primary.city.keyword",
+    "primary_address_state": "address.primary.state.keyword",
+    "primary_address_postalcode": "address.primary.postalcode.keyword",
+    "primary_address_street": "address.primary.street.keyword",
+    "primary_address_country": "address.primary.country.keyword"
+}

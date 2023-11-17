@@ -1,0 +1,210 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+abbr, acronym {
+    border: 0;
+}
+
+
+.Treant {
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+    background-color: #f7f7f7;
+}
+
+.Treant>.node, .Treant>.pseudo {
+    position: absolute;
+    display: block;
+    visibility: hidden;
+}
+
+.Treant.loaded .node, .Treant.loaded .pseudo {
+    visibility: visible;
+}
+
+.Treant>.pseudo {
+    width: 0;
+    height: 0;
+    border: none;
+    padding: 0;
+}
+
+.Treant .collapse-switch {
+    width: 3px;
+    height: 3px;
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    cursor: pointer;
+}
+
+.Treant .collapse-switch:hover, .Treant .collapse-switch:active, .Treant .collapse-switch:focus {
+    text-decoration: none;
+}
+
+.Treant>.node img {
+    border: none;
+    float: left;
+}
+
+.Treant>.node {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    height: auto !important;
+}
+
+.Treant .collapse-switch {
+    width: 10px;
+    height: 10px;
+}
+
+.Treant .collapse-switch:before {
+    content: "\f101";
+}
+
+.Treant .collapsed .collapse-switch {
+    width: 10px;
+    height: 10px;
+}
+
+.Treant .collapsed .collapse-switch:before {
+    content: "\f106";
+}
+
+.Treant .node.collapsed .collapse-switch {
+    background: none;
+}
+
+.chart {
+    margin: 5px;
+    width: 100%;
+}
+
+.Treant {
+    color: #6a6a6a;
+}
+
+.Treant>p {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.node-name {
+    font-size: 12px;
+}
+
+.node-title {
+    font-weight: bold;
+}
+
+a.node-title {
+    text-decoration: underline;
+}
+
+.Treant p {
+    font-size: 12px;
+}
+
+.osNode {
+    padding: 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: 1px solid #000;
+    width: 200px;
+    font-family: Tahoma;
+    font-size: 12px;
+}
+
+.osNode img {
+    margin-right: 10px;
+}
+
+.node.osNode.company, .company {
+    padding: 4px;
+    width: 150px;
+}
+
+.node.osNode.company img, .company img {
+    width: 150px;
+}
+
+.department {
+    background-color: #f3dfd7;
+}
+
+.team {
+    background-color: #e3f9ff;
+}
+
+.rootWithImage img {
+    height: 100%;
+    width: 100%;
+}
+
+.rootWithImage img.face {
+    height: 100%;
+    width: 100%;
+    border-radius:0%;
+}
+
+img.face {
+    width: 40px;
+    border-radius: 50%;
+    height: 40px;
+    object-fit: cover;
+}
+
+#structure_full_screen{
+    position:absolute;
+    z-index: 1;
+    width: 233px;
+    margin-top: 5px;
+    margin-left: 5px;
+	color: #ccc;
+}
+
+#structure_full_screen > img {
+    width: 40px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+#structure_full_screen > img:hover {
+    border: 1px solid #f77;
+}

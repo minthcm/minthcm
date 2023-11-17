@@ -1,0 +1,78 @@
+<?php
+
+
+/**
+ *
+ * SugarCRM Community Edition is a customer relationship management program developed by
+ * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
+ *
+ * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
+ * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ *
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2023 MintHCM
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License version 3 as published by the
+ * Free Software Foundation with the addition of the following permission added
+ * to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED WORK
+ * IN WHICH THE COPYRIGHT IS OWNED BY SUGARCRM, SUGARCRM DISCLAIMS THE WARRANTY
+ * OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with
+ * this program; if not, see http://www.gnu.org/licenses or write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
+ *
+ * You can contact SugarCRM, Inc. headquarters at 10050 North Wolfe Road,
+ * SW2-130, Cupertino, CA 95014, USA. or at email address contact@sugarcrm.com.
+ *
+ * The interactive user interfaces in modified source and object code versions
+ * of this program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU Affero General Public License version 3.
+ *
+ * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
+ */
+
+class NewsDisplayDateUpdater {
+
+   const LIMIT = 4;
+
+   public function start() {
+      $news_ids = $this->getNewsIds();
+      $this->updateNewsDisplayDate($news_ids);
+   }
+
+   protected function getNewsIds() {
+      global $db;
+      $results = array();
+      $sql = "SELECT id FROM news WHERE news_type = 'reminder' AND news_status = 'published' AND (display_date IS NULL OR display_date = '' OR display_date < CURDATE() - INTERVAL 30 DAY) AND deleted = 0 ORDER BY display_date ASC LIMIT " . self::LIMIT;
+      $result = $db->query($sql);
+      while ( $row = $db->fetchByAssoc($result) ) {
+         $results[] = $row['id'];
+      }
+      return $results;
+   }
+
+   protected function updateNewsDisplayDate($news_ids) {
+      global $timedate;
+      foreach ( $news_ids as $news_id ) {
+         $news = BeanFactory::getBean('News', $news_id);
+         if ( $news && !empty($news->id) ) {
+            $news->display_date = $timedate->nowDbDate();
+            $news->save();
+         }
+      }
+   }
+
+}

@@ -1,0 +1,96 @@
+ul.nav.navbar-nav li.topnav:hover > span.currentTab a {
+    color: $navbar-currentTab-color-hover;
+}
+
+ul.nav.navbar-nav li.navbar-brand-container a.navbar-brand:hover ,
+ul.toolbar li.desktop_notifications button.alertsButton:hover,
+ul.toolbar li.globalLinks-desktop:hover {
+    color: $color-64;
+}
+
+@media screen and (max-width: 1560px){
+    ul.toolbar li.navbar-search button.searchbutton:hover {
+        color: $navbar-search-button-background-hover;
+    }
+}
+
+.has-alerts > .clear-all-alerts-container > .btn-warning {
+    background-color: $navbar-link-color-hover;
+    border-color: $navbar-link-color-hover;
+}
+
+.desktop_notifications .has-alerts {
+    background-color: $main-bg;
+}
+
+.create.quickcreatetop .dropdown-toggle {
+    background-color: $navbar-main-menu-bg;
+}
+
+.create.quickcreatetop ul.dropdown-menu {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: $color-99;
+}
+
+.create.quickcreatetop ul.dropdown-menu li a:hover {
+    background-color: $color-99;
+}
+
+.quickcreatetop .dropdown-menu li a {
+    background-color: $navbar-main-menu-bg;
+}
+.navbar-inverse .nav > .topnav > span.notCurrentTab > a:hover,
+.navbar-inverse .nav > .topnav > span.notCurrentTab > a:active,
+.navbar-inverse .dropdown-menu li a:hover,
+.navbar-inverse .dropdown-menu li a:active,
+.navbar li a.suitepicon:hover,
+// MintHCM #120479 START
+//.navbar li a.suitepicon:active,
+.navbar li a.suitepicon:active
+// MintHCM #120479 END
+{
+    color: $navbar-inverse-link-color;
+}
+
+.quickcreatetop li:last-child a {
+border-bottom: 0;
+}
+
+// MintHCM #120479 START
+.navbar-inverse {
+    background: $lm-primary-accent;
+}
+
+.navbar-inverse .dropdown-menu {
+  background: $lm-primary-accent;
+}
+
+.navbar-inverse .dropdown-menu li a,
+.navbar-inverse .dropdown-menu li a:hover,
+.topnav a,
+.topnav a:hover,
+.navbar-inverse .nav > .topnav > span.notCurrentTab > a:hover,
+.navbar-inverse .nav > .topnav.with-actions > span.notCurrentTab > a:hover,
+.create.quickcreatetop .dropdown-toggle,
+.globalLinks-desktop .user-menu-button {
+    background-color: unset;
+}
+
+.alertsButton {
+    background-color: unset !important;
+}
+
+.create.quickcreatetop ul.dropdown-menu {
+    background: $lm-primary-accent;
+}
+
+.navbar-inverse .dropdown-menu li a:hover,
+.topnav:hover,
+.create.quickcreatetop .dropdown-toggle:hover,
+.create.quickcreatetop ul.dropdown-menu li a:hover,
+.globalLinks-desktop .user-menu-button:hover,
+.globalLinks-desktop .user-menu-button:active {
+    background: $lm-primary-accent--darker;
+}
+// MintHCM #120479 END

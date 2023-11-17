@@ -1,0 +1,214 @@
+<?php
+
+if ( !defined('sugarEntry') || !sugarEntry ) {
+   die('Not A Valid Entry Point');
+}
+/**
+ *
+ * SugarCRM Community Edition is a customer relationship management program developed by
+ * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
+ *
+ * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
+ * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ *
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2023 MintHCM
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License version 3 as published by the
+ * Free Software Foundation with the addition of the following permission added
+ * to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED WORK
+ * IN WHICH THE COPYRIGHT IS OWNED BY SUGARCRM, SUGARCRM DISCLAIMS THE WARRANTY
+ * OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with
+ * this program; if not, see http://www.gnu.org/licenses or write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
+ *
+ * You can contact SugarCRM, Inc. headquarters at 10050 North Wolfe Road,
+ * SW2-130, Cupertino, CA 95014, USA. or at email address contact@sugarcrm.com.
+ *
+ * The interactive user interfaces in modified source and object code versions
+ * of this program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU Affero General Public License version 3.
+ *
+ * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
+ */
+$layout_defs['Meetings'] = array(
+   // list of what Subpanels to show in the DetailView
+   'subpanel_setup' => array(
+      'users' => array(
+         'top_buttons' => array(),
+         'order' => 20,
+         'module' => 'Users',
+         'sort_order' => 'asc',
+         'sort_by' => 'name',
+         'subpanel_name' => 'ForMeetings',
+         'get_subpanel_data' => 'users',
+         'title_key' => 'LBL_USERS_SUBPANEL_TITLE',
+      ),
+      'leads' => array(
+         'order' => 30,
+         'module' => 'Leads',
+         'sort_order' => 'asc',
+         'sort_by' => 'last_name, first_name',
+         'subpanel_name' => 'ForMeetings',
+         'get_subpanel_data' => 'leads',
+         'title_key' => 'LBL_LEADS_SUBPANEL_TITLE',
+         'top_buttons' => array(),
+      ),
+//      'history' => array(
+//         'order' => 40,
+//         'sort_order' => 'desc',
+//         'sort_by' => 'date_entered',
+//         'title_key' => 'LBL_HISTORY_SUBPANEL_TITLE',
+//         'type' => 'collection',
+//         'subpanel_name' => 'history', //this values is not associated with a physical file.
+//         'header_definition_from_subpanel' => 'meetings',
+//         'module' => 'History',
+//         'top_buttons' => array(
+//            array('widget_class' => 'SubPanelTopCreateNoteButton'),
+//         ),
+//         'collection_list' => array(
+//            'notes' => array(
+//               'module' => 'Notes',
+//               'subpanel_name' => 'ForMeetings',
+//               'get_subpanel_data' => 'notes',
+//            ),
+//         )
+//      ),
+      'candidates' => array(
+         'order' => 35,
+         'module' => 'Candidates',
+         'sort_order' => 'asc',
+         'sort_by' => 'last_name, first_name',
+         'subpanel_name' => 'ForMeetings',
+         'get_subpanel_data' => 'candidates',
+         'title_key' => 'LBL_CANDIDATES',
+         'top_buttons' => array(),
+      ),
+      'trainings' => array(
+         'order' => 100,
+         'module' => 'Trainings',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_TRAININGS',
+         'get_subpanel_data' => 'trainings',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'exitinterviews' => array(
+         'order' => 100,
+         'module' => 'ExitInterviews',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_EXITINTERVIEWS',
+         'get_subpanel_data' => 'exitinterviews',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'appraisals' => array(
+         'order' => 100,
+         'module' => 'Appraisals',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_APPRAISALS',
+         'get_subpanel_data' => 'appraisals',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'conclusions' => array(
+         'order' => 100,
+         'module' => 'Conclusions',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_CONCLUSIONS',
+         'get_subpanel_data' => 'conclusions',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'reservations' => array(
+         'order' => 100,
+         'module' => 'Reservations',
+         'subpanel_name' => 'default',
+         'sort_order' => 'asc',
+         'sort_by' => 'id',
+         'title_key' => 'LBL_RESERVATIONS',
+         'get_subpanel_data' => 'reservations',
+         'top_buttons' => array(
+            array(
+               'widget_class' => 'SubPanelTopButtonQuickCreate',
+            ),
+            array(
+               'widget_class' => 'SubPanelTopSelectButton',
+               'mode' => 'MultiSelect',
+            ),
+         ),
+      ),
+      'resources' => array(
+         'order' => 35,
+         'module' => 'Resources',
+         'sort_order' => 'asc',
+         'sort_by' => 'name',
+         'subpanel_name' => 'default',
+         'get_subpanel_data' => 'resources',
+         'title_key' => 'LBL_RESOURCES',
+         'top_buttons' => array(),
+      ),
+      'securitygroups' => array(
+         'top_buttons' => array(array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'SecurityGroups', 'mode' => 'MultiSelect'),),
+         'order' => 900,
+         'sort_by' => 'name',
+         'sort_order' => 'asc',
+         'module' => 'SecurityGroups',
+         'refresh_page' => 1,
+         'subpanel_name' => 'default',
+         'get_subpanel_data' => 'SecurityGroups',
+         'add_subpanel_data' => 'securitygroup_id',
+         'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
+      ),
+   ),
+);

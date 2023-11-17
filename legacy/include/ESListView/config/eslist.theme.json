@@ -1,0 +1,27 @@
+{
+    "font": {
+        "body": "primary",
+        "btn": "secondary",
+        "popup-title": "secondary"
+    },
+    "color": {
+        "btn-primary--bg": "secondary",
+        "btn-primary--text": "light",
+        "btn-secondary--bg": "light",
+        "btn-secondary--text": "secondary",
+        "btn-secondary--outline": "disabled",
+        "popup-column-visible--bg": "primary",
+        "popup-column-visible--text": "light",
+        "popup-column-hidden--bg": "gray--light",
+        "popup-column-hidden--text": "dark",
+        "switch": "primary",
+        "action-icon": "primary--dark",
+        "boolean-icon": "gray",
+        "loader": "primary--lighter",
+        "text--disabled": "disabled",
+        "text--link": "primary",
+        "text--error": "error",
+        "scroll--bg": "light",
+        "scroll--fg": "primary"
+    }
+}

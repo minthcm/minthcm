@@ -1,0 +1,97 @@
+.toolbar_container {
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    // MintHCM #120479 START
+    gap:16px;
+    padding: 16px;
+
+    &__date_time {
+        padding-top:16px;
+        padding-bottom:16px;
+        line-height:100%;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        padding-left: 8px;
+
+        &__month_header_left {
+            display:flex;
+            margin-top:0;
+            padding-left:0;
+            width: 32px;
+            height: 32px;
+            align-content: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        input {
+            width: 8.5em !important;
+        }
+
+        &__calendar_img {
+            position:relative;
+            margin-right:15px;
+            margin-left:-30px;
+            cursor:pointer;
+        }
+
+        &__month_header_right {
+            display:flex;
+            margin-top:0;
+            padding-right:0;
+            width: 32px;
+            height: 32px;
+            align-content: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+    }
+
+    &__select_container {
+        padding-top:16px;
+        padding-bottom:16px;
+
+        select {
+            min-width:300px;
+        }
+    }
+
+    &__action_buttons_container {
+        padding-top:16px;
+        padding-bottom:16px;
+        display:grid;
+        grid-auto-flow:column;
+        grid-gap: 12px;
+        margin-left: auto;
+        img {
+            width:16px;
+            height:16px;
+            cursor:pointer;
+            filter: saturate(3.5);
+        }
+    }
+}
+// MintHCM #120479 END
+.yui-calendar td.calcell.today, .yui-calendar td.calcell.today a{
+	background-color:#63c29a;
+	background:#63c29a;
+        color:white;
+}
+
+.yui-calendar td.calcell.today.selected, .yui-calendar td.calcell.today.selected a, .yui-calendar td.calcell.selected:hover, .yui-calendar td.calcell.selected:hover > a {
+    background:#009976;
+	background-color:#009976;
+	color:white;
+}
+// MintHCM #120479 START
+.ui-droppable tr td:empty::after {
+    border: 1.5px dashed #b8b8b8;
+    border-radius: 4px;
+    padding: 20px;
+}
+// MintHCM #120479 END
