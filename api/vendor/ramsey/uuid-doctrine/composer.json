@@ -1,0 +1,62 @@
+{
+    "name": "ramsey/uuid-doctrine",
+    "type": "library",
+    "description": "Use ramsey/uuid as a Doctrine field type.",
+    "keywords": [
+        "uuid",
+        "identifier",
+        "guid",
+        "doctrine",
+        "database"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ben Ramsey",
+            "email": "ben@benramsey.com",
+            "homepage": "https://benramsey.com"
+        }
+    ],
+    "require": {
+        "php": "^5.4 || ^7 || ^8",
+        "doctrine/dbal": "^2.5 || ^3.0",
+        "ramsey/uuid": "^3.5 || ^4"
+    },
+    "require-dev": {
+        "doctrine/orm": "^2.5",
+        "php-parallel-lint/php-parallel-lint": "^1",
+        "mockery/mockery": "^0.9.11 || ^1",
+        "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7 || ^8 || ^9",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "scripts": {
+        "build:clean": "git clean -fX build/",
+        "lint": "parallel-lint src tests",
+        "lint:paths": "parallel-lint",
+        "phpcbf": "phpcbf -vpw --cache=build/cache/phpcs.cache",
+        "phpcs": "phpcs --cache=build/cache/phpcs.cache",
+        "phpunit": "phpunit --verbose --colors=always",
+        "phpunit-coverage": "phpunit --verbose --colors=always --coverage-html build/coverage",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpunit"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Ramsey\\Uuid\\Doctrine\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ramsey\\Uuid\\Doctrine\\": "tests/"
+        }
+    }
+}

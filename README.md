@@ -22,7 +22,7 @@ This repository contains a source code of MintHCM system.
 
 ## Installation 🧩
 
-The installation process is described on our [official wiki](https://wiki.minthcm.org/index.php?title=Process:Installation_guide).
+The installation process is described on a official wiki [link](https://wiki.minthcm.org/index.php?title=Process:Installation_guide_MintHCM_v4).
 
 ## Community and Contributions 🤝
 
@@ -37,8 +37,7 @@ We don't have any rigid rules. We don't want to cut back your creativity in deve
 
 ## Requirements 💻
 
-MintHCM requirements are **PHP 7.1** and **MySQL 5.6-5.7** or **MariaDB 10**. All web browsers with Chromium, Firefox, and Edge are supported by MintHCM. <br>
-Unfortunately, we do not support IE, but you can still test and use it by yourself. 🤗
+MintHCM requirements: **PHP 7.4-8.0** and **MySQL 5.7 or 8.0**. All web browsers with Chromium and Firefox are supported by MintHCM. <br> Unfortunately, it doesn't support IE 😭 
 
 ## License 🌐
 

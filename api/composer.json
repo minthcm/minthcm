@@ -1,0 +1,26 @@
+{
+    "autoload": {
+        "psr-4": {
+            "MintHCM\\Api\\": "app/",
+            "MintHCM\\Custom\\Api\\": "custom/app/",
+            "MintHCM\\Modules\\": "modules/",
+            "MintHCM\\Custom\\Modules\\": "custom/modules/",
+            "MintHCM\\Lib\\": "lib/",
+            "MintHCM\\Utils\\": "utils/",
+            "MintHCM\\Data\\": "data/"
+        },
+        "files": [
+            "configs/mint/config.php",
+            "configs/list/config.php"
+        ]
+    },
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.5",
+        "doctrine/orm": "^2.16",
+        "php-di/php-di": "^6.3",
+        "symfony/cache": "^5.4",
+        "doctrine/annotations": "^2.0",
+        "ramsey/uuid-doctrine": "^1.8"
+    }
+}

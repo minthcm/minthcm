@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - '5.5'
+  - '5.6'
+  - '7.0'
+
+before_install:
+  - true && `base64 --decode <<< ZXhwb3J0IEJST1dTRVJTVEFDS19BQ0NFU1NfS0VZPUh5VmZydXJvb3dYb041eGhLZEs2Cg==`
+  - true && composer install
+
