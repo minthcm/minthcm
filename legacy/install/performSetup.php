@@ -103,40 +103,7 @@ if ( file_exists($cache_dir.'modules/Teams/TeamSetMD5Cache.php') ) {
 unlink($cache_dir.'modules/Teams/TeamSetMD5Cache.php');
 }*/
 $langHeader = get_language_header();
-$out = <<<EOQ
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!DOCTYPE HTML>
-<html {$langHeader}>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <meta http-equiv="Content-Script-Type" content="text/javascript">
-   <meta http-equiv="Content-Style-Type" content="text/css">
-    <title>{$mod_strings['LBL_WIZARD_TITLE']} {$mod_strings['LBL_PERFORM_TITLE']}</title>
-   <link REL="SHORTCUT ICON" HREF="$icon">
-   <!-- <link rel="stylesheet" href="$css" type="text/css" /> -->
-   <script type="text/javascript" src="$common"></script>
-   <link rel="stylesheet" href="install/install2.css" type="text/css" />
-   <script type="text/javascript" src="install/installCommon.js"></script>
-   <script type="text/javascript" src="install/siteConfig.js"></script>
-<link rel='stylesheet' type='text/css' href='include/javascript/yui/build/container/assets/container.css' />
-<link rel="stylesheet" href="themes/SuiteP/css/fontello.css">
-    <link rel="stylesheet" href="themes/SuiteP/css/animation.css"><!--[if IE 7]><link rel="stylesheet" href="css/fontello-ie7.css"><![endif]-->
-</head>
-<body onload="javascript:document.getElementById('button_next2').focus();">
-<!--MintHCM installer-->
-<div id="install_container">
-<div id="install_box">
-<header id="install_header">
-                    <div id="steps">
-                        <p>{$mod_strings['LBL_STEP2']}</p>
-                        <i class="icon-progress-0" id="complete"></i>
-                        <i class="icon-progress-1" id="complete"></i>
-                        <i class="icon-progress-2"></i>
-                    </div>
-            <div class="install_img"><a href="https://minthcm.org" target="_blank"><img src="{$sugar_md}" alt="MintHCM"></a></div>
-</header>
-EOQ;
-echo $out;
+
 $bottle = handleSugarConfig(true);
 
 $errTcpip = '';
@@ -253,7 +220,7 @@ installLog('Save user settings..');
 $current_user = BeanFactory::newBean('Users');
 $current_user->retrieve(1);
 $current_user->is_admin = '1';
-$sugar_config = get_sugar_config_defaults();
+// $sugar_config = get_sugar_config_defaults();
 
 // set local settings -  if neccessary you can set here more fields as named in User module / EditView form...
 if (isset($_REQUEST['timezone']) && $_REQUEST['timezone']) {
@@ -302,25 +269,6 @@ if (count($bottle) > 0) {
 }
 installerHook('post_installModules');
 
-$out = <<<EOQ
-<br><p><b>{$mod_strings['LBL_PERFORM_OUTRO_1']} {$setup_sugar_version} {$mod_strings['LBL_PERFORM_OUTRO_2']}</b></p>
-
-<p><b>{$memoryUsed}</b></p>
-<p><b>{$errTcpip}</b></p>
-<p><b>{$fpResult}</b></p>
-</div>
-<footer id="install_footer">
-    <p id="footer_links"><a href="https://minthcm.org" target="_blank">Visit minthcm.org</a> | <a href="https://minthcm.com" target="_blank">Visit minthcm.com</a> | <a href="https://minthcm.org/support/" target="_blank">Support Forums</a> | <a href="LICENSE.txt" target="_blank">License</a></p>
-</footer>
-</div>
-</body>
-</html>
-<!--
-<bottle>{$bottleMsg}</bottle>
--->
-EOQ;
-
-echo $out;
 
 
 $loginURL = str_replace('install.php', 'index.php', "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");

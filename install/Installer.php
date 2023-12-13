@@ -1,6 +1,7 @@
 <?php
 
 use MintHCM\MintCLI\Installer\Installer as CLIInstaller;
+use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
 
 class Installer extends CLIInstaller
 {

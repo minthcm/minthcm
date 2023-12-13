@@ -64,37 +64,36 @@ require_once 'modules/TableDictionary.php';
 $trackerManager = TrackerManager::getInstance();
 $trackerManager->pause();
 
-$cache_dir = sugar_cached("");
+global $cache_dir; $cache_dir = sugar_cached("");
 $line_entry_format = "&nbsp&nbsp&nbsp&nbsp&nbsp<b>";
 $line_exit_format = "... &nbsp&nbsp</b>";
 $rel_dictionary = $dictionary; // sourced by modules/TableDictionary.php
 $render_table_close = "";
 $render_table_open = "";
-$setup_db_admin_password = $_SESSION['setup_db_admin_password'];
-$setup_db_admin_user_name = $_SESSION['setup_db_admin_user_name'];
-$setup_db_create_database = $_SESSION['setup_db_create_database'];
-$setup_db_create_sugarsales_user = $_SESSION['setup_db_create_sugarsales_user'];
-$setup_db_database_name = $_SESSION['setup_db_database_name'];
-$setup_db_drop_tables = $_SESSION['setup_db_drop_tables'];
-$setup_db_host_instance = $_SESSION['setup_db_host_instance'];
-$setup_db_port_num = $_SESSION['setup_db_port_num'];
-$setup_db_host_name = $_SESSION['setup_db_host_name'];
-$demoData = $_SESSION['demoData'];
-$setup_db_sugarsales_password = $_SESSION['setup_db_sugarsales_password'];
-$setup_db_sugarsales_user = $_SESSION['setup_db_sugarsales_user'];
-$setup_site_admin_user_name = $_SESSION['setup_site_admin_user_name'];
-$setup_site_admin_password = $_SESSION['setup_site_admin_password'];
-$setup_site_guid = (isset($_SESSION['setup_site_specify_guid']) && $_SESSION['setup_site_specify_guid']
-    != '') ? $_SESSION['setup_site_guid'] : '';
-$setup_site_url = $_SESSION['setup_site_url'];
+global $setup_db_admin_password; $setup_db_admin_password = $_SESSION['setup_db_admin_password'];
+global $setup_db_admin_user_name; $setup_db_admin_user_name = $_SESSION['setup_db_admin_user_name'];
+global $setup_db_create_database; $setup_db_create_database = $_SESSION['setup_db_create_database'];
+global $setup_db_create_sugarsales_user; $setup_db_create_sugarsales_user = $_SESSION['setup_db_create_sugarsales_user'];
+global $setup_db_database_name; $setup_db_database_name = $_SESSION['setup_db_database_name'];
+global $setup_db_drop_tables; $setup_db_drop_tables = $_SESSION['setup_db_drop_tables'];
+global $setup_db_host_instance; $setup_db_host_instance = $_SESSION['setup_db_host_instance'];
+global $setup_db_port_num; $setup_db_port_num = $_SESSION['setup_db_port_num'];
+global $setup_db_host_name; $setup_db_host_name = $_SESSION['setup_db_host_name'];
+global $demoData; $demoData = $_SESSION['demoData'];
+global $setup_db_sugarsales_password; $setup_db_sugarsales_password = $_SESSION['setup_db_sugarsales_password'];
+global $setup_db_sugarsales_user; $setup_db_sugarsales_user = $_SESSION['setup_db_sugarsales_user'];
+global $setup_site_admin_user_name; $setup_site_admin_user_name = $_SESSION['setup_site_admin_user_name'];
+global $setup_site_admin_password; $setup_site_admin_password = $_SESSION['setup_site_admin_password'];
+global $setup_site_guid; $setup_site_guid = (isset($_SESSION['setup_site_specify_guid']) && $_SESSION['setup_site_specify_guid']!= '') ? $_SESSION['setup_site_guid'] : '';
+global $setup_site_url; $setup_site_url = $_SESSION['setup_site_url'];
 $parsed_url = parse_url($setup_site_url);
-$setup_site_host_name = $parsed_url['host'];
-$setup_site_log_dir = isset($_SESSION['setup_site_custom_log_dir']) ? $_SESSION['setup_site_log_dir']
+global $setup_site_host_name; $setup_site_host_name = $parsed_url['host'];
+global $setup_site_log_dir; $setup_site_log_dir = isset($_SESSION['setup_site_custom_log_dir']) ? $_SESSION['setup_site_log_dir']
 : '.';
-$setup_site_log_file = 'minthcm.log'; // may be an option later
-$setup_site_session_path = isset($_SESSION['setup_site_custom_session_path']) ? $_SESSION['setup_site_session_path']
+global $setup_site_log_file; $setup_site_log_file = 'minthcm.log';  // may be an option later
+global $setup_site_log_level; $setup_site_log_level = 'fatal';
+global $setup_site_session_path; $setup_site_session_path = isset($_SESSION['setup_site_custom_session_path']) ? $_SESSION['setup_site_session_path']
 : '';
-$setup_site_log_level = 'fatal';
 
 //$bottle = handleSugarConfig();
 

@@ -4,10 +4,7 @@ use MintHCM\MintCLI\Services\DatabaseService;
 
 class InstallService
 {
-    public function validateElasticConnection($host, $port, $user, $password)
-    {
-
-    }
+    const STATUSFILE = __DIR__ . '/assets/status.json';
 
     public function clearStatusJson()
     {
@@ -24,7 +21,7 @@ class InstallService
      */
     public function setMintInstallStatus(int $step, string $message): void
     {
-        $statusFile = __DIR__ . '/assets/status.json';
+        $statusFile = self::STATUSFILE;
         $statusData = [];
 
         if (file_exists($statusFile)) {
@@ -37,5 +34,21 @@ class InstallService
         $statusData[$step] = $message;
         $encodedStatusData = json_encode($statusData, JSON_PRETTY_PRINT);
         file_put_contents($statusFile, $encodedStatusData);
+    }
+
+    public function readMintInstallStatus(): array
+    {
+        $statusFile = self::STATUSFILE;
+
+        if (file_exists($statusFile)) {
+            $existingData = json_decode(file_get_contents($statusFile), true);
+            if (is_array($existingData)) {
+                $latestStepKey = max(array_keys($existingData));
+                $latestStepValue = $existingData[$latestStepKey];
+
+                return ["step" => $latestStepKey, "message" => $latestStepValue];
+            }
+        }
+        return ["step" => null, "message" => ''];
     }
 }

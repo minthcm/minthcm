@@ -558,7 +558,16 @@ $dictionary['Candidates'] = array(
             'bean_name' => 'Files',
             'vname' => 'LBL_FILES',
             'label' => 'LBL_FILES',
-        )
+        ),
+        'do_not_call' => array(
+            'name' => 'do_not_call',
+            'vname' => 'LBL_DO_NOT_CALL',
+            'type' => 'bool',
+            'default' => '0',
+            'audited' => true,
+            'comment' => 'An indicator of whether contact can be called',
+            'mass_update' => false,
+        ),
     ),
     'relationships' => array(
         'candidates_candidatures' => array(
@@ -634,8 +643,6 @@ $dictionary['Candidates'] = array(
     'optimistic_locking' => true,
     'unified_search' => true,
 );
-$dictionary['Candidates']['fields']['do_not_call']['mass_update'] = false;
-$dictionary['Candidates']['fields']['phone_work']['audited'] = false;
 
 if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
@@ -643,6 +650,7 @@ if (!class_exists('VardefManager')) {
 VardefManager::createVardef('Candidates', 'Candidates',
     array('basic', 'assignable', 'person', 'security_groups'));
 
+$dictionary['Candidates']['fields']['phone_work']['audited'] = false;
 $dictionary['Candidates']['fields']['date_reviewed']['audited'] = false;
 $dictionary['Candidates']['fields']['date_reviewed']['reportable'] = false;
 $dictionary['Candidates']['fields']['lawful_basis_source']['audited'] = false;

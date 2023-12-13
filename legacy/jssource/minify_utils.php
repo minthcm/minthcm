@@ -93,7 +93,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     {
 
         // Minifying the group files takes a long time sometimes.
-        @ini_set('max_execution_time', 300);
+        @ini_set('max_execution_time', 3600);
         $js_groupings = array();
         if (isset($_REQUEST['root_directory'])) {
             require('jssource/JSGroupings.php');

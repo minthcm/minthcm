@@ -11,11 +11,15 @@ use MintHCM\MintCLI\Services\ElasticsearchService;
 
 class InstallController
 {
+    const LAST_BACKEND_STEP = 19;
+
     private $service;
+    private $elasticService;
 
     public function __construct()
     {
         $this->service = new InstallService();
+        $this->elasticService = new ElasticsearchService();
     }
 
     public function redirectToInstaller()
@@ -26,11 +30,14 @@ class InstallController
 
     public function getInitialData()
     {
+        $isInstalling = !empty($this->service->readMintInstallStatus()['step']);
+
         require_once '../legacy/minthcm_version.php';
         return [
             'version' => $minthcm_version,
             'license' => trim(file_get_contents('../LICENSE')),
             'environment' => (new VersionValidator)->runValidations(),
+            'isInstalling' => (bool)$isInstalling,
         ];
     }
 
@@ -49,8 +56,7 @@ class InstallController
 
     public function validateElastic($data)
     {
-        $service = new ElasticsearchService();
-        $response = $service -> testConnection($data['host'], $data['port'], $data['username'], $data['password']);
+        $response = $this->elasticService->testConnection($data['host'], $data['port'], $data['username'], $data['password']);
         if($response['status']){
             return ["status" => 1, "message" => "ok"];
         } else {
@@ -107,14 +113,22 @@ class InstallController
             $this->service->setMintInstallStatus(3, "Starting backend installation...");
             $installer->installBackendApplication();
 
-            // // Sudden progress jump due to backend doing a lot of other stuff
+            $lastStep = $this->service->readMintInstallStatus();
+            if($lastStep["step"] != self::LAST_BACKEND_STEP){
+                return ["status" => 0, "message" => "Installation failed.", "error" => "Backend installation failed"];
+            }
+
+            // Sudden progress jump due to backend doing a lot of other stuff
             $this->service->setMintInstallStatus(20, "Starting frontend installation...");
             $installer->installFrontendApplication();
 
             $this->service->setMintInstallStatus(21, "Setting up file permissions...");
             $installer->setupFilesPermissions();
 
-            $this->service->setMintInstallStatus(22, "Setting up htacess...");
+            $this->service->setMintInstallStatus(22, "Reindexing ElasticSearch");
+            $installer->reindexElastic();
+
+            $this->service->setMintInstallStatus(23, "Setting up htacess...");
             $installer->setupHtaccess();
 
             return ["status" => 1, "message" => "Installation finished successfully."];

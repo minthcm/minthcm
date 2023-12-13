@@ -22,15 +22,15 @@
                 </v-slide-x-transition>
                 <div class="install-view-buttons">
                     <MintButton
-                        v-if="store.currentStep.prevBtn !== false && store.currentStepNumber !== 0"
+                        v-if="stepComponent?.prevBtn !== false && store.currentStepNumber !== 0"
                         variant="text"
-                        :text="'Back'"
-                        @click="store.prevStep"
+                        :text="prevBtnLabel"
+                        @click="handlePrevBtnClick"
                     />
                     <MintButton
-                        v-if="store.currentStep.nextBtn !== false"
+                        v-if="stepComponent?.nextBtn !== false"
                         variant="primary"
-                        :text="store.currentStep.nextBtn?.label ?? 'Next'"
+                        :text="nextBtnLabel"
                         @click="handleNextBtnClick"
                     />
                 </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useInstallViewStore } from './InstallViewStore'
 import { INSTALL_CONFIG } from './InstallViewConfig'
 import MintButton from '@/components/MintButtons/MintButton.vue'
@@ -63,16 +63,44 @@ const store = useInstallViewStore()
 
 const stepComponent = ref(null)
 
+const prevBtnLabel = computed(() => {
+    if (typeof stepComponent.value?.prevBtn?.label === 'string') {
+        return stepComponent.value.prevBtn.label
+    }
+    if (stepComponent.value?.prevBtn?.label && typeof stepComponent.value?.prevBtn?.label === 'object') {
+        return stepComponent.value.prevBtn.label.value
+    }
+    return 'Back'
+})
+
+const nextBtnLabel = computed(() => {
+    if (typeof stepComponent.value?.nextBtn?.label === 'string') {
+        return stepComponent.value.nextBtn.label
+    }
+    if (stepComponent.value?.nextBtn?.label && typeof stepComponent.value?.nextBtn?.label === 'object') {
+        return stepComponent.value.nextBtn.label.value
+    }
+    return 'Next'
+})
+
 onMounted(() => {
     store.fetchInitialData()
 })
+
+function handlePrevBtnClick() {
+    if (stepComponent.value?.prevBtn && typeof stepComponent.value.prevBtn.action === 'function') {
+        stepComponent.value?.prevBtn.action()
+    } else {
+        store.prevStep()
+    }
+}
 
 function handleNextBtnClick() {
     if (typeof stepComponent.value?.validate === 'function' && !stepComponent.value.validate()) {
         return
     }
-    if (store.currentStep.nextBtn && typeof store.currentStep.nextBtn?.action === 'function') {
-        store.currentStep.nextBtn.action()
+    if (stepComponent.value?.nextBtn && typeof stepComponent.value.nextBtn.action === 'function') {
+        stepComponent.value?.nextBtn.action()
     } else {
         store.nextStep()
     }

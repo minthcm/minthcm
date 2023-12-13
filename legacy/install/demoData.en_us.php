@@ -2,7 +2,7 @@
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
-
+global $sugar_demodata;
 $sugar_demodata['Users'] = [];
 $sugar_demodata['Users'][] = ['id' => '14a7c3af-44fc-4e11-ef11-5ce3c5778501', 'last_name' => 'Lee', 'first_name' => 'Julia', 'user_name' => 'leej', 'user_hash' => ['function' => 'generateUserPasswordHash', 'arguments' => ['field' => 'user_name']], 'email1' => '', 'position_id' => '45adaabf-46aa-d447-6f58-5e4c07129d3a', 'securitygroup_id' => '82d66fec-065e-d23c-6845-5e4c013b01c2', 'reports_to_id' => '', 'phone_work' => '', 'phone_mobile' => '', 'status' => 'Active', 'employee_status' => 'Active'];
 $sugar_demodata['Users'][] = ['id' => '22da6f70-1581-910f-02b7-5ce3c54fab51', 'last_name' => 'Hart', 'first_name' => 'Christina', 'user_name' => 'hartc', 'user_hash' => ['function' => 'generateUserPasswordHash', 'arguments' => ['field' => 'user_name']], 'email1' => 'hartc@example.com', 'position_id' => 'aa9398b0-1321-b394-03d2-5ce2ac56e977', 'securitygroup_id' => '82d66fec-065e-d23c-6845-5e4c013b01c2', 'reports_to_id' => 'bf3cb12c-88b6-e637-022e-5ce3c7df4ab7', 'phone_work' => '745856325', 'phone_mobile' => '', 'status' => 'Active', 'employee_status' => 'Active'];
@@ -1142,7 +1142,7 @@ $sugar_demodata['Allocations'][] = ['id' => '97329b05-64db-f880-f526-605b42505bb
 $sugar_demodata['Allocations'][] = ['id' => '9ebfb0b3-24ba-c97a-68ca-605b4340029e', 'name' => 'OS - Desk 2 - Emma  Brooks - 2020-01-01', 'assigned_user_id' => '3764d490-cd45-5796-dde9-5ce3c7a1e614', 'mode' => 'permanent', 'date_from' => '2020-01-01', 'workplace_id' => '8c10756b-15cf-5e39-3c81-605b42a3ee9a'];
 $sugar_demodata['Allocations'][] = ['id' => 'cfc9e2bd-7d70-a17f-1417-605b43b80615', 'name' => 'OS - Desk 4 - Ben Steward - 2020-01-01', 'assigned_user_id' => '4ec12c2e-fa27-bec5-3f64-5ce3c8dd0a9b', 'mode' => 'permanent', 'date_from' => '2020-01-01', 'workplace_id' => 'cb6232bc-0748-50f6-752f-605b422f5c7b'];
 $sugar_demodata['Allocations'][] = ['id' => 'e0ecacbf-5ea9-e7d8-a795-605b43816179', 'name' => 'OS - Desk 3 - Christina Hart - 2020-01-01', 'assigned_user_id' => '22da6f70-1581-910f-02b7-5ce3c54fab51', 'mode' => 'permanent', 'date_from' => '2020-01-01', 'workplace_id' => '5eeb4117-eedd-6b3d-77f6-605b427ba7fe'];
-
+global $sugar_demodata_relations;
 $sugar_demodata_relations = [
     'Benefits' =>
     [

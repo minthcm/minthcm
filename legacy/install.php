@@ -117,10 +117,10 @@ if (isset($_REQUEST['goto']) && $_REQUEST['goto'] != 'SilentInstall') {
     }
     $silentInstall = false;
 }
-$timedate = TimeDate::getInstance();
+$GLOBALS['timedate'] = TimeDate::getInstance();
 // cn: set php.ini settings at entry points
 setPhpIniSettings();
-$locale = new Localization();
+$GLOBALS['locale'] = new Localization();
 
 $GLOBALS['log'] = LoggerManager::getLogger();
 $setup_sugar_version = $minthcm_version ?? '3.1.5'; // PHP compatibility
