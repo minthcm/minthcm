@@ -1,9 +1,14 @@
 <?php
 
+require_once __DIR__ . '/../../legacy/php_version.php';
+
 class VersionValidator
 {   
     public function runValidations() {
         return [
+            'php' => $this->phpversion(),
+            'readwriteperms' => $this->readwritePerms(),
+            'htaccessperms' => $this->htaccessPerms(),
             'xmlParse' => $this->xmlParse(),
             'mbstrings' => $this->mbstrings(),
             'config' => $this->configExists(),
@@ -15,7 +20,7 @@ class VersionValidator
             'zlib' => $this->zlib(),
             'zip' => $this->zip(),
             'PCRE' => $this->PCRE(),
-            // 'imap' => $this->imap(),
+            'imap' => $this->imap(),
             'cURL' => $this->cURL(),
             'uploadFileSize' => $this->uploadFileSize(),
             'spriteSupport' => $this->spriteSupport(),
@@ -26,35 +31,80 @@ class VersionValidator
     }
 
     public function xmlParse() {
-        return ['label' => 'xml parse', 'status' => 1, 'message' => ""];
+        return ['label' => 'XML parse', 'status' => 1, 'message' => ""];
     }
 
     public function mbstrings() {
-        return ['label' => 'mb strings', 'status' => 1, 'message' => ""];
+        return ['label' => 'MB strings', 'status' => 1, 'message' => ""];
     }
 
     public function configExists() {
-        return ['label' => 'config', 'status' => 1, 'message' => ""];
+        return ['label' => 'Config', 'status' => 1, 'message' => ""];
     }
 
     public function customdir() {
-        return ['label' => 'custom dir', 'status' => 1, 'message' => ""];
+        return ['label' => 'Custom dir', 'status' => 1, 'message' => ""];
     }
 
     public function modulesdir() {
-        return ['label' => 'modules dir', 'status' => 1, 'message' => ""];
+        return ['label' => 'Modules dir', 'status' => 1, 'message' => ""];
     }
 
     public function uploaddir() {
-        return ['label' => 'upload dir', 'status' => 1, 'message' => ""];
+        return ['label' => 'Upload dir', 'status' => 1, 'message' => ""];
     }
 
     public function datadir() {
-        return ['label' => 'data dir', 'status' => 1, 'message' => ""];
+        return ['label' => 'Data dir', 'status' => 1, 'message' => ""];
     }
 
     public function cachedir() {
-        return ['label' => 'cache dir', 'status' => 1, 'message' => ""];
+        return ['label' => 'Cache dir', 'status' => 1, 'message' => ""];
+    }
+
+    public function phpversion() {
+        $sys_php_version = constant('PHP_VERSION');
+        $min_php_version = constant('SUITECRM_PHP_MIN_VERSION');
+        $rec_php_version = constant('SUITECRM_PHP_REC_VERSION');
+    
+        if (version_compare($sys_php_version, $min_php_version, '<') === true ||
+        version_compare($sys_php_version, $rec_php_version, '<') === true ||
+        version_compare( $sys_php_version, constant('MINTHCM_PHP_MAX_VERSION'), '>=' ) === true) {
+            $status = 0;
+            $message = 'You are using PHP version  ' . $this->shortenPhpVer(constant('PHP_VERSION')) . '. Accepted versions are those between ' . $this->shortenPhpVer(constant('SUITECRM_PHP_MIN_VERSION')) . " and " . $this->shortenPhpVer(constant('MINTHCM_PHP_MAX_VERSION'));
+        } else {
+            $status = 1;
+            $message = "";
+        }
+    
+        return ['label' => 'PHP version', 'status' => $status, 'message' => $message];
+    }
+
+    public function readwritePerms() {
+        $directory = __DIR__ . '/../../legacy';
+
+        if(is_dir($directory) && is_writable($directory) && is_readable($directory)){
+            $status = 1;
+            $message = "";
+        } else {
+            $status = 0;
+            $message = "Cannot read/write to the directory, verify read/write permissions and ownership";
+        }
+        return ['label' => 'Read/Write Permissions', 'status' => $status, 'message' => $message];
+    }
+
+    public function htaccessPerms() {
+        $file = __DIR__ . '/../../.htaccess';
+
+        if(is_file($file) && is_writable($file) && is_readable($file)){
+            $status = 1;
+            $message = "";
+        } else {
+            $status = 0;
+            $message = "Cannot read/write to the hidden .htaccess file located in the application folder, verify read/write permissions and ownership";
+        }
+
+        return ['label' => 'Permissions for .htaccess', 'status' => $status, 'message' => $message];
     }
 
     public function zlib() {
@@ -66,7 +116,7 @@ class VersionValidator
             $message = "";
         }
 
-        return ['label' => 'zlib', 'status' => $status, 'message' => $message];
+        return ['label' => 'Zlib', 'status' => $status, 'message' => $message];
     }
 
     public function zip() {
@@ -78,7 +128,7 @@ class VersionValidator
             $message = "";
         }
 
-        return ['label' => 'zip', 'status' => $status, 'message' => $message];
+        return ['label' => 'Zip', 'status' => $status, 'message' => $message];
     }
 
     public function PCRE() {
@@ -99,9 +149,16 @@ class VersionValidator
     }
 
     public function imap() {
+        if(version_compare( constant('PHP_VERSION'), constant('MINTHCM_PHP_MAX_VERSION'), '>=' ) === true){
+            return ['label' => 'Imap', 'status' => -1, 'message' => "Can't verify the version, since your PHP version is too high for compatibility"];
+        }
+
         chdir('../legacy/');
         require_once ('include/Imap/ImapHandlerFactory.php');
         require_once ('include/Imap/ImapHandlerOAuth2.php');
+        require_once ('include/Imap/ImapHandler.php');
+        require_once ('include/utils.php');
+        require_once ('include/SugarLogger/LoggerManager.php');
 
         $imapFactory = new \ImapHandlerFactory();
         $imap = $imapFactory->getImapHandler();
@@ -114,7 +171,7 @@ class VersionValidator
         }
 
         chdir('../install/');
-        return ['label' => 'imap', 'status' => $status, 'message' => $message];
+        return ['label' => 'Imap', 'status' => $status, 'message' => $message];
     }
 
     public function cURL() {
@@ -126,7 +183,7 @@ class VersionValidator
             $message = "";
         }
 
-        return ['label' => 'curl', 'status' => $status, 'message' => $message];
+        return ['label' => 'Curl', 'status' => $status, 'message' => $message];
     }
 
     public function uploadFileSize() {
@@ -142,7 +199,7 @@ class VersionValidator
             $message = "";
         }
 
-        return ['label' => 'upload size', 'status' => $status, 'message' => $message];
+        return ['label' => 'Upload Size', 'status' => $status, 'message' => $message];
     }
 
     public function spriteSupport() {
@@ -154,7 +211,7 @@ class VersionValidator
             $message = "";
         }
 
-        return ['label' => 'sprite', 'status' => $status, 'message' => $message];
+        return ['label' => 'Sprite', 'status' => $status, 'message' => $message];
     }
 
     public function phpini() {
@@ -203,7 +260,7 @@ class VersionValidator
             }
         }
 
-        return ['label' => 'memory', 'status' => $status, 'message' => $message];
+        return ['label' => 'Memory', 'status' => $status, 'message' => $message];
     }
 
     //this is for uploading
@@ -247,6 +304,11 @@ class VersionValidator
         }
 
         return $val;
+    }
+
+    public function shortenPhpVer($php_ver){
+        $php_ver_parts = explode('.', $php_ver);
+        return implode('.', array_slice($php_ver_parts, 0, 2));
     }
 
 }

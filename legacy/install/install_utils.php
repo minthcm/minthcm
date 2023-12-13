@@ -648,11 +648,9 @@ function handleDbCreateDatabase() {
    global $mod_strings;
    global $setup_db_database_name;
    global $setup_db_host_name;
-   global $setup_db_host_instance;
-   global $setup_db_port_num;
-   global $setup_db_admin_user_name;
-   global $setup_db_admin_password;
-   global $sugar_config;
+
+   $setup_db_host_name = $setup_db_database_name ?? $_SESSION['setup_db_host_name'];
+   $setup_db_database_name = $setup_db_database_name ?? $_SESSION['setup_db_database_name'];
 
    echo "{$mod_strings['LBL_PERFORM_CREATE_DB_1']} {$setup_db_database_name} {$mod_strings['LBL_PERFORM_CREATE_DB_2']} {$setup_db_host_name}...";
    $db = getDbConnection();

@@ -47,6 +47,13 @@ const errors = ref({
 })
 
 defineExpose({
+    nextBtn: {
+        action: async () => {
+            if (await store.validateElastic()) {
+                store.nextStep()
+            }
+        },
+    },
     validate: () => {
         errors.value = {
             host: '',

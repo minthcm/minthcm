@@ -67,6 +67,13 @@ const errors = ref({
 })
 
 defineExpose({
+    nextBtn: {
+        action: async () => {
+            if (await store.validateDb()) {
+                store.nextStep()
+            }
+        },
+    },
     validate: () => {
         errors.value = {
             dbname: '',

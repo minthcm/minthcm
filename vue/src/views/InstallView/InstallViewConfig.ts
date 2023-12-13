@@ -5,7 +5,6 @@ import InstallViewDatabaseConfig from './steps/InstallViewDatabaseConfig.vue'
 import InstallViewElasticConfig from './steps/InstallViewElasticConfig.vue'
 import InstallViewSiteConfig from './steps/InstallViewSiteConfig.vue'
 import InstallViewInstallation from './steps/InstallViewInstallation.vue'
-import { useInstallViewStore } from './InstallViewStore'
 
 interface InstallConfig {
     steps: InstallStep[]
@@ -15,20 +14,6 @@ interface InstallConfig {
 interface InstallStep {
     title: string
     component: Component
-    prevBtn?:
-        | {
-              label?: string // "Back" by default
-              action?: () => void // go to the previous step by default
-              isDisabled?: () => void // always enabled by default
-          }
-        | false
-    nextBtn?:
-        | {
-              label?: string // "Next" by default
-              action?: () => void // go to the next step by default
-              isDisabled?: () => void // always enabled by default
-          }
-        | false
 }
 
 export const INSTALL_CONFIG: InstallConfig = {
@@ -36,9 +21,6 @@ export const INSTALL_CONFIG: InstallConfig = {
         {
             title: 'License',
             component: InstallViewLicense,
-            nextBtn: {
-                label: 'Accept',
-            },
         },
         {
             title: 'System Environment Check',
@@ -47,26 +29,10 @@ export const INSTALL_CONFIG: InstallConfig = {
         {
             title: 'Database configuration',
             component: InstallViewDatabaseConfig,
-            nextBtn: {
-                action: async () => {
-                    const store = useInstallViewStore()
-                    if (await store.validateDb()) {
-                        store.nextStep()
-                    }
-                },
-            },
         },
         {
             title: 'ElasticSearch configuration',
             component: InstallViewElasticConfig,
-            nextBtn: {
-                action: async () => {
-                    const store = useInstallViewStore()
-                    if (await store.validateElastic()) {
-                        store.nextStep()
-                    }
-                },
-            },
         },
         {
             title: 'Site configuration',
@@ -75,8 +41,6 @@ export const INSTALL_CONFIG: InstallConfig = {
         {
             title: 'Installation',
             component: InstallViewInstallation,
-            prevBtn: false,
-            nextBtn: false,
         },
     ],
     db_collations: [

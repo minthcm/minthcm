@@ -7,9 +7,7 @@
     "build": "vite build",
     "lint": "vue-cli-service lint",
     "dev": "vite",
-    "build:mint": "npm run build && ssh -p 50022 root@localhost 'rm /var/www/test123/assets -rf' && scp -P 50022 -r dist/* root@localhost:/var/www/test123",
-    "build:demo": "npm run build && ssh -p 2251 root@minthcm.pp.evolpe.it 'rm /var/www/minthcm/assets -rf' && scp -P 2251 -r dist/* root@minthcm.pp.evolpe.it:/var/www/minthcm",
-    "build:repo": "npm run build && rm -r ../assets && cp -r dist/* ../"
+    "build:repo": "npm run build && rm -r ../assets && cp -r dist/* ../ && rm ../index.html"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",

@@ -1,3 +1,8 @@
+The .htaccess file could not be found in your installation directory.
+
+Please create a .htaccess file in root directory of your instance.
+The file should contain:
+
 <IfModule mod_rewrite.c>
     Options +SymLinksIfOwnerMatch
     RewriteEngine On

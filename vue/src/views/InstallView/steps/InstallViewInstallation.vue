@@ -40,6 +40,11 @@ const stepsContainer = ref<HTMLElement | null>(null)
 
 const checkStatusInterval = ref<null | number>(null)
 
+defineExpose({
+    prevBtn: false,
+    nextBtn: false,
+})
+
 onMounted(async () => {
     store.install()
     await fetchStatus()

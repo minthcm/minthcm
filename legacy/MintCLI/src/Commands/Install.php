@@ -90,6 +90,9 @@ class Install extends Command
         $io->section('Setting up files permissions...');
         $installer->setupFilesPermissions();
 
+        $io->section('Reindexing Elastic');
+        $installer->reindexElastic();
+
         $io->success('Installation finished successfuly');
         return Command::SUCCESS;
     }
@@ -142,7 +145,7 @@ class Install extends Command
 
         $serverService = new ServerService();
         $protocl = $ssl ? 'https://' : 'http://';
-        $url = $protocl . $serverService->getHostName() . DIRECTORY_SEPARATOR . $serverService->getScriptDirectory();
+        $url = $protocl . $serverService->getHostName() . $serverService->getDirectorySeparator() . $serverService->getScriptDirectory();
 
         $question = new \MintHCM\MintCLI\Questions\SiteURL($QH, $input, $output);
         $question->setDefaultValue($url);

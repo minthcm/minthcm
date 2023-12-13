@@ -112,11 +112,5 @@ $dictionary['KReport'] = array( 'table' => 'kreports',
 );
 
 // Mint start #60447
-if ( $GLOBALS['sugar_flavor'] !== 'CE' ) {
-   VardefManager::createVardef('KReports', 'KReport', array( 'default', 'assignable', 'team_security' ));
-} else if ( isset($GLOBALS['sugar_config']['suitecrm_version']) ) {
    VardefManager::createVardef('KReports', 'KReport', array( 'default', 'assignable', 'security_groups' ));
-} else {
-   VardefManager::createVardef('KReports', 'KReport', array( 'default', 'assignable' ));
-}
 // Mint end #60447

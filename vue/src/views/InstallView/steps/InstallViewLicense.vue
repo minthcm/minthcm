@@ -10,6 +10,12 @@
 import { useInstallViewStore } from '../InstallViewStore'
 
 const store = useInstallViewStore()
+
+defineExpose({
+    nextBtn: {
+        label: 'Accept',
+    },
+})
 </script>
 
 <style scoped lang="scss">

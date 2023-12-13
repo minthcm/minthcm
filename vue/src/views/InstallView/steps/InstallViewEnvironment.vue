@@ -12,9 +12,29 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useInstallViewStore } from '../InstallViewStore'
 
 const store = useInstallViewStore()
+
+const isOk = computed(() => {
+    return store.environment && Object.values(store.environment).every((item) => item.status === 1)
+})
+
+const nextBtnLabel = computed(() => (isOk.value ? 'Next' : 'Recheck'))
+
+defineExpose({
+    nextBtn: {
+        label: nextBtnLabel,
+        action: () => {
+            if (isOk.value) {
+                store.nextStep()
+            } else {
+                store.recheckEnvironment()
+            }
+        },
+    },
+})
 </script>
 
 <style scoped lang="scss">

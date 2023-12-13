@@ -220,7 +220,10 @@ class ImapHandlerFactory
             // MintHCM #110041 START
             $interfaceClass = $useOauth2 ? ImapHandlerOauth2::class : $this->getHandlerClass($handlerType);
             // MintHCM #110041 END
-            $log->debug('Using imap handler class: ' . $interfaceClass);
+
+            // MintHCM #124768 START
+            LoggerManager::getLogger()->debug('Using imap handler class: ' . $interfaceClass);
+            // MintHCM #124768 END
             if ($test) {
                 $this->loadTestSettings($testSettings);
             } else {
