@@ -1,0 +1,70 @@
+version: '2.1'
+services:
+
+  minthcm-web:
+    container_name: minthcm-web
+    image: minthcm/minthcm
+    ports:
+      - '${WEB_PORT}:80'
+    expose:
+      - '80'
+    hostname: minthcm-www
+    restart: always
+    depends_on:
+      minthcm-db:
+                condition: service_healthy
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env
+    volumes:
+      - minthcm_www:/var/www/html
+      - minthcm_cron:/var/spool/cron/crontabs
+    networks:
+      minthcm:
+
+  minthcm-db:
+    image: percona:8
+    container_name: minthcm-db
+    restart: always
+    networks:
+      minthcm:
+    environment:
+      MYSQL_ROOT_PASSWORD: '${MYSQL_PASSWORD}'
+      SYS_NICE: CAP_SYS_NICE
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10    
+    volumes:
+      - minthcm_db:/var/lib/mysql
+  
+  minthcm-es:
+      container_name: minthcm-es
+      image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.3"
+      networks:
+              minthcm:
+      volumes:
+          - minthcm_es:/usr/share/elasticsearch/data
+      mem_limit: 4g
+      environment:
+          - node.name=es1
+          - cluster.name=minthcm
+          - discovery.type=single-node
+          - xpack.security.enabled=false       
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      ulimits:
+          memlock:
+              soft: -1
+              hard: -1
+          nofile:
+              soft: 65536
+              hard: 65536
+volumes:
+  minthcm_db:
+  minthcm_es:
+  minthcm_www:
+  minthcm_cron:
+
+networks:
+  minthcm:
