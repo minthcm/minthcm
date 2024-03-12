@@ -59,6 +59,10 @@ The installation process is described on our website [minthcm.org/support/minthc
 
 We don't have any rigid rules. We don't want to cut back your creativity in developing MintHCM. We care about the community and we'd like everyone to feel like a part of it. If you're willing to help, **fork a repo**, make some changes, and then create Pull Request!
 
+## i18n 🌐
+
+You can download and contribute your own translation packages via our [Crowdin project](https://crowdin.com/project/minthcm)
+
 ## Do you have a problem? Maybe you'd like to ask us about something? ❌
 
 
