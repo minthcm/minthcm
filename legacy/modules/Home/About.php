@@ -77,5 +77,11 @@ global $sugar_config, $mod_strings;
     <h3 style="margin-top:40px; text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT_CHAPTER_5_TITLE']; ?></h3>
     <p><?php echo $mod_strings['LBL_ABOUT_CHAPTER_5']; ?></p>
 
+    <h3 style="margin-top:40px; text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT_CHAPTER_6_TITLE']; ?></h3>
+    <p><?php echo $mod_strings['LBL_ABOUT_CHAPTER_6']; ?></p>
+
+    <h3 style="margin-top:40px; text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT_CHAPTER_7_TITLE']; ?></h3>
+    <p><?php echo $mod_strings['LBL_ABOUT_CHAPTER_7']; ?></p>
+
     <h3 style="margin-top:40px; text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT_FINISH']; ?></h3>
 </div>
