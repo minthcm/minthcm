@@ -44,24 +44,12 @@
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
-include 'minthcm_version.php';
-include 'suitecrm_version.php';
 global $sugar_config, $mod_strings;
 ?>
 <div class="about" id="about_header" style="max-width: 700px;">
     <h2 style="text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT']; ?></h2>
     <h2><img src="include/images/minthcm-logo.svg" alt="MintHCM"></h2>
     <h3 style="text-transform: uppercase;"><?php echo $mod_strings['LBL_ABOUT_TITLE']; ?></h3>
-    <br />
-    <p>
-        <b>
-            MintHCM <?php echo $mod_strings['LBL_VERSION'].' '.$minthcm_version; ?>
-        </b>
-        <br />
-        Suite <?php echo $mod_strings['LBL_VERSION'].' '.$suitecrm_version; ?>
-        <br />
-        Sugar <?php echo $mod_strings['LBL_VERSION'].' '.$sugar_version.' ('.$mod_strings['LBL_BUILD'].' '.$sugar_build.')'; ?>
-    </p>
     <br />
     <p><?php echo $mod_strings['LBL_ABOUT_CHAPTER_1']; ?></p>
 
