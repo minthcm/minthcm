@@ -1,7 +1,7 @@
 <template>
     <div class="auth-view">
         <div class="auth-view-container">
-            <img src="../../assets/mint_logo.png" height="32" />
+            <img src="../../assets/mint_logo.png" height="100" />
 
             <router-view v-slot="{ Component }" class="form-content">
                 <v-slide-x-transition hide-on-leave>

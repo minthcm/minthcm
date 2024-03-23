@@ -25,11 +25,11 @@ export default createVuetify({
             light: {
                 dark: false,
                 colors: {
-                    primary: '#00654e',
-                    'primary-light': '#e0ecea',
-                    'primary-lighter': '#f5fbfa',
-                    secondary: '#145d7b',
-                    'secondary-dark': '#08384B',
+                    primary: '#030B18',
+                    'primary-light': '0F3A6D',
+                    'primary-lighter': '#236FBA',
+                    secondary: '#0F3A6D',
+                    'secondary-dark': '#236FBA',
                 },
                 variables,
             },

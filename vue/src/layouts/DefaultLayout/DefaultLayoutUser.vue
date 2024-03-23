@@ -53,7 +53,7 @@ const menuItems = computed<MenuListItem[]>(() => {
     items.push({
         title: languages.label('LBL_MINT4_USER_MENU_SUPPORT'),
         icon: 'face-agent',
-        onClick: () => window.open('https://minthcm.org/support/', '_blank'),
+        onClick: () => window.location.href = 'mailto:OmniHRllc@outlook.com?subject=Support Request&body=Hi, I need help with the website...'
     })
     items.push({
         title: languages.label('LBL_MINT4_USER_MENU_ABOUT'),

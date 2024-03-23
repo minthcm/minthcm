@@ -1,7 +1,7 @@
 <template>
     <slot></slot>
     <footer>
-        <a href="https://minthcm.org" target="_blank"> www.minthcm.org </a>
+        <a href="https://omnihr.org" target="_blank"> www.omnihr.org</a> | + 407-485-5622 
     </footer>
 </template>
 
@@ -16,10 +16,11 @@ footer {
     align-items: center;
     padding: 8px 32px;
     z-index: 1000;
+    color: rgb(var(--v-theme-secondary));
 
     a {
-        color: rgb(var(--v-theme-secondary));
         text-decoration: none;
+        color: rgb(var(--v-theme-secondary));
 
         &:hover {
             color: rgb(var(--v-theme-secondary-dark));

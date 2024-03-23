@@ -108,8 +108,7 @@ function showModulesPopup() {
     width: 260px;
     z-index: 1000;
     img {
-        padding: 12px 24px;
-        height: 58px;
+        width: 100%;
     }
 }
 </style>

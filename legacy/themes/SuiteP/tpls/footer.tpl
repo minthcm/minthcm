@@ -50,6 +50,7 @@
 {if $AUTHENTICATED}
     <!-- Start generic footer -->
     <footer>
+<!-- 
         <div id="copyright_data" class="footer_left">
             <div id="dialog2" title="{$APP.LBL_SUITE_SUPERCHARGED}" style="display: none">
                 <p>{$APP.LBL_MINT_DESC}</p>
@@ -79,6 +80,7 @@
             <a onclick="SUGAR.util.top();" href="javascript:void(0)">{$APP.LBL_SUITE_TOP}<span class="suitepicon suitepicon-action-above"></span> </a>
             <span style="margin-left: 5px; color: #000;">v {$MINTHCM_VERSION}</span> 
         </div>
+-->
     </footer>
     <!-- END Generic Footer -->
 {/if}

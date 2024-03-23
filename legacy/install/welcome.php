@@ -121,7 +121,7 @@ $out = <<<EOQ
         <form action="install.php" method="post" name="setConfig" id="form">
             <header id="install_header">
                 <h1 id="welcomelink">{$mod_strings['LBL_TITLE_WELCOME']} {$setup_sugar_version} {$mod_strings['LBL_WELCOME_SETUP_WIZARD']}</h1>
-                <div class="install_img"><a href="https://minthcm.org" target="_blank"><img src="{$sugar_md}" alt="MintHCM"></a></div>
+                <div class="install_img"><a href="https://omnihr.org/" target="_blank"><img src="{$sugar_md}" alt="OmniHRMS"></a></div>
             </header>
             <div id="wrapper" style="display:none;">
                 <div class="rslides_container">
@@ -170,7 +170,7 @@ $out = <<<EOQ
         <!-- </td></tr></table> -->
     </div>
 	<footer id="install_footer">
-        <p id="footer_links"><a href="https://minthcm.org" target="_blank">Visit minthcm.org</a> | <a href="https://minthcm.com" target="_blank">Visit minthcm.com</a> | <a href="https://minthcm.org/support/" target="_blank">Support Forums</a> | <a href="LICENSE.txt" target="_blank">License</a></p>
+        <p id="footer_links"><a href="https://omnihr.org/" target="_blank">Visit omnihr.org/</a> | <a href="https://omnihr.org/" target="_blank">Visit omnihr.org/</a> | <a href="https://omnihr.org//support/" target="_blank">Support Forums</a> | <a href="LICENSE.txt" target="_blank">License</a></p>
     </footer>
     </div>
 <script>

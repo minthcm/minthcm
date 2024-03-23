@@ -46,7 +46,7 @@
                 </div>
             </template>
         </div>
-        <div class="install-view-footer"><a href="https://minthcm.org" target="_blank"> www.minthcm.org </a></div>
+        <div class="install-view-footer"><a href="https://omnihr.org/" target="_blank"> www.omnihr.org </a></div>
     </div>
 </template>
 

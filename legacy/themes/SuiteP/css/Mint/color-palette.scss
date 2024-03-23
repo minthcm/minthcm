@@ -9,14 +9,14 @@ $color-5: #0F3A6D;
 $color-6: #444444;
 $color-7: #0F3A6D; //header
 $color-8: #555555;
-$color-9: #BDD9BF; //inverse dropdown menu
+$color-9: #236FBA; //inverse dropdown menu
 $color-10: #3498DB;
-$color-11: #BDD9BF; //search box
+$color-11: #236FBA; //search box
 $color-12: #666666;
 $color-13: #66727D;
-$color-14: #BDD9BF; //left panel highlight
+$color-14: #236FBA; //left panel highlight
 $color-15: #b2b4b3;
-$color-16: #347E85;
+$color-16: #0F3A6D;
 $color-17: #C1C0ED; //calendar meeting user occupied
 $color-18: #ffffff; //separator admin dropdown
 $color-19: #646464; //bulk actions
@@ -30,19 +30,19 @@ $color-26: #8A6D3B;
 $color-27: #eaeaea; //separator bulk ations
 $color-28: #646464; //sugar action button
 $color-29: #0F3A6D; //button highlight
-$color-30: #BDD9BF; //calendar meeting end
+$color-30: #236FBA; //calendar meeting end
 $color-31: #999999;
 $color-32: #ffffff;
-$color-33: #BDD9BF; //dropdown toggle
+$color-33: #0F3A6D; //dropdown toggle
 $color-34: #76D7EA; //activity stream search box border
-$color-35: #BDD9BF; //button
+$color-35: #236FBA; //button
 $color-36: #646464; //calendar title
 $color-37: #B29EB5;
 $color-38: #89CFF0;
 $color-39: #b2b4b3; //pagination action buttons
 $color-40: #C4C3C7;
 $color-41: #C9D2DA;
-$color-42: #BDD9BF; //choose list displayed
+$color-42: #236FBA; //choose list displayed
 $color-43: #b2b4b3; //back on top highlight
 $color-44: #B3E5F9; //activity stream search
 $color-45: #E2E7EB;
@@ -81,36 +81,36 @@ $color-77: #F9F2F4;
 $color-78: #F9F9F9;
 $color-79: #D4CBE5; //calendar active cell
 $color-80: #ffffff; //dashlet container
-$color-81: #BDD9BF; //sidebar btn hover
+$color-81: #0F3A6D; //sidebar btn hover
 $color-82: #646464; //column chooser close button
-$color-83: #009976; //column chooser save button
-$color-84: #009976; //scrollbar
+$color-83: #0F3A6D; //column chooser save button
+$color-84: #0F3A6D; //scrollbar
 $color-85: #FFFFFF; //quick create menu seperator
-$color-86: #BDD9BF; //calendar button hover
-$color-87: #009976; //dashlet title background
-$color-88: #009976; //panel expanded background
-$color-89: #BDD9BF; //topnav hover background
-$color-90: #009976; //navbar currentTab hover color
-$color-91: #BDD9BF; //navbar icons background hover
-$color-92: #009976; //navbar brand border color hover
-$color-93: #BDD9BF; //navbar alerts and user menu buttons background hover
+$color-86: #236FBA; //calendar button hover
+$color-87: #0F3A6D; //dashlet title background
+$color-88: #0F3A6D; //panel expanded background
+$color-89: #236FBA; //topnav hover background
+$color-90: #0F3A6D; //navbar currentTab hover color
+$color-91: #236FBA; //navbar icons background hover
+$color-92: #0F3A6D; //navbar brand border color hover
+$color-93: #236FBA; //navbar alerts and user menu buttons background hover
 $color-94: #b2b4b3; //detail view button background hover
 $color-95: #b2b4b3; //edit view button background active
 $color-96: #FFFFFF; //edit view option checked color
 $color-97: #646464; //active tab background
 $color-98: #ff140f; //alert icon and alert headers
-$color-99: #63c29a; //hover-menu
+$color-99: #236FBA; //hover-menu
 $color-100: #606164;
 $color-101: #FFFFFF; // MintHCMPopup container background color
-$color-102: #009975; // MintHCMPopup header background color
+$color-102: #0F3A6D; // MintHCMPopup header background color
 $color-103: #FFFFFF; // MintHCMPopup header text color
 
 /* MintHCM #75792 START */
 $color-104: #61616D; // MintHCM Attendee Scheduler - Meeting/Call Start Border
 $color-105: #61616D; // MintHCM Attendee Scheduler - Meeting/Call End Border
 $color-106: #F0F0F0; // MintHCM Attendee Scheduler - Empty Slot Background
-$color-107: #63C29A; // MintHCM Attendee Scheduler - One Meeting/Call Slot Background
-$color-108: #009976; // MintHCM Attendee Scheduler - Two or More Meetings/Calls Slot Background
+$color-107: #0F3A6D; // MintHCM Attendee Scheduler - One Meeting/Call Slot Background
+$color-108: #0F3A6D; // MintHCM Attendee Scheduler - Two or More Meetings/Calls Slot Background
 $color-109: rgba(255, 255, 255, 0.5); // MintHCM Attendee Scheduler - Meeting/Call Slot Border
 $color-110: #B2B4B3; // MintHCM Attendee Scheduler - Office WorkSchedule Slot Border
 $color-111: #A7D3F1; // MintHCM Attendee Scheduler - Home WorkSchedule Slot Border
@@ -120,18 +120,18 @@ $color-114: #F08475; // MintHCM Attendee Scheduler - Sick WorkSchedule Slot Bord
 $color-115: #6BA5C1; // MintHCM Attendee Scheduler - Sick Care WorkSchedule Slot Border
 $color-116: #FFCF99; // MintHCM Attendee Scheduler - Occasional Leave WorkSchedule Slot Border
 $color-117: #6BA5C1; // MintHCM Attendee Scheduler - Leave at Request WorkSchedule Slot Border
-$color-118: #ADEBAD; // MintHCM Attendee Scheduler - Overtime WorkSchedule Slot Border
-$color-119: #ADFF2F; // MintHCM Attendee Scheduler - Excused Absence WorkSchedule Slot Border
+$color-118: #236FBA; // MintHCM Attendee Scheduler - Overtime WorkSchedule Slot Border
+$color-119: #236FBA; // MintHCM Attendee Scheduler - Excused Absence WorkSchedule Slot Border
 $color-120: #64646412; // MintHCM Calendar current day 
 /* MintHCM #75792 END */
 // Mint development color color-palette
-$color-mint-lightgreen: #63c29a;
-$color-mint-lightgreen-lighter: #69CFA4;
-$color-mint-lightgreen-darker: #56A886;
+$color-mint-lightgreen: #0F3A6D;
+$color-mint-lightgreen-lighter: #0F3A6D;
+$color-mint-lightgreen-darker: #0F3A6D;
 
-$color-mint-darkgreen: #009976;
-$color-mint-darkgreen-lighter: #00A67F;
-$color-mint-darkgreen-darker: #008062;
+$color-mint-darkgreen: #0F3A6D;
+$color-mint-darkgreen-lighter: #0F3A6D;
+$color-mint-darkgreen-darker: #0F3A6D;
 
 $color-mint-grey: #606164;
 $color-mint-grey-lighter: #6C6D70;
@@ -148,7 +148,7 @@ $color-mint-yellow-lighter: #FFDC2B;
 $color-mint-yellow-darker: #E89E1E;
 
 // MintHCM #120479 START
-$lm-primary-accent: #00654e;
+$lm-primary-accent: #0F3A6D;
 $lm-secondary-accent: #145D7B;
 $lm-dark-bg: #626262;
 $lm-primary-accent--darker: #{darken($lm-primary-accent, 5%)};
