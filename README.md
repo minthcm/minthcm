@@ -51,9 +51,13 @@ Thanks to the open code of both SugarCRM CE and SuiteCRM we were able to reintro
 
 This repository contains a source code of MintHCM system.
 
-## Installation 🧩
+## Installation 🖥
 
-The installation process is described on our website [minthcm.org/support/minthcm-installation-guide/](https://minthcm.org/support/minthcm-installation-guide/).
+The installation process is described in this guide: [minthcm.org/support/minthcm-installation-guide/](https://minthcm.org/support/minthcm-installation-guide/)
+
+## API 🧩
+
+MintHCM is based on SuiteCRM, so the API is very similar. However there are a few important differences, that we covered in this guide: [minthcm.org/support/how-to-use-mint-api/](https://minthcm.org/support/how-to-use-mint-api/)
 
 ## Community and Contributions 🤝
 
