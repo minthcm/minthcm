@@ -27,7 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 class kreportpresentationplugin {
     var $canExport = false; 
     
-    public function display(&$thisview){
+    public function display($thisview){
         
     }
     // function that should be overwritten if the Presentation Plugin provides a separate export to XLS and PDF

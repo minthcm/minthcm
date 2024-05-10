@@ -11,6 +11,7 @@ $ESListViewDefs['WorkSchedules'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'supervisor_acceptance' => [

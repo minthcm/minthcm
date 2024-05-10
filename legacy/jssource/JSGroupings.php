@@ -78,6 +78,7 @@ $js_groupings = array(
    'include/ViewTools/javascript/underscore-min.js'          => 'include/javascript/sugar_grp1.js',
    'include/ViewTools/javascript/autocomplete-config.js'     => 'include/javascript/sugar_grp1.js',
    'jssource/src_files/include/Vue/vue.min.js'                         =>   'include/javascript/sugar_grp1.js', 
+   'include/javascript/LegacyEventManager.js'                => 'include/javascript/sugar_grp1.js',
 
    //Dropzone
    'include/Dropzone/dropzone.min.js' => 'include/javascript/sugar_grp1.js',

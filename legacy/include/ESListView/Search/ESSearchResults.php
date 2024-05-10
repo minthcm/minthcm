@@ -36,6 +36,10 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults {
                     $parsed[$module][] = false;
                     continue;
                 }
+                if(!$this->handleListACL($obj)){
+                    $parsed[$module][] = false;
+                    continue;
+                }
                 $fieldDefs = $obj->getFieldDefinitions();
                 $objUpdatedLinks = $this->updateFieldDefLinks($obj, $fieldDefs);
                 $objDecodedEntities = $this->decodeEntities($objUpdatedLinks, $fieldDefs);
@@ -48,6 +52,14 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults {
         $this->addACLAccessInfo();
         return $parsed;
     }
+
+    protected function handleListACL($obj) {
+        global $current_user;
+        if ($obj->bean_implements('ACL')) {
+            return $obj->ACLAccess('list');
+        }
+        return true;
+    }
         
     protected function addACLAccessInfo(){
         foreach ($this->hits_after_acl as $module => $beans) {
@@ -56,7 +68,7 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults {
                     $bean->acl_access = [
                         'edit' => $bean->ACLAccess('edit'),
                         'view' => $bean->ACLAccess('view'),
-                        'delete' => $bean->ACLAccess('delete')
+                        'delete' => $bean->ACLAccess('delete'),
                     ];
                 }
             }

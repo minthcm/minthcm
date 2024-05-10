@@ -61,7 +61,7 @@ function center() {
     background: rgb(var(--v-theme-surface));
     position: fixed;
     border-radius: 16px;
-    z-index: 10000;
+    z-index: 2000;
 
     .mint-popup-header {
         display: flex;

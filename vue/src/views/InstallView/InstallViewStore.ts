@@ -131,9 +131,10 @@ export const useInstallViewStore = defineStore('install-view', () => {
             elastic: elasticConfig.value,
             site: siteConfig.value,
         })
-        if (response.data?.status === 0) {
-            errorMsg.value = response.data.message
-            console.error(response.data.error ?? response.data.message)
+        if (typeof response.data === 'string' || (typeof response.data === 'object' && response.data?.status === 0)) {
+            const errorMsgText = response.data.error ?? response.data.message ?? response.data
+            errorMsg.value = errorMsgText
+            console.error(errorMsgText)
             return false
         }
         isInstallationCompleted.value = true

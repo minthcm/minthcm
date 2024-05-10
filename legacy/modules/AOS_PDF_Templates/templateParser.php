@@ -53,7 +53,7 @@ class templateParser
         return $string;
     }
 
-    function parse_template_bean($string, $key, &$focus)
+    public static function parse_template_bean($string, $key, &$focus)
     {
         global $app_strings, $sugar_config;
         $repl_arr = array();
@@ -135,7 +135,7 @@ class templateParser
                 $sep = get_number_seperators();
                 $value = rtrim(rtrim(format_number($value), '0'), $sep[1]) . $app_strings['LBL_PERCENTAGE_SYMBOL'];
             }
-            if ($focus->field_defs[$name][dbType] == 'datetime' &&
+            if ($focus->field_defs[$name]['dbType'] == 'datetime' &&
                 (strpos($name, 'date') > 0 || strpos($name, 'expiration') > 0) ) {
                 if ($value != '') {
                     $dt = explode(' ', $value);

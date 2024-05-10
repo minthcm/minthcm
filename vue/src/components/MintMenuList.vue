@@ -38,7 +38,6 @@ function getIcon(icon: string) {
     }
     return `mdi-${icon}` // return mdi by default
 }
-
 </script>
 
 <style lang="scss">

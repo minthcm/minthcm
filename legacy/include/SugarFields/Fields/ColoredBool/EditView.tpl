@@ -41,7 +41,8 @@
     {assign var="checked" value=""}
 {/if}
 <input type="hidden" name="{{if empty($displayParams.idName)}}{{sugarvar key='name'}}{{else}}{{$displayParams.idName}}{{/if}}" value="0"> 
-<input type="checkbox" id="{{if empty($displayParams.idName)}}{{sugarvar key='name'}}{{else}}{{$displayParams.idName}}{{/if}}" 
+<input class="vt_formulaSelector{{if $vardef.vt_enforced!='false' and $vardef.vt_calculated!=''}} vt_enforced{{/if}}" type="checkbox" id="{{if empty($displayParams.idName)}}{{sugarvar key='name'}}{{else}}{{$displayParams.idName}}{{/if}}" 
        name="{{if empty($displayParams.idName)}}{{sugarvar key='name'}}{{else}}{{$displayParams.idName}}{{/if}}" 
        value="1" title='{{$vardef.help}}' tabindex="{{$tabindex}}" {{if !empty($displayParams.accesskey)}} accesskey='{{$displayParams.accesskey}}' {{/if}}
-       {$checked} {{$displayParams.field}}>
+       {$checked} {{$displayParams.field}}
+       {{include file='include/SugarFields/include/formulaInclude.tpl'}}>

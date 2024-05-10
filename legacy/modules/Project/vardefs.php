@@ -199,8 +199,10 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'status',
                 'vname' => 'LBL_STATUS',
-                'type' => 'enum',
+                'type' => 'ColoredEnum',
+                'dbType' => 'varchar',
                 'options' => 'project_status_dom',
+                'options_colors' => 'project_status_dom_colored',
             ),
 
         'priority' =>

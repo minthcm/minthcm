@@ -36,7 +36,7 @@ interface Conversation {
 export const useMintChatStore = (key = 'mint') =>
     defineStore(`chat-${key}`, () => {
         const auth = useAuthStore()
-        
+
         // Views
         const views = {
             default: MintChatDefault,
@@ -86,7 +86,9 @@ export const useMintChatStore = (key = 'mint') =>
         ])
         const usersList = computed(() => {
             const usersList = chatUsers.value.filter(
-                (u) => !chatUsersSearchQuery.value || u.name.toLowerCase().includes(chatUsersSearchQuery.value.toLowerCase()),
+                (u) =>
+                    !chatUsersSearchQuery.value ||
+                    u.name.toLowerCase().includes(chatUsersSearchQuery.value.toLowerCase()),
             )
             return usersList.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
         })
@@ -126,10 +128,25 @@ export const useMintChatStore = (key = 'mint') =>
                         date_entered: '2023-05-25 10:00:00',
                         user_id: '1',
                     },
-                    { id: 'm2', text: 'Sounds like a plan. How about tomorrow morning at 10 am?', date_entered: '2023-05-25 10:00:20', user_id: '9c32d170-f872-01d4-868b-64703e9d54bf' },
+                    {
+                        id: 'm2',
+                        text: 'Sounds like a plan. How about tomorrow morning at 10 am?',
+                        date_entered: '2023-05-25 10:00:20',
+                        user_id: '9c32d170-f872-01d4-868b-64703e9d54bf',
+                    },
                     { id: 'm22', text: 'Works for me.', date_entered: '2023-05-25 10:10:23', user_id: '1' },
-                    { id: 'm3', text: 'I’ll block off the time on my calendar..', date_entered: '2023-05-25 10:10:40', user_id: '1' },
-                    { id: 'm33', text: 'Excellent. I’ll send you an invite shortly.', date_entered: '2023-05-25 13:51:26', user_id: '9c32d170-f872-01d4-868b-64703e9d54bf' },
+                    {
+                        id: 'm3',
+                        text: 'I’ll block off the time on my calendar..',
+                        date_entered: '2023-05-25 10:10:40',
+                        user_id: '1',
+                    },
+                    {
+                        id: 'm33',
+                        text: 'Excellent. I’ll send you an invite shortly.',
+                        date_entered: '2023-05-25 13:51:26',
+                        user_id: '9c32d170-f872-01d4-868b-64703e9d54bf',
+                    },
                     { id: 'm34', text: 'Thanks!', date_entered: '2023-05-25 14:54:05', user_id: '1' },
                     {
                         id: 'm35',
@@ -221,18 +238,21 @@ export const useMintChatStore = (key = 'mint') =>
             // },
         ])
         const unreadConversationsCount = computed(
-            () => conversations.value.filter((c) => {
-                const lastMessage = c.messages?.at(-1)
-                return (
-                    lastMessage
-                    && lastMessage.user_id !== auth.user?.id
-                    && (!c.date_read || lastMessage.date_entered > c.date_read)
-                )
-            }).length || 0,
+            () =>
+                conversations.value.filter((c) => {
+                    const lastMessage = c.messages?.at(-1)
+                    return (
+                        lastMessage &&
+                        lastMessage.user_id !== auth.user?.id &&
+                        (!c.date_read || lastMessage.date_entered > c.date_read)
+                    )
+                }).length || 0,
         )
         const conversationsList = computed(() => {
             const conversationsList = conversations.value.filter(
-                (c) => !conversationsSearchQuery.value || c.name.toLowerCase().includes(conversationsSearchQuery.value?.toLowerCase()),
+                (c) =>
+                    !conversationsSearchQuery.value ||
+                    c.name.toLowerCase().includes(conversationsSearchQuery.value?.toLowerCase()),
             )
             return conversationsList.sort((a, b) => {
                 const aLastMessage = a.messages?.at(-1)

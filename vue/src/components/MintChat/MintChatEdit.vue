@@ -7,10 +7,7 @@
 import { useMintChatStore } from './MintChatStore'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 
-
 const chat = useMintChatStore()
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -13,6 +13,7 @@
                     :no-data-text="languages.label('LBL_ESLIST_NO_DATA')"
                     variant="outlined"
                     hide-details
+                    density="compact"
                 />
             </v-col>
             <v-col cols="3" v-if="field" class="px-2">
@@ -26,6 +27,7 @@
                     :label="languages.label('LBL_ESLIST_OPERATOR')"
                     variant="outlined"
                     hide-details
+                    density="compact"
                 />
             </v-col>
             <v-col cols="3" v-for="input in inputs" :key="input" class="px-2">
@@ -33,7 +35,8 @@
                     :is="getInputComponent(input.type)"
                     :fieldDefs="fieldDefs"
                     :input="input"
-                    @update:modelValue="newValue => input.value = newValue"
+                    @update:modelValue="(newValue) => (input.value = newValue)"
+                    density="compact"
                 />
             </v-col>
         </v-row>
@@ -42,7 +45,7 @@
             variant="text"
             density="comfortable"
             icon="mdi-close"
-            @click="emit('delete-filter-row', props.index)"
+            @click="store.deleteFilterRow(props.index)"
         />
     </div>
 </template>
@@ -66,12 +69,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits([
-    'update:field',
-    'update:operator',
-    'update:inputs',
-    'delete-filter-row',
-])
+const emit = defineEmits(['update:field', 'update:operator', 'update:inputs'])
 const store = useListViewStore()
 const languages = useLanguagesStore()
 const field = ref(props.row.field ?? '')
@@ -86,11 +84,7 @@ const operatorList = computed(() => {
         return {}
     }
     const type = fieldDefs.value.type
-    return (
-        operatorDefs[type] ??
-        operatorDefs[operatorDefs.typeMap[type]] ??
-        operatorDefs[operatorDefs.defaultOperator]
-    )
+    return operatorDefs[type] ?? operatorDefs[operatorDefs.typeMap[type]] ?? operatorDefs[operatorDefs.defaultOperator]
 })
 const operatorItems = computed(() => {
     return Object.entries(operatorList.value).map(([key, op]) => ({
@@ -128,9 +122,15 @@ function handleOperatorChange() {
 
 <style scoped lang="scss">
 .filter-row {
-    padding: 0px 8px;
+    margin: 0 10px;
+    padding: 10px 0 10px;
     display: flex;
     align-items: center;
     gap: 16px;
+    border-bottom: 1px solid #0000001f;
+}
+
+.filter-row:first-child {
+    border-top: 1px solid #0000001f;
 }
 </style>

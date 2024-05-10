@@ -227,8 +227,8 @@ class Delegations extends Delegations_sugar
 
     public function countRegiments()
     {
-        $date1  = new DateTime($this->start_date);
-        $date2  = new DateTime($this->end_date);
+        $date1  = getDateTimeObject($this->start_date, true);
+        $date2  = getDateTimeObject($this->end_date, true);
         $period = $date1->diff($date2);
 
         $regiment = 0;
@@ -317,8 +317,8 @@ class Delegations extends Delegations_sugar
 
     public function countNumberOfNights()
     {
-        $date_start = new DateTime(substr($this->start_date, 0, 10));
-        $date_end   = new DateTime(substr($this->end_date, 0, 10));
+        $date_start = getDateTimeObject($this->start_date, true);
+        $date_end   = getDateTimeObject($this->end_date, true);
         $period     = $date_end->diff($date_start);
         return $period->d;
     }

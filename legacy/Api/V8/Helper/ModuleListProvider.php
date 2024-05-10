@@ -149,10 +149,10 @@ class ModuleListProvider
     {
         global $current_user;
 
-        if (is_admin(is_admin($current_user))) {
+        if (is_admin($current_user)) {  // MintHCM #87119
             return true;
         }
 
-        return $level >= ACL_ALLOW_ENABLED;
+        return $level >= ACL_ALLOW_OWNER;  // MintHCM #87119
     }
 }

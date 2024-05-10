@@ -45,10 +45,18 @@ const backend = useBackendStore()
 const languages = useLanguagesStore()
 const store = useSetupWizardStore()
 
-const timezonesList = computed(() => Object.entries(backend.initData?.global?.time_zones ?? {}).map(([value, title]) => ({ value, title })))
-const nameFormats = computed(() => Object.entries(backend.initData?.global?.name_formats ?? {}).map(([value, title]) => ({ value, title })))
-const timeFormats = computed(() => Object.entries(backend.initData?.global?.time_formats ?? {}).map(([value, title]) => ({ value, title })))
-const dateFormats = computed(() => Object.entries(backend.initData?.global?.date_formats ?? {}).map(([value, title]) => ({ value, title })))
+const timezonesList = computed(() =>
+    Object.entries(backend.initData?.global?.time_zones ?? {}).map(([value, title]) => ({ value, title })),
+)
+const nameFormats = computed(() =>
+    Object.entries(backend.initData?.global?.name_formats ?? {}).map(([value, title]) => ({ value, title })),
+)
+const timeFormats = computed(() =>
+    Object.entries(backend.initData?.global?.time_formats ?? {}).map(([value, title]) => ({ value, title })),
+)
+const dateFormats = computed(() =>
+    Object.entries(backend.initData?.global?.date_formats ?? {}).map(([value, title]) => ({ value, title })),
+)
 </script>
 
 <style scoped lang="scss">

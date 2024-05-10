@@ -8,5 +8,4 @@ import { useMintChatStore } from './MintChatStore'
 const chat = useMintChatStore()
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

@@ -10,6 +10,10 @@ $ESListViewDefs['Surveys'] = [
         'assigned_user_name' => [
             'default' => true,
         ],
+        'status' => [
+            'default' => false,
+            'type' => 'enum',
+        ],
         'date_entered' => [],
         'date_modified' => [],
         'created_by_name' => [
@@ -22,6 +26,7 @@ $ESListViewDefs['Surveys'] = [
     'search' => [
         'name' => [],  
         'assigned_user_name' => [],
+        'status' => [],
         'date_entered' => [],
         'date_modified' => [],
         'created_by_name' => [],

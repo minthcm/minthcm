@@ -188,8 +188,8 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $input_name0 = $current_user->id;
         }
 
-        return SugarWidgetFieldid::_get_column_select($layout_def)."="
-            .$this->reporter->db->quoted($input_name0)."\n";
+        return parent::_get_column_select($layout_def)."="
+			.$this->reporter->db->quoted($input_name0)."\n";
     }
 
     public function queryFilteris_not($layout_def)
@@ -206,8 +206,8 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $input_name0 = $current_user->id;
         }
 
-        return SugarWidgetFieldid::_get_column_select($layout_def)."<>"
-            .$this->reporter->db->quoted($input_name0)."\n";
+        return parent::_get_column_select($layout_def) . "<>"
+            . $this->reporter->db->quoted($input_name0) . "\n";
     }
 
     // $rename_columns, if true then you're coming from reports
@@ -230,7 +230,8 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
 
         $str = implode(",", $arr);
 
-        return SugarWidgetFieldid::_get_column_select($layout_def)." IN (".$str.")\n";
+        $sugarWidgetFieldId = new SugarWidgetFieldId($this->layout_manager);
+        return $sugarWidgetFieldId->_get_column_select($layout_def)." IN (".$str.")\n";
     }
     // $rename_columns, if true then you're coming from reports
     public function queryFilternot_one_of($layout_def, $rename_columns = true)
@@ -252,7 +253,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
 
         $str = implode(",", $arr);
 
-        return SugarWidgetFieldid::_get_column_select($layout_def)." NOT IN (".$str.")\n";
+        return parent::_get_column_select($layout_def)." NOT IN (".$str.")\n";
     }
 
     public function &queryGroupBy($layout_def)
@@ -261,7 +262,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $layout_def['name'] = 'id';
             $layout_def['type'] = 'id';
 
-            $group_by =  SugarWidgetFieldid::_get_column_select($layout_def)."\n";
+            $group_by =  parent::_get_column_select($layout_def)."\n";
         } else {
             // group by clause for user name passes through here.
             $group_by = $this->_get_column_select($layout_def)."\n";

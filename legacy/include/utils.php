@@ -6099,11 +6099,17 @@ function getAppString($key)
     return $app_strings[$key];
 }
 
-function getDateTimeObject($date_string)
+function getDateTimeObject($date_string, $reset_time = false)
 {
+    $date_object = null;
+    if(is_a($date_string, 'SugarDateTime')){
+        $date_object = $date_string;
+    }
     global $timedate;
-    $date_object = SugarDateTime::createFromFormat($timedate->get_date_format(),
-        $date_string);
+    if (!$date_object) {
+        $date_object = SugarDateTime::createFromFormat($timedate->get_date_format(),
+            $date_string);
+    }
     if (!$date_object) {
         $date_object = SugarDateTime::createFromFormat($timedate->get_db_date_format(),
             $date_string);
@@ -6115,6 +6121,9 @@ function getDateTimeObject($date_string)
     if (!$date_object) {
         $date_object = SugarDateTime::createFromFormat($timedate->get_db_date_time_format(),
             $date_string);
+    }
+    if (!empty($date_object) && $reset_time === true) {
+        $date_object->setTime(0, 0);
     }
     return $date_object;
 }

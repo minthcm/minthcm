@@ -13,7 +13,9 @@
         <div
             :class="{
                 'mint-chat-conversation': true,
-                'mint-chat-conversation-unread': (conv.messages?.at(-1)?.user_id !== auth.user?.id) && (!conv.date_read || conv.date_read < (conv.messages?.at(-1)?.date_entered || conv.date_active)),
+                'mint-chat-conversation-unread':
+                    conv.messages?.at(-1)?.user_id !== auth.user?.id &&
+                    (!conv.date_read || conv.date_read < (conv.messages?.at(-1)?.date_entered || conv.date_active)),
             }"
             v-for="conv in chat.conversationsList"
             :key="conv.id"
@@ -30,7 +32,11 @@
                     <div class="mint-chat-conversation-status">
                         <div v-text="toRelativeDate(conv.messages?.at(-1)?.date_entered || conv.date_active)" />
                         <div
-                            v-if="(conv.messages?.at(-1)?.user_id !== auth.user?.id) && (!conv.date_read || conv.date_read < (conv.messages?.at(-1)?.date_entered || conv.date_active))"
+                            v-if="
+                                conv.messages?.at(-1)?.user_id !== auth.user?.id &&
+                                (!conv.date_read ||
+                                    conv.date_read < (conv.messages?.at(-1)?.date_entered || conv.date_active))
+                            "
                             class="mint-chat-conversation-unread-dot"
                         />
                     </div>

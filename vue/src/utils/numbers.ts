@@ -1,11 +1,11 @@
 import { useAuthStore } from '@/store/auth'
 import { useBackendStore } from '@/store/backend'
 
-const auth = useAuthStore()
-const backend = useBackendStore()
 
 export default class NumberUtils {
     public static formatNumber(n, num_grp_sep = null, dec_sep = null, round = null, precision = null) {
+        const auth = useAuthStore()
+
         if (n == '') {
             return n
         }
@@ -46,6 +46,7 @@ export default class NumberUtils {
         return n[0] + (n.length > 1 && n[1] != '' ? dec_sep + n[1] : '')
     }
     public static formatCurrency(n: string | number, currency_id: string | number) {
+        const backend = useBackendStore()
         const currency = backend.initData.global.currencies[currency_id] ?? backend.initData.global.currencies[-99]
         const number = NumberUtils.formatNumber(n)
         if (currency.currency_on_right) {

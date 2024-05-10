@@ -261,7 +261,7 @@ class ListViewData
         global $current_user;
         require_once 'include/SearchForm/SearchForm2.php';
         SugarVCR::erase($seed->module_dir);
-        $this->seed =& $seed;
+        $this->seed = $seed;
         $totalCounted = empty($GLOBALS['sugar_config']['disable_count_query']);
         $_SESSION['MAILMERGE_MODULE_FROM_LISTVIEW'] = $seed->module_dir;
         if (empty($_REQUEST['action']) || $_REQUEST['action'] != 'Popup') {

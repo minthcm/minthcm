@@ -71,6 +71,9 @@ class AOD_Index extends AOD_Index_sugar
      */
     public function isEnabled()
     {
+      /* MintHCM #127800 START */
+      return false;
+      /* MintHCM #127800 END */
         global $sugar_config;
         return !empty($sugar_config['aod']['enable_aod']);
     }

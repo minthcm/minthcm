@@ -8,6 +8,7 @@ $ESListViewDefs['Applications'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'type' => [

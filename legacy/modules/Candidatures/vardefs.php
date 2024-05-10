@@ -471,7 +471,8 @@ $dictionary['Candidatures'] = array(
             'required' => false,
             'name' => 'status',
             'vname' => 'LBL_STATUS',
-            'type' => 'enum',
+            'type' => 'ColoredEnum',
+            'dbType' => 'varchar',
             'massupdate' => true,
             'default' => 'New',
             'no_default' => false,
@@ -488,6 +489,7 @@ $dictionary['Candidatures'] = array(
             'len' => 100,
             'size' => '20',
             'options' => 'status_list',
+            'options_colors' => 'status_list_colored',
             'studio' => 'visible',
         ),
         'status_information' => array(

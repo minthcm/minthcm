@@ -11,6 +11,7 @@ $ESListViewDefs['Onboardings'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'onboardingtemplate_name' => [

@@ -63,7 +63,7 @@ class MetaController extends BaseController
 {
 
     /**
-     * @var UserService
+     * @var MetaService
      */
     private $metaService;
 

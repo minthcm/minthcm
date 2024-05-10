@@ -1309,6 +1309,7 @@ function insert_default_settings() {
     'Workplaces',
     'Rooms',
     'SecurityGroups',
+    'Employees',
     );
 
    $hidden_subpanels = array (

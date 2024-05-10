@@ -39,7 +39,10 @@
                 hide-details
             >
                 <template #prepend-inner>
-                    <v-icon icon="mdi-magnify" />
+                    <v-fab-transition>
+                        <v-icon v-if="filterModulesQuery" icon="mdi-close" @click="clearInput" />
+                        <v-icon v-else icon="mdi-magnify" />
+                    </v-fab-transition>
                 </template>
             </v-text-field>
             <v-list nav class="nav-list nav-list-blurred flex-grow-1" style="min-height: 80px">
@@ -90,7 +93,11 @@
                             </div>
                         </v-list-item>
                     </template>
-                    <div class="px-4" v-else>No modules found</div>
+                    <span
+                        v-else
+                        class="px-4 text-grey-darken-4"
+                        v-text="languages.label('LBL_MINT4_NO_MODULES_FOUND')"
+                    />
                 </transition-group>
             </v-list>
             <v-expansion-panels class="nav-accordion" variant="accordion">
@@ -175,6 +182,10 @@ function parseModuleActions(actions: ModuleAction[]) {
         url: url.fromLegacyUrl(action.url),
         icon: action.icon,
     }))
+}
+
+function clearInput() {
+    filterModulesQuery.value = ''
 }
 </script>
 <style lang="scss">

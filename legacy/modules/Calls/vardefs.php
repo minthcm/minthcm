@@ -144,10 +144,11 @@ $dictionary['Call'] = array(
       array(
          'name' => 'status',
          'vname' => 'LBL_STATUS',
-         'type' => 'ColoredActivityStatus',
+         'type' => 'ColoredEnum',
          'dbType' => 'varchar',
          'len' => 100,
          'options' => 'call_status_dom',
+         'options_colors' => 'call_status_dom_colored',
          'comment' => 'The status of the call (Held, Not Held, etc.)',
          'required' => true,
          'importable' => 'required',

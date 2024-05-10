@@ -148,8 +148,8 @@ onMounted(async () => {
     if (messagesContent.value) {
         messagesContent.value.scrollTo(0, messagesContent.value.scrollHeight)
     }
-    chat.conversations.find(c => c.id === chat.activeConversationId).date_read = DateTime.now().toSQL()
-    
+    chat.conversations.find((c) => c.id === chat.activeConversationId).date_read = DateTime.now().toSQL()
+
     initTimeout(chat.activeConversationId)
 })
 
@@ -166,13 +166,20 @@ onUnmounted(() => {
 })
 
 onUpdated(() => {
-    chat.conversations.find(c => c.id === chat.activeConversationId).date_read = DateTime.now().toSQL()
+    chat.conversations.find((c) => c.id === chat.activeConversationId).date_read = DateTime.now().toSQL()
 })
 
 async function sendAutoMessage(convId: string) {
     return
     try {
-        const message = (await axios.get(`https://fakerapi.it/api/v1/texts?_locale=pl_PL&_quantity=1&_characters=${Math.round(Math.random() * 50 + 10)}`))?.data?.data?.[0]?.content || 'asd'
+        const message =
+            (
+                await axios.get(
+                    `https://fakerapi.it/api/v1/texts?_locale=pl_PL&_quantity=1&_characters=${Math.round(
+                        Math.random() * 50 + 10,
+                    )}`,
+                )
+            )?.data?.data?.[0]?.content || 'asd'
         if (!message) {
             return
         }

@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,13 +34,12 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
- */
-function isoUpdate(formElem){if(typeof(js_iso4217[formElem.value])=='undefined'){return false;}
+ */function isoUpdate(formElem){if(typeof(js_iso4217[formElem.value])=='undefined'){return false;}
 var thisForm=formElem.form;var thisCurr=js_iso4217[formElem.value];if(thisForm.name.value==''){thisForm.name.value=thisCurr.name;}
 if(thisForm.symbol.value==''){thisForm.symbol.value='';for(var i=0;i<thisCurr.unicode.length;i++){thisForm.symbol.value=thisForm.symbol.value+String.fromCharCode(thisCurr.unicode[i]);}}
 return true;}

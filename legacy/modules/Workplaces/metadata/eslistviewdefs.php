@@ -15,6 +15,7 @@ $ESListViewDefs['Workplaces'] = [
             'default' => true,
         ],
         'availability' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'date_entered' => [

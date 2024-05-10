@@ -7,6 +7,7 @@ import AuthViewReset from '@/views/AuthView/AuthViewReset.vue'
 import { Component } from 'vue'
 import GuestLayout from '@/layouts/GuestLayout/GuestLayout.vue'
 import { useAuthStore } from '@/store/auth'
+import ListView from '@/views/ListView/ListView.vue'
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -136,7 +137,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/modules/:module',
         name: 'list',
-        component: () => import('../views/ListView/ListView.vue'),
+        component: ListView,
         alias: ['/modules/:module/ESListView', '/modules/:module/ListView', '/modules/:module/index'],
         meta: {
             auth: true,

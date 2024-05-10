@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  *
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -59,10 +59,10 @@ use SugarBean;
 use SuiteCRM\Search\Index\AbstractIndexer;
 use SuiteCRM\Search\Index\Documentify\AbstractDocumentifier;
 use SuiteCRM\Search\Index\Documentify\SearchDefsDocumentifier;
-use SuiteCRM\Search\Index\IndexingLockFileTrait;
 use SuiteCRM\Search\Index\IndexingSchedulerTrait;
 use SuiteCRM\Search\Index\IndexingStatisticsTrait;
 use Symfony\Component\Yaml\Parser as YamlParser;
+
 require_once 'lib/Search/ElasticSearch/ElasticSearchVardefsReader.php';
 
 /**
@@ -81,9 +81,9 @@ class ElasticSearchIndexer extends AbstractIndexer
     private $batchSize = 1000;
     /** @var Carbon|false the timestamp of the last indexing. false if unknown */
 
-   // MintHCM #121632 START
-   protected $acl_helper;
-   // MintHCM #121632 END
+    // MintHCM #121632 START
+    protected $acl_helper;
+    // MintHCM #121632 END
 
     /**
      * ElasticSearchIndexer constructor.
@@ -93,12 +93,12 @@ class ElasticSearchIndexer extends AbstractIndexer
     public function __construct(Client $client = null)
     {
         parent::__construct();
-      // MintHCM #121632 START
-      require_once 'include/ESListView/ESListACLHelper.php';
-      $this->acl_helper = new \ESListACLHelper;
-      // MintHCM #121632 END
+        // MintHCM #121632 START
+        require_once 'include/ESListView/ESListACLHelper.php';
+        $this->acl_helper = new \ESListACLHelper;
+        // MintHCM #121632 END
 
-      $this->client = !empty($client) ? $client : ElasticSearchClientBuilder::getClient();
+        $this->client = !empty($client) ? $client : ElasticSearchClientBuilder::getClient();
     }
 
     /**
@@ -136,15 +136,15 @@ class ElasticSearchIndexer extends AbstractIndexer
             $this->logger->debug('A differential indexing will be performed');
         } else {
             $this->logger->debug('A full indexing will be performed');
-            
+
             foreach ($modules as $module) {
                 try {
                     $instance_id = $GLOBALS['sugar_config']['unique_key'];
                     $lowercaseModule = strtolower($module);
-                    $index =  $instance_id.'_'.$lowercaseModule;
+                    $index = $instance_id . '_' . $lowercaseModule;
                     $this->removeIndex($index);
                     // MintHCM #121632 START
-                    $this->createIndex($index, $this->getDefaultMapParams($module)?? null);
+                    $this->createIndex($index, $this->getDefaultMapParams($module) ?? null);
                     // MintHCM #121632 END
                 } catch (Exception $exception) {
                     $message = "Failed to create index $index! Exception details follow";
@@ -204,38 +204,60 @@ class ElasticSearchIndexer extends AbstractIndexer
 
         $this->logger->debug("Created new index '$index'");
     }
-    
+
     /** @inheritdoc */
     public function indexModule($module)
     {
+        global $sugar_config;
         $seed = \BeanFactory::getBean($module);
+        if (empty($seed->table_name)) {
+            $this->logger->error("Table not found for module $module. Skipping this module!");
+            return;
+        }
         $tableName = $seed->table_name;
         $isDifferential = $this->isDifferentialIndexing();
-  
+
         $where = "";
         $showDeleted = 0;
 
-        if ( $isDifferential && isset($seed->field_defs['date_indexed']) ) {
+        if ($isDifferential && isset($seed->field_defs['date_indexed'])) {
             $where = "$tableName.date_indexed IS NULL OR $tableName.date_indexed < $tableName.date_modified";
         }
 
+        $old_disable_date_format = $GLOBALS['disable_date_format'];
+        // prevent date format conversion in get_list
+        $GLOBALS['disable_date_format'] = true;
+
+        $batchOffset = 0;
+        $maxBatchSize = $sugar_config['search']['ElasticSearch']['max_batch_size'] ?? 50000;
+        $totalRecordsCount = 0;
+        $oldIndexedRecordsCount = $this->indexedRecordsCount;
         try {
-            $beanTime = Carbon::now()->toDateTimeString();
-            if ($seed) {
-                $beans = $seed->get_full_list("", $where, false, $showDeleted);
-            }
+            do {
+                $batch = $seed->get_list("$tableName.date_entered", $where, $batchOffset, $maxBatchSize, $maxBatchSize, $showDeleted);
+                if (empty($batch['list'])) {
+                    break;
+                }
+                $totalRecordsCount += count($batch['list']);
+                $this->indexBatch($module, $batch['list']);
+                $batchOffset += $maxBatchSize;
+            } while (true);
         } catch (RuntimeException $exception) {
             $this->logger->error("Failed to index module $module");
             $this->logger->error($exception);
             return;
+        } finally {
+            /* MintHCM START */
+            $this->indexBatch($module, []); // Setting index for current module if there are no records
+            /* MintHCM START */
+            $GLOBALS['disable_date_format'] = $old_disable_date_format;
         }
-        if ( $beans === null ) {
-            $beans = [];
-        }
-        $this->logger->debug(sprintf('Indexing module %s...', $module));
-        $this->indexBeans($module, $beans);
+        $indexedRecordsCount = $this->indexedRecordsCount - $oldIndexedRecordsCount;
+        $type = $totalRecordsCount === $indexedRecordsCount ? Logger::DEBUG : Logger::WARNING;
+        $this->logger->log($type, sprintf('Indexed %d/%d %s', $indexedRecordsCount, $totalRecordsCount, $module));
+        
         $this->putMeta($module, [
-            'module_name' => $module
+            'module_name' => $module,
         ]);
         $this->indexedModulesCount++;
     }
@@ -252,7 +274,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $params = [
             'index' => $this->index,
             'body' => ['_meta' => $meta],
-            'ignore_unavailable' => true
+            'ignore_unavailable' => true,
         ];
 
         $this->client->indices()->putMapping($params);
@@ -298,8 +320,8 @@ class ElasticSearchIndexer extends AbstractIndexer
         $this->logger->debug("Deleting all indices");
         try {
             $this->client->indices()->delete(['index' => '_all']);
-        } /** @noinspection PhpRedundantCatchClauseInspection */
-        catch (Missing404Exception $ignore) {
+        }/** @noinspection PhpRedundantCatchClauseInspection */
+         catch (Missing404Exception $ignore) {
             // Index not there, not big deal since we meant to delete it anyway.
             $this->logger->warn('Index not found, no index has been deleted.');
         }
@@ -309,90 +331,90 @@ class ElasticSearchIndexer extends AbstractIndexer
     public function indexBean(SugarBean $bean)
     {
         $this->logger->debug("Indexing {$bean->module_name}($bean->name)");
-      // minthcm start (todo: refactor)
-      $beans = $bean->get_full_list('', " {$bean->table_name}.id = '{$bean->id}'");
-      if (!empty($beans[0]->id)) {
-         $bean = $beans[0];
-      }
-      // minthcm end
+        // minthcm start (todo: refactor)
+        $beans = $bean->get_full_list('', " {$bean->table_name}.id = '{$bean->id}'");
+        if (!empty($beans[0]->id)) {
+            $bean = $beans[0];
+        }
+        // minthcm end
         $args = $this->makeIndexParamsFromBean($bean);
-      $this->fillAllNestedPropertyValues($bean, $args['body']);
+        $this->fillAllNestedPropertyValues($bean, $args['body']);
 
-      $this->removeErrorProneFields($bean->module_name, $args['body']);
-      $this->client->index($args);
-      $this->setBeanInstantIndexingDate($bean);
-   }
-
-   protected function fillAllNestedPropertyValues(SugarBean $bean, array &$args): void
-   {
-      $nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->module_name);
-      foreach ($nested_properties as $property_name => $nested_config) {
-         $args[$property_name] = $this->getNestedPropertyValues($bean, $property_name, $nested_config);
-      }
-   }
-
-   protected function getNestedPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
-   {
-    $link_field_name = $nested_config['link'] ?? $property_name;
-    if(!isset($bean->field_defs) || !is_array($bean->field_defs)){
-      return [];
-    }
-    if(is_array($link_field_name)){
-        $link_field_name = $link_field_name[0];
-    }
-    if (!$bean->load_relationship($link_field_name)) {
-       return [];
+        $this->removeErrorProneFields($bean->module_name, $args['body']);
+        $this->client->index($args);
+        $this->setBeanInstantIndexingDate($bean);
     }
 
-      $related_beans = $bean->$link_field_name->getBeans();
-      $nested_fields = $nested_config['fields'];
-      $nested_data = array_map(function ($related_bean) use ($nested_fields) {
-         $row = [];
-         foreach ($nested_fields as $nested_field) {
-            $row[$nested_field] = $related_bean->$nested_field;
-         }
-         return $row;
-      }, $related_beans);
+    protected function fillAllNestedPropertyValues(SugarBean $bean, array &$args): void
+    {
+        $nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->module_name);
+        foreach ($nested_properties as $property_name => $nested_config) {
+            $args[$property_name] = $this->getNestedPropertyValues($bean, $property_name, $nested_config);
+        }
+    }
 
-      return array_values($nested_data);
-   }
+    protected function getNestedPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
+    {
+        $link_field_name = $nested_config['link'] ?? $property_name;
+        if (!isset($bean->field_defs) || !is_array($bean->field_defs)) {
+            return [];
+        }
+        if (is_array($link_field_name)) {
+            $link_field_name = $link_field_name[0];
+        }
+        if (!$bean->load_relationship($link_field_name)) {
+            return [];
+        }
 
-   protected function setBeanInstantIndexingDate(SugarBean $bean)
-   {
-      $db = \DBManagerFactory::getInstance();
-      $db->query("UPDATE {$bean->table_name}
+        $related_beans = $bean->$link_field_name->getBeans();
+        $nested_fields = $nested_config['fields'];
+        $nested_data = array_map(function ($related_bean) use ($nested_fields) {
+            $row = [];
+            foreach ($nested_fields as $nested_field) {
+                $row[$nested_field] = $related_bean->$nested_field;
+            }
+            return $row;
+        }, $related_beans);
+
+        return array_values($nested_data);
+    }
+
+    protected function setBeanInstantIndexingDate(SugarBean $bean)
+    {
+        $db = \DBManagerFactory::getInstance();
+        $db->query("UPDATE {$bean->table_name}
          SET date_indexed = '{$bean->date_modified}'
          WHERE id = '{$bean->id}'
       ");
-   }
+    }
 
-   protected function setBeansDeferredIndexingDate(array $beans)
-   {
-      if (empty($beans)) {
-         return;
-      }
+    protected function setBeansDeferredIndexingDate(array $beans)
+    {
+        if (empty($beans)) {
+            return;
+        }
 
-      $ids = implode(',', array_map(function ($bean) { return "'{$bean->id}'"; }, $beans));
+        $ids = implode(',', array_map(function ($bean) {return "'{$bean->id}'";}, $beans));
 
-      $db = \DBManagerFactory::getInstance();
-      $now_datetime = (new \SugarDateTime)->asDb();
-      $seed = $beans[0];
-      $db->query("UPDATE {$seed->table_name}
+        $db = \DBManagerFactory::getInstance();
+        $now_datetime = (new \SugarDateTime)->asDb();
+        $seed = $beans[0];
+        $db->query("UPDATE {$seed->table_name}
          SET date_indexed = '{$now_datetime}'
          WHERE id IN ($ids)
       ");
-   }
+    }
 
-   protected function removeErrorProneFields(string $module_name, array &$body)
-   {
-      $mapping = [
-         'FP_Event_Locations' => ['address', 'address_city', 'address_country', 'address_postalcode', 'address_state'],
-      ];
+    protected function removeErrorProneFields(string $module_name, array &$body)
+    {
+        $mapping = [
+            'FP_Event_Locations' => ['address', 'address_city', 'address_country', 'address_postalcode', 'address_state'],
+        ];
 
-      foreach ($mapping[$module_name] ?? [] as $key) {
-         unset($body[$key]);
-      }
-   }
+        foreach ($mapping[$module_name] ?? [] as $key) {
+            unset($body[$key]);
+        }
+    }
 
     /** @inheritdoc */
     public function removeBean(SugarBean $bean)
@@ -436,7 +458,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $status = $this->client->ping();
         $elapsed = Carbon::now()->micro - $start;
 
-        if ($status === false) {
+        if (false === $status) {
             $this->logger->error("Failed to ping server");
 
             return false;
@@ -498,13 +520,13 @@ class ElasticSearchIndexer extends AbstractIndexer
 
         $instance_id = $GLOBALS['sugar_config']['unique_key'];
         $lowercaseModule = strtolower($module);
-        $this->index =  $instance_id.'_'.$lowercaseModule;
-        
+        $this->index = $instance_id . '_' . $lowercaseModule;
+
         foreach ($beans as $key => $bean) {
             // MintHCM #122342 START
             //$head = ['_index' => strtolower($module), '_id' => $bean->id];
 
-            $head = [ '_index' => $this->index, '_id' => $bean->id ];
+            $head = ['_index' => $this->index, '_id' => $bean->id];
             // MintHCM #122342 END
             if ($bean->deleted) {
                 $params['body'][] = ['delete' => $head];
@@ -512,11 +534,11 @@ class ElasticSearchIndexer extends AbstractIndexer
             } else {
                 $body = $this->makeIndexParamsBodyFromBean($bean);
 
-            // TODO: optimize with single load from db before foreach
-            $this->fillAllNestedPropertyValues($bean, $body);
+                // TODO: optimize with single load from db before foreach
+                $this->fillAllNestedPropertyValues($bean, $body);
                 //$body['meta']['module_name'] = $bean->module_dir;
 
-            $this->removeErrorProneFields($module, $body);
+                $this->removeErrorProneFields($module, $body);
                 $params['body'][] = ['index' => $head];
                 $params['body'][] = $body;
                 $this->indexedRecordsCount++;
@@ -524,9 +546,9 @@ class ElasticSearchIndexer extends AbstractIndexer
             }
 
             // Send a batch of $this->batchSize elements to the server
-         // MintHCM START
-         if ( $key % $this->batchSize == $this->batchSize - 1 ) {
-         // MintHCM END
+            // MintHCM START
+            if ($key % $this->batchSize == $this->batchSize - 1) {
+                // MintHCM END
                 $this->sendBatch($params);
             }
         }
@@ -536,16 +558,17 @@ class ElasticSearchIndexer extends AbstractIndexer
             $this->sendBatch($params);
         }
 
-      $this->setBeansDeferredIndexingDate($beans);
+        $this->setBeansDeferredIndexingDate($beans);
     }
 
     // MintHCM #121632 START
     /**
-    * Retrieves the default params to set up an optimised default index for Elasticsearch.
-    *
-    * @return array
-    */
-    private function getDefaultMapParams($module) {
+     * Retrieves the default params to set up an optimised default index for Elasticsearch.
+     *
+     * @return array
+     */
+    private function getDefaultMapParams($module)
+    {
         $file = __DIR__ . '/defaultParams.yml';
 
         $this->logger->debug("Loading mapping file $file");
@@ -553,7 +576,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $parse = new YamlParser();
         $parsed = $parse->parseFile($file);
 
-        return [ 'mappings' => $parsed['mappings'][$module] ];
+        return ['mappings' => $parsed['mappings'][$module]];
     }
     // MintHCM #121632 END
     /**
@@ -583,20 +606,20 @@ class ElasticSearchIndexer extends AbstractIndexer
         // sends the batch over to the server
         $responses = $this->client->bulk($params);
 
-        if (isset($responses['errors']) && $responses['errors'] === true) {
+        if (isset($responses['errors']) && true === $responses['errors']) {
             // logs the errors
             foreach ($responses['items'] as $item) {
                 $action = array_keys($item)[0];
-                if(isset($item[$action]['error'])) {
+                if (isset($item[$action]['error'])) {
                     $type = $item[$action]['error']['type'];
                     $reason = $item[$action]['error']['reason'];
                     $this->logger->error("[$action] [$type] $reason");
-                    
-                    if ($action === 'index') {
+
+                    if ('index' === $action) {
                         $this->indexedRecordsCount--;
                     }
 
-                    if ($action === 'delete') {
+                    if ('delete' === $action) {
                         $this->removedRecordsCount--;
                     }
                 }
@@ -638,13 +661,13 @@ class ElasticSearchIndexer extends AbstractIndexer
         $lowercaseModule = strtolower($bean->module_name);
 
         return [
-            'index' => $instance_id.'_'.$lowercaseModule,
+            'index' => $instance_id . '_' . $lowercaseModule,
             'id' => $bean->id,
         ];
     }
 
     /**
-    * 
+     *
      * @param bool $differential
      * @param int $searchdefs
      */
@@ -661,4 +684,3 @@ class ElasticSearchIndexer extends AbstractIndexer
         $indexer->index();
     }
 }
-

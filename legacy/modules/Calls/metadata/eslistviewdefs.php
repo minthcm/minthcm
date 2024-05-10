@@ -11,7 +11,9 @@ $ESListViewDefs[$module_name] = [
             'link' => true,
             'default' => true,
         ],
-        'status' => [],
+        'status' => [
+            'type' => 'enum',
+        ],
         'direction' => [
             'default' => true,
         ],

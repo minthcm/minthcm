@@ -756,6 +756,7 @@ $moduleList[] = 'Attitudes';
 $moduleList[] = 'Knowledge';
 $moduleList[] = 'SalaryRanges';
 $moduleList[] = 'EmployeeCertificates';
+$moduleList[] = 'Employees';  // MintHCM #116668
 //
 $beanList['Files'] = 'Files';
 $beanFiles['Files'] = 'modules/Files/Files.php';

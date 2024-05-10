@@ -12,7 +12,14 @@
                 </v-menu>
             </template>
         </v-text-field>
-        <v-text-field :disabled="!dateValue" variant="outlined" density="compact" type="time" hide-details v-model="timeValue" />
+        <v-text-field
+            :disabled="!dateValue"
+            variant="outlined"
+            density="compact"
+            type="time"
+            hide-details
+            v-model="timeValue"
+        />
     </div>
 </template>
 

@@ -64,22 +64,14 @@
             </div>
         </div>
         <div class="buttons mt-4">
-            <MintButton
-                @click="$emit('close')"
-                variant="text"
-                :text="languages.label('LBL_ESLIST_CANCEL')"
-            />
+            <MintButton @click="$emit('close')" variant="text" :text="languages.label('LBL_ESLIST_CANCEL')" />
             <MintButton
                 @click="setDefaultColumns"
                 class="ms-auto"
                 variant="text"
                 :text="languages.label('LBL_ESLIST_DEFAULT')"
             />
-            <MintButton
-                @click="applyColumns"
-                variant="primary"
-                :text="languages.label('LBL_ESLIST_SAVE')"
-            />
+            <MintButton @click="applyColumns" variant="primary" :text="languages.label('LBL_ESLIST_SAVE')" />
         </div>
     </div>
 </template>
@@ -107,8 +99,7 @@ const hiddenColumns = computed(() => {
         .filter((col) => !visibleColumns.value.find((c) => c.name === col.name))
         .filter(
             (col) =>
-                !columnsSearchPhrase.value ||
-                col.label.toLowerCase().includes(columnsSearchPhrase.value.toLowerCase()),
+                !columnsSearchPhrase.value || col.label.toLowerCase().includes(columnsSearchPhrase.value.toLowerCase()),
         )
 })
 
@@ -125,27 +116,19 @@ function applyColumns() {
 }
 
 function moveColumnToHidden(colName: string) {
-    visibleColumns.value = visibleColumns.value.filter(
-        (c) => c.name !== colName,
-    )
+    visibleColumns.value = visibleColumns.value.filter((c) => c.name !== colName)
 }
 
 function moveColumnToVisible(colName: string) {
     if (!visibleColumns.value.find((c) => c.name === colName)) {
-        visibleColumns.value.push(
-            store.allColumns.find((c) => c.name === colName),
-        )
+        visibleColumns.value.push(store.allColumns.find((c) => c.name === colName))
     }
 }
 
 function onVisibleColumnsDragOver(e) {
     moveColumnToVisible(draggedColumnName.value)
     const path = e.composedPath()
-    if (
-        path[0] &&
-        path[0].classList.contains('column-chip') &&
-        !path[0].classList.contains('dragged')
-    ) {
+    if (path[0] && path[0].classList.contains('column-chip') && !path[0].classList.contains('dragged')) {
         moveColumnToHidden(draggedColumnName.value)
         const index = [...path[0].parentNode.children].indexOf(path[0])
         visibleColumns.value.splice(
@@ -220,10 +203,7 @@ function onDrop(e, list) {
                 cursor: grab;
                 user-select: none;
                 box-shadow: 0 1px 3px #0003;
-                transform: translate(
-                    0,
-                    0
-                ); /* trick to get rid of white corners during drag */
+                transform: translate(0, 0); /* trick to get rid of white corners during drag */
                 opacity: 0.92;
                 transition: opacity 200ms;
 
@@ -232,10 +212,7 @@ function onDrop(e, list) {
                 }
                 &.visible {
                     background: rgb(var(--v-theme-secondary));
-                    color: rgba(
-                        var(--v-theme-surface),
-                        var(--v-high-emphasis-opacity)
-                    );
+                    color: rgba(var(--v-theme-surface), var(--v-high-emphasis-opacity));
                 }
                 &.dragged {
                     opacity: 0.5;

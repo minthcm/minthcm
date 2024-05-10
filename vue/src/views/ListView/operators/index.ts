@@ -16,4 +16,13 @@ export const typeMap = {
     decimal: 'numeric',
     currency: 'numeric',
     ColoredActivityStatus: 'enum',
+    ColoredEnum: 'enum',
+}
+
+export function getAllTypesMatchingTo(baseType: string) {
+    const matchingTypes = Object.entries(typeMap)
+        .filter(([_, type]) => type === baseType)
+        .map(([type, _]) => type)
+
+    return [...matchingTypes, baseType]
 }

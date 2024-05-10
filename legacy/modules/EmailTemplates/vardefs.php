@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -56,7 +56,7 @@ $dictionary['EmailTemplate'] = array(
             'type' => 'id',
             'required' => true,
             'reportable' => false,
-            'comment' => 'Unique identifier'
+            'comment' => 'Unique identifier',
         ),
         'date_entered' => array(
             'name' => 'date_entered',
@@ -64,7 +64,7 @@ $dictionary['EmailTemplate'] = array(
             'type' => 'datetime',
             'required' => true,
             'comment' => 'Date record created',
-            'inline_edit' => false
+            'inline_edit' => false,
         ),
         'date_modified' => array(
             'name' => 'date_modified',
@@ -72,7 +72,16 @@ $dictionary['EmailTemplate'] = array(
             'type' => 'datetime',
             'required' => true,
             'comment' => 'Date record last modified',
-            'inline_edit' => false
+            'inline_edit' => false,
+        ),
+        'date_indexed' => array(
+            'name' => 'date_indexed',
+            'vname' => 'LBL_DATE_INDEXED',
+            'type' => 'datetime',
+            'comment' => 'Date record last indexed',
+            'enable_range_search' => true,
+            'options' => 'date_range_search_dom',
+            'inline_edit' => false,
         ),
         'modified_user_id' => array(
             'name' => 'modified_user_id',
@@ -84,21 +93,21 @@ $dictionary['EmailTemplate'] = array(
             'reportable' => true,
             'isnull' => 'false',
             'dbType' => 'id',
-            'comment' => 'User who last modified record'
+            'comment' => 'User who last modified record',
         ),
         'created_by' => array(
             'name' => 'created_by',
             'vname' => 'LBL_CREATED_BY',
             'type' => 'varchar',
             'len' => '36',
-            'comment' => 'User who created record'
+            'comment' => 'User who created record',
         ),
         'published' => array(
             'name' => 'published',
             'vname' => 'LBL_PUBLISHED',
             'type' => 'varchar',
             'len' => '3',
-            'comment' => ''
+            'comment' => '',
         ),
         'name' => array(
             'name' => 'name',
@@ -107,32 +116,32 @@ $dictionary['EmailTemplate'] = array(
             'len' => '255',
             'comment' => 'Email template name',
             'importable' => 'required',
-            'required' => true
+            'required' => true,
         ),
         'description' => array(
             'name' => 'description',
             'vname' => 'LBL_DESCRIPTION',
             'type' => 'text',
-            'comment' => 'Email template description'
+            'comment' => 'Email template description',
         ),
         'subject' => array(
             'name' => 'subject',
             'vname' => 'LBL_SUBJECT',
             'type' => 'varchar',
             'len' => '255',
-            'comment' => 'Email subject to be used in resulting email'
+            'comment' => 'Email subject to be used in resulting email',
         ),
         'body' => array(
             'name' => 'body',
             'vname' => 'LBL_BODY',
             'type' => 'longtext',
-            'comment' => 'Plain text body to be used in resulting email'
+            'comment' => 'Plain text body to be used in resulting email',
         ),
         'body_html' => array(
             'name' => 'body_html',
             'vname' => 'LBL_PLAIN_TEXT',
             'type' => 'longtext',
-            'comment' => 'HTML formatted email body to be used in resulting email'
+            'comment' => 'HTML formatted email body to be used in resulting email',
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -140,7 +149,7 @@ $dictionary['EmailTemplate'] = array(
             'type' => 'bool',
             'required' => false,
             'reportable' => false,
-            'comment' => 'Record deletion indicator'
+            'comment' => 'Record deletion indicator',
         ),
         'assigned_user_id' => array(
             'name' => 'assigned_user_id',
@@ -156,7 +165,7 @@ $dictionary['EmailTemplate'] = array(
             'dbType' => 'id',
             'audited' => true,
             'comment' => 'User ID assigned to record',
-            'duplicate_merge' => 'disabled'
+            'duplicate_merge' => 'disabled',
         ),
         'assigned_user_name' => array(
             'name' => 'assigned_user_name',
@@ -169,7 +178,7 @@ $dictionary['EmailTemplate'] = array(
             'table' => 'users',
             'id_name' => 'assigned_user_id',
             'module' => 'Users',
-            'duplicate_merge' => 'disabled'
+            'duplicate_merge' => 'disabled',
         ),
         'assigned_user_link' => array(
             'name' => 'assigned_user_link',
@@ -191,7 +200,7 @@ $dictionary['EmailTemplate'] = array(
             'type' => 'bool',
             'required' => false,
             'reportable' => false,
-            'comment' => 'Should be checked if email template is to be sent in text only'
+            'comment' => 'Should be checked if email template is to be sent in text only',
         ),
         'type' => array(
             'name' => 'type',
@@ -200,32 +209,31 @@ $dictionary['EmailTemplate'] = array(
             'required' => false,
             'reportable' => false,
             'options' => 'emailTemplates_type_list',
-            'comment' => 'Type of the email template'
+            'comment' => 'Type of the email template',
         ),
     ),
     'indices' => array(
         array(
             'name' => 'email_templatespk',
             'type' => 'primary',
-            'fields' => array('id')
+            'fields' => array('id'),
         ),
         array(
             'name' => 'idx_email_template_name',
             'type' => 'index',
-            'fields' => array('name')
-        )
+            'fields' => array('name'),
+        ),
     ),
     'relationships' => array(
-        'emailtemplates_assigned_user' =>
-            array(
-                'lhs_module' => 'Users',
-                'lhs_table' => 'users',
-                'lhs_key' => 'id',
-                'rhs_module' => 'EmailTemplates',
-                'rhs_table' => 'email_templates',
-                'rhs_key' => 'assigned_user_id',
-                'relationship_type' => 'one-to-many'
-            )
+        'emailtemplates_assigned_user' => array(
+            'lhs_module' => 'Users',
+            'lhs_table' => 'users',
+            'lhs_key' => 'id',
+            'rhs_module' => 'EmailTemplates',
+            'rhs_table' => 'email_templates',
+            'rhs_key' => 'assigned_user_id',
+            'relationship_type' => 'one-to-many',
+        ),
     ),
 );
 
