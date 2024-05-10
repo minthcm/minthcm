@@ -8,6 +8,7 @@ $ESListViewDefs['Appraisals'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'type' => [

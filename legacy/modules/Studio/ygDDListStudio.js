@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,13 +34,12 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
- */
-var addListStudioCount=0;var moduleTabs=[];function ygDDListStudio(id,sGroup,fromOnly){if(id){if(id=='trashcan'||id.indexOf('noselect')==0){this.initTarget(id,sGroup);}else{this.init(id,sGroup);}
+ */var addListStudioCount=0;var moduleTabs=[];function ygDDListStudio(id,sGroup,fromOnly){if(id){if(id=='trashcan'||id.indexOf('noselect')==0){this.initTarget(id,sGroup);}else{this.init(id,sGroup);}
 this.initFrame();this.fromOnly=fromOnly;}
 var s=this.getDragEl().style;s.borderColor="transparent";s.backgroundColor="#f6f5e5";s.opacity=0.76;s.filter="alpha(opacity=76)";}
 ygDDListStudio.prototype=new YAHOO.util.DDProxy();ygDDListStudio.prototype.clickContent='';ygDDListStudio.prototype.clickBorder='';ygDDListStudio.prototype.clickHeight='';ygDDListStudio.prototype.lastNode=false;ygDDListStudio.prototype.startDrag

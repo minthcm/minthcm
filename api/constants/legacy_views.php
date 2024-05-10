@@ -505,6 +505,10 @@ return [
         'list' => false,
         'record' => true,
     ],
+    'Calls' => [
+        'list' => false,
+        'record' => true,
+    ],
     'Currencies' => [
         'list' => true,
         'record' => true,

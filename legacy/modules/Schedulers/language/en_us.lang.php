@@ -176,7 +176,7 @@ $mod_strings = array(
    'LBL_REBUILDVIEWTOOLS' => 'Rebuild View Tools',
    'LBL_EXECUTEVIEWTOOLSQUEUE' => 'Execute View Tools Queue',
    
-   'LBL_AUTOMATICCREATENOTIFICATION' => 'Creating Alerts for Users',
+   'LBL_AUTOMATICCREATENOTIFICATION' => 'Create Work Schedule Alerts',
    'LBL_SEND_REPORTS' => "Send generated KReports PDFs",
 
 );

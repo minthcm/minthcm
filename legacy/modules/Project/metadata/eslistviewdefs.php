@@ -11,6 +11,7 @@ $ESListViewDefs['Project'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'estimated_start_date' => [

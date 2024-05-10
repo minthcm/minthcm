@@ -117,7 +117,6 @@ watch(
             align-items: center;
             .installation-step-label {
                 font-weight: 600;
-
             }
         }
     }

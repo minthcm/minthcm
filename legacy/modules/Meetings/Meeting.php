@@ -266,6 +266,14 @@ class Meeting extends SugarBean {
       
       $return_id = parent::save($check_notify);
 
+      // MintHCM #111604 start
+      // dev note: whole condition should be moved to new frontend API in Mint4 in order to separate Controllers and Model
+      if ( $this->shouldBeProcessedApi() ) {
+        $this->createRelationshipFromApi();
+        $this->saveRepeatlyApi();
+      }
+      // MintHCM #111604 end
+
       if ($this->status != $bean->fetched_row['status'] && $this->status == 'Held') {
          $this->closeRelatedTraining();
          }
@@ -989,8 +997,60 @@ class Meeting extends SugarBean {
          CalendarUtils::save_repeat_activities($this, $repeatArr);
       }
    }
+   // MintHCM #44718 END
 
+
+   // MintHCM #111604 start
+   protected function shouldBeProcessedApi() {
+      return !( self::$repeatSaveRoudTripCounter || empty($this->repeat_type) || empty($this->date_start) || !empty($this->fetched_row)
+      || empty($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -14, 14) != "/Api/V8/module");
+   }
+
+   protected function createRelationshipFromApi()
+   {
+       
+       if (!empty($this->users_arr) && is_string($this->users_arr) && $this->load_relationship('users') && $this->users) {
+           $users_ids = explode(',', $this->users_arr);
+           foreach ($users_ids as $user_id) {
+               $this->users->add($user_id);
+           }
+       }
+       
+   }
+
+   public function saveRepeatlyApi() {
+      self::$repeatSaveRoudTripCounter++;
+      require_once 'modules/Calendar/CalendarUtils.php';
+
+      $params = array(
+         'type' => $this->repeat_type,
+         'interval' => $this->repeat_interval,
+         'count' => $this->repeat_count,
+         'until' => isset($this->repeat_until) ? $this->repeat_until : null,
+         'dow' => $this->repeat_dow,
+      );
+
+      $date_start = $GLOBALS['timedate']->fromDb($this->date_start);
+      if (!empty($date_start)) {
+        $date_start = $GLOBALS['timedate']->tzUser($date_start);
+        $repeatArr = CalendarUtils::build_repeat_sequence($date_start->format($GLOBALS['timedate']->get_date_time_format()), $params);
+      } else {
+        $repeatArr = CalendarUtils::build_repeat_sequence($this->date_start, $params);
+      }
+      $limit = SugarConfig::getInstance()->get('calendar.max_repeat_count', 1000);
+
+      if ( !empty($this->edit_all_recurrences) ) {
+         CalendarUtils::markRepeatDeleted($this);
+      }
+
+      if ( count($repeatArr) > ($limit - 1) ) {
+         //$GLOBALS['log']->fatal('Repeat limit exceeded');
+      } elseif ( isset($repeatArr) && is_array($repeatArr) && count($repeatArr) > 0 ) {
+         CalendarUtils::save_repeat_activities($this, $repeatArr);
+      }
+   }
 }
+// MintHCM #111604 end
 
 // end class def
 // External API integration, for the dropdown list of what external API's are available

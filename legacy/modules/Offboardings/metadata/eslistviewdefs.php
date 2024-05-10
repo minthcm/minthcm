@@ -11,6 +11,7 @@ $ESListViewDefs['Offboardings'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'offboardingtemplate_name' => [

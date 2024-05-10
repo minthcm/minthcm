@@ -6,6 +6,7 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUrlStore } from '@/store/url'
+import LegacyEvents from './LegacyEventManager'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,6 +21,20 @@ onBeforeUnmount(() => {
 })
 
 async function handleMessageEvent(e: MessageEvent) {
+    const eventId = e.data?.eventId
+    const eventName = e.data?.eventName
+    const eventData = e.data?.data
+
+    if (eventId && eventName) {
+        const eventClass = LegacyEvents[eventName]
+        if (!eventClass) {
+            console.error(`Unknown event name: ${eventName}`)
+            return
+        }
+        const event = new eventClass(eventId, eventData)
+        event.resolveEvent()
+        return
+    }
     if (!e.data || typeof e.data !== 'string' || e.data.slice(0, 4) !== 'http') {
         return
     }
@@ -27,8 +42,6 @@ async function handleMessageEvent(e: MessageEvent) {
     const resolved = router.resolve(path)
     if (resolved.meta?.auth === false) {
         router.go(0) //refresh
-    } else if (resolved.meta?.isLegacy && resolved.name === 'dashboard') {
-        history.replaceState(null, '', resolved.href)
     } else {
         router.push(path)
 

@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,23 +34,15 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
- */
-function prep_edit(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='EditView';the_form.sugar_body_only.value='0';}
-function prep_edit_project_tasks(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='EditGridView';the_form.sugar_body_only.value='0';}
-function prep_duplicate(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='index';the_form.isDuplicate.value=true;the_form.action.value='EditView';the_form.sugar_body_only.value='0';}
-function prep_delete(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='ListView';the_form.action.value='Delete';the_form.sugar_body_only.value='0';}
-function prep_save_as_template(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='Convert';the_form.sugar_body_only.value='0';}
-function prep_save_as_project(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='ProjectTemplatesDetailView';the_form.return_id.value='{id}';the_form.action.value='Convert';}
-function prep_export_to_project(the_form)
-{the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='Export';the_form.sugar_body_only.value='1';}
+ */function prep_edit(the_form){the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='EditView';the_form.sugar_body_only.value='0';}
+function prep_edit_project_tasks(the_form){the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='EditGridView';the_form.sugar_body_only.value='0';}
+function prep_duplicate(the_form){the_form.return_module.value='Project';the_form.return_action.value='index';the_form.isDuplicate.value=true;the_form.action.value='EditView';the_form.sugar_body_only.value='0';}
+function prep_delete(the_form){the_form.return_module.value='Project';the_form.return_action.value='ListView';the_form.action.value='Delete';the_form.sugar_body_only.value='0';}
+function prep_save_as_template(the_form){the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='Convert';the_form.sugar_body_only.value='0';}
+function prep_save_as_project(the_form){the_form.return_module.value='Project';the_form.return_action.value='ProjectTemplatesDetailView';the_form.return_id.value='{id}';the_form.action.value='Convert';}
+function prep_export_to_project(the_form){the_form.return_module.value='Project';the_form.return_action.value='DetailView';the_form.return_id.value='{id}';the_form.action.value='Export';the_form.sugar_body_only.value='1';}

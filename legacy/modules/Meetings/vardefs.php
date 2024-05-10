@@ -224,10 +224,11 @@ $dictionary['Meeting'] = array(
      array(
          'name' => 'status',
          'vname' => 'LBL_STATUS',
-         'type' => 'ColoredActivityStatus',
+         'type' => 'ColoredEnum',
          'dbType' => 'varchar',
          'len' => 100,
          'options' => 'meeting_status_dom',
+         'options_colors' => 'meeting_status_dom_colored',
          'comment' => 'Meeting status (ex: Planned, Held, Not held)',
          'default' => 'Planned',
          'massupdate' => 1,
@@ -763,9 +764,6 @@ $dictionary['Meeting'] = array(
      array( 'name' => 'idx_meet_par_del', 'type' => 'index', 'fields' =>array( 'parent_id', 'parent_type', 'deleted' ) ),
      array( 'name' => 'idx_meet_stat_del', 'type' => 'index', 'fields' =>array( 'assigned_user_id', 'status', 'deleted' ) ),
      array( 'name' => 'idx_meet_date_start', 'type' => 'index', 'fields' =>array( 'date_start' ) ),
-     array( 'name' => 'idx_meet_date_end', 'type' => 'index', 'fields' =>array( 'date_end' ) ),
-     array( 'name' => 'idx_meet_duration_hours', 'type' => 'index', 'fields' =>array( 'duration_hours' ) ),
-     array( 'name' => 'idx_meet_duration_minutes', 'type' => 'index', 'fields' =>array( 'duration_minutes' ) ),
    )
 //This enables optimistic locking for Saves From EditView
    , 'optimistic_locking' => true,

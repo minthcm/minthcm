@@ -6,7 +6,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -34,13 +34,12 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
- */
-function ygDDSlot(id,sGroup){if(id){this.init(id,sGroup);this.initFrame();}
+ */function ygDDSlot(id,sGroup){if(id){this.init(id,sGroup);this.initFrame();}
 var s=this.getDragEl().style;s.borderColor="transparent";s.backgroundColor="#f6f5e5";s.opacity=0.76;s.filter="alpha(opacity=76)";this.resizeFrame=true;if(id=='s_field_delete'){this.isValidHandle=false;}}
 ygDDSlot.prototype=new YAHOO.util.DDProxy();ygDDSlot.prototype.handleDelete=function(cur,curb){var parentID=(typeof(cur.parentID)=='undefined')?cur.id.substr(4,cur.id.length):cur.parentID;if(parentID.indexOf('field')==0){return false;}
 var myfieldcount=field_count_MSI;addNewField('dyn_field_'+field_count_MSI,'delete','&nbsp;','&nbsp;','deleted',0,'studio_fields')

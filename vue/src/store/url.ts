@@ -6,12 +6,18 @@ export const useUrlStore = defineStore('url', () => {
     const DEFAULT_MODULE = 'Home'
     const route = useRoute()
 
+    // here the names 'module' 'action' or 'record' do not always correspond to the values they are assigned
+    // for now I am not changing anything, but I had a problem with adding a second list view
+    // because both in the module constant and action constant the module name was assigned, and in the record constant the action name
+    // from what we talked about in EWL it would be nice to do it generically so that it could be done in a relatively easy way
+    // add another list view. Only then would it be necessary to somehow return the correct parameter names for the appropriate route
+
     const path = computed(() => {
         return route.path.split('/')
     })
 
     const module = computed(() => {
-        return route.params?.module || DEFAULT_MODULE
+        return route.params?.module || path.value?.[2] || DEFAULT_MODULE
     })
 
     const action = computed(() => {

@@ -45,6 +45,7 @@ class ParamsMiddleware
             $this->setCurrentUserGlobal($request);
             $parameters = $this->getParameters($request);
             $this->params->configure($parameters);
+            $this->setAppListStrings(); // MintHCM #116728
             $request = $request->withAttribute('params', $this->params);
         } catch (Exception $exception) {
             $response = new ErrorResponse();
@@ -106,4 +107,18 @@ class ParamsMiddleware
             isset($parsedBody) ? $parsedBody : []
         );
     }
+
+    // MintHCM #116728 Start
+    protected function setAppListStrings()
+    {
+        if (empty($GLOBALS['app_list_strings'])) {
+            $headers = getallheaders();
+            if (!empty($headers['App-Language'])) {
+                $GLOBALS['app_list_strings'] = return_app_list_strings_language($headers['App-Language']);
+            } else {
+                $GLOBALS['app_list_strings'] = return_app_list_strings_language($GLOBALS['sugar_config']['default_language'] ?? 'en_us');
+            }
+        }
+    }
+    // MintHCM #116728 End
 }

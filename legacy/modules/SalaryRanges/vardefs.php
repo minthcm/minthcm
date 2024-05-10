@@ -162,7 +162,10 @@ $dictionary['SalaryRanges'] = array(
             'dbType' => 'id',
             'vname' => 'LBL_CURRENCY_ID',
             'type' => 'currency_id',
-            'function' => 'getCurrencies',
+            'function' => array(
+                'name' => 'getCurrencyDropDown', 
+                'returns' => 'html',
+            ),
             'function_bean' => 'Currencies',
             'required' => false,
             'reportable' => false,

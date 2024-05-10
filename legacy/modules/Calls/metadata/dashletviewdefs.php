@@ -109,7 +109,6 @@ $dashletData['CallsDashlet']['columns'] = array(
       'default' => true
    ),
    'status' => array(
-      'type' => 'ColoredActivityStatus',
       'width' => '8',
       'label' => 'LBL_STATUS',
       'default' => true

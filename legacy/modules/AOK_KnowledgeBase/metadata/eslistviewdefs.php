@@ -8,6 +8,7 @@ $ESListViewDefs['AOK_KnowledgeBase'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'author' => [

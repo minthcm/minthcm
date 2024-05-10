@@ -100,6 +100,10 @@ class Employee extends Person implements EmailInterface
     // This is used to retrieve related fields from form posts.
     public $additional_column_fields = array('reports_to_name');
     public $new_schema = true;
+    // MintHCM #123323 START
+    public $securitygroup_id;
+    public $SecurityGroups;
+    // MintHCM #123323 END
 
     public function __construct()
     {
@@ -470,4 +474,28 @@ class Employee extends Person implements EmailInterface
     {
         return !empty($this->id) && !$this->new_with_id;
     }
+
+    // MintHCM #123323 Users|Employees ACLAccess START
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
+    {
+        global $current_user;
+        if ('edit' === $this->ACLNormalizeViewContext($view)) {
+            return is_admin($current_user)
+            || $this->id == $current_user->id
+            || empty($this->id)
+            || $this->created_by == $current_user->id;
+        }
+        if('delete' === $this->ACLNormalizeViewContext($view)){
+            return is_admin($current_user)
+            || (
+                !is_admin($current_user) 
+                && $this->id !== $current_user->id 
+                && $this->is_admin != '1'
+                && $this->created_by == $current_user->id
+            );
+        }
+        return parent::ACLAccess($view, $is_owner, $in_group);
+    }
+    // MintHCM #123323 Users|Employees ACLAccess END
+
 }

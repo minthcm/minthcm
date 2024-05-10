@@ -63,7 +63,8 @@ $dictionary['Positions'] = array(
         'status' => array(
             'name' => 'status',
             'vname' => 'LBL_STATUS',
-            'type' => 'enum',
+            'type' => 'ColoredEnum',
+            'dbType' => 'varchar',
             'required' => false,
             'massupdate' => true,
             'importable' => 'true',
@@ -77,6 +78,7 @@ $dictionary['Positions'] = array(
             'len' => 100,
             'size' => '20',
             'options' => 'position_status',
+            'options_colors' => 'position_status_colored',
             'default' => 'active',
         ),
         "recruitments" => array(

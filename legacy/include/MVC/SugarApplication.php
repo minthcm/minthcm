@@ -671,7 +671,20 @@ class SugarApplication
                     header('HTTP/1.1 301 Moved Permanently');
                     header("Location:". $url);
                 } else {
-                    echo "<script>window.parent.postMessage(location.origin+location.pathname.replace('index.php', '')+'$url');</script>\n";
+                    echo <<<EOF
+                    <script type="text/javascript">
+                        let url = location.origin + location.pathname.replace('index.php', '')
+                        if (!url.includes('#') && !url.includes('legacy')){
+                            url += '#/'
+                        }
+                        url += '$url'
+                        if(window.parent !== window){
+                            window.parent.postMessage(url)
+                        } else {
+                            window.location = url
+                        }
+                    </script>
+EOF;
                 }
             }
         }

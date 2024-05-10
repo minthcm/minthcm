@@ -52,6 +52,7 @@ if (isset($argv[1]) && isset($argv[2])) {
     $_GET['cli'] = $argv[2];
     $_REQUEST['cli'] = $argv[2];
     error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING);
+    ini_set('display_errors', 1);
 }
 
 require_once 'include/utils.php';

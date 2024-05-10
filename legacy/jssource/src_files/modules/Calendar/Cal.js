@@ -277,7 +277,8 @@ CAL.repeat_type_selected = function () {
 CAL.load_form = function (module_name, record, edit_all_recurrences, cal_event) {
    // Mint start
    var url = "index.php?module=" + module_name + "&action=DetailView&record=" + record;
-   window.location.assign(url);
+   window.parent.postMessage(new URL(url, document.location).href); // Mint-Vue
+   // window.location.assign(url);
    //    CAL.disable_creating = true;
    //    CAL.reset_edit_dialog();
    //    CAL.disable_buttons();
@@ -610,7 +611,8 @@ CAL.dialog_create = function (date, end_date, user_id) {
    var module_name = CAL.get("current_module").value;
    var return_module = (typeof (moduleName) != 'undefined') ? moduleName : 'Calendar';
    var url = "index.php?module=" + module_name + "&action=EditView&redirected_from_calendar=1&return_module=" + return_module + "&date_start=" + date + "&date_end=" + end_date + "&assigned_user_id=" + user_id;
-   window.location.assign(url);
+   window.parent.postMessage(new URL(url, document.location).href); // Mint-Vue
+   // window.location.assign(url);
    //   var e, user_id, user_name;
    //   CAL.get( "title-cal-edit" ).innerHTML = CAL.lbl_loading;
    //   CAL.open_edit_dialog();

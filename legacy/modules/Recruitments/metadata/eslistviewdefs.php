@@ -26,6 +26,7 @@ $ESListViewDefs[$module_name] = [
             'width' => '10%',
         ],
         'PROJECT_STATUS' => [
+            'type' => 'enum',
             'name' => 'project_status',
             'label' => 'LBL_PROJECT_STATUS',
             'enabled' => true,

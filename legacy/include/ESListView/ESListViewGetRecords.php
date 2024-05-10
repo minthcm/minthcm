@@ -32,7 +32,11 @@ class ESListViewGetRecords {
             global $current_user;
             $options['filters']['filter'][] = ['term' => ['meta.assigned.user_id.keyword' => $current_user->id]];
         }
-
+        if (strlen($options['searchPhrase'])) {
+            $searchPhrase = str_replace('+', '', $options['searchPhrase']);
+            $searchPhrase = strtolower($searchPhrase) . '*';
+            $options['filters']['filter'][] = ['query_string' => ['query' => $searchPhrase]];
+        }
         if (!empty($arguments['defaultFilters']['filter'])) {
             array_push($options['filters']['filter'], ...$arguments['defaultFilters']['filter']);
         }

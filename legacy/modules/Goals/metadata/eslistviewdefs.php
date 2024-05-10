@@ -8,6 +8,7 @@ $ESListViewDefs['Goals'] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'default' => true,
         ],
         'date_start' => [

@@ -157,7 +157,7 @@ class kGoogleChart extends kreportvisualizationplugin {
             'chartType' => $gvizclass,
             'containerId' => $divId,
             'options' => array(
-                'legend' => none,
+                'legend' => 'none',
                 'fontSize' => 11
             ),
             'dataTable' => $googleData
@@ -192,7 +192,7 @@ class kGoogleChart extends kreportvisualizationplugin {
         // set the title if we have one
         if ($thisParams['title'] != '') {
             $googleChart['options']['title'] = $thisParams['title'];
-            $googleChart['options'][titleTextStyle] = array(
+            $googleChart['options']['titleTextStyle'] = array(
                 'fontSize' => 14
             );
         }
