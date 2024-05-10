@@ -13,5 +13,6 @@ export const fieldConfig = {
         char: 'varchar',
         datetimecombo: 'datetime',
         ColoredActivityStatus: 'enum',
+        ColoredEnum: 'enum',
     } as { [key: string]: string },
 }

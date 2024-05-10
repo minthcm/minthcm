@@ -115,26 +115,33 @@ class SurveyResponses extends Basic
             $templateId = $sugar_config['survey_negative_confirmation_email'];
             //Create case
             $case = BeanFactory::newBean('Cases');
-            $case->name = 'SurveyFollowup';
-            $case->description = "Received the following dissatisfied response from " . $employee->name . "<br>";
-            $case->description .= $this->happiness_text;
-            $case->from_negative_survey = true;
-            $case->status = 'Open_New';
-            $case->priority = 'P1';
-            $case->type = 'User';
-            if (!empty($employee->assigned_user_id)) {
-                $case->assigned_user_id = $employee->assigned_user_id;
-                $case->auto_assigned = true;
+            /* MintHCM #126906 START */
+            if(!empty($case)){
+                $case->name = 'SurveyFollowup';
+                $case->description = "Received the following dissatisfied response from " . $employee->name . "<br>";
+                $case->description .= $this->happiness_text;
+                $case->from_negative_survey = true;
+                $case->status = 'Open_New';
+                $case->priority = 'P1';
+                $case->type = 'User';
+                if (!empty($employee->assigned_user_id)) {
+                    $case->assigned_user_id = $employee->assigned_user_id;
+                    $case->auto_assigned = true;
+                }
+                $case->save();
+                $case->load_relationship('employees');
+                $case->employees->add($employee);
             }
-            $case->save();
-            $case->load_relationship('employees');
-            $case->employees->add($employee);
+            /* MintHCM #126906 END */
         }
         if (!$templateId) {
             return $res;
         }
 
-        if ($this->sendEmail($employee, $email, $templateId, $case)) {
+        /* MintHCM #126906 START */
+        //if ($this->sendEmail($employee, $email, $templateId, $case)) {
+        if (!empty($case) && $this->sendEmail($employee, $email, $templateId, $case)) {
+        /* MintHCM #126906 END */
             $this->email_response_sent = true;
             $this->save();
         }

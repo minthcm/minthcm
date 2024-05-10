@@ -14,7 +14,7 @@ $ESListViewDefs[$module_name] = [
             'default' => true,
         ],
         'STATUS' => [
-            'type' => 'ColoredActivityStatus',
+            'type' => 'enum',
             'width' => '10%',
             'label' => 'LBL_LIST_STATUS',
             'link' => false,

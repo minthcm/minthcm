@@ -17,7 +17,6 @@
             </v-date-picker>
         </v-menu>
     </div>
-    
 </template>
 
 <script setup lang="ts">

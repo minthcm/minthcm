@@ -1,6 +1,7 @@
 <?php
 
 $module_name = 'Employees';
+$acl_module_name = 'Users';
 $ESListViewDefs['Employees'] = [
     'columns' => [
         'name' => [

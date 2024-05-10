@@ -62,7 +62,8 @@ $dictionary['Applications'] = array(
          'reportable' => true,
          'name' => 'status',
          'vname' => 'LBL_STATUS',
-         'type' => 'enum',
+         'type' => 'ColoredEnum',
+         'dbType' => 'varchar',
          'default' => 'new',
          'duplicate_merge' => 'disabled',
          'duplicate_merge_dom_value' => '0',
@@ -70,6 +71,7 @@ $dictionary['Applications'] = array(
          'len' => 100,
          'size' => '20',
          'options' => 'applications_status_list',
+         'options_colors' => 'applications_status_list_colored',
          'studio' => 'visible',
       ),
       'type' => array(

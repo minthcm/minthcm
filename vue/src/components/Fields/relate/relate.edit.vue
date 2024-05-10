@@ -26,12 +26,16 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
-const items = ref(props.data.bean[props.defs.id_name] ? [
-    {
-        id: props.data.bean[props.defs.id_name],
-        name: props.modelValue,
-    },
-] : [])
+const items = ref(
+    props.data.bean[props.defs.id_name]
+        ? [
+              {
+                  id: props.data.bean[props.defs.id_name],
+                  name: props.modelValue,
+              },
+          ]
+        : [],
+)
 
 onMounted(() => {
     fetchItems()

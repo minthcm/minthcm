@@ -10,6 +10,7 @@
                 autocomplete="off"
                 :error="!isValidDate"
                 hide-details
+                density="compact"
             />
         </template>
         <VueDatePicker
@@ -17,6 +18,8 @@
             inline
             :enable-time-picker="false"
             :format="format"
+            :locale="locale"
+            :select-text="languages.label('LBL_ESLIST_SELECT_DATE')"
         />
         <!-- <v-date-picker
             v-model="input.value"
@@ -35,9 +38,11 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { defineProps, ref, computed, watch, defineEmits } from 'vue'
+import { useLanguagesStore } from '@/store/languages';
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
+const languages = useLanguagesStore();
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps(['input'])
 const value = ref(props.input?.value)
@@ -45,6 +50,7 @@ const menu = ref(false)
 const isValidDate = computed(() => {
     return !value.value || value.value.length === 10
 })
+const locale = computed(() => languages.currentLanguage.split('_')[0]);
 
 const formattedDate = computed({
     get() {

@@ -343,6 +343,18 @@ SugarWidgetSchedulerSearch.prototype.display = function () {
 
    this.parentNode.appendChild( html );
 
+   var empty_search_message_div = document.createElement("div");
+   empty_search_message_div.setAttribute('id','create-invitees');
+   empty_search_message_div.setAttribute('style','margin-bottom: 10px;');
+
+   var empty_search_message = document.createElement("div");
+   empty_search_message.setAttribute('id','empty-search-message');
+   empty_search_message.setAttribute('style','display: none;');
+   empty_search_message.innerHTML = GLOBAL_REGISTRY['meeting_strings']['LBL_EMPTY_SEARCH_RESULT'];
+   empty_search_message_div.appendChild(empty_search_message);
+
+   this.parentNode.appendChild(empty_search_message_div);
+
    var div = document.createElement( 'div' );
    div.setAttribute( 'id', 'list_div_win' );
    div.style.overflow = 'auto';

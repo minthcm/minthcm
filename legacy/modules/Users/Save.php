@@ -599,5 +599,8 @@ $redirect .= ('' != $new_pwd) ? "&pwd_set=" . $new_pwd : '';
 if (array_key_exists('do_not_redirect', $_REQUEST) && true === $_REQUEST['do_not_redirect']) {
     // do nothing
 } else {
-    header("Location: {$redirect}");
+    /* MintHCM #125694 START */
+    //header("Location: {$redirect}");
+    SugarApplication::redirect($redirect);
+    /* MintHCM #125694 END */
 }

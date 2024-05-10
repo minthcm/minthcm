@@ -21,7 +21,7 @@ const isOverlayVisible = computed(() => popups.popups.length)
     width: 100vw;
     height: 100vh;
     background: #0005;
-    z-index: 9999;
+    z-index: 1999;
     user-select: none;
 }
 </style>

@@ -364,7 +364,7 @@ Ext.define( "SpiceCRM.KReporter.Viewer.model.KReporterRecord", {
                       _whereConditions = Ext.util.Format.htmlDecode( SpiceCRM.KReporter.Viewer.Application.reportRecord.get( "whereconditions" ) ),
                       _whereConditions && "" !== _whereConditions && (_whereConditionsObj = Ext.decode( _whereConditions )),
                       Ext.each( _whereConditionsObj, function ( b ) {
-                         "yes" === b.usereditable && (null !== _dynamicoptions && Ext.each( _dynamicoptions, function ( a ) {
+                        "no" !== b.usereditable && (null !== _dynamicoptions && Ext.each( _dynamicoptions, function ( a ) {
                             if ( a.fieldid === b.fieldid || a.reference === b.reference )
                                return b.operator = a.operator,
                                        void 0 !== a.value && (b.value = a.value),

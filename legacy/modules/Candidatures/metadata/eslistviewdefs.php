@@ -25,6 +25,7 @@ $ESListViewDefs[$module_name] = [
             'default' => true,
         ],
         'status' => [
+            'type' => 'enum',
             'name' => 'status',
             'label' => 'LBL_STATUS',
             'enabled' => true,

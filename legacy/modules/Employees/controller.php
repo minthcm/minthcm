@@ -48,8 +48,13 @@ class EmployeesController extends SugarController {
       global $current_user;
       if (
          is_admin($GLOBALS['current_user']) ||
-         $_REQUEST['record'] == $current_user->id ||
-         ACLAction::userHasAccess($current_user->id, $this->module, 'edit')
+         // MintHCM #123323 Users|Employees ACLAccess START
+         //  $_REQUEST['record'] == $current_user->id ||
+         //  ACLAction::userHasAccess($current_user->id, $this->module, 'edit')
+         $_REQUEST['record'] == $current_user->id 
+         || empty($_REQUEST['record'])
+         || (!empty($this->bean->created_by) && $this->bean->created_by == $current_user->id)
+         // MintHCM #123323 Users|Employees ACLAccess END
       ) {
          $this->view = 'edit';
       } else {

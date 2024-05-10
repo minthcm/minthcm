@@ -53,6 +53,7 @@ $mod_strings = array(
     'LBL_SEARCH_FORM_TITLE' => 'Call Search',
     'LBL_LIST_FORM_TITLE' => 'Call List',
     'LBL_NEW_FORM_TITLE' => 'Create Call',
+    'LNK_NEW_RECORD' => 'Create Call',
     'LBL_LIST_CLOSE' => 'Close',
     'LBL_LIST_SUBJECT' => 'Subject',
     'LBL_LIST_CONTACT' => 'Contact',

@@ -47,18 +47,26 @@ class aowTemplateParser extends templateParser
 
             $string = aowTemplateParser::parse_template_bean($string, strtolower($beanList[$bean_name]), $focus);
 
-            if($focus instanceof Person){
-                $person[] = $focus;
+            $person = array();
+	
+			foreach($bean_arr as $bean_name => $bean_id) {
+
+				$focus = BeanFactory::getBean($bean_name, $bean_id);
+				$string = aowTemplateParser::parse_template_bean($string, strtolower($beanList[$bean_name]), $focus);
+
+                if($focus instanceof Person){
+                    $person[] = $focus;
+                }
             }
-        }
 
-        if (!empty($person)) {
-            $focus = $person[0];
-        } else {
-            $focus = BeanFactory::newBean('Contacts');
-        }
-        $string = aowTemplateParser::parse_template_bean($string, 'contact', $focus);
+            if (!empty($person)) {
+                $focus = $person[0];
+            } else {
+                $focus = BeanFactory::newBean('Contacts');
+            }
+            $string = aowTemplateParser::parse_template_bean($string, 'contact', $focus);
 
-        return $string;
+            return $string;
+        }
     }
 }

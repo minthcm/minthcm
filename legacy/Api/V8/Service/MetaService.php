@@ -109,6 +109,12 @@ class MetaService
      */
     public function getModuleList(Request $request)
     {
+        // MintHCM #87119 start
+        global $current_user;
+        if (empty($current_user->id)) {
+            $this->setCurrentUserGlobal($request);
+        }
+        // MintHCM #87119 end
         $modules = $this->moduleListProvider->getModuleList();
 
         $dataResponse = new DataResponse('modules', '');
@@ -232,7 +238,7 @@ class MetaService
     public function getEditViewMeta(Request $request, GetModuleMetaParams $moduleMetaParams)
     {
         $module = $moduleMetaParams->getModuleName();
-        
+
         $ve = new \ViewEdit;
         $ve->module = $module;
         require_once $ve->getMetaDataFile();
@@ -241,7 +247,7 @@ class MetaService
         $module_fields = $this->varDefHelper->getModuleVardefs($bean);
 
         $response = new DocumentResponse();
-        $response->setData($this->mergeModuleFields($viewdefs[$module]['EditView']['panels'],$module_fields));
+        $response->setData($this->mergeModuleFields($viewdefs[$module]['EditView']['panels'], $module_fields));
         return $response;
     }
 
@@ -258,7 +264,7 @@ class MetaService
         $module_fields = $this->varDefHelper->getModuleVardefs($bean);
 
         $data = [];
-        $data['detailview'] = $this->mergeModuleFields($viewdefs[$module]['DetailView']['panels'],$module_fields);
+        $data['detailview'] = $this->mergeModuleFields($viewdefs[$module]['DetailView']['panels'], $module_fields);
         $data['subpanels'] = $this->getSubpanelSetup(new \SubPanelDefinitions($bean, $module));
 
         $response = new DocumentResponse();
@@ -272,17 +278,20 @@ class MetaService
             foreach ($fields as $arr_key => $field) {
                 foreach ($field as $k => $v) {
                     if (!is_array($v) && !empty($module_fields[$v])) {
-                        $array[$panel][$arr_key][$k] = $module_fields[$v]; 
+                        $array[$panel][$arr_key][$k] = $module_fields[$v];
                         $array[$panel][$arr_key][$k]['label'] = $array[$panel][$arr_key][$k]['vname'];
                         unset($array[$panel][$arr_key][$k]['vname']);
                         continue;
                     }
-                    if(empty($module_fields[$v['name']])){
+                    if (empty($v) && $v !== '0') {
+                        continue; // #MintHCM #131001 - empty panel name causes a fatal error
+                    }
+                    if (empty($module_fields[$v['name']])) {
                         continue;
                     }
-                    if(empty($array[$panel][$arr_key][$k]['label'])){
+                    if (empty($array[$panel][$arr_key][$k]['label'])) {
                         $array[$panel][$arr_key][$k]['label'] = $module_fields[$v['name']]['vname'];
-                    } 
+                    }
                     unset($module_fields[$v['name']]['vname']);
                     $array[$panel][$arr_key][$k] += $module_fields[$v['name']];
                 }
@@ -303,36 +312,58 @@ class MetaService
             if (in_array($k, ['edit_button', 'remove_button'])) {
                 continue;
             }
-            if(empty($module_fields[$k])){
+            if (empty($module_fields[$k])) {
                 unset($array[$k]);
                 continue;
             }
-            if(!empty($array[$k]['vname'])){
+            if (!empty($array[$k]['vname'])) {
                 $array[$k]['label'] = $array[$k]['vname'];
                 unset($array[$k]['vname']);
             } else {
-                if(!empty($module_fields[$k]['vname'])){
+                if (!empty($module_fields[$k]['vname'])) {
                     $array[$k]['label'] = $module_fields[$k]['vname'];
                 }
             }
             unset($module_fields[$k]['vname']);
             $array[$k] += $module_fields[$k];
-        }                    
+        }
         return $array;
     }
 
-    protected function getSubpanelSetup($sb)
+    protected function getSubpanelSetup(\SubPanelDefinitions $sb)
     {
         $array = [];
+        $hidden_subpanels = $sb->get_hidden_subpanels();
         foreach ($sb->layout_defs['subpanel_setup'] as $name => $defs) {
+            if (in_array(strtolower($defs['module'] ?? ''), $hidden_subpanels)) {
+                continue;
+            }
             $module_bean = \BeanFactory::newBean($defs['module']);
             $array[$name]['properties'] = $defs;
-            if(!empty($module_bean) && $module_bean instanceof \SugarBean){
+            if (!empty($module_bean) && $module_bean instanceof \SugarBean) {
                 $array[$name]['columns'] = $this->mergeSubpanelFields(($sb->load_subpanel($name))->panel_definition['list_fields'], $this->varDefHelper->getModuleVardefs($module_bean));
             } else {
-                $array[$name]['columns'] = ($sb->load_subpanel($name))->panel_definition['list_fields'];    
+                $array[$name]['columns'] = ($sb->load_subpanel($name))->panel_definition['list_fields'];
             }
         }
         return $array;
     }
+
+    // MintHCM #87119 start
+    /**
+     * @param Request $request
+     */
+    protected function setCurrentUserGlobal(Request $request)
+    {
+        $oauth2Token = $this->beanManager->newBeanSafe('OAuth2Tokens');
+
+        $oauth2Token->retrieve_by_string_fields(
+            ['access_token' => $request->getAttribute('oauth_access_token_id')]
+        );
+
+        $currentUser = $this->beanManager->getBeanSafe('Users', $oauth2Token->assigned_user_id);
+
+        $GLOBALS['current_user'] = $currentUser;
+    }
+    // MintHCM #87119 end
 }

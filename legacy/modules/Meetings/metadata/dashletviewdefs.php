@@ -89,7 +89,6 @@ $dashletData['MeetingsDashlet']['columns'] = array('set_complete' => array('widt
       'default' => true,
       'related_fields' => array('status')),
    'status' => array('width' => '8',
-      'type' => 'ColoredActivityStatus',
       'label' => 'LBL_STATUS',
       'default' => true),
    'date_entered' => array('width' => '15',

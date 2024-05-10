@@ -126,24 +126,29 @@ array(
           ),
         ),
         4 =>
-        array(
-          0 => 'date_entered',
-          1 =>
-          array(
+        array (
+          0 =>
+          array (
             'name' => 'author',
             'studio' => 'visible',
             'label' => 'LBL_AUTHOR',
           ),
-        ),
-        5 =>
-        array(
-          0 => 'date_modified',
-          1 =>
-          array(
+          1 => 
+          array (
             'name' => 'approver',
             'studio' => 'visible',
             'label' => 'LBL_APPROVER',
           ),
+        ),
+        5 => 
+        array (
+          0 => 'assigned_user_name',
+          1 => '',
+        ),
+        6 => 
+        array (
+          0 => 'date_entered',
+          1 => 'date_modified',
         ),
       ),
     ),

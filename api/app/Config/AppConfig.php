@@ -51,6 +51,12 @@ class AppConfig
 
     public static function getBasePath()
     {
-        return '/new_mint/api';
+        //TODO Check if instance path is in config -> after rebuild config manager
+        $appBasePath = "/api";
+        $currentDirectoryName = dirname($_SERVER['PHP_SELF']);
+        if (str_contains($currentDirectoryName, '/api') && $appBasePath != $currentDirectoryName) {
+            $appBasePath = $currentDirectoryName;
+        }
+        return $appBasePath;
     }
 }

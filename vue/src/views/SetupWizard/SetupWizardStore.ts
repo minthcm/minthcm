@@ -19,8 +19,10 @@ export const useSetupWizardStore = defineStore('setup-wizard', () => {
         last_name: auth.user?.last_name ?? '',
         email: auth.user?.email ?? '',
         time_zone: auth.user?.preferences.timezone ?? 'Europe/Warsaw',
-        time_format: auth.user?.preferences.date_time_preferences.time ?? backend.initData?.global?.time_format ?? 'H:i',
-        date_format: auth.user?.preferences.date_time_preferences.date ?? backend.initData?.global?.date_format ?? 'd.m.Y',
+        time_format:
+            auth.user?.preferences.date_time_preferences.time ?? backend.initData?.global?.time_format ?? 'H:i',
+        date_format:
+            auth.user?.preferences.date_time_preferences.date ?? backend.initData?.global?.date_format ?? 'd.m.Y',
         display_name_format: auth.user?.preferences.name_format ?? backend.initData?.global?.name_format ?? 's f l',
     })
 

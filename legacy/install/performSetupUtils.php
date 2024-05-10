@@ -31,9 +31,7 @@ function setMintInstallStatus($step, $message){
 
     $encodedStatusData = json_encode($statusData, JSON_PRETTY_PRINT);
 
-    if (file_put_contents($statusFile, $encodedStatusData)) {
-        echo "Status updated: $step - $message";
-    } else {
+    if (!file_put_contents($statusFile, $encodedStatusData)) {
         echo "Failed to update status.";
     }
 }

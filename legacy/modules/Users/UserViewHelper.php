@@ -606,7 +606,19 @@ class UserViewHelper
         }
 
         $chooser->args['id'] = 'edit_tabs';
-        $chooser->args['values_array'] = $controller->get_tabs($this->bean);
+        /* MintHCM #125694 START */
+        //$chooser->args['values_array'] = $controller->get_tabs($this->bean);
+        $chooser->args['values_array'] = $controller->get_tabs($this->bean, true);
+        if(isset($chooser->args['values_array'][0]['Home'])){
+            unset($chooser->args['values_array'][0]['Home']);
+        }
+        if(isset($chooser->args['values_array'][1]['Home'])){
+            unset($chooser->args['values_array'][1]['Home']);
+        }
+        if(isset($chooser->args['values_array'][2]['Home'])){
+            unset($chooser->args['values_array'][2]['Home']);
+        }
+        /* MintHCM #125694 END */
         foreach ($chooser->args['values_array'][0] as $key => $value) {
             $chooser->args['values_array'][0][$key] = $app_list_strings['moduleList'][$key];
         }

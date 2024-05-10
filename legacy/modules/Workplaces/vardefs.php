@@ -77,7 +77,8 @@ $dictionary['Workplaces'] = array(
             'required' => true,
             'name' => 'availability',
             'vname' => 'LBL_STATUS',
-            'type' => 'enum',
+            'type' => 'ColoredEnum',
+            'dbType' => 'varchar',
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
@@ -94,6 +95,7 @@ $dictionary['Workplaces'] = array(
             'len' => 100,
             'size' => '20',
             'options' => 'workplace_room_status',
+            'options_colors' => 'workplace_room_status_colored',
             'studio' => 'visible',
         ),
         "rooms_workplaces" => array(

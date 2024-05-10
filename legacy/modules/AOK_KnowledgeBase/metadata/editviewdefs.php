@@ -128,15 +128,16 @@ array(
             'studio' => 'visible',
             'label' => 'LBL_AUTHOR',
           ),
-        ),
-        5 =>
-        array(
-          0 =>
-          array(
+          1 => 
+          array (
             'name' => 'approver',
             'studio' => 'visible',
             'label' => 'LBL_APPROVER',
           ),
+        ),
+        5 => 
+        array (
+          0 => 'assigned_user_name',
         ),
       ),
     ),

@@ -63,6 +63,7 @@ class ElasticQuery extends SearchQuery
     const ALL_FIELDS = "*";
 
     protected $exclude_modules = [];
+    protected $search_modules = [];
 
     protected $add_acl_filters  = false;
     protected $indice_module_map;
@@ -99,20 +100,24 @@ class ElasticQuery extends SearchQuery
         );
     }
 
+
     private function getIndex()
     {
         if (isset($GLOBALS['sugar_config']['unique_key'])) {
-            
-            $searchModules = array_map('strtolower', $this->search_modules);
+            if(isset($this->params['search']) && $this->params['search'] == 'list' && !empty($this->params['type'])){
+                $search_modules = [$this->params['type']];
+            }else{
+                $search_modules = $this->getGlobalSearchModuleList();
+            }
+            $searchModules = array_map('strtolower', $search_modules);
             $searchModules = substr_replace($searchModules, $GLOBALS['sugar_config']['unique_key'].'_', 0, 0);
             $indexes = implode(',', $searchModules);
-            $this->indice_module_map = array_combine($searchModules,$this->search_modules);
+            $this->indice_module_map = array_combine($searchModules,$search_modules);
 
             return $indexes;
         }
         return null;
     }
-
 
     private function getBody()
     {
@@ -128,8 +133,7 @@ class ElasticQuery extends SearchQuery
     {
         switch (strtolower($this->params['search'])) {
             case "global":
-                $this->search_modules = $search_modules = $this->getGlobalSearchModuleList();
-                return $this->getGlobalQuery($search_modules);
+                return $this->getGlobalQuery();
                 break;
             case "list":
                 return $this->getListQuery();
@@ -139,14 +143,14 @@ class ElasticQuery extends SearchQuery
         }
     }
 
-    private function getGlobalQuery($search_modules)
+    private function getGlobalQuery()
     {
 
         if($this->add_acl_filters){
             $uniq = $GLOBALS['sugar_config']['unique_key'];
             $main_acl["bool"]["must"] = $this->noAclGlobalQuery();
             $main_acl["bool"]["filter"]["bool"]["should"] = [];
-            
+            $search_modules = $this->getGlobalSearchModuleList();
             
             foreach($search_modules as $module_to_search)
             {
@@ -240,6 +244,9 @@ class ElasticQuery extends SearchQuery
     }
 
     protected function getGlobalSearchModuleList(){
+        if(!empty($this->search_modules)){
+            return $this->search_modules;
+        }
         include '../legacy/custom/modules/unified_search_modules_display.php';
         
         $search_modules = [];
@@ -256,7 +263,7 @@ class ElasticQuery extends SearchQuery
             $this->exclude_modules = array_merge($exclude_hardcode,array_keys($exclude));
             return array_diff(array_keys($search_modules),$this->exclude_modules);
         }
-
+        $this->search_modules = $search_modules;
         return $search_modules;
     }
 }

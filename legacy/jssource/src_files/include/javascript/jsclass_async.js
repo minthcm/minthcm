@@ -105,9 +105,9 @@ SugarVCalClient.prototype.load = function (user_id, request_id) {
         GLOBAL_REGISTRY.freebusy_adjusted = new Object();
       }
       // parse vCal and put it in the registry using the user_id as a key:
-      GLOBAL_REGISTRY.freebusy[user_id] = SugarVCalClient.prototype.parseResults(result.responseText, false, global_request_registry[request_id][0].timeslots[0].date_obj);
+      GLOBAL_REGISTRY.freebusy[user_id] = SugarVCalClient.prototype.parseResults(result.responseText, false, global_request_registry[request_id][0].timeslots[0]?.date_obj);
       // parse for current user adjusted vCal
-      GLOBAL_REGISTRY.freebusy_adjusted[user_id] = SugarVCalClient.prototype.parseResults(result.responseText, true, global_request_registry[request_id][0].timeslots[0].date_obj);
+      GLOBAL_REGISTRY.freebusy_adjusted[user_id] = SugarVCalClient.prototype.parseResults(result.responseText, true, global_request_registry[request_id][0].timeslots[0]?.date_obj);
       // now call the display() on the widget registered at request_id:
       global_request_registry[request_id][0].display();
     },

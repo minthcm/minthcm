@@ -32,6 +32,9 @@ class AOD_LogicHooks
     */
     public function saveModuleChanges(SugarBean $bean, $event, $arguments)
     {
+        /* MintHCM #127800 START */
+        return;
+        /* MintHCM #127800 END */
         if ($bean->module_name == 'AOD_Index') {
             return;
         }
@@ -54,6 +57,9 @@ class AOD_LogicHooks
      */
     public function saveModuleDelete(SugarBean $bean, $event, $arguments)
     {
+        /* MintHCM #127800 START */
+        return;
+        /* MintHCM #127800 END */
         if ($bean->module_name == 'AOD_Index') {
             return;
         }
@@ -76,6 +82,9 @@ class AOD_LogicHooks
      */
     public function saveModuleRestore(SugarBean $bean, $event, $arguments)
     {
+        /* MintHCM #127800 START */
+        return;
+        /* MintHCM #127800 END */
         if ($bean->module_name == 'AOD_Index') {
             return;
         }

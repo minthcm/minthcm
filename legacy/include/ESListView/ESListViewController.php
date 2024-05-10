@@ -1,24 +1,25 @@
 <?php
 
-use SuiteCRM\Search\SearchQuery;
-use SuiteCRM\Search\SearchWrapper;
-use SuiteCRM\Search\UI\SearchThrowableHandler;
 use MassUpdate;
-use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
+use SuiteCRM\Search\SearchQuery;
+use SuiteCRM\Search\UI\SearchThrowableHandler;
 
 require_once 'include/ESListView/ESListViewGetRecords.php';
 require_once 'lib/Search/ElasticSearch/ElasticSearchIndexer.php';
 
-class ESListViewController {
+class ESListViewController
+{
 
-    protected $bean, $query, $per_page, $page, $engine, $options, $metadata;
+    protected $bean, $query, $per_page, $page, $engine, $options, $metadata, $module_name, $acl_module_name;
 
-    public function __construct($bean) {
+    public function __construct($bean)
+    {
         $this->bean = $bean;
     }
 
     //temp
-    public function getInitialData($options) {
+    public function getInitialData($options)
+    {
         $view = new ViewESList();
         $module = $options['module'];
         $view->module = $module;
@@ -33,13 +34,14 @@ class ESListViewController {
         ];
     }
 
-    public function massUpdate() {
+    public function massUpdate()
+    {
         require_once 'include/MassUpdate.php';
         $_POST['mass'] = $_POST['IDs'];
         $_REQUEST['massupdate'] = true;
         $updater = new MassUpdate();
         $updater->setSugarBean($this->bean);
-        if ($_POST['action_name'] === 'delete') {
+        if ('delete' === $_POST['action_name']) {
             $_POST['Delete'] = true;
         }
         $updater->handleMassUpdate();
@@ -50,9 +52,8 @@ class ESListViewController {
     public function getResults($options)
     {
         $this->loadMetadataFile($options['module']);
-        $module_name = $this->metadata['es_module'] ?? $options['module'];
-        if (ACLController::checkAccess($module_name, 'list', true)) {
-            $get_records = new ESListViewGetRecords($this->metadata, $module_name, $options['itemsPerPage'], $options['offset'], $options['page'], $options['sortBy'], $options['sortOrder'], [
+        if (ACLController::checkAccess($this->acl_module_name, 'list', true)) {
+            $get_records = new ESListViewGetRecords($this->metadata, $this->module_name, $options['itemsPerPage'], $options['offset'], $options['page'], $options['sortBy'], $options['sortOrder'], [
                 'myObjects' => $options['myObjects'],
                 'searchPhrase' => $options['searchPhrase'] ?? '',
                 'defaultFilters' => !empty($this->metadata['query']) ? $this->metadata['query'] : null,
@@ -72,12 +73,14 @@ class ESListViewController {
         }
     }
 
-    public function handleThrowable($throwable, SearchQuery $query) {
+    public function handleThrowable($throwable, SearchQuery $query)
+    {
         $handler = new SearchThrowableHandler($throwable, $query);
         $handler->handle();
     }
 
-    public function savePreferences($data) {
+    public function savePreferences($data)
+    {
         global $current_user;
         $module = $data['module'];
         $preferences = $data['preferences'];
@@ -87,7 +90,8 @@ class ESListViewController {
         return true;
     }
 
-    public function updatePreferences($data) {
+    public function updatePreferences($data)
+    {
         if (empty($data['module']) || empty($data['itemsPerPage'])) {
             return false;
         }
@@ -105,13 +109,13 @@ class ESListViewController {
         }
     }
 
-    public function deleteRecord($data) {
+    public function deleteRecord($data)
+    {
         if (empty($data['module']) || empty($data['record_id'])) {
             return false;
         }
         $this->loadMetadataFile($data['module']);
-        $module_name = $this->metadata['es_module'] ?? $data['module'];
-        $bean = BeanFactory::getBean($module_name, $data['record_id']);
+        $bean = BeanFactory::getBean($this->module_name, $data['record_id']);
         if (empty($bean->id) || !$bean->ACLAccess('delete')) {
             return false;
         }
@@ -119,7 +123,8 @@ class ESListViewController {
         return true;
     }
 
-    protected function loadMetadataFile($module) {
+    protected function loadMetadataFile($module)
+    {
         if (!empty($this->metadata)) {
             return;
         }
@@ -134,6 +139,8 @@ class ESListViewController {
             return;
         }
         require_once $metadata_file;
+        $this->acl_module_name = $acl_module_name ?? $module;
+        $this->module_name = $module_name ?? $module;
         $this->metadata = $ESListViewDefs[$module];
     }
 }

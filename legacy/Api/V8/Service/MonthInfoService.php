@@ -52,17 +52,30 @@ class MonthInfoService
         foreach ($modules as $key => $value) {
             $module_data = $db->query($this->getModuleIds($employee_id, $start_date, $end_date, $key));
             while (($row = $db->fetchByAssoc($module_data)) != null) {
+                // MintHCM #87119 start
+                $module_name = ($key === 'WorkSchedules') ? $key : ucfirst($value);
+                $bean = $this->beanManager->getBeanSafe(
+                    $module_name,
+                    $row['id']
+                );
+                $attributes = array_map(function ($value) {
+                    return is_string($value)
+                    ? (\DateTime::createFromFormat('Y-m-d H:i:s', $value)
+                        ? date(\DateTime::ATOM, strtotime($value))
+                        : html_entity_decode(htmlspecialchars_decode($value), ENT_QUOTES))
+                    : $value;
+                }, array_slice($row, 1));
+                $attributes['acl_access'] = [
+                    'edit' => $bean->ACLAccess('edit'),
+                    'view' => $bean->ACLAccess('view'),
+                    'delete' => $bean->ACLAccess('delete'),
+                ];
                 $data[][$value] = [
                     'id' => $row['id'],
-                    'type' => ($key === 'WorkSchedules') ? $key : ucfirst($value),
-                    'attributes' => array_map(function ($value) {
-                        return is_string($value)
-                        ? (\DateTime::createFromFormat('Y-m-d H:i:s', $value)
-                            ? date(\DateTime::ATOM, strtotime($value))
-                            : html_entity_decode(htmlspecialchars_decode($value), ENT_QUOTES))
-                        : $value;
-                    }, array_slice($row, 1)),
+                    'type' => $module_name,
+                    'attributes' => $attributes,
                 ];
+                // MintHCM #87119 end
             }
         }
 

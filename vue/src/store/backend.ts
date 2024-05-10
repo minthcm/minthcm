@@ -16,6 +16,12 @@ interface QuickCreate {
     name: string
 }
 
+interface LegacyView {
+    list?: boolean
+    record?: boolean
+    popup?: boolean
+}
+
 interface InitResponse {
     user: User
     languages: Languages
@@ -23,6 +29,7 @@ interface InitResponse {
     menu_modules: string[]
     quick_create: QuickCreate[]
     global: any
+    legacy_views: { [module: string]: LegacyView }
 }
 export const useBackendStore = defineStore('backend', () => {
     const route = useRoute()

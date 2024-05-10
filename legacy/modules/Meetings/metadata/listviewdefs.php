@@ -109,7 +109,6 @@ $listViewDefs ['Meetings'] = array(
    ),
    'STATUS' =>
    array(
-      'type' => 'ColoredActivityStatus',
       'width' => '10%',
       'label' => 'LBL_LIST_STATUS',
       'link' => false,
