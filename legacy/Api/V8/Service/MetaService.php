@@ -332,12 +332,22 @@ class MetaService
 
     protected function getSubpanelSetup(\SubPanelDefinitions $sb)
     {
+        // MintHCM #87119 start
+        global $current_user;
+        $visible_modules = query_module_access_list($current_user);
+        \ACLController::filterModuleList($visible_modules, false);
+        // MintHCM #87119 end
         $array = [];
         $hidden_subpanels = $sb->get_hidden_subpanels();
         foreach ($sb->layout_defs['subpanel_setup'] as $name => $defs) {
             if (in_array(strtolower($defs['module'] ?? ''), $hidden_subpanels)) {
                 continue;
             }
+            // MintHCM #87119 start
+            if (!in_array($defs['module'], $visible_modules)) {
+                continue;
+            }
+            // MintHCM #87119 end
             $module_bean = \BeanFactory::newBean($defs['module']);
             $array[$name]['properties'] = $defs;
             if (!empty($module_bean) && $module_bean instanceof \SugarBean) {
