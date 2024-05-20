@@ -53,7 +53,6 @@ return [
             User::class => 'Users',
             UserPreference::class => 'UserPreferences',
             vCal::class => 'vCals',
-            'Contracts' => AOS_Contracts::class,
             'Invoices' => AOS_Invoices::class,
             'ProductQuotes' => AOS_Products_Quotes::class,
             'Quotes' => AOS_Quotes::class,
