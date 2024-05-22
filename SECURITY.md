@@ -16,6 +16,5 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Please report any vulnerabilities that you find via email to contact@minthcm.org
-
+Please report any vulnerabilities that you find via Security Advisories section https://github.com/minthcm/minthcm/security/advisories
 We will reply to your report within 1 business day. We kindly ask you not to make the vulerability public for 14 days after we released a security update addressing it.
