@@ -463,6 +463,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
               'source'=>'non-db',
               'vname'=>'LBL_TASKS',
             ],
+        'appraisal' => [
+            'name' => 'appraisal',
+            'type' => 'link',
+            'relationship' => 'appraisal_notes',
+            'source'=>'non-db',
+            'vname'=>'LBL_APPRAISAL',
+        ],
   ],
 
 'relationships'=>array(

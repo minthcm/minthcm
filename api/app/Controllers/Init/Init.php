@@ -93,7 +93,7 @@ class Init
         $response_body['menu_modules'] = $modules_menu;
         $response_body['modules'] = $modules_data;
         $response_body['quick_create'] = $this->getQuickCreate();
-        $response_body['legacy_views'] = $this->getLegacyViews();
+        $response_body['legacy_views'] = $this->getLegacyViews($modules_data);
         return $response_body;
     }
 
@@ -159,9 +159,27 @@ class Init
         return $response;
     }
 
-    private function getLegacyViews()
+    private function getLegacyViews($modules_data)
     {
         $legacy_views = include "constants/legacy_views.php";
+        chdir('../legacy');
+        foreach($modules_data as $module => $data){
+            if(
+                (
+                    !array_key_exists($module, $legacy_views)
+                    || !isset($legacy_views[$module]['list'])
+                )
+                && (
+                    file_exists('modules/' . $module . '/metadata/eslistviewdefs.php')
+                    || file_exists('custom/modules/' . $module . '/metadata/eslistviewdefs.php')
+                )
+            ){
+                $legacy_views[$module] = [
+                    'list' => false,
+                ];
+            }
+        }
+        chdir('../api');
         return $legacy_views;
     }
 

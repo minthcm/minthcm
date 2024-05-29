@@ -44,6 +44,8 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+require_once 'include/ViewTools/ViewToolsQueue.php';
+
 class executeViewToolsQueue {
 
    public $db;

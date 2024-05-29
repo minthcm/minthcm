@@ -75,7 +75,6 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useModulesStore } from '@/store/modules'
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 import he from 'he'
 import axios from 'axios'
 import { watch } from 'vue'

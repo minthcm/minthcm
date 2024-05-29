@@ -516,6 +516,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
     // MintHCM START
     function isCommandLineInterface()
     {
-        return (substr(php_sapi_name(), 0, 3) === 'cli');
+        return (substr(php_sapi_name(), 0, 3) === 'cli' && strpos($_SERVER['SCRIPT_NAME'], 'MintCLI') === false);
     }
     // MintHCM END

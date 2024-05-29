@@ -2,6 +2,8 @@ import { ref, markRaw, Component } from 'vue'
 import { defineStore } from 'pinia'
 import { useLanguagesStore } from './languages'
 import MintPopupConfirm from '@/components/MintPopups/MintPopupConfirm.vue'
+import MintPopupAlert from '@/components/MintPopups/MintPopupAlert.vue'
+
 
 export interface Popup {
     title: string
@@ -45,11 +47,26 @@ export const usePopupsStore = defineStore('popups', () => {
         })
     }
 
+    function alert(text: string) {
+        return new Promise((resolve) => {
+            showPopup({
+                title: languages.label('LBL_ALERT'),
+                unclosable: true,
+                component: markRaw(MintPopupAlert),
+                data: {
+                    text,
+                    onConfirm: () => resolve(true),
+                },
+            })
+        })
+    }
+
     return {
         popups,
         showPopup,
         closePopup,
         closeAll,
         confirm,
+        alert,
     }
 })

@@ -109,7 +109,7 @@ class Delegations extends Delegations_sugar
     protected function getExchangeRate()
     {
         $exchange_rate = $this->exchange_rate;
-        if ($this->exchange_rate == 0) {
+        if (!is_int($exchange_rate) || $exchange_rate === 0) {
             $exchange_rate = 1;
         }
         return $exchange_rate;
@@ -120,9 +120,6 @@ class Delegations extends Delegations_sugar
         $exchange_rate                         = $this->getExchangeRate();
         $this->regiments_usdollar              = $this->regiments * $exchange_rate;
         $this->accommodation_lump_sum_usdollar = $this->accommodation_lump_sum * $exchange_rate;
-//        $this->transport_cost_usdollar         = $this->transport_cost * $exchange_rate;
-//      $this->total_accommodation_usdollar = $this->total_accommodation * $exchange_rate;
-//        $this->other_usdollar                  = $this->other * $exchange_rate;
         $this->total_expenses_usdollar         = $this->total_expenses * $exchange_rate;
         $this->obtained_sum_usdollar           = $this->obtained_sum * $$exchange_rate;
         $this->payoff_sum_usdollar             = $this->payoff_sum * $exchange_rate;
@@ -368,12 +365,16 @@ class Delegations extends Delegations_sugar
 
     public function countPayoffSum()
     {
+        $this->total_expenses = (int) $this->total_expenses;
+        $this->obtained_sum = (int) $this->obtained_sum;
         $this->payoff_sum = ($this->total_expenses - $this->obtained_sum) > 0 ? ($this->total_expenses - $this->obtained_sum)
                 : 0;
     }
 
     public function countReturnSum()
     {
+        $this->total_expenses = (int) $this->total_expenses;
+        $this->obtained_sum = (int) $this->obtained_sum;
         $this->return_sum = ($this->total_expenses - $this->obtained_sum) < 0 ? ($this->obtained_sum - $this->total_expenses)
                 : 0;
     }

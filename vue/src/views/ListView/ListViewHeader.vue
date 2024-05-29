@@ -1,6 +1,6 @@
 <template>
     <div class="list-header">
-        <v-menu v-if="store.mode === 'list' && store.config?.config?.mass_actions?.length" offset="16">
+        <v-menu v-if="store.mode === 'list' && store.massActions.length" offset="16">
             <template v-slot:activator="{ props, isActive }">
                 <MintButton
                     v-bind="props"
@@ -10,7 +10,7 @@
                     :disabled="!store.selected?.length"
                 />
             </template>
-            <MintMenuList :items="massActions" />
+            <MintMenuList :items="store.massActions" />
         </v-menu>
         <MintButton
             v-else-if="store.mode === 'relate' && store.itemsSelectable"
@@ -43,7 +43,6 @@ import { useListViewStore } from './ListViewStore'
 import { useLanguagesStore } from '@/store/languages'
 import { usePopupsStore } from '@/store/popups'
 import ListViewColumnsPopup from './ListViewColumnsPopup.vue'
-import MassActions from './MassActions'
 
 const store = useListViewStore()
 
@@ -57,17 +56,6 @@ function showColumnsPopup() {
         icon: 'mdi-playlist-plus',
     })
 }
-
-const massActions = computed(() => {
-    if (!store.config?.config?.mass_actions) {
-        return null
-    }
-    return store.config.config.mass_actions.map((action) => ({
-        icon: action.icon,
-        title: languages.label(action.label, store.module),
-        onClick: () => MassActions[action.action]?.(store.selected),
-    }))
-})
 </script>
 
 <style scoped lang="scss">

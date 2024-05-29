@@ -54,7 +54,7 @@ class WorkSchedulesController extends SugarController
                 if (ACLController::checkAccess('Meetings', 'edit', true)) {
                     $date_end = getDateTimeObject($_GET['date_end']);
                     $date_diff = $date_end->diff(getDateTimeObject($_GET['date_start']));
-                    if ($date_diff->i == 30 && $date_diff->h == 0) {
+                    if (30 == $date_diff->i && 0 == $date_diff->h) {
                         $date_end->modify("+30 minutes");
                         SugarApplication::redirect('index.php?module=Meetings&action=EditView&return_module=Home&date_start=' . $_GET['date_start'] . '&date_end=' . $date_end->format($timedate->get_date_time_format()) . '&assigned_user_id=' . $_GET['assigned_user_id']);
                     } else {
@@ -92,7 +92,7 @@ class WorkSchedulesController extends SugarController
             $fields = ['repeat_parent_id', 'repeat_type', 'repeat_interval', 'repeat_dow', 'repeat_until', 'repeat_count'];
             $update_fields = [];
             foreach ($fields as $field) {
-                if ($field === 'repeat_interval') {
+                if ('repeat_interval' === $field) {
                     $update_fields[] = $field . '=1';
                 } else {
                     $update_fields[] = $field . '=NULL';
@@ -115,13 +115,13 @@ class WorkSchedulesController extends SugarController
             'items' => array(),
         );
 
-        if ($_REQUEST['date'] != date('Y-m-d')) {
+        if (date('Y-m-d') != $_REQUEST['date']) {
             $_SESSION['dashlet_loaded_before'] = true;
         } else {
             unset($_SESSION['dashlet_loaded_before']);
         }
 
-        $q = "SELECT * FROM workschedules " . "WHERE assigned_user_id='$user_id' AND schedule_date='$date' AND deleted=0";
+        $q = "SELECT *, DATE_FORMAT(date_start,'%H:%i') as startTime, DATE_FORMAT(date_end,'%H:%i') as endTime FROM workschedules " . "WHERE assigned_user_id='$user_id' AND schedule_date='$date' AND deleted=0 ORDER BY date_start ASC";
         $r = $db->query($q);
         while ($row = $db->fetchByAssoc($r)) {
             array_push($plans['items'], $row);
@@ -149,7 +149,7 @@ class WorkSchedulesController extends SugarController
 
         // DZ TODO wyjąć zapytania
         $spent_times_last_datetime = $db->getOne("SELECT max(date_end) as max_date_end FROM spenttime A INNER JOIN workschedules_spenttime B ON A.id = B.spenttime_id AND B.workschedule_id = '{$workschedule_id}' AND A.deleted='0' AND B.deleted=0");
-        if ($spent_times_last_datetime == '') {
+        if ('' == $spent_times_last_datetime) {
             $spent_times_last_datetime = $work_schedule_date_start;
         }
         ob_clean();
@@ -214,7 +214,7 @@ class WorkSchedulesController extends SugarController
 
     protected function post_save()
     {
-        if (isset($_REQUEST['return_module']) && ($_REQUEST['return_module'] == 'Calendar' || $_REQUEST['return_module'] == 'Home')) {
+        if (isset($_REQUEST['return_module']) && ('Calendar' == $_REQUEST['return_module'] || 'Home' == $_REQUEST['return_module'])) {
             $module = $_REQUEST['return_module'];
             $action = 'index';
             $url = "index.php?module=" . $module . "&action=" . $action;
@@ -236,7 +236,7 @@ class WorkSchedulesController extends SugarController
         $assigned_user_id = isset($_REQUEST['assigned_user_id']) ? $_REQUEST['assigned_user_id'] : '';
         $date_start = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
         $date_end = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
-        if ($assigned_user_id != '' && $date_start != '' && $date_end != '') {
+        if ('' != $assigned_user_id && '' != $date_start && '' != $date_end) {
             $db_date_start = $timedate->to_db($date_start);
             $db_date_end = $timedate->to_db($date_end);
             $query = "

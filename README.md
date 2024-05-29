@@ -86,3 +86,7 @@ MintHCM requirements:
 ## License 🌐
 
 The MintHCM is released under the under terms of the [GNU Affero General Public License Version 3](LICENSE).
+
+## Project Road Map
+
+https://github.com/minthcm/minthcm/wiki/Road-Map

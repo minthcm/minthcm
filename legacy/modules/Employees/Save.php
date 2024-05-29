@@ -51,6 +51,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'modules/MySettings/TabController.php';
 require_once 'include/SugarFields/SugarFieldHandler.php';
+require_once 'modules/Employees/Repository/EmployeesRepository.php';
+
+$module_name = 'Employees';
 
 $tabs_def = urldecode(isset($_REQUEST['display_tabs_def']) ? $_REQUEST['display_tabs_def'] : '');
 $DISPLAY_ARR = array();
@@ -78,13 +81,93 @@ if (
 
 $focus = new Employee();
 
-$focus->retrieve($_POST['record']);
+$focus->retrieve(!empty($_POST['record']) ? $_POST['record'] : $_POST['id']);
 
 //rrs bug: 30035 - I am not sure how this ever worked b/c old_reports_to_id was not populated.
 $old_reports_to_id = $focus->reports_to_id;
 
+
+$retrieved_focus = $focus;
 populateFromRow($focus, $_POST);
 
+// handles duplicate search for updates
+if (!empty($focus->fetched_row) && !empty($_POST['id']) && $retrieved_focus->id === $_POST['id']) {
+    $focus->new_with_id = false;
+}
+
+$focus->email1 = $_REQUEST[$_REQUEST["Users0emailAddressPrimaryFlag"]];
+
+if (empty($_POST['dup_checked'])) {
+
+    $duplicates = EmployeesRepository::getDuplicatedCandidatesEmployeesRecordsIds($focus);
+    if (!empty($duplicates)) {
+        $location = "module={$module_name}&action=showduplicates";
+        
+        $get = '';
+        if (isset($_POST['inbound_email_id']) && !empty($_POST['inbound_email_id'])) {
+            $get .= '&inbound_email_id=' . $_POST['inbound_email_id'];
+        }
+
+        if (isset($_POST['relate_to']) && !empty($_POST['relate_to'])) {
+            $get .= "&{$module_name}relate_to=" . $_POST['relate_to'];
+        }
+        if (isset($_POST['relate_id']) && !empty($_POST['relate_id'])) {
+            $get .= "&{$module_name}relate_id='" . $_POST['relate_id'];
+        }
+
+        foreach ($focus->column_fields as $field) {
+            if (!empty($focus->$field) && !is_object($focus->$field)) {
+                $get .= "&{$module_name}$field=" . urlencode($focus->$field);
+            }
+        }
+
+        foreach ($focus->additional_column_fields as $field) {
+            if (!empty($focus->$field)) {
+                $get .= "&{$module_name}$field=" . urlencode($focus->$field);
+            }
+        }
+
+        if ($focus->hasCustomFields()) {
+            foreach ($focus->field_defs as $name => $field) {
+                if (!empty($field['source']) && 'custom_fields' == $field['source']) {
+                    $get .= "&{$module_name}$name=" . urlencode($focus->$name);
+                }
+            }
+        }
+
+        $emailAddress = new SugarEmailAddress();
+        $get .= $emailAddress->getFormBaseURL($focus);
+
+        foreach ($duplicates as $index => $duplicated_id) {
+            $get .= "&duplicate[$index]=" . $duplicated_id;
+        }
+
+        $urlData = ['return_module' => $module_name, 'return_action' => ''];
+        foreach (['return_module', 'return_action', 'return_id', 'popup', 'create', 'start'] as $var) {
+            if (!empty($_POST[$var])) {
+                $urlData[$var] = $_POST[$var];
+            }
+        }
+        $get .= "&" . http_build_query($urlData);
+        $_SESSION['SHOW_DUPLICATES'] = $get;
+
+        if (!empty($_POST['is_ajax_call']) && '1' == $_POST['is_ajax_call']) {
+            ob_clean();
+            $json = getJSONobj();
+            echo $json->encode(array('status' => 'dupe', 'get' => $location));
+        } else if (!empty($_REQUEST['ajax_load'])) {
+            echo "<script>SUGAR.ajaxUI.loadContent('index.php?{$location}');</script>";
+        } else {
+            if (!empty($_POST['to_pdf'])) {
+                $location .= '&to_pdf=' . urlencode($_POST['to_pdf']);
+            }
+
+            header("Location: index.php?{$location}");
+        }
+        return null;
+    }
+}
+$focus->email1 = $_REQUEST['email1'];
 $focus->save();
 $return_id = $focus->id;
 

@@ -19,6 +19,8 @@ viewTools.form.prepareViewToolsValidation = function () {
    setTimeout( viewTools.form.startViewToolsValidation.call( this ), 20 );
 };
 viewTools.form.startViewToolsValidation = function () {
+    var mask = '<div class="mask" id="dlg_mask" style="z-index: 3; height: 100%; width: 100%; display: block; opacity: 0.5;">&nbsp;</div>';
+    $("#bootstrap-container").append(mask); 
    if ( viewTools.form.validation_state != 1 ) {
       viewTools.form.throttle_save = false;
       return false;
@@ -106,8 +108,9 @@ viewTools.form.startViewToolsValidation = function () {
 viewTools.form.onValidationEnd = function () {
    if ( viewTools.form.error_count > 0 ) {
       viewTools.GUI.statusBox.showStatus( SUGAR.language.get( 'app_strings', 'LBL_FORM_WITH_ERRORS' ), 'error', 6000 );
+      $("#bootstrap-container .mask").remove()
    } else {
-      viewTools.GUI.statusBox.showStatus( viewTools.language.get('app_strings', 'LBL_SAVING') + '...', 'success');
+      viewTools.GUI.statusBox.showStatus( viewTools.language.get('app_strings', 'LBL_SAVING') + '...', 'info');
    }
    setTimeout( function () {
       viewTools.form.validation_state = 0;

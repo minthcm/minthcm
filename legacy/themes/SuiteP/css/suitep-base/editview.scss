@@ -1261,6 +1261,7 @@ li.noBullet {
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: $border-radius-base;
+  display: block;
 }
 
 //
@@ -1281,7 +1282,8 @@ p.error {
 .error {
   border: none;
   color: $alert-danger-text-color;
-  background: $error-background-color;
+  background: transparent;
+  font-weight: bold;
 }
 
 .error:empty {

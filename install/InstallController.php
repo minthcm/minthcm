@@ -44,8 +44,9 @@ class InstallController
     public function validateDb($data)
     {
         $dbService = new DatabaseService();
-        if (!$dbService->testConnection($data['host'], $data['port'], $data['username'], $data['password'])['status']) {
-            return ["status" => 0, "message" => "Database connection failed"];
+        $result = $dbService->testConnection($data['host'], $data['port'], $data['username'], $data['password']);
+        if (!$result['status']) {
+            return ["status" => 0, "message" => $result['message']];
         }
         if (!$dbService->testDatabaseExistance($data['host'], $data['port'], $data['username'], $data['password'], $data['dbname'])['status']) {
             return ["status" => 0, "message" => "Database with that name already exists"];

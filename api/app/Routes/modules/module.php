@@ -48,6 +48,7 @@ use MintHCM\Api\Controllers\Init\Module;
 use MintHCM\Api\Controllers\ModuleController;
 use MintHCM\Api\Controllers\Module\ListController;
 use MintHCM\Api\Controllers\Module\ListInitController;
+use MintHCM\Api\Controllers\Module\ListMassActionsController;
 use MintHCM\Api\Middlewares\Params\ParamTypes\IntType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\ArrayType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
@@ -163,6 +164,31 @@ $routes = array(
         "desc" => "Get init data for list",
         "options" => array(
             'auth' => true,
+        ),
+    ),
+    "mass_actions" => array(
+        "method" => "POST",
+        "path" => "/MassActions/{action}",
+        "class" => ListMassActionsController::class,
+        "desc" => "Mass actions on list of records",
+        "options" => array(
+            'auth' => true,
+        ),
+        "pathParams" => array(
+            "action" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "Action name",
+                "example" => 'Delete',
+            ),
+        ),
+        "bodyParams" => array(
+            "ids" => array(
+                "type" => ArrayType::class,
+                "required" => true,
+                "desc" => "Array of ids",
+                "example" => '["223dee27-b9e7-432a-8da9-c84cc0770035", "223dee27-b9e7-432a-8da9-c84cc0770035"]',
+            ),
         ),
     ),
 );

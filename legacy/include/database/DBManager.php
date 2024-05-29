@@ -1579,6 +1579,18 @@ abstract class DBManager
     }
 
     /**
+     * Usage: WHERE col IN ({$db->implodeQuoted($arr)})
+     * @return string
+     */
+    public function implodeQuoted(array $array = array())
+    {
+        $arrayQuoted = array_map(function ($value) {
+            return $this->quoted($value);
+        }, $array);
+        return implode(',', $arrayQuoted);
+    }
+
+    /**
      * Quote value according to type
      * Numerics aren't quoted
      * Dates are converted and quoted

@@ -42,6 +42,9 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+
+use SuiteCRM\Search\ElasticSearch\ElasticSearchHooks;
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
@@ -581,6 +584,16 @@ class User extends Person implements EmailInterface
     {
         return "deleted=0 AND status='Active' AND user_name IS NOT NULL AND is_group=0 AND portal_only=0  AND " .
         DBManagerFactory::getInstance()->convert('user_name', 'length') . ">0";
+    }
+
+    protected function postSave()
+    {
+        if($this->show_on_employees){
+            $employee = BeanFactory::getBean('Employees', $this->id);
+            if(!empty($employee->id) && $employee->id === $this->id){
+                (new ElasticSearchHooks())->beanSaved($employee, 'after_save', []);
+            }
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,64 +36,73 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-class AllocationsApi {
+class AllocationsApi
+{
 
-   public function checkWorkplacePeriods($id, $workplace_id, $mode, $date_from, $date_to) {
-      $result = true;  
-      if($mode=='permanent'){
-        $result=$this->checkConcurrentPeriods($id,$workplace_id, $date_from, $date_to);
-      }
-      return $result;
-   }
-   public function checkWorkplaceStatus($workplace_id, $mode)
-   {
-      $workplace = BeanFactory::getBean('Workplaces',$workplace_id);
-      if($workplace->availability!='active') 
-         return false;
-      else if ($workplace->mode=='permanent'&&$mode!='permanent')
-         return false;
-      else if ($mode=='rotational'&&$workplace->mode=='permanent')
-         return false;
-      else 
-         return true;
-   }
-   protected function checkConcurrentPeriods($id, $workplace_id, $date_from, $date_to){
-    $db = DBManagerFactory::getInstance();
-    global $timedate;
-    $db_format = $timedate->get_db_date_time_format();
-
-    $workplace = BeanFactory::getBean('Workplaces',$workplace_id);
-    $workplace->load_relationship('workplaces_allocations');
-    $allocations = $workplace->workplaces_allocations->getBeans();
-
-    while(list($allocation_id,$allocation) = each($allocations)){
-       if($allocation_id==$id)
-         continue;
-       $start_date = strtotime($allocation->date_from);
-       $end_date = strtotime($allocation->date_to);
-       $from_date = strtotime($date_from);
-       $to_date = strtotime($date_to);
-       if(empty($end_date)&&empty($to_date)){
-           return false;
-       } else if (empty($end_date)&&!empty($to_date)){
-            if($from_date>$start_date||$to_date>$start_date)
-                return false;
-       } else if (!empty($end_date)&&empty($to_date)){
-            if($from_date<=$end_date)
-                return false;
-       } else {
-            if(($end_date>=$from_date&&$start_date<=$from_date)||
-               ($end_date<=$from_date&&$start_date>=$from_date))
-                return false;
-       }
+    public function checkWorkplacePeriods($args)
+    {
+        $result = true;
+        if ('permanent' == $args['mode']) {
+            $result = $this->checkConcurrentPeriods($args['id'], $args['workplace_id'], $args['date_from'], $args['date_to']);
+        }
+        return $result;
     }
-    return true;
-   }
+    public function checkWorkplaceStatus($args)
+    {
+        $workplace = BeanFactory::getBean('Workplaces', $args['workplace_id']);
+        if ('active' != $workplace->availability) {
+            return false;
+        } else if ('permanent' == $workplace->mode && 'permanent' != $args['mode']) {
+            return false;
+        } else if ('rotational' == $args['mode'] && 'permanent' == $workplace->mode) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+    protected function checkConcurrentPeriods($id, $workplace_id, $date_from, $date_to)
+    {
+        $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
+        $workplace->load_relationship('workplaces_allocations');
+        $allocations = $workplace->workplaces_allocations->getBeans();
+
+        foreach($allocations as $allocation){
+            if ($allocation->id === $id) {
+                continue;
+            }
+
+            $start_date = strtotime($allocation->date_from);
+            $end_date = strtotime($allocation->date_to);
+            $from_date = strtotime($date_from);
+            $to_date = strtotime($date_to);
+            if (empty($end_date) && empty($to_date)) {
+                return false;
+            } else if (empty($end_date) && !empty($to_date)) {
+                if ($from_date > $start_date || $to_date > $start_date) {
+                    return false;
+                }
+
+            } else if (!empty($end_date) && empty($to_date)) {
+                if ($from_date <= $end_date) {
+                    return false;
+                }
+
+            } else {
+                if (($end_date >= $from_date && $start_date <= $from_date) ||
+                    ($end_date <= $from_date && $start_date >= $from_date)) {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
 }

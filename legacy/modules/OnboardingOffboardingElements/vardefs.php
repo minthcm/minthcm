@@ -213,7 +213,8 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'table' => 'securitygroups',
             'module' => 'SecurityGroups',
             'rname' => 'name',
-            'required' => true,
+            'required' => false,
+            'vt_required' => "equals(\$kind_of_element,'organizational_unit_manager')",
             'vt_dependency' => "equals(\$kind_of_element,'organizational_unit_manager')",
         ),
         'securitygroup_unit_id' => array(

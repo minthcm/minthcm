@@ -13,9 +13,9 @@
         @update:options="store.options = $event"
         :no-data-text="languages.label('LBL_ESLIST_NO_DATA_AVAILABLE')"
     >
-        <template v-slot:[`item.name`]="{ item }">
-            <a @click="store.handleNameClick(item.raw)" class="list-table-name-link">
-                {{ item.raw.name || item.raw.full_name }}
+        <template v-slot:item.name="{ item }">
+            <a @click="store.handleNameClick(item)" class="list-table-name-link">
+                {{ item.name || item.full_name }}
             </a>
         </template>
         <template
@@ -24,52 +24,52 @@
             :key="link.nameField"
         >
             <router-link
-                v-if="item.raw[link.urlField]"
-                :to="url.fromLegacyUrl(item.raw[link.urlField])"
+                v-if="item[link.urlField]"
+                :to="url.fromLegacyUrl(item[link.urlField])"
                 :target="store.mode === 'relate' ? '_blank' : null"
-                v-text="item.raw[link.nameField]"
+                v-text="item[link.nameField]"
             />
-            <span v-else v-text="item.raw[link.nameField]" />
+            <span v-else v-text="item[link.nameField]" />
         </template>
         <template v-for="bool in store.customFields.booleans" v-slot:[`item.${bool}`]="{ item }" :key="bool">
             <v-icon
                 color="secondary"
-                :icon="item.raw[bool] && item.raw[bool] !== '0' ? 'mdi-checkbox-marked-circle' : 'mdi-close'"
+                :icon="item[bool] && item[bool] !== '0' ? 'mdi-checkbox-marked-circle' : 'mdi-close'"
             />
         </template>
         <template v-for="list in store.customFields.lists" v-slot:[`item.${list.field}`]="{ item }" :key="list.field">
             <div
                 v-if="list.colors"
                 class="enum-chip"
-                :style="list.colors[item.raw[list.field]]"
-                v-text="list.options[item.raw[list.field]]"
+                :style="list.colors[item[list.field]]"
+                v-text="list.options[item[list.field]]"
             />
-            <span v-else v-text="list.options[item.raw[list.field]]" />
+            <span v-else v-text="list.options[item[list.field]]" />
         </template>
         <template
             v-for="multienum in store.customFields.multienums"
             v-slot:[`item.${multienum.field}`]="{ item }"
             :key="multienum.field"
         >
-            <span v-text="formatMultienum(item.raw[multienum.field], multienum.options)" />
+            <span v-text="formatMultienum(item[multienum.field], multienum.options)" />
         </template>
         <template v-for="date in store.customFields.dates" v-slot:[`item.${date.field}`]="{ item }" :key="date.field">
-            <span v-text="item.raw[date.field]" :style="date.style" />
+            <span v-text="item[date.field]" :style="date.style" />
         </template>
         <template
             v-for="currency in store.customFields.currencies"
             v-slot:[`item.${currency}`]="{ item }"
             :key="currency"
         >
-            <span v-text="NumberUtils.formatCurrency(item.raw[currency], item.raw.currency_id)" />
+            <span v-text="NumberUtils.formatCurrency(item[currency], item.currency_id)" />
         </template>
-        <template v-slot:[`item.actions`]="{ item }">
+        <template v-slot:item.actions="{ item }">
             <div class="d-flex justify-end" style="gap: 8px">
                 <v-icon
-                    v-for="action in getItemActions(item.raw)"
+                    v-for="action in getItemActions(item)"
                     v-show="action.icon"
                     :key="action.icon"
-                    @click="action.onClick(item.raw)"
+                    @click="action.onClick(item)"
                     color="secondary"
                     size="small"
                     :icon="action.icon"
@@ -89,7 +89,6 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { computed } from 'vue'
-import { VDataTableServer, VDataTableFooter } from 'vuetify/labs/VDataTable'
 import { useRouter } from 'vue-router'
 import { useListViewStore } from './ListViewStore'
 import { useLanguagesStore } from '@/store/languages'
@@ -160,11 +159,9 @@ function formatMultienum(value, labels) {
         text-decoration: none;
         color: rgb(var(--v-theme-secondary));
     }
-    :deep(.v-data-table-footer__pagination) {
-        button:first-child,
-        button:last-child {
-            display: none;
-        }
+    :deep(.v-pagination__first),
+    :deep(.v-pagination__last) {
+        display: none;
     }
     .enum-chip {
         display: flex;

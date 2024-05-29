@@ -184,4 +184,7 @@ $mod_strings = array(
     'LBL_LAST_NEXT_CONTACT_PANEL' => 'Contact with Client',
     // DLNC end
     'LBL_FILES' => 'Files',
+    'LBL_DISPLAY_MODULE_NAME_DUP' => "Module Name",
+    'LBL_EMPLOYEES_MODULE_DUP' => 'Employees',
+    'MSG_SHOW_DUPLICATES' => 'The record you are about to create might be a duplicate of a Candidates or Employees record that already exists. Candidates and Employees records containing similar names are listed below.<br>Click Create to continue creating this new Candidate, or select an existing listed below.',
 );

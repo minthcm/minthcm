@@ -16,7 +16,7 @@ class ElasticsearchService
 
         $response = json_decode($response, true);
 
-        if ($response['status'] == 401){
+        if (is_array($response) && isset($response['status']) && $response['status'] == 401){
             return $this->error("Wrong credentials. Cannot access ElasticSearch");
         } 
 

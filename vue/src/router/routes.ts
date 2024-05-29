@@ -113,6 +113,17 @@ const routes: Array<RouteRecordRaw> = [
         },
     },
     {
+        path: '/MergeRecords',
+        name: 'merge-records',
+        component: LegacyView,
+        alias: ['/modules/MergeRecords'],
+        meta: {
+            isLegacy: true,
+            legacyUrl: 'legacy/index.php?module=MergeRecords',
+            auth: true,
+        },
+    },
+    {
         path: '/Administration',
         name: 'administration',
         component: LegacyView,
