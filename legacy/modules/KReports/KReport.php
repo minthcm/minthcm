@@ -1103,9 +1103,10 @@ class KReport extends SugarBean
         $arrayList = json_decode(html_entity_decode($this->listfields, ENT_QUOTES, 'UTF-8'), true);
 
         //see if we have dynamic cols in the Request ...
-        $dynamicolsOverrid = array();
         if ('' != $dynamicolsOverride) {
-            $dynamicolsOverride = json_decode(html_entity_decode($dynamicolsOverride, ENT_QUOTES, 'UTF-8'), true);
+            if(!is_array($dynamicolsOverride)){
+                $dynamicolsOverride = json_decode(html_entity_decode($dynamicolsOverride, ENT_QUOTES, 'UTF-8'), true);
+            }
             $overrideMap = array();
             foreach ($dynamicolsOverride as $thisOverrideKey => $thisOverrideEntry) {
                 $overrideMap[$thisOverrideEntry['dataIndex']] = $thisOverrideKey;
@@ -1211,9 +1212,10 @@ class KReport extends SugarBean
         $arrayList = json_decode(html_entity_decode($this->listfields, ENT_QUOTES, 'UTF-8'), true);
 
         //see if we have dynamic cols in the Request ...
-        $dynamicolsOverrid = array();
         if ('' != $dynamicolsOverride) {
-            $dynamicolsOverride = json_decode(html_entity_decode($dynamicolsOverride, ENT_QUOTES, 'UTF-8'), true);
+            if(!is_array($dynamicolsOverride)){
+                $dynamicolsOverride = json_decode(html_entity_decode($dynamicolsOverride, ENT_QUOTES, 'UTF-8'), true);
+            }
             $overrideMap = array();
             foreach ($dynamicolsOverride as $thisOverrideKey => $thisOverrideEntry) {
                 $overrideMap[$thisOverrideEntry['dataIndex']] = $thisOverrideKey;
@@ -1280,7 +1282,7 @@ class KReport extends SugarBean
 
         $results = $this->getSelectionResults(array());
 
-        if (count($results > 0)) {
+        if (count($results) > 0) {
             require_once 'modules/ProspectLists/ProspectList.php';
             $newProspectList = new ProspectList();
 

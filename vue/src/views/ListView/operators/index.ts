@@ -4,6 +4,7 @@ export { default as enum } from './enum'
 export { default as multienum } from './multienum'
 export { default as text } from './text'
 export { default as numeric } from './numeric'
+export { default as relate } from './relate'
 
 export const defaultOperator = 'text'
 

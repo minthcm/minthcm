@@ -49,9 +49,6 @@ $unified_search_modules_display = array(
     'CampaignTrackers' => array(
         'visible' => false,
     ),
-    'EmailMan' => array(
-        'visible' => true,
-    ),
     'Schedulers' => array(
         'visible' => true,
     ),

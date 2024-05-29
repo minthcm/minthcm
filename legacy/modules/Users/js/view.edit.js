@@ -37,6 +37,28 @@ viewTools.form.afterSave(function(){
     let employee_status = $('select[name="employee_status"] option:selected').val();
     let employee_id = $('#record').val();
     let result = false;
+    if(
+        (
+            $("#confirm_pwd").val().length <= 0 
+            && $("#new_password").val().length <= 0 
+            && employee_id === ''
+        )
+        || $("#new_password").val().length !== $("#confirm_pwd").val().length
+        || $("#new_password").val() !== $("#confirm_pwd").val()
+    ){
+        setTimeout(function(){
+            viewTools.GUI.statusBox.hideStatus();
+            if($("#new_password").val().length <= 0){
+                viewTools.GUI.statusBox.showStatus(ERR_ENTER_NEW_PASSWORD, 'error', 4000);
+            }
+            if($("#new_password").val().length > 0 && $("#confirm_pwd").val().length <= 0 ){
+                viewTools.GUI.statusBox.showStatus(ERR_ENTER_CONFIRMATION_PASSWORD, 'error', 4000);
+            }
+        }, 50);
+        $("#tab2")[0].click();
+        $("#dlg_mask").remove();
+        return false;    
+    }
     if (!!window["users_editview_units_popup"] === false && (employee_status != 'Active' || status != 'Active') && employee_id != '') {
         viewTools.api.callCustomApi({
             module: 'Employees',

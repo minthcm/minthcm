@@ -53,9 +53,12 @@
 
 <!-- --------------------------------------------------------------------------- -->
 <!-- BEGIN: merge_cell_label -->
-	<td width="{CELL_WIDTH}"  valign="top"  >{FIELD_LABEL}&nbsp;{REQUIRED_SYMBOL}</td>
+<td width="{CELL_WIDTH}"  valign="top"  >{FIELD_LABEL}&nbsp;{REQUIRED_SYMBOL}</td>
 <!-- END: merge_cell_label -->
 <!-- --------------------------------------------------------------------------- -->
+<!-- BEGIN: merge_cell_edit_email -->
+<td width="{CELL_WIDTH}" valign="top"><span>{EDIT_FIELD_VALUE}</span></td>
+<!-- END: merge_cell_edit_email -->
 <!-- BEGIN: merge_cell_edit_text -->
 	<td width="{CELL_WIDTH}" valign="top" ><span><input name="{EDIT_FIELD_NAME}" id="{EDIT_FIELD_NAME}" tabindex="{TAB_INDEX}" size="35" maxlength="150" type="text" value="{EDIT_FIELD_VALUE}"></span></td>
 <!-- END: merge_cell_edit_text -->
@@ -127,6 +130,9 @@
 <!-- BEGIN: merge_cell_field_value -->
 	<td width="{CELL_WIDTH}" valign="top"  ><span><input title="{HOVER_TEXT}" class="button" onclick='copy_value({ENCODED_JSON_DATA});' type="button" name="copyValue" value="<<"/>&nbsp;{FIELD_VALUE}</span></td>
 <!-- END: merge_cell_field_value -->
+<!-- BEGIN: merge_cell_field_value_email -->
+<td width="{CELL_WIDTH}" valign="top"  > <span><input title="{HOVER_TEXT}" class="button" onclick='copy_value({ENCODED_JSON_DATA});' type="button" name="copyValue" value="<<"/>&nbsp;</span> <span>{FIELD_VALUE}</span> </td>
+<!-- END: merge_cell_field_value_email -->
 <!-- BEGIN: merge_cell_field_value_checkbox -->
 	<td width="{CELL_WIDTH}" valign="top" ><span><input title="{HOVER_TEXT}" class="button" onclick='copy_value({ENCODED_JSON_DATA});' type="button" name="copyValue" value="<<"/>&nbsp;<input disabled type="checkbox" class="checkbox" {FIELD_VALUE}/></span></td>
 <!-- END: merge_cell_field_value_checkbox -->

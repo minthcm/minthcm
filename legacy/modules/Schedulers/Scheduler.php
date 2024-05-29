@@ -1015,6 +1015,18 @@ class Scheduler extends SugarBean
         $sched18->modified_user_id = '1';
         $sched18->catch_up = '1';
         $sched18->save();
+        
+        $sched19 = new Scheduler();
+        $sched19->name = $mod_strings['LBL_EXECUTEVIEWTOOLSQUEUE'];
+        $sched19->job = 'function::executeViewToolsQueue';
+        $sched19->date_time_start = create_date(2015, 1, 1) . ' ' . create_time(0, 0, 1);
+        $sched19->date_time_end = null;
+        $sched19->job_interval = '*/5::*::*::*::*';
+        $sched19->status = 'Active';
+        $sched19->created_by = '1';
+        $sched19->modified_user_id = '1';
+        $sched19->catch_up = '1';
+        $sched19->save();
   
       $this->createJobEntry('AutomaticCreateNotification', '*/15::*::*::*::*', $mod_strings['LBL_AUTOMATICCREATENOTIFICATION'],'Inactive');
      }

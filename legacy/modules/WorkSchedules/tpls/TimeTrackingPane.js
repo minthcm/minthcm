@@ -135,7 +135,6 @@ if (!window.TimePanel) { // avoid multi-declaration
                 }).pop();
                 if (_this.taskman) {
                     _this.taskman.timeline = _this;
-                    _this.taskman.$planSelect.change();
                 } else
                     setTimeout(function () {
                         _this.initialize();

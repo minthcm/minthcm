@@ -60,6 +60,7 @@ if (!window.TWSDashlet) {
         });
         this.$planSelect.change(async function () {
             var items = [];
+            localStorage.setItem(_this.storageKeyPlanId, this.value);
             if (!this.value) {
                 _this.$content.hide();
                 localStorage.removeItem(_this.storageKeyPlanId);
@@ -325,11 +326,8 @@ if (!window.TWSDashlet) {
             var result = await _this.getPlansListForDay(date);
             items = result.items;
             items = _this.createPlanSelectOptions(items);
-            if (items.length == 1) {
-                _this.$planSelect
-                    .find('option:first').remove().end()
-                    .find('option:last').prop('selected', true).end()
-                    .trigger('change');
+            if (items.length >= 1) {
+                _this.$planSelect.trigger('change');
             }
             _this._currentPlans = items;
             if (_this.initialDateChange) {
@@ -344,9 +342,29 @@ if (!window.TWSDashlet) {
     TWSDashlet.prototype.createPlanSelectOptions = function (items) {
         this.$planSelect.html('');
         this.$planSelect.append(new Option('', ''));
+        let lp = 1;
+        let selected = false;
+        let selectedPlanId = localStorage.getItem(this.storageKeyPlanId) ?? undefined;
         items.forEach(function (item) {
-            var n = item.name + ' - ' + TWSDashlet.planStatusDom[item.status];
-            this.$planSelect.append(new Option(n, item.id));
+
+            let planName = lp 
+            + ". " 
+            + moment(item.startTime, "HH:mm").format(viewTools.date.getTimeFormat()) 
+            + " - "
+            + moment(item.endTime, "HH:mm").format(viewTools.date.getTimeFormat()) 
+            + ' - ' 
+            + TWSDashlet.planStatusDom[item.status];
+
+            if((item.status === 'planned' || item.status === 'worked') && !selected && selectedPlanId === undefined){
+                selected = true;
+                this.$planSelect.append(new Option(planName, item.id, selected, selected));
+            } else if(selectedPlanId === item.id) {
+                selected = true;
+                this.$planSelect.append(new Option(planName, item.id, selected, selected));
+            } else {
+                this.$planSelect.append(new Option(planName, item.id));
+            }
+            lp++;
         }.bind(this));
         return items;
     };
@@ -369,15 +387,8 @@ if (!window.TWSDashlet) {
             dataType: "json",
         });
         if (!(result_json && result_json.items instanceof Array)) {
-            console.error('Error while loading related redmine tasks');
+            console.error('Error while loading work schedules');
         } else {
-            result_json.items = result_json.items.sort(function (a, b) {
-                if (a.lp > b.lp)
-                    return 1;
-                if (a.lp < b.lp)
-                    return -1;
-                return 0;
-            });
             result = result_json;
         }
         return result;
@@ -390,17 +401,8 @@ if (!window.TWSDashlet) {
             dataType: "json",
         })
         if (!(result_json && result_json.items instanceof Array)) {
-            console.error('Error while loading related redmine tasks');
+            console.error('Error while loading work schedules');
         } else {
-            result_json.items = result_json.items.sort(function (a, b) {
-                if (a.ord > b.ord) {
-                    return 1;
-                }
-                if (a.ord < b.ord) {
-                    return -1;
-                }
-                return 0;
-            });
             result = result_json;
         }
         return result;

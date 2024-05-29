@@ -42,10 +42,19 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 require_once('include/MVC/View/SugarView.php');
+require_once '../api/vendor/autoload.php';
+
+use MintHCM\Data\MassActions\Actions as MassActions;
 
 class ViewESList extends SugarView
 {
-    /**
+    const DEFAULT_MASS_ACTIONS = [
+        MassActions\Delete::class,
+        MassActions\Export::class,
+        MassActions\Merge::class,
+    ];
+
+        /**
      * @var string $type
      */
     public $type = 'ESList';
@@ -99,7 +108,7 @@ class ViewESList extends SugarView
 
     protected function prepareESListView()
     {
-        global $sugar_config;
+        global $sugar_config, $mint_config;
         if (!isset($this->bean->module_name)) {
             LoggerManager::getLogger()->fatal('Undefined module for eslist view');
             return false;
@@ -115,6 +124,8 @@ class ViewESList extends SugarView
         $this->eslistmap = $eslistmap;
 
         $host = $sugar_config['search']['ElasticSearch']['host'];
+        $port = $mint_config['search']['engines']['ElasticSearch'][0]['port'];
+        $host = $this->validateHostAndPort($host, $port);
         $protocol = $sugar_config['search']['ElasticSearch']['protocol']?? 'http';
         
         $es_module = $ESListViewDefs[$this->module]['es_module'] ?? $this->module;
@@ -125,6 +136,21 @@ class ViewESList extends SugarView
         }
         
         $this->mappings = array_values($mappings)[0]['mappings'];
+    }
+
+    protected function validateHostAndPort($host, $port) {
+        if (strpos($host, ':') !== false) {
+            return $host;
+        }
+
+        if (!filter_var($host, FILTER_VALIDATE_IP) && !preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $host) && preg_match("/^.{1,253}$/", $host) && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $host)) {
+            throw new Exception('Elasticsearch: Invalid host');
+        }
+    
+        if (!filter_var($port, FILTER_VALIDATE_INT, array("options" => array("min_range"=>1, "max_range"=>65535)))) {
+            throw new Exception('Elasticsearch: Invalid port');
+        }
+        return $host . ":" . $port;
     }
 
     protected function prepareConfig()
@@ -138,9 +164,21 @@ class ViewESList extends SugarView
             $this->config['actions'] = $this->ESListViewDefs[$this->module]['actions'] ?? [];
         }
 
-        if (isset($this->ESListViewDefs[$this->module]['mass_actions'])) {
-            $this->config['mass_actions'] = array_values($this->ESListViewDefs[$this->module]['mass_actions']) ?? [];
+        $mass_actions = [];
+        if (isset($this->ESListViewDefs[$this->module]['massActions'])) {
+            $mass_actions = $this->ESListViewDefs[$this->module]['massActions'];
+        } else {
+            $mass_actions = self::DEFAULT_MASS_ACTIONS;
         }
+        
+        chdir('../api');
+        foreach ($mass_actions as $action) {
+            $mass_action = new $action($this->module, []);
+            if ($mass_action->hasAccess()) {
+                $this->config['massActions'][] = $mass_action->getFrontendData();
+            }
+        }
+        chdir('../legacy');
 
         foreach ($theme as $property => $objects) {
             foreach ($objects as $object => $value) {
@@ -194,10 +232,9 @@ class ViewESList extends SugarView
                 $columns[$field]['key'] .= '.keyword';
             }
             $columns[$field]['type'] = $defs['type'] ?? $field_defs['type'];
-            $columns[$field]['options'] = $field_defs['options'];
+            $columns[$field]['options'] = $this->getParsedOptions($field_defs);
             $label = $defs['label'] ?? $field_defs['label'] ?? $field_defs['vname'];
             $columns[$field]['label'] = $this->prepareLabel($mod_strings[$label] ?? $app_strings[$label] ?? $label);
-            $this->assignDynamicOptionsIfFunction($columns, $field, $field_defs);
         }
         return $columns;
     }
@@ -228,55 +265,22 @@ class ViewESList extends SugarView
             }
             $search[$field] = array_merge($field_defs, $search[$field]);
             $search[$field]['name'] = $defs['name'] ?? $field;
-            $search[$field]['key'] = $defs['key'] ?? $this->eslistmap[$field] ?? $field;
+            $search_field_name = $field_defs['id_name'] ?? $field;
+            $search[$field]['key'] = $defs['key'] ?? $this->eslistmap[$search_field_name] ?? $search_field_name;
             $search[$field]['type'] = $defs['type'] ?? $field_defs['type'];
-            if (!empty($search[$field]['type']) && in_array($search[$field]['type'], ['multienum', 'enum'])) {
-                $search[$field]['key'] .= '.keyword';
+            if (!empty($search[$field]['type']) ) {
+                if (in_array($search[$field]['type'], ['multienum', 'enum'])) {
+                    $search[$field]['key'] .= '.keyword';
+                } else if ($search[$field]['type'] === 'relate') {
+                    $field_id = $field_defs['id_name'];
+                    $search[$field]['key'] = $defs['key'] ?? $this->eslistmap[$field_id] ?? $field_id;
+                }
             }
-            $search[$field]['options'] = $field_defs['options'];
+            $search[$field]['options'] = $this->getParsedOptions($field_defs);
             $label = $defs['label'] ?? $field_defs['label'] ?? $field_defs['vname'];
             $search[$field]['label'] = $this->prepareLabel($mod_strings[$label] ?? $app_strings[$label] ?? $label);
-            $this->assignDynamicOptionsIfFunction($search, $field, $field_defs);
         }
         return $search;
-    }
-
-    protected function assignDynamicOptionsIfFunction(&$out_defs, $field, $field_defs)
-    {
-        if ($field_defs['type'] === 'enum' && !empty($field_defs['function'])) {
-            $out_defs[$field]['options'] = $this->getEnumOptionsFromFunction($field, $field_defs);
-        }
-    }
-
-    protected function getEnumOptionsFromFunction(string $field, array $field_defs): ?array
-    {
-        $func_def = $this->unifyFunctionDefs($field_defs['function']);
-        $callback = $func_def['name'];
-
-        if (!empty($func_def['include'])) {
-            include_once $func_def['include'];
-        }
-
-        if (!function_exists($callback)) {
-            return null;
-        }
-
-        if (empty($func_def['params'])) {
-            return $callback($this->bean, $field, $this->bean->$field, 'eslist', $func_def['additional_params']);
-        } else {
-            return call_user_func_array($callback, $func_def['params']);
-        }
-    }
-
-    protected function unifyFunctionDefs($func_def): array
-    {
-        if (is_array($func_def)) {
-            return $func_def;
-        }
-
-        return [
-            'name' => $func_def,
-        ];
     }
 
     protected function prepareUserPreferences()
@@ -351,5 +355,22 @@ class ViewESList extends SugarView
         }
 
         return $options;
+    }
+
+    protected function getParsedOptions($field_defs)
+    {
+        if (isset($field_defs['options']) && is_string($field_defs['options'])) {
+            return $field_defs['options'];
+}
+        if (empty($field_defs['function'])) {
+            return null;
+        }
+        if (!empty($field_defs['function']['include']) && file_exists($field_defs['function']['include'])) {
+            require_once($field_defs['function']['include']);
+        }
+        $function = $field_defs['function']['name'] ?? $field_defs['function'];
+        $additional_params = $field_defs['function']['additional_params'] ?? null;
+
+        return call_user_func($function, null, null, null, null, $additional_params);
     }
 }

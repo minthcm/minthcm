@@ -51,6 +51,7 @@ class MassConfirmationJob implements RunnableSchedulerJob {
    }
 
    public function run($job_data) {
+      $max_execution_time = ini_get('max_execution_time');
       ini_set('max_execution_time', -1);
       $ids = $this->parseMassParams($job_data);
       SugarAutoLoader::requireWithCustom('modules/WorkSchedules/MassConfirmation.php');
@@ -58,7 +59,7 @@ class MassConfirmationJob implements RunnableSchedulerJob {
       $confirmator->setIDs($ids);
       $confirmator->setUserId($this->job->assigned_user_id);
       $confirmator->confirm();
-      ini_set('max_execution_time', 120);
+      ini_set('max_execution_time', $max_execution_time);
       return true;
    }
 

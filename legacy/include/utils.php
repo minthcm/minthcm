@@ -359,6 +359,7 @@ function get_sugar_config_defaults(): array
             'ssl' => false,
         ],
         'default_action' => 'index',
+        'currency_on_right' => false,
         'default_charset' => return_session_value_or_default('default_charset',
             'UTF-8'),
         'default_currency_name' => return_session_value_or_default('default_currency_name',

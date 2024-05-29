@@ -27,7 +27,7 @@ class Candidates extends Candidates_sugar implements EmailInterface {
          $beans = $this->candidatures->getBeans();
       }
 
-      parent::save($check_notify);
+      $id = parent::save($check_notify);
 
       foreach ( $beans as $b ) {
          $b->generateName();
@@ -35,6 +35,7 @@ class Candidates extends Candidates_sugar implements EmailInterface {
       }
 
       $this->pushFeed();
+      return $id;
    }
 
    public function get_unlinked_email_query($type = array()) {

@@ -41,6 +41,9 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+
+use SuiteCRM\Search\ElasticSearch\ElasticSearchHooks;
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
@@ -386,7 +389,13 @@ class Employee extends Person implements EmailInterface
         if($this->securitygroup_id != $this->fetched_row['securitygroup_id'] && empty($this->securitygroup_id)){
             $this->load_relationship('SecurityGroups');
             $this->SecurityGroups->delete($this->fetched_row['securitygroup_id']);
-    }
+        }
+        if(!empty($this->user_name)){
+            $user = BeanFactory::getBean('Users', $this->id);
+            if(!empty($user->id) && $user->id === $this->id){
+                (new ElasticSearchHooks())->beanSaved($user, 'after_save', []);
+            }
+        }
     }
     // MintHCM end
 

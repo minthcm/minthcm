@@ -63,7 +63,6 @@
         <tr>
             <th align="left" scope="row" colspan="4"><h4>{$MOD.DEFAULT_SYSTEM_SETTINGS}</h4></th>
         </tr>
-
         <tr>
             <td  scope="row">{$MOD.LIST_ENTRIES_PER_LISTVIEW}: </td>
             <td  >
@@ -159,25 +158,8 @@
             </td>
         </tr>
         <tr>
-            <td scope="row">{$MOD.LBL_LEAD_CONV_OPTION}:&nbsp;{sugar_help text=$MOD.LEAD_CONV_OPT_HELP}</td>
-            <td> <select name="lead_conv_activity_opt">{$lead_conv_activities}</select></td>
-            <td><a href="./index.php?module=Administration&action=ConfigureAjaxUI" id="configure_ajax">{$MOD.LBL_CONFIG_AJAX}</a>&nbsp;{sugar_help text=$MOD.LBL_CONFIG_AJAX_DESC}</td>
+            <td colspan="4"><a href="./index.php?module=Administration&action=ConfigureAjaxUI" id="configure_ajax">{$MOD.LBL_CONFIG_AJAX}</a>&nbsp;{sugar_help text=$MOD.LBL_CONFIG_AJAX_DESC}</td>
         </tr>
-
-        <tr>
-            <td  scope="row" nowrap>{$MOD.LBL_DISALBE_CONVERT_LEAD}: &nbsp;{sugar_help text=$MOD.LBL_DISALBE_CONVERT_LEAD_DESC}</td>
-            {if !empty($config.disable_convert_lead)}
-                {assign var='disable_convert_lead' value='CHECKED'}
-            {else}
-                {assign var='disable_convert_lead' value=''}
-            {/if}
-            <td>
-                <input type='hidden' name='disable_convert_lead' value='false'>
-                <input name='disable_convert_lead'  type="checkbox" value="true" {$disable_convert_lead}>
-            </td>
-            <td colspan="2">&nbsp;</td>
-        </tr>
-
         <tr>
             <td  scope="row" nowrap>{$MOD.LBL_ENABLE_ACTION_MENU}: &nbsp;{sugar_help text=$MOD.LBL_ENABLE_ACTION_MENU_DESC}</td>
             {if isset($config.enable_action_menu) && $config.enable_action_menu != "true" }
@@ -191,30 +173,6 @@
             </td>
             <td colspan="2">&nbsp;</td>
         </tr>
-
-        <tr>
-            <td  scope="row" nowrap>{$MOD.LBL_ENABLE_INLINE_EDITING_LIST}: &nbsp;{sugar_help text=$MOD.LBL_ENABLE_INLINE_EDITING_LIST_DESC}</td>
-            {if isset($config.enable_line_editing_list) && $config.enable_line_editing_list != "true" }
-                {assign var='enable_line_editing_list' value=''}
-            {else}
-                {assign var='enable_line_editing_list' value='CHECKED'}
-            {/if}
-            <td>
-                <input type='hidden' name='enable_line_editing_list' value='false'>
-                <input name='enable_line_editing_list'  type="checkbox" value="true" {$enable_line_editing_list}>
-            </td>
-            <td  scope="row" nowrap>{$MOD.LBL_ENABLE_INLINE_EDITING_DETAIL}: &nbsp;{sugar_help text=$MOD.LBL_ENABLE_INLINE_EDITING_DETAIL_DESC}</td>
-            {if isset($config.enable_line_editing_detail) && $config.enable_line_editing_detail != "true" }
-                {assign var='enable_line_editing_detail' value=''}
-            {else}
-                {assign var='enable_line_editing_detail' value='CHECKED'}
-            {/if}
-            <td>
-                <input type='hidden' name='enable_line_editing_detail' value='false'>
-                <input name='enable_line_editing_detail' type="checkbox" value="true" {$enable_line_editing_detail}>
-            </td>
-        </tr>
-
 
         <tr>
             <td  scope="row" nowrap>{$MOD.LBL_HIDE_SUBPANELS}: &nbsp;{sugar_help text=$MOD.LBL_HIDE_SUBPANELS}</td>

@@ -32,14 +32,19 @@ router.beforeEach(async (to, from) => {
     }
     if (to.name === 'list') {
         const module = to.params.module?.toString()
+        const legacy_list_params = {
+            name: 'module-view',
+            params: {
+                module,
+                action: 'index',
+            },
+        };
         if (backend.initData?.legacy_views?.[module]?.list) {
-            return {
-                name: 'module-view',
-                params: {
-                    module,
-                    action: 'index',
-                },
-            }
+            return legacy_list_params;
+        }
+        if(backend.initData?.legacy_views?.[module]?.list === undefined){
+            console.warn('Legacy views not defined for module: ' + module + ". Using legacy list view.");
+            return legacy_list_params;
         }
     } else if (to.name === 'record') {
         const module = to.params.module?.toString()

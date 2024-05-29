@@ -99,4 +99,5 @@ $mod_strings = array(
     'LBL_LIST_TITLE' => 'Appraisal',
     'LBL_EVALUATOR_NAME' => 'Evaluator',
     'LBL_EVALUATOR_ID' => 'Evaluator (ID)',
+    'LBL_NOTES_TITLE' => 'Notes',
 );
