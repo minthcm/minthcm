@@ -63,7 +63,7 @@
 	<table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td align="left" style="padding-bottom: 2px;"><input title="{MOD.LBL_SAVE_MERGED_RECORD_BUTTON_TITLE}" class="button" onclick="return merge_verify();" type="submit" name="button" value="  {MOD.LBL_SAVE_MERGED_RECORD_BUTTON_LABEL}  " id="save_merged_record_button" >&nbsp;
-		<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  " id="cancel_merge_button"></td>
+		<a class="button" id="CANCEL" href="index.php?module={RETURN_MODULE}&action={RETURN_ACTION}&record={RETURN_ID}">{APP.LBL_CANCEL_BUTTON_LABEL}</a>
 		<td align="right" nowrap><span class="required">{APP.LBL_REQUIRED_SYMBOL}</span> {APP.NTC_REQUIRED}</td>
 	</tr>
 	</table>
@@ -221,6 +221,24 @@ function copy_value(json_array)
             }
         }
 	}
+    else if(json_array['field_type'] == 'email'){
+        let module = $("#EditView input[name='merge_module']").val();
+        let widget_index = '0';
+        let instance_name = module + widget_index;
+        let email_addresses = [];
+
+        $(".email-address-input-group :input[type='email']").each((i, input) => {
+            if(input.id.length > 0 && input.id !== 'email-address-input'){
+                email_addresses.push(input.value);
+            }
+        });
+
+        json_array['field_value'].forEach( (value, index) => {
+            if(!email_addresses.includes(value)){
+                SUGAR.EmailAddressWidget.instances[instance_name].addEmailAddress(module + 'emailAddressesTable' + widget_index, value, false);
+            }
+        });  
+    }
 	else
 	{
 		target_element.value = json_array['field_value'];

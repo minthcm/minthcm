@@ -51,6 +51,10 @@
  */
 function getDurationMinutesOptions($focus, $field, $value, $view)
 {
+    if (empty($focus)) {
+        return '';
+    }
+
     if (isset($_REQUEST['duration_minutes'])) {
         $focus->duration_minutes = $_REQUEST['duration_minutes'];
     }

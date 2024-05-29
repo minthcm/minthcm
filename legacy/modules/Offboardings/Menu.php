@@ -48,14 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $mod_strings, $app_strings, $sugar_config;
 $module_name = 'Offboardings';
-if (ACLController::checkAccess('OffboardingTemplates', 'edit', true)) {
-    $module_menu[] = array(
-        'javascript:generateOnboardingOffboarding.init(generateOnboardingOffboarding);',
-        translate('LBL_GENERATE_BUTTON', 'OffboardingTemplates'),
-        'Add',
-        'OffboardingTemplates',
-    );
-}
+
 if (ACLController::checkAccess($module_name, 'list', true)) {
     $module_menu[] = array(
         'index.php?module=Offboardings&action=index&return_module=Offboardings&return_action=DetailView',

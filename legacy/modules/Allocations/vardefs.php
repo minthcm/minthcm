@@ -125,8 +125,8 @@ $dictionary['Allocations'] = array(
             'table' => 'workplaces',
             'rname' => 'name',
             'vt_validation' => array(
-                "AEM(callCustomApi('Allocations','checkWorkplaceStatus',\$workplace_id,\$mode),'LBL_ERR_WORKPLACE_STATUS')",
-                "AEM(callCustomApi('Allocations','checkWorkplacePeriods',\$id,\$workplace_id,\$mode,\$date_from,\$date_to),'LBL_ERR_WORKPLACE_PERIODS')",
+                "AEM(callCustomApi('Allocations','checkWorkplaceStatus', {workplace_id: \$workplace_id, mode: \$mode}),'LBL_ERR_WORKPLACE_STATUS')",
+                "AEM(callCustomApi('Allocations','checkWorkplacePeriods',{id: \$id, workplace_id: \$workplace_id, mode: \$mode, date_from: \$date_from, date_to: \$date_to}),'LBL_ERR_WORKPLACE_PERIODS')",
             ),
          ),
          "workplace_id" => array(

@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,14 +36,14 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 
 /* * *******************************************************************************
@@ -53,156 +53,159 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Contributor(s): ______________________________________..
  * ****************************************************************************** */
 
-require_once('modules/Configurator/Forms.php');
-require_once('modules/Administration/Forms.php');
-require_once('modules/Configurator/Configurator.php');
-require_once('include/SugarLogger/SugarLogger.php');
-require_once('modules/Leads/Lead.php');
+require_once 'modules/Configurator/Forms.php';
+require_once 'modules/Administration/Forms.php';
+require_once 'modules/Configurator/Configurator.php';
+require_once 'include/SugarLogger/SugarLogger.php';
+require_once 'modules/Leads/Lead.php';
 
-class ConfiguratorViewEdit extends ViewEdit {
+class ConfiguratorViewEdit extends ViewEdit
+{
 
-   /**
-    * @var Configurator
-    */
-   protected $configurator;
+    /**
+     * @var Configurator
+     */
+    protected $configurator;
 
-   /**
-    * @see SugarView::preDisplay()
-    */
-   public function preDisplay() {
-      global $app_list_strings;
-      $this->ss->assign("SUBPANEL_COUNT_METHODS", get_select_options_with_id($app_list_strings['subpanel_count_methods'], isset($this->configurator->config['subpanel_count_method']) ? $this->configurator->config['subpanel_count_method'] : 'count'));
-      if ( !is_admin($GLOBALS['current_user']) )
-         sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']);
-   }
+    /**
+     * @see SugarView::preDisplay()
+     */
+    public function preDisplay()
+    {
+        global $app_list_strings;
+        $this->ss->assign("SUBPANEL_COUNT_METHODS", get_select_options_with_id($app_list_strings['subpanel_count_methods'], isset($this->configurator->config['subpanel_count_method']) ? $this->configurator->config['subpanel_count_method'] : 'count'));
+        if (!is_admin($GLOBALS['current_user'])) {
+            sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']);
+        }
 
-   /**
-    * @see SugarView::_getModuleTitleParams()
-    */
-   protected function _getModuleTitleParams($browserTitle = false) {
-      global $mod_strings;
+    }
 
-      return array(
-         "<a href='index.php?module=Administration&action=index'>" . translate('LBL_MODULE_NAME', 'Administration') . "</a>",
-         $mod_strings['LBL_SYSTEM_SETTINGS']
-      );
-   }
+    /**
+     * @see SugarView::_getModuleTitleParams()
+     */
+    protected function _getModuleTitleParams($browserTitle = false)
+    {
+        global $mod_strings;
 
-   public function __construct() {
-      $this->configurator = new Configurator;
-   }
+        return array(
+            "<a href='index.php?module=Administration&action=index'>" . translate('LBL_MODULE_NAME', 'Administration') . "</a>",
+            $mod_strings['LBL_SYSTEM_SETTINGS'],
+        );
+    }
 
-   public function process() {
-      if ( isset($this->errors['company_logo']) ) {
-         $this->configurator->errors['company_logo'] = $this->errors['company_logo'];
-         unset($this->errors['company_logo']);
-      }
+    public function __construct()
+    {
+        $this->configurator = new Configurator;
+    }
 
-      return parent::process();
-   }
+    public function process()
+    {
+        if (isset($this->errors['company_logo'])) {
+            $this->configurator->errors['company_logo'] = $this->errors['company_logo'];
+            unset($this->errors['company_logo']);
+        }
 
-   /**
-    * @see SugarView::display()
-    */
-   public function display() {
-      global $current_user, $mod_strings, $app_strings, $app_list_strings, $sugar_config, $locale;
+        return parent::process();
+    }
 
-      $configurator = $this->configurator;
-      $sugarConfig = SugarConfig::getInstance();
-      $focus = BeanFactory::newBean('Administration');
-      $configurator->parseLoggerSettings();
+    /**
+     * @see SugarView::display()
+     */
+    public function display()
+    {
+        global $current_user, $mod_strings, $app_strings, $app_list_strings, $sugar_config, $locale;
 
-      $focus->retrieveSettings();
-      if ( !empty($_POST['restore']) ) {
-         $configurator->restoreConfig();
-      }
+        $configurator = $this->configurator;
+        $sugarConfig = SugarConfig::getInstance();
+        $focus = BeanFactory::newBean('Administration');
+        $configurator->parseLoggerSettings();
 
+        $focus->retrieveSettings();
+        if (!empty($_POST['restore'])) {
+            $configurator->restoreConfig();
+        }
 
-      $mailSendType = null;
-      if ( isset($focus->settings['mail_sendtype']) ) {
-         $mailSendType = $focus->settings['mail_sendtype'];
-      } else {
-         LoggerManager::getLogger()->error('ConfiguratorViewEdit view display error: mail send type is not set for focus');
-      }
+        $mailSendType = null;
+        if (isset($focus->settings['mail_sendtype'])) {
+            $mailSendType = $focus->settings['mail_sendtype'];
+        } else {
+            LoggerManager::getLogger()->error('ConfiguratorViewEdit view display error: mail send type is not set for focus');
+        }
 
-      $this->ss->assign('MOD', $mod_strings);
-      $this->ss->assign('APP', $app_strings);
-      $this->ss->assign('APP_LIST', $app_list_strings);
-      $this->ss->assign('config', $configurator->config);
-      $this->ss->assign('error', $configurator->errors);
-      $this->ss->assign("AUTO_REFRESH_INTERVAL_OPTIONS", get_select_options_with_id($app_list_strings['dashlet_auto_refresh_options_admin'], isset($configurator->config['dashlet_auto_refresh_min']) ? $configurator->config['dashlet_auto_refresh_min'] : 30));
-      $this->ss->assign('LANGUAGES', get_languages());
-      $this->ss->assign("JAVASCRIPT", get_set_focus_js() . get_configsettings_js());
-      $this->ss->assign('company_logo', SugarThemeRegistry::current()->getImageURL('company_logo.png'));
-      $this->ss->assign("settings", $focus->settings);
-      $this->ss->assign("mail_sendtype_options", get_select_options_with_id($app_list_strings['notifymail_sendtype'], $mailSendType));
-      if ( !empty($focus->settings['proxy_on']) ) {
-         $this->ss->assign("PROXY_CONFIG_DISPLAY", 'inline');
-      } else {
-         $this->ss->assign("PROXY_CONFIG_DISPLAY", 'none');
-      }
-      if ( !empty($focus->settings['proxy_auth']) ) {
-         $this->ss->assign("PROXY_AUTH_DISPLAY", 'inline');
-      } else {
-         $this->ss->assign("PROXY_AUTH_DISPLAY", 'none');
-      }
-      if ( !empty($configurator->config['logger']['level']) ) {
-         $this->ss->assign('log_levels', get_select_options_with_id(LoggerManager::getLoggerLevels(), $configurator->config['logger']['level']));
-      } else {
-         $this->ss->assign('log_levels', get_select_options_with_id(LoggerManager::getLoggerLevels(), ''));
-      }
-      if ( !empty($configurator->config['lead_conv_activity_opt']) ) {
-         $this->ss->assign('lead_conv_activities', get_select_options_with_id(Lead::getActivitiesOptions(), $configurator->config['lead_conv_activity_opt']));
-      } else {
-         $this->ss->assign('lead_conv_activities', get_select_options_with_id(Lead::getActivitiesOptions(), ''));
-      }
-      if ( !empty($configurator->config['logger']['file']['suffix']) ) {
-         $this->ss->assign('filename_suffix', get_select_options_with_id(SugarLogger::$filename_suffix, $configurator->config['logger']['file']['suffix']));
-      } else {
-         $this->ss->assign('filename_suffix', get_select_options_with_id(SugarLogger::$filename_suffix, ''));
-      }
-      if ( isset($configurator->config['logger_visible']) ) {
-         $this->ss->assign('logger_visible', $configurator->config['logger_visible']);
-      } else {
-         $this->ss->assign('logger_visible', true);
-      }
-      if (isset($configurator->config['stackTrace'])) {
-         $this->ss->assign('stackTrace', $configurator->config['stackTrace']);
-      } else {
-         $this->ss->assign('stackTrace', false);
-      }
-      // Check for Google Sync JSON
-      $this->checkGoogleSyncJSON($configurator->config['google_auth_json']);
+        $this->ss->assign('MOD', $mod_strings);
+        $this->ss->assign('APP', $app_strings);
+        $this->ss->assign('APP_LIST', $app_list_strings);
+        $this->ss->assign('config', $configurator->config);
+        $this->ss->assign('error', $configurator->errors);
+        $this->ss->assign("AUTO_REFRESH_INTERVAL_OPTIONS", get_select_options_with_id($app_list_strings['dashlet_auto_refresh_options_admin'], isset($configurator->config['dashlet_auto_refresh_min']) ? $configurator->config['dashlet_auto_refresh_min'] : 30));
+        $this->ss->assign('LANGUAGES', get_languages());
+        $this->ss->assign("JAVASCRIPT", get_set_focus_js() . get_configsettings_js());
+        $this->ss->assign('company_logo', SugarThemeRegistry::current()->getImageURL('company_logo.png'));
+        $this->ss->assign("settings", $focus->settings);
+        $this->ss->assign("mail_sendtype_options", get_select_options_with_id($app_list_strings['notifymail_sendtype'], $mailSendType));
+        if (!empty($focus->settings['proxy_on'])) {
+            $this->ss->assign("PROXY_CONFIG_DISPLAY", 'inline');
+        } else {
+            $this->ss->assign("PROXY_CONFIG_DISPLAY", 'none');
+        }
+        if (!empty($focus->settings['proxy_auth'])) {
+            $this->ss->assign("PROXY_AUTH_DISPLAY", 'inline');
+        } else {
+            $this->ss->assign("PROXY_AUTH_DISPLAY", 'none');
+        }
+        if (!empty($configurator->config['logger']['level'])) {
+            $this->ss->assign('log_levels', get_select_options_with_id(LoggerManager::getLoggerLevels(), $configurator->config['logger']['level']));
+        } else {
+            $this->ss->assign('log_levels', get_select_options_with_id(LoggerManager::getLoggerLevels(), ''));
+        }
+        if (!empty($configurator->config['logger']['file']['suffix'])) {
+            $this->ss->assign('filename_suffix', get_select_options_with_id(SugarLogger::$filename_suffix, $configurator->config['logger']['file']['suffix']));
+        } else {
+            $this->ss->assign('filename_suffix', get_select_options_with_id(SugarLogger::$filename_suffix, ''));
+        }
+        if (isset($configurator->config['logger_visible'])) {
+            $this->ss->assign('logger_visible', $configurator->config['logger_visible']);
+        } else {
+            $this->ss->assign('logger_visible', true);
+        }
+        if (isset($configurator->config['stackTrace'])) {
+            $this->ss->assign('stackTrace', $configurator->config['stackTrace']);
+        } else {
+            $this->ss->assign('stackTrace', false);
+        }
+        // Check for Google Sync JSON
+        $this->checkGoogleSyncJSON($configurator->config['google_auth_json']);
 
-      echo $this->getModuleTitle(false);
+        echo $this->getModuleTitle(false);
 
-      $this->ss->display('modules/Configurator/tpls/EditView.tpl');
+        $this->ss->display('modules/Configurator/tpls/EditView.tpl');
 
-      $javascript = new javascript();
-      $javascript->setFormName("ConfigureSettings");
-      $javascript->addFieldGeneric("notify_fromaddress", "email", $mod_strings['LBL_NOTIFY_FROMADDRESS'], true, "");
-      $javascript->addFieldGeneric("notify_subject", "varchar", $mod_strings['LBL_NOTIFY_SUBJECT'], true, "");
-      $javascript->addFieldGeneric("proxy_host", "varchar", $mod_strings['LBL_PROXY_HOST'], true, "");
-      $javascript->addFieldGeneric("proxy_port", "int", $mod_strings['LBL_PROXY_PORT'], true, "");
-      $javascript->addFieldGeneric("proxy_password", "varchar", $mod_strings['LBL_PROXY_PASSWORD'], true, "");
-      $javascript->addFieldGeneric("proxy_username", "varchar", $mod_strings['LBL_PROXY_USERNAME'], true, "");
-      echo $javascript->getScript();
-   }
+        $javascript = new javascript();
+        $javascript->setFormName("ConfigureSettings");
+        $javascript->addFieldGeneric("notify_fromaddress", "email", $mod_strings['LBL_NOTIFY_FROMADDRESS'], true, "");
+        $javascript->addFieldGeneric("notify_subject", "varchar", $mod_strings['LBL_NOTIFY_SUBJECT'], true, "");
+        $javascript->addFieldGeneric("proxy_host", "varchar", $mod_strings['LBL_PROXY_HOST'], true, "");
+        $javascript->addFieldGeneric("proxy_port", "int", $mod_strings['LBL_PROXY_PORT'], true, "");
+        $javascript->addFieldGeneric("proxy_password", "varchar", $mod_strings['LBL_PROXY_PASSWORD'], true, "");
+        $javascript->addFieldGeneric("proxy_username", "varchar", $mod_strings['LBL_PROXY_USERNAME'], true, "");
+        echo $javascript->getScript();
+    }
 
-   /**
-    * 
-    * @param string $googleAuthJSON
-    */
-   protected function checkGoogleSyncJSON($googleAuthJSON) {
-      $json = base64_decode($googleAuthJSON);
-      $config = json_decode($json, true);
-      if ( $config ) {
-         $this->ss->assign("GOOGLE_JSON_CONF", 'CONFIGURED');
-         $this->ss->assign("GOOGLE_JSON_CONF_COLOR", 'green');
-      } else {
-         $this->ss->assign("GOOGLE_JSON_CONF", 'UNCONFIGURED');
-         $this->ss->assign("GOOGLE_JSON_CONF_COLOR", 'black');
-      }
-   }
+    /**
+     *
+     * @param string $googleAuthJSON
+     */
+    protected function checkGoogleSyncJSON($googleAuthJSON)
+    {
+        $json = base64_decode($googleAuthJSON);
+        $config = json_decode($json, true);
+        if ($config) {
+            $this->ss->assign("GOOGLE_JSON_CONF", 'CONFIGURED');
+            $this->ss->assign("GOOGLE_JSON_CONF_COLOR", 'green');
+        } else {
+            $this->ss->assign("GOOGLE_JSON_CONF", 'UNCONFIGURED');
+            $this->ss->assign("GOOGLE_JSON_CONF_COLOR", 'black');
+        }
+    }
 
 }

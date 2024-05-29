@@ -109,12 +109,14 @@ function searchByPhrase() {
 }
 
 function showSaveFilterPopup() {
+    let myObjects = store.myObjects
     popups.showPopup({
         title: languages.label('LBL_ESLIST_SAVE_FILTER'),
         component: ListViewSaveFilterPopup,
         icon: 'mdi-content-save-outline',
         data: {
             filterRows,
+            myObjects,
         },
     })
 }
@@ -192,6 +194,8 @@ function setFilters(filterRows: FilterRow[]) {
 
 function deleteSavedFilter(filter: string) {
     store.preferences.saved_filters = store.preferences?.saved_filters.filter((f) => f.name !== filter)
+    filterRows.value = []
+    activeFilter.value = null
     store.savePreferences()
 }
 
@@ -207,6 +211,7 @@ watch(activeFilter, () => {
     filterRows.value = cloneDeep(
         store.preferences?.saved_filters?.find((f) => f.name === activeFilter.value)?.filters ?? [],
     )
+    store.myObjects = store.preferences?.saved_filters?.find((f) => f.name === activeFilter.value)?.myObjects ?? false;
 })
 </script>
 

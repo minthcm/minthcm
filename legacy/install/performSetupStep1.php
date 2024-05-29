@@ -229,7 +229,6 @@ foreach ($beanFiles as $bean => $file) {
         installerHook('pre_createModuleTable', array('module' => $focus->getObjectName()));
         SugarBean::createRelationshipMeta($focus->getObjectName(), $db, $table_name, $empty, $focus->module_dir);
         installerHook('post_createModuleTable', array('module' => $focus->getObjectName()));
-        echo ".";
     } // end if()
 }
 

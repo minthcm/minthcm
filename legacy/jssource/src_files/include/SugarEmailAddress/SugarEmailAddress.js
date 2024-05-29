@@ -287,6 +287,12 @@
          removeButton.attr( 'module', this.module );
          removeButton.click( _eaw.removeEmailAddress );
 
+         if(_eaw.totalEmailAddresses < 1 && $("input[name='merge_module']").length > 0){
+             viewTools.form.hideRemoveButtonsEmail();
+         }else{
+             viewTools.form.showRemoveButtonsEmail();
+         }
+ 
          // Record id
          var recordId = lineContainer.find( 'input#record-id' );
          recordId.attr( 'name', this.module + _eaw.id + "emailAddressId" + _eaw.totalEmailAddresses );
@@ -296,7 +302,7 @@
 
          // Fix #9271 - Keeping record of primary email, after adding secondary
          var primaryPreviousValue = $("input[name='"+ _eaw.module + "0emailAddressPrimaryFlag']:checked").val();
-      
+ 
 
          // Primary checkbox
          var primaryCheckbox = lineContainer.find( 'input#email-address-primary-flag' );
@@ -320,7 +326,7 @@
          if ( this.module == 'Users' && primaryCheckbox.attr( "checked" ) ) {
             removeButton.prop( 'disabled', true );
          }
-      
+ 
          // Fix #9271 - Keeping record of primary email, after adding secondary
          if (!primaryFlag && primaryPreviousValue) {
             $('input[value="'+primaryPreviousValue+'"].email-address-primary-flag').prop("checked", true);
@@ -435,6 +441,11 @@
 
          _eaw.totalEmailAddresses = $( '.email-address-line-container:not(.template)' ).length;
 
+         if(_eaw.totalEmailAddresses < 2 && $("input[name='merge_module']").length > 0) {
+             viewTools.form.hideRemoveButtonsEmail();
+         } else {
+             viewTools.form.showRemoveButtonsEmail();
+         }
 
          //var primaryFound = ($('[name='+ module + '0emailAddressPrimaryFlag]:checked').length != 0);
          if ( $( '[name=' + module + id + 'emailAddressPrimaryFlag]:checked' ).length == 0 ) {

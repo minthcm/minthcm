@@ -92,11 +92,11 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 
 global $mod_strings, $app_strings, $sugar_config;
 
-$module_menu[] = Array( "index.php?module=Delegations&action=EditView&return_module=Delegations&return_action=index", $mod_strings['LNK_NEW_DELEGATIONS'], "Create", 'Delegations' );
+$module_menu[] = Array( "index.php?module=Delegations&action=EditView&return_module=Delegations&return_action=DetailView", $mod_strings['LNK_NEW_DELEGATIONS'], "Create", 'Delegations' );
 $module_menu[] = Array( "index.php?module=Delegations&action=index&", $mod_strings['LNK_LIST_DELEGATIONS'], "List", 'Delegations' );
 
-$module_menu[] = Array( "index.php?module=Costs&action=EditView&return_module=Delegations&return_action=index", $mod_strings['LNK_NEW_COST'], "Create", 'Costs' );
+$module_menu[] = Array( "index.php?module=Costs&action=EditView&return_module=Costs&return_action=DetailView", $mod_strings['LNK_NEW_COST'], "Create", 'Costs' );
 $module_menu[] = Array( "index.php?module=Costs&action=index", $mod_strings['LNK_LIST_COST'], "List", 'Delegations' );
 
-$module_menu[] = Array( "index.php?module=Transportations&action=EditView&return_module=Delegations&return_action=index", $mod_strings['LNK_NEW_RECORD'], "Create", 'Transportations' );
+$module_menu[] = Array( "index.php?module=Transportations&action=EditView&return_module=Transportations&return_action=DetailView", $mod_strings['LNK_NEW_RECORD'], "Create", 'Transportations' );
 $module_menu[] = Array( "index.php?module=Transportations&action=index", $mod_strings['LBL_SEARCH_FORM_TITLE'], "List", 'Transportations' );

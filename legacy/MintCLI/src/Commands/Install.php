@@ -90,7 +90,7 @@ class Install extends Command
         $io->section('Setting up files permissions...');
         $installer->setupFilesPermissions();
 
-        $io->section('Reindexing Elastic');
+        $io->section('Reindexing Elastic...');
         $installer->reindexElastic();
 
         $io->success('Installation finished successfuly');

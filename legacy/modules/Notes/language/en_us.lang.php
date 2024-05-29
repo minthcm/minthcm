@@ -109,4 +109,5 @@ $mod_strings = array(
     'LBL_DELETED' => 'Deleted',
     'LBL_LIST_TITLE' => 'Note or Attachment',
     'LBL_FILE_CONTENTS' => 'File Contents',
+    'LBL_APPRAISAL' => 'Appraisal',
 );

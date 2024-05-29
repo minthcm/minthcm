@@ -17,7 +17,7 @@
         >
             <v-list-item
                 v-for="action in modules.activeModule.actions"
-                :key="action.action"
+                :key="action.action+modules.activeModule"
                 class="nav-item module-action"
                 :value="action.action"
                 :to="url.fromLegacyUrl(action.url)"

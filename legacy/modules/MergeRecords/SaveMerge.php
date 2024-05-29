@@ -82,7 +82,7 @@ foreach ($_REQUEST['merged_ids'] as $mergeId) {
 foreach ($focus->merge_bean->column_fields as $field) {
     if (isset($_POST[$field])) {
         $value = $_POST[$field];
-        if (is_array($value) && !empty($focus->merge_bean->field_defs[$field]['isMultiSelect'])) {
+        if (is_array($value) && $focus->merge_bean->field_defs[$field]['type'] === 'multienum') {
             if (empty($value[0])) {
                 unset($value[0]);
             }
@@ -152,10 +152,7 @@ if (is_array($_POST['merged_ids'])) {
             if ($mergeSource->load_relationship($name)) {
                 //check to see if loaded relationship is with email address
                 $relName = $mergeSource->$name->getRelatedModuleName();
-                if (!empty($relName) && strtolower($relName) == 'emailaddresses') {
-                    //handle email address merge
-                    handleEmailMerge($focus, $name, $mergeSource->$name->get());
-                } else {
+                if (empty($relName) || strtolower($relName) != 'emailaddresses') {
                     $data = $mergeSource->$name->get();
                     if (is_array($data) && $focus->merge_bean->load_relationship($name)) {
                         foreach ($data as $related_id) {
