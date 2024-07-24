@@ -51,32 +51,25 @@ const store = useAuthViewStore()
 const preferences = usePreferencesStore()
 
 const languagesList = computed<MenuListItem[]>(() => {
+    const getFlagCode = (code: string) => {
+        let [lang, country] = code.split('_')
+        if (['ar','fa','he','ur','yi'].includes(lang.toLowerCase())){
+            country = 'arab'
+        }
+        return `fi-${country.toLowerCase()}`
+    }
     return Object.entries(preferences.global?.languages ?? {}).map(([code, title]) => ({
         title: title?.toString() || '',
-        icon: `fi-${code.split('_')?.[1]?.toLowerCase()}`, // en_us => fi-us, pl_PL => fi-pl
+        icon: getFlagCode(code),
         onClick: () => {
             changeLanguage(code)
         },
     }))
 })
 
-async function changeLanguage(lang = 'pl_PL') {
-    backend.initialLoading = true
-    const response = await axios.get('api/languages', {
-        params: {
-            lang,
-        },
-    })
-    if (!response?.data) {
-        return
-    }
-    languages.languages = {
-        app_strings: response.data.app_strings,
-        app_list_strings: response.data.app_list_strings,
-        modules: {},
-    }
-    languages.currentLanguage = lang
-    backend.initialLoading = false
+async function changeLanguage(lang = 'en_us') {
+    localStorage.setItem('currentLang', lang)
+    document.location.reload()
 }
 </script>
 

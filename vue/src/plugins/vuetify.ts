@@ -2,6 +2,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 import { createVuetify } from 'vuetify'
+import * as locales from 'vuetify/locale'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 const variables = {
@@ -9,7 +10,18 @@ const variables = {
     'drawer-width': '460px',
 }
 
+const currentLang = localStorage.getItem('currentLang') || 'en_us'
+let locale = currentLang.split('_')[0] || 'en'
+if (!locales[locale]) {
+    locale = 'en'
+}
+
 export default createVuetify({
+    locale: {
+        locale,
+        fallback: locale,
+        messages: { [locale]: locales[locale] },
+    },
     icons: {
         defaultSet: 'mdi',
         sets: { mdi },

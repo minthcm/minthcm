@@ -19,10 +19,4 @@
     {/php}
 {/capture}
 
-{if $key == 'Planned'}
-    <span style="color:#6f6f6f;border:solid 1px;padding:5px 12px;border-radius:7px;border-color:#84d2e4;background:#f5fcff;white-space:nowrap"><b>{$status}</b></span>
-{elseif $key == 'Held'}
-    <span style="color:#6f6f6f;border:solid 1px;padding:5px 12px;border-radius:7px;border-color:#afedad;background:#f5fff5;white-space:nowrap"><b>{$status}</b></span>
-{else}
-    <span style="color:#6f6f6f;border:solid 1px;padding:5px 12px;border-radius:7px;border-color:#ed8083;background:#fff5f5;white-space:nowrap"><b>{$status}</b></span>
-{/if}
+<span style="{$style}"><b>{$status}</b></span>

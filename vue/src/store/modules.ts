@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { useBackendStore } from './backend'
 import { useUrlStore } from './url'
 import { useLanguagesStore } from './languages'
+import { useRoute } from 'vue-router'
 
 /** backend defs */
 export interface ModulesDefs {
@@ -10,6 +11,8 @@ export interface ModulesDefs {
         name: string
         icon: string
         actions: ModuleAction[]
+        vardefs: unknown
+        metadata: ModuleMetadata
         acl: { [view: string]: number }
     }
 }
@@ -23,6 +26,8 @@ export interface Module {
     label: string
     icon: string
     actions: ModuleAction[]
+    vardefs: unknown
+    metadata: ModuleMetadata
     acl: { [view: string]: number }
 }
 
@@ -30,7 +35,30 @@ export interface ModuleAction {
     name: string
     url: string
     action: string
+    original_url: string
     icon: string
+    params: ModuleActionParams
+}
+
+export interface ModuleActionParams {
+    view: string
+}
+
+interface SubpanelColumn {
+    name: string
+    label: string
+    type: string
+    usage?: string
+}
+
+export interface ModuleMetadata {
+    Subpanels: {
+        [key: string]: {
+            properties: { [key: string]: string | number }
+            columns: null | { [key: string]: SubpanelColumn }
+        }
+    }
+    RecordView: any
 }
 
 export interface FieldVardef {
@@ -44,9 +72,9 @@ export interface FieldVardef {
 }
 
 export const useModulesStore = defineStore('modules', () => {
-    const backend = useBackendStore()
-    const url = useUrlStore()
+    const backend = useBackendStore() 
     const languages = useLanguagesStore()
+    const route = useRoute()
 
     const modulesDefs = ref<ModulesDefs | null>(null)
 
@@ -63,28 +91,55 @@ export const useModulesStore = defineStore('modules', () => {
             if (m.icon?.slice(0, 4) !== 'mdi-') {
                 icon = `mdi-${m.icon}`
             }
-            modules[m.name] = {
+
+            const moduleData = { 
                 ...m,
                 icon,
-                label,
+                label
             }
+            moduleData.actions = getModuleActions(moduleData.actions)
+            
+            modules[m.name] = moduleData
         })
         return modules
     })
 
-    const activeModule = computed(() => {
-        return modules.value[url.module]
+    const currentModule = computed(() => {        
+        const url = useUrlStore()
+        const moduleName = route.params.module ?? url.module
+        if (moduleName && typeof moduleName === 'string') {
+            return modules.value[moduleName]
+        }
+        return null
     })
 
     const visibleModules = computed(() => {
         return backend.initData?.menu_modules.map((moduleName) => modules.value[moduleName]) ?? []
     })
 
+    function getModuleActions(actions: Array<ModuleAction>) { 
+        const response: ModuleAction[] = []
+        for (const action of actions) {
+            if(!action.original_url){
+                action.original_url = action.url
+            }
+            if (action.params?.view && action.params.view != route.params.action) {
+                continue 
+            }
+
+            const recordId: string = route.params?.record ?? ''
+            action.url = action.original_url?.replace('{record_id}', recordId)
+
+            response.push(action)
+        }
+        return response
+    }
+
     return {
         modules,
         modulesDefs,
         defaultIcon,
         visibleModules,
-        activeModule,
+        currentModule,
     }
 })

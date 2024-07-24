@@ -139,7 +139,8 @@ array (
             'name' => 'name',
             'label' => 'LBL_SUBJECT',
           ),
-          1 => 'status',
+          1 =>
+            array('name' => 'status'),
         ),
         1 => 
         array (

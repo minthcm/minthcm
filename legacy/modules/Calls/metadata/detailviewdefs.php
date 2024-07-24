@@ -162,9 +162,9 @@ array (
           ),
           1 => 
           array (
-            'name' => 'direction',
-            'customCode' => '{$fields.direction.options[$fields.direction.value]} {$fields.status.options[$fields.status.value]}',
+            'name' => 'status',
             'label' => 'LBL_STATUS',
+            'type' => 'ColoredActivityStatus',
           ),
         ),
         1 => 

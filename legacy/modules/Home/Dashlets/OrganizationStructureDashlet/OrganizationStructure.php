@@ -60,7 +60,7 @@ class OrganizationStructure
             WHERE ou.deleted=0 AND ou.group_type IN ('department', 'team')
         UNION ALL
             SELECT
-                CONCAT('{\"name\":\"',p.name,'\",\"title\": {\"val\": \"',u.first_name, ' ',u.last_name,'\", \"href\":\"{$siteURL}/index.php?module=Employees&action=DetailView&record=',u.id,'\"}}') AS text
+                CONCAT('{\"name\":\"',p.name,'\",\"title\": {\"val\": \"',u.first_name, ' ',u.last_name,'\", \"href\":\"{$siteURL}legacy/index.php?module=Employees&action=DetailView&record=',u.id,'\"}}') AS text
                 , ' '  AS 'HTMLclass'
                 , CONCAT('_',MD5(CONCAT(ou.id,u.id))) AS oid
                 , CONCAT('_',MD5( ou.id)) AS parent_id
@@ -74,7 +74,7 @@ class OrganizationStructure
         UNION ALL
             SELECT
                 
-                CONCAT('{\"name\":\"',p.name,'\",\"title\": {\"val\": \"',u.first_name, ' ',u.last_name,'\", \"href\":\"{$siteURL}/index.php?module=Employees&action=DetailView&record=',u.id,'\"}}') AS text
+                CONCAT('{\"name\":\"',p.name,'\",\"title\": {\"val\": \"',u.first_name, ' ',u.last_name,'\", \"href\":\"{$siteURL}legacy/index.php?module=Employees&action=DetailView&record=',u.id,'\"}}') AS text
                 , '-' AS 'HTMLclass'
                 , CONCAT('_',MD5(CONCAT(ou.id,u.id))) AS oid
                 , CONCAT('_',MD5(CONCAT(ou.id,u.reports_to_id))) AS parent_id
@@ -87,7 +87,7 @@ class OrganizationStructure
             INNER JOIN users u
                 ON u.securitygroup_id = ou.id  and u.id !=ou.current_manager_id
             INNER JOIN positions p on u.position_id = p.id
-            WHERE u.status='Active'  AND ou.group_type IN ('department', 'team')
+            WHERE u.employee_status='Active'  AND ou.group_type IN ('department', 'team')
 ";
     }
     protected function getDataBySQL()

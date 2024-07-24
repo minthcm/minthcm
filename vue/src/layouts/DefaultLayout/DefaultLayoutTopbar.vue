@@ -33,6 +33,7 @@
             <DefaultLayoutAlerts @close="alertsMenu = false" />
         </v-menu>
         <DefaultLayoutUser />
+        <div />
     </nav>
 </template>
 
@@ -89,7 +90,6 @@ function showModulesPopup() {
     gap: 16px;
     align-items: center;
     box-shadow: 0 0 1rem #0005;
-    padding-right: 16px;
 }
 .nav-btn {
     padding: 6px;

@@ -93,6 +93,7 @@ var ERR_REENTER_PASSWORDS = '{$MOD.ERR_REENTER_PASSWORDS}';
 	<input type="hidden" name="edit_self" id="edit_self" value='{$EDIT_SELF}' >
 	<input type="hidden" name="required_email_address" id="required_email_address" value='{$REQUIRED_EMAIL_ADDRESS}' >
     <input type="hidden" name="isDuplicate" id="isDuplicate" value="{$isDuplicate}">
+    <input type="hidden" name="systemGeneratedPasswordSetting" id="systemGeneratedPasswordSetting" value="{$SYSTEM_GENERATED_PASSWORD_SETTING}">
 	<div id="popup_window"></div>
 
 <script type="text/javascript">

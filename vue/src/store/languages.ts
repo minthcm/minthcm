@@ -9,7 +9,7 @@ export interface Languages {
 }
 
 export const useLanguagesStore = defineStore('languages', () => {
-    const currentLanguage = 'pl_PL'
+    const currentLanguage = 'en_us'
     const languages = ref<Languages>({
         app_strings: {},
         app_list_strings: {},
