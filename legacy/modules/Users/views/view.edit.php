@@ -82,8 +82,11 @@ class UsersViewEdit extends ViewEdit
    }
 
    public function display() {
-      global $current_user, $app_list_strings, $mod_strings;
+      global $current_user, $app_list_strings, $mod_strings, $sugar_config;
 
+      if(isset($sugar_config['passwordsetting']['SystemGeneratedPasswordON'])){
+        $this->ss->assign('SYSTEM_GENERATED_PASSWORD_SETTING', $sugar_config['passwordsetting']['SystemGeneratedPasswordON']);
+      }
 
       //lets set the return values
       if ( isset($_REQUEST['return_module']) ) {

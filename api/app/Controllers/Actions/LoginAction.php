@@ -65,13 +65,15 @@ class LoginAction
 
     public function __invoke(Request $request, Response $response, array $args): Response
     {
+        global $sugar_config;
         $response = $response->withHeader('Content-type', 'application/json');
+        $lang = $request->getAttribute('lang') ?? $sugar_config['default_language'];
 
         $response_body = array();
         $response_body['global'] = $this->preferences_controller->getGlobalSettings();
         global $system_config;
         $response_body['global']['ldap_enabled'] = !empty($system_config->settings['system_ldap_enabled']) && $system_config->settings['system_ldap_enabled'] == true;
-        $response_body['languages'] = $this->languages_controller->getLanguages();
+        $response_body['languages'] = $this->languages_controller->getLanguages([], $lang);
         
         $response->getBody()->write(json_encode($response_body));
         return $response;

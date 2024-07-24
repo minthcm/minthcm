@@ -551,6 +551,8 @@ class SugarBean {
                   }
                   // no break
                default:
+                    $this->field_defs[$field]['field_module_name'] = $_REQUEST['module'];
+                    $this->field_defs[$field]['field_record'] = $_REQUEST['record'];
                   if ( isset($value['default']) && $value['default'] !== '' ) {
                      $this->$field = htmlentities($value['default'], ENT_QUOTES, 'UTF-8');
                   } else {

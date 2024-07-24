@@ -4978,7 +4978,7 @@ SUGAR.append( SUGAR.util, {
                                                 parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + childElement.id ) );
                                                }
                                             /* MintHCM #122649 END */
-                                           if ( parent.length === 0 ) {
+                                           if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
                                               window.location.reload( true )
                                            } else {
                                               //else just refresh the parent panel using the SUGAR.mysugar.retrieveDashlet method

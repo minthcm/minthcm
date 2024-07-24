@@ -59,7 +59,14 @@ $routes = array(
             'auth' => false,
         ),
         "pathParams" => array(),
-        "queryParams" => array(),
+        "queryParams" => array(
+            'lang' => array(
+                "type" => StringType::class,
+                "required" => false,
+                "desc" => "Language",
+                "example" => 'en_us',
+            ),
+        ),
         "bodyParams" => array(),
     ),
     "global_search" => array(

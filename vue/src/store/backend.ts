@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { useApi } from '@/composables/useApi'
 import { useAuthStore, User } from './auth'
 import { useAlertsStore } from './alerts'
 import { useFavoritesStore } from './favorites'
@@ -48,7 +47,6 @@ export const useBackendStore = defineStore('backend', () => {
 
     async function init() {
         const auth = useAuthStore()
-        const api = useApi()
         try {
             const initResponse = await axios.get<InitResponse>('api/init')
             initData.value = initResponse.data
@@ -58,14 +56,21 @@ export const useBackendStore = defineStore('backend', () => {
                 app_list_strings: initResponse.data.languages?.app_list_strings ?? {},
                 modules: {},
             }
-            languages.currentLanguage = initResponse.data.global?.default_language ?? 'en_us'
+            languages.currentLanguage =
+                localStorage.getItem('currentLang') ?? initResponse.data.global?.default_language ?? 'en_us'
             modules.modulesDefs = initResponse.data?.modules ?? {}
             alerts.init()
             favorites.fetch()
             recents.fetch()
         } catch (err) {
             if ((err as AxiosError).response?.status === 401) {
-                const loginData = (await api.get('api/login')).data
+                const loginData = (
+                    await axios.get('api/login', {
+                        params: {
+                            lang: localStorage.getItem('currentLang') ?? 'en_us',
+                        },
+                    })
+                ).data
                 languages.languages = {
                     app_strings: loginData.languages?.app_strings ?? {},
                     app_list_strings: loginData.languages?.app_list_strings ?? {},
@@ -74,8 +79,17 @@ export const useBackendStore = defineStore('backend', () => {
                     },
                 }
                 preferences.global = loginData.global
-                languages.currentLanguage = loginData.global?.default_language ?? 'en_us'
-                if (router.currentRoute.value.meta?.auth !== false) {
+                languages.currentLanguage =
+                    localStorage.getItem('currentLang') ?? loginData.global?.default_language ?? 'en_us'
+                if(window.location.href.search('/auth/reset') !== -1){
+                    const token = window.location.hash.substring(1).split('?').reduce(function (previousValue, currentParam) {
+                            const parts = currentParam.split('=');
+                            previousValue[parts[0]] = parts[1];
+                            return previousValue;
+                        }, {} as any
+                    )?.token;
+                    router.push({ name: 'auth-reset', query: { token: token} })
+                } else if (router.currentRoute.value.meta?.auth !== false) {
                     router.push({ name: 'auth-login' })
                 }
             } else if ((err as AxiosError).response?.status === 307) {
