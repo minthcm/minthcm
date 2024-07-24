@@ -811,7 +811,16 @@
              setTimeout( this.hideStatus, miliseconds );
           }
        }
-    }
+   },
+   mask: {
+        show: function () {
+            var mask = '<div class="mask" id="dlg_mask" style="z-index: 3; height: 100%; width: 100%; display: block; opacity: 0.5;">&nbsp;</div>';
+            $("#bootstrap-container").append(mask); 
+        },
+        hide: function () {
+            $("#bootstrap-container .mask").remove()
+        }
+   }
     /*View Tools END #37980 ([7.7.X] Dodanie alertów w stylu ajaxStatus)*/
  };
  window.viewTools.date = {

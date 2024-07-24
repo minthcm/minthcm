@@ -96,7 +96,23 @@ form
 {
     height: 47.5px;
     width: 250px;
-} 	
+}
+.outer_table{
+    padding: 10px;
+    width: 30%;
+    text-align: center;
+}
+.inner_table{
+    text-align: center;
+}
+.vt_submit{
+    display: block;
+    width: 50%;
+}
+.error{
+    margin-bottom: 0px;
+    padding: 0px;
+}
 -->
 </style>
 {/literal}
@@ -105,7 +121,7 @@ form
 <table cellpadding="0" align="center" width="100%" cellspacing="0" border="0">
 <tr>
 <td>
-<table cellpadding="0"  cellspacing="0" border="0" align="center">
+<table class="outer_table" cellpadding="0"  cellspacing="0" border="0" align="center">
 <tr>
 <td style="padding-bottom: 10px;" >
 <img src="{$sugar_md}" alt="SuiteCRM" /></td>
@@ -113,12 +129,12 @@ form
 <tr>
 <td align="center">
 
-		<table cellpadding="0" cellspacing="2" border="0" align="center" width="100%" class="edit view">
+		<table class="table inner_table" cellpadding="0" cellspacing="2" border="0" align="center" width="100%" class="edit view">
 		<tr>
-			<td colspan="2" width="100%" style="font-size: 12px; padding-bottom: 5px; font-weight: normal;">{$INSTRUCTION}</td>
+			<td colspan="2" width="100%" style="font-size: 18px; padding-bottom: 5px; margin-bottom: 0px; font-weight: normal;">{$INSTRUCTION}</td>
 		</tr>
 		<tr>
-			<td colspan="2" width="100%" style="font-size: 12px; padding-bottom: 5px; font-weight: normal; color: red;">{$ERRORS}</td>
+			<td colspan="2" width="100%" style="font-size: 14px; padding-bottom: 5px; margin-bottom: 0px; font-weight: normal; color: red;">{$ERRORS}</td>
 		</tr>
 			<input type="hidden" name="entryPoint" value="{$ENTRY_POINT}" />
 			<input type='hidden' name='action' value="{$ACTION}" />
@@ -139,9 +155,9 @@ form
 			<input type="hidden" name="user_name" value="{$USER_NAME}" />
 			<input type='hidden' name='saveConfig' value='0' />
 		<tr>
-			<td  colspan='2'><span id='post_error' class="error">{$EXPIRATION_TYPE}&nbsp;</span></td>
+			<td colspan='2'><span id='post_error' class="error">{$EXPIRATION_TYPE}&nbsp;</span></td>
 		</tr>
-		
+
 		<tr>
 		{if $OLD_PASSWORD_FIELD == '' &&  $USERNAME_FIELD == '' }
 		<td  width="30%"></td><td></td>
@@ -149,19 +165,23 @@ form
 			{$OLD_PASSWORD_FIELD}
 			{$USERNAME_FIELD}
 		</tr>
+     
 		<tr>
 			<td scope="row">{$MOD.LBL_NEW_PASSWORD}:</td>
 			<td width="30%">
 				<input type="password" size="26" tabindex="2" id="new_password" name="new_password" value="" onkeyup="password_confirmation();newrules('{$PWDSETTINGS.minpwdlength}','{$PWDSETTINGS.maxpwdlength}','{$REGEX}');" /></td>
 		</tr>
+    
 		<tr>
 			<td scope="row">{$MOD.LBL_NEW_PASSWORD2}:</td>
 			<td width="30%">
 				<input type="password" size="26" tabindex="2" id="confirm_pwd" name="confirm_pwd" value="" onkeyup="password_confirmation();" /> <div id="comfirm_pwd_match" class="error" style="display: none;">{$MOD.LBL_PASSWORD_MIS_MATCH}</div></td>
 		</tr>
+  
 		<tr>
 			<td>{$CAPTCHA}</td>
 		</tr>
+   
 		<tr>
 			<td>&nbsp;</td>
 			<td>

@@ -133,6 +133,19 @@ if (!empty($_POST['saveConfig'])) {
             $_POST['passwordsetting_lockoutexpiration'] = 2;
         }
 
+        if(isset($_POST['passwordsetting_SystemGeneratedPasswordON']) && $_POST['passwordsetting_SystemGeneratedPasswordON'] == 0) {
+            $_POST['passwordsetting_systexpiration'] = '0';
+            $_POST['passwordsetting_systexpirationtime'] = '';
+            $_POST['passwordsetting_systexpirationtype'] = '1';
+            $_POST['passwordsetting_systexpirationlogin'] = '';
+        }
+
+        if(isset($_POST['passwordsetting_forgotpasswordON']) && $_POST['passwordsetting_forgotpasswordON'] == 0) {
+            $_POST['passwordsetting_linkexpiration'] = '0';
+            $_POST['passwordsetting_linkexpirationtime'] = '';
+            $_POST['passwordsetting_linkexpirationtype'] = '1';
+        }
+
         $configurator->config['passwordsetting']['oneupper'] = $_POST['passwordsetting_oneupper'];
         $configurator->config['passwordsetting']['onelower'] = $_POST['passwordsetting_onelower'];
         $configurator->config['passwordsetting']['onenumber'] = $_POST['passwordsetting_onenumber'];

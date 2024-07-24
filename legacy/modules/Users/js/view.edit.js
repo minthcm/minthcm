@@ -38,13 +38,16 @@ viewTools.form.afterSave(function(){
     let employee_id = $('#record').val();
     let result = false;
     if(
-        (
-            $("#confirm_pwd").val().length <= 0 
-            && $("#new_password").val().length <= 0 
-            && employee_id === ''
+        $('#systemGeneratedPasswordSetting').val() !== '1'
+        && (
+            (
+                $("#confirm_pwd").val().length <= 0 
+                && $("#new_password").val().length <= 0 
+                && employee_id === ''
+            )
+            || $("#new_password").val().length !== $("#confirm_pwd").val().length
+            || $("#new_password").val() !== $("#confirm_pwd").val()
         )
-        || $("#new_password").val().length !== $("#confirm_pwd").val().length
-        || $("#new_password").val() !== $("#confirm_pwd").val()
     ){
         setTimeout(function(){
             viewTools.GUI.statusBox.hideStatus();

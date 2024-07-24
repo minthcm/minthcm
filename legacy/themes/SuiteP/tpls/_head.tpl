@@ -44,7 +44,7 @@
 
 *}
 <!DOCTYPE html>
-<html {$langHeader}>
+<html {$langHeader} {$dirHeader} >
 <head>
     <link rel="SHORTCUT ICON" href="{$FAVICON_URL}">
     <meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">

@@ -107,7 +107,8 @@ $listViewDefs['Tasks'] = array(
         'width' => '10', 
         'label' => 'LBL_LIST_STATUS', 
         'link' => false,
-        'default' => false),
+        'default' => false,  
+    ),
 	'DATE_ENTERED' => array (
 	    'width' => '10',
 	    'label' => 'LBL_DATE_ENTERED',

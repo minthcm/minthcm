@@ -51,14 +51,11 @@ class ScheduleGenerateOnboardingOffboarding
 
     public function __construct($module_name, $template_id, $employee_id, $date_start)
     {
-        global $timedate;
         $this->module_name = $module_name;
         $this->template_id = $template_id;
         $this->employee_id = $employee_id;
-        $this->date_start = $date_start;
-        if (!empty($this->date_start)) {
-            $ds = getDateTimeObject($this->date_start);
-            $this->date_start = $ds->format($timedate->get_db_date_time_format());
+        if (!empty($date_start)) {
+            $this->date_start = (new SugarDateTime($date_start))->asDb();
         }
     }
 

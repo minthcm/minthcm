@@ -106,11 +106,26 @@ class Module
             $acl = \ACLAction::getUserActions($current_user->id, false) ?? [];
             chdir('../api');
         }
+        if(is_array($acl[$module]['module'])){
+            foreach($acl[$module]['module'] as $view => $access){
+                if($current_user->isAdmin()){
+                    switch($view){
+                        case 'access':
+                            $acl[$module]['module'][$view]['aclaccess'] = ACL_ALLOW_ENABLED;
+                        break;
+                        default:
+                            $acl[$module]['module'][$view]['aclaccess'] = ACL_ALLOW_ALL;
+                        break;
+                    }
+                }
+            }
+        }
         return array(
             "name" => $module,
             "icon" => $this->modules_icons[$module] ?? $this->modules_icons['default'],
-            "actions" => 'Home' === $module ? $this->getHomeMenu() : $this->getModuleMenu($module),
+            "actions" => $this->getModuleMenu($module),
             "acl" => array_map(function ($view) { return (int)$view['aclaccess']; }, $acl[$module]['module'] ?? []),
+            "dashboards" => 'Home' === $module ? $this->getHomeMenu() : array(),
         );
     }
 
@@ -145,6 +160,7 @@ class Module
                 "name" => $item[1],
                 "action" => $item[2],
                 "icon" => $this->action_icons[strtolower($item[2])] ?? $this->action_icons['default'],
+                "params" => $item[3] ?? array(),
             );
             if (isset($item[3])) {
                 $row['module'] = $item[3];

@@ -18,6 +18,5 @@ if(!file_exists('.htaccess')) {
   file_put_contents('.htaccess', $htaccess_body);
   
 }
-unlink('index.php');
 copy('vue/dist/index.html', 'index.html');
 header("Refresh:0");

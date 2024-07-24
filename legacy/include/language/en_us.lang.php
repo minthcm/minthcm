@@ -406,6 +406,13 @@ $app_list_strings = array(
         'Pending Input' => 'Pending Input',
         'Deferred' => 'Deferred',
     ),
+    'task_status_dom_coloredenum' => array(
+        'Not Started' => 'blue',
+        'In Progress' => 'yellow',
+        'Completed' => 'green',
+        'Pending Input' => 'yellow',
+        'Deferred' => 'grey',
+    ),
     'meeting_status_default' => 'Planned',
     'meeting_status_dom' => array(
         'Planned' => 'Planned',
@@ -4216,12 +4223,36 @@ $app_list_strings['status_list'] = array(
     'Scored' => 'Task Scored',
     'Scored2' => 'After Preliminary Meeting',
 );
+$app_list_strings['status_list_coloredenum'] = array(
+    'Acceptance' => 'yellow',
+    'AfterEntryInterview' => 'yellow',
+    'CandidateResignation' => 'grey',
+    'EntryInterview' => 'yellow',
+    'Hired' => 'green',
+    'InProgress' => 'yellow',
+    'MeetingAdditional' => 'yellow',
+    'MeetingPrimary' => 'yellow',
+    'Negotation' => 'yellow',
+    'New' => 'blue',
+    'Offer' => 'yellow',
+    'PracticalTask' => 'yellow',
+    'Preselection' => 'yellow',
+    'Rejected' => 'red',
+    'Scored' => 'yellow',
+    'Scored2' => 'yellow',
+);
 
 $app_list_strings['project_status_list'] = array(
     'for_approval' => 'For approval',
     'plan' => 'Planned',
     'open' => 'Open',
     'close' => 'Closed',
+);
+$app_list_strings['project_status_list_coloredenum'] = array(
+    'for_approval' => 'blue',
+    'plan' => 'yellow',
+    'open' => 'green',
+    'close' => 'grey',
 );
 
 $app_list_strings['reason_for_rejection_list'] = array(

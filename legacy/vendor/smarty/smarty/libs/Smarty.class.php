@@ -1096,6 +1096,15 @@ class Smarty
     function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {
         $msg = htmlentities($error_msg);
+        /* MintHCM #112747 START */
+        switch($error_type){
+            case E_USER_ERROR:
+                $GLOBALS['log']->fatal("Smarty fatal: $msg");
+                break;
+            default:
+                $GLOBALS['log']->debug("Smarty error: $msg");
+        }
+        /* MintHCM #112747 END */
         trigger_error("Smarty error: $msg", $error_type);
     }
 
