@@ -97,7 +97,6 @@ $mod_strings = array(
     'LBL_BTN_ADD' => 'Add',
     'LBL_BTN_EDIT' => 'Edit',
     'LBL_GENERATE_URL' => 'Generate URL',
-    'LBL_CALCULATED' => 'Calculated Value',
     'LBL_LINK_TARGET' => 'Open Link In',
     'LBL_IMAGE_WIDTH' => 'Width',
     'LBL_IMAGE_HEIGHT' => 'Height',

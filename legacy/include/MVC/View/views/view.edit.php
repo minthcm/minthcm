@@ -113,7 +113,12 @@ class ViewEdit extends SugarView
         //viewTools end #40916
         echo $this->ev->display($this->showTitle);
         //viewTools start #52440
-        echo '<script>viewTools.form.calculateSelectors();</script>';
+        echo '<script>const vtCSintervalEV = setInterval(() => {
+            if (typeof viewTools.form.calculateSelectors === \'function\') {
+                clearInterval(vtCSintervalEV)
+                viewTools.form.calculateSelectors()
+            }
+        }, 100);</script>';
         //viewTools end #52440
     }
 

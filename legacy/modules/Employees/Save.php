@@ -204,16 +204,17 @@ function populateFromRow(&$focus, $row)
         'phone_work',
         'phone_other',
         'phone_fax',
-        'address_street',
-        'address_city',
-        'address_state',
-        'address_country',
-        'address_country',
-        'address_postalcode',
+        'primary_address_street',
+        'primary_address_city',
+        'primary_address_state',
+        'primary_address_country',
+        'primary_address_country',
+        'primary_address_postalcode',
         'messenger_id',
         'messenger_type',
         'email1',
         'securitygroup_id',
+        'birthdate',
     );
 
     if (is_admin($GLOBALS['current_user'])) {

@@ -101,11 +101,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $this->ss->assign('PHONE_FAX', $current_user->phone_fax);
          $this->ss->assign('EMAIL1', $current_user->email1);
          $this->ss->assign('EMAIL2', $current_user->email2);
-         $this->ss->assign('ADDRESS_STREET', $current_user->address_street);
-         $this->ss->assign('ADDRESS_CITY', $current_user->address_city);
-         $this->ss->assign('ADDRESS_STATE', $current_user->address_state);
-         $this->ss->assign('ADDRESS_POSTALCODE', $current_user->address_postalcode);
-         $this->ss->assign('ADDRESS_COUNTRY', $current_user->address_country);
+         $this->ss->assign('ADDRESS_STREET', $current_user->primary_address_street);
+         $this->ss->assign('ADDRESS_CITY', $current_user->primary_address_city);
+         $this->ss->assign('ADDRESS_STATE', $current_user->primary_address_state);
+         $this->ss->assign('ADDRESS_POSTALCODE', $current_user->primary_address_postalcode);
+         $this->ss->assign('ADDRESS_COUNTRY', $current_user->primary_address_country);
          $configurator = new Configurator();
          if ($configurator->config['passwordsetting']['SystemGeneratedPasswordON']
                  || $configurator->config['passwordsetting']['forgotpasswordON']) {

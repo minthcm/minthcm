@@ -6,6 +6,7 @@ export interface Languages {
     app_strings: { [key: string]: string }
     app_list_strings: { [key: string]: { [key: string]: string } }
     modules: { [key: string]: { [key: string]: string } }
+    [key: string]: any
 }
 
 export const useLanguagesStore = defineStore('languages', () => {

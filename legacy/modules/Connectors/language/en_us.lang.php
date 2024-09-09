@@ -70,7 +70,6 @@ $mod_strings = array(
     'LBL_MODIFY_PROPERTIES_DESC' => 'Configure the properties for each connector, including URLs and API keys.',
     'LBL_MODIFY_SEARCH_TITLE' => 'Manage Connector Search',
     'LBL_MODIFY_SEARCH' => 'Search',
-    'LBL_MODIFY_SEARCH_DESC' => 'Select the connector fields to use to search for data for each module.',
     'LBL_MODULE_NAME' => 'Connectors',
     'LBL_NO_PROPERTIES' => 'There are no configurable properties for this connector.',
     'LBL_SAVE' => 'Save',
@@ -87,7 +86,6 @@ $mod_strings = array(
     'ERROR_NO_SEARCHDEFS_MAPPED' => 'Error: There are no connectors enabled that have search fields defined.',
     'ERROR_NO_SEARCHDEFS_MAPPING' => 'Error: There are no search fields defined for the module and connector. Please contact the system administrator.',
     'ERROR_NO_DISPLAYABLE_MAPPED_FIELDS' => 'Error: There are no module fields that have been mapped for display in the results. Please contact the system administrator.',
-    'LBL_INFO_INLINE' => 'Info' /*for 508 compliance fix*/,
     'LBL_CLOSE' => 'Close' /*for 508 compliance fix*/,
 
 );

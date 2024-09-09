@@ -47,8 +47,11 @@
 namespace MintHCM\Api\Controllers\Init;
 
 use BeanFactory;
+use DBManager;
+use DBManagerFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Entities\UserPreferences;
+use PDO;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
@@ -77,11 +80,11 @@ class Preferences
         return $response;
     }
 
-    public function getGlobalSettings()
+    public function getGlobalSettings($minified = false, $rebuild_array = [])
     {
         global $sugar_config;
 
-        return array(
+        $global_settings = [
             'calendar' => $sugar_config['calendar'],
             'currency' => $sugar_config['currency'],
             'date_format' => $sugar_config['datef'],
@@ -100,36 +103,36 @@ class Preferences
                 'onenumber' => $sugar_config['passwordsetting']['onenumber'] ?? false,
                 'onespecial' => $sugar_config['passwordsetting']['onespecial'] ?? false,
             ],
-            'time_zones' => \TimeDate::getTimezoneList(),
             'name_formats' => (new \Localization())->getUsableLocaleNameOptions($sugar_config['name_formats']),
-            'currencies' => $this->getCurrenciesList(),
-        );
+        ];
+        if(!$minified || in_array('reload_currency', $rebuild_array)){
+            $global_settings['currencies'] = $this->getCurrenciesList();
+        }
+        if(!$minified){
+            $global_settings['time_zones'] = \TimeDate::getTimezoneList();
+        }
+        return $global_settings;
     }
 
     protected function getCurrenciesList()
     {
         $return_list = [];
         chdir('../legacy/');
-        $currency = BeanFactory::getBean('Currencies');
-        $list = $currency->get_full_list('name');
-        $currency->retrieve('-99');
-        if (is_array($list)) {
-            $list = array_merge(array($currency), $list);
-        } else {
-            $list = array($currency);
-        }
-        foreach($list as $currency_bean){
-            $return_list[$currency_bean->id] = [
-                'id' => $currency_bean->id,
-                'iso4217' => $currency_bean->iso4217,
-                'name' => $currency_bean->name,
-                'status' => $currency_bean->status,
-                'conversion_rate' => $currency_bean->conversion_rate,
-                'symbol' => $currency_bean->symbol,
-                'hidden' => $currency_bean->hidden,
-                'currency_on_right' => $currency_bean->currency_on_right,
+        $db = DBManagerFactory::getInstance();
+        $result = $db->query("SELECT * FROM currencies WHERE deleted = 0");
+        while ($row = $db->fetchByAssoc($result)) {
+            $return_list[$row['id']] = [
+                'id' => $row['id'],
+                'iso4217' => $row['iso4217'],
+                'name' => $row['name'],
+                'status' => $row['status'],
+                'conversion_rate' => $row['conversion_rate'],
+                'symbol' => $row['symbol'],
+                'hidden' => $row['hidden'],
+                'currency_on_right' => $row['currency_on_right'],
             ];
         }
+        $return_list[-99] = (BeanFactory::newBean('Currencies'))->retrieve('-99')->toArray(true);
         chdir('../api/');
         return $return_list;
     }

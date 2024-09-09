@@ -49,38 +49,47 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
 
     const PLAN_FOR_DAYS = 10;
 
+    public function __construct()
+    {
+        $this->setType('WorkSchedulesNotPlandForTwoWeeks');
+    }
+
     public function run()
     {
         $work_schedules = $this->getNotPlannedWorkSchedules();
         foreach ($work_schedules as $work_schedule) {
-            if ($work_schedule == false) {
+            if (false == $work_schedule) {
                 continue;
             }
 
-            if(NotificationManager::notificationForRecordWithId('Users',$work_schedule['id'],'WorkSchedulesNotPlandForTwoWeeks')){
+            if (NotificationManager::notificationForRecordWithId('Users', $work_schedule['id'], $this->getType())) {
                 continue;
-             }
+            }
 
-            $options = ['url_redirect' => 'index.php?module=WorkSchedules' ];
+            $options = ['url_redirect' => 'index.php?module=WorkSchedules'];
             $this->getNewNotification()
                 ->setAssignedUserId($work_schedule['id'])->setRelatedBean($work_schedule['id'], 'Users')
-                ->setDescription(translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules'))->setType('WorkSchedulesNotPlandForTwoWeeks')
-                ->saveAsAlert(true,$options)->WebPush(true,true,$options);
+                ->setDescription(translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules'))->setType($this->getType())
+                ->saveAsAlert(true, $options)->WebPush(true, true, $options);
         }
     }
 
-    public function isWebPushableNotification(){
+    public function isWebPushableNotification()
+    {
         return true;
     }
-    public function getWebPushDescriptionConfig(){
+    public function getWebPushDescriptionConfig()
+    {
         return true;
     }
-    public function getWebPushLinkConfig(){
+    public function getWebPushLinkConfig()
+    {
         return true;
-     }
-     public function getWebPushOverrideConfig(){
-        return $options = ['url_redirect' => 'index.php?module=WorkSchedules' ];
-     }
+    }
+    public function getWebPushOverrideConfig()
+    {
+        return $options = ['url_redirect' => 'index.php?module=WorkSchedules'];
+    }
     protected function getNotPlannedWorkSchedules()
     {
         global $db;

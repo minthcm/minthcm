@@ -47,8 +47,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 $mod_strings = array(
-    'ERR_UW_CANNOT_DETERMINE_GROUP' => 'Cannot determine Group',
-    'ERR_UW_CANNOT_DETERMINE_USER' => 'Cannot determine Owner',
     'ERR_UW_CONFIG_WRITE' => 'Error updating config.php with new version information.',
     'ERR_UW_CONFIG' => 'Please make your config.php file writable and reload this page.',
     'ERR_UW_DIR_NOT_WRITABLE' => 'Directory not writable',
@@ -56,8 +54,6 @@ $mod_strings = array(
     'ERR_UW_FILE_NOT_DELETED' => 'Problem removing package ',
     'ERR_UW_FILE_NOT_READABLE' => 'File could not be read.',
     'ERR_UW_FILE_NOT_WRITABLE' => 'File cannot be moved or written to',
-    'ERR_UW_FLAVOR_2' => 'Upgrade Flavor: ',
-    'ERR_UW_FLAVOR' => 'MintHCM System Flavor: ',
     'ERR_UW_LOG_FILE_UNWRITABLE' => './upgradeWizard.log could not be created/written to. Please fix permissions on your MintHCM directory.',
     'ERR_UW_MBSTRING_FUNC_OVERLOAD' => 'mbstring.func_overload set to a value higher than 1. Please change this in your php.ini and restart the web server.',
     'ERR_UW_NO_FILE_UPLOADED' => 'Please specify a file and try again!',
@@ -105,7 +101,6 @@ $mod_strings = array(
     'LBL_UW_COMPLIANCE_DB' => 'Minimum Database Version',
     'LBL_UW_COMPLIANCE_PHP_INI' => 'Location of php.ini',
     'LBL_UW_COMPLIANCE_PHP_VERSION' => 'Minimum PHP Version',
-    'LBL_UW_COMPLIANCE_SAFEMODE' => 'PHP Setting: Safe Mode',
     'LBL_UW_COMPLIANCE_TITLE2' => 'Detected Settings',
     'LBL_UW_COMPLIANCE_XML' => 'XML Parsing',
     'LBL_UW_COMPLIANCE_ZIPARCHIVE' => 'Zip Support',
@@ -150,7 +145,6 @@ $mod_strings = array(
     'LBL_UW_INCLUDING' => 'Including',
     'LBL_UW_INCOMPLETE' => 'Incomplete',
     'LBL_UW_MANUAL_MERGE' => 'File Merge',
-    'LBL_UW_MODULE_READY' => 'Module is ready to be installed. Click "Commit" to proceed with installation.',
     'LBL_UW_NO_INSTALLED_UPGRADES' => 'No recorded Upgrades detected.',
     'LBL_UW_NONE' => 'None',
     'LBL_UW_OVERWRITE_DESC' => 'All changed files will be overwritten, including any code customizations and template changes you have made. Are you sure you want to proceed?',
@@ -221,7 +215,6 @@ $mod_strings = array(
     'LBL_UW_SKIPPED_QUERIES_ALREADY_EXIST' => 'Skipped Queries',
     'LBL_INCOMPATIBLE_PHP_VERSION' => 'Php version 5 or above is required.',
     'ERR_CHECKSYS_PHP_INVALID_VER' => 'Your version of PHP is not supported by MintHCM. You will need to install a version that is compatible with the MintHCM application. Please consult the Compatibility Matrix in the Release Notes for supported PHP Versions. Your version is ',
-    'LBL_BACKWARD_COMPATIBILITY_ON' => 'Php Backward Compatibility mode is turned on. Set zend.ze1_compatibility_mode to Off for proceeding further',
     //including some strings from moduleinstall that are used in Upgrade
     'LBL_ML_ACTION' => 'Action',
     'LBL_ML_CANCEL' => 'Cancel',

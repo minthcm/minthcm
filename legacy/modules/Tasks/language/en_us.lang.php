@@ -95,7 +95,6 @@ $mod_strings = array(
     'LBL_TASK_INFORMATION' => 'TASK OVERVIEW', //No need to be translated in all caps. Translation used just in menu action items when using the SuiteP template
     'LBL_EDITLAYOUT' => 'Edit Layout' /*for 508 compliance fix*/,
     'LBL_HISTORY_SUBPANEL_TITLE' => 'Notes',
-    'LNK_ES_TASKS_LIST' => 'View ES Tasks',
     //For export labels
     'LBL_DATE_DUE' => 'Date Due',
     'LBL_RELATED_TO' => 'Related to:',

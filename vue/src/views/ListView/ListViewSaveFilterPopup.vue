@@ -63,8 +63,8 @@ async function save() {
                 }],
             }
         }
-        store.savePreferences()
         store.activeFilter = name
+        store.savePreferences()
         emit('close')
     }
 }
@@ -77,7 +77,10 @@ async function validate() {
         errorMsg.value = languages.label('LBL_ESLIST_REQUIRED_FIELD_ERROR')
         valid = false
     }
-    if(store.preferences?.saved_filters?.findIndex((f) => f.name === trimmedFilterName) !== -1){
+    if (
+        store.preferences?.saved_filters &&
+        store.preferences?.saved_filters?.findIndex((f) => f.name === trimmedFilterName) !== -1
+    ) {
         saveFilterPopup.unclosable = true;
         return new Promise((resolve) => {
             popups.showPopup({

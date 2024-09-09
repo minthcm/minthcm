@@ -41,5 +41,5 @@ class NotificationNull extends NotificationAbstractClass
     public function WebPush($desc = true,$link = true,$override = array()){
         return $this;
     }
-
+    
 }

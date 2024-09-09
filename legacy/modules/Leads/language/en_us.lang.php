@@ -190,7 +190,6 @@ $mod_strings = array(
     'LNK_NEW_MEETING' => 'Schedule Meeting',
     'LNK_NEW_OPPORTUNITY' => 'Create Opportunity',
     'LNK_SELECT_ACCOUNTS' => ' <b>OR</b> Select Account',
-    'LNK_SELECT_CONTACTS' => ' <b>OR</b> Select Contact',
     'NTC_DELETE_CONFIRMATION' => 'Are you sure you want to delete this record?',
     'NTC_REMOVE_CONFIRMATION' => 'Are you sure you want to remove this lead from this case?',
     'LBL_CAMPAIGN_LIST_SUBPANEL_TITLE' => 'Campaigns',
@@ -230,7 +229,6 @@ $mod_strings = array(
     //For export labels
     'LBL_CAMPAIGN_ID' => 'Campaign ID',
     'LBL_EDITLAYOUT' => 'Edit Layout' /*for 508 compliance fix*/,
-    'LBL_ENTERDATE' => 'Enter Date' /*for 508 compliance fix*/,
     'LBL_LOADING' => 'Loading' /*for 508 compliance fix*/,
     'LBL_EDIT_INLINE' => 'Edit' /*for 508 compliance fix*/,
     'LBL_FP_EVENTS_LEADS_1_FROM_FP_EVENTS_TITLE' => 'Events',

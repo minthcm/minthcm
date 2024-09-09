@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAuthStore, User } from './auth'
 import { useAlertsStore } from './alerts'
 import { useFavoritesStore } from './favorites'
@@ -29,9 +29,10 @@ interface InitResponse {
     quick_create: QuickCreate[]
     global: any
     legacy_views: { [module: string]: LegacyView }
+    mintRebuildID: string
+    responseType: string
 }
 export const useBackendStore = defineStore('backend', () => {
-    const route = useRoute()
     const router = useRouter()
     const alerts = useAlertsStore()
     const favorites = useFavoritesStore()
@@ -44,24 +45,70 @@ export const useBackendStore = defineStore('backend', () => {
     const isInit = ref(false)
     const initialLoading = ref(true)
     const isInstalled = ref(true)
+    const cachedConfig = ref()
 
     async function init() {
         const auth = useAuthStore()
         try {
-            const initResponse = await axios.get<InitResponse>('api/init')
-            initData.value = initResponse.data
+
+            await caches.match('api/init').then(function(response) {
+                if (!response) {
+                    return;
+                }
+                return response.json()
+            }).then(function(response) {
+                if(cachedConfig){
+                    cachedConfig.value = response;
+                }
+            })
+            let mintRebuildID = cachedConfig.value?.mintRebuildID ?? '';
+            let current_language = cachedConfig.value?.languages?.current_language ?? '';
+            if(mintRebuildID === false){
+                mintRebuildID = '';
+            }
+            const initResponse = await axios.post<InitResponse>('api/init', {
+                mintRebuildID: mintRebuildID,
+                current_language: current_language,
+                user_id: cachedConfig.value?.user?.id ?? ''
+            })
             auth.user = initResponse.data?.user ?? {}
+
+            if(initResponse.data.responseType === 'minified'){
+                cachedConfig.value.user = initResponse.data.user
+                cachedConfig.value.global = initResponse.data.global
+                cachedConfig.value.preferences = initResponse.data.preferences
+                cachedConfig.value.responseType = initResponse.data.responseType
+                if(initResponse.data.languages && current_language !== initResponse.data.languages?.current_language){
+                    cachedConfig.value.languages = initResponse.data.languages
+                }
+                if(initResponse.data.menu_modules){
+                    cachedConfig.value.menu_modules = initResponse.data.menu_modules
+                    cachedConfig.value.modules = initResponse.data.modules
+                    cachedConfig.value.quick_create = initResponse.data.quick_create
+                    cachedConfig.value.legacy_views = initResponse.data.legacy_views
+                }
+                initData.value = cachedConfig.value
+            } else {
+                initData.value = initResponse.data
+            }
+
             languages.languages = {
-                app_strings: initResponse.data.languages?.app_strings ?? {},
-                app_list_strings: initResponse.data.languages?.app_list_strings ?? {},
+                app_strings: initData.value.languages?.app_strings ?? {},
+                app_list_strings: initData.value.languages?.app_list_strings ?? {},
                 modules: {},
+                current_language: initData.value.languages?.current_language ?? 'en_us'
             }
             languages.currentLanguage =
-                localStorage.getItem('currentLang') ?? initResponse.data.global?.default_language ?? 'en_us'
-            modules.modulesDefs = initResponse.data?.modules ?? {}
+                localStorage.getItem('currentLang') ?? initData.value.global?.default_language ?? 'en_us'
+            modules.modulesDefs = initData.value?.modules ?? {}
+            
+            caches.open('mint-rebuild').then(function(cache) {
+                cache.put('api/init', new Response(JSON.stringify(initData.value)));
+            })
             alerts.init()
             favorites.fetch()
             recents.fetch()
+            
         } catch (err) {
             if ((err as AxiosError).response?.status === 401) {
                 const loginData = (

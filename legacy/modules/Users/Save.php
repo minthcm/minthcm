@@ -231,16 +231,19 @@ if (!$focus->is_group && !$focus->portal_only) {
     $tabs = new TabController();
     if (isset($_POST['display_tabs'])) {
         $tabs->set_user_tabs($DISPLAY_ARR['display_tabs'], $focus, 'display');
+        $focus->setPreference('reload_module_menu', time(), 0, 'global');
     }
 
     if (isset($HIDE_ARR['hide_tabs'])) {
         $tabs->set_user_tabs($HIDE_ARR['hide_tabs'], $focus, 'hide');
+        $focus->setPreference('reload_module_menu', time(), 0, 'global');
     } else {
         $tabs->set_user_tabs(array(), $focus, 'hide');
     }
     if (is_admin($current_user)) {
         if (isset($REMOVE_ARR['remove_tabs'])) {
             $tabs->set_user_tabs($REMOVE_ARR['remove_tabs'], $focus, 'remove');
+            $focus->setPreference('reload_module_menu', time(), 0, 'global');
         } else {
             $tabs->set_user_tabs(array(), $focus, 'remove');
         }

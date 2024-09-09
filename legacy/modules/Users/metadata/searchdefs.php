@@ -63,6 +63,7 @@ $searchdefs['Users'] = array(
             'is_group',
             'position_name',
             'securitygroup_name',
+            'birthdate',
             'phone' => array(
                 'name' => 'phone',
                 'label' => 'LBL_ANY_PHONE',
@@ -70,8 +71,8 @@ $searchdefs['Users'] = array(
                 'default' => true,
                 'width' => '10%',
             ),
-            'address_street' => array(
-                'name' => 'address_street',
+            'primary_address_street' => array(
+                'name' => 'primary_address_street',
                 'label' => 'LBL_ANY_ADDRESS',
                 'type' => 'name',
                 'default' => true,
@@ -84,29 +85,29 @@ $searchdefs['Users'] = array(
                 'default' => true,
                 'width' => '10%',
             ),
-            'address_city' => array(
-                'name' => 'address_city',
+            'primary_address_city' => array(
+                'name' => 'primary_address_city',
                 'label' => 'LBL_CITY',
                 'type' => 'name',
                 'default' => true,
                 'width' => '10%',
             ),
-            'address_state' => array(
-                'name' => 'address_state',
+            'primary_address_state' => array(
+                'name' => 'primary_address_state',
                 'label' => 'LBL_STATE',
                 'type' => 'name',
                 'default' => true,
                 'width' => '10%',
             ),
-            'address_postalcode' => array(
-                'name' => 'address_postalcode',
+            'primary_address_postalcode' => array(
+                'name' => 'primary_address_postalcode',
                 'label' => 'LBL_POSTAL_CODE',
                 'type' => 'name',
                 'default' => true,
                 'width' => '10%',
             ),
-            'address_country' => array(
-                'name' => 'address_country',
+            'primary_address_country' => array(
+                'name' => 'primary_address_country',
                 'label' => 'LBL_COUNTRY',
                 'type' => 'name',
                 'default' => true,

@@ -77,4 +77,22 @@ array(
             'id',
         ),
     ),
+    'range_birthdate' =>
+    array(
+       'query_type' => 'default',
+       'enable_range_search' => true,
+       'is_date_field' => true,
+    ),
+    'start_range_birthdate' =>
+    array(
+       'query_type' => 'default',
+       'enable_range_search' => true,
+       'is_date_field' => true,
+    ),
+    'end_range_birthdate' =>
+    array(
+       'query_type' => 'default',
+       'enable_range_search' => true,
+       'is_date_field' => true,
+    ),
 );

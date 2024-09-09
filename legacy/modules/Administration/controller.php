@@ -72,7 +72,7 @@ class AdministrationController extends SugarController
             $subPanelDefinition = new SubPanelDefinitions($this->bean);
             $subPanelDefinition->set_hidden_subpanels($disabledTabsKeyArray);
         }
-
+        updateMintRebuildFile(['reload_module_menu']);
         header("Location: index.php?module=Administration&action=ConfigureTabs");
     }
 

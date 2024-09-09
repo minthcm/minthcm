@@ -59,11 +59,11 @@ $GLOBALS['ldapConfig'] = array(
 							"telephoneNumber"=>'phone_work',
 							"facsimileTelephoneNumber"=>'phone_fax',
 							"mobile"=>'phone_mobile',
-							"street"=>'address_street',
-							"l"=>'address_city',
-							"st"=>'address_state',
-							"postalCode"=>'address_postalcode',
-							"c"=>'address_country'
+							"street"=>'primary_address_street',
+							"l"=>'primary_address_city',
+							"st"=>'primary_address_state',
+							"postalCode"=>'primary_address_postalcode',
+							"c"=>'primary_address_country'
 							
 							
 							

@@ -143,21 +143,21 @@
                         </tr>
                         <tr>
                             <td width="17%" scope="row" nowrap="nowrap"><span>{$MOD.LBL_PRIMARY_ADDRESS}:</span></td>
-                            <td width="33%"><span><textarea name='address_street' rows="2" tabindex='8' cols="30">{$ADDRESS_STREET}</textarea></span></td>
+                            <td width="33%"><span><textarea name='primary_address_street' rows="2" tabindex='8' cols="30">{$ADDRESS_STREET}</textarea></span></td>
                             <td scope="row" nowrap="nowrap"><span>&nbsp;</span></td>
                             <td><span>&nbsp;</span></td>
                         </tr>
                         <tr>
                             <td width="17%" scope="row" nowrap="nowrap"><span>{$MOD.LBL_CITY}:</span></td>
-                            <td width="33%" ><span><input name='address_city' type="text" tabindex='8' size='15' maxlength='100' value='{$ADDRESS_CITY}'></span></td>
+                            <td width="33%" ><span><input name='primary_address_city' type="text" tabindex='8' size='15' maxlength='100' value='{$primary_address_CITY}'></span></td>
                             <td scope="row" nowrap="nowrap"><span>{$MOD.LBL_STATE}:</span></td>
-                            <td><span><input name='address_state' type="text" tabindex='9' size='15' maxlength='100' value='{$ADDRESS_STATE}'></span></td>
+                            <td><span><input name='primary_address_state' type="text" tabindex='9' size='15' maxlength='100' value='{$ADDRESS_STATE}'></span></td>
                         </tr>
                         <tr>
                             <td scope="row" nowrap="nowrap"><span>{$MOD.LBL_POSTAL_CODE}:</span></td>
-                            <td><span><input name='address_postalcode' type="text" tabindex='9' size='10' maxlength='20' value='{$ADDRESS_POSTALCODE}'></span></td>
+                            <td><span><input name='primary_address_postalcode' type="text" tabindex='9' size='10' maxlength='20' value='{$ADDRESS_POSTALCODE}'></span></td>
                             <td scope="row" nowrap="nowrap"><span>{$MOD.LBL_COUNTRY}:</span></td>
-                            <td><span><input name='address_country' type="text" tabindex='10' size='10' maxlength='20' value='{$ADDRESS_COUNTRY}'></span></td>
+                            <td><span><input name='primary_address_country' type="text" tabindex='10' size='10' maxlength='20' value='{$ADDRESS_COUNTRY}'></span></td>
                         </tr>
                     </table>
                 </div>

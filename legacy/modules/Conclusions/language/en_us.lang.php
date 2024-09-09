@@ -71,7 +71,6 @@ $mod_strings = array(
    'LBL_HOMEPAGE_TITLE' => 'My Conclusions',
    'LNK_NEW_RECORD' => 'Create Conclusion',
    'LNK_LIST' => 'View Conclusions',
-   'LNK_IMPORT_CONCLUSIONS' => 'Import Conclusions',
    'LBL_SEARCH_FORM_TITLE' => 'Search Conclusions',
    'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
    'LBL_NEW_FORM_TITLE' => 'New Conclusion',

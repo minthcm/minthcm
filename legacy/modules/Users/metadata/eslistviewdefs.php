@@ -41,13 +41,15 @@ $ESListViewDefs['Users'] = [
         'reports_to_name' => [
             'link' => true,
         ],
-        'address_street' => [
+        'primary_address_street' => [
         ],
-        'address_city' => [
+        'primary_address_city' => [
         ],
-        'address_state' => [
+        'primary_address_state' => [
         ],
-        'address_country' => [
+        'primary_address_country' => [
+        ],
+        'birthdate' => [
         ],
     ],
     'search' => [
@@ -71,17 +73,19 @@ $ESListViewDefs['Users'] = [
         ],
         'securitygroup_name' => [
         ],
-        'address_street' => [
+        'primary_address_street' => [
         ],
         'email' => [
         ],
-        'address_city' => [
+        'primary_address_city' => [
         ],
-        'address_state' => [
+        'primary_address_state' => [
         ],
-        'address_postalcode' => [
+        'primary_address_postalcode' => [
         ],
-        'address_country' => [
+        'primary_address_country' => [
+        ],
+        'birthdate' => [
         ],
     ],
 ];
