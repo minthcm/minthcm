@@ -112,27 +112,33 @@ $listViewDefs['Users'] = array(
         'link' => true,
         'default' => false,
     ),
-    'ADDRESS_STREET' => array(
+    'PRIMARY_ADDRESS_STREET' => array(
         'width' => '10',
-        'label' => 'LBL_ADDRESS_STREET',
+        'label' => 'LBL_primary_address_STREET',
         'link' => false,
         'default' => false,
     ),
-    'ADDRESS_CITY' => array(
+    'PRIMARY_ADDRESS_CITY' => array(
         'width' => '10',
         'label' => 'LBL_ADDRESS_CITY',
         'link' => false,
         'default' => false,
     ),
-    'ADDRESS_STATE' => array(
+    'PRIMARY_ADDRESS_STATE' => array(
         'width' => '10',
         'label' => 'LBL_ADDRESS_STATE',
         'link' => false,
         'default' => false,
     ),
-    'ADDRESS_COUNTRY' => array(
+    'PRIMARY_ADDRESS_COUNTRY' => array(
         'width' => '10',
         'label' => 'LBL_ADDRESS_COUNTRY',
+        'link' => false,
+        'default' => false,
+    ),
+    'BIRTHDATE' => array(
+        'width' => '10',
+        'label' => 'LBL_BIRTHDATE',
         'link' => false,
         'default' => false,
     ),

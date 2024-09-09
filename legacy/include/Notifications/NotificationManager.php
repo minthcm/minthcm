@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,106 +36,121 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 require_once 'include/Notifications/Notification.php';
 require_once 'include/Notifications/NotificationPlugin.php';
 
-class NotificationManager {
+class NotificationManager
+{
 
-   const PLUGINS_DIRECTORY = "./include/Notifications/plugins";
+    const PLUGINS_DIRECTORY = "include/Notifications/plugins";
 
-   protected $plugins_collection = array();
+    protected $plugins_collection = array();
 
-   public function __construct() {
-      $files = scandir(self::PLUGINS_DIRECTORY);
+    public function __construct()
+    {
+        $this->scanDirectory(self::PLUGINS_DIRECTORY);
+        $this->scanDirectory('custom/' . self::PLUGINS_DIRECTORY);
+    }
 
-      foreach ( $files as $file ) {
-         if ( $file == '.' || $file == '..' ) {
-            continue;
-         }
+    public function run()
+    {
+        $this->clearOldWebPush();
+        foreach ($this->plugins_collection as $plugin_class) {
+            $plugin = new $plugin_class();
+            $plugin->run();
+        }
+    }
 
-         include self::PLUGINS_DIRECTORY . '/' . $file;
-         $class_name = self::getClassFromFile($file);
-         $plugin = new $class_name;
-         if ( $plugin instanceof NotificationPlugin ) {
-            $this->plugins_collection[] = $class_name;
-         }
-      }
-   }
+    protected function scanDirectory($dir_path)
+    {
+        $files = scandir($dir_path);
+        if (!$files) {
+            return;
+        }
+        foreach ($files as $file) {
+            if ('.' == $file || '..' == $file) {
+                continue;
+            }
 
-   public function run() {
-      $this->clearOldWebPush();
-      foreach ( $this->plugins_collection as $plugin_class ) {
-         $plugin = new $plugin_class();
-         $plugin->run();
-      }
-   }
+            include $dir_path . '/' . $file;
+            $class_name = self::getClassFromFile($file);
+            $plugin = new $class_name;
+            if ($plugin instanceof NotificationPlugin) {
+                $this->plugins_collection[$plugin->getType()] = $class_name;
+            }
+        }
+    }
 
+    protected static function getClassFromFile($file)
+    {
+        $r = substr($file, 0, -4);
+        return $r;
+    }
 
+    public static function isValidUser($user_id)
+    {
+        $user_bean = BeanFactory::getBean('Users', $user_id);
+        return (!empty($user_bean->id));
+    }
 
-   protected static function getClassFromFile($file) {
-      $r = substr($file, 0, -4);
-      return $r;
-   }
+    public static function getUserFullName($user_id)
+    {
+        $user_bean = BeanFactory::getBean('Users', $user_id);
+        if (!empty($user_bean->id)) {
+            return $user_bean->full_name;
+        }
+        return false;
+    }
 
-   public static function isValidUser($user_id) {
-      $user_bean = BeanFactory::getBean('Users', $user_id);
-      return (!empty($user_bean->id));
-   }
+    public static function toDbDatetime($input_string)
+    {
+        global $timedate;
+        $output_string = "";
+        $date_db_format = "/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/";
 
-   public static function getUserFullName($user_id) {
-      $user_bean = BeanFactory::getBean('Users', $user_id);
-      if ( !empty($user_bean->id) ) {
-         return $user_bean->full_name;
-      }
-      return false;
-   }
+        if (preg_match($date_db_format, $input_string)) {
+            $output_string = $input_string;
+        } else {
+            $start_arr = explode(' ', $input_string);
+            $start_time = $start_arr[1];
+            $start_date = $timedate->to_db_date($input_string, false);
+            if ($start_date) {
+                $output_string = $start_date . ' ' . $start_time;
+            }
+        }
 
-   public static function toDbDatetime($input_string) {
-      global $timedate;
-      $output_string = "";
-      $date_db_format = "/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/";
+        return $output_string;
+    }
 
-      if ( preg_match($date_db_format, $input_string) ) {
-         $output_string = $input_string;
-      } else {
-         $start_arr = explode(' ', $input_string);
-         $start_time = $start_arr[1];
-         $start_date = $timedate->to_db_date($input_string, false);
-         if ( $start_date ) {
-            $output_string = $start_date . ' ' . $start_time;
-         }
-      }
+    public static function NotificationForBeanExists($bean, $type)
+    {
+        return self::NotificationExists($bean->parent_type, $bean->id, $type);
+    }
 
-      return $output_string;
-   }
+    public static function notificationForRecordWithId($module, $record_id, $type)
+    {
+        return self::NotificationExists($module, $record_id, $type);
+    }
 
-   public static function NotificationForBeanExists($bean,$type) {
-     return self::NotificationExists($bean->parent_type,$bean->id,$type);
-   }
+    public static function NotificationExists($module, $record_id, $type)
+    {
+        global $db;
+        $sql = "SELECT id FROM alerts WHERE parent_type='{$module}' AND parent_id='{$record_id}' AND alert_type='{$type}' AND is_read=0 AND (type != 'webpush' OR type IS NULL)";
+        $sql_result = $db->getOne($sql);
+        return !empty($sql_result);
+    }
 
-   public static function notificationForRecordWithId($module,$record_id,$type){
-      return self::NotificationExists($module,$record_id,$type);
-   }
-
-   public static function NotificationExists($module,$record_id,$type){
-      global $db;
-      $sql = "SELECT id FROM alerts WHERE parent_type='{$module}' AND parent_id='{$record_id}' AND alert_type='{$type}' AND is_read=0 AND (type != 'webpush' OR type IS NULL)";
-      $sql_result = $db->getOne($sql);
-      return !empty($sql_result);
-   }
-
-
-   public function clearOldWebPush(){
-      global $db;
-      $db->query("DELETE FROM alerts WHERE type='webpush' AND is_read=1 AND DATE(date_entered) = DATE( DATE_SUB( NOW() , INTERVAL 30 DAY ) )" );
-   }
-   
+    public function clearOldWebPush()
+    {
+        global $db;
+        $db->query("DELETE FROM alerts WHERE type='webpush' AND is_read=1 AND DATE(date_entered) = DATE( DATE_SUB( NOW() , INTERVAL 30 DAY ) )");
+    }
 
 }

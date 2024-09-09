@@ -71,7 +71,6 @@ $mod_strings = array(
    'LBL_HOMEPAGE_TITLE' => 'My Improvements',
    'LNK_NEW_RECORD' => 'Create Improvement',
    'LNK_LIST' => 'View Improvements',
-   'LNK_IMPORT_IMPROVEMENTS' => 'Import Improvements',
    'LBL_SEARCH_FORM_TITLE' => 'Search Improvements',
    'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
    'LBL_NEW_FORM_TITLE' => 'New Improvement',

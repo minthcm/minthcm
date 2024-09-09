@@ -91,20 +91,20 @@ class UsersController extends SugarController
         if (!empty($_POST['messenger_id'])) {
             $current_user->messenger_id = ($_POST['messenger_id']);
         }
-        if (!empty($_POST['address_street'])) {
-            $current_user->address_street = ($_POST['address_street']);
+        if (!empty($_POST['primary_address_street'])) {
+            $current_user->primary_address_street = ($_POST['primary_address_street']);
         }
-        if (!empty($_POST['address_city'])) {
-            $current_user->address_city = ($_POST['address_city']);
+        if (!empty($_POST['primary_address_city'])) {
+            $current_user->primary_address_city = ($_POST['primary_address_city']);
         }
-        if (!empty($_POST['address_state'])) {
-            $current_user->address_state = ($_POST['address_state']);
+        if (!empty($_POST['primary_address_state'])) {
+            $current_user->primary_address_state = ($_POST['primary_address_state']);
         }
-        if (!empty($_POST['address_postalcode'])) {
-            $current_user->address_postalcode = ($_POST['address_postalcode']);
+        if (!empty($_POST['primary_address_postalcode'])) {
+            $current_user->primary_address_postalcode = ($_POST['address_postalcode']);
         }
-        if (!empty($_POST['address_country'])) {
-            $current_user->address_country = ($_POST['address_country']);
+        if (!empty($_POST['primary_address_country'])) {
+            $current_user->primary_address_country = ($_POST['primary_address_country']);
         }
 
         // Saves User Details ONLY

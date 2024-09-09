@@ -63,7 +63,6 @@ $mod_strings = array(
     'LBL_MODULE_TITLE' => 'Dictionaries',
     'LNK_NEW_RECORD' => 'Create Dictionary',
     'LNK_LIST' => 'View Dictionaries',
-    'LNK_IMPORT_EXITINTERVIEWS' => 'Import Dictionaries',
     'LBL_SEARCH_FORM_TITLE' => 'Search Dictionaries',
     'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
     'LBL_NEW_FORM_TITLE' => 'New Dictionary',

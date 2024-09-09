@@ -84,12 +84,7 @@ $mod_strings['LBL_GEOCODED_COUNTS'] = 'Module Geocoded Counts';
 $mod_strings['LBL_CRON_URL'] = 'Cron URL:';
 $mod_strings['LBL_MODULE_HEADING'] = 'Module';
 
-$mod_strings['LBL_N/A'] = 'N/A';
-$mod_strings['LBL_ZERO_RESULTS'] = 'Zero Results';
 $mod_strings['LBL_OK'] = 'Ok';
-$mod_strings['LBL_INVALID_REQUEST'] = 'Invalid Request';
-$mod_strings['LBL_APPROXIMATE'] = 'Approximate';
-$mod_strings['LBL_EMPTY'] = 'Empty';
 
 $mod_strings['LBL_MODULE_TOTAL_HEADING'] = 'Total';
 $mod_strings['LBL_MODULE_RESET_HEADING'] = 'Reset';

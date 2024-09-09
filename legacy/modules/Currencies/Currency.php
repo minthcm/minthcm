@@ -275,7 +275,14 @@ class Currency extends SugarBean {
    public function save($check_notify = false) 
    {
       sugar_cache_clear('currency_list');
+      updateMintRebuildFile(['reload_currency']);
       return parent::save($check_notify);
+   }
+
+   public function mark_deleted($id)
+   {
+        updateMintRebuildFile(['reload_currency']);
+        parent::mark_deleted($id); 
    }
 
 }

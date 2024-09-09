@@ -61,7 +61,6 @@ $mod_strings = array(
     'LBL_MARKING' => 'Marking',
     'LBL_DELETING' => 'Deleting',
 
-    'LBL_CONFIRM_DELETE_EMAIL' => 'Are you sure you want to delete this email?',
     'LBL_ENTER_FOLDER_NAME' => 'Please enter a folder name',
 
     'LBL_ERROR_SELECT_MODULE' => 'Please select a module for the Related to field',
@@ -91,7 +90,6 @@ $mod_strings = array(
     'LBL_DESCRIPTION' => 'Description',
     'LBL_EDIT_ALT_TEXT' => 'Edit Plain Text',
     'LBL_SEND_IN_PLAIN_TEXT' => 'Send in Plain Text',
-    'LBL_SEND_CONFIRM_OPT_IN' => 'Send Opt In Email',
     'LBL_EMAIL_ATTACHMENT' => 'Email Attachment',
     'LBL_EMAIL_SELECTOR_SELECT' => 'Select',
     'LBL_EMAIL_SELECTOR_CLEAR' => 'Clear',
@@ -197,7 +195,6 @@ $mod_strings = array(
     'LBL_MESSAGE_ID' => 'Message ID',
     'LBL_REPLY_HEADER_1' => 'On',
     'LBL_REPLY_HEADER_2' => 'wrote:',
-    'LBL_REPLY_TO_ADDRESS' => 'Reply-to Address',
     'LBL_REPLY_TO_NAME' => 'Reply-to Name',
 
     'LBL_LIST_BUG' => 'Bugs',
@@ -255,7 +252,6 @@ $mod_strings = array(
     'LBL_INSERT_TARGET_EMAIL' => 'Insert Email Address from a Target',
     'LBL_INSERT_USER_EMAIL' => 'Insert Email Address from an User',
     'LBL_INSERT_LEAD_EMAIL' => 'Insert Email Address from a Lead',
-    'LBL_INSERT_ERROR_BLANK_EMAIL' => 'Invalid email address',
 
     // advanced search
     'LBL_ASSIGNED_TO' => 'Assigned To:',

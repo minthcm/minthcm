@@ -81,7 +81,6 @@ $mod_strings = [
     'LBL_EXPIRES_IN' => 'Expires In',
     'LBL_ACCESS_TOKEN' => 'Access Token',
     'LBL_REFRESH_TOKEN' => 'Refresh Token',
-    'LBL_PROVIDER' => 'Provider',
 
     'LBL_AUTHENTICATE' => 'Authenticate',
 

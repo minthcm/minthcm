@@ -92,10 +92,11 @@ class EmployeeCreator
 
         $employee_bean->first_name = $this->candidate_bean->first_name;
         $employee_bean->last_name = $this->candidate_bean->last_name;
+        $employee_bean->birthdate = $this->candidate_bean->birthdate;
         $employee_bean->position_id = $this->position_bean->id;
         if (strlen($this->converted_candidature_login) > 0) {
             $employee_bean->user_name = $this->converted_candidature_login;
-            $employee_bean->status = 'Inactive';
+            $employee_bean->status = 'Inactive'; 
         } else {
             $employee_bean->status = 'Inactive';
         }
@@ -171,11 +172,11 @@ class EmployeeCreator
 
     private function assignEmployeeContactFields(Employee $employee_bean): Employee
     {
-        $employee_bean->address_street = $this->candidate_bean->primary_address_street;
-        $employee_bean->address_city = $this->candidate_bean->primary_address_city;
-        $employee_bean->address_state = $this->candidate_bean->primary_address_state;
-        $employee_bean->address_country = $this->candidate_bean->primary_address_country;
-        $employee_bean->address_postalcode = $this->candidate_bean->primary_address_postalcode;
+        $employee_bean->primary_address_street = $this->candidate_bean->primary_address_street;
+        $employee_bean->primary_address_city = $this->candidate_bean->primary_address_city;
+        $employee_bean->primary_address_state = $this->candidate_bean->primary_address_state;
+        $employee_bean->primary_address_country = $this->candidate_bean->primary_address_country;
+        $employee_bean->primary_address_postalcode = $this->candidate_bean->primary_address_postalcode;
 
         $employee_bean->email1 = $this->candidate_bean->email1;
         $employee_bean->phone_mobile = $this->candidate_bean->phone_mobile;

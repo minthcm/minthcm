@@ -292,7 +292,12 @@ class TemplateHandler
             $contents .= "{literal}\n";
             $contents .= $javascript->getScript();
             $contents .= $this->createQuickSearchCode($defs, $defs2, $view, $module);
-            $contents .= '<script language="javascript">viewTools.form.calculateSelectors();</script>'; //viewTools #55906
+            $contents .= '<script language="javascript">const vtCSinterval = setInterval(() => {
+                if (typeof viewTools.form.calculateSelectors === \'function\') {
+                    clearInterval(vtCSinterval)
+                    viewTools.form.calculateSelectors()
+                }
+            }, 100);</script>'; //viewTools #55906
             $contents .= "{/literal}\n";
         } else {
             if (preg_match('/^SearchForm_.+/', $view)) {

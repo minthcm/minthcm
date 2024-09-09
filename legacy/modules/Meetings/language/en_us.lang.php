@@ -127,11 +127,9 @@ $mod_strings = array(
    'LBL_CREATED_USER' => 'Created User',
    'LBL_MODIFIED_USER' => 'Modified User',
    'NOTICE_DURATION_TIME' => 'Duration time must be greater than 0',
-   'LBL_MEETING_INFORMATION' => 'OVERVIEW', //No need to be translated in all caps. Translation used just in menu action items when using the SuiteP template
    'LBL_LIST_JOIN_MEETING' => 'Join Meeting',
    'LBL_ACCEPT_STATUS' => 'Accept Status',
    'LBL_ACCEPT_LINK' => 'Accept Link',
-   'LNK_ES_MEETINGS_LIST' => 'View ES Meetings',
    // You are not invited to the meeting messages
    'LBL_EXTNOT_MAIN' => 'You are not able to join this meeting because you are not an Invitee.',
    'LBL_EXTNOT_RECORD_LINK' => 'View Meeting',
@@ -175,11 +173,9 @@ $mod_strings = array(
    'LBL_APPRAISALS' => 'Appraisals',
    'LBL_CONCLUSIONS' => 'Conclusions',
    'LBL_RESERVATIONS' => 'Reservations',
-   'LBL_RESERVATIONS_MEETINGS' => 'Reservations',
    'LBL_RESOURCES' => 'Resources',
    'LBL_ADD_INVITEE' => 'Add Invitees/Resources',
    'LBL_FIRST_NAME' => 'First Name/Resource Name',
    'LBL_LIST_TITLE' => 'Meeting',
-   'LBL_MEETING' => 'Meeting',
    'LNK_NEW_RECORD' => 'Create Meeting',  // MintHCM
 );
