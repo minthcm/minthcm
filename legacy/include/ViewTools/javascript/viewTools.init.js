@@ -142,10 +142,7 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
    $( document ).on( 'change', 'select.vt_formulaSelector', function () {
       viewTools.form.fieldChangeEvent( this );
    } );
-   /*
-    * Event inited on every creation of  vt_formulaSelector fields
-    */
-   $( document ).on( 'DOMNodeInserted', function ( ) {
+   new MutationObserver(() => {
       //Init save events
       if ( viewTools.cache.form_save !== undefined ) {
          var disabled_buttons = [ 'saved_search_submit' ];
@@ -189,7 +186,7 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
             delete viewTools.cache.onAppear[key];
          }
       }
-   } );
+    }).observe(document, { childList: true, subtree: true });
    /*
     * Back to edit form
     */

@@ -1002,6 +1002,9 @@ EOQ;
                 Header set Expires "01 Jan 2112 00:00:00 GMT"
         </IfModule>
 </FilesMatch>
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
 <IfModule mod_expires.c>
         ExpiresByType text/css "access plus 1 month"
         ExpiresByType text/javascript "access plus 1 month"

@@ -118,7 +118,6 @@ $mod_strings = array(
 
     'LBL_HOURS_ABBREV' => 'h',
     'LBL_MINSS_ABBREV' => 'm',
-    'LBL_FP_EVENTS_FP_EVENT_DELEGATES_1_FROM_FP_EVENT_DELEGATES_TITLE' => 'Delegates',
 
     // Attendance report
     'LBL_CONTACT_NAME' => 'Name',

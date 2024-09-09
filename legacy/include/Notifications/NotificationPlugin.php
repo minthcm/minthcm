@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,35 +36,50 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 require_once 'include/Notifications/Notification.php';
 
-abstract class NotificationPlugin {
+abstract class NotificationPlugin
+{
 
-   public function getNewNotification() {
-      return new Notification;
-   }
+    protected $type;
 
-   abstract public function run();
+    public function getNewNotification()
+    {
+        return new Notification;
+    }
 
-   public function isWebPushableNotification(){
-      return false;
-   }
+    abstract public function run();
 
-   public function getWebPushDescriptionConfig(){
-      return false;
-   }
-   public function getWebPushLinkConfig(){
-      return false;
-   }
-   public function getWebPushOverrideConfig(){
-      return array();
-   }
+    public function isWebPushableNotification()
+    {
+        return false;
+    }
 
+    public function getWebPushDescriptionConfig()
+    {
+        return false;
+    }
+    public function getWebPushLinkConfig()
+    {
+        return false;
+    }
+    public function getWebPushOverrideConfig()
+    {
+        return array();
+    }
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    public function getType()
+    {
+        return $this->type;
+    }
 
 }

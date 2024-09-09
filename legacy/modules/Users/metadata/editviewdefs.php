@@ -77,32 +77,40 @@ $viewdefs['Users']['EditView'] = array(
             array(array('name' => 'factor_auth', 'label' => 'LBL_FACTOR_AUTH')),
         ),
         'LBL_EMPLOYEE_INFORMATION' => array(
-            array(array(
-                'name' => 'employee_status',
-                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$EMPLOYEE_STATUS_READONLY}{/if}',
+            array(
+                array(
+                    'name' => 'employee_status',
+                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$EMPLOYEE_STATUS_READONLY}{/if}',
+                ),
+                'show_on_employees',
             ),
-                'show_on_employees'),
-            array(array(
-                'name' => 'position_name',
-                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$POSITION_NAME_READONLY}{/if}',
+            array(
+                array(
+                    'name' => 'position_name',
+                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$POSITION_NAME_READONLY}{/if}',
+                ),
+                'birthdate',
             ),
-                'phone_work'),
-            array(array(
-                'name' => 'securitygroup_name',
-                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$SG_NAME_READONLY}{/if}',
+            array(
+                array(
+                    'name' => 'securitygroup_name',
+                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$SG_NAME_READONLY}{/if}',
+                ),
+                array(
+                    'name' => 'reports_to_name',
+                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$REPORTS_TO_READONLY}{/if}',
+                ),
             ),
-                'phone_mobile'),
-            array(array(
-                'name' => 'reports_to_name',
-                'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$REPORTS_TO_READONLY}{/if}',
+            array(
+                'phone_work',
+                'phone_mobile',
             ),
-                'phone_other'),
-            array('', 'phone_fax'),
-            array('', 'phone_home'),
+            array('phone_other', 'phone_home'),
+            array('phonphone_faxe_home'),
             array('messenger_type', 'messenger_id'),
-            array('address_street', 'address_city'),
-            array('address_state', 'address_postalcode'),
-            array('address_country'),
+            array('primary_address_street', 'primary_address_city'),
+            array('primary_address_state', 'primary_address_postalcode'),
+            array('primary_address_country'),
             array('description'),
         ),
     ),

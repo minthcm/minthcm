@@ -137,7 +137,6 @@ $mod_strings = array(
 //ABOUT page
     'LBL_VERSION' => 'Version',
     'LBL_BUILD' => 'Build',
-    'LBL_SOURCE_SUGAR' => 'SugarCRM Inc - providers of CE framework',
     'LBL_DASHLET_TITLE' => 'My Sites',
     'LBL_DASHLET_OPT_TITLE' => 'Title',
     'LBL_DASHLET_INCORRECT_URL' => 'Incorrect website location is specified',
@@ -197,12 +196,9 @@ $mod_strings = array(
     'LBL_APPLY_BUTTON' => 'Apply',
     'LBL_SEND_INVITES' => 'Save & Send Invites',
     'LBL_CANCEL_BUTTON' => 'Cancel',
-    'LBL_CLOSE_BUTTON' => 'Close',
     'LBL_CREATE_NEW_RECORD' => 'Create Activity',
     'LBL_CREATE_CALL' => 'Log Call',
     'LBL_CREATE_MEETING' => 'Schedule Meeting',
-    'LBL_GENERAL_TAB' => 'Details',
-    'LBL_PARTICIPANTS_TAB' => 'Invitees',
     'LBL_REPEAT_TAB' => 'Recurrence',
     'LBL_REPEAT_TYPE' => 'Repeat',
     'LBL_REPEAT_INTERVAL' => 'Every',
@@ -227,11 +223,8 @@ $mod_strings = array(
     'LBL_STATUS' => 'Status:',
     'LBL_DESCRIPTION' => 'Description: ',
     //End Events
-    'LBL_ERR_DATE_ARE_NOT_EQUALS' => 'Dates are not equal',
     'LBL_CLOSE_PLAN' => 'Submit',
     'LBL_CLOSE_PLAN_CONFIRM' => 'Are you sure to submit this work schedule? You cannot rollback this operation.',
-    'ERR_CLOSE_PLAN' => 'Work schedule can not be submitted due to breaks between work times.',
-    'LBL_ERR_INVALID_START_TIME' => 'Work schedule can not start after 23:55',
     
     'LBL_ELASTIC_SEARCH_EXCEPTION_SEARCH_INVALID_REQUEST' => 'An error has occurred while performing the search. Your query syntax might not be valid.',
     'LBL_ELASTIC_SEARCH_EXCEPTION_SEARCH_ENGINE_NOT_FOUND' => 'Unable to find the requested SearchEngine. Try performing the search again.',
@@ -240,7 +233,6 @@ $mod_strings = array(
     'LBL_ELASTIC_SEARCH_EXCEPTION_DEFAULT' => 'An unknown error has occurred while performing the search.',
     'LBL_ELASTIC_SEARCH_EXCEPTION_END_MESSAGE' => 'Contact an administrator if the problem persists. More information available in the logs.',
 
-    'LBL_ELASTIC_SEARCH_DEFAULT' => 'No results matching your search criteria. Try broadening your search.',
 
     'LNK_TASK_VIEW' => 'View Task',
 );

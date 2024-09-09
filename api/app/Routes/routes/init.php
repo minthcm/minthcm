@@ -51,7 +51,7 @@ use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 
 $routes = array(
     "init" => array(
-        "method" => "GET",
+        "method" => "POST",
         "path" => "/init",
         "class" => Init::class,
         "desc" => "Initial data for first page load",
@@ -60,7 +60,20 @@ $routes = array(
         ),
         "pathParams" => array(),
         "queryParams" => array(),
-        "bodyParams" => array(),
+        "bodyParams" => array(
+            'mintRebuildID' => array(
+                "type" => StringType::class,
+                "required" => false,
+            ),
+            'current_language' => array(
+                "type" => StringType::class,
+                "required" => false,
+            ),
+            'user_id' => array(
+                "type" => StringType::class,
+                "required" => false,
+            ),
+        ),
     ),
     'languages' => array(
         "method" => "GET",

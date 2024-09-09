@@ -71,7 +71,6 @@ $mod_strings = array(
    'LBL_HOMEPAGE_TITLE' => 'My Problems',
    'LNK_NEW_RECORD' => 'Create Problem',
    'LNK_LIST' => 'View Problems',
-   'LNK_IMPORT_PROBLEMS' => 'Import Problems',
    'LBL_SEARCH_FORM_TITLE' => 'Search Problems',
    'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
    'LBL_NEW_FORM_TITLE' => 'New Problem',

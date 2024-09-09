@@ -55,11 +55,11 @@ $viewdefs['Users']['DetailView'] = array(
         ),
         'maxColumns' => '2',
         'widths' => array(
-            0 => array(
+            array(
                 'label' => '10',
                 'field' => '30',
             ),
-            1 => array(
+            array(
                 'label' => '10',
                 'field' => '30',
             ),
@@ -78,67 +78,66 @@ $viewdefs['Users']['DetailView'] = array(
     ),
     'panels' => array(
         'LBL_USER_INFORMATION' => array(
-            0 => array(
-                0 => 'full_name',
-                1 => 'user_name',
+            array(
+                'full_name',
+                'user_name',
             ),
-            1 => array(
-                0 => 'status',
-                1 => array(
+            array(
+                'status',
+                array(
                     'name' => 'UserType',
                     'customCode' => '{$USER_TYPE_READONLY}',
                 ),
             ),
-            2 => array(
-                0 => 'photo',
+            array(
+                'photo',
             ),
-            3 => array(
-                0 => 'business_role',
-                1 => '',
+            array(
+                'business_role',
+                '',
             ),
         ),
         'LBL_EMPLOYEE_INFORMATION' => array(
-            0 => array(
-                0 => 'employee_status',
-                1 => 'show_on_employees',
+            array(
+                'employee_status',
+                'show_on_employees',
             ),
-            1 => array(
-                0 => 'position_name',
-                1 => 'phone_work',
+            array(
+                'position_name',
+                'birthdate',
             ),
-            2 => array(
-                0 => 'securitygroup_name',
-                1 => 'phone_mobile',
+            array(
+                'securitygroup_name',
+                'reports_to_name',
             ),
-            3 => array(
-                0 => 'reports_to_name',
-                1 => 'phone_other',
+            array(
+                'phone_work',
+                'phone_mobile',
             ),
-            4 => array(
-                0 => '',
-                1 => 'phone_fax',
+            array(
+                'phone_other',
+                'phone_home',
             ),
-            5 => array(
-                0 => '',
-                1 => 'phone_home',
+            array(
+                'phone_fax',
             ),
-            6 => array(
-                0 => 'messenger_type',
-                1 => 'messenger_id',
+            array(
+                'messenger_type',
+                'messenger_id',
             ),
-            7 => array(
-                0 => 'address_street',
-                1 => 'address_city',
+            array(
+                'primary_address_street',
+                'primary_address_city',
             ),
-            8 => array(
-                0 => 'address_state',
-                1 => 'address_postalcode',
+            array(
+                'primary_address_state',
+                'primary_address_postalcode',
             ),
-            9 => array(
-                0 => 'address_country',
+            array(
+                'primary_address_country',
             ),
-            10 => array(
-                0 => 'description',
+            array(
+                'description',
             ),
         ),
     ),

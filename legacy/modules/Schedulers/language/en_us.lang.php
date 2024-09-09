@@ -142,7 +142,6 @@ $mod_strings = array(
 //jobstrings
    'LBL_REFRESHJOBS' => 'Refresh Jobs',
    'LBL_POLLMONITOREDINBOXES' => 'Check Inbound Mail Accounts',
-   'LBL_PERFORMFULLFTSINDEX' => 'Full-text Search Index System',
    'LBL_RUNMASSEMAILCAMPAIGN' => 'Run Nightly Mass Email Campaigns',
    'LBL_POLLMONITOREDINBOXESFORBOUNCEDCAMPAIGNEMAILS' => 'Run Nightly Process Bounced Campaign Emails',
    'LBL_PRUNEDATABASE' => 'Prune Database on 1st of Month',
@@ -165,11 +164,7 @@ $mod_strings = array(
    'LBL_INVALID_SPENT_TIMES_NOTIFICATION_BODY' => "Invalid Spent times found!",
    'LBL_NOTIFIER_DEFAULT_SUBJECT' => "Invalid records found!",
    'LBL_NOTIFIER_DEFAULT_BODY' => "Invalid records found! ",
-   'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE_SUBJECT' => "Find Spent times assign to different user that is in work schedule",
-   'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE_BODY' => "Find Spent times assign to different user that is in work schedule\n",
-   'LBL_FIND_SPENT_TIMES_ASSIGN_TO_DIFFERENT_USER_WORK_SCHEDULE' => 'Find Spent times assign to different user that is in work schedule',
     //MintHCM #102685 START
-    'LBL_SENDCHATNOTIFICATION' => 'Sends RocketChat Notifications',
     'LBL_CLEARVCALCRON' => 'Clear vCal',
     'LBL_UPDATE_NEWS_DISPLAY_DATE' => 'Update News Display Date',
     //MintHCM #102685 END

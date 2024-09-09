@@ -31,13 +31,15 @@ $ESListViewDefs['Employees'] = [
         'employee_status' => [
             'default' => true,
         ],
-        'address_street' => [
+        'primary_address_street' => [
         ],
-        'address_city' => [
+        'primary_address_city' => [
         ],
-        'address_state' => [
+        'primary_address_state' => [
         ],
-        'address_country' => [
+        'primary_address_country' => [
+        ],
+        'birthdate' => [
         ],
         'date_entered' => [
         ],
@@ -55,15 +57,17 @@ $ESListViewDefs['Employees'] = [
         ],
         'email' => [
         ],
-        'address_street' => [
+        'birthdate' => [
         ],
-        'address_city' => [
+        'primary_address_street' => [
         ],
-        'address_state' => [
+        'primary_address_city' => [
         ],
-        'address_postalcode' => [
+        'primary_address_state' => [
         ],
-        'address_country' => [
+        'primary_address_postalcode' => [
+        ],
+        'primary_address_country' => [
         ],
     ],
 ];

@@ -287,6 +287,7 @@ class ViewESList extends SugarView
     protected function prepareUserPreferences()
     {
         global $current_user;
+        (new UserPreference($current_user))->reloadPreferences('eslist');
         $preferences = (new UserPreference($current_user))->getPreference($this->bean->module_name, 'eslist');
         return json_encode($preferences);
     }

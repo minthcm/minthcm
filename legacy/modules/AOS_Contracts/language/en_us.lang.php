@@ -73,7 +73,6 @@ $mod_strings = array(
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_NEW_FORM_TITLE' => 'New Contract',
     'LBL_CONTRACT_NAME' => 'Contract Name',
-    'LBL_REFERENCE_CODE ' => 'Reference Code ',
     'LBL_START_DATE' => 'Start Date',
     'LBL_END_DATE' => 'End Date',
     'LBL_TOTAL_CONTRACT_VALUE' => 'Contract Value',

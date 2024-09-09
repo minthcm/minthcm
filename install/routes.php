@@ -7,6 +7,11 @@ $routes = [
         'function' => 'redirectToInstaller',
     ],
     [
+        'path' => 'api/init',
+        'method' => 'POST',
+        'function' => 'redirectToInstaller',
+    ],
+    [
         'path' => 'api/install/init',
         'method' => 'GET',
         'function' => 'getInitialData',
