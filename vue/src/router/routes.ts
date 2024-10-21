@@ -4,6 +4,7 @@ import AuthViewForget from '@/views/AuthView/AuthViewForget.vue'
 import LegacyView from '@/views/LegacyView/LegacyView.vue'
 import AuthViewLogin from '@/views/AuthView/AuthViewLogin.vue'
 import AuthViewReset from '@/views/AuthView/AuthViewReset.vue'
+import RecordView from '@/views/RecordView/RecordView.vue'
 import { Component } from 'vue'
 import GuestLayout from '@/layouts/GuestLayout/GuestLayout.vue'
 import { useAuthStore } from '@/store/auth'
@@ -151,6 +152,14 @@ const coreRoutes: Array<RouteRecordRaw> = [
         name: 'list',
         component: ListView,
         alias: ['/modules/:module/ESListView', '/modules/:module/ListView', '/modules/:module/index'],
+        meta: {
+            auth: true,
+        },
+    },
+    {
+        path: '/modules/:module/DetailView/:id',
+        name: 'record',
+        component: RecordView,
         meta: {
             auth: true,
         },

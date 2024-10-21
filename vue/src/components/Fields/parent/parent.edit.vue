@@ -8,6 +8,8 @@
         v-model="model"
         item-value="id"
         item-title="name"
+        @keyup.enter="$emit('inlineEditSave')"
+        @keyup.esc="$emit('inlineEditCancel')"
     />
 </template>
 

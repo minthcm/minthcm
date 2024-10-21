@@ -78,15 +78,21 @@ $viewdefs[$module_name] = array(
             'default' => array(
                 array(
                     'name',
-                    '',
                 ),
                 array(
-                    'assigned_user_name',
+                    'news_type',
                     'publication_date',
+                ),
+                array(
+                    'photo',
+                    ''
                 ),
                 array(
                     'content_of_announcement',
                     '',
+                ),
+                array(
+                    'assigned_user_name',
                 ),
                 array(
                     'description',

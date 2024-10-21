@@ -125,7 +125,7 @@ export const useInstallViewStore = defineStore('install-view', () => {
         if (isInstalling.value == true) {
             return true
         }
-
+        isInstalling.value = true
         const response = await axios.post('api/install/submit', {
             db: databaseConfig.value,
             elastic: elasticConfig.value,
@@ -176,5 +176,6 @@ export const useInstallViewStore = defineStore('install-view', () => {
         validateDb,
         validateElastic,
         install,
+        isInstalling,
     }
 })

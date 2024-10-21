@@ -1,13 +1,15 @@
 <template>
     <v-data-table-server
         class="list-table"
+        :style="{
+            minHeight: store.mode === 'relate' ? 'calc(100vh - 300px)' : 0,
+        }"
         :headers="store.headers"
         :items="store.results"
         :items-length="store.itemsLength || 0"
         :loading="store.isLoading || store.initialLoading"
         fixed-header
         must-sort
-        :height="store.mode === 'relate' ? 'calc(100vh - 400px)' : null"
         :show-select="store.itemsSelectable"
         v-model="store.selected"
         @update:options="store.options = $event"

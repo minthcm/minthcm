@@ -529,7 +529,9 @@ class aSubPanel
         $module_name = $this->get_module_name() ;
         if (! empty($module_name)) {
             $bean_name = $beanList [ $this->get_module_name() ] ;
-
+            if (empty($bean_name)){
+                return;
+            }
             $this->bean_name = $bean_name ;
 
             include_once($beanFiles [ $bean_name ]) ;

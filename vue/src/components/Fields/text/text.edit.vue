@@ -7,6 +7,8 @@
         hide-details
         :modelValue="props.modelValue"
         @update:modelValue="(v) => $emit('update:modelValue', v)"
+        @keyup.enter.prevent="$emit('inlineEditSave')"
+        @keyup.esc="$emit('inlineEditCancel')"
     />
 </template>
 

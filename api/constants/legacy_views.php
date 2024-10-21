@@ -517,4 +517,24 @@ return [
         'list' => false,
         'record' => true,
     ],
+    'Candidates' => [
+        'list' => false,
+        'record' => true,
+    ],
+    'Candidatures' => [
+        'list' => false,
+        'record' => true,
+    ],
+    'Tasks' => [
+        'list' => false,
+        'record' => true,
+    ],
+    'Kudos' => [
+        'list' => false,
+        'record' => true,
+    ],
+    'Recruitments' => [
+        'list' => false,
+        'record' => true,
+    ],
 ];

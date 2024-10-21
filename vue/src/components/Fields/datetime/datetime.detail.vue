@@ -3,7 +3,10 @@
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
             <div>{{ parsedDate }}</div>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

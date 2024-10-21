@@ -60,6 +60,9 @@ class LastNextContacts extends LastNextContactsDeadCode
         && in_array($arguments['related_module'], LastNextContactsConfig::get('last_next_modules'))
         ) {
             $bean_to_update = $this->getBean($arguments['related_module'], $arguments['related_id']);
+            if(empty($bean_to_update) || empty($bean_to_update->id)) {
+                return;
+            }
             $bean_to_update->retrieve($bean_to_update->id);
             $this->updateLastNextDatesInBean($bean_to_update);
             if ('Contacts' == $bean_to_update->module_name && strlen($bean_to_update->account_id) > 0) {

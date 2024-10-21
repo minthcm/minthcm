@@ -7213,7 +7213,20 @@ var EventPointing = /** @class */ (function (_super) {
         component.bindSegHandlerToEl(el, 'click', this.handleClick.bind(this));
         component.bindSegHandlerToEl(el, 'mouseenter', this.handleMouseover.bind(this));
         component.bindSegHandlerToEl(el, 'mouseleave', this.handleMouseout.bind(this));
+        component.bindSegHandlerToEl(el, 'auxclick', this.handleAuxclick.bind(this));
     };
+    EventPointing.prototype.handleAuxclick = function (seg, ev) {
+        if(ev.button == 2) {
+            return;
+        }
+        var res = this.component.publiclyTrigger('eventAuxclick', {
+            context: seg.el[0],
+            args: [seg.footprint.getEventLegacy(), ev, this.view]
+        });
+        if (res === false) {
+            ev.preventDefault();
+        }
+    }
     EventPointing.prototype.handleClick = function (seg, ev) {
         var res = this.component.publiclyTrigger('eventClick', {
             context: seg.el[0],
@@ -7227,6 +7240,9 @@ var EventPointing = /** @class */ (function (_super) {
     EventPointing.prototype.handleMouseover = function (seg, ev) {
         if (!GlobalEmitter_1.default.get().shouldIgnoreMouse() &&
             !this.mousedOverSeg) {
+            document.body.onmousedown = function(e) {
+                if (e.button === 1) return false;
+            }
             this.mousedOverSeg = seg;
             // TODO: move to EventSelecting's responsibility
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
@@ -7243,6 +7259,7 @@ var EventPointing = /** @class */ (function (_super) {
     EventPointing.prototype.handleMouseout = function (seg, ev) {
         if (this.mousedOverSeg) {
             this.mousedOverSeg = null;
+            document.body.onmousedown = "";
             // TODO: move to EventSelecting's responsibility
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
                 seg.el.removeClass('fc-allow-mouse-resize');

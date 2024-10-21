@@ -9,6 +9,7 @@ import { useLanguagesStore, Languages } from './languages'
 import axios, { AxiosError } from 'axios'
 import { useModulesStore, ModulesDefs } from './modules'
 import { usePreferencesStore } from './preferences'
+import { Settings } from 'luxon'
 
 interface QuickCreate {
     module: string
@@ -62,7 +63,7 @@ export const useBackendStore = defineStore('backend', () => {
                 }
             })
             let mintRebuildID = cachedConfig.value?.mintRebuildID ?? '';
-            let current_language = cachedConfig.value?.languages?.current_language ?? '';
+            const current_language = cachedConfig.value?.languages?.current_language ?? '';
             if(mintRebuildID === false){
                 mintRebuildID = '';
             }
@@ -87,6 +88,11 @@ export const useBackendStore = defineStore('backend', () => {
                     cachedConfig.value.quick_create = initResponse.data.quick_create
                     cachedConfig.value.legacy_views = initResponse.data.legacy_views
                 }
+                if(initResponse.data?.acls){
+                    for(let module_name in initResponse.data.acls){
+                        cachedConfig.value.modules[module_name].acl = initResponse.data.acls[module_name]
+                    }
+                }
                 initData.value = cachedConfig.value
             } else {
                 initData.value = initResponse.data
@@ -108,7 +114,6 @@ export const useBackendStore = defineStore('backend', () => {
             alerts.init()
             favorites.fetch()
             recents.fetch()
-            
         } catch (err) {
             if ((err as AxiosError).response?.status === 401) {
                 const loginData = (

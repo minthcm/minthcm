@@ -69,6 +69,10 @@ $viewdefs['Employees']['QuickCreate'] = array(
             ),
          ),
          array(
+            'birthdate',
+            '',
+         ),
+         array(
             array(
                'name' => 'securitygroup_name',
                'customCode' => '{if  $EDIT_REPORTS_TO || $IS_ADMIN}@@FIELD@@{else}{$DEPT_READONLY}{/if}',

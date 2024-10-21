@@ -48,7 +48,6 @@ array (
             'label' => 'LBL_RELATIONSHIP_SECURITY_GROUP_NAME',
             'displayParams' => 
             array (
-              'class' => 'sqsDisabled',
               'initial_filter' => '&group_type=business_unit',
             ),
           ),

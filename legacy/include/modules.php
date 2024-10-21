@@ -513,6 +513,10 @@ $beanList['SecurityGroups'] = 'SecurityGroup';
 $beanFiles['SecurityGroup'] = 'modules/SecurityGroups/SecurityGroup.php';
 $moduleList[] = 'SecurityGroups';
 
+$beanList['Kudos'] = 'Kudos';
+$beanFiles['Kudos'] = 'modules/Kudos/Kudos.php';
+$moduleList[] = 'Kudos';
+
 $beanList['OutboundEmailAccounts'] = 'OutboundEmailAccounts';
 $beanFiles['OutboundEmailAccounts'] = 'modules/OutboundEmailAccounts/OutboundEmailAccounts.php';
 $modules_exempt_from_availability_check['OutboundEmailAccounts'] = 'OutboundEmailAccounts';

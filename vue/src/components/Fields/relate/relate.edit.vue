@@ -8,6 +8,7 @@
         v-model="model"
         item-value="id"
         item-title="name"
+        @input="(event) => fetchItems(event, index)"
     />
 </template>
 

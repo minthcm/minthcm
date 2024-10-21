@@ -22,7 +22,7 @@ router.beforeEach(async (to, from) => {
         await backend.init()
     }
     if (to.meta?.auth !== false && !auth.user?.id) {
-        return { name: 'auth-login' }
+        return { name: 'auth-login', query: { redirect: to.path } }
     }
     if (auth.user?.show_login_wizard && to.name !== 'setup-wizard') {
         return { name: 'setup-wizard' }
@@ -54,6 +54,7 @@ router.beforeEach(async (to, from) => {
                 params: {
                     module,
                     action: 'DetailView',
+                    record: to.params.id,
                 },
             }
         }

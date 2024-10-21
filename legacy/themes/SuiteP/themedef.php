@@ -122,6 +122,7 @@ $themedef = array(
         'allocations' => 'fa-sign-in-alt',
         'workplaces' => 'fa-pencil-ruler',
         'files' => 'fa-file',
+        'kudos' => 'fa-thumbs-up',
     ),
 );
 

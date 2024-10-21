@@ -63,7 +63,7 @@ class ESListViewController
             try {
                 list($total, $offset, $results) = $get_records->get();
                 $this->updatePreferences($options);
-                return ['total' => $total, 'offset' => $offset, 'results' => $results];
+                return ['total' => $total, 'offset' => $offset, 'results' => $results, 'module' => $options['module']];
             } catch (Exception $exception) {
                 $GLOBALS['log']->fatal($exception->getMessage());
                 return false;

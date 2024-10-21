@@ -5,7 +5,10 @@
             <router-link :to="recordUrl" class="relate-field">
                 {{ props.modelValue }}
             </router-link>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

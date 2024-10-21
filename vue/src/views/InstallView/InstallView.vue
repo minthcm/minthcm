@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, onBeforeUnmount } from 'vue'
 import { useInstallViewStore } from './InstallViewStore'
 import { INSTALL_CONFIG } from './InstallViewConfig'
 import MintButton from '@/components/MintButtons/MintButton.vue'
@@ -60,9 +60,7 @@ import InstallViewCompleted from './steps/InstallViewCompleted.vue'
 import LoadingScreen from '@/components/LoadingScreen.vue'
 
 const store = useInstallViewStore()
-
 const stepComponent = ref(null)
-
 const prevBtnLabel = computed(() => {
     if (typeof stepComponent.value?.prevBtn?.label === 'string') {
         return stepComponent.value.prevBtn.label
@@ -85,7 +83,32 @@ const nextBtnLabel = computed(() => {
 
 onMounted(() => {
     store.fetchInitialData()
+    window.addEventListener('keydown', handleKeyDown)
 })
+
+onBeforeUnmount(() => {
+    window.removeEventListener('keydown', handleKeyDown)
+})
+
+function handleKeyDown(event) {
+    if (store.isInstalling || document.querySelectorAll('.v-menu .v-list').length > 0) {
+        return
+    }
+    if (event.key === 'Enter') {
+        if (store.isInstallationCompleted) {
+            location.reload()
+            return
+        }
+        handleNextBtnClick()
+    }
+    if (
+        (event.key === 'Escape' || event.key === 'Esc') &&
+        store.currentStepNumber !== 0 &&
+        !store.isInstallationCompleted
+    ) {
+        handlePrevBtnClick()
+    }
+}
 
 function handlePrevBtnClick() {
     if (stepComponent.value?.prevBtn && typeof stepComponent.value.prevBtn.action === 'function') {

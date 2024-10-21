@@ -58,6 +58,7 @@ $searchdefs['Employees'] = array(
          'last_name',
          'employee_status',
          'position_name',
+         'birthdate',
          'phone' =>
          array(
             'name' => 'phone',

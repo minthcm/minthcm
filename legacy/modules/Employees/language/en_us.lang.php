@@ -198,9 +198,12 @@ $mod_strings = array(
     'LBL_BUSINESS_ROLE' => 'Business Role',
     'LBL_EMPLOYEES_CONFIRMATION_BUTTON_CONFIRM' => 'YES',
     'LBL_EMPLOYEES_CONFIRMATION_BUTTON_CANCEL' => 'NO',
+    'LBL_DEPUTY'=>'Deputy', 
     /* MintHCM #84233 START */
     'LBL_CANDIDATES_MODULE_DUP' => 'Candidates',
     'MSG_SHOW_DUPLICATES' => 'The record you are about to create might be a duplicate of a Candidates or Employees record that already exists. Candidates and Employees records containing similar names are listed below.<br>Click Create to continue creating this new Candidate, or select an existing listed below.',
     /* MintHCM #84233 END */
     'LBL_BIRTHDATE' => 'Birthdate',
+    'LBL_KUDOS' => 'Kudos',
+    'LBL_FILES' => 'Files'
 );
