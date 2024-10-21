@@ -13,6 +13,9 @@ $ESListViewDefs['ProspectLists'] = [
         'description' => [
             'default' => true,
         ],
+        'report_name' => [
+            'default' => true,
+        ],
         'assigned_user_name' => [
             'default' => true,
         ],

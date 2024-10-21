@@ -126,6 +126,16 @@ $dictionary['Files'] = array(
             'audited' => false,
             'size' => 30,
         ),
+        'employee' => array(
+            'name' => 'employee',
+            'type' => 'link',
+            'relationship' => 'employees_files',
+            'source' => 'non-db',
+            'module' => 'Employees',
+            'bean_name' => 'Employee',
+            'vname' => 'LBL_EMPLOYEE',
+            'label' => 'LBL_EMPLOYEE',
+        ),
     ),
     'relationships' => array(
         'candidatures_files' => array(
@@ -204,6 +214,17 @@ $dictionary['Files'] = array(
             'relationship_type' => 'one-to-many',
             'relationship_role_column' => 'parent_type',
             'relationship_role_column_value' => 'Ideas',
+        ),
+        'employees_files' => array(
+            'lhs_module' => 'Employees',
+            'lhs_table' => 'users',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Files',
+            'rhs_table' => 'files',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Employees',
         ),
     ),
     'indices' => array(        

@@ -46,19 +46,29 @@
 
 namespace MintHCM\Api\Controllers\Init;
 
+use BeanFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 use Slim\Exception\HttpBadRequestException;
 use MintHCM\Api\Controllers\Init\Preferences;
+use MintHCM\Api\Controllers\MetaController;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Module
 {
-    protected $preferences_controller, $sugar_view, $modules_icons, $action_icons;
+    const VIEW_META = [
+        "DetailView",
+        "EditView",
+        "Subpanels",
+        "RecordView",
+    ];
+
+    protected $preferences_controller, $sugar_view, $modules_icons, $action_icons, $module_meta_controller;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
+        $this->module_meta_controller = new MetaController();
         $this->preferences_controller = new Preferences($entityManager);
         $this->sugar_view = new \SugarView();
         $this->modules_icons = include "constants/module_icons.php";
@@ -99,6 +109,28 @@ class Module
 
     public function getModuleData($module)
     {
+        return array(
+            "name" => $module,
+            "icon" => $this->modules_icons[$module] ?? $this->modules_icons['default'],
+            "actions" => $this->getModuleMenu($module),
+            "vardefs" => $this->getVardefs($module),
+            "metadata" => $this->getMetadata($module),
+            "acl" => $this->getACLForModule($module),
+            "dashboards" => 'Home' === $module ? $this->getHomeMenu() : array(),
+        );
+    }
+
+    public function getACLs(){
+        global $moduleList;
+        $acls = array();
+        foreach ($moduleList as $module) {
+            $acls[$module] = $this->getACLForModule($module);
+        }
+        return $acls;
+    }
+
+    private function getACLForModule($module)
+    {
         global $current_user;
         $acl = $_SESSION['ACL'][$current_user->id];
         if (empty($acl)) {
@@ -120,13 +152,7 @@ class Module
                 }
             }
         }
-        return array(
-            "name" => $module,
-            "icon" => $this->modules_icons[$module] ?? $this->modules_icons['default'],
-            "actions" => $this->getModuleMenu($module),
-            "acl" => array_map(function ($view) { return (int)$view['aclaccess']; }, $acl[$module]['module'] ?? []),
-            "dashboards" => 'Home' === $module ? $this->getHomeMenu() : array(),
-        );
+        return array_map(function ($view) { return (int)$view['aclaccess']; }, $acl[$module]['module'] ?? []);
     }
 
     private function getHomeMenu()
@@ -169,5 +195,25 @@ class Module
         }
 
         return $response;
+    }
+
+    private function getMetadata($module_name)
+    {
+        $metadata = [];
+        if($module_name !== "OAuthKeys") {
+            foreach(static::VIEW_META as $index=>$view) {
+                $method = "get" . $view . "Meta";
+                $metadata[$view] = $this->module_meta_controller->$method($module_name);
+            }
+        }
+        return $metadata;
+    }
+
+    private function getVardefs($module_name)
+    {
+        chdir('../legacy/');
+        $bean = BeanFactory::newBean($module_name);
+        chdir('../api/');
+        return $bean->field_defs ?? [];
     }
 }

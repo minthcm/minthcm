@@ -119,4 +119,12 @@ class Onboardings extends Basic
         return parent::ACLAccess($view, $is_owner, $in_group);
     }
 
+    function mark_deleted($id){
+        $query = "UPDATE tasks SET deleted = 1 WHERE parent_id = '{$id}' AND (parent_type = 'Onboardings' OR parent_type = 'Offboardings') ";
+        $this->db->query($query);
+        $query = "UPDATE meetings SET deleted = 1 WHERE parent_id = '{$id}' AND (parent_type = 'Onboardings' OR parent_type = 'Offboardings') ";
+		$this->db->query($query);
+        return parent::mark_deleted($id);
+	}
+
 }

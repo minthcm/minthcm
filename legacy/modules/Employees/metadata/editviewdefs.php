@@ -163,22 +163,22 @@ $viewdefs ['Employees'] = array(
                ),
             ),
             array(
-                array(
+               array(
                     'name' => 'primary_address_street',
                     'hideLabel' => true,
                     'type' => 'address',
                     'displayParams' => array(
                         'key' => 'primary',
-                        'rows' => 2,
-                        'cols' => 30,
+                     'rows' => 2,
+                     'cols' => 30,
                         'maxlength' => 150,
-                    ),
+                  ),
                     'label' => 'LBL_ADDRESS_STREET'
-                ),
-                array(
-                   'name' => 'email1',
-                   'label' => 'LBL_EMAIL',
-                ),
+               ),
+               array(
+                  'name' => 'email1',
+                  'label' => 'LBL_EMAIL',
+               ),
             ),
          ),
       ),

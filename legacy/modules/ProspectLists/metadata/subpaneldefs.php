@@ -138,5 +138,23 @@ $layout_defs['ProspectLists'] = array(
             'add_subpanel_data' => 'securitygroup_id',
             'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
         ),
+        'news' => array(
+            'order' => 100,
+            'module' => 'News',
+            'subpanel_name' => 'default',
+            'sort_order' => 'asc',
+            'sort_by' => 'publication_date',
+            'title_key' => 'LBL_NEWS',
+            'get_subpanel_data' => 'news',
+            'top_buttons' => array(
+                array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+                array(
+                    'widget_class' => 'SubPanelTopSelectButton',
+                    'mode' => 'MultiSelect',
+                ),
+            ),
+        ),
     ),
 );

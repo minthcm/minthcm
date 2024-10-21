@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { FieldVardef } from '@/store/modules'
 
 interface Props {

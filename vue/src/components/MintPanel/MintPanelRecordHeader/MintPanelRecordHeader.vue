@@ -82,7 +82,7 @@ const languages = useLanguagesStore()
 const actions = computed<MenuListItem[]>(() => {
     const actions: MenuListItem[] = [
         {
-            title: 'LNK_VIEW_CHANGE_LOG',
+            title: languages.label('LNK_VIEW_CHANGE_LOG'),
             icon: 'mdi-history',
             onClick: () =>
                 window.open(
@@ -94,7 +94,7 @@ const actions = computed<MenuListItem[]>(() => {
     ]
     if (store.bean.acl_access?.delete === true) {
         actions.push({
-            title: 'LBL_DELETE_BUTTON_LABEL',
+            title: languages.label('LBL_DELETE_BUTTON_LABEL'),
             icon: 'mdi-trash-can-outline',
             onClick: async () => {
                 await store.deleteBean()

@@ -80,6 +80,7 @@ class ProspectList extends SugarBean
     public $prospect_id;
     public $contact_id;
     public $lead_id;
+    public $automatic_update;
 
     // module name definitions and table relations
     public $table_name = "prospect_lists";

@@ -63,7 +63,7 @@ class GenerateOnboardingOffboarding
         : null;
         $this->template_id = (isset($data['template_id'])) ? $data['template_id']
         : null;
-        $this->employee_id = (isset($data['employee_id'])) ? $data['employee_id']
+        $this->employees_ids = (isset($data['employees_ids'])) ? $data['employees_ids']
         : null;
         $this->date_start = (isset($data['date_start'])) ? $data['date_start'] : null;
         $this->record_id = (isset($data['record_id'])) ? $data['record_id'] : null;
@@ -78,25 +78,29 @@ class GenerateOnboardingOffboarding
     public function generate()
     {
         $template = BeanFactory::getBean($this->module_name, $this->template_id);
-        if ('OnboardingTemplates' == $this->module_name) {
-            $this->createProcess('Onboardings', 'onboardingtemplate_id',
-                $template->assigned_user_id);
-        } else {
-            $this->createProcess('Offboardings', 'offboardingtemplate_id',
-                $template->assigned_user_id);
-        }
-        if ($template->load_relationship('elements')) {
-            foreach ($template->elements->getBeans() as $element) {
-                $this->createRecordOfElementType($element);
+        foreach ($this->employees_ids as $employee_id) {
+            $this->employee_id = $employee_id;
+            if ('OnboardingTemplates' == $this->module_name) {
+                $this->createProcess('Onboardings', 'onboardingtemplate_id', 
+                    $template->assigned_user_id);
+            } else {
+                $this->createProcess('Offboardings', 'offboardingtemplate_id', 
+                    $template->assigned_user_id);
             }
+            if ($template->load_relationship('elements')) {
+                foreach ($template->elements->getBeans() as $element) {
+                    $this->createRecordOfElementType($element);
+                }
+            }
+            $this->addNotification();
         }
-        $this->addNotification();
     }
 
-    protected function createProcess($process_name, $relate_id_field_name,
+    protected function createProcess($process_name, $relate_id_field_name, 
         $assigned_user_id) {
         $bean = BeanFactory::newBean($process_name);
-        $bean->date_start = $this->date_start;
+        $db_date = date('Y-m-d H:i:s', strtotime($this->date_start . ' -2 hours'));
+        $bean->date_start = $db_date;
         $bean->employee_id = $this->employee_id;
         $bean->$relate_id_field_name = $this->template_id;
         $bean->assigned_user_id = $assigned_user_id;
@@ -141,7 +145,7 @@ class GenerateOnboardingOffboarding
                 break;
             case 'training':
                 $bean = $this->createTraining($element);
-                $meeting_bean = $this->createMeeting($element, $bean);
+                $this->handleMeeting($element, $bean);
                 break;
             case 'exit_interview':
                 $bean = $this->createExitInterview($element);
@@ -200,6 +204,23 @@ class GenerateOnboardingOffboarding
         return $bean;
     }
 
+    protected function handleMeeting($element, $training_bean)
+    {
+        if (!empty($this->meeting_bean) && $this->module_name == 'OnboardingTemplates') {
+            $meeting_bean = $this->meeting_bean;
+        }
+        else {
+            $meeting_bean = $this->createMeeting($element, $training_bean);
+        }
+        if (!empty($meeting_bean->id) && !empty($training_bean->id) && $meeting_bean->load_relationship('trainings') && $meeting_bean->load_relationship('users')) {
+            $meeting_bean->trainings->add($training_bean->id);
+            $meeting_bean->users->add($this->process->employee_id);
+            $meeting_bean->users->add($element->user_id);
+        }
+        $this->addSecurityGroupToRecord($meeting_bean,
+            $this->user_scheduled_onboarding->getUserPrivateGroup());
+    }
+
     protected function createMeeting($element, $training_bean)
     {
         global $timedate;
@@ -220,13 +241,10 @@ class GenerateOnboardingOffboarding
         $meeting_bean->parent_type = $this->process->module_name;
         $meeting_bean->parent_id = $this->process->id;
         $meeting_bean->save();
-        if (!empty($meeting_bean->id) && !empty($training_bean->id) && $meeting_bean->load_relationship('trainings') && $meeting_bean->load_relationship('users')) {
-            $meeting_bean->trainings->add($training_bean->id);
-            $meeting_bean->users->add($this->process->employee_id);
-            $meeting_bean->users->add($element->user_id);
+        if (!empty($meeting_bean->id)) {
+            $this->meeting_bean = $meeting_bean;
         }
-        $this->addSecurityGroupToRecord($meeting_bean,
-            $this->user_scheduled_onboarding->getUserPrivateGroup());
+        return $meeting_bean;
     }
 
     protected function createExitInterview($element)

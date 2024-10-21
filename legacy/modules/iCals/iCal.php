@@ -287,8 +287,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  if ($event->object_name == "Meeting") {
                      $ical_array[] = array("LOCATION", $event->location);
                      $eventUsers = $event->get_meeting_users();
-                     $query = "SELECT contact_id as id from meetings_contacts where meeting_id='$event->id' AND deleted=0";
-                     $eventContacts = $event->build_related_list($query, BeanFactory::newBean('Contacts'));
+                     /* MintHCM #138652 - We don't use Contacts module at the moment START */
+                     $eventContacts = [];
+                     /* MintHCM #138652 - We don't use Contacts module at the moment END */
                      $eventAttendees = array_merge($eventUsers, $eventContacts);
                      if (is_array($eventAttendees)) {
                          foreach ($eventAttendees as $attendee) {

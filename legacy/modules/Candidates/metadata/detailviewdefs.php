@@ -153,7 +153,7 @@ $viewdefs[$module_name] = array(
             'LBL_RECORDVIEW_PANEL1' => array(
                 array(
                     'linkedin',
-                    'goldenline',
+                    'github',
                 ),
                 array(
                     'facebook',

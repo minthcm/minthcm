@@ -92,4 +92,7 @@ $mod_strings = array(
     'LBL_NEW_USERS_NEWS' => "There is a new information avaiable",
     'LBL_NEW_USERS_NEWS_UPDATED' => "There is an updated information avaiable",
     'LBL_REACTIONS' => "Reactions",
+    'LBL_PROSPECT_LISTS' => 'Target Lists',
+    'LBL_NO_TARGET_MSG' => 'To publish news, you need to define a group of recipients',
+    'LBL_PHOTO' => "Photo",
 );

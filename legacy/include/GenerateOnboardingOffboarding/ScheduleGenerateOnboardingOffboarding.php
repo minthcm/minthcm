@@ -49,11 +49,11 @@ class ScheduleGenerateOnboardingOffboarding
     protected $employee_id;
     protected $date_start;
 
-    public function __construct($module_name, $template_id, $employee_id, $date_start)
+    public function __construct($module_name, $template_id, $employees_ids, $date_start)
     {
         $this->module_name = $module_name;
         $this->template_id = $template_id;
-        $this->employee_id = $employee_id;
+        $this->employees_ids = $employees_ids;
         if (!empty($date_start)) {
             $this->date_start = (new SugarDateTime($date_start))->asDb();
         }
@@ -78,7 +78,7 @@ class ScheduleGenerateOnboardingOffboarding
         $data = base64_encode(json_encode(array(
             'module_name' => $this->module_name,
             'template_id' => $this->template_id,
-            'employee_id' => $this->employee_id,
+            'employees_ids' => $this->employees_ids,
             'date_start' => $this->date_start,
         )));
         $job->data = $data;
@@ -92,19 +92,21 @@ class ScheduleGenerateOnboardingOffboarding
         $template = BeanFactory::getBean($this->module_name, $this->template_id);
         if ($template && !empty($template->id) && $template->load_relationship('elements')) {
             foreach ($template->elements->get() as $element_id) {
-                $this->validateElement($element_id, $errors);
+                foreach ($this->employees_ids as $employee_id) {
+                    $this->validateElement($employee_id, $element_id, $errors);
             }
+        }
         }
         return $errors;
     }
 
-    protected function validateElement($element_id, &$errors)
+    protected function validateElement($employee_id, $element_id, &$errors)
     {
         $element = BeanFactory::getBean('OnboardingOffboardingElements', $element_id);
         if ($element && !empty($element->id)) {
             switch ($element->kind_of_element) {
                 case 'self';
-                    $employee = BeanFactory::getBean('Employees', $this->employee_id);
+                    $employee = BeanFactory::getBean('Employees', $employee_id);
                     if (empty($errors[$element->kind_of_element]) && (empty($employee->user_name) || $employee->status != 'Active')) {
                         $errors[$element->kind_of_element] = [
                             'module' => 'Employees',
@@ -114,7 +116,7 @@ class ScheduleGenerateOnboardingOffboarding
                     }
                     break;
                 case 'employee_manager';
-                    $user = BeanFactory::getBean('Users', $this->employee_id);
+                    $user = BeanFactory::getBean('Users', $employee_id);
                     if (empty($errors[$element->kind_of_element]) && empty($user->reports_to_id)) {
                         $errors[$element->kind_of_element] = [
                             'module' => 'Users',

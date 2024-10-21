@@ -44,7 +44,7 @@ if (typeof Reactions !== 'function') {
             });
         }
         getReactionButtonTemplate() {
-            return _.template('<button <%= active %> type="button" title="<%= title %>" onclick="<%= onclick %>"><span class="fas fa-<%= icon %>"></span><%= count %></button>');
+            return _.template('<button <%= active %> type="button" title="<%= title %>" onclick="<%= onclick %>"><%= icon %><%= count %></button>');
         }
         getReactionButtonTitle(reaction) {
             let users = Object.values(this.reactions[reaction].users);
@@ -66,7 +66,7 @@ if (typeof Reactions !== 'function') {
             return "Reactions." + function_name + "('" + reaction + "','" + module_name + "','" + record_id + "')";
         }
         getReactionButtonIcon(reaction) {
-            return viewTools.language.get('app_list_strings', 'reaction_icons_list')[reaction];
+            return viewTools.language.get('app_list_strings', 'reaction_type_list')[reaction];
         }
         addReaction(reaction_type, module_name, record_id) {
             viewTools.api.callCustomApi({

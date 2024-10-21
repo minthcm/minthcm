@@ -180,6 +180,7 @@ include 'metadata/Attitudes_CompetenciesMetaData.php';
 //
 include 'metadata/Appraisals_EmployeesMetaData.php';
 include 'metadata/last_next_contacts_queueMetaData.php';
+include 'metadata/prospect_list_newsMetaData.php';
 if (file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
     include 'custom/application/Ext/TableDictionary/tabledictionary.ext.php';
 }

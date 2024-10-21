@@ -94,6 +94,7 @@ class EmployeeCreator
         $employee_bean->last_name = $this->candidate_bean->last_name;
         $employee_bean->birthdate = $this->candidate_bean->birthdate;
         $employee_bean->position_id = $this->position_bean->id;
+        $employee_bean->birthdate = $this->candidate_bean->birthdate;
         if (strlen($this->converted_candidature_login) > 0) {
             $employee_bean->user_name = $this->converted_candidature_login;
             $employee_bean->status = 'Inactive'; 
@@ -134,8 +135,9 @@ class EmployeeCreator
         } else {
             $related_employee_bean->status = 'Inactive';
         }
+        $related_employee_bean->birthdate = $this->candidate_bean->birthdate;
         $related_employee_bean->position_id = $this->position_bean->id;
-        $employee_bean->skip_vt_validation = true;
+        $related_employee_bean->skip_vt_validation = true;
         $related_employee_bean->save();
 
         return $related_employee_bean;

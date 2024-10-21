@@ -1,6 +1,6 @@
 <?php
 
-namespace Evolpe\EvolpeCLI\Commands;
+namespace MintHCM\MintCLI\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;

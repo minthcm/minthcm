@@ -274,6 +274,10 @@ CAL.repeat_type_selected = function () {
       }
    }
 }
+CAL.load_form_in_new_tab = function (module_name, record, edit_all_recurrences, cal_event) {
+    var url = "index.php?module=" + module_name + "&action=DetailView&record=" + record;
+    window.open(url, '_blank');
+}
 CAL.load_form = function (module_name, record, edit_all_recurrences, cal_event) {
    // Mint start
    var url = "index.php?module=" + module_name + "&action=DetailView&record=" + record;
@@ -1141,6 +1145,11 @@ $($.fullCalendar).ready(function () {
                CAL.load_form(calEvent.module, calEvent.record, false, calEvent);
             }
          },
+         eventAuxclick: function (calEvent, jsEvent, view) {
+            if (global_edit == true) {
+               CAL.load_form_in_new_tab(calEvent.module, calEvent.record, false, calEvent);
+            }
+        },
          eventDrop: function (event, delta, revertFunc) {
             event_datetime = event.start.format(global_datetime_format);
             var data = {

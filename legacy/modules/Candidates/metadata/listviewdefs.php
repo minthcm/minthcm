@@ -132,8 +132,8 @@ $listViewDefs[$module_name] = array(
         'width' => '10%',
         'default' => false,
     ),
-    'GOLDENLINE' => array(
-        'label' => 'LBL_GOLDENLINE',
+    'GITHUB' => array(
+        'label' => 'LBL_GITHUB',
         'type' => 'url',
         'width' => '10%',
         'default' => false,

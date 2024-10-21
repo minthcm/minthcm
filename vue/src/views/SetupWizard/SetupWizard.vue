@@ -36,15 +36,41 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import { useLanguagesStore } from '@/store/languages'
 import { useSetupWizardStore } from './SetupWizardStore'
 import SetupWizardComplete from './SetupWizardComplete.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const store = useSetupWizardStore()
 const languages = useLanguagesStore()
 const setupWizardStepComponent = ref<any>()
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('keydown', handleKeyDown)
+})
+
+function handleKeyDown(event) {
+    if (store.isLoading || document.querySelectorAll('.v-menu .v-list').length > 0) {
+        return
+    }
+    if (event.key === 'Enter') {
+        if (store.isFinished) {
+            router.push({ name: 'dashboard' })
+            return
+        }
+        handleNextStep()
+    }
+    if ((event.key === 'Escape' || event.key === 'Esc') && store.currentStepNumber !== 0 && !store.isFinished) {
+        store.prevStep()
+    }
+}
 
 function handleNextStep() {
     if (!setupWizardStepComponent.value?.validate || setupWizardStepComponent.value.validate()) {

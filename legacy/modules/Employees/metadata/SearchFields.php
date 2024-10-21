@@ -72,6 +72,24 @@ $searchFields['Employees'] =
                 'id',
             )
         ),
+        'range_birthdate' =>
+        array(
+           'query_type' => 'default',
+           'enable_range_search' => true,
+           'is_date_field' => true,
+        ),
+        'start_range_birthdate' =>
+        array(
+           'query_type' => 'default',
+           'enable_range_search' => true,
+           'is_date_field' => true,
+        ),
+        'end_range_birthdate' =>
+        array(
+           'query_type' => 'default',
+           'enable_range_search' => true,
+           'is_date_field' => true,
+        ),
         // This is named so awkwardly because it's the only way we could get it to be a "proper" checkbox and not throw the basic search all out of wack.
 		'open_only_active_users'=> array('query_type'=>'default','db_field'=>array('employee_status'), 'vname' => 'LBL_ONLY_ACTIVE', 'type' => 'bool'),
 

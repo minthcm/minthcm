@@ -7,6 +7,9 @@ $unified_search_modules_display = array(
     'ProspectLists' => array(
         'visible' => true,
     ),
+    'Kudos' => array(
+        'visible' => true,
+    ),
     'AOK_KnowledgeBase' => array(
         'visible' => true,
     ),

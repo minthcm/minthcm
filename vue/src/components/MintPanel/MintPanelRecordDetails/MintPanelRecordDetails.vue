@@ -29,16 +29,19 @@
             </template>
         </div>
         <div class="fields-container">
-            <div v-for="(row, i) in props.data.fields" class="row" :key="i + store.view">
+            <div v-for="(row, i) in props.data.fields" class="row" :key="i + store.view + store.inlineEditField">
                 <div v-for="n in store.columns" :key="n - 1">
                     <Field
                         v-if="row[n - 1] && !(row[n - 1].readonly && store.view === 'edit')"
-                        :view="store.view"
+                        :view="store.inlineEditField === row[n - 1].name ? 'edit' : store.view"
                         :defs="row[n - 1]"
                         :data="{ bean: store.bean.attributes }"
                         :label="languages.label(row[n - 1].label, modules.currentModule?.name)"
                         v-model="store.bean.attributes[row[n - 1].name]"
                         @update:modelValue="(additionalFields) => store.updateField(row[n - 1].name, additionalFields)"
+                        @inlineEditBtnClicked="inlineEditBtnClicked"
+                        @inlineEditSave="save"
+                        @inlineEditCancel="cancel"
                     />
                 </div>
             </div>
@@ -90,24 +93,41 @@ const saveButtonStates = {
     },
 }
 
+const inlineEditBtnClicked = (event: string) => {
+    store.inlineEditField = event
+}
+
 const edit = () => {
     store.view = 'edit'
+    store.inlineEditField = ''
+    store.inlineEditFieldSaving = ''
 }
 
 const cancel = () => {
     store.bean.dirtyFields.clear()
     store.bean.attributes = { ...store.bean.syncAttributes }
     store.view = 'detail'
+    store.inlineEditField = ''
+    store.inlineEditFieldSaving = ''
     saveStatus.value = ''
 }
 
 const save = async () => {
+    const prevInlineEditField = store.inlineEditField
+    if (prevInlineEditField) {
+        store.inlineEditFieldSaving = prevInlineEditField
+    }
+    store.inlineEditField = ''
     saveStatus.value = 'saving'
     const response = await store.saveBean()
     saveStatus.value = [200, 201].includes(response.status) ? 'saved' : 'error'
     setTimeout(() => {
         if (saveStatus.value === 'saved') {
             store.view = 'detail'
+            store.inlineEditField = ''
+            store.inlineEditFieldSaving = ''
+        } else {
+            store.inlineEditField = prevInlineEditField
         }
         saveStatus.value = ''
     }, 2000)

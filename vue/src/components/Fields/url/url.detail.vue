@@ -6,7 +6,10 @@
                 <span>{{ props.modelValue }}</span>
                 <v-icon v-if="props.modelValue" size="x-small">mdi-open-in-new</v-icon>
             </a>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

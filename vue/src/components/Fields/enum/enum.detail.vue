@@ -9,7 +9,10 @@
                 >{{ languages.translateListValue(props.modelValue, props.defs?.options) }}</v-chip
             >
             <div v-else>{{ languages.translateListValue(props.modelValue, props.defs?.options) }}</div>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

@@ -74,4 +74,19 @@ class NewsApi
         }
     }
 
+    public function hasNewsTarget($args)
+    {
+        $return = false;
+        if (isset($args['news_id'])) {
+            global $db;
+            $id = $db->quote($args['news_id']);
+            $sql = "SELECT count(*) AS num FROM prospect_list_news pln
+                    JOIN prospect_lists pl ON pl.id=pln.prospectlist_id AND pl.deleted=0
+                    JOIN prospect_lists_prospects plp ON plp.deleted=0 AND plp.prospect_list_id=pl.id
+                    WHERE pln.deleted=0 AND pln.news_id='{$id}'";
+            $return = $db->getOne($sql) ? true : false;
+        }
+        return $return;
+    }
+
 }

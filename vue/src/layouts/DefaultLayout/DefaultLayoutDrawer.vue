@@ -1,21 +1,23 @@
 <template>
     <div class="drawer">
         <div class="drawer-nav">
-            <MintButton icon="mdi-thumb-up" variant="nav" />
-            <v-badge
-                :content="chat.unreadConversationsCount"
-                color="error"
-                location="bottom end"
-                :model-value="chat.unreadConversationsCount > 0"
-                @click="ux.drawer = !ux.drawer"
-            >
-                <MintButton icon="mdi-chat" variant="nav" :active="ux.drawer" />
-            </v-badge>
-            <MintButton icon="mdi-newspaper-variant" variant="nav" />
+            <template v-for="drawer in bundle.drawers" :key="drawer.key">
+                <v-badge v-if="drawer.isAvaliable?.()"
+                    :content="drawer.badge?.()"
+                    color="error"
+                    location="bottom end"
+                    :model-value="!!drawer.badge?.()"
+                    @click="ux.drawer = ux.drawer === drawer.key ? null : drawer.key"
+                >
+                    <MintButton :icon="drawer.icon" variant="nav" :active="ux.drawer === drawer.key" />
+                </v-badge>
+            </template>
         </div>
-        <v-slide-x-transition hide-on-leave>
-            <div v-if="ux.drawer" class="drawer-content">
-                <MintChat />
+        <v-slide-x-transition>
+            <div v-if="ux.drawer" class="drawer-content" ref="drawerContentRef" @scroll="handleScroll">
+                <template v-for="drawer in bundle.drawers" :key="drawer.key">
+                    <component v-if="ux.drawer === drawer.key" :is="drawer.component" />
+                </template>
             </div>
         </v-slide-x-transition>
     </div>
@@ -23,12 +25,18 @@
 
 <script setup lang="ts">
 import MintButton from '@/components/MintButtons/MintButton.vue'
-import MintChat from '@/components/MintChat/MintChat.vue'
-import { useMintChatStore } from '@/components/MintChat/MintChatStore'
 import { useUxStore } from '@/store/ux'
+import { computed, ref } from 'vue'
+import bundle from '@/bundler'
 
 const ux = useUxStore()
-const chat = useMintChatStore()
+const drawerContentRef = ref<any>(null)
+
+const activeDrawer = computed(() => bundle.drawers.find((drawer: any) => drawer.key === ux.drawer))
+
+function handleScroll() {
+    activeDrawer.value?.onScroll(drawerContentRef.value)
+}
 </script>
 
 <style scoped lang="scss">
@@ -44,6 +52,7 @@ const chat = useMintChatStore()
         width: var(--v-drawer-width);
         background: rgb(var(--v-theme-surface));
         height: 100%;
+        overflow: auto;
     }
 }
 .drawer-nav {
