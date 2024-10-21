@@ -14,6 +14,8 @@ if(!file_exists('.htaccess')) {
   RewriteRule ^assets/(.*?)$ assets/$1 [L]
   RewriteRule ^favicon.ico$ favicon.ico [L]
   RewriteRule ^bg.jpg$ bg.jpg [L]
+  
+  RewriteRule ^ical_server.php$ legacy/ical_server.php [L]
 </IfModule>";
   file_put_contents('.htaccess', $htaccess_body);
   

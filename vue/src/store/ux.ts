@@ -7,7 +7,7 @@ import GuestLayout from '@/layouts/GuestLayout/GuestLayout.vue'
 
 export const useUxStore = defineStore('ux', () => {
     const loadingScreen = ref(false)
-    const drawer = ref(false)
+    const drawer = ref<null | string>(null)
     const route = useRoute()
 
     function showLoadingScreen() {

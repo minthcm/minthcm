@@ -8,6 +8,9 @@
             :modelValue="modelValue"
             :class="`${view}-field-container`"
             @update:modelValue="(v) => $emit('update:modelValue', v)"
+            @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            @inlineEditSave="() => $emit('inlineEditSave')"
+            @inlineEditCancel="() => $emit('inlineEditCancel')"
         />
     </keep-alive>
 </template>

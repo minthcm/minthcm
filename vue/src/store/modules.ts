@@ -72,9 +72,9 @@ export interface FieldVardef {
 }
 
 export const useModulesStore = defineStore('modules', () => {
-    const backend = useBackendStore() 
-    const languages = useLanguagesStore()
     const route = useRoute()
+    const backend = useBackendStore()
+    const languages = useLanguagesStore()
 
     const modulesDefs = ref<ModulesDefs | null>(null)
 
@@ -117,7 +117,7 @@ export const useModulesStore = defineStore('modules', () => {
         return backend.initData?.menu_modules.map((moduleName) => modules.value[moduleName]) ?? []
     })
 
-    function getModuleActions(actions: Array<ModuleAction>) { 
+    function getModuleActions(actions: Array<ModuleAction>) {
         const response: ModuleAction[] = []
         for (const action of actions) {
             if(!action.original_url){

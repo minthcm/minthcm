@@ -104,8 +104,11 @@ $viewdefs[$module_name] = array(
                     'news_status',
                 ),
                 array(
+                    'news_type',
                     'publication_date',
-                    ''
+                ),
+                array(
+                    'photo',
                 ),
                 array(
                     array(

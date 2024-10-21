@@ -127,6 +127,20 @@ $layout_defs['Employees'] = array(
                 ),
             ),
         ),
+        "kudos" => array(
+            'order' => 100,
+            'module' => 'Kudos',
+            'subpanel_name' => 'ForEmployees',
+            'sort_order' => 'asc',
+            'sort_by' => 'id',
+            'title_key' => 'LBL_KUDOS',
+            'get_subpanel_data' => 'kudos',
+            'top_buttons' => array(
+                array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+            ),
+        ),
         "appraisals" => array(
             'order' => 100,
             'module' => 'Appraisals',
@@ -286,6 +300,14 @@ $layout_defs['Employees'] = array(
                     'widget_class' => 'SubPanelTopButtonQuickCreate',
                 ),
             ),
+        ),
+        'files' => array(
+            'order' => 100,
+            'module' => 'Files',
+            'subpanel_name' => 'default',
+            'title_key' => 'LBL_FILES',
+            'get_subpanel_data' => 'files',
+            'dropzone' => true
         ),
     ),
 );

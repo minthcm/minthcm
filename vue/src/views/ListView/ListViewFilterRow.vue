@@ -35,7 +35,7 @@
                     :is="getInputComponent(input.type)"
                     :fieldDefs="fieldDefs"
                     :input="input"
-                    @update:modelValue="(newValue) => (input.value = newValue)"
+                    @update:modelValue="(newValue) => (input.value = input.modifiers ? runModifiers(input.modifiers, newValue) : newValue)"
                     density="compact"
                 />
             </v-col>
@@ -96,7 +96,16 @@ const operatorItems = computed(() => {
 function getInputComponent(type: string) {
     return inputDefs[type] ? inputDefs[type] : null
 }
-
+function runModifiers(modifier: any, value: any) {
+    if (!Array.isArray(modifier) && modifier instanceof Function) {
+        return modifier(value)
+    } else {
+        modifier.forEach((m) => {
+            value = runModifiers(m, value)
+        })
+    }
+    return value
+}
 function handleFieldChange() {
     operator.value = ''
     inputs.value = []
@@ -113,6 +122,7 @@ function handleOperatorChange() {
             type: i.type,
             value: null,
             label: languages.label(i.label),
+            modifiers: i.modifiers ?? null,
         }))
     }
     emit('update:operator', operator.value)

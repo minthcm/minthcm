@@ -9,7 +9,10 @@
                     <v-icon :icon="expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
                 </a>
             </div>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

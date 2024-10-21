@@ -2237,11 +2237,11 @@ abstract class DBManager
                         return 0;
                     }
 
-                    // eVolpe #119576 START
+                    // MintHCM #119576 START
                     if ($val === '') {
                         return "NULL";
                     }
-                    // eVolpe #119576 END
+                    // MintHCM #119576 END
                     return intval($val);
                 case 'bigint':
                     // ViewTools #69225 START
@@ -2257,11 +2257,11 @@ abstract class DBManager
                         return 0;
                     }
 
-                    // eVolpe #119576 START
+                    // MintHCM #119576 START
                     if ($val === '') {
                         return "NULL";
                     }
-                    // eVolpe #119576 END
+                    // MintHCM #119576 END
                     return $val;
                 case 'float':
                     if (!empty($fieldDef['required']) && $val == '') {

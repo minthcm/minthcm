@@ -341,10 +341,10 @@ $dictionary['Candidates'] = array(
             'options' => 'date_range_search_dom',
             'enable_range_search' => '1',
         ),
-        'goldenline' => array(
-            'name' => 'goldenline',
-            'label' => 'LBL_GOLDENLINE',
-            'vname' => 'LBL_GOLDENLINE',
+        'github' => array(
+            'name' => 'github',
+            'label' => 'LBL_GITHUB',
+            'vname' => 'LBL_GITHUB',
             'comments' => '',
             'type' => 'url',
             'max_size' => '255',

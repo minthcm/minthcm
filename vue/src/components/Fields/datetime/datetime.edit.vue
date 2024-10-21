@@ -1,5 +1,5 @@
 <template>
-    <div class="mint-date-field-detail">
+    <div class="mint-date-field-detail" @keyup.enter="$emit('inlineEditSave')" @keyup.esc="$emit('inlineEditCancel')">
         <v-text-field :label="label" variant="outlined" density="compact" hide-details v-model="dateValue">
             <template #append-inner>
                 <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">

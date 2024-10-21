@@ -6,7 +6,10 @@
                 <v-icon size="x-small" v-if="props.modelValue">mdi-email</v-icon>
                 <span>{{ props.modelValue }}</span>
             </a>
-            <Pencil :defs="props.defs" />
+            <Pencil
+                :defs="props.defs"
+                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
+            />
         </div>
     </div>
 </template>

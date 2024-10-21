@@ -1322,7 +1322,6 @@ function insert_default_settings() {
     'prospects' => 'prospects',
     'cases' => 'cases',
     'jjwg_areas' => 'jjwg_areas',
-    'prospectlists' => 'prospectlists',
     'jjwg_markers' => 'jjwg_markers',
     'bugs' => 'bugs',
     'aos_contracts' => 'aos_contracts',

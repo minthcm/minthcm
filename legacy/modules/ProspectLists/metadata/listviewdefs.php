@@ -62,6 +62,11 @@ $listViewDefs['ProspectLists'] = array(
         'width' => '40',
         'label' => 'LBL_LIST_DESCRIPTION',
         'default' => true),
+    'REPORT_NAME' => array(
+        'width' => '40',
+        'label' => 'LBL_REPORT_NAME',
+        'default' => false
+    ),
     'ASSIGNED_USER_NAME' => array(
         'width' => '10',
         'label' => 'LBL_LIST_ASSIGNED_USER',

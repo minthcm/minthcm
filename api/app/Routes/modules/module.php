@@ -72,6 +72,84 @@ $routes = array(
             ),
         ),
     ),
+    "create" => array(
+        "method" => "POST",
+        "path" => "/Create",
+        "class" => ModuleController::class,
+        "function" => 'create',
+        "desc" => "Create records",
+        "options" => array(
+            'auth' => true,
+        ),
+        "pathParams" => array(),
+        "queryParams" => array(),
+        "bodyParams" => array(
+            "record_data" => array(
+                "type" => ArrayType::class,
+                "required" => true,
+                "desc" => "Record data",
+                "example" => '
+                    "record_data": {
+                        "first_name": "Example",
+                        "last_name": "record",
+                        "birthdate": "2023-07-23",
+                    },
+                ',
+            ),
+        ),
+    ),
+    "update" => array(
+        "method" => "PATCH",
+        "path" => "/Update/{id}",
+        "class" => ModuleController::class,
+        "function" => 'update',
+        "desc" => "Update records",
+        "options" => array(
+            'auth' => true,
+        ),
+        "pathParams" => array(
+            "id" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "Module id",
+                "example" => '223dee27-b9e7-432a-8da9-c84cc0770035',
+            ),
+        ),
+        "queryParams" => array(),
+        "bodyParams" => array(
+            "record_data" => array(
+                "type" => ArrayType::class,
+                "required" => true,
+                "desc" => "Record id and fields to overwrite",
+                "example" => '
+                    "record_data": {
+                        "name": "Updated example record",
+                        "description": "Example desc for this record"
+                    },
+                ',
+            ),
+        ),
+    ),
+    "get_record" => array(
+        "method" => "GET",
+        "path" => "/Get/{id}",
+        "class" => ModuleController::class,
+        "function" => 'getRecord',
+        "desc" => "Get record fields",
+        "options" => array(
+            'auth' => true,
+        ),
+        "pathParams" => array(
+            "id" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "Module id",
+                "example" => '223dee27-b9e7-432a-8da9-c84cc0770035',
+            ),
+        ),
+        "queryParams" => array(),
+        "bodyParams" => array(),
+    ),
     "delete" => array(
         "method" => "DELETE",
         "path" => "/{id}",
@@ -92,6 +170,32 @@ $routes = array(
         "queryParams" => array(),
         "bodyParams" => array(),
     ),
+    "subpanel_records" => array(
+        "method" => "GET",
+        "path" => "/subpanel/{relation_name}/{id}",
+        "class" => ModuleController::class,
+        "function" => 'subpanelRecords',
+        "desc" => "Returns related records for Subpanel.",
+        "options" => array(
+            'auth' => true,
+        ),
+        "pathParams" => array(
+            "relation_name" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "Relatiuon name or name of subpanel",
+                "example" => 'candidatures',
+            ),
+            "id" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "Module id",
+                "example" => '223dee27-b9e7-432a-8da9-c84cc0770035',
+            ),
+        ),
+        "queryParams" => array(),
+        "bodyParams" => array(),
+    ), 
     "list_data" => array(
         "method" => "POST",
         "path" => "",

@@ -97,7 +97,14 @@ async function handleSubmit() {
     const result = await auth.authenticate(authViewStore.username, password.value)
     if (result) {
         backend.initialLoading = true
-        router.go(0)
+        const redirect = router.currentRoute.value?.query?.redirect
+
+        if (redirect && typeof redirect === 'string') {
+            await backend.init()
+            await router.replace({ path: redirect })
+        } else {
+            router.go(0)
+        }
     } else {
         loginError.value = true
     }

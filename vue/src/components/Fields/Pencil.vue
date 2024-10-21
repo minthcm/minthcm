@@ -1,6 +1,7 @@
 <template>
+    <v-progress-circular v-if="store.inlineEditFieldSaving === props.defs?.name" size="16" indeterminate />
     <v-icon
-        v-if="!props.defs?.readonly"
+        v-else-if="!props.defs?.readonly"
         icon="mdi-pencil"
         size="small"
         class="detail-view-edit-icon"
@@ -10,13 +11,18 @@
 
 <script setup lang="ts">
 import { FieldVardef } from '@/store/modules'
+import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
+const store = useRecordViewStore()
 interface Props {
     defs?: FieldVardef
 }
 const props = defineProps<Props>()
+const emit = defineEmits(['inlineEditBtnClicked'])
 
 function editBtnClicked() {
-    console.log('editBtnClicked')
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
 }
 </script>
 

@@ -8,6 +8,8 @@
         :items="languages.getList(props.defs?.options)"
         item-title="value"
         item-value="key"
+        @keyup.enter="$emit('inlineEditSave')"
+        @keyup.esc="$emit('inlineEditCancel')"
     ></v-select>
 </template>
 

@@ -22,7 +22,6 @@ export interface MenuListItem {
 interface Props {
     items: MenuListItem[]
 }
-
 const props = defineProps<Props>()
 
 //TODO: global function?

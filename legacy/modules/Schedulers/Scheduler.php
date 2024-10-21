@@ -1027,8 +1027,21 @@ class Scheduler extends SugarBean
         $sched19->modified_user_id = '1';
         $sched19->catch_up = '1';
         $sched19->save();
+
+        $sched20 = new Scheduler();
+        $sched20->name = $mod_strings['LBL_SEND_KUDOS'];
+        $sched20->job = 'function::sendKudos';
+        $sched20->date_time_start = create_date(2015, 1, 1) . ' ' . create_time(0, 0, 1);
+        $sched20->date_time_end = null;
+        $sched20->job_interval = '0::9::*::*::MON';
+        $sched20->status = 'Active';
+        $sched20->created_by = '1';
+        $sched20->modified_user_id = '1';
+        $sched20->catch_up = '1';
+        $sched20->save();
   
       $this->createJobEntry('AutomaticCreateNotification', '*/15::*::*::*::*', $mod_strings['LBL_AUTOMATICCREATENOTIFICATION'],'Inactive');
+      $this->createJobEntry('updateNewsByProspectLists', '0::2::*::*::*', $mod_strings['LBL_UPDATENEWSBYPROSPECTLISTS']);
      }
   
    protected function createJobEntry($function, $interval, $name = '', $status='Active') {

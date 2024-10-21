@@ -608,11 +608,12 @@ class KReporterRESTHandler
                         ?: $parentModule->field_defs[$fieldArray[1]]['type'];
             }
             // we have the root module
-            switch ($fieldType) {
+            switch (strtolower($fieldType)) {
                 // Mint end
                 case 'enum':
                 case 'radioenum':
                 case 'multienum':
+                case 'coloredenum':
                     if ($parentModule->field_defs[$fieldArray[1]]['function']) {
                         require_once($parentModule->field_defs[$fieldArray[1]]['function']['include']);
                         $functionName = $parentModule->field_defs[$fieldArray[1]]['function']['name'];
