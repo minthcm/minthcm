@@ -61,7 +61,7 @@ MintHCM is based on SuiteCRM, so the API is very similar. However there are a fe
 
 ## Community and Contributions 🤝
 
-Be part of the conversation. Join our [Discord server](https://discord.gg/mdt7ybbGG8)
+Be part of the conversation. Join our [Discord server](https://discord.gg/zHu8AfCEVb)
 
 If you're willing to help, **fork a repo**, make some changes, and then create Pull Request!
 
