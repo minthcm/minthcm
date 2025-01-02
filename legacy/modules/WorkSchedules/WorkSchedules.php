@@ -44,6 +44,7 @@
  */
 
 require_once 'include/CalendarActivities/CalendarActivities.php';
+require_once 'modules/Calendar/Calendar.php';
 require_once 'include/DateFunctions/DateFormatter.php';
 require_once 'modules/WorkSchedules/AcceptWorkScheduleValidator.php';
 
@@ -186,11 +187,11 @@ class WorkSchedules extends Basic
         if (empty($this->date_end) || empty($this->date_start)) {
             $GLOBALS['log']->fatal("Date start or date end is empty. Cannot save.Date start: {$this->date_start} date end: {$this->date_end}");
         } else {
-            
-                        // prevent a mass mailing for recurring meetings created in Calendar module
-                        if ( empty($this->id) && !empty($_REQUEST['repeat_type']) && !empty($this->repeat_parent_id) ) {
-                            $check_notify = false;
-                        }
+
+            // prevent a mass mailing for recurring meetings created in Calendar module
+            if ( empty($this->id) && !empty($_REQUEST['repeat_type']) && !empty($this->repeat_parent_id) ) {
+                $check_notify = false;
+            }
 
             $parent_result = parent::save($check_notify);
             $this->saveRepeatly();
@@ -204,13 +205,6 @@ class WorkSchedules extends Basic
         }
 
         $this->addNotification($new_record);
-        if ($parent_result) {
-            if (isset($_REQUEST['return_module']) && ($_REQUEST['return_module'] == 'Calendar' || $_REQUEST['return_module'] == 'Home')) {
-                header("Location: index.php?module={$_REQUEST['return_module']}&action=index");
-            } else if ($redirect) {
-                handleRedirect($return_id, 'Calls');
-            }
-        }
         return $parent_result;
     }
     protected function addNotification($new_record)
@@ -357,7 +351,7 @@ class WorkSchedules extends Basic
         require_once 'modules/WorkSchedules/WorkSchedulesACLAccess.php';
         $acl = new WorkSchedulesACLAccess($this, parent::ACLAccess($view, $is_owner));
         return $acl->ACLAccess($view, $is_owner, $in_group);
-        
+
     }
 
     protected function setSupervisorAcceptance()

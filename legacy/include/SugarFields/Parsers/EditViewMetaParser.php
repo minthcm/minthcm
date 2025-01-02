@@ -177,8 +177,8 @@ function parse($filePath, $vardefs = array(), $moduleDir = '', $merge=false, $ma
               }
 
               // If there wasn't any slot numbering/lettering then just default to expect label->vallue pairs
-	          $sugarAttrLabel = count($sugarAttrLabel) != 0 ? $sugarAttrLabel : ($slot % 2 == 0) ? true : false;
-	          $sugarAttrValue = count($sugarAttrValue) != 0 ? $sugarAttrValue : ($slot % 2 == 1) ? true : false;
+	          $sugarAttrLabel = count($sugarAttrLabel) != 0 ? $sugarAttrLabel : (($slot % 2 == 0) ? true : false);
+	          $sugarAttrValue = count($sugarAttrValue) != 0 ? $sugarAttrValue : (($slot % 2 == 1) ? true : false);
 	          $slot++;
 
               if($sugarAttrValue) {

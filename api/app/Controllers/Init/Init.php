@@ -122,6 +122,7 @@ class Init
             chdir('../api');
         }
         $response_body['mintRebuildID'] = $this->mintRebuildID;
+        $response_body['system_name'] = $GLOBALS['system_config']->settings['system_name'];
         return $response_body;
     }
 

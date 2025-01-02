@@ -2185,7 +2185,7 @@ $app_strings = array(
     'LBL_ESLIST_ADD_FILTER' => 'Add filter',
     'LBL_ESLIST_COLUMNS' => 'Columns',
     'LBL_ESLIST_MY_OBJECTS' => 'Only my objects',
-    'LBL_ESLIST_MASS_ACTION' => 'Mass action',
+    'LBL_ESLIST_MASS_ACTION' => 'Bulk actions',
     'LBL_ESLIST_COLUMNS_MANAGEMENT' => 'Column management',
     'LBL_ESLIST_HIDDEN_COLUMNS' => 'Hidden columns',
     'LBL_ESLIST_VISIBLE_COLUMNS' => 'Visible columns',
@@ -2245,6 +2245,7 @@ $app_strings = array(
     'LBL_ESLIST_DATE' => 'Date',
     'LBL_ESLIST_SELECT_DATE' => 'Select',
     'LBL_ESLIST_OVERWRITE_FILTER_CONFIRM' => 'Filter with that name already exists. Do you want to overwrite it?',
+    'LBL_ESLIST_REFRESH' => 'Refresh',
     //MOBILE START
     'LBL_ID_FF_SELECT' => 'Select',
     'LBL_INSTANCE_ADDRESS' => 'Server Address',
@@ -4857,3 +4858,5 @@ $app_list_strings['contract_type_list'] = array(
     'contract_of_commission' => 'Contract of commission',
     'other' => 'Other',
 );
+
+$app_strings['LBL_DASHBOARD'] = 'Dashboard';

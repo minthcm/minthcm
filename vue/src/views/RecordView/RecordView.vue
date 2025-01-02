@@ -7,11 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import MintPanel from '@/components/MintPanel/MintPanel.vue'
 import { useRecordViewStore } from './RecordViewStore'
+import { useLanguagesStore } from '@/store/languages'
+import { useBackendStore } from '@/store/backend'
 
 const store = useRecordViewStore()
+const languages = useLanguagesStore()
+const backend = useBackendStore()
 
 store.resetBean()
 store.$reset()
@@ -19,6 +23,14 @@ store.$reset()
 onMounted(() => {
     store.fetchBean()
 })
+
+watch(
+    () => store.bean.syncAttributes,
+    (newVal) => {
+        if (!newVal.name || !newVal.module_name) return
+        document.title = `${newVal.name} | ${languages.label('LBL_MODULE_NAME', newVal.module_name)} | ${backend.initData?.systemName}`
+    },
+)
 </script>
 
 <style scoped lang="scss">
