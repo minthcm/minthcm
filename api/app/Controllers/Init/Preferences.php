@@ -89,6 +89,7 @@ class Preferences
             'currency' => $sugar_config['currency'],
             'date_format' => $sugar_config['datef'],
             'time_format' => $sugar_config['timef'],
+            'time_zones' => \TimeDate::getTimezoneList(),
             'default_date_format' => $sugar_config["default_date_format"],
             'default_time_format' => $sugar_config["default_time_format"],
             'default_language' => $sugar_config["default_language"],
@@ -107,9 +108,6 @@ class Preferences
         ];
         if(!$minified || in_array('reload_currency', $rebuild_array)){
             $global_settings['currencies'] = $this->getCurrenciesList();
-        }
-        if(!$minified){
-            $global_settings['time_zones'] = \TimeDate::getTimezoneList();
         }
         return $global_settings;
     }

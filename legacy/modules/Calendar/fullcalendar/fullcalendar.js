@@ -7228,10 +7228,17 @@ var EventPointing = /** @class */ (function (_super) {
         }
     }
     EventPointing.prototype.handleClick = function (seg, ev) {
-        var res = this.component.publiclyTrigger('eventClick', {
-            context: seg.el[0],
-            args: [seg.footprint.getEventLegacy(), ev, this.view]
-        });
+        if(ev.ctrlKey) {
+            var res = this.component.publiclyTrigger('eventAuxclick', {
+                context: seg.el[0],
+                args: [seg.footprint.getEventLegacy(), ev, this.view]
+            });
+        } else {
+            var res = this.component.publiclyTrigger('eventClick', {
+                context: seg.el[0],
+                args: [seg.footprint.getEventLegacy(), ev, this.view]
+            });
+        }
         if (res === false) {
             ev.preventDefault();
         }

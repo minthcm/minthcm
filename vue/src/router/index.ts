@@ -3,6 +3,7 @@ import { useBackendStore } from '@/store/backend'
 import { useAuthStore } from '@/store/auth'
 import { useLanguagesStore } from '@/store/languages'
 import routes from './routes'
+import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
 
 const router = createRouter({
     history: createWebHashHistory(window.location.pathname),
@@ -98,15 +99,32 @@ router.beforeEach(async (to, from) => {
 //     }
 // })
 
-router.afterEach((to, from) => {
+router.afterEach(async (to, from) => {
     const languages = useLanguagesStore()
-    if (to.params?.module && typeof to.params.module === 'string' && !languages.languages.modules[to.params.module]) {
-        languages.fetchModuleLanguage(to.params.module)
+    const backend = useBackendStore()
+    const regex = /\/modules\/([^\/?]+)/
+    const match = to.fullPath.match(regex)
+    const module = match ? match[1] : ''
+    const recordViewStore = useRecordViewStore()
+    if (!module && to.name !== 'dashboard') {
+        return
     }
-    // if (to.meta?.isLegacy && from.meta?.isLegacy) {
-    //     router.go(0)
-    //     return
-    // }
+    if (module && !languages.languages.modules[module]) {
+        await languages.fetchModuleLanguage(module)
+    }
+    if (to.name === 'dashboard') {
+        document.title = `${languages.label('LBL_DASHBOARD')} | ${backend.initData?.systemName}`
+    } else if (
+        to.name === 'record' &&
+        module === recordViewStore.bean?.module_name &&
+        languages.languages.modules[module]
+    ) {
+        document.title = `${recordViewStore.bean?.attributes.name} | ${languages.label('LBL_MODULE_NAME', module)} | ${
+            backend.initData?.systemName
+        }`
+    } else if (languages.languages.modules[module]) {
+        document.title = `${languages.label('LBL_MODULE_NAME', module)} | ${backend.initData?.systemName}`
+    }
 })
 
 export default router

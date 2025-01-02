@@ -475,4 +475,20 @@ class Calendar
         return $this->print;
     }
 
+    public static function getRedirectUrl(string $date_start = '', string $return_module = "Calendar"): string
+    {
+        $params = [
+            'module' => $return_module,
+            'action' => 'index',
+        ];
+
+        if (!empty($date_start) && 'Calendar' === $return_module) {
+            $calendar_date_elements = explode('-', (new SugarDateTime($date_start))->asDbDate());
+            $params['year'] = $calendar_date_elements[0];
+            $params['month'] = $calendar_date_elements[1];
+            $params['day'] = $calendar_date_elements[2];
+        }
+        
+        return http_build_query($params);
+    }
 }

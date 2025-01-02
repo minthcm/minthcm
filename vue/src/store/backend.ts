@@ -32,6 +32,7 @@ interface InitResponse {
     legacy_views: { [module: string]: LegacyView }
     mintRebuildID: string
     responseType: string
+    systemName: string
 }
 export const useBackendStore = defineStore('backend', () => {
     const router = useRouter()
@@ -51,17 +52,20 @@ export const useBackendStore = defineStore('backend', () => {
     async function init() {
         const auth = useAuthStore()
         try {
-
-            await caches.match('api/init').then(function(response) {
-                if (!response) {
-                    return;
-                }
-                return response.json()
-            }).then(function(response) {
-                if(cachedConfig){
-                    cachedConfig.value = response;
-                }
-            })
+            if (typeof caches === "undefined") {
+                console.warn('Cache API not supported.')
+            } else {
+                await caches.match('api/init').then(function(response) {
+                    if (!response) {
+                        return;
+                    }
+                    return response.json()
+                }).then(function(response) {
+                    if(cachedConfig){
+                        cachedConfig.value = response;
+                    }
+                })
+            }
             let mintRebuildID = cachedConfig.value?.mintRebuildID ?? '';
             const current_language = cachedConfig.value?.languages?.current_language ?? '';
             if(mintRebuildID === false){
@@ -73,12 +77,12 @@ export const useBackendStore = defineStore('backend', () => {
                 user_id: cachedConfig.value?.user?.id ?? ''
             })
             auth.user = initResponse.data?.user ?? {}
-
             if(initResponse.data.responseType === 'minified'){
                 cachedConfig.value.user = initResponse.data.user
                 cachedConfig.value.global = initResponse.data.global
                 cachedConfig.value.preferences = initResponse.data.preferences
                 cachedConfig.value.responseType = initResponse.data.responseType
+                cachedConfig.value.systemName = initResponse.data.system_name
                 if(initResponse.data.languages && current_language !== initResponse.data.languages?.current_language){
                     cachedConfig.value.languages = initResponse.data.languages
                 }
@@ -97,23 +101,25 @@ export const useBackendStore = defineStore('backend', () => {
             } else {
                 initData.value = initResponse.data
             }
-
             languages.languages = {
                 app_strings: initData.value.languages?.app_strings ?? {},
                 app_list_strings: initData.value.languages?.app_list_strings ?? {},
                 modules: {},
                 current_language: initData.value.languages?.current_language ?? 'en_us'
             }
+            Settings.defaultLocale = initData.value.user.preferences.language.split('_')[0] ?? 'en_us'
             languages.currentLanguage =
                 localStorage.getItem('currentLang') ?? initData.value.global?.default_language ?? 'en_us'
             modules.modulesDefs = initData.value?.modules ?? {}
-            
-            caches.open('mint-rebuild').then(function(cache) {
-                cache.put('api/init', new Response(JSON.stringify(initData.value)));
-            })
+            if (typeof caches !== "undefined") {
+                caches.open('mint-rebuild').then(function(cache) {
+                    cache.put('api/init', new Response(JSON.stringify(initData.value)));
+                })
+            }
             alerts.init()
             favorites.fetch()
             recents.fetch()
+            
         } catch (err) {
             if ((err as AxiosError).response?.status === 401) {
                 const loginData = (

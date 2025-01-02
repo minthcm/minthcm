@@ -1214,6 +1214,7 @@ function return_app_list_strings_language($language)
 
     foreach ($langs as $lang) {
         $app_list_strings = array();
+        chdir('../legacy');
         if (file_exists("include/language/$lang.lang.php")) {
             include "include/language/$lang.lang.php";
             $GLOBALS['log']->info("Found language file: $lang.lang.php");
