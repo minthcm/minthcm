@@ -21,7 +21,7 @@
             :disabled="!store.selected?.length"
         />
         <MintButton
-            :variant="store.mode === 'list' ? 'primary' : 'regular'"
+            variant="regular"
             icon="mdi-plus"
             :text="languages.label('LBL_ESLIST_ADD_FILTER')"
             @click="store.addFilterRow"
@@ -31,6 +31,12 @@
             icon="mdi-playlist-plus"
             :text="languages.label('LBL_ESLIST_COLUMNS')"
             @click="showColumnsPopup"
+        />
+        <MintButton
+            variant="regular"
+            icon="mdi-refresh"
+            @click="store.getData"
+            :tooltip="languages.label('LBL_ESLIST_REFRESH')"
         />
     </div>
 </template>

@@ -602,7 +602,11 @@ EOQ;
 
       // MintHCM start #42401
       if ( isset($_REQUEST['return_module']) && ($_REQUEST['return_module'] == 'Calendar' || $_REQUEST['return_module'] == 'Home') ) {
-         header("Location: index.php?module=" . $_REQUEST['return_module'] . "&action=index");
+         header("Location: index.php?" . Calendar::getRedirectUrl(
+                !empty($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '', 
+                $_REQUEST['return_module']
+            )
+        );
          // MintHCM end #42401
       } else {
             if ( $redirect ) {

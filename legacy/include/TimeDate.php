@@ -1541,6 +1541,10 @@ class TimeDate
      */
     public static function tzName($name)
     {
+        global $current_language, $app_list_strings;
+        if (!$app_list_strings) {
+            $app_list_strings = return_app_list_strings_language($current_language); 
+        }
         if (empty($name)) {
             return '';
         }
@@ -1554,7 +1558,7 @@ class TimeDate
         }
         $now = new DateTime("now", $tz);
         $off = $now->getOffset();
-        $translated = translate('timezone_dom', '', $name);
+        $translated = $app_list_strings['timezone_dom'][$name];
         if (is_string($translated) && !empty($translated)) {
             $name = $translated;
         }

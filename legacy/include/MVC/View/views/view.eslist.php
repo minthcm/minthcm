@@ -270,7 +270,7 @@ class ViewESList extends SugarView
             $search[$field]['key'] = $defs['key'] ?? $this->eslistmap[$search_field_name] ?? $search_field_name;
             $search[$field]['type'] = $defs['type'] ?? $field_defs['type'];
             if (!empty($search[$field]['type'])) {
-                if (in_array($search[$field]['type'], ['multienum', 'enum'])) {
+                if (in_array($search[$field]['type'], ['multienum', 'enum', 'ColoredEnum'])) {
                     $search[$field]['key'] .= '.keyword';
                 } else if ('relate' === $search[$field]['type']) {
                     $field_id = $field_defs['id_name'];
