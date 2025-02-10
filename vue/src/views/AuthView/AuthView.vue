@@ -2,7 +2,6 @@
     <div class="auth-view">
         <div class="auth-view-container">
             <img src="../../assets/mint_logo.png" height="32" />
-
             <router-view v-slot="{ Component }" class="form-content">
                 <v-slide-x-transition hide-on-leave>
                     <component :is="Component" />
@@ -44,6 +43,7 @@ import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
 import axios from 'axios'
 import { usePreferencesStore } from '@/store/preferences'
+import { onMounted } from 'vue'
 
 const languages = useLanguagesStore()
 const backend = useBackendStore()
@@ -65,6 +65,27 @@ const languagesList = computed<MenuListItem[]>(() => {
             changeLanguage(code)
         },
     }))
+})
+
+onMounted(() => {
+    const currentLang = localStorage.getItem('currentLang')
+    if (!currentLang) {
+        let browserLang = navigator.language
+        const [languageCode, countryCode] = browserLang.split('-')
+        let formattedbrowserLang = countryCode ? `${languageCode}_${countryCode}` : `${languageCode}_${languageCode.toUpperCase()}`
+
+        const availableLanguages = Object.keys(preferences.global?.languages ?? {})
+
+        let defaultLang = availableLanguages.find(lang => lang.toLowerCase() === formattedbrowserLang.toLowerCase())
+        if (!defaultLang) {
+            defaultLang = availableLanguages.find(lang => lang.toLowerCase().startsWith(languageCode.toLowerCase()))
+        }
+
+        if (!defaultLang) {
+            defaultLang = "en_US"
+        }
+        changeLanguage(defaultLang)
+    }
 })
 
 async function changeLanguage(lang = 'en_us') {
