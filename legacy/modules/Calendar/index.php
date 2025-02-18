@@ -98,7 +98,8 @@ $display = new CalendarDisplay($cal,"", $views);
 
 	$display->display_title();
 	if ($cal->view == "sharedMonth" || $cal->view == "sharedWeek") {
-		$display->display_shared_html($cal->view);        
+		$display->display_shared_html($cal->view);
+		$display->display_group_modals($cal->view);        
     }
 	$display->display_calendar_header();
 	$display->display();

@@ -21,15 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.1', '7.2', '7.3', '7.4' ]
+        php: [ '7.1', '7.2', '7.3', '7.4', '8.0' ]
+    continue-on-error: ${{ matrix.php == '8.0' }}
     name: PHP ${{ matrix.php }} Test
 
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.16.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: json

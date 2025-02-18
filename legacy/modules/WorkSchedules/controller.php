@@ -124,10 +124,25 @@ class WorkSchedulesController extends SugarController
         $q = "SELECT *, DATE_FORMAT(date_start,'%H:%i') as startTime, DATE_FORMAT(date_end,'%H:%i') as endTime FROM workschedules " . "WHERE assigned_user_id='$user_id' AND schedule_date='$date' AND deleted=0 ORDER BY date_start ASC";
         $r = $db->query($q);
         while ($row = $db->fetchByAssoc($r)) {
+            $row['startTime'] = $this->addOffset($row['startTime']);
+            $row['endTime'] = $this->addOffset($row['endTime']);
             array_push($plans['items'], $row);
         }
         ob_clean();
         echo json_encode($plans);
+    }
+
+    private function addOffset($time) {
+        global $timedate;
+        $user_timezone = new DateTimeZone($timedate->userTimezone());
+        $user_offset = $user_timezone->getOffset(new DateTime());
+        $plus_hours = 0;
+        if(0 !== $user_offset) {
+            $plus_hours = (int)$user_offset / 3600;
+        }
+        $times = explode(':', $time);
+        $times[0] = $times[0] + $plus_hours;
+        return implode(':', $times);
     }
 
     protected function action_getWorkSchedulesDates()
@@ -215,18 +230,17 @@ class WorkSchedulesController extends SugarController
     protected function post_save()
     {
         if (isset($_REQUEST['return_module']) && ('Calendar' == $_REQUEST['return_module'] || 'Home' == $_REQUEST['return_module'])) {
-            $url = Calendar::getRedirectUrl(
+            header("Location: index.php?" . Calendar::getRedirectUrl(
                 !empty($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '', 
                 $_REQUEST['return_module']
-            );
+            ));
         } else {
             $module = $this->module;
             $action = (!empty($this->return_action) ? $this->return_action : 'DetailView');
             $id = (!empty($this->return_id) ? $this->return_id : $this->bean->id);
             $url = "index.php?module=" . $module . "&action=" . $action . "&record=" . $id;
+            $this->set_redirect($url);
         }
-
-        $this->set_redirect($url);
     }
 
     public function action_isUniqueWorkSchedule()
@@ -280,4 +294,19 @@ class WorkSchedulesController extends SugarController
         echo json_encode(['status' => $_SESSION['dashlet_loaded_before']]);
     }
 
+    public function action_acceptWorkSchedule()
+    {
+        if(empty($_REQUEST['work_schedule_id'])) {
+            return;
+        }
+        $workSchedule = BeanFactory::getBean("WorkSchedules", $_REQUEST['work_schedule_id']);
+
+        if(empty($workSchedule->id) || !$workSchedule->canBeAccepted()){
+            return;
+        }
+
+        $workSchedule->supervisor_acceptance = 'accepted';
+        $workSchedule->save();
+        echo true;
+    }
 }

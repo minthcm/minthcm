@@ -24,7 +24,6 @@ return array(
     'Zend_Crypt' => array($vendorDir . '/zf1/zend-crypt/library'),
     'Zend_Cache' => array($vendorDir . '/zf1/zend-cache/library'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
-    'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'JShrink' => array($vendorDir . '/tedivm/jshrink/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),

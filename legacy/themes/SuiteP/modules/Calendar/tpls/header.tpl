@@ -50,7 +50,7 @@
 
     <div style='float:left; width: 70%;'>
         {foreach name=tabs from=$tabs key=k item=tab}
-            <input type="button" class="button" {if $view == $k} selected {/if} id="{$tabs_params[$k].id}" title="{$tabs_params[$k].title}" value="{$tabs_params[$k].title}" onclick="{$tabs_params[$k].link}">
+            <input type="button" class="button" {if $view == $k} selected {/if} id="{$tabs_params[$k].id}" title="{$tabs_params[$k].title}" value="{$tabs_params[$k].title}" onclick="showLoadingScreen('{$tabs_params[$k].title}', viewTools.language.get('app_strings', 'LBL_LOADING')); {$tabs_params[$k].link}">
         {/foreach}
     </div>
 

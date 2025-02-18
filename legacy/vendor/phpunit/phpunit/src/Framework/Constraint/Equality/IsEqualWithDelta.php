@@ -14,6 +14,7 @@ use function trim;
 use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use SebastianBergmann\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
@@ -62,13 +63,13 @@ final class IsEqualWithDelta extends Constraint
         try {
             $comparator = $comparatorFactory->getComparatorFor(
                 $this->value,
-                $other
+                $other,
             );
 
             $comparator->assertEquals(
                 $this->value,
                 $other,
-                $this->delta
+                $this->delta,
             );
         } catch (ComparisonFailure $f) {
             if ($returnResult) {
@@ -77,7 +78,7 @@ final class IsEqualWithDelta extends Constraint
 
             throw new ExpectationFailedException(
                 trim($description . "\n" . $f->getMessage()),
-                $f
+                $f,
             );
         }
 
@@ -87,14 +88,14 @@ final class IsEqualWithDelta extends Constraint
     /**
      * Returns a string representation of the constraint.
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function toString(): string
     {
         return sprintf(
-            'is equal to %s with delta <%F>>',
+            'is equal to %s with delta <%F>',
             $this->exporter()->export($this->value),
-            $this->delta
+            $this->delta,
         );
     }
 }

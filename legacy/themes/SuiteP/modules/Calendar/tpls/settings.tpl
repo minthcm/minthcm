@@ -219,7 +219,7 @@ $(function() {
 			</div>
 			<div class="modal-footer">
 				<button data-dismiss="modal" class="btn btn-default" type="button">{$MOD.LBL_CANCEL_BUTTON}</button>
-				<button id="btn-save-settings" onclick="$('#form_settings).submit();" class="btn btn-danger" type="button">{$MOD.LBL_APPLY_BUTTON}</button>
+				<button id="btn-save-settings" onclick="$('#form_settings').submit();" class="btn btn-danger" type="button">{$MOD.LBL_APPLY_BUTTON}</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

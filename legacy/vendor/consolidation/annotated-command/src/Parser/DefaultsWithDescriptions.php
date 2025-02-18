@@ -98,12 +98,29 @@ class DefaultsWithDescriptions
      */
     public function removeMatching($key)
     {
-        if (!array_key_exists($key, $this->values)) {
+        $key = $this->approximatelyMatchingKey($key);
+        if (!$key) {
             return '';
         }
         $result = $this->values[$key];
         unset($this->values[$key]);
         return $result;
+    }
+
+    public function approximatelyMatchingKey($key)
+    {
+        $key = $this->simplifyKey($key);
+        foreach ($this->values as $k => $v) {
+            if ($key === $this->simplifyKey($k)) {
+                return $k;
+            }
+        }
+        return '';
+    }
+
+    protected function simplifyKey($key)
+    {
+        return strtolower(preg_replace('#[-_]#', '', $key));
     }
 
     /**

@@ -148,7 +148,7 @@ class CalendarActivity {
         );
    }
 
-   function get_freebusy_activities($user_focus, $start_date_time, $end_date_time) {
+   public static function get_freebusy_activities($user_focus, $start_date_time, $end_date_time) {
       $act_list = array();
       $vcal_focus = BeanFactory::newBean('vCals');
       $vcal_str = $vcal_focus->get_vcal_freebusy($user_focus);

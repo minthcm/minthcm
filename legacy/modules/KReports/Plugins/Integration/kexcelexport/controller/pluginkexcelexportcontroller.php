@@ -56,8 +56,8 @@
  * You can contact us at info@kreporter.org
  * ****************************************************************************** */
 
-
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 if ( !defined('sugarEntry') || !sugarEntry )
    die('Not A Valid Entry Point');
@@ -91,24 +91,23 @@ class pluginkexcelexportcontroller {
       $filename = "report.xlsx";
 
       $output = $thisReport->createArray($dynamicolsOverride);
-      require_once('include/PHPExcel-1.8/Classes/PHPExcel.php');
-      $excel = new PHPExcel();
+      $excel = new Spreadsheet();
       $row_id = 1;
-      $col_id = 0;
+      $col_id = 1;
       foreach ( $output as $row ) {
          foreach ( $row as $cell ) {
-            $excel->getActiveSheet()->setCellValueByColumnAndRow($col_id, $row_id, $cell);
+            $excel->getActiveSheet()->setCellValue([$col_id, $row_id], $cell);
             $col_id++;
          }
          $row_id++;
-         $col_id = 0;
+         $col_id = 1;
       }
 
       ob_clean();
       header('Content-type: application/ms-excel; charset=UTF-8');
       header('Content-Disposition: attachment; filename=' . $filename);
       header('Cache-Control: max-age=0');
-      $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+      $writer = IOFactory::createWriter($excel, 'Xlsx');
       $writer->save('php://output');
    }
 

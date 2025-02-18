@@ -903,3 +903,34 @@ $(function () {
         });
     });
 });
+
+function acceptWorkSchedule(work_schedule_id) {
+  viewTools.GUI.statusBox.showStatus(
+    SUGAR.language.get("app_strings", "LBL_SAVING"),
+    "info"
+  );
+  viewTools.api.callController({
+      module: "WorkSchedules",
+      action: "acceptWorkSchedule",
+      dataType: "json",
+      async: false,
+      dataPOST: {
+          work_schedule_id: work_schedule_id,
+      },
+      callback: function (call_constroller_data) {
+          if (
+              call_constroller_data == false ||
+              call_constroller_data == null
+          ) {
+              console.error(call_constroller_data);
+              viewTools.GUI.statusBox.showStatus(
+                  SUGAR.language.get("app_strings", "LBL_ERROR"),
+                  "error",
+                  3000
+              );
+          } else {
+              location.reload();
+          }
+      },
+  });
+}

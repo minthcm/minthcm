@@ -111,5 +111,12 @@ $subpanel_layout = array(
          'width' => '5%',
          'default' => true,
       ),
+      'accept_button' => array(
+         'vname' => 'LBL_ACCEPT',
+         'widget_class' => 'SubPanelAcceptWorkScheduleButton',
+         'module' => 'workschedules',
+         'width' => '5%',
+         'default' => true,
+      )
    ),
 );

@@ -54,4 +54,6 @@ return array(
     "Tasks" => translate("LBL_LIST_TITLE", "Tasks"),
     "Calls" => translate("LBL_LIST_TITLE", "Calls"),
     "Meetings" => translate("LBL_LIST_TITLE", "Meetings"),
+    "Candidates" => translate("LBL_LIST_TITLE", "Candidates"),
+    "Recruitments" => translate("LBL_LIST_TITLE", "Recruitments"),
 );

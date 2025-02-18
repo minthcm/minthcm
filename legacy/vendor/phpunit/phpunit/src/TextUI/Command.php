@@ -16,6 +16,7 @@ use function array_keys;
 use function assert;
 use function class_exists;
 use function copy;
+use function explode;
 use function extension_loaded;
 use function fgets;
 use function file_get_contents;
@@ -60,6 +61,7 @@ use PHPUnit\Util\XmlTestListRenderer;
 use ReflectionClass;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\StaticAnalysis\CacheWarmer;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use SebastianBergmann\Timer\Timer;
 use Throwable;
 
@@ -99,7 +101,7 @@ class Command
             throw new RuntimeException(
                 $t->getMessage(),
                 (int) $t->getCode(),
-                $t
+                $t,
             );
         }
     }
@@ -118,7 +120,7 @@ class Command
         } else {
             $suite = $runner->getTest(
                 $this->arguments['test'],
-                $this->arguments['testSuffixes']
+                $this->arguments['testSuffixes'],
             );
         }
 
@@ -256,8 +258,8 @@ class Command
             $this->exitWithErrorMessage(
                 sprintf(
                     'unrecognized --order-by option: %s',
-                    $arguments->unrecognizedOrderBy()
-                )
+                    $arguments->unrecognizedOrderBy(),
+                ),
             );
         }
 
@@ -270,7 +272,7 @@ class Command
         if ($arguments->hasIncludePath()) {
             ini_set(
                 'include_path',
-                $arguments->includePath() . PATH_SEPARATOR . ini_get('include_path')
+                $arguments->includePath() . PATH_SEPARATOR . ini_get('include_path'),
             );
         }
 
@@ -290,8 +292,8 @@ class Command
                 $this->exitWithErrorMessage(
                     sprintf(
                         'Cannot open file "%s".',
-                        $arguments->argument()
-                    )
+                        $arguments->argument(),
+                    ),
                 );
             }
         }
@@ -367,7 +369,7 @@ class Command
 
                 $this->arguments['printer'] = $this->handlePrinter(
                     $phpunitConfiguration->printerClass(),
-                    $file
+                    $file,
                 );
             }
 
@@ -376,7 +378,7 @@ class Command
 
                 $this->arguments['loader'] = $this->handleLoader(
                     $phpunitConfiguration->testSuiteLoaderClass(),
-                    $file
+                    $file,
                 );
             }
 
@@ -388,7 +390,7 @@ class Command
                 try {
                     $this->arguments['test'] = (new TestSuiteMapper)->map(
                         $this->arguments['configurationObject']->testSuite(),
-                        $this->arguments['testsuite'] ?? ''
+                        $this->arguments['testsuite'] ?? '',
                     );
                 } catch (Exception $e) {
                     $this->printVersionString();
@@ -429,7 +431,7 @@ class Command
         if (!class_exists($loaderClass, false)) {
             if ($loaderFile == '') {
                 $loaderFile = Filesystem::classNameToFilename(
-                    $loaderClass
+                    $loaderClass,
                 );
             }
 
@@ -453,7 +455,7 @@ class Command
                 throw new ReflectionException(
                     $e->getMessage(),
                     $e->getCode(),
-                    $e
+                    $e,
                 );
             }
             // @codeCoverageIgnoreEnd
@@ -474,8 +476,8 @@ class Command
         $this->exitWithErrorMessage(
             sprintf(
                 'Could not use "%s" as loader.',
-                $loaderClass
-            )
+                $loaderClass,
+            ),
         );
 
         return null;
@@ -491,7 +493,7 @@ class Command
         if (!class_exists($printerClass, false)) {
             if ($printerFile === '') {
                 $printerFile = Filesystem::classNameToFilename(
-                    $printerClass
+                    $printerClass,
                 );
             }
 
@@ -511,8 +513,8 @@ class Command
             $this->exitWithErrorMessage(
                 sprintf(
                     'Could not use "%s" as printer: class does not exist',
-                    $printerClass
-                )
+                    $printerClass,
+                ),
             );
         }
 
@@ -523,7 +525,7 @@ class Command
             throw new ReflectionException(
                 $e->getMessage(),
                 $e->getCode(),
-                $e
+                $e,
             );
             // @codeCoverageIgnoreEnd
         }
@@ -533,8 +535,8 @@ class Command
                 sprintf(
                     'Could not use "%s" as printer: class does not implement %s',
                     $printerClass,
-                    ResultPrinter::class
-                )
+                    ResultPrinter::class,
+                ),
             );
         }
 
@@ -542,8 +544,8 @@ class Command
             $this->exitWithErrorMessage(
                 sprintf(
                     'Could not use "%s" as printer: class cannot be instantiated',
-                    $printerClass
-                )
+                    $printerClass,
+                ),
             );
         }
 
@@ -568,16 +570,29 @@ class Command
                 $this->exitWithErrorMessage($t->getMessage());
             }
 
-            $this->exitWithErrorMessage(
-                sprintf(
-                    'Error in bootstrap script: %s:%s%s%s%s',
+            $message = sprintf(
+                'Error in bootstrap script: %s:%s%s%s%s',
+                get_class($t),
+                PHP_EOL,
+                $t->getMessage(),
+                PHP_EOL,
+                $t->getTraceAsString(),
+            );
+
+            while ($t = $t->getPrevious()) {
+                $message .= sprintf(
+                    '%s%sPrevious error: %s:%s%s%s%s',
+                    PHP_EOL,
+                    PHP_EOL,
                     get_class($t),
                     PHP_EOL,
                     $t->getMessage(),
                     PHP_EOL,
-                    $t->getTraceAsString()
-                )
-            );
+                    $t->getTraceAsString(),
+                );
+            }
+
+            $this->exitWithErrorMessage($message);
         }
     }
 
@@ -585,17 +600,31 @@ class Command
     {
         $this->printVersionString();
 
-        $latestVersion = file_get_contents('https://phar.phpunit.de/latest-version-of/phpunit');
-        $isOutdated    = version_compare($latestVersion, Version::id(), '>');
+        $latestVersion           = file_get_contents('https://phar.phpunit.de/latest-version-of/phpunit');
+        $latestCompatibleVersion = file_get_contents('https://phar.phpunit.de/latest-version-of/phpunit-' . explode('.', Version::series())[0]);
 
-        if ($isOutdated) {
-            printf(
-                'You are not using the latest version of PHPUnit.' . PHP_EOL .
-                'The latest version is PHPUnit %s.' . PHP_EOL,
-                $latestVersion
-            );
+        $notLatest           = version_compare($latestVersion, Version::id(), '>');
+        $notLatestCompatible = version_compare($latestCompatibleVersion, Version::id(), '>');
+
+        if ($notLatest || $notLatestCompatible) {
+            print 'You are not using the latest version of PHPUnit.' . PHP_EOL;
         } else {
             print 'You are using the latest version of PHPUnit.' . PHP_EOL;
+        }
+
+        if ($notLatestCompatible) {
+            printf(
+                'The latest version compatible with PHPUnit %s is PHPUnit %s.' . PHP_EOL,
+                Version::id(),
+                $latestCompatibleVersion,
+            );
+        }
+
+        if ($notLatest) {
+            printf(
+                'The latest version is PHPUnit %s.' . PHP_EOL,
+                $latestVersion,
+            );
         }
 
         exit(TestRunner::SUCCESS_EXIT);
@@ -648,7 +677,7 @@ class Command
                 'groups',
                 'excludeGroups',
                 'testsuite',
-            ]
+            ],
         );
 
         print 'Available test group(s):' . PHP_EOL;
@@ -663,7 +692,7 @@ class Command
 
             printf(
                 ' - %s' . PHP_EOL,
-                $group
+                $group,
             );
         }
 
@@ -676,7 +705,7 @@ class Command
 
     /**
      * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\TextUI\XmlConfiguration\Exception
+     * @throws XmlConfiguration\Exception
      */
     private function handleListSuites(bool $exit): int
     {
@@ -689,7 +718,7 @@ class Command
                 'groups',
                 'excludeGroups',
                 'testsuite',
-            ]
+            ],
         );
 
         print 'Available test suite(s):' . PHP_EOL;
@@ -697,7 +726,7 @@ class Command
         foreach ($this->arguments['configurationObject']->testSuite() as $testSuite) {
             printf(
                 ' - %s' . PHP_EOL,
-                $testSuite->name()
+                $testSuite->name(),
             );
         }
 
@@ -709,7 +738,7 @@ class Command
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function handleListTests(TestSuite $suite, bool $exit): int
     {
@@ -721,8 +750,7 @@ class Command
                 'filter',
                 'groups',
                 'excludeGroups',
-                'testsuite',
-            ]
+            ],
         );
 
         $renderer = new TextTestListRenderer;
@@ -737,7 +765,7 @@ class Command
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function handleListTestsXml(TestSuite $suite, string $target, bool $exit): int
     {
@@ -749,8 +777,7 @@ class Command
                 'filter',
                 'groups',
                 'excludeGroups',
-                'testsuite',
-            ]
+            ],
         );
 
         $renderer = new XmlTestListRenderer;
@@ -759,7 +786,7 @@ class Command
 
         printf(
             'Wrote list of tests that would have been run to %s' . PHP_EOL,
-            $target
+            $target,
         );
 
         if ($exit) {
@@ -815,8 +842,8 @@ class Command
                 $bootstrapScript,
                 $testsDirectory,
                 $src,
-                $cacheDirectory
-            )
+                $cacheDirectory,
+            ),
         );
 
         print PHP_EOL . 'Generated phpunit.xml in ' . getcwd() . '.' . PHP_EOL;
@@ -829,7 +856,16 @@ class Command
     {
         $this->printVersionString();
 
-        if (!(new SchemaDetector)->detect($filename)->detected()) {
+        $result = (new SchemaDetector)->detect($filename);
+
+        if (!$result->detected()) {
+            print $filename . ' does not validate against any known schema.' . PHP_EOL;
+
+            exit(TestRunner::EXCEPTION_EXIT);
+        }
+
+        /** @psalm-suppress MissingThrowsDocblock */
+        if ($result->version() === Version::series()) {
             print $filename . ' does not need to be migrated.' . PHP_EOL;
 
             exit(TestRunner::EXCEPTION_EXIT);
@@ -842,7 +878,7 @@ class Command
         try {
             file_put_contents(
                 $filename,
-                (new Migrator)->migrate($filename)
+                (new Migrator)->migrate($filename),
             );
 
             print 'Migrated configuration: ' . $filename . PHP_EOL;
@@ -895,7 +931,7 @@ class Command
         if ($configuration->codeCoverage()->hasNonEmptyListOfFilesToBeIncludedInCodeCoverageReport()) {
             (new FilterMapper)->map(
                 $filter,
-                $configuration->codeCoverage()
+                $configuration->codeCoverage(),
             );
         } elseif (isset($this->arguments['coverageFilter'])) {
             if (!is_array($this->arguments['coverageFilter'])) {
@@ -922,7 +958,7 @@ class Command
             $cacheDirectory,
             !$configuration->codeCoverage()->disableCodeCoverageIgnore(),
             $configuration->codeCoverage()->ignoreDeprecatedCodeUnits(),
-            $filter
+            $filter,
         );
 
         print 'done [' . $timer->stop()->asString() . ']' . PHP_EOL;
@@ -960,7 +996,7 @@ class Command
                     'The %s and %s options cannot be combined, %s is ignored' . PHP_EOL,
                     $this->mapKeyToOptionForWarning($_key),
                     $this->mapKeyToOptionForWarning($key),
-                    $this->mapKeyToOptionForWarning($_key)
+                    $this->mapKeyToOptionForWarning($_key),
                 );
 
                 $warningPrinted = true;

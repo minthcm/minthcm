@@ -225,7 +225,7 @@ class VCard
      * @param string $element The name of the element to set
      * @throws VCardException
      */
-    private function addMedia($property, $url, $include = true, $element)
+    private function addMedia($property, $url, $element, $include = true)
     {
         $mimeType = null;
 
@@ -434,8 +434,8 @@ class VCard
         $this->addMedia(
             'LOGO',
             $url,
-            $include,
-            'logo'
+            'logo',
+            $include
         );
 
         return $this;
@@ -470,8 +470,8 @@ class VCard
         $this->addMedia(
             'PHOTO',
             $url,
-            $include,
-            'photo'
+            'photo',
+            $include
         );
 
         return $this;
@@ -636,14 +636,39 @@ class VCard
             return $text;
         }
 
+        // The chunk_split_unicode creates a huge memory footprint when used on long strings (EG photos are base64 10MB results in > 1GB memory usage)
+        // So check if the string is ASCII (7 bit) and if it is use the built in way RE: https://github.com/jeroendesloovere/vcard/issues/153
+        if ($this->is_ascii($text)) {
+           return substr(chunk_split($text, 75, "\r\n "), 0, -3);
+        }
+
         // split, wrap and trim trailing separator
         return substr($this->chunk_split_unicode($text, 75, "\r\n "), 0, -3);
+    }
+
+
+    /**
+     * Determine if string is pure 7bit ascii
+     * @link https://pageconfig.com/post/how-to-validate-ascii-text-in-php
+     *
+     * @param string $string
+     * @return bool
+     */
+    protected function is_ascii($string = '' ) {
+        $num = 0;
+        while( isset( $string[$num] ) ) {
+            if( ord( $string[$num] ) & 0x80 ) {
+                return false;
+            }
+        $num++;
+        }
+        return true;
     }
 
     /**
      * multibyte word chunk split
      * @link http://php.net/manual/en/function.chunk-split.php#107711
-     * 
+     *
      * @param  string  $body     The string to be chunked.
      * @param  integer $chunklen The chunk length.
      * @param  string  $end      The line ending sequence.
@@ -669,6 +694,10 @@ class VCard
      */
     protected function escape($text)
     {
+        if ($text === null) {
+            return null;
+        }
+
         $text = str_replace("\r\n", "\\n", $text);
         $text = str_replace("\n", "\\n", $text);
 

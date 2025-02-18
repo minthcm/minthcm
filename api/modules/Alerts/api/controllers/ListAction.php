@@ -74,12 +74,11 @@ class ListAction
         if (!is_array($alerts)) {
             return $response;
         }
-
         foreach ($alerts as $alert) {
             if (empty($alert->id)) {
                 continue;
             }
-            $response[] = array(
+            $response['alerts'][] = array(
                 'id' => $alert->id,
                 'name' => $alert->name,
                 'description' => $alert->description,
@@ -95,6 +94,7 @@ class ListAction
             );
 
         }
+        $response['moreResults'] = $controller->view_object_map['More_Results'];
         return $response;
     }
 
