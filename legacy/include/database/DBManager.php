@@ -3099,6 +3099,12 @@ abstract class DBManager
             foreach ($field_defs as $field => $properties) {
                 $before_value = from_html($fetched_row[$field]);
                 $after_value = $bean->$field;
+                //dirty fix to avoid error when array is in new value of relate field (e.g position_name)
+                // #132411 start
+                if(is_array($after_value)) {
+                    continue;
+                }
+                // #132411 end
                 if (isset($properties['type'])) {
                     $field_type = $properties['type'];
                 } else {

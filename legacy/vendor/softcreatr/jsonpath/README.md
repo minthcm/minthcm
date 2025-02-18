@@ -1,8 +1,8 @@
-# JSONPath for PHP 7.1 - 7.4
+# JSONPath for PHP
 
 [![Build Status](https://img.shields.io/github/workflow/status/SoftCreatR/JSONPath/Test/main?label=Build%20Status)](https://github.com/SoftCreatR/JSONPath/actions?query=workflow%3ATest)
 [![Latest Release](https://img.shields.io/packagist/v/SoftCreatR/JSONPath?color=blue&label=Latest%20Release)](https://packagist.org/packages/softcreatr/jsonpath)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) [![Plant Tree](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=Plant%20Tree&query=%24.total&url=https%3A%2F%2Fpublic.offset.earth%2Fusers%2Fsoftcreatr%2Ftrees)](https://ecologi.com/softcreatr?r=61212ab3fc69b8eb8a2014f4)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Codecov branch](https://img.shields.io/codecov/c/github/SoftCreatR/JSONPath)](https://codecov.io/gh/SoftCreatR/JSONPath)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/SoftCreatR/JSONPath)](https://codeclimate.com/github/SoftCreatR/JSONPath)
 
@@ -20,7 +20,7 @@ This project aims to be a clean and simple implementation with the following goa
 ## Installation
 
 ```bash
-composer require softcreatr/jsonpath:"^0.5 || ^0.7 || ^0.8"
+composer require softcreatr/jsonpath:"^0.5 || ^0.7"
 ```
 
 ## JSONPath Examples
@@ -39,7 +39,6 @@ JSONPath                  | Result
 `$..books[1:6:3]`         | every third book starting from 1 till 6
 `$..books[?(@.isbn)]`     | filter all books with isbn number
 `$..books[?(@.price<10)]` | filter all books cheaper than 10
-`$..books.length`         | the amount of books
 `$..*`                    | all elements in the data (recursively extracted)
 
 
@@ -63,8 +62,7 @@ Symbol                | Description
 #### Using arrays
 
 ```php
-<?php
-require_once __DIR__ . '/vendor/autoload.php';
+use Flow\JSONPath\JSONPath;
 
 $data = ['people' => [
     ['name' => 'Sascha'],
@@ -73,7 +71,7 @@ $data = ['people' => [
     ['name' => 'Maximilian'],
 ]];
 
-print_r((new \Flow\JSONPath\JSONPath($data))->find('$.people.*.name')->getData());
+print_r((new JSONPath($data))->find('$.people.*.name')->getData());
 
 /*
 Array
@@ -89,12 +87,11 @@ Array
 #### Using objects
 
 ```php
-<?php
-require_once __DIR__ . '/vendor/autoload.php';
+use Flow\JSONPath\JSONPath;
 
 $data = json_decode('{"name":"Sascha Greuel","birthdate":"1987-12-16","city":"Gladbeck","country":"Germany"}', false);
 
-print_r((new \Flow\JSONPath\JSONPath($data))->find('$')->getData()[0]);
+print_r((new JSONPath($data))->find('$')->getData()[0]);
 
 /*
 stdClass Object
@@ -162,11 +159,9 @@ Other / Similar implementations can be found in the [Wiki](https://github.com/So
 
 A list of changes can be found in the [CHANGELOG.md](CHANGELOG.md) file. 
 
-## License 🌳
+## License
 
-[MIT](LICENSE.md) © [1-2.dev](https://1-2.dev)
-
-This package is Treeware. If you use it in production, then we ask that you [**buy the world a tree**](https://ecologi.com/softcreatr?r=61212ab3fc69b8eb8a2014f4) to thank us for our work. By contributing to the ecologi project, you’ll be creating employment for local families and restoring wildlife habitats.
+[MIT](LICENSE)
 
 ## Contributors ✨
 
@@ -209,3 +204,4 @@ This package is Treeware. If you use it in production, then we ask that you [**b
     </td>
 </tr>
 </table>
+

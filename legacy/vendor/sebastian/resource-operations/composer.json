@@ -30,8 +30,9 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-main": "3.0-dev"
         }
-    }
+    },
+    "abandoned": false
 }
 

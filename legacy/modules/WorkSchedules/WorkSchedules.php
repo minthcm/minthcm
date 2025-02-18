@@ -421,4 +421,11 @@ class WorkSchedules extends Basic
     }
     // MintHCM #76236 END
 
+
+    public function canBeAccepted() {
+        if(!$this->checkOwner() && $this->supervisor_acceptance == 'wait' && $this->ACLAccess('edit')) {
+            return true;
+        }
+        return false;
+    }
 }

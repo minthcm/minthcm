@@ -610,6 +610,9 @@ class ListViewData
         $queries['orderBy'] = $queries['baseURL'];
         $queries['orderBy'][$this->var_order_by] = '';
 
+        $queries['currentPage'] = $queries['baseURL'];
+        $queries['currentPage'][$this->var_offset] = $offset;
+
         if ($nextOffset > -1) {
             $queries['nextPage'] = $queries['baseURL'];
             $queries['nextPage'][$this->var_offset] = $nextOffset;

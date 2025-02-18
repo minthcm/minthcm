@@ -58,6 +58,7 @@ class Calendar extends \Google\Service
   public $events;
   public $freebusy;
   public $settings;
+  public $rootUrlTemplate;
 
   /**
    * Constructs the internal representation of the Calendar service.
@@ -70,6 +71,7 @@ class Calendar extends \Google\Service
   {
     parent::__construct($clientOrConfig);
     $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->rootUrlTemplate = $rootUrl ?: 'https://www.UNIVERSE_DOMAIN/';
     $this->servicePath = 'calendar/v3/';
     $this->batchPath = 'batch/calendar/v3';
     $this->version = 'v3';
@@ -604,6 +606,11 @@ class Calendar extends \Google\Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ],
+                'eventTypes' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ],
                 'iCalUID' => [
                   'location' => 'query',
                   'type' => 'string',
@@ -812,6 +819,11 @@ class Calendar extends \Google\Service
                 'alwaysIncludeEmail' => [
                   'location' => 'query',
                   'type' => 'boolean',
+                ],
+                'eventTypes' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
                 ],
                 'iCalUID' => [
                   'location' => 'query',

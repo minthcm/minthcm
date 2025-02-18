@@ -25,7 +25,7 @@ class Option
 
     public static function handle(\ReflectionAttribute $attribute, CommandInfo $commandInfo)
     {
-        $args = $attribute->getArguments();
-        $commandInfo->addOptionDescription($args['name'], @$args['description'], @$args['suggestedValues']);
+        $instance = $attribute->newInstance();
+        $commandInfo->addOptionDescription($instance->name, $instance->description, $instance->suggestedValues);
     }
 }

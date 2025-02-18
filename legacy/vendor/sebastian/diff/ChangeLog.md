@@ -2,6 +2,19 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [4.0.6] - 2024-03-02
+
+### Changed
+
+* Do not use implicitly nullable parameters
+
+## [4.0.5] - 2023-05-07
+
+### Changed
+
+* [#118](https://github.com/sebastianbergmann/diff/pull/118): Improve performance of `MemoryEfficientLongestCommonSubsequenceCalculator`
+* [#119](https://github.com/sebastianbergmann/diff/pull/119): Improve performance of `TimeEfficientLongestCommonSubsequenceCalculator`
+
 ## [4.0.4] - 2020-10-26
 
 ### Fixed
@@ -76,6 +89,8 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * This component is no longer supported on PHP 5.6
 
+[4.0.6]: https://github.com/sebastianbergmann/diff/compare/4.0.5...4.0.6
+[4.0.5]: https://github.com/sebastianbergmann/diff/compare/4.0.4...4.0.5
 [4.0.4]: https://github.com/sebastianbergmann/diff/compare/4.0.3...4.0.4
 [4.0.3]: https://github.com/sebastianbergmann/diff/compare/4.0.2...4.0.3
 [4.0.2]: https://github.com/sebastianbergmann/diff/compare/4.0.1...4.0.2

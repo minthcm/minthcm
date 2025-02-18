@@ -141,4 +141,5 @@ $mod_strings = array(
     'LBL_DEPUTY_NAME' => 'Deputy',
     'LBL_DEPUTY_ID' => 'Deputy (ID)',
     'LBL_LEAVE_ALERT' => "%s added a/an %s on %s.",  
+    'LBL_ACCEPT' => 'Accept',
 );

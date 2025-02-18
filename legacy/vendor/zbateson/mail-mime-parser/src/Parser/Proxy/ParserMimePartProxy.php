@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
@@ -17,13 +18,13 @@ use ZBateson\MailMimeParser\Message\IMessagePart;
 class ParserMimePartProxy extends ParserPartProxy
 {
     /**
-     * @var boolean set to true once the end boundary of the currently-parsed
+     * @var bool set to true once the end boundary of the currently-parsed
      *      part is found.
      */
     protected $endBoundaryFound = false;
 
     /**
-     * @var boolean set to true once a boundary belonging to this parent's part
+     * @var bool set to true once a boundary belonging to this parent's part
      *      is found.
      */
     protected $parentBoundaryFound = false;
@@ -56,31 +57,33 @@ class ParserMimePartProxy extends ParserPartProxy
      * Ensures that the last child added to this part is fully parsed (content
      * and children).
      */
-    protected function ensureLastChildParsed()
+    protected function ensureLastChildParsed() : self
     {
         if ($this->lastAddedChild !== null) {
             $this->lastAddedChild->parseAll();
         }
+        return $this;
     }
 
     /**
      * Parses the next child of this part and adds it to the 'stack' of
      * children.
      */
-    protected function parseNextChild()
+    protected function parseNextChild() : self
     {
         if ($this->allChildrenParsed) {
-            return;
+            return $this;
         }
         $this->parseContent();
         $this->ensureLastChildParsed();
         $next = $this->parser->parseNextChild($this);
         if ($next !== null) {
-            array_push($this->children, $next);
+            $this->children[] = $next;
             $this->lastAddedChild = $next;
         } else {
             $this->allChildrenParsed = true;
         }
+        return $this;
     }
 
     /**
@@ -95,12 +98,13 @@ class ParserMimePartProxy extends ParserPartProxy
         if (empty($this->children)) {
             $this->parseNextChild();
         }
-        $proxy = array_shift($this->children);
+        $proxy = \array_shift($this->children);
         return ($proxy !== null) ? $proxy->getPart() : null;
     }
 
     /**
      * Parses all content and children for this part.
+     * @return static
      */
     public function parseAll()
     {
@@ -108,13 +112,14 @@ class ParserMimePartProxy extends ParserPartProxy
         while (!$this->allChildrenParsed) {
             $this->parseNextChild();
         }
+        return $this;
     }
 
     /**
      * Returns a ParameterHeader representing the parsed Content-Type header for
      * this part.
      *
-     * @return \ZBateson\MailMimeParser\Header\ParameterHeader
+     * @return ?\ZBateson\MailMimeParser\Header\IHeader
      */
     public function getContentType()
     {
@@ -146,10 +151,9 @@ class ParserMimePartProxy extends ParserPartProxy
      * If the passed $line is the ending boundary for the current part,
      * $this->isEndBoundaryFound will return true after.
      *
-     * @param string $line
      * @return bool
      */
-    public function setEndBoundaryFound($line)
+    public function setEndBoundaryFound(string $line)
     {
         $boundary = $this->getMimeBoundary();
         if ($this->getParent() !== null && $this->getParent()->setEndBoundaryFound($line)) {
@@ -171,9 +175,8 @@ class ParserMimePartProxy extends ParserPartProxy
      * matches a parent's mime boundary, and the following input belongs to a
      * new part under its parent.
      *
-     * @return bool
      */
-    public function isParentBoundaryFound()
+    public function isParentBoundaryFound() : bool
     {
         return ($this->parentBoundaryFound);
     }
@@ -181,9 +184,8 @@ class ParserMimePartProxy extends ParserPartProxy
     /**
      * Returns true if an end boundary was found for this part.
      *
-     * @return bool
      */
-    public function isEndBoundaryFound()
+    public function isEndBoundaryFound() : bool
     {
         return ($this->endBoundaryFound);
     }
@@ -192,13 +194,36 @@ class ParserMimePartProxy extends ParserPartProxy
      * Called once EOF is reached while reading content.  The method sets the
      * flag used by isParentBoundaryFound() to true on this part and all parent
      * parts.
+     *
+     * @return static
      */
-    public function setEof()
+    public function setEof() : self
     {
         $this->parentBoundaryFound = true;
         if ($this->getParent() !== null) {
             $this->getParent()->setEof();
         }
+        return $this;
+    }
+
+    /**
+     * Overridden to set a 0-length content length, and a stream end pos of -2
+     * if the passed end pos is before the start pos (can happen if a mime
+     * end boundary doesn't have an empty line before the next parent start
+     * boundary).
+     *
+     * @return static
+     */
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos)
+    {
+        $start = $this->getStreamContentStartPos();
+        if ($streamContentEndPos - $start < 0) {
+            parent::setStreamPartAndContentEndPos($start);
+            $this->setStreamPartEndPos($streamContentEndPos);
+        } else {
+            parent::setStreamPartAndContentEndPos($streamContentEndPos);
+        }
+        return $this;
     }
 
     /**
@@ -210,11 +235,12 @@ class ParserMimePartProxy extends ParserPartProxy
      * which must eventually reach a ParserMessageProxy which actually stores
      * the length.
      *
-     * @param int $length
+     * @return static
      */
-    public function setLastLineEndingLength($length)
+    public function setLastLineEndingLength(int $length)
     {
         $this->getParent()->setLastLineEndingLength($length);
+        return $this;
     }
 
     /**
@@ -228,7 +254,7 @@ class ParserMimePartProxy extends ParserPartProxy
      *
      * @return int the length of the last line ending read
      */
-    public function getLastLineEndingLength()
+    public function getLastLineEndingLength() : int
     {
         return $this->getParent()->getLastLineEndingLength();
     }

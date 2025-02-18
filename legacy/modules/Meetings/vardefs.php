@@ -526,7 +526,6 @@ $dictionary['Meeting'] = array(
          'vname' => 'LBL_DURATION',
          'type' => 'enum',
          'options' => 'duration_dom',
-         'source' => 'non-db',
          'comment' => 'Duration handler dropdown',
          'massupdate' => false,
          'reportable' => false,

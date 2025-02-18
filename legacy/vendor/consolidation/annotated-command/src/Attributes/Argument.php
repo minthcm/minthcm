@@ -25,7 +25,7 @@ class Argument
 
     public static function handle(\ReflectionAttribute $attribute, CommandInfo $commandInfo)
     {
-        $args = $attribute->getArguments();
-        $commandInfo->addArgumentDescription($args['name'], @$args['description'], @$args['suggestedValues']);
+        $instance = $attribute->newInstance();
+        $commandInfo->addArgumentDescription($instance->name, $instance->description, $instance->suggestedValues);
     }
 }

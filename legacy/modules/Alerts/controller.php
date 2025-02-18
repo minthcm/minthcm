@@ -53,10 +53,14 @@ class AlertsController extends SugarController
         $disabled_modules_string_with_quotes = "'" . $disabled_modules_string . "'";
         $this->view_object_map['Flash'] = '';
         // MintHCM #70313 begin
-        $this->view_object_map['Results'] = $bean->get_full_list("alerts.date_entered ASC", "alerts.assigned_user_id = '" . $current_user->id . "' AND (is_closed != '1'  OR is_closed is NULL) AND ( type!= 'webpush' OR type IS NULL OR type ='') AND (parent_type NOT IN (" . $disabled_modules_string_with_quotes . ") OR parent_type IS NULL)");
+        $this->view_object_map['Results'] = $bean->get_full_list("alerts.date_entered ASC", "alerts.assigned_user_id = '" . $current_user->id . "' AND (is_closed != '1'  OR is_closed is NULL) AND ( type!= 'webpush' OR type IS NULL OR type ='') AND (parent_type NOT IN (" . $disabled_modules_string_with_quotes . ") OR parent_type IS NULL)", false, 0, 51);
         // MintHCM #70313 end
         if ('' == $this->view_object_map['Results']) {
             $this->view_object_map['Flash'] = $app_strings['LBL_NOTIFICATIONS_NONE'];
+        }
+        if(count($this->view_object_map['Results']) > 50){
+            array_pop($this->view_object_map['Results']);
+            $this->view_object_map['More_Results'] = true;
         }
         $this->view = 'default';
 

@@ -34,6 +34,7 @@ use SebastianBergmann\CodeCoverage\Exception as OriginalCodeCoverageException;
 use SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException;
 use SebastianBergmann\Invoker\Invoker;
 use SebastianBergmann\Invoker\TimeoutException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use SebastianBergmann\ResourceOperations\ResourceOperations;
 use SebastianBergmann\Timer\Timer;
 use Throwable;
@@ -444,7 +445,7 @@ final class TestResult implements Countable
     /**
      * Informs the result that a test was completed.
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function endTest(Test $test, float $time): void
     {
@@ -460,7 +461,7 @@ final class TestResult implements Countable
                 'result' => $test->getResult(),
                 'size'   => TestUtil::getSize(
                     $class,
-                    $test->getName(false)
+                    $test->getName(false),
                 ),
             ];
 
@@ -634,8 +635,8 @@ final class TestResult implements Countable
      * Runs a TestCase.
      *
      * @throws \SebastianBergmann\CodeCoverage\InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws CodeCoverageException
+     * @throws InvalidArgumentException
      * @throws UnintentionallyCoveredCodeException
      */
     public function run(Test $test): void
@@ -646,7 +647,7 @@ final class TestResult implements Countable
 
         if ($test instanceof TestCase) {
             $test->setRegisterMockObjectsFromTestArgumentsRecursively(
-                $this->registerMockObjectsFromTestArgumentsRecursively
+                $this->registerMockObjectsFromTestArgumentsRecursively,
             );
 
             $isAnyCoverageRequired = TestUtil::requiresCodeCoverageDataCollection($test);
@@ -667,7 +668,7 @@ final class TestResult implements Countable
                 $this->convertDeprecationsToExceptions,
                 $this->convertErrorsToExceptions,
                 $this->convertNoticesToExceptions,
-                $this->convertWarningsToExceptions
+                $this->convertWarningsToExceptions,
             );
 
             $errorHandler->register();
@@ -731,9 +732,9 @@ final class TestResult implements Countable
             $this->addFailure(
                 $test,
                 new RiskyTestError(
-                    $e->getMessage()
+                    $e->getMessage(),
                 ),
-                $_timeout
+                $_timeout,
             );
 
             $risky = true;
@@ -758,10 +759,10 @@ final class TestResult implements Countable
                     '%s in %s:%s',
                     $e->getMessage(),
                     $frame['file'] ?? $e->getFile(),
-                    $frame['line'] ?? $e->getLine()
+                    $frame['line'] ?? $e->getLine(),
                 ),
                 0,
-                $e
+                $e,
             );
         } catch (Warning $e) {
             $warning = true;
@@ -794,16 +795,17 @@ final class TestResult implements Countable
                                 '%s() used in %s:%s',
                                 $function['function'],
                                 $function['filename'],
-                                $function['lineno']
-                            )
+                                $function['lineno'],
+                            ),
                         ),
-                        $time
+                        $time,
                     );
                 }
             }
         }
 
         if ($this->beStrictAboutTestsThatDoNotTestAnything &&
+            !$test->doesNotPerformAssertions() &&
             $test->getNumAssertions() === 0) {
             $risky = true;
         }
@@ -811,7 +813,7 @@ final class TestResult implements Countable
         if ($this->forceCoversAnnotation && !$error && !$failure && !$warning && !$incomplete && !$skipped && !$risky) {
             $annotations = TestUtil::parseTestMethodAnnotations(
                 get_class($test),
-                $test->getName(false)
+                $test->getName(false),
             );
 
             if (!isset($annotations['class']['covers']) &&
@@ -821,9 +823,9 @@ final class TestResult implements Countable
                 $this->addFailure(
                     $test,
                     new MissingCoversAnnotationException(
-                        'This test does not have a @covers annotation but is expected to have one'
+                        'This test does not have a @covers annotation but is expected to have one',
                     ),
-                    $time
+                    $time,
                 );
 
                 $risky = true;
@@ -839,20 +841,20 @@ final class TestResult implements Countable
                 try {
                     $linesToBeCovered = TestUtil::getLinesToBeCovered(
                         get_class($test),
-                        $test->getName(false)
+                        $test->getName(false),
                     );
 
                     $linesToBeUsed = TestUtil::getLinesToBeUsed(
                         get_class($test),
-                        $test->getName(false)
+                        $test->getName(false),
                     );
                 } catch (InvalidCoversTargetException $cce) {
                     $this->addWarning(
                         $test,
                         new Warning(
-                            $cce->getMessage()
+                            $cce->getMessage(),
                         ),
-                        $time
+                        $time,
                     );
                 }
             }
@@ -861,12 +863,12 @@ final class TestResult implements Countable
                 $this->codeCoverage->stop(
                     $append,
                     $linesToBeCovered,
-                    $linesToBeUsed
+                    $linesToBeUsed,
                 );
             } catch (UnintentionallyCoveredCodeException $cce) {
                 $unintentionallyCoveredCodeError = new UnintentionallyCoveredCodeError(
                     'This test executed code that is not listed as code to be covered or used:' .
-                    PHP_EOL . $cce->getMessage()
+                    PHP_EOL . $cce->getMessage(),
                 );
             } catch (OriginalCodeCoverageException $cce) {
                 $error = true;
@@ -891,7 +893,7 @@ final class TestResult implements Countable
             $this->addFailure(
                 $test,
                 $unintentionallyCoveredCodeError,
-                $time
+                $time,
             );
         } elseif ($this->beStrictAboutTestsThatDoNotTestAnything &&
             !$test->doesNotPerformAssertions() &&
@@ -903,7 +905,7 @@ final class TestResult implements Countable
                 throw new Exception(
                     $e->getMessage(),
                     $e->getCode(),
-                    $e
+                    $e,
                 );
             }
             // @codeCoverageIgnoreEnd
@@ -918,7 +920,7 @@ final class TestResult implements Countable
                     throw new Exception(
                         $e->getMessage(),
                         $e->getCode(),
-                        $e
+                        $e,
                     );
                 }
                 // @codeCoverageIgnoreEnd
@@ -930,10 +932,10 @@ final class TestResult implements Countable
                     sprintf(
                         "This test did not perform any assertions\n\n%s:%d",
                         $reflected->getFileName(),
-                        $reflected->getStartLine()
-                    )
+                        $reflected->getStartLine(),
+                    ),
                 ),
-                $time
+                $time,
             );
         } elseif ($this->beStrictAboutTestsThatDoNotTestAnything &&
             $test->doesNotPerformAssertions() &&
@@ -943,10 +945,10 @@ final class TestResult implements Countable
                 new RiskyTestError(
                     sprintf(
                         'This test is annotated with "@doesNotPerformAssertions" but performed %d assertions',
-                        $test->getNumAssertions()
-                    )
+                        $test->getNumAssertions(),
+                    ),
                 ),
-                $time
+                $time,
             );
         } elseif ($this->beStrictAboutOutputDuringTests && $test->hasOutput()) {
             $this->addFailure(
@@ -954,24 +956,24 @@ final class TestResult implements Countable
                 new OutputError(
                     sprintf(
                         'This test printed output: %s',
-                        $test->getActualOutput()
-                    )
+                        $test->getActualOutput(),
+                    ),
                 ),
-                $time
+                $time,
             );
         } elseif ($this->beStrictAboutTodoAnnotatedTests && $test instanceof TestCase) {
             $annotations = TestUtil::parseTestMethodAnnotations(
                 get_class($test),
-                $test->getName(false)
+                $test->getName(false),
             );
 
             if (isset($annotations['method']['todo'])) {
                 $this->addFailure(
                     $test,
                     new RiskyTestError(
-                        'Test method is annotated with @todo'
+                        'Test method is annotated with @todo',
                     ),
-                    $time
+                    $time,
                 );
             }
         }
