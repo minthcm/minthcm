@@ -4,13 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
@@ -46,10 +47,8 @@ class MimeParser extends AbstractParser
     /**
      * Returns true if the passed PartBuilder::isMime() method returns true.
      *
-     * @param PartBuilder $part
-     * @return bool
      */
-    public function canParse(PartBuilder $part)
+    public function canParse(PartBuilder $part) : bool
     {
         return $part->isMime();
     }
@@ -58,25 +57,23 @@ class MimeParser extends AbstractParser
      * Reads up to 2048 bytes of input from the passed resource handle,
      * discarding portions of a line that are longer than that, and returning
      * the read portions of the line.
-     * 
+     *
      * The method also calls $proxy->setLastLineEndingLength which is used in
      * findContentBoundary() to set the exact end byte of a part.
      *
      * @param resource $handle
-     * @param ParserMimePartProxy $proxy
-     * @return string
      */
-    private function readBoundaryLine($handle, ParserMimePartProxy $proxy)
+    private function readBoundaryLine($handle, ParserMimePartProxy $proxy) : string
     {
         $size = 2048;
         $isCut = false;
-        $line = fgets($handle, $size);
-        while (strlen($line) === $size - 1 && substr($line, -1) !== "\n") {
-            $line = fgets($handle, $size);
+        $line = \fgets($handle, $size);
+        while (\strlen($line) === $size - 1 && \substr($line, -1) !== "\n") {
+            $line = \fgets($handle, $size);
             $isCut = true;
         }
-        $ret = rtrim($line, "\r\n");
-        $proxy->setLastLineEndingLength(strlen($line) - strlen($ret));
+        $ret = \rtrim($line, "\r\n");
+        $proxy->setLastLineEndingLength(\strlen($line) - \strlen($ret));
         return ($isCut) ? '' : $ret;
     }
 
@@ -94,30 +91,34 @@ class MimeParser extends AbstractParser
      * Once a boundary is found, setStreamPartAndContentEndPos is called with
      * the passed $handle's read pos before the boundary and its line separator
      * were read.
-     *
-     * @param PartBuilder $partBuilder
      */
-    private function findContentBoundary(ParserMimePartProxy $proxy)
+    private function findContentBoundary(ParserMimePartProxy $proxy) : self
     {
         $handle = $proxy->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
-        // part of the current part
-        while (!feof($handle)) {
-            $endPos = ftell($handle) - $proxy->getLastLineEndingLength();
+        // part of the current part, if a part is immediately followed by a
+        // boundary, this could result in a '-1' or '-2' content length
+        while (!\feof($handle)) {
+            $endPos = \ftell($handle) - $proxy->getLastLineEndingLength();
             $line = $this->readBoundaryLine($handle, $proxy);
-            if (substr($line, 0, 2) === '--' && $proxy->setEndBoundaryFound($line)) {
+            if (\substr($line, 0, 2) === '--' && $proxy->setEndBoundaryFound($line)) {
                 $proxy->setStreamPartAndContentEndPos($endPos);
-                return;
+                return $this;
             }
         }
-        $proxy->setStreamPartAndContentEndPos(ftell($handle));
+        $proxy->setStreamPartAndContentEndPos(\ftell($handle));
         $proxy->setEof();
+        return $this;
     }
 
+    /**
+     * @return static
+     */
     public function parseContent(ParserPartProxy $proxy)
     {
         $proxy->setStreamContentStartPos($proxy->getMessageResourceHandlePos());
         $this->findContentBoundary($proxy);
+        return $this;
     }
 
     /**
@@ -125,7 +126,7 @@ class MimeParser extends AbstractParser
      * $this->parserManager->createParserProxyFor($child);
      *
      * The method first checks though if the 'part' represents hidden content
-     * passed a MIME end boundary, which some messages like to include, for
+     * past a MIME end boundary, which some messages like to include, for
      * instance:
      *
      * ```
@@ -141,9 +142,6 @@ class MimeParser extends AbstractParser
      * a part, $this->parseContent is called immediately to parse it and discard
      * it, and null is returned.
      *
-     * @param ParserMimePartProxy $parent
-     * @param PartHeaderContainer $headerContainer
-     * @param PartBuilder $child
      * @return ParserPartProxy|null
      */
     private function createPart(ParserMimePartProxy $parent, PartHeaderContainer $headerContainer, PartBuilder $child)
@@ -155,12 +153,11 @@ class MimeParser extends AbstractParser
             );
             $parserProxy = $this->parserManager->createParserProxyFor($child);
             return $parserProxy;
-        } else {
-            // reads content past an end boundary if there is any
-            $parserProxy = $this->parserPartProxyFactory->newInstance($child, $this);
-            $this->parseContent($parserProxy);
-            return null;
         }
+        // reads content past an end boundary if there is any
+        $parserProxy = $this->parserPartProxyFactory->newInstance($child, $this);
+        $this->parseContent($parserProxy);
+        return null;
     }
 
     public function parseNextChild(ParserMimePartProxy $proxy)

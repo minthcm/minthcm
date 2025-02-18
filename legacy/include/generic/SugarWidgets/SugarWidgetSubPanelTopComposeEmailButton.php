@@ -130,9 +130,19 @@ class SugarWidgetSubPanelTopComposeEmailButton extends SugarWidgetSubPanelTopBut
 
         global $current_user;
         $client = $current_user->getEmailClient();
+        $bean = $defines['focus'];
 
         if ($client == 'sugar') {
-            $button .= "<input class='button' onclick='return false;' type='button' id='$inputID' value='$this->form_value'>";
+            $button = "<input 
+                class='button' 
+                onclick='$(document).openComposeViewModal(this);' 
+                type='button' 
+                id='$inputID' 
+                value='$this->form_value' 
+                data-module='$bean->module_name' 
+                data-record-id='$bean->id' 
+                data-module-name='$bean->name' 
+                data-email-address='$bean->email1'>";
         }
 
         return $button;

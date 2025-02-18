@@ -9,10 +9,9 @@ jobs:
 
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2
 
-      - name: Update Contributors
-        uses: BobAnkh/add-contributors@v0.0.8
+      - uses: BobAnkh/add-contributors@master
         with:
           REPO_NAME: 'SoftCreatR/JSONPath'
           CONTRIBUTOR: '## Contributors ✨'

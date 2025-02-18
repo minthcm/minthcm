@@ -20,6 +20,7 @@ $kanbanViewDefs[$module_name] = array(
     'columns' => extractSublist($app_list_strings['status_list'], [
         // Displayed Kanban columns
         'New',
+        'ToBeVerifiedInOtherRecruitments',
         'InProgress',
         'EntryInterview',
         'AfterEntryInterview',

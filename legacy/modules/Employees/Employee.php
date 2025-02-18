@@ -324,7 +324,7 @@ class Employee extends Person implements EmailInterface
     public function save($check_notify = false)
     {
         global $current_user;
-        if ($current_user->id) {
+        if ($current_user->id && $this->id != $current_user->id) {
             if (
                 !is_admin($current_user) &&
                 !ACLAction::userHasAccess($GLOBALS['current_user']->id, 'Employees', 'edit', 'module', $current_user->id == $this->id)
@@ -444,7 +444,7 @@ class Employee extends Person implements EmailInterface
         }
 
         if (empty($current_user->id)) {
-            return false;
+            return true;
         }
 
         $sameUser = $current_user->id === $this->id;

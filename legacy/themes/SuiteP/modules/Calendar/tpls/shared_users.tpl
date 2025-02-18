@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -107,9 +107,11 @@
 {/literal}
 </script>
 
+<script language="javascript" type="text/javascript" src="{sugar_getjspath file='themes/SuiteP/modules/Calendar/tpls/shared_users.js'}"></script>
+
 <div class="modal fade modal-calendar-user-list" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
+		<div class="modal-content" style="width: 1000px;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 				<h4 class="modal-title">{$MOD.LBL_EDIT_USERLIST}</h4>
@@ -134,7 +136,53 @@
 								<input type="hidden" name="view" value="{$view}">
 
 
-								<table cellpadding="0" cellspacing="3" border="0" align="center" width="100%">
+                                <div class="col-12">
+                                    <div class="col-12" style="margin-top: 24px">
+                                        {$MOD.LBL_SELECT_USERS}
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="col-sm-5 col-12">
+                                            <div style="float:left"><b>{$MOD.LBL_USERS}:</b></div>
+                                            <div class="shared_ids_td" style="float:left">
+                                                <select id="shared_ids" name="shared_ids[]" multiple size="8">{$users_options}</select>
+                                            </div>
+                                            <div style="float:left">
+                                                <a onclick="up('shared_ids');">{$UP}</a><br>
+                                                <a onclick="down('shared_ids');">{$DOWN}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7 col-12">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-primary" id="create-users-group">+ {$MOD.LBL_CREATE_USERS_GROUP_BUTTON}</button> {* todo LBL *}
+                                                {$MOD.LBL_CREATE_GROUP_DESCRIPTION}
+                                            </div>
+                                            <hr>
+                                            <div class="col-12">
+                                            <ul class="list-group" style="max-height: 128px; overflow-y: scroll;">
+											{foreach from=$shared_ids_groups key=arrayKey  item=group_name}
+												{foreach from=$group_name key=name item=ids}
+													{if $name eq $shared_ids_last_group}
+													<li class="list-group-item d-flex justify-content-between align-items-center users-group-select" value="{$name}" style="color: white; background-color: rgb(0, 153, 118);">
+													{$name}
+														<a href="javascript:void(0)" class="delete-users-group" style="float: right; margin-left: 10px; color: white;" value="{$name}"><span class="suitepicon suitepicon-action-delete"></span></a>
+														<a href="javascript:void(0)" class="update-users-group" style="float: right; margin-left: 10px; color: white;" value="{$name}">AKTUALIZUJ</a>
+													{else}
+													<li class="list-group-item d-flex justify-content-between align-items-center users-group-select" value="{$name}">
+													{$name}
+														<a href="javascript:void(0)" class="delete-users-group" style="float: right; margin-left: 10px" value="{$name}"><span class="suitepicon suitepicon-action-delete"></span></a>
+														<a href="javascript:void(0)" class="update-users-group" style="float: right; margin-left: 10px" value="{$name}">AKTUALIZUJ</a>
+													{/if}
+													</li>
+												{/foreach}
+											{/foreach}
+                                            </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+								{* <table cellpadding="0" cellspacing="3" border="0" align="center" width="100%">
 									<tr><th valign="top" align="center" colspan="2">{$MOD.LBL_SELECT_USERS}</th></tr>
 									<tr><td valign="top"></td><td valign="top">
 											<table cellpadding="1" cellspacing="1" border="0" class="edit view" align="center">
@@ -150,7 +198,7 @@
 												</tr>
 											</table>
 										</td></tr>
-								</table>
+								</table> *}
 							</form>
 						</div>
 					</div>
@@ -158,7 +206,7 @@
 			</div>
 			<div class="modal-footer">
 				<button id="sharedCalUsersSelectBtn" data-dismiss="modal" class="btn btn-default" type="button">{$MOD.LBL_CANCEL_BUTTON}</button>
-				<button id="sharedCalUsersSelectBtn" onclick="$('#shared_cal').submit();" class="btn btn-danger" type="button">{$MOD.LBL_APPLY_BUTTON}</button>
+				<button id="sharedCalUsersSelectBtn" onclick="showLoadingScreen('{$MOD.LBL_MODULE_NAME}', viewTools.language.get('app_strings', 'LBL_LOADING')); $('#shared_cal').submit();" class="btn btn-danger" type="button">{$MOD.LBL_APPLY_BUTTON}</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

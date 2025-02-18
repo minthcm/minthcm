@@ -65,6 +65,7 @@ class Meeting extends SugarBean {
    public $date_start;
    public $time_start;
    public $date_end;
+   public $duration;
    public $duration_hours;
    public $duration_minutes;
    public $time_meridiem;
@@ -263,7 +264,8 @@ class Meeting extends SugarBean {
          $api->logoff();
       }
 
-      
+      $this->duration = $this->duration_hours . 'h ' . $this->duration_minutes . 'm';
+
       $return_id = parent::save($check_notify);
 
       // MintHCM #111604 start

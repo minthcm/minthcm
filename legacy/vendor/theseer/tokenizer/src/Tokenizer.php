@@ -70,6 +70,18 @@ class Tokenizer {
             $line   = $tok[2];
             $values = \preg_split('/\R+/Uu', $tok[1]);
 
+            if (!$values) {
+                $result->addToken(
+                    new Token(
+                        $line,
+                        \token_name($tok[0]),
+                        '{binary data}'
+                    )
+                );
+
+                continue;
+            }
+
             foreach ($values as $v) {
                 $token = new Token(
                     $line,
@@ -100,13 +112,6 @@ class Tokenizer {
         $final = new TokenCollection();
 
         foreach ($tokens as $token) {
-            if ($prev === null) {
-                $final->addToken($token);
-                $prev = $token;
-
-                continue;
-            }
-
             $gap = $token->getLine() - $prev->getLine();
 
             while ($gap > 1) {

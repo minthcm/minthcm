@@ -536,6 +536,15 @@ Then, an instance of 'MySymfonyStyle' will be provided to any command handler me
 $commandProcessor->parameterInjection()->register('Symfony\Component\Console\Style\SymfonyStyle', new SymfonyStyleInjector);
 ```
 
+The following classes are available to be injected into the command method by default:
+
+- Symfony\Component\Console\Input\InputInterface
+- Symfony\Component\Console\Output\OutputInterface
+- Consolidation\AnnotatedCommand\AnnotationData
+- Consolidation\OutputFormatters\Options\FormatterOptions
+
+Note that these instances are also available via the CommandData object passed to most command hooks.
+
 ## Handling Standard Input
 
 Any Symfony command may use the provided StdinHandler to imlement commands that read from standard input.

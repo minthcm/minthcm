@@ -221,6 +221,11 @@ class json_config
             }
             // MintHCM #54195 #59793 End
         }
+        function cmp($a, $b)
+        {
+            return strcmp($a['fields']['full_name'], $b['fields']['full_name']);
+        }
+        usort($module_arr['users_arr'], 'cmp');
         return $module_arr;
     }
 

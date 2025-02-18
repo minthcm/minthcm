@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Consolidation\OutputFormatters\Options\FormatterOptions;
 
 /**
  * AnnotatedCommands are created automatically by the
@@ -379,7 +380,7 @@ class AnnotatedCommand extends Command implements HelpDocumentAlter
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $state = $this->injectIntoCommandfileInstance($input, $output);
         // Validate, run, process, alter, handle results.
@@ -428,6 +429,9 @@ class AnnotatedCommand extends Command implements HelpDocumentAlter
             $output,
             $this->parameterMap
         );
+
+        $formatterOptions = new FormatterOptions($commandData->annotationData()->getArrayCopy(), $commandData->input()->getOptions());
+        $commandData->setFormatterOptions($formatterOptions);
 
         // Fetch any classes (e.g. InputInterface / OutputInterface) that
         // this command's callback wants passed as a parameter and inject

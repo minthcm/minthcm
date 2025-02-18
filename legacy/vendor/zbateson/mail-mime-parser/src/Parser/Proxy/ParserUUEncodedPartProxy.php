@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 /**
@@ -24,7 +25,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      *
      * @return int|null The start position or null
      */
-    public function getNextPartStart()
+    public function getNextPartStart() : ?int
     {
         return $this->getParent()->getNextPartStart();
     }
@@ -39,7 +40,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      *
      * @return int|null The file mode or null
      */
-    public function getNextPartMode()
+    public function getNextPartMode() : ?int
     {
         return $this->getParent()->getNextPartMode();
     }
@@ -52,9 +53,9 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * getNextPartFilename() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
      *
-     * @return int|null The file name or null
+     * @return ?string The file name or null
      */
-    public function getNextPartFilename()
+    public function getNextPartFilename() : ?string
     {
         return $this->getParent()->getNextPartFilename();
     }
@@ -65,12 +66,11 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartStart() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
-     * @param int $nextPartStart
      */
-    public function setNextPartStart($nextPartStart)
+    public function setNextPartStart(int $nextPartStart) : self
     {
         $this->getParent()->setNextPartStart($nextPartStart);
+        return $this;
     }
 
     /**
@@ -79,12 +79,11 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartMode() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
-     * @param int $nextPartMode
      */
-    public function setNextPartMode($nextPartMode)
+    public function setNextPartMode(int $nextPartMode) : self
     {
         $this->getParent()->setNextPartMode($nextPartMode);
+        return $this;
     }
 
     /**
@@ -93,21 +92,18 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartFilename() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
-     * @param string $nextPartFilename
      */
-    public function setNextPartFilename($nextPartFilename)
+    public function setNextPartFilename(string $nextPartFilename) : self
     {
         $this->getParent()->setNextPartFilename($nextPartFilename);
+        return $this;
     }
 
     /**
      * Returns the file mode included in the uuencoded 'begin' line for this
      * part.
-     *
-     * @return int
      */
-    public function getUnixFileMode()
+    public function getUnixFileMode() : ?int
     {
         return $this->getHeaderContainer()->getUnixFileMode();
     }
@@ -115,10 +111,8 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
     /**
      * Returns the filename included in the uuencoded 'begin' line for this
      * part.
-     *
-     * @return string
      */
-    public function getFilename()
+    public function getFilename() : ?string
     {
         return $this->getHeaderContainer()->getFilename();
     }

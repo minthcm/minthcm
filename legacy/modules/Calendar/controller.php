@@ -332,4 +332,52 @@ class CalendarController extends SugarController {
       $this->view_object_map['jsonData'] = $cal->items;
    }
 
+   protected function action_createUpdateGroup() {
+      $group_name = $_REQUEST['group_name'];
+      $user_ids = $_REQUEST['user_ids'];
+      global $current_user;
+      $user_ids_groups = $current_user->getPreference('shared_ids_groups') ?? [];
+      $create = true;
+      foreach($user_ids_groups as $key => $value) {
+         if (array_key_exists($group_name, $value)) {
+            $user_ids_groups[$key] = [$group_name => $user_ids];
+            $create = false;
+            break;
+         }
+      }
+      if ($create) {
+         $user_ids_groups[] = [$group_name => $user_ids];
+      }
+      $current_user->setPreference('shared_ids_groups', $user_ids_groups);
+      $current_user->setPreference('shared_ids_last_group', $group_name);
+      $current_user->setPreference('shared_ids', $user_ids);
+      echo true;
+   }
+
+   protected function action_selectGroup() {
+      $group_name = $_REQUEST['group_name'];
+      global $current_user;
+      $user_ids_groups = $current_user->getPreference('shared_ids_groups');
+      foreach($user_ids_groups as $key => $value) {
+         if (array_key_exists($group_name, $value)) {
+            $current_user->setPreference('shared_ids', $value[$group_name]);
+         }
+      }
+      $current_user->setPreference('shared_ids_last_group', $group_name);
+      echo true;
+   }
+
+   protected function action_deleteGroup() {
+      $group_name = $_REQUEST['group_name'];
+      global $current_user;
+      $user_ids_groups = $current_user->getPreference('shared_ids_groups');
+      foreach($user_ids_groups as $key => $value) {
+         if (array_key_exists($group_name, $value)) {
+            unset($user_ids_groups[$key]);
+         }
+      }
+      $current_user->setPreference('shared_ids_groups', $user_ids_groups);
+      echo true;
+   }
+
 }

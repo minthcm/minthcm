@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="modules/WorkSchedules/tpls/TimeTrackingPane.css" />
-<div class="TimePanel">
+<div class="TimePanel" style="margin-right:15px;">
     <table style="width:100%;margin-top:10px;" cellspacing="0">
         <tr>
             <td class="TimePanelLeft" style="z-index:1; width: 40px;">-</td>

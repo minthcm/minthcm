@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 /**
@@ -22,13 +23,17 @@ class ParserMessageProxy extends ParserMimePartProxy
      */
     protected $lastLineEndingLength = 0;
 
-    public function getLastLineEndingLength()
+    public function getLastLineEndingLength() : int
     {
         return $this->lastLineEndingLength;
     }
 
-    public function setLastLineEndingLength($lastLineEndingLength)
+    /**
+     * @return static
+     */
+    public function setLastLineEndingLength(int $lastLineEndingLength)
     {
         $this->lastLineEndingLength = $lastLineEndingLength;
+        return $this;
     }
 }

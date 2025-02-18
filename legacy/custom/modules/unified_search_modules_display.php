@@ -289,4 +289,7 @@ $unified_search_modules_display = array(
     "Requests" => array(
         'visible' => true,
     ),
+    'AOS_PDF_Templates' => array(
+        'visible' => false,
+    ),
 );

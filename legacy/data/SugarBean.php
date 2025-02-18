@@ -4998,16 +4998,20 @@ class SugarBean {
     * @param string $where where clause. defaults to ""
     * @param bool $check_dates . defaults to false
     * @param int $show_deleted show deleted records. defaults to 0
+    * @param int $limit
     * @return null|SugarBean[]
     */
-   public function get_full_list($order_by = "", $where = "", $check_dates = false, $show_deleted = 0) {
-      $GLOBALS['log']->debug("get_full_list:  order_by = '$order_by' and where = '$where'");
-      if ( isset($_SESSION['show_deleted']) ) {
-         $show_deleted = 1;
-      }
-      $query = $this->create_new_list_query($order_by, $where, array(), array(), $show_deleted);
-      return $this->process_full_list_query($query, $check_dates);
-   }
+    public function get_full_list($order_by = "", $where = "", $check_dates = false, $show_deleted = 0, $limit = -1) {
+        $GLOBALS['log']->debug("get_full_list:  order_by = '$order_by' and where = '$where'");
+        if ( isset($_SESSION['show_deleted']) ) {
+           $show_deleted = 1;
+        }
+        $query = $this->create_new_list_query($order_by, $where, array(), array(), $show_deleted);
+        if(!empty($limit) && $limit !== -1){
+          $query = $query . " LIMIT " . $limit;
+        }
+        return $this->process_full_list_query($query, $check_dates);
+     }
 
    /**
     * Processes fetched list view data
