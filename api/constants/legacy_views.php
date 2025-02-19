@@ -537,4 +537,8 @@ return [
         'list' => false,
         'record' => true,
     ],
+    'Positions' => [
+        'list' => false,
+        'record' => true,
+    ],
 ];
