@@ -43,109 +43,92 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-$module_name = 'News';
-$viewdefs[$module_name] = array(
-    'DetailView' => array(
-        'templateMeta' => array(
-            'form' => array(
-                'buttons' => array(
-                    'EDIT',
-                    'DUPLICATE',
-                    'DELETE',
-                    'FIND_DUPLICATES',
-                    array(
-                        'customCode' => '{include file="modules/News/tpls/PublishButton.tpl"}'
-                        . '{include file="modules/News/tpls/ArchiveButton.tpl"}',
-                    ),
-                ),
-                'links' => array(
-                    '<div class="reactionsWrapper"></div>',
-                ),
-            ),
-            'maxColumns' => '2',
-            'widths' => array(
-                array(
-                    'label' => '10',
-                    'field' => '30',
-                ),
-                array(
-                    'label' => '10',
-                    'field' => '30',
-                ),
-            ),
-            'includes' => array(
-                array(
-                    'file' => 'modules/News/js/view.detail.js',
-                ),
-                array(
-                    'file' => 'modules/Reactions/js/Reactions.js'
-                ),
-            ),
-            'useTabs' => true,
-            'tabDefs' => array(
-                'DEFAULT' => array(
-                    'newTab' => true,
-                    'panelDefault' => 'expanded',
-                ),
-                'LBL_PANEL_COMMENTS' => array(
-                  'newTab' => false,
-                  'panelDefault' => 'expanded',
-              ),
-                'LBL_PANEL_ASSIGNMENT' => array(
-                    'newTab' => true,
-                    'panelDefault' => 'expanded',
-                ),
-            ),
-        ),
-        'panels' => array(
-            'default' => array(
-                array(
-                    'name',
-                    'news_status',
-                ),
-                array(
-                    'news_type',
-                    'publication_date',
-                ),
-                array(
-                    'photo',
-                ),
+ $module_name = 'News';
+ $viewdefs[$module_name] = array(
+     'DetailView' => array(
+         'templateMeta' => array(
+             'form' => array(
+                 'buttons' => array(
+                     'EDIT',
+                     'DUPLICATE',
+                     'DELETE',
+                     'FIND_DUPLICATES',
+                     array(
+                         'customCode' => '{include file="modules/News/tpls/PublishButton.tpl"}'
+                         . '{include file="modules/News/tpls/ArchiveButton.tpl"}',
+                     ),
+                 ),
+                 'links' => array(
+                     '<div class="reactionsWrapper"></div>',
+                     '<link rel="stylesheet" href="modules/News/css/detail.css">',
+                 ),
+             ),
+             'maxColumns' => '2',
+             'widths' => array(
+                 array('label' => '10', 'field' => '30'),
+                 array('label' => '10', 'field' => '30'),
+             ),
+             'includes' => array(
+                 array('file' => 'modules/News/js/view.detail.js'),
+                 array('file' => 'modules/Reactions/js/Reactions.js')
+             ),
+             'useTabs' => true,
+             'tabDefs' => array(
+                 'LBL_PANEL_NEWS' => array(
+                     'newTab' => true,
+                     'panelDefault' => 'expanded',
+                 ),
+                 'LBL_PANEL_BASIC' => array(
+                     'newTab' => true,
+                     'panelDefault' => 'expanded',
+                 ),
+                 'LBL_PANEL_COMMENTS' => array(
+                     'newTab' => false,
+                     'panelDefault' => 'expanded',
+                 ),
+                 'LBL_PANEL_ASSIGNMENT' => array(
+                     'newTab' => true,
+                     'panelDefault' => 'expanded',
+                 ),
+             ),
+         ),
+         'panels' => array(
+             'LBL_PANEL_NEWS' => array(
                 array(
                     array(
                         'name' => 'content_of_announcement',
-                        'label' => 'LBL_CONTENT_OF_ANNOUNCEMENT',
                         'customCode' => '{$fields.content_of_announcement.value}',
                     ),
                 ),
-                array(
-                    'description',
-                ),
-            ),
-            'LBL_PANEL_COMMENTS' => array(
-                array(
-                    array(
-                        'name' => 'comments_widget',
-                        'studio' => 'visible',
-                        'label' => 'LBL_COMMENTS',
-                    ),
-                ),
-            ),
-            'LBL_PANEL_ASSIGNMENT' => array(
-                array(
-                    'assigned_user_name',
-                    '',
-                ),
-                array(
-                    array(
-                        'name' => 'date_entered',
-                        'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
-                    ),
-                    array(
-                        'name' => 'date_modified',
-                        'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+             ),
+             'LBL_PANEL_COMMENTS' => array(
+                 array(
+                     array(
+                         'name' => 'comments_widget',
+                         'studio' => 'visible',
+                         'label' => 'LBL_COMMENTS',
+                     ),
+                 ),
+             ),
+             'LBL_PANEL_BASIC' => array(
+                 array('name', 'news_status'),
+                 array('news_type', 'publication_date'),
+             ),
+             
+             'LBL_PANEL_ASSIGNMENT' => array(
+                 array('assigned_user_name', ''),
+                 array(
+                     array(
+                         'name' => 'date_entered',
+                         'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
+                     ),
+                     array(
+                         'name' => 'date_modified',
+                         'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
+                     ),
+                 ),
+             ),
+         ),
+     ),
+ );
+ 
