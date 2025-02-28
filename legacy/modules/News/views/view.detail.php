@@ -47,11 +47,15 @@ class NewsViewDetail extends ViewDetail {
 
    public function display() {
       $this->setDecodeHTML();
+
+      
+
       parent::display();
    }
 
    public function setDecodeHTML() {
-      $this->bean->content_of_announcement = html_entity_decode('<span data-open-links-in-new=true>'.str_replace('&nbsp;', ' ', $this->bean->content_of_announcement).'</span>');
+      $this->bean->content_of_announcement = html_entity_decode('<span data-open-links-in-new=false>'.str_replace('&nbsp;', ' ', $this->bean->content_of_announcement).'</span>');
  }
 
 }
+
