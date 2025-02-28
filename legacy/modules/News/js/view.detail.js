@@ -44,14 +44,3 @@ async function setNewsStatus(status) {
         viewTools.GUI.statusBox.showStatus(viewTools.language.get('News', 'LBL_' + status.toUpperCase() + '_ERROR'), 'error', 2000);
     }
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('.detail-view-row-item[data-field="photo"]').forEach(item => {
-        item.style.display = 'none';
-    });
-
-    document.querySelectorAll('.detail-view-row-item[data-field="content_of_news"]').forEach(item => {
-        item.style.display = 'none';
-    });
-});
-

@@ -687,8 +687,7 @@ slot {
 }
 
 .detail-view-field {
-  //display: inline;
-  display: flex;
+  display: inline;
   font-size: 14px;
   font-weight: 400;
   background-color: $detail-view-field-bg;
@@ -707,7 +706,7 @@ slot {
 
 .detail-view-field span {
   line-height: normal;
-  display: inline;
+  display: inline-block;
   vertical-align: middle;
   word-break: break-word;
 }
