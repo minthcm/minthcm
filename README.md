@@ -80,8 +80,8 @@ You can download and contribute your own translation packages via our [Crowdin p
 
 MintHCM requirements:
 * **Linux** or **Windows** machine running Apache2
-* PHP 7.4-8.0
-* MySQL 5.7 or 8.0 or Percona 8.0 or MariaDB 10
+* PHP 8.0
+* MySQL 8.0 or MariaDB 10.5, 10.6, 10.10, 10.11
 * ElasticSearch 7.9
 * All web browsers with Chromium and Firefox are supported by MintHCM. <br> Unfortunately, it doesn't support IE 😭 
 
