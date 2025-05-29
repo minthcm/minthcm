@@ -20,6 +20,10 @@ namespace Google\Service\CloudRedis;
 class RetentionSettings extends \Google\Model
 {
   /**
+   * @var string
+   */
+  public $durationBasedRetention;
+  /**
    * @var int
    */
   public $quantityBasedRetention;
@@ -31,7 +35,25 @@ class RetentionSettings extends \Google\Model
    * @var string
    */
   public $timeBasedRetention;
+  /**
+   * @var string
+   */
+  public $timestampBasedRetentionTime;
 
+  /**
+   * @param string
+   */
+  public function setDurationBasedRetention($durationBasedRetention)
+  {
+    $this->durationBasedRetention = $durationBasedRetention;
+  }
+  /**
+   * @return string
+   */
+  public function getDurationBasedRetention()
+  {
+    return $this->durationBasedRetention;
+  }
   /**
    * @param int
    */
@@ -73,6 +95,20 @@ class RetentionSettings extends \Google\Model
   public function getTimeBasedRetention()
   {
     return $this->timeBasedRetention;
+  }
+  /**
+   * @param string
+   */
+  public function setTimestampBasedRetentionTime($timestampBasedRetentionTime)
+  {
+    $this->timestampBasedRetentionTime = $timestampBasedRetentionTime;
+  }
+  /**
+   * @return string
+   */
+  public function getTimestampBasedRetentionTime()
+  {
+    return $this->timestampBasedRetentionTime;
   }
 }
 

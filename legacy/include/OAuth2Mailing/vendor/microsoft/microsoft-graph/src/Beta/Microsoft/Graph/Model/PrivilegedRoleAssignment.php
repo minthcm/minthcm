@@ -26,7 +26,6 @@ class PrivilegedRoleAssignment extends Entity
 {
     /**
     * Gets the expirationDateTime
-    * The UTC DateTime when the temporary privileged role assignment will be expired. For permanent role assignment, the value is null.
     *
     * @return \DateTime|null The expirationDateTime
     */
@@ -42,10 +41,9 @@ class PrivilegedRoleAssignment extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
-    * The UTC DateTime when the temporary privileged role assignment will be expired. For permanent role assignment, the value is null.
     *
     * @param \DateTime $val The expirationDateTime
     *
@@ -56,10 +54,9 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isElevated
-    * true if the role assignment is activated. false if the role assignment is deactivated.
     *
     * @return bool|null The isElevated
     */
@@ -71,10 +68,9 @@ class PrivilegedRoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isElevated
-    * true if the role assignment is activated. false if the role assignment is deactivated.
     *
     * @param bool $val The isElevated
     *
@@ -85,10 +81,9 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["isElevated"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the resultMessage
-    * Result message set by the service.
     *
     * @return string|null The resultMessage
     */
@@ -100,10 +95,9 @@ class PrivilegedRoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resultMessage
-    * Result message set by the service.
     *
     * @param string $val The resultMessage
     *
@@ -114,10 +108,9 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["resultMessage"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleId
-    * Role identifier. In GUID string format.
     *
     * @return string|null The roleId
     */
@@ -129,10 +122,9 @@ class PrivilegedRoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleId
-    * Role identifier. In GUID string format.
     *
     * @param string $val The roleId
     *
@@ -143,10 +135,9 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["roleId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
-    * User identifier. In GUID string format.
     *
     * @return string|null The userId
     */
@@ -158,10 +149,9 @@ class PrivilegedRoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
-    * User identifier. In GUID string format.
     *
     * @param string $val The userId
     *
@@ -172,10 +162,9 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleInfo
-    * Read-only. Nullable. The associated role information.
     *
     * @return PrivilegedRole|null The roleInfo
     */
@@ -191,10 +180,9 @@ class PrivilegedRoleAssignment extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the roleInfo
-    * Read-only. Nullable. The associated role information.
     *
     * @param PrivilegedRole $val The roleInfo
     *
@@ -205,5 +193,5 @@ class PrivilegedRoleAssignment extends Entity
         $this->_propDict["roleInfo"] = $val;
         return $this;
     }
-    
+
 }

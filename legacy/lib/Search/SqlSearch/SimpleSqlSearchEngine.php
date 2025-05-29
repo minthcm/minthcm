@@ -63,6 +63,12 @@ use SuiteCRM\Search\SearchWrapper;
  */
 class SimpleSqlSearchEngine extends SearchEngine
 {
+
+    public function globalSearch(SearchQuery $query): SearchResults
+    {
+        return $this->search($query);
+    }
+    
     /**
      * Performs a search using the search engine and returns a list SearchResults instance.
      *

@@ -26,16 +26,18 @@ class ServiceHostedMediaConfig extends MediaConfig
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.serviceHostedMediaConfig");
     }
 
 
     /**
     * Gets the preFetchMedia
-    * The list of media to pre-fetch.
+    * The list of media to prefetch.
     *
     * @return MediaInfo|null The preFetchMedia
     */
@@ -54,7 +56,7 @@ class ServiceHostedMediaConfig extends MediaConfig
 
     /**
     * Sets the preFetchMedia
-    * The list of media to pre-fetch.
+    * The list of media to prefetch.
     *
     * @param MediaInfo $val The value to assign to the preFetchMedia
     *

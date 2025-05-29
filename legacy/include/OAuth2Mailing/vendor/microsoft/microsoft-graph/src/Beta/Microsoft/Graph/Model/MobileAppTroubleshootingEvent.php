@@ -38,7 +38,7 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
             return null;
         }
     }
-    
+
     /**
     * Sets the applicationId
     * Intune application identifier.
@@ -52,9 +52,38 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
         $this->_propDict["applicationId"] = $val;
         return $this;
     }
-    
 
-     /** 
+    /**
+    * Gets the deviceId
+    * Device identifier created or collected by Intune.
+    *
+    * @return string|null The deviceId
+    */
+    public function getDeviceId()
+    {
+        if (array_key_exists("deviceId", $this->_propDict)) {
+            return $this->_propDict["deviceId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the deviceId
+    * Device identifier created or collected by Intune.
+    *
+    * @param string $val The deviceId
+    *
+    * @return MobileAppTroubleshootingEvent
+    */
+    public function setDeviceId($val)
+    {
+        $this->_propDict["deviceId"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the history
     * Intune Mobile Application Troubleshooting History Item
      *
@@ -68,12 +97,12 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the history
     * Intune Mobile Application Troubleshooting History Item
     *
-    * @param MobileAppTroubleshootingHistoryItem $val The history
+    * @param MobileAppTroubleshootingHistoryItem[] $val The history
     *
     * @return MobileAppTroubleshootingEvent
     */
@@ -82,7 +111,7 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
         $this->_propDict["history"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the managedDeviceIdentifier
     * Device identifier created or collected by Intune.
@@ -97,7 +126,7 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
             return null;
         }
     }
-    
+
     /**
     * Sets the managedDeviceIdentifier
     * Device identifier created or collected by Intune.
@@ -111,7 +140,7 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
         $this->_propDict["managedDeviceIdentifier"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
     * Identifier for the user that tried to enroll the device.
@@ -126,7 +155,7 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
     * Identifier for the user that tried to enroll the device.
@@ -140,9 +169,9 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the appLogCollectionRequests
     * The collection property of AppLogUploadRequest.
      *
@@ -156,12 +185,12 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the appLogCollectionRequests
     * The collection property of AppLogUploadRequest.
     *
-    * @param AppLogCollectionRequest $val The appLogCollectionRequests
+    * @param AppLogCollectionRequest[] $val The appLogCollectionRequests
     *
     * @return MobileAppTroubleshootingEvent
     */
@@ -170,5 +199,5 @@ class MobileAppTroubleshootingEvent extends DeviceManagementTroubleshootingEvent
         $this->_propDict["appLogCollectionRequests"] = $val;
         return $this;
     }
-    
+
 }

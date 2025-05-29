@@ -26,7 +26,6 @@ class AccessPackageResourceRoleScope extends Entity
 {
     /**
     * Gets the createdBy
-    * Read-only.
     *
     * @return string|null The createdBy
     */
@@ -38,10 +37,9 @@ class AccessPackageResourceRoleScope extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the createdBy
-    * Read-only.
     *
     * @param string $val The createdBy
     *
@@ -52,7 +50,7 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -71,7 +69,7 @@ class AccessPackageResourceRoleScope extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -85,10 +83,9 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedBy
-    * Read-only.
     *
     * @return string|null The modifiedBy
     */
@@ -100,10 +97,9 @@ class AccessPackageResourceRoleScope extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the modifiedBy
-    * Read-only.
     *
     * @param string $val The modifiedBy
     *
@@ -114,7 +110,7 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["modifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -133,7 +129,7 @@ class AccessPackageResourceRoleScope extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -147,10 +143,10 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["modifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResourceRole
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
     *
     * @return AccessPackageResourceRole|null The accessPackageResourceRole
     */
@@ -166,10 +162,10 @@ class AccessPackageResourceRoleScope extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResourceRole
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
     *
     * @param AccessPackageResourceRole $val The accessPackageResourceRole
     *
@@ -180,10 +176,9 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["accessPackageResourceRole"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResourceScope
-    * Read-only. Nullable.
     *
     * @return AccessPackageResourceScope|null The accessPackageResourceScope
     */
@@ -199,10 +194,9 @@ class AccessPackageResourceRoleScope extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResourceScope
-    * Read-only. Nullable.
     *
     * @param AccessPackageResourceScope $val The accessPackageResourceScope
     *
@@ -213,5 +207,5 @@ class AccessPackageResourceRoleScope extends Entity
         $this->_propDict["accessPackageResourceScope"] = $val;
         return $this;
     }
-    
+
 }

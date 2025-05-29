@@ -20,7 +20,7 @@ class vfsStreamBlockTestCase extends \BC_PHPUnit_Framework_TestCase
      */
     protected $block;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->block = new vfsStreamBlock('foo');
     }
@@ -73,10 +73,10 @@ class vfsStreamBlockTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * tests that a blank name for a block device throws an exception
      * @test
-     * @expectedException org\bovigo\vfs\vfsStreamException
      */
     public function createWithEmptyName()
     {
+        $this->expectException(vfsStreamException::class);
         $structure = array(
             'topLevel' => array(
                 'thisIsAFile' => 'file contents',

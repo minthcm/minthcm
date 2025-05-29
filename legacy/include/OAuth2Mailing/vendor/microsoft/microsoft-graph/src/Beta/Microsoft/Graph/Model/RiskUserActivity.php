@@ -59,7 +59,6 @@ class RiskUserActivity extends Entity
 
     /**
     * Gets the eventTypes
-    * List of risk event types. Deprecated. Use riskEventType instead.
     *
     * @return RiskEventType|null The eventTypes
     */
@@ -78,7 +77,6 @@ class RiskUserActivity extends Entity
 
     /**
     * Sets the eventTypes
-    * List of risk event types. Deprecated. Use riskEventType instead.
     *
     * @param RiskEventType $val The value to assign to the eventTypes
     *
@@ -91,7 +89,6 @@ class RiskUserActivity extends Entity
     }
     /**
     * Gets the riskEventTypes
-    * The type of risk event detected.
     *
     * @return string|null The riskEventTypes
     */
@@ -106,7 +103,6 @@ class RiskUserActivity extends Entity
 
     /**
     * Sets the riskEventTypes
-    * The type of risk event detected.
     *
     * @param string $val The value of the riskEventTypes
     *

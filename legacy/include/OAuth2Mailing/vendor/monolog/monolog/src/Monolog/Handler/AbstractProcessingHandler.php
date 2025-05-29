@@ -55,7 +55,7 @@ abstract class AbstractProcessingHandler extends AbstractHandler implements Proc
      *
      * @phpstan-param FormattedRecord $record
      */
-    abstract protected function write(array $record);
+    abstract protected function write(array $record): void;
 
     /**
      * @return void

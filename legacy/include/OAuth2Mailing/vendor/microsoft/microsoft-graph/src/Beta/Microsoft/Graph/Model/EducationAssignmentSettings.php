@@ -26,7 +26,7 @@ class EducationAssignmentSettings extends Entity
 {
     /**
     * Gets the submissionAnimationDisabled
-    * Indicates whether turn-in celebration animation will be shown. A value of true indicates that the animation will not be shown. Default value is false.
+    * Indicates whether turn-in celebration animation will be shown. If true, the animation won't be shown. The default value is false.
     *
     * @return bool|null The submissionAnimationDisabled
     */
@@ -38,10 +38,10 @@ class EducationAssignmentSettings extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the submissionAnimationDisabled
-    * Indicates whether turn-in celebration animation will be shown. A value of true indicates that the animation will not be shown. Default value is false.
+    * Indicates whether turn-in celebration animation will be shown. If true, the animation won't be shown. The default value is false.
     *
     * @param bool $val The submissionAnimationDisabled
     *
@@ -52,5 +52,33 @@ class EducationAssignmentSettings extends Entity
         $this->_propDict["submissionAnimationDisabled"] = boolval($val);
         return $this;
     }
-    
+
+
+     /**
+     * Gets the gradingCategories
+     *
+     * @return array|null The gradingCategories
+     */
+    public function getGradingCategories()
+    {
+        if (array_key_exists("gradingCategories", $this->_propDict)) {
+           return $this->_propDict["gradingCategories"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the gradingCategories
+    *
+    * @param EducationGradingCategory[] $val The gradingCategories
+    *
+    * @return EducationAssignmentSettings
+    */
+    public function setGradingCategories($val)
+    {
+        $this->_propDict["gradingCategories"] = $val;
+        return $this;
+    }
+
 }

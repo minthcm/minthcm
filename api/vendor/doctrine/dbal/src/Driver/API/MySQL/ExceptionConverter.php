@@ -22,9 +22,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query;
 
-/**
- * @internal
- */
+/** @internal */
 final class ExceptionConverter implements ExceptionConverterInterface
 {
     /**
@@ -103,6 +101,7 @@ final class ExceptionConverter implements ExceptionConverterInterface
                 return new ConnectionException($exception, $query);
 
             case 2006:
+            case 4031:
                 return new ConnectionLost($exception, $query);
 
             case 1048:

@@ -38,7 +38,7 @@ class Site extends BaseItem
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The full title for the site. Read-only.
@@ -52,7 +52,7 @@ class Site extends BaseItem
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the error
     *
@@ -70,7 +70,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the error
     *
@@ -83,7 +83,34 @@ class Site extends BaseItem
         $this->_propDict["error"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the isPersonalSite
+    *
+    * @return bool|null The isPersonalSite
+    */
+    public function getIsPersonalSite()
+    {
+        if (array_key_exists("isPersonalSite", $this->_propDict)) {
+            return $this->_propDict["isPersonalSite"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isPersonalSite
+    *
+    * @param bool $val The isPersonalSite
+    *
+    * @return Site
+    */
+    public function setIsPersonalSite($val)
+    {
+        $this->_propDict["isPersonalSite"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the root
     * If present, indicates that this is the root site in the site collection. Read-only.
@@ -102,7 +129,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the root
     * If present, indicates that this is the root site in the site collection. Read-only.
@@ -116,7 +143,7 @@ class Site extends BaseItem
         $this->_propDict["root"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -135,7 +162,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -149,7 +176,7 @@ class Site extends BaseItem
         $this->_propDict["sharepointIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the siteCollection
     * Provides details about the site's site collection. Available only on the root site. Read-only.
@@ -168,7 +195,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the siteCollection
     * Provides details about the site's site collection. Available only on the root site. Read-only.
@@ -182,7 +209,7 @@ class Site extends BaseItem
         $this->_propDict["siteCollection"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the analytics
     * Analytics about the view activities that took place in this site.
@@ -201,7 +228,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the analytics
     * Analytics about the view activities that took place in this site.
@@ -215,9 +242,9 @@ class Site extends BaseItem
         $this->_propDict["analytics"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the columns
     * The collection of column definitions reusable across lists under this site.
      *
@@ -231,12 +258,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the columns
     * The collection of column definitions reusable across lists under this site.
     *
-    * @param ColumnDefinition $val The columns
+    * @param ColumnDefinition[] $val The columns
     *
     * @return Site
     */
@@ -245,9 +272,9 @@ class Site extends BaseItem
         $this->_propDict["columns"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the contentTypes
     * The collection of content types defined for this site.
      *
@@ -261,12 +288,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the contentTypes
     * The collection of content types defined for this site.
     *
-    * @param ContentType $val The contentTypes
+    * @param ContentType[] $val The contentTypes
     *
     * @return Site
     */
@@ -275,7 +302,7 @@ class Site extends BaseItem
         $this->_propDict["contentTypes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the drive
     * The default drive (document library) for this site.
@@ -294,7 +321,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the drive
     * The default drive (document library) for this site.
@@ -308,9 +335,9 @@ class Site extends BaseItem
         $this->_propDict["drive"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the drives
     * The collection of drives (document libraries) under this site.
      *
@@ -324,12 +351,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the drives
     * The collection of drives (document libraries) under this site.
     *
-    * @param Drive $val The drives
+    * @param Drive[] $val The drives
     *
     * @return Site
     */
@@ -338,11 +365,39 @@ class Site extends BaseItem
         $this->_propDict["drives"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the externalColumns
+     *
+     * @return array|null The externalColumns
+     */
+    public function getExternalColumns()
+    {
+        if (array_key_exists("externalColumns", $this->_propDict)) {
+           return $this->_propDict["externalColumns"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the externalColumns
+    *
+    * @param ColumnDefinition[] $val The externalColumns
+    *
+    * @return Site
+    */
+    public function setExternalColumns($val)
+    {
+        $this->_propDict["externalColumns"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the items
-    * Used to address any item contained in this site. This collection cannot be enumerated.
+    * Used to address any item contained in this site. This collection can't be enumerated.
      *
      * @return array|null The items
      */
@@ -354,12 +409,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the items
-    * Used to address any item contained in this site. This collection cannot be enumerated.
+    * Used to address any item contained in this site. This collection can't be enumerated.
     *
-    * @param BaseItem $val The items
+    * @param BaseItem[] $val The items
     *
     * @return Site
     */
@@ -368,9 +423,9 @@ class Site extends BaseItem
         $this->_propDict["items"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the lists
     * The collection of lists under this site.
      *
@@ -384,12 +439,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the lists
     * The collection of lists under this site.
     *
-    * @param GraphList $val The lists
+    * @param GraphList[] $val The lists
     *
     * @return Site
     */
@@ -398,9 +453,39 @@ class Site extends BaseItem
         $this->_propDict["lists"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the operations
+    * The collection of long-running operations on the site.
+     *
+     * @return array|null The operations
+     */
+    public function getOperations()
+    {
+        if (array_key_exists("operations", $this->_propDict)) {
+           return $this->_propDict["operations"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the operations
+    * The collection of long-running operations on the site.
+    *
+    * @param RichLongRunningOperation[] $val The operations
+    *
+    * @return Site
+    */
+    public function setOperations($val)
+    {
+        $this->_propDict["operations"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the permissions
     * The permissions associated with the site. Nullable.
      *
@@ -414,12 +499,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the permissions
     * The permissions associated with the site. Nullable.
     *
-    * @param Permission $val The permissions
+    * @param Permission[] $val The permissions
     *
     * @return Site
     */
@@ -428,9 +513,9 @@ class Site extends BaseItem
         $this->_propDict["permissions"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the sites
     * The collection of the sub-sites under this site.
      *
@@ -444,12 +529,12 @@ class Site extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the sites
     * The collection of the sub-sites under this site.
     *
-    * @param Site $val The sites
+    * @param Site[] $val The sites
     *
     * @return Site
     */
@@ -458,7 +543,70 @@ class Site extends BaseItem
         $this->_propDict["sites"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the termStore
+    * The default termStore under this site.
+    *
+    * @return \Microsoft\Graph\TermStore\Model\Store|null The termStore
+    */
+    public function getTermStore()
+    {
+        if (array_key_exists("termStore", $this->_propDict)) {
+            if (is_a($this->_propDict["termStore"], "\Microsoft\Graph\TermStore\Model\Store") || is_null($this->_propDict["termStore"])) {
+                return $this->_propDict["termStore"];
+            } else {
+                $this->_propDict["termStore"] = new \Microsoft\Graph\TermStore\Model\Store($this->_propDict["termStore"]);
+                return $this->_propDict["termStore"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the termStore
+    * The default termStore under this site.
+    *
+    * @param \Microsoft\Graph\TermStore\Model\Store $val The termStore
+    *
+    * @return Site
+    */
+    public function setTermStore($val)
+    {
+        $this->_propDict["termStore"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the termStores
+    * The collection of termStores under this site.
+     *
+     * @return array|null The termStores
+     */
+    public function getTermStores()
+    {
+        if (array_key_exists("termStores", $this->_propDict)) {
+           return $this->_propDict["termStores"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the termStores
+    * The collection of termStores under this site.
+    *
+    * @param \Microsoft\Graph\TermStore\Model\Store[] $val The termStores
+    *
+    * @return Site
+    */
+    public function setTermStores($val)
+    {
+        $this->_propDict["termStores"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the onenote
     * Calls the OneNote service for notebook related operations.
@@ -477,7 +625,7 @@ class Site extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the onenote
     * Calls the OneNote service for notebook related operations.
@@ -491,5 +639,5 @@ class Site extends BaseItem
         $this->_propDict["onenote"] = $val;
         return $this;
     }
-    
+
 }

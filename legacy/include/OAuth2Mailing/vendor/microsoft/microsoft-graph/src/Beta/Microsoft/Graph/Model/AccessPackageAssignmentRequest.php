@@ -25,7 +25,7 @@ namespace Beta\Microsoft\Graph\Model;
 class AccessPackageAssignmentRequest extends Entity
 {
 
-     /** 
+     /**
      * Gets the answers
     * Answers provided by the requestor to accessPackageQuestions asked of them at the time of request.
      *
@@ -39,12 +39,12 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the answers
     * Answers provided by the requestor to accessPackageQuestions asked of them at the time of request.
     *
-    * @param AccessPackageAnswer $val The answers
+    * @param AccessPackageAnswer[] $val The answers
     *
     * @return AccessPackageAssignmentRequest
     */
@@ -53,7 +53,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["answers"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the completedDate
     * The date of the end of processing, either successful or failure, of a request. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -72,7 +72,7 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the completedDate
     * The date of the end of processing, either successful or failure, of a request. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -86,7 +86,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["completedDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -105,7 +105,7 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -119,7 +119,67 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the customExtensionCalloutInstances
+    * Information about all the custom extension calls that were made during the access package assignment request workflow.
+     *
+     * @return array|null The customExtensionCalloutInstances
+     */
+    public function getCustomExtensionCalloutInstances()
+    {
+        if (array_key_exists("customExtensionCalloutInstances", $this->_propDict)) {
+           return $this->_propDict["customExtensionCalloutInstances"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customExtensionCalloutInstances
+    * Information about all the custom extension calls that were made during the access package assignment request workflow.
+    *
+    * @param CustomExtensionCalloutInstance[] $val The customExtensionCalloutInstances
+    *
+    * @return AccessPackageAssignmentRequest
+    */
+    public function setCustomExtensionCalloutInstances($val)
+    {
+        $this->_propDict["customExtensionCalloutInstances"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the customExtensionHandlerInstances
+    * A collection of custom workflow extension instances being run on an assignment request. Read-only.
+     *
+     * @return array|null The customExtensionHandlerInstances
+     */
+    public function getCustomExtensionHandlerInstances()
+    {
+        if (array_key_exists("customExtensionHandlerInstances", $this->_propDict)) {
+           return $this->_propDict["customExtensionHandlerInstances"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customExtensionHandlerInstances
+    * A collection of custom workflow extension instances being run on an assignment request. Read-only.
+    *
+    * @param CustomExtensionHandlerInstance[] $val The customExtensionHandlerInstances
+    *
+    * @return AccessPackageAssignmentRequest
+    */
+    public function setCustomExtensionHandlerInstances($val)
+    {
+        $this->_propDict["customExtensionHandlerInstances"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the expirationDateTime
     *
@@ -137,7 +197,7 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
     *
@@ -150,7 +210,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isValidationOnly
     * True if the request is not to be processed for assignment.
@@ -165,7 +225,7 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isValidationOnly
     * True if the request is not to be processed for assignment.
@@ -179,7 +239,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["isValidationOnly"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the justification
     * The requestor's supplied justification.
@@ -194,7 +254,7 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the justification
     * The requestor's supplied justification.
@@ -208,10 +268,10 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["justification"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestState
-    * One of PendingApproval, Canceled,  Denied, Delivering, Delivered, PartiallyDelivered, Submitted or Scheduled. Read-only.
+    * One of PendingApproval, Canceled,  Denied, Delivering, Delivered, PartiallyDelivered, DeliveryFailed, Submitted or Scheduled. Read-only.
     *
     * @return string|null The requestState
     */
@@ -223,10 +283,10 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestState
-    * One of PendingApproval, Canceled,  Denied, Delivering, Delivered, PartiallyDelivered, Submitted or Scheduled. Read-only.
+    * One of PendingApproval, Canceled,  Denied, Delivering, Delivered, PartiallyDelivered, DeliveryFailed, Submitted or Scheduled. Read-only.
     *
     * @param string $val The requestState
     *
@@ -237,7 +297,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["requestState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestStatus
     * More information on the request processing status. Read-only.
@@ -252,7 +312,7 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestStatus
     * More information on the request processing status. Read-only.
@@ -266,10 +326,10 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["requestStatus"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestType
-    * One of UserAdd, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have requestType of UserAdd or UserRemove. Read-only.
+    * One of UserAdd, UserExtend, UserUpdate, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have requestType of UserAdd, UserUpdate or UserRemove. Read-only.
     *
     * @return string|null The requestType
     */
@@ -281,10 +341,10 @@ class AccessPackageAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestType
-    * One of UserAdd, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have requestType of UserAdd or UserRemove. Read-only.
+    * One of UserAdd, UserExtend, UserUpdate, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have requestType of UserAdd, UserUpdate or UserRemove. Read-only.
     *
     * @param string $val The requestType
     *
@@ -295,7 +355,7 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["requestType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the schedule
     * The range of dates that access is to be assigned to the requestor. Read-only.
@@ -314,7 +374,7 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the schedule
     * The range of dates that access is to be assigned to the requestor. Read-only.
@@ -328,10 +388,40 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["schedule"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the verifiedCredentialsData
+    * The details of the verifiable credential that was presented by the requestor, such as the issuer and claims. Read-only.
+     *
+     * @return array|null The verifiedCredentialsData
+     */
+    public function getVerifiedCredentialsData()
+    {
+        if (array_key_exists("verifiedCredentialsData", $this->_propDict)) {
+           return $this->_propDict["verifiedCredentialsData"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the verifiedCredentialsData
+    * The details of the verifiable credential that was presented by the requestor, such as the issuer and claims. Read-only.
+    *
+    * @param VerifiedCredentialData[] $val The verifiedCredentialsData
+    *
+    * @return AccessPackageAssignmentRequest
+    */
+    public function setVerifiedCredentialsData($val)
+    {
+        $this->_propDict["verifiedCredentialsData"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the accessPackage
-    * The access package associated with the accessPackageAssignmentRequest. An access package defines the collections of resource roles and the policies for how one or more users can get access to those resources. Read-only. Nullable.
+    * The access package associated with the accessPackageAssignmentRequest. An access package defines the collections of resource roles and the policies for how one or more users can get access to those resources. Read-only. Nullable. Supports $expand.
     *
     * @return AccessPackage|null The accessPackage
     */
@@ -347,10 +437,10 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackage
-    * The access package associated with the accessPackageAssignmentRequest. An access package defines the collections of resource roles and the policies for how one or more users can get access to those resources. Read-only. Nullable.
+    * The access package associated with the accessPackageAssignmentRequest. An access package defines the collections of resource roles and the policies for how one or more users can get access to those resources. Read-only. Nullable. Supports $expand.
     *
     * @param AccessPackage $val The accessPackage
     *
@@ -361,9 +451,10 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["accessPackage"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageAssignment
+    * For a requestType of UserAdd or AdminAdd, this is an access package assignment requested to be created.  For a requestType of UserRemove, AdminRemove or SystemRemove, this has the id property of an existing assignment to be removed.  Supports $expand.
     *
     * @return AccessPackageAssignment|null The accessPackageAssignment
     */
@@ -379,9 +470,10 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageAssignment
+    * For a requestType of UserAdd or AdminAdd, this is an access package assignment requested to be created.  For a requestType of UserRemove, AdminRemove or SystemRemove, this has the id property of an existing assignment to be removed.  Supports $expand.
     *
     * @param AccessPackageAssignment $val The accessPackageAssignment
     *
@@ -392,10 +484,10 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["accessPackageAssignment"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestor
-    * The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable.
+    * The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable. Supports $expand.
     *
     * @return AccessPackageSubject|null The requestor
     */
@@ -411,10 +503,10 @@ class AccessPackageAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the requestor
-    * The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable.
+    * The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable. Supports $expand.
     *
     * @param AccessPackageSubject $val The requestor
     *
@@ -425,5 +517,5 @@ class AccessPackageAssignmentRequest extends Entity
         $this->_propDict["requestor"] = $val;
         return $this;
     }
-    
+
 }

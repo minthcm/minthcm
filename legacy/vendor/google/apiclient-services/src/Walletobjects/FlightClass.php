@@ -19,7 +19,7 @@ namespace Google\Service\Walletobjects;
 
 class FlightClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var bool
    */
@@ -106,12 +106,18 @@ class FlightClass extends \Google\Collection
   protected $localizedIssuerNameDataType = '';
   protected $locationsType = LatLongPoint::class;
   protected $locationsDataType = 'array';
+  protected $merchantLocationsType = MerchantLocation::class;
+  protected $merchantLocationsDataType = 'array';
   protected $messagesType = Message::class;
   protected $messagesDataType = 'array';
   /**
    * @var string
    */
   public $multipleDevicesAndHoldersAllowedStatus;
+  /**
+   * @var string
+   */
+  public $notifyPreference;
   protected $originType = AirportInfo::class;
   protected $originDataType = '';
   /**
@@ -128,6 +134,8 @@ class FlightClass extends \Google\Collection
   protected $securityAnimationDataType = '';
   protected $textModulesDataType = TextModuleData::class;
   protected $textModulesDataDataType = 'array';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   /**
    * @var string
    */
@@ -532,6 +540,20 @@ class FlightClass extends \Google\Collection
     return $this->locations;
   }
   /**
+   * @param MerchantLocation[]
+   */
+  public function setMerchantLocations($merchantLocations)
+  {
+    $this->merchantLocations = $merchantLocations;
+  }
+  /**
+   * @return MerchantLocation[]
+   */
+  public function getMerchantLocations()
+  {
+    return $this->merchantLocations;
+  }
+  /**
    * @param Message[]
    */
   public function setMessages($messages)
@@ -558,6 +580,20 @@ class FlightClass extends \Google\Collection
   public function getMultipleDevicesAndHoldersAllowedStatus()
   {
     return $this->multipleDevicesAndHoldersAllowedStatus;
+  }
+  /**
+   * @param string
+   */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
   }
   /**
    * @param AirportInfo
@@ -642,6 +678,20 @@ class FlightClass extends \Google\Collection
   public function getTextModulesData()
   {
     return $this->textModulesData;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param string

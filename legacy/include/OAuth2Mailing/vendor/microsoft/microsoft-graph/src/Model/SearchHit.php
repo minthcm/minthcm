@@ -25,7 +25,7 @@ class SearchHit extends Entity
 {
     /**
     * Gets the contentSource
-    * The name of the content source which the externalItem is part of .
+    * The name of the content source that the externalItem is part of.
     *
     * @return string|null The contentSource
     */
@@ -40,7 +40,7 @@ class SearchHit extends Entity
 
     /**
     * Sets the contentSource
-    * The name of the content source which the externalItem is part of .
+    * The name of the content source that the externalItem is part of.
     *
     * @param string $val The value of the contentSource
     *
@@ -53,7 +53,7 @@ class SearchHit extends Entity
     }
     /**
     * Gets the hitId
-    * The internal identifier for the item.
+    * The internal identifier for the item. The format of the identifier varies based on the entity type. For details, see hitId format.
     *
     * @return string|null The hitId
     */
@@ -68,7 +68,7 @@ class SearchHit extends Entity
 
     /**
     * Sets the hitId
-    * The internal identifier for the item.
+    * The internal identifier for the item. The format of the identifier varies based on the entity type. For details, see hitId format.
     *
     * @param string $val The value of the hitId
     *
@@ -77,6 +77,34 @@ class SearchHit extends Entity
     public function setHitId($val)
     {
         $this->_propDict["hitId"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the isCollapsed
+    * Indicates whether the current result is collapsed when the collapseProperties property in the searchRequest is used.
+    *
+    * @return bool|null The isCollapsed
+    */
+    public function getIsCollapsed()
+    {
+        if (array_key_exists("isCollapsed", $this->_propDict)) {
+            return $this->_propDict["isCollapsed"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isCollapsed
+    * Indicates whether the current result is collapsed when the collapseProperties property in the searchRequest is used.
+    *
+    * @param bool $val The value of the isCollapsed
+    *
+    * @return SearchHit
+    */
+    public function setIsCollapsed($val)
+    {
+        $this->_propDict["isCollapsed"] = $val;
         return $this;
     }
     /**
@@ -105,6 +133,34 @@ class SearchHit extends Entity
     public function setRank($val)
     {
         $this->_propDict["rank"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the resultTemplateId
+    * ID of the result template used to render the search result. This ID must map to a display layout in the resultTemplates dictionary that is also included in the searchResponse.
+    *
+    * @return string|null The resultTemplateId
+    */
+    public function getResultTemplateId()
+    {
+        if (array_key_exists("resultTemplateId", $this->_propDict)) {
+            return $this->_propDict["resultTemplateId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the resultTemplateId
+    * ID of the result template used to render the search result. This ID must map to a display layout in the resultTemplates dictionary that is also included in the searchResponse.
+    *
+    * @param string $val The value of the resultTemplateId
+    *
+    * @return SearchHit
+    */
+    public function setResultTemplateId($val)
+    {
+        $this->_propDict["resultTemplateId"] = $val;
         return $this;
     }
     /**

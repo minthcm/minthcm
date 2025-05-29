@@ -8,9 +8,6 @@ use Doctrine\DBAL\Schema\SchemaException;
 
 use function sprintf;
 
-/**
- * @psalm-immutable
- */
 final class InvalidTableName extends SchemaException
 {
     public static function new(string $tableName): self

@@ -27,12 +27,20 @@ class GoogleCloudConnectorsV1ConnectorVersionInfraConfig extends \Google\Model
    * @var string
    */
   public $deploymentModel;
+  /**
+   * @var string
+   */
+  public $deploymentModelMigrationState;
   protected $hpaConfigType = GoogleCloudConnectorsV1HPAConfig::class;
   protected $hpaConfigDataType = '';
   /**
    * @var string
    */
   public $internalclientRatelimitThreshold;
+  /**
+   * @var int
+   */
+  public $maxInstanceRequestConcurrency;
   /**
    * @var string
    */
@@ -45,6 +53,10 @@ class GoogleCloudConnectorsV1ConnectorVersionInfraConfig extends \Google\Model
    * @var string
    */
   public $sharedDeployment;
+  /**
+   * @var string
+   */
+  public $tlsMigrationState;
 
   /**
    * @param string
@@ -75,6 +87,20 @@ class GoogleCloudConnectorsV1ConnectorVersionInfraConfig extends \Google\Model
     return $this->deploymentModel;
   }
   /**
+   * @param string
+   */
+  public function setDeploymentModelMigrationState($deploymentModelMigrationState)
+  {
+    $this->deploymentModelMigrationState = $deploymentModelMigrationState;
+  }
+  /**
+   * @return string
+   */
+  public function getDeploymentModelMigrationState()
+  {
+    return $this->deploymentModelMigrationState;
+  }
+  /**
    * @param GoogleCloudConnectorsV1HPAConfig
    */
   public function setHpaConfig(GoogleCloudConnectorsV1HPAConfig $hpaConfig)
@@ -101,6 +127,20 @@ class GoogleCloudConnectorsV1ConnectorVersionInfraConfig extends \Google\Model
   public function getInternalclientRatelimitThreshold()
   {
     return $this->internalclientRatelimitThreshold;
+  }
+  /**
+   * @param int
+   */
+  public function setMaxInstanceRequestConcurrency($maxInstanceRequestConcurrency)
+  {
+    $this->maxInstanceRequestConcurrency = $maxInstanceRequestConcurrency;
+  }
+  /**
+   * @return int
+   */
+  public function getMaxInstanceRequestConcurrency()
+  {
+    return $this->maxInstanceRequestConcurrency;
   }
   /**
    * @param string
@@ -157,6 +197,20 @@ class GoogleCloudConnectorsV1ConnectorVersionInfraConfig extends \Google\Model
   public function getSharedDeployment()
   {
     return $this->sharedDeployment;
+  }
+  /**
+   * @param string
+   */
+  public function setTlsMigrationState($tlsMigrationState)
+  {
+    $this->tlsMigrationState = $tlsMigrationState;
+  }
+  /**
+   * @return string
+   */
+  public function getTlsMigrationState()
+  {
+    return $this->tlsMigrationState;
   }
 }
 

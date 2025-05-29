@@ -26,6 +26,8 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   protected $adGroupDataType = '';
   protected $adGroupAdType = GoogleAdsSearchads360V0ResourcesAdGroupAd::class;
   protected $adGroupAdDataType = '';
+  protected $adGroupAdEffectiveLabelType = GoogleAdsSearchads360V0ResourcesAdGroupAdEffectiveLabel::class;
+  protected $adGroupAdEffectiveLabelDataType = '';
   protected $adGroupAdLabelType = GoogleAdsSearchads360V0ResourcesAdGroupAdLabel::class;
   protected $adGroupAdLabelDataType = '';
   protected $adGroupAssetType = GoogleAdsSearchads360V0ResourcesAdGroupAsset::class;
@@ -38,8 +40,12 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   protected $adGroupBidModifierDataType = '';
   protected $adGroupCriterionType = GoogleAdsSearchads360V0ResourcesAdGroupCriterion::class;
   protected $adGroupCriterionDataType = '';
+  protected $adGroupCriterionEffectiveLabelType = GoogleAdsSearchads360V0ResourcesAdGroupCriterionEffectiveLabel::class;
+  protected $adGroupCriterionEffectiveLabelDataType = '';
   protected $adGroupCriterionLabelType = GoogleAdsSearchads360V0ResourcesAdGroupCriterionLabel::class;
   protected $adGroupCriterionLabelDataType = '';
+  protected $adGroupEffectiveLabelType = GoogleAdsSearchads360V0ResourcesAdGroupEffectiveLabel::class;
+  protected $adGroupEffectiveLabelDataType = '';
   protected $adGroupLabelType = GoogleAdsSearchads360V0ResourcesAdGroupLabel::class;
   protected $adGroupLabelDataType = '';
   protected $ageRangeViewType = GoogleAdsSearchads360V0ResourcesAgeRangeView::class;
@@ -76,6 +82,8 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   protected $campaignBudgetDataType = '';
   protected $campaignCriterionType = GoogleAdsSearchads360V0ResourcesCampaignCriterion::class;
   protected $campaignCriterionDataType = '';
+  protected $campaignEffectiveLabelType = GoogleAdsSearchads360V0ResourcesCampaignEffectiveLabel::class;
+  protected $campaignEffectiveLabelDataType = '';
   protected $campaignLabelType = GoogleAdsSearchads360V0ResourcesCampaignLabel::class;
   protected $campaignLabelDataType = '';
   protected $cartDataSalesViewType = GoogleAdsSearchads360V0ResourcesCartDataSalesView::class;
@@ -124,6 +132,8 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   protected $shoppingPerformanceViewDataType = '';
   protected $userListType = GoogleAdsSearchads360V0ResourcesUserList::class;
   protected $userListDataType = '';
+  protected $userLocationViewType = GoogleAdsSearchads360V0ResourcesUserLocationView::class;
+  protected $userLocationViewDataType = '';
   protected $visitType = GoogleAdsSearchads360V0ResourcesVisit::class;
   protected $visitDataType = '';
   protected $webpageViewType = GoogleAdsSearchads360V0ResourcesWebpageView::class;
@@ -170,6 +180,20 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   public function getAdGroupAd()
   {
     return $this->adGroupAd;
+  }
+  /**
+   * @param GoogleAdsSearchads360V0ResourcesAdGroupAdEffectiveLabel
+   */
+  public function setAdGroupAdEffectiveLabel(GoogleAdsSearchads360V0ResourcesAdGroupAdEffectiveLabel $adGroupAdEffectiveLabel)
+  {
+    $this->adGroupAdEffectiveLabel = $adGroupAdEffectiveLabel;
+  }
+  /**
+   * @return GoogleAdsSearchads360V0ResourcesAdGroupAdEffectiveLabel
+   */
+  public function getAdGroupAdEffectiveLabel()
+  {
+    return $this->adGroupAdEffectiveLabel;
   }
   /**
    * @param GoogleAdsSearchads360V0ResourcesAdGroupAdLabel
@@ -256,6 +280,20 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
     return $this->adGroupCriterion;
   }
   /**
+   * @param GoogleAdsSearchads360V0ResourcesAdGroupCriterionEffectiveLabel
+   */
+  public function setAdGroupCriterionEffectiveLabel(GoogleAdsSearchads360V0ResourcesAdGroupCriterionEffectiveLabel $adGroupCriterionEffectiveLabel)
+  {
+    $this->adGroupCriterionEffectiveLabel = $adGroupCriterionEffectiveLabel;
+  }
+  /**
+   * @return GoogleAdsSearchads360V0ResourcesAdGroupCriterionEffectiveLabel
+   */
+  public function getAdGroupCriterionEffectiveLabel()
+  {
+    return $this->adGroupCriterionEffectiveLabel;
+  }
+  /**
    * @param GoogleAdsSearchads360V0ResourcesAdGroupCriterionLabel
    */
   public function setAdGroupCriterionLabel(GoogleAdsSearchads360V0ResourcesAdGroupCriterionLabel $adGroupCriterionLabel)
@@ -268,6 +306,20 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   public function getAdGroupCriterionLabel()
   {
     return $this->adGroupCriterionLabel;
+  }
+  /**
+   * @param GoogleAdsSearchads360V0ResourcesAdGroupEffectiveLabel
+   */
+  public function setAdGroupEffectiveLabel(GoogleAdsSearchads360V0ResourcesAdGroupEffectiveLabel $adGroupEffectiveLabel)
+  {
+    $this->adGroupEffectiveLabel = $adGroupEffectiveLabel;
+  }
+  /**
+   * @return GoogleAdsSearchads360V0ResourcesAdGroupEffectiveLabel
+   */
+  public function getAdGroupEffectiveLabel()
+  {
+    return $this->adGroupEffectiveLabel;
   }
   /**
    * @param GoogleAdsSearchads360V0ResourcesAdGroupLabel
@@ -520,6 +572,20 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   public function getCampaignCriterion()
   {
     return $this->campaignCriterion;
+  }
+  /**
+   * @param GoogleAdsSearchads360V0ResourcesCampaignEffectiveLabel
+   */
+  public function setCampaignEffectiveLabel(GoogleAdsSearchads360V0ResourcesCampaignEffectiveLabel $campaignEffectiveLabel)
+  {
+    $this->campaignEffectiveLabel = $campaignEffectiveLabel;
+  }
+  /**
+   * @return GoogleAdsSearchads360V0ResourcesCampaignEffectiveLabel
+   */
+  public function getCampaignEffectiveLabel()
+  {
+    return $this->campaignEffectiveLabel;
   }
   /**
    * @param GoogleAdsSearchads360V0ResourcesCampaignLabel
@@ -856,6 +922,20 @@ class GoogleAdsSearchads360V0ServicesSearchAds360Row extends \Google\Collection
   public function getUserList()
   {
     return $this->userList;
+  }
+  /**
+   * @param GoogleAdsSearchads360V0ResourcesUserLocationView
+   */
+  public function setUserLocationView(GoogleAdsSearchads360V0ResourcesUserLocationView $userLocationView)
+  {
+    $this->userLocationView = $userLocationView;
+  }
+  /**
+   * @return GoogleAdsSearchads360V0ResourcesUserLocationView
+   */
+  public function getUserLocationView()
+  {
+    return $this->userLocationView;
   }
   /**
    * @param GoogleAdsSearchads360V0ResourcesVisit

@@ -4,6 +4,7 @@ namespace Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\Deprecations\Deprecation;
 
 /**
  * Immutable type of {@see DateTimeTzType}.
@@ -11,7 +12,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class DateTimeTzImmutableType extends DateTimeTzType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -19,7 +20,13 @@ class DateTimeTzImmutableType extends DateTimeTzType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @phpstan-param T $value
+     *
+     * @return (T is null ? null : string)
+     *
+     * @template T
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -34,12 +41,18 @@ class DateTimeTzImmutableType extends DateTimeTzType
         throw ConversionException::conversionFailedInvalidType(
             $value,
             $this->getName(),
-            ['null', DateTimeImmutable::class]
+            ['null', DateTimeImmutable::class],
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param T $value
+     *
+     * @return (T is null ? null : DateTimeImmutable)
+     *
+     * @template T
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -49,22 +62,31 @@ class DateTimeTzImmutableType extends DateTimeTzType
 
         $dateTime = DateTimeImmutable::createFromFormat($platform->getDateTimeTzFormatString(), $value);
 
-        if ($dateTime === false) {
-            throw ConversionException::conversionFailedFormat(
-                $value,
-                $this->getName(),
-                $platform->getDateTimeTzFormatString()
-            );
+        if ($dateTime !== false) {
+            return $dateTime;
         }
 
-        return $dateTime;
+        throw ConversionException::conversionFailedFormat(
+            $value,
+            $this->getName(),
+            $platform->getDateTimeTzFormatString(),
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @deprecated
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
         return true;
     }
 }

@@ -12,12 +12,9 @@ use Psr\Log\LoggerInterface;
 
 final class Connection extends AbstractConnectionMiddleware
 {
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
-    /**
-     * @internal This connection can be only instantiated by its driver.
-     */
+    /** @internal This connection can be only instantiated by its driver. */
     public function __construct(ConnectionInterface $connection, LoggerInterface $logger)
     {
         parent::__construct($connection);
@@ -35,7 +32,7 @@ final class Connection extends AbstractConnectionMiddleware
         return new Statement(
             parent::prepare($sql),
             $this->logger,
-            $sql
+            $sql,
         );
     }
 

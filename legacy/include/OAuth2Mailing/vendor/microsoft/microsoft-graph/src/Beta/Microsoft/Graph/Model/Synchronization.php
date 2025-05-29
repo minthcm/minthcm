@@ -25,8 +25,9 @@ namespace Beta\Microsoft\Graph\Model;
 class Synchronization extends Entity
 {
 
-     /** 
+     /**
      * Gets the secrets
+    * Represents a collection of credentials to access provisioned cloud applications.
      *
      * @return array|null The secrets
      */
@@ -38,11 +39,12 @@ class Synchronization extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the secrets
+    * Represents a collection of credentials to access provisioned cloud applications.
     *
-    * @param SynchronizationSecretKeyStringValuePair $val The secrets
+    * @param SynchronizationSecretKeyStringValuePair[] $val The secrets
     *
     * @return Synchronization
     */
@@ -51,10 +53,11 @@ class Synchronization extends Entity
         $this->_propDict["secrets"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the jobs
+    * Performs synchronization by periodically running in the background, polling for changes in one directory, and pushing them to another directory.
      *
      * @return array|null The jobs
      */
@@ -66,11 +69,12 @@ class Synchronization extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the jobs
+    * Performs synchronization by periodically running in the background, polling for changes in one directory, and pushing them to another directory.
     *
-    * @param SynchronizationJob $val The jobs
+    * @param SynchronizationJob[] $val The jobs
     *
     * @return Synchronization
     */
@@ -79,10 +83,11 @@ class Synchronization extends Entity
         $this->_propDict["jobs"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the templates
+    * Pre-configured synchronization settings for a particular application.
      *
      * @return array|null The templates
      */
@@ -94,11 +99,12 @@ class Synchronization extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the templates
+    * Pre-configured synchronization settings for a particular application.
     *
-    * @param SynchronizationTemplate $val The templates
+    * @param SynchronizationTemplate[] $val The templates
     *
     * @return Synchronization
     */
@@ -107,5 +113,5 @@ class Synchronization extends Entity
         $this->_propDict["templates"] = $val;
         return $this;
     }
-    
+
 }

@@ -26,7 +26,7 @@ class Endpoint extends DirectoryObject
 {
     /**
     * Gets the capability
-    * Describes the capability that is associated with this resource. (e.g. Messages, Conversations, etc.)  Not nullable. Read-only.
+    * Describes the capability that is associated with this resource. (for example, Messages, Conversations, etc.) Not nullable. Read-only.
     *
     * @return string|null The capability
     */
@@ -38,10 +38,10 @@ class Endpoint extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the capability
-    * Describes the capability that is associated with this resource. (e.g. Messages, Conversations, etc.)  Not nullable. Read-only.
+    * Describes the capability that is associated with this resource. (for example, Messages, Conversations, etc.) Not nullable. Read-only.
     *
     * @param string $val The capability
     *
@@ -52,7 +52,7 @@ class Endpoint extends DirectoryObject
         $this->_propDict["capability"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the providerId
     * Application id of the publishing underlying service. Not nullable. Read-only.
@@ -67,7 +67,7 @@ class Endpoint extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the providerId
     * Application id of the publishing underlying service. Not nullable. Read-only.
@@ -81,7 +81,7 @@ class Endpoint extends DirectoryObject
         $this->_propDict["providerId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the providerName
     * Name of the publishing underlying service. Read-only.
@@ -96,7 +96,7 @@ class Endpoint extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the providerName
     * Name of the publishing underlying service. Read-only.
@@ -110,10 +110,10 @@ class Endpoint extends DirectoryObject
         $this->_propDict["providerName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the providerResourceId
-    * For Microsoft 365 groups, this is set to a well-known name for the resource (e.g. Yammer.FeedURL etc.). Not nullable. Read-only.
+    * For Microsoft 365 groups, this is set to a well-known name for the resource (for example, Yammer.FeedURL etc.). Not nullable. Read-only.
     *
     * @return string|null The providerResourceId
     */
@@ -125,10 +125,10 @@ class Endpoint extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the providerResourceId
-    * For Microsoft 365 groups, this is set to a well-known name for the resource (e.g. Yammer.FeedURL etc.). Not nullable. Read-only.
+    * For Microsoft 365 groups, this is set to a well-known name for the resource (for example, Yammer.FeedURL etc.). Not nullable. Read-only.
     *
     * @param string $val The providerResourceId
     *
@@ -139,7 +139,7 @@ class Endpoint extends DirectoryObject
         $this->_propDict["providerResourceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the uri
     * URL of the published resource. Not nullable. Read-only.
@@ -154,7 +154,7 @@ class Endpoint extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the uri
     * URL of the published resource. Not nullable. Read-only.
@@ -168,5 +168,5 @@ class Endpoint extends DirectoryObject
         $this->_propDict["uri"] = $val;
         return $this;
     }
-    
+
 }

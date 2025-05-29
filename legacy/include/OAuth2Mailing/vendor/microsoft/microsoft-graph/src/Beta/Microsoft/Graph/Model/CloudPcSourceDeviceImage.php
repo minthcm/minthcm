@@ -79,4 +79,60 @@ class CloudPcSourceDeviceImage extends Entity
         $this->_propDict["id"] = $val;
         return $this;
     }
+    /**
+    * Gets the subscriptionDisplayName
+    * The display name of subscription that hosts the source image.
+    *
+    * @return string|null The subscriptionDisplayName
+    */
+    public function getSubscriptionDisplayName()
+    {
+        if (array_key_exists("subscriptionDisplayName", $this->_propDict)) {
+            return $this->_propDict["subscriptionDisplayName"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the subscriptionDisplayName
+    * The display name of subscription that hosts the source image.
+    *
+    * @param string $val The value of the subscriptionDisplayName
+    *
+    * @return CloudPcSourceDeviceImage
+    */
+    public function setSubscriptionDisplayName($val)
+    {
+        $this->_propDict["subscriptionDisplayName"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the subscriptionId
+    * The ID of subscription that hosts the source image.
+    *
+    * @return string|null The subscriptionId
+    */
+    public function getSubscriptionId()
+    {
+        if (array_key_exists("subscriptionId", $this->_propDict)) {
+            return $this->_propDict["subscriptionId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the subscriptionId
+    * The ID of subscription that hosts the source image.
+    *
+    * @param string $val The value of the subscriptionId
+    *
+    * @return CloudPcSourceDeviceImage
+    */
+    public function setSubscriptionId($val)
+    {
+        $this->_propDict["subscriptionId"] = $val;
+        return $this;
+    }
 }

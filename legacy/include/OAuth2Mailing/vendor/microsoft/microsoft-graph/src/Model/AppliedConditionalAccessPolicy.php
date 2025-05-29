@@ -53,7 +53,7 @@ class AppliedConditionalAccessPolicy extends Entity
     }
     /**
     * Gets the enforcedGrantControls
-    * Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication').
+    * Refers to the grant controls enforced by the conditional access policy (example: 'Require multifactor authentication').
     *
     * @return string|null The enforcedGrantControls
     */
@@ -68,7 +68,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the enforcedGrantControls
-    * Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication').
+    * Refers to the grant controls enforced by the conditional access policy (example: 'Require multifactor authentication').
     *
     * @param string $val The value of the enforcedGrantControls
     *
@@ -109,7 +109,7 @@ class AppliedConditionalAccessPolicy extends Entity
     }
     /**
     * Gets the id
-    * Identifier of the conditional access policy.
+    * An identifier of the conditional access policy.
     *
     * @return string|null The id
     */
@@ -124,7 +124,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the id
-    * Identifier of the conditional access policy.
+    * An identifier of the conditional access policy.
     *
     * @param string $val The value of the id
     *
@@ -138,7 +138,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Gets the result
-    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions were not met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted
+    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions weren't met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue.
     *
     * @return AppliedConditionalAccessPolicyResult|null The result
     */
@@ -157,7 +157,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the result
-    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions were not met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted
+    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions weren't met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue.
     *
     * @param AppliedConditionalAccessPolicyResult $val The value to assign to the result
     *

@@ -38,7 +38,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the accountId
     * Tenant GUID the enrollment profile belongs to.
@@ -52,7 +52,36 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["accountId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the configureWifi
+    * Boolean that indicates that the Wi-Fi network should be configured during device provisioning. When set to TRUE, device provisioning will use Wi-Fi related properties to automatically connect to Wi-Fi networks. When set to FALSE or undefined, other Wi-Fi related properties will be ignored. Default value is TRUE. Returned by default.
+    *
+    * @return bool|null The configureWifi
+    */
+    public function getConfigureWifi()
+    {
+        if (array_key_exists("configureWifi", $this->_propDict)) {
+            return $this->_propDict["configureWifi"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the configureWifi
+    * Boolean that indicates that the Wi-Fi network should be configured during device provisioning. When set to TRUE, device provisioning will use Wi-Fi related properties to automatically connect to Wi-Fi networks. When set to FALSE or undefined, other Wi-Fi related properties will be ignored. Default value is TRUE. Returned by default.
+    *
+    * @param bool $val The configureWifi
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setConfigureWifi($val)
+    {
+        $this->_propDict["configureWifi"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the createdDateTime
     * Date time the enrollment profile was created.
@@ -71,7 +100,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Date time the enrollment profile was created.
@@ -85,7 +114,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * Description for the enrollment profile.
@@ -100,7 +129,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Description for the enrollment profile.
@@ -114,7 +143,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * Display name for the enrollment profile.
@@ -129,7 +158,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Display name for the enrollment profile.
@@ -143,7 +172,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the enrolledDeviceCount
     * Total number of Android devices that have enrolled using this enrollment profile.
@@ -158,7 +187,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the enrolledDeviceCount
     * Total number of Android devices that have enrolled using this enrollment profile.
@@ -172,10 +201,10 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["enrolledDeviceCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the enrollmentMode
-    * The enrollment mode of devices that use this enrollment profile. Possible values are: corporateOwnedDedicatedDevice, corporateOwnedFullyManaged, corporateOwnedWorkProfile.
+    * The enrollment mode of devices that use this enrollment profile. Possible values are: corporateOwnedDedicatedDevice, corporateOwnedFullyManaged, corporateOwnedWorkProfile, corporateOwnedAOSPUserlessDevice, corporateOwnedAOSPUserAssociatedDevice.
     *
     * @return AndroidDeviceOwnerEnrollmentMode|null The enrollmentMode
     */
@@ -191,10 +220,10 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the enrollmentMode
-    * The enrollment mode of devices that use this enrollment profile. Possible values are: corporateOwnedDedicatedDevice, corporateOwnedFullyManaged, corporateOwnedWorkProfile.
+    * The enrollment mode of devices that use this enrollment profile. Possible values are: corporateOwnedDedicatedDevice, corporateOwnedFullyManaged, corporateOwnedWorkProfile, corporateOwnedAOSPUserlessDevice, corporateOwnedAOSPUserAssociatedDevice.
     *
     * @param AndroidDeviceOwnerEnrollmentMode $val The enrollmentMode
     *
@@ -205,7 +234,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["enrollmentMode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the enrollmentTokenType
     * The enrollment token type for an enrollment profile. Possible values are: default, corporateOwnedDedicatedDeviceWithAzureADSharedMode.
@@ -224,7 +253,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the enrollmentTokenType
     * The enrollment token type for an enrollment profile. Possible values are: default, corporateOwnedDedicatedDeviceWithAzureADSharedMode.
@@ -238,7 +267,65 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["enrollmentTokenType"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the enrollmentTokenUsageCount
+    * Total number of AOSP devices that have enrolled using the current token.
+    *
+    * @return int|null The enrollmentTokenUsageCount
+    */
+    public function getEnrollmentTokenUsageCount()
+    {
+        if (array_key_exists("enrollmentTokenUsageCount", $this->_propDict)) {
+            return $this->_propDict["enrollmentTokenUsageCount"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the enrollmentTokenUsageCount
+    * Total number of AOSP devices that have enrolled using the current token.
+    *
+    * @param int $val The enrollmentTokenUsageCount
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setEnrollmentTokenUsageCount($val)
+    {
+        $this->_propDict["enrollmentTokenUsageCount"] = intval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the isTeamsDeviceProfile
+    * Boolean indicating if this profile is an Android AOSP for Teams device profile.
+    *
+    * @return bool|null The isTeamsDeviceProfile
+    */
+    public function getIsTeamsDeviceProfile()
+    {
+        if (array_key_exists("isTeamsDeviceProfile", $this->_propDict)) {
+            return $this->_propDict["isTeamsDeviceProfile"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isTeamsDeviceProfile
+    * Boolean indicating if this profile is an Android AOSP for Teams device profile.
+    *
+    * @param bool $val The isTeamsDeviceProfile
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setIsTeamsDeviceProfile($val)
+    {
+        $this->_propDict["isTeamsDeviceProfile"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the lastModifiedDateTime
     * Date time the enrollment profile was last modified.
@@ -257,7 +344,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * Date time the enrollment profile was last modified.
@@ -271,7 +358,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qrCodeContent
     * String used to generate a QR code for the token.
@@ -286,7 +373,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the qrCodeContent
     * String used to generate a QR code for the token.
@@ -300,7 +387,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["qrCodeContent"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qrCodeImage
     * String used to generate a QR code for the token.
@@ -319,7 +406,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the qrCodeImage
     * String used to generate a QR code for the token.
@@ -333,12 +420,12 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["qrCodeImage"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
     * List of Scope Tags for this Entity instance.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -348,12 +435,12 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * List of Scope Tags for this Entity instance.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return AndroidDeviceOwnerEnrollmentProfile
     */
@@ -362,7 +449,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tokenCreationDateTime
     * Date time the most recently created token was created.
@@ -381,7 +468,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the tokenCreationDateTime
     * Date time the most recently created token was created.
@@ -395,7 +482,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["tokenCreationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tokenExpirationDateTime
     * Date time the most recently created token will expire.
@@ -414,7 +501,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the tokenExpirationDateTime
     * Date time the most recently created token will expire.
@@ -428,7 +515,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["tokenExpirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tokenValue
     * Value of the most recently created token for this enrollment profile.
@@ -443,7 +530,7 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the tokenValue
     * Value of the most recently created token for this enrollment profile.
@@ -457,5 +544,125 @@ class AndroidDeviceOwnerEnrollmentProfile extends Entity
         $this->_propDict["tokenValue"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the wifiHidden
+    * Boolean that indicates if hidden wifi networks are enabled
+    *
+    * @return bool|null The wifiHidden
+    */
+    public function getWifiHidden()
+    {
+        if (array_key_exists("wifiHidden", $this->_propDict)) {
+            return $this->_propDict["wifiHidden"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the wifiHidden
+    * Boolean that indicates if hidden wifi networks are enabled
+    *
+    * @param bool $val The wifiHidden
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setWifiHidden($val)
+    {
+        $this->_propDict["wifiHidden"] = boolval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the wifiPassword
+    * String that contains the wi-fi login password
+    *
+    * @return string|null The wifiPassword
+    */
+    public function getWifiPassword()
+    {
+        if (array_key_exists("wifiPassword", $this->_propDict)) {
+            return $this->_propDict["wifiPassword"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the wifiPassword
+    * String that contains the wi-fi login password
+    *
+    * @param string $val The wifiPassword
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setWifiPassword($val)
+    {
+        $this->_propDict["wifiPassword"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the wifiSecurityType
+    * String that contains the wi-fi security type. Possible values are: none, wpa, wep.
+    *
+    * @return AospWifiSecurityType|null The wifiSecurityType
+    */
+    public function getWifiSecurityType()
+    {
+        if (array_key_exists("wifiSecurityType", $this->_propDict)) {
+            if (is_a($this->_propDict["wifiSecurityType"], "\Beta\Microsoft\Graph\Model\AospWifiSecurityType") || is_null($this->_propDict["wifiSecurityType"])) {
+                return $this->_propDict["wifiSecurityType"];
+            } else {
+                $this->_propDict["wifiSecurityType"] = new AospWifiSecurityType($this->_propDict["wifiSecurityType"]);
+                return $this->_propDict["wifiSecurityType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the wifiSecurityType
+    * String that contains the wi-fi security type. Possible values are: none, wpa, wep.
+    *
+    * @param AospWifiSecurityType $val The wifiSecurityType
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setWifiSecurityType($val)
+    {
+        $this->_propDict["wifiSecurityType"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the wifiSsid
+    * String that contains the wi-fi login ssid
+    *
+    * @return string|null The wifiSsid
+    */
+    public function getWifiSsid()
+    {
+        if (array_key_exists("wifiSsid", $this->_propDict)) {
+            return $this->_propDict["wifiSsid"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the wifiSsid
+    * String that contains the wi-fi login ssid
+    *
+    * @param string $val The wifiSsid
+    *
+    * @return AndroidDeviceOwnerEnrollmentProfile
+    */
+    public function setWifiSsid($val)
+    {
+        $this->_propDict["wifiSsid"] = $val;
+        return $this;
+    }
+
 }

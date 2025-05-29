@@ -24,8 +24,39 @@ namespace Microsoft\Graph\ExternalConnectors\Model;
 */
 class ExternalItem extends \Microsoft\Graph\Model\Entity
 {
+
+     /**
+     * Gets the acl
+    * An array of access control entries. Each entry specifies the access granted to a user or group. Required.
+     *
+     * @return array|null The acl
+     */
+    public function getAcl()
+    {
+        if (array_key_exists("acl", $this->_propDict)) {
+           return $this->_propDict["acl"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the acl
+    * An array of access control entries. Each entry specifies the access granted to a user or group. Required.
+    *
+    * @param Acl[] $val The acl
+    *
+    * @return ExternalItem
+    */
+    public function setAcl($val)
+    {
+        $this->_propDict["acl"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the content
+    * A plain-text  representation of the contents of the item. The text in this property is full-text indexed. Optional.
     *
     * @return ExternalItemContent|null The content
     */
@@ -41,9 +72,10 @@ class ExternalItem extends \Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the content
+    * A plain-text  representation of the contents of the item. The text in this property is full-text indexed. Optional.
     *
     * @param ExternalItemContent $val The content
     *
@@ -54,9 +86,10 @@ class ExternalItem extends \Microsoft\Graph\Model\Entity
         $this->_propDict["content"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalItemProperties
+    * A property bag with the properties of the item. The properties MUST conform to the schema defined for the externalConnection. Required.
     *
     * @return Properties|null The externalItemProperties
     */
@@ -72,9 +105,10 @@ class ExternalItem extends \Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the externalItemProperties
+    * A property bag with the properties of the item. The properties MUST conform to the schema defined for the externalConnection. Required.
     *
     * @param Properties $val The externalItemProperties
     *
@@ -85,5 +119,35 @@ class ExternalItem extends \Microsoft\Graph\Model\Entity
         $this->_propDict["properties"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the activities
+    * Returns a list of activities performed on the item. Write-only.
+     *
+     * @return array|null The activities
+     */
+    public function getActivities()
+    {
+        if (array_key_exists("activities", $this->_propDict)) {
+           return $this->_propDict["activities"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the activities
+    * Returns a list of activities performed on the item. Write-only.
+    *
+    * @param ExternalActivity[] $val The activities
+    *
+    * @return ExternalItem
+    */
+    public function setActivities($val)
+    {
+        $this->_propDict["activities"] = $val;
+        return $this;
+    }
+
 }

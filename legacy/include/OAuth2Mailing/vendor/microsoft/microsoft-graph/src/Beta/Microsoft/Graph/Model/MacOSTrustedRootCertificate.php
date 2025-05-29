@@ -38,7 +38,7 @@ class MacOSTrustedRootCertificate extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the certFileName
     * File name to display in UI.
@@ -52,7 +52,7 @@ class MacOSTrustedRootCertificate extends DeviceConfiguration
         $this->_propDict["certFileName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the trustedRootCertificate
     * Trusted Root Certificate.
@@ -65,13 +65,13 @@ class MacOSTrustedRootCertificate extends DeviceConfiguration
             if (is_a($this->_propDict["trustedRootCertificate"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["trustedRootCertificate"])) {
                 return $this->_propDict["trustedRootCertificate"];
             } else {
-                $this->_propDict["trustedRootCertificate"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["trustedRootCertificate"]);
+                $this->_propDict["trustedRootCertificate"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["trustedRootCertificate"]);
                 return $this->_propDict["trustedRootCertificate"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the trustedRootCertificate
     * Trusted Root Certificate.
@@ -85,5 +85,5 @@ class MacOSTrustedRootCertificate extends DeviceConfiguration
         $this->_propDict["trustedRootCertificate"] = $val;
         return $this;
     }
-    
+
 }

@@ -36,6 +36,8 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
    * @var string
    */
   public $errorCatcherId;
+  protected $inputVariablesType = EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables::class;
+  protected $inputVariablesDataType = '';
   /**
    * @var string
    */
@@ -44,6 +46,8 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
    * @var string
    */
   public $nextTasksExecutionPolicy;
+  protected $outputVariablesType = EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables::class;
+  protected $outputVariablesDataType = '';
   /**
    * @var bool
    */
@@ -146,6 +150,20 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
     return $this->errorCatcherId;
   }
   /**
+   * @param EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables
+   */
+  public function setInputVariables(EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables $inputVariables)
+  {
+    $this->inputVariables = $inputVariables;
+  }
+  /**
+   * @return EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables
+   */
+  public function getInputVariables()
+  {
+    return $this->inputVariables;
+  }
+  /**
    * @param string
    */
   public function setLabel($label)
@@ -172,6 +190,20 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
   public function getNextTasksExecutionPolicy()
   {
     return $this->nextTasksExecutionPolicy;
+  }
+  /**
+   * @param EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables
+   */
+  public function setOutputVariables(EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables $outputVariables)
+  {
+    $this->outputVariables = $outputVariables;
+  }
+  /**
+   * @return EnterpriseCrmFrontendsEventbusProtoTriggerConfigVariables
+   */
+  public function getOutputVariables()
+  {
+    return $this->outputVariables;
   }
   /**
    * @param bool

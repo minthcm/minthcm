@@ -30,12 +30,12 @@ use Google\Service\DLP\GooglePrivacyDlpV2ListInfoTypesResponse;
 class LocationsInfoTypes extends \Google\Service\Resource
 {
   /**
-   * Returns a list of the sensitive information types that DLP API supports. See
-   * https://cloud.google.com/sensitive-data-protection/docs/infotypes-reference
-   * to learn more. (infoTypes.listLocationsInfoTypes)
+   * Returns a list of the sensitive information types that the DLP API supports.
+   * See https://cloud.google.com/sensitive-data-protection/docs/infotypes-
+   * reference to learn more. (infoTypes.listLocationsInfoTypes)
    *
    * @param string $parent The parent resource name. The format of this value is
-   * as follows: locations/ LOCATION_ID
+   * as follows: `locations/{location_id}`
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter filter to only return infoTypes supported by certain

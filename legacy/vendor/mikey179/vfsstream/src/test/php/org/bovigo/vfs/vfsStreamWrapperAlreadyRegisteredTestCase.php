@@ -33,7 +33,7 @@ class vfsStreamWrapperAlreadyRegisteredTestCase extends \BC_PHPUnit_Framework_Te
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         TestvfsStreamWrapper::unregister();
         $mock = $this->bc_getMock('org\\bovigo\\vfs\\vfsStreamWrapper');
@@ -43,7 +43,7 @@ class vfsStreamWrapperAlreadyRegisteredTestCase extends \BC_PHPUnit_Framework_Te
     /**
      * clean up test environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         TestvfsStreamWrapper::unregister();
     }
@@ -53,10 +53,10 @@ class vfsStreamWrapperAlreadyRegisteredTestCase extends \BC_PHPUnit_Framework_Te
      * registered for the vfs scheme should throw an exception
      *
      * @test
-     * @expectedException  org\bovigo\vfs\vfsStreamException
      */
     public function registerOverAnotherStreamWrapper()
     {
+        $this->expectException(vfsStreamException::class);
         vfsStreamWrapper::register();
     }
 }

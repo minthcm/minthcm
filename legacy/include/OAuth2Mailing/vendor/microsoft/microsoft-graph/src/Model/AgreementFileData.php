@@ -26,6 +26,7 @@ class AgreementFileData extends Entity
 
     /**
     * Gets the data
+    * Data that represents the terms of use PDF document. Read-only.
     *
     * @return \GuzzleHttp\Psr7\Stream|null The data
     */
@@ -35,7 +36,7 @@ class AgreementFileData extends Entity
             if (is_a($this->_propDict["data"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["data"])) {
                 return $this->_propDict["data"];
             } else {
-                $this->_propDict["data"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["data"]);
+                $this->_propDict["data"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["data"]);
                 return $this->_propDict["data"];
             }
         }
@@ -44,6 +45,7 @@ class AgreementFileData extends Entity
 
     /**
     * Sets the data
+    * Data that represents the terms of use PDF document. Read-only.
     *
     * @param \GuzzleHttp\Psr7\Stream $val The value to assign to the data
     *

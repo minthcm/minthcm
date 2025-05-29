@@ -25,8 +25,37 @@ namespace Beta\Microsoft\Graph\Model;
 class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
 {
     /**
+    * Gets the allowWindows11Upgrade
+    * When TRUE, allows eligible Windows 10 devices to upgrade to Windows 11. When FALSE, implies the device stays on the existing operating system. Returned by default. Query parameters are not supported.
+    *
+    * @return bool|null The allowWindows11Upgrade
+    */
+    public function getAllowWindows11Upgrade()
+    {
+        if (array_key_exists("allowWindows11Upgrade", $this->_propDict)) {
+            return $this->_propDict["allowWindows11Upgrade"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the allowWindows11Upgrade
+    * When TRUE, allows eligible Windows 10 devices to upgrade to Windows 11. When FALSE, implies the device stays on the existing operating system. Returned by default. Query parameters are not supported.
+    *
+    * @param bool $val The allowWindows11Upgrade
+    *
+    * @return WindowsUpdateForBusinessConfiguration
+    */
+    public function setAllowWindows11Upgrade($val)
+    {
+        $this->_propDict["allowWindows11Upgrade"] = boolval($val);
+        return $this;
+    }
+
+    /**
     * Gets the automaticUpdateMode
-    * Automatic update mode. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime, autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl, windowsDefault.
+    * The Automatic Update Mode. Possible values are: UserDefined, NotifyDownload, AutoInstallAtMaintenanceTime, AutoInstallAndRebootAtMaintenanceTime, AutoInstallAndRebootAtScheduledTime, AutoInstallAndRebootWithoutEndUserControl, WindowsDefault. UserDefined is the default value, no intent. Returned by default. Query parameters are not supported. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime, autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl, windowsDefault.
     *
     * @return AutomaticUpdateMode|null The automaticUpdateMode
     */
@@ -42,10 +71,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the automaticUpdateMode
-    * Automatic update mode. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime, autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl, windowsDefault.
+    * The Automatic Update Mode. Possible values are: UserDefined, NotifyDownload, AutoInstallAtMaintenanceTime, AutoInstallAndRebootAtMaintenanceTime, AutoInstallAndRebootAtScheduledTime, AutoInstallAndRebootWithoutEndUserControl, WindowsDefault. UserDefined is the default value, no intent. Returned by default. Query parameters are not supported. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime, autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl, windowsDefault.
     *
     * @param AutomaticUpdateMode $val The automaticUpdateMode
     *
@@ -56,10 +85,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["automaticUpdateMode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the autoRestartNotificationDismissal
-    * Specify the method by which the auto-restart required notification is dismissed. Possible values are: notConfigured, automatic, user.
+    * Specify the method by which the auto-restart required notification is dismissed. Possible values are: NotConfigured, Automatic, User. Returned by default. Query parameters are not supported. Possible values are: notConfigured, automatic, user, unknownFutureValue.
     *
     * @return AutoRestartNotificationDismissalMethod|null The autoRestartNotificationDismissal
     */
@@ -75,10 +104,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the autoRestartNotificationDismissal
-    * Specify the method by which the auto-restart required notification is dismissed. Possible values are: notConfigured, automatic, user.
+    * Specify the method by which the auto-restart required notification is dismissed. Possible values are: NotConfigured, Automatic, User. Returned by default. Query parameters are not supported. Possible values are: notConfigured, automatic, user, unknownFutureValue.
     *
     * @param AutoRestartNotificationDismissalMethod $val The autoRestartNotificationDismissal
     *
@@ -89,10 +118,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["autoRestartNotificationDismissal"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the businessReadyUpdatesOnly
-    * Determines which branch devices will receive their updates from. Possible values are: userDefined, all, businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease.
+    * Determines which branch devices will receive their updates from. Possible values are: UserDefined, All, BusinessReadyOnly, WindowsInsiderBuildFast, WindowsInsiderBuildSlow, WindowsInsiderBuildRelease. Returned by default. Query parameters are not supported. Possible values are: userDefined, all, businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease.
     *
     * @return WindowsUpdateType|null The businessReadyUpdatesOnly
     */
@@ -108,10 +137,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the businessReadyUpdatesOnly
-    * Determines which branch devices will receive their updates from. Possible values are: userDefined, all, businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease.
+    * Determines which branch devices will receive their updates from. Possible values are: UserDefined, All, BusinessReadyOnly, WindowsInsiderBuildFast, WindowsInsiderBuildSlow, WindowsInsiderBuildRelease. Returned by default. Query parameters are not supported. Possible values are: userDefined, all, businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease.
     *
     * @param WindowsUpdateType $val The businessReadyUpdatesOnly
     *
@@ -122,10 +151,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["businessReadyUpdatesOnly"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deadlineForFeatureUpdatesInDays
-    * Number of days before feature updates are installed automatically with valid range from 2 to 30 days
+    * Number of days before feature updates are installed automatically with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The deadlineForFeatureUpdatesInDays
     */
@@ -137,10 +166,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the deadlineForFeatureUpdatesInDays
-    * Number of days before feature updates are installed automatically with valid range from 2 to 30 days
+    * Number of days before feature updates are installed automatically with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The deadlineForFeatureUpdatesInDays
     *
@@ -151,10 +180,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["deadlineForFeatureUpdatesInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the deadlineForQualityUpdatesInDays
-    * Number of days before quality updates are installed automatically with valid range from 2 to 30 days
+    * Number of days before quality updates are installed automatically with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The deadlineForQualityUpdatesInDays
     */
@@ -166,10 +195,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the deadlineForQualityUpdatesInDays
-    * Number of days before quality updates are installed automatically with valid range from 2 to 30 days
+    * Number of days before quality updates are installed automatically with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The deadlineForQualityUpdatesInDays
     *
@@ -180,10 +209,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["deadlineForQualityUpdatesInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the deadlineGracePeriodInDays
-    * Number of days after deadline  until restarts occur automatically with valid range from 0 to 7 days
+    * Number of days after deadline until restarts occur automatically with valid range from 0 to 7 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The deadlineGracePeriodInDays
     */
@@ -195,10 +224,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the deadlineGracePeriodInDays
-    * Number of days after deadline  until restarts occur automatically with valid range from 0 to 7 days
+    * Number of days after deadline until restarts occur automatically with valid range from 0 to 7 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The deadlineGracePeriodInDays
     *
@@ -209,10 +238,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["deadlineGracePeriodInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the deliveryOptimizationMode
-    * Delivery Optimization Mode. Possible values are: userDefined, httpOnly, httpWithPeeringNat, httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode.
+    * The Delivery Optimization Mode. Possible values are: UserDefined, HttpOnly, HttpWithPeeringNat, HttpWithPeeringPrivateGroup, HttpWithInternetPeering, SimpleDownload, BypassMode. UserDefined allows the user to set. Returned by default. Query parameters are not supported. Possible values are: userDefined, httpOnly, httpWithPeeringNat, httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode.
     *
     * @return WindowsDeliveryOptimizationMode|null The deliveryOptimizationMode
     */
@@ -228,10 +257,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the deliveryOptimizationMode
-    * Delivery Optimization Mode. Possible values are: userDefined, httpOnly, httpWithPeeringNat, httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode.
+    * The Delivery Optimization Mode. Possible values are: UserDefined, HttpOnly, HttpWithPeeringNat, HttpWithPeeringPrivateGroup, HttpWithInternetPeering, SimpleDownload, BypassMode. UserDefined allows the user to set. Returned by default. Query parameters are not supported. Possible values are: userDefined, httpOnly, httpWithPeeringNat, httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode.
     *
     * @param WindowsDeliveryOptimizationMode $val The deliveryOptimizationMode
     *
@@ -242,10 +271,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["deliveryOptimizationMode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the driversExcluded
-    * Exclude Windows update Drivers
+    * When TRUE, excludes Windows update Drivers. When FALSE, does not exclude Windows update Drivers. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The driversExcluded
     */
@@ -257,10 +286,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the driversExcluded
-    * Exclude Windows update Drivers
+    * When TRUE, excludes Windows update Drivers. When FALSE, does not exclude Windows update Drivers. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The driversExcluded
     *
@@ -271,10 +300,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["driversExcluded"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the engagedRestartDeadlineInDays
-    * Deadline in days before automatically scheduling and executing a pending restart outside of active hours, with valid range from 2 to 30 days
+    * Deadline in days before automatically scheduling and executing a pending restart outside of active hours, with valid range from 2 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The engagedRestartDeadlineInDays
     */
@@ -286,10 +315,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the engagedRestartDeadlineInDays
-    * Deadline in days before automatically scheduling and executing a pending restart outside of active hours, with valid range from 2 to 30 days
+    * Deadline in days before automatically scheduling and executing a pending restart outside of active hours, with valid range from 2 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The engagedRestartDeadlineInDays
     *
@@ -300,10 +329,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["engagedRestartDeadlineInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the engagedRestartSnoozeScheduleInDays
-    * Number of days a user can snooze Engaged Restart reminder notifications with valid range from 1 to 3 days
+    * Number of days a user can snooze Engaged Restart reminder notifications with valid range from 1 to 3 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The engagedRestartSnoozeScheduleInDays
     */
@@ -315,10 +344,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the engagedRestartSnoozeScheduleInDays
-    * Number of days a user can snooze Engaged Restart reminder notifications with valid range from 1 to 3 days
+    * Number of days a user can snooze Engaged Restart reminder notifications with valid range from 1 to 3 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The engagedRestartSnoozeScheduleInDays
     *
@@ -329,10 +358,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["engagedRestartSnoozeScheduleInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the engagedRestartTransitionScheduleInDays
-    * Number of days before transitioning from Auto Restarts scheduled outside of active hours to Engaged Restart, which requires the user to schedule, with valid range from 0 to 30 days
+    * Number of days before transitioning from Auto Restarts scheduled outside of active hours to Engaged Restart, which requires the user to schedule, with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The engagedRestartTransitionScheduleInDays
     */
@@ -344,10 +373,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the engagedRestartTransitionScheduleInDays
-    * Number of days before transitioning from Auto Restarts scheduled outside of active hours to Engaged Restart, which requires the user to schedule, with valid range from 0 to 30 days
+    * Number of days before transitioning from Auto Restarts scheduled outside of active hours to Engaged Restart, which requires the user to schedule, with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The engagedRestartTransitionScheduleInDays
     *
@@ -358,10 +387,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["engagedRestartTransitionScheduleInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesDeferralPeriodInDays
-    * Defer Feature Updates by these many days
+    * Defer Feature Updates by these many days with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The featureUpdatesDeferralPeriodInDays
     */
@@ -373,10 +402,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdatesDeferralPeriodInDays
-    * Defer Feature Updates by these many days
+    * Defer Feature Updates by these many days with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The featureUpdatesDeferralPeriodInDays
     *
@@ -387,10 +416,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesDeferralPeriodInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesPaused
-    * Pause Feature Updates
+    * When TRUE, assigned devices are paused from receiving feature updates for up to 35 days from the time you pause the ring. When FALSE, does not pause Feature Updates. Returned by default. Query parameters are not supported.s
     *
     * @return bool|null The featureUpdatesPaused
     */
@@ -402,10 +431,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdatesPaused
-    * Pause Feature Updates
+    * When TRUE, assigned devices are paused from receiving feature updates for up to 35 days from the time you pause the ring. When FALSE, does not pause Feature Updates. Returned by default. Query parameters are not supported.s
     *
     * @param bool $val The featureUpdatesPaused
     *
@@ -416,10 +445,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesPaused"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesPauseExpiryDateTime
-    * Feature Updates Pause Expiry datetime
+    * The Feature Updates Pause Expiry datetime. This value is 35 days from the time admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported.
     *
     * @return \DateTime|null The featureUpdatesPauseExpiryDateTime
     */
@@ -435,10 +464,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the featureUpdatesPauseExpiryDateTime
-    * Feature Updates Pause Expiry datetime
+    * The Feature Updates Pause Expiry datetime. This value is 35 days from the time admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported.
     *
     * @param \DateTime $val The featureUpdatesPauseExpiryDateTime
     *
@@ -449,10 +478,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesPauseExpiryDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesPauseStartDate
-    * Feature Updates Pause start date. This property is read-only.
+    * The Feature Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported. This property is read-only.
     *
     * @return \DateTime|null The featureUpdatesPauseStartDate
     */
@@ -468,10 +497,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the featureUpdatesPauseStartDate
-    * Feature Updates Pause start date. This property is read-only.
+    * The Feature Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported. This property is read-only.
     *
     * @param \DateTime $val The featureUpdatesPauseStartDate
     *
@@ -482,10 +511,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesPauseStartDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesRollbackStartDateTime
-    * Feature Updates Rollback Start datetime
+    * The Feature Updates Rollback Start datetime.This value is the time when the admin rolled back the Feature update for the ring.Returned by default.Query parameters are not supported.
     *
     * @return \DateTime|null The featureUpdatesRollbackStartDateTime
     */
@@ -501,10 +530,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the featureUpdatesRollbackStartDateTime
-    * Feature Updates Rollback Start datetime
+    * The Feature Updates Rollback Start datetime.This value is the time when the admin rolled back the Feature update for the ring.Returned by default.Query parameters are not supported.
     *
     * @param \DateTime $val The featureUpdatesRollbackStartDateTime
     *
@@ -515,10 +544,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesRollbackStartDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesRollbackWindowInDays
-    * The number of days after a Feature Update for which a rollback is valid
+    * The number of days after a Feature Update for which a rollback is valid with valid range from 2 to 60 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The featureUpdatesRollbackWindowInDays
     */
@@ -530,10 +559,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdatesRollbackWindowInDays
-    * The number of days after a Feature Update for which a rollback is valid
+    * The number of days after a Feature Update for which a rollback is valid with valid range from 2 to 60 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The featureUpdatesRollbackWindowInDays
     *
@@ -544,10 +573,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesRollbackWindowInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdatesWillBeRolledBack
-    * Specifies whether to rollback Feature Updates on the next device check in
+    * When TRUE, rollback Feature Updates on the next device check in. When FALSE, do not rollback Feature Updates on the next device check in. Returned by default.Query parameters are not supported.
     *
     * @return bool|null The featureUpdatesWillBeRolledBack
     */
@@ -559,10 +588,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdatesWillBeRolledBack
-    * Specifies whether to rollback Feature Updates on the next device check in
+    * When TRUE, rollback Feature Updates on the next device check in. When FALSE, do not rollback Feature Updates on the next device check in. Returned by default.Query parameters are not supported.
     *
     * @param bool $val The featureUpdatesWillBeRolledBack
     *
@@ -573,10 +602,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["featureUpdatesWillBeRolledBack"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the installationSchedule
-    * Installation schedule
+    * The Installation Schedule. Possible values are: ActiveHoursStart, ActiveHoursEnd, ScheduledInstallDay, ScheduledInstallTime. Returned by default. Query parameters are not supported.
     *
     * @return WindowsUpdateInstallScheduleType|null The installationSchedule
     */
@@ -592,10 +621,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the installationSchedule
-    * Installation schedule
+    * The Installation Schedule. Possible values are: ActiveHoursStart, ActiveHoursEnd, ScheduledInstallDay, ScheduledInstallTime. Returned by default. Query parameters are not supported.
     *
     * @param WindowsUpdateInstallScheduleType $val The installationSchedule
     *
@@ -606,10 +635,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["installationSchedule"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the microsoftUpdateServiceAllowed
-    * Allow Microsoft Update Service
+    * When TRUE, allows Microsoft Update Service. When FALSE, does not allow Microsoft Update Service. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The microsoftUpdateServiceAllowed
     */
@@ -621,10 +650,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the microsoftUpdateServiceAllowed
-    * Allow Microsoft Update Service
+    * When TRUE, allows Microsoft Update Service. When FALSE, does not allow Microsoft Update Service. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The microsoftUpdateServiceAllowed
     *
@@ -635,10 +664,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["microsoftUpdateServiceAllowed"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the postponeRebootUntilAfterDeadline
-    * Specifies if the device should wait until deadline for rebooting outside of active hours
+    * When TRUE the device should wait until deadline for rebooting outside of active hours. When FALSE the device should not wait until deadline for rebooting outside of active hours. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The postponeRebootUntilAfterDeadline
     */
@@ -650,10 +679,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the postponeRebootUntilAfterDeadline
-    * Specifies if the device should wait until deadline for rebooting outside of active hours
+    * When TRUE the device should wait until deadline for rebooting outside of active hours. When FALSE the device should not wait until deadline for rebooting outside of active hours. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The postponeRebootUntilAfterDeadline
     *
@@ -664,10 +693,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["postponeRebootUntilAfterDeadline"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the prereleaseFeatures
-    * The pre-release features. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed.
+    * The Pre-Release Features. Possible values are: UserDefined, SettingsOnly, SettingsAndExperimentations, NotAllowed. UserDefined is the default value, no intent. Returned by default. Query parameters are not supported. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed.
     *
     * @return PrereleaseFeatures|null The prereleaseFeatures
     */
@@ -683,10 +712,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the prereleaseFeatures
-    * The pre-release features. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed.
+    * The Pre-Release Features. Possible values are: UserDefined, SettingsOnly, SettingsAndExperimentations, NotAllowed. UserDefined is the default value, no intent. Returned by default. Query parameters are not supported. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed.
     *
     * @param PrereleaseFeatures $val The prereleaseFeatures
     *
@@ -697,10 +726,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["prereleaseFeatures"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesDeferralPeriodInDays
-    * Defer Quality Updates by these many days
+    * Defer Quality Updates by these many days with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @return int|null The qualityUpdatesDeferralPeriodInDays
     */
@@ -712,10 +741,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the qualityUpdatesDeferralPeriodInDays
-    * Defer Quality Updates by these many days
+    * Defer Quality Updates by these many days with valid range from 0 to 30 days. Returned by default. Query parameters are not supported.
     *
     * @param int $val The qualityUpdatesDeferralPeriodInDays
     *
@@ -726,10 +755,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesDeferralPeriodInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesPaused
-    * Pause Quality Updates
+    * When TRUE, assigned devices are paused from receiving quality updates for up to 35 days from the time you pause the ring. When FALSE, does not pause Quality Updates. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The qualityUpdatesPaused
     */
@@ -741,10 +770,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the qualityUpdatesPaused
-    * Pause Quality Updates
+    * When TRUE, assigned devices are paused from receiving quality updates for up to 35 days from the time you pause the ring. When FALSE, does not pause Quality Updates. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The qualityUpdatesPaused
     *
@@ -755,10 +784,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesPaused"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesPauseExpiryDateTime
-    * Quality Updates Pause Expiry datetime
+    * The Quality Updates Pause Expiry datetime. This value is 35 days from the time admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported.
     *
     * @return \DateTime|null The qualityUpdatesPauseExpiryDateTime
     */
@@ -774,10 +803,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the qualityUpdatesPauseExpiryDateTime
-    * Quality Updates Pause Expiry datetime
+    * The Quality Updates Pause Expiry datetime. This value is 35 days from the time admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported.
     *
     * @param \DateTime $val The qualityUpdatesPauseExpiryDateTime
     *
@@ -788,10 +817,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesPauseExpiryDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesPauseStartDate
-    * Quality Updates Pause start date. This property is read-only.
+    * The Quality Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported. This property is read-only.
     *
     * @return \DateTime|null The qualityUpdatesPauseStartDate
     */
@@ -807,10 +836,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the qualityUpdatesPauseStartDate
-    * Quality Updates Pause start date. This property is read-only.
+    * The Quality Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring. Returned by default. Query parameters are not supported. This property is read-only.
     *
     * @param \DateTime $val The qualityUpdatesPauseStartDate
     *
@@ -821,10 +850,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesPauseStartDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesRollbackStartDateTime
-    * Quality Updates Rollback Start datetime
+    * The Quality Updates Rollback Start datetime. This value is the time when the admin rolled back the Quality update for the ring. Returned by default. Query parameters are not supported.
     *
     * @return \DateTime|null The qualityUpdatesRollbackStartDateTime
     */
@@ -840,10 +869,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the qualityUpdatesRollbackStartDateTime
-    * Quality Updates Rollback Start datetime
+    * The Quality Updates Rollback Start datetime. This value is the time when the admin rolled back the Quality update for the ring. Returned by default. Query parameters are not supported.
     *
     * @param \DateTime $val The qualityUpdatesRollbackStartDateTime
     *
@@ -854,10 +883,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesRollbackStartDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the qualityUpdatesWillBeRolledBack
-    * Specifies whether to rollback Quality Updates on the next device check in
+    * When TRUE, rollback Quality Updates on the next device check in. When FALSE, do not rollback Quality Updates on the next device check in. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The qualityUpdatesWillBeRolledBack
     */
@@ -869,10 +898,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the qualityUpdatesWillBeRolledBack
-    * Specifies whether to rollback Quality Updates on the next device check in
+    * When TRUE, rollback Quality Updates on the next device check in. When FALSE, do not rollback Quality Updates on the next device check in. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The qualityUpdatesWillBeRolledBack
     *
@@ -883,10 +912,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["qualityUpdatesWillBeRolledBack"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the scheduleImminentRestartWarningInMinutes
-    * Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes).
+    * Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes). Returned by default. Query parameters are not supported.
     *
     * @return int|null The scheduleImminentRestartWarningInMinutes
     */
@@ -898,10 +927,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the scheduleImminentRestartWarningInMinutes
-    * Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes).
+    * Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes). Returned by default. Query parameters are not supported.
     *
     * @param int $val The scheduleImminentRestartWarningInMinutes
     *
@@ -912,10 +941,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["scheduleImminentRestartWarningInMinutes"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the scheduleRestartWarningInHours
-    * Specify the period for auto-restart warning reminder notifications. Supported values: 2, 4, 8, 12 or 24 (hours).
+    * Specify the period for auto-restart warning reminder notifications. Supported values: 2, 4, 8, 12 or 24 (hours). Returned by default. Query parameters are not supported.
     *
     * @return int|null The scheduleRestartWarningInHours
     */
@@ -927,10 +956,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the scheduleRestartWarningInHours
-    * Specify the period for auto-restart warning reminder notifications. Supported values: 2, 4, 8, 12 or 24 (hours).
+    * Specify the period for auto-restart warning reminder notifications. Supported values: 2, 4, 8, 12 or 24 (hours). Returned by default. Query parameters are not supported.
     *
     * @param int $val The scheduleRestartWarningInHours
     *
@@ -941,10 +970,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["scheduleRestartWarningInHours"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the skipChecksBeforeRestart
-    * Set to skip all check before restart: Battery level = 40%, User presence, Display Needed, Presentation mode, Full screen mode, phone call state, game mode etc.
+    * When TRUE, skips all checks before restart: Battery level = 40%, User presence, Display Needed, Presentation mode, Full screen mode, phone call state, game mode etc. When FALSE, does not skip all checks before restart. Returned by default. Query parameters are not supported.
     *
     * @return bool|null The skipChecksBeforeRestart
     */
@@ -956,10 +985,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the skipChecksBeforeRestart
-    * Set to skip all check before restart: Battery level = 40%, User presence, Display Needed, Presentation mode, Full screen mode, phone call state, game mode etc.
+    * When TRUE, skips all checks before restart: Battery level = 40%, User presence, Display Needed, Presentation mode, Full screen mode, phone call state, game mode etc. When FALSE, does not skip all checks before restart. Returned by default. Query parameters are not supported.
     *
     * @param bool $val The skipChecksBeforeRestart
     *
@@ -970,10 +999,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["skipChecksBeforeRestart"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the updateNotificationLevel
-    * Specifies what Windows Update notifications users see. Possible values are: notConfigured, defaultNotifications, restartWarningsOnly, disableAllNotifications.
+    * Specifies what Windows Update notifications users see. Possible values are: NotConfigured, DefaultNotifications, RestartWarningsOnly, DisableAllNotifications. Returned by default. Query parameters are not supported. Possible values are: notConfigured, defaultNotifications, restartWarningsOnly, disableAllNotifications, unknownFutureValue.
     *
     * @return WindowsUpdateNotificationDisplayOption|null The updateNotificationLevel
     */
@@ -989,10 +1018,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the updateNotificationLevel
-    * Specifies what Windows Update notifications users see. Possible values are: notConfigured, defaultNotifications, restartWarningsOnly, disableAllNotifications.
+    * Specifies what Windows Update notifications users see. Possible values are: NotConfigured, DefaultNotifications, RestartWarningsOnly, DisableAllNotifications. Returned by default. Query parameters are not supported. Possible values are: notConfigured, defaultNotifications, restartWarningsOnly, disableAllNotifications, unknownFutureValue.
     *
     * @param WindowsUpdateNotificationDisplayOption $val The updateNotificationLevel
     *
@@ -1003,10 +1032,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["updateNotificationLevel"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the updateWeeks
-    * Scheduled the update installation on the weeks of the month. Possible values are: userDefined, firstWeek, secondWeek, thirdWeek, fourthWeek, everyWeek.
+    * Schedule the update installation on the weeks of the month. Possible values are: UserDefined, FirstWeek, SecondWeek, ThirdWeek, FourthWeek, EveryWeek. Returned by default. Query parameters are not supported. Possible values are: userDefined, firstWeek, secondWeek, thirdWeek, fourthWeek, everyWeek, unknownFutureValue.
     *
     * @return WindowsUpdateForBusinessUpdateWeeks|null The updateWeeks
     */
@@ -1022,10 +1051,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the updateWeeks
-    * Scheduled the update installation on the weeks of the month. Possible values are: userDefined, firstWeek, secondWeek, thirdWeek, fourthWeek, everyWeek.
+    * Schedule the update installation on the weeks of the month. Possible values are: UserDefined, FirstWeek, SecondWeek, ThirdWeek, FourthWeek, EveryWeek. Returned by default. Query parameters are not supported. Possible values are: userDefined, firstWeek, secondWeek, thirdWeek, fourthWeek, everyWeek, unknownFutureValue.
     *
     * @param WindowsUpdateForBusinessUpdateWeeks $val The updateWeeks
     *
@@ -1036,10 +1065,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["updateWeeks"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userPauseAccess
-    * Specifies whether to enable end user’s access to pause software updates. Possible values are: notConfigured, enabled, disabled.
+    * Specifies whether to enable end user’s access to pause software updates. Possible values are: NotConfigured, Enabled, Disabled. Returned by default. Query parameters are not supported. Possible values are: notConfigured, enabled, disabled.
     *
     * @return Enablement|null The userPauseAccess
     */
@@ -1055,10 +1084,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the userPauseAccess
-    * Specifies whether to enable end user’s access to pause software updates. Possible values are: notConfigured, enabled, disabled.
+    * Specifies whether to enable end user’s access to pause software updates. Possible values are: NotConfigured, Enabled, Disabled. Returned by default. Query parameters are not supported. Possible values are: notConfigured, enabled, disabled.
     *
     * @param Enablement $val The userPauseAccess
     *
@@ -1069,10 +1098,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["userPauseAccess"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userWindowsUpdateScanAccess
-    * Specifies whether to disable user’s access to scan Windows Update. Possible values are: notConfigured, enabled, disabled.
+    * Specifies whether to disable user’s access to scan Windows Update. Possible values are: NotConfigured, Enabled, Disabled. Returned by default. Query parameters are not supported. Possible values are: notConfigured, enabled, disabled.
     *
     * @return Enablement|null The userWindowsUpdateScanAccess
     */
@@ -1088,10 +1117,10 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the userWindowsUpdateScanAccess
-    * Specifies whether to disable user’s access to scan Windows Update. Possible values are: notConfigured, enabled, disabled.
+    * Specifies whether to disable user’s access to scan Windows Update. Possible values are: NotConfigured, Enabled, Disabled. Returned by default. Query parameters are not supported. Possible values are: notConfigured, enabled, disabled.
     *
     * @param Enablement $val The userWindowsUpdateScanAccess
     *
@@ -1102,35 +1131,5 @@ class WindowsUpdateForBusinessConfiguration extends DeviceConfiguration
         $this->_propDict["userWindowsUpdateScanAccess"] = $val;
         return $this;
     }
-    
 
-     /** 
-     * Gets the deviceUpdateStates
-    * Windows update for business configuration device states.
-     *
-     * @return array|null The deviceUpdateStates
-     */
-    public function getDeviceUpdateStates()
-    {
-        if (array_key_exists("deviceUpdateStates", $this->_propDict)) {
-           return $this->_propDict["deviceUpdateStates"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the deviceUpdateStates
-    * Windows update for business configuration device states.
-    *
-    * @param WindowsUpdateState $val The deviceUpdateStates
-    *
-    * @return WindowsUpdateForBusinessConfiguration
-    */
-    public function setDeviceUpdateStates($val)
-    {
-        $this->_propDict["deviceUpdateStates"] = $val;
-        return $this;
-    }
-    
 }

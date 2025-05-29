@@ -19,7 +19,7 @@ namespace Google\Service\Walletobjects;
 
 class GiftCardClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var bool
    */
@@ -88,6 +88,8 @@ class GiftCardClass extends \Google\Collection
   protected $localizedPinLabelDataType = '';
   protected $locationsType = LatLongPoint::class;
   protected $locationsDataType = 'array';
+  protected $merchantLocationsType = MerchantLocation::class;
+  protected $merchantLocationsDataType = 'array';
   /**
    * @var string
    */
@@ -98,6 +100,10 @@ class GiftCardClass extends \Google\Collection
    * @var string
    */
   public $multipleDevicesAndHoldersAllowedStatus;
+  /**
+   * @var string
+   */
+  public $notifyPreference;
   /**
    * @var string
    */
@@ -118,6 +124,8 @@ class GiftCardClass extends \Google\Collection
   protected $securityAnimationDataType = '';
   protected $textModulesDataType = TextModuleData::class;
   protected $textModulesDataDataType = 'array';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   /**
    * @var string
    */
@@ -468,6 +476,20 @@ class GiftCardClass extends \Google\Collection
     return $this->locations;
   }
   /**
+   * @param MerchantLocation[]
+   */
+  public function setMerchantLocations($merchantLocations)
+  {
+    $this->merchantLocations = $merchantLocations;
+  }
+  /**
+   * @return MerchantLocation[]
+   */
+  public function getMerchantLocations()
+  {
+    return $this->merchantLocations;
+  }
+  /**
    * @param string
    */
   public function setMerchantName($merchantName)
@@ -508,6 +530,20 @@ class GiftCardClass extends \Google\Collection
   public function getMultipleDevicesAndHoldersAllowedStatus()
   {
     return $this->multipleDevicesAndHoldersAllowedStatus;
+  }
+  /**
+   * @param string
+   */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
   }
   /**
    * @param string
@@ -606,6 +642,20 @@ class GiftCardClass extends \Google\Collection
   public function getTextModulesData()
   {
     return $this->textModulesData;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param string

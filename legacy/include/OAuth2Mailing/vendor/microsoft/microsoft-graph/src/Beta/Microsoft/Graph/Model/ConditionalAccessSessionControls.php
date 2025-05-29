@@ -91,6 +91,67 @@ class ConditionalAccessSessionControls extends Entity
     }
 
     /**
+    * Gets the continuousAccessEvaluation
+    * Session control for continuous access evaluation settings.
+    *
+    * @return ContinuousAccessEvaluationSessionControl|null The continuousAccessEvaluation
+    */
+    public function getContinuousAccessEvaluation()
+    {
+        if (array_key_exists("continuousAccessEvaluation", $this->_propDict)) {
+            if (is_a($this->_propDict["continuousAccessEvaluation"], "\Beta\Microsoft\Graph\Model\ContinuousAccessEvaluationSessionControl") || is_null($this->_propDict["continuousAccessEvaluation"])) {
+                return $this->_propDict["continuousAccessEvaluation"];
+            } else {
+                $this->_propDict["continuousAccessEvaluation"] = new ContinuousAccessEvaluationSessionControl($this->_propDict["continuousAccessEvaluation"]);
+                return $this->_propDict["continuousAccessEvaluation"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the continuousAccessEvaluation
+    * Session control for continuous access evaluation settings.
+    *
+    * @param ContinuousAccessEvaluationSessionControl $val The value to assign to the continuousAccessEvaluation
+    *
+    * @return ConditionalAccessSessionControls The ConditionalAccessSessionControls
+    */
+    public function setContinuousAccessEvaluation($val)
+    {
+        $this->_propDict["continuousAccessEvaluation"] = $val;
+         return $this;
+    }
+    /**
+    * Gets the disableResilienceDefaults
+    * Session control that determines whether it's acceptable for Microsoft Entra ID to extend existing sessions based on information collected prior to an outage or not.
+    *
+    * @return bool|null The disableResilienceDefaults
+    */
+    public function getDisableResilienceDefaults()
+    {
+        if (array_key_exists("disableResilienceDefaults", $this->_propDict)) {
+            return $this->_propDict["disableResilienceDefaults"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the disableResilienceDefaults
+    * Session control that determines whether it's acceptable for Microsoft Entra ID to extend existing sessions based on information collected prior to an outage or not.
+    *
+    * @param bool $val The value of the disableResilienceDefaults
+    *
+    * @return ConditionalAccessSessionControls
+    */
+    public function setDisableResilienceDefaults($val)
+    {
+        $this->_propDict["disableResilienceDefaults"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the persistentBrowser
     * Session control to define whether to persist cookies or not. All apps should be selected for this session control to work correctly.
     *
@@ -120,6 +181,39 @@ class ConditionalAccessSessionControls extends Entity
     public function setPersistentBrowser($val)
     {
         $this->_propDict["persistentBrowser"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the secureSignInSession
+    * Session control to require sign in sessions to be bound to a device.
+    *
+    * @return SecureSignInSessionControl|null The secureSignInSession
+    */
+    public function getSecureSignInSession()
+    {
+        if (array_key_exists("secureSignInSession", $this->_propDict)) {
+            if (is_a($this->_propDict["secureSignInSession"], "\Beta\Microsoft\Graph\Model\SecureSignInSessionControl") || is_null($this->_propDict["secureSignInSession"])) {
+                return $this->_propDict["secureSignInSession"];
+            } else {
+                $this->_propDict["secureSignInSession"] = new SecureSignInSessionControl($this->_propDict["secureSignInSession"]);
+                return $this->_propDict["secureSignInSession"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the secureSignInSession
+    * Session control to require sign in sessions to be bound to a device.
+    *
+    * @param SecureSignInSessionControl $val The value to assign to the secureSignInSession
+    *
+    * @return ConditionalAccessSessionControls The ConditionalAccessSessionControls
+    */
+    public function setSecureSignInSession($val)
+    {
+        $this->_propDict["secureSignInSession"] = $val;
          return $this;
     }
 

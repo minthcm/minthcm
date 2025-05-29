@@ -58,6 +58,7 @@ use SuiteCRM\Search\SearchEngine;
 use SuiteCRM\Search\SearchQuery;
 use SuiteCRM\Search\SearchResults;
 use SuiteCRM\Search\SearchWrapper;
+use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
 
 /**
  * SearchEngine that use Elasticsearch index for performing almost real-time search.
@@ -79,6 +80,11 @@ class ElasticSearchEngine extends SearchEngine
    {
       $this->client = $client ?? ElasticSearchClientBuilder::getClient();
    }
+
+    public function globalSearch(SearchQuery $query): SearchResults
+    {
+        return $this->search($query);
+    }
 
    /**
     * @throws InvalidArgumentException
@@ -133,7 +139,7 @@ class ElasticSearchEngine extends SearchEngine
        $options = $query->getOptions();
        if ($options['filter_by_module']) {
          $params = [
-            'index' => $GLOBALS['sugar_config']['unique_key'].'_'.strtolower($options['module']),
+            'index' => ElasticSearchIndexer::getIndexPrefix().'_'.strtolower($options['module']),
             'body' => [
                'query' => [
                   'bool' => [
@@ -155,7 +161,7 @@ class ElasticSearchEngine extends SearchEngine
             $searchStr = $query->getSearchString();
             $searchModules = SearchWrapper::getModules();
             $searchModules = array_map('strtolower', $searchModules);
-            $searchModules = substr_replace($searchModules, $GLOBALS['sugar_config']['unique_key'].'_', 0, 0);
+            $searchModules = substr_replace($searchModules, ElasticSearchIndexer::getIndexPrefix().'_', 0, 0);
 
             $indexes = implode(',', $searchModules);
 

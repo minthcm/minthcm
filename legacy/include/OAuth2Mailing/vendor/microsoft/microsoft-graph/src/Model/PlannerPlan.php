@@ -25,6 +25,39 @@ namespace Microsoft\Graph\Model;
 class PlannerPlan extends Entity
 {
     /**
+    * Gets the container
+    * Identifies the container of the plan. Specify only the url, the containerId and type, or all properties. After it's set, this property can’t be updated. Required.
+    *
+    * @return PlannerPlanContainer|null The container
+    */
+    public function getContainer()
+    {
+        if (array_key_exists("container", $this->_propDict)) {
+            if (is_a($this->_propDict["container"], "\Microsoft\Graph\Model\PlannerPlanContainer") || is_null($this->_propDict["container"])) {
+                return $this->_propDict["container"];
+            } else {
+                $this->_propDict["container"] = new PlannerPlanContainer($this->_propDict["container"]);
+                return $this->_propDict["container"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the container
+    * Identifies the container of the plan. Specify only the url, the containerId and type, or all properties. After it's set, this property can’t be updated. Required.
+    *
+    * @param PlannerPlanContainer $val The container
+    *
+    * @return PlannerPlan
+    */
+    public function setContainer($val)
+    {
+        $this->_propDict["container"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the createdBy
     * Read-only. The user who created the plan.
     *
@@ -42,7 +75,7 @@ class PlannerPlan extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
     * Read-only. The user who created the plan.
@@ -56,7 +89,7 @@ class PlannerPlan extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * Read-only. Date and time at which the plan is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -75,7 +108,7 @@ class PlannerPlan extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Read-only. Date and time at which the plan is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -89,10 +122,9 @@ class PlannerPlan extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the owner
-    * ID of the Group that owns the plan. A valid group must exist before this field can be set. After it is set, this property can’t be updated.
     *
     * @return string|null The owner
     */
@@ -104,10 +136,9 @@ class PlannerPlan extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the owner
-    * ID of the Group that owns the plan. A valid group must exist before this field can be set. After it is set, this property can’t be updated.
     *
     * @param string $val The owner
     *
@@ -118,7 +149,7 @@ class PlannerPlan extends Entity
         $this->_propDict["owner"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the title
     * Required. Title of the plan.
@@ -133,7 +164,7 @@ class PlannerPlan extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the title
     * Required. Title of the plan.
@@ -147,11 +178,11 @@ class PlannerPlan extends Entity
         $this->_propDict["title"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the buckets
-    * Collection of buckets in the plan. Read-only. Nullable.
+    * Read-only. Nullable. Collection of buckets in the plan.
      *
      * @return array|null The buckets
      */
@@ -163,12 +194,12 @@ class PlannerPlan extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the buckets
-    * Collection of buckets in the plan. Read-only. Nullable.
+    * Read-only. Nullable. Collection of buckets in the plan.
     *
-    * @param PlannerBucket $val The buckets
+    * @param PlannerBucket[] $val The buckets
     *
     * @return PlannerPlan
     */
@@ -177,10 +208,10 @@ class PlannerPlan extends Entity
         $this->_propDict["buckets"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the details
-    * Additional details about the plan. Read-only. Nullable.
+    * Read-only. Nullable. Extra details about the plan.
     *
     * @return PlannerPlanDetails|null The details
     */
@@ -196,10 +227,10 @@ class PlannerPlan extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the details
-    * Additional details about the plan. Read-only. Nullable.
+    * Read-only. Nullable. Extra details about the plan.
     *
     * @param PlannerPlanDetails $val The details
     *
@@ -210,11 +241,11 @@ class PlannerPlan extends Entity
         $this->_propDict["details"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the tasks
-    * Collection of tasks in the plan. Read-only. Nullable.
+    * Read-only. Nullable. Collection of tasks in the plan.
      *
      * @return array|null The tasks
      */
@@ -226,12 +257,12 @@ class PlannerPlan extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tasks
-    * Collection of tasks in the plan. Read-only. Nullable.
+    * Read-only. Nullable. Collection of tasks in the plan.
     *
-    * @param PlannerTask $val The tasks
+    * @param PlannerTask[] $val The tasks
     *
     * @return PlannerPlan
     */
@@ -240,5 +271,5 @@ class PlannerPlan extends Entity
         $this->_propDict["tasks"] = $val;
         return $this;
     }
-    
+
 }

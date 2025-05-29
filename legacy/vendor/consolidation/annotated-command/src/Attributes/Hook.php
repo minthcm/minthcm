@@ -16,7 +16,7 @@ class Hook
      * @param $target
      *   Specifies which command(s) the hook will be attached to.
      * @param $selector
-     *   A 'tag' that requests that a hoof operate on the current command.
+     *   A 'tag' that requests that a hook operate on the current command.
      */
     public function __construct(
         #[ExpectedValues(valuesFromClass: HookManager::class)] public string $type,

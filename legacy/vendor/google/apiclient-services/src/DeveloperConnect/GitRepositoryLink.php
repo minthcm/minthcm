@@ -40,6 +40,10 @@ class GitRepositoryLink extends \Google\Model
    */
   public $etag;
   /**
+   * @var string
+   */
+  public $gitProxyUri;
+  /**
    * @var string[]
    */
   public $labels;
@@ -59,6 +63,10 @@ class GitRepositoryLink extends \Google\Model
    * @var string
    */
   public $updateTime;
+  /**
+   * @var string
+   */
+  public $webhookId;
 
   /**
    * @param string[]
@@ -131,6 +139,20 @@ class GitRepositoryLink extends \Google\Model
     return $this->etag;
   }
   /**
+   * @param string
+   */
+  public function setGitProxyUri($gitProxyUri)
+  {
+    $this->gitProxyUri = $gitProxyUri;
+  }
+  /**
+   * @return string
+   */
+  public function getGitProxyUri()
+  {
+    return $this->gitProxyUri;
+  }
+  /**
    * @param string[]
    */
   public function setLabels($labels)
@@ -199,6 +221,20 @@ class GitRepositoryLink extends \Google\Model
   public function getUpdateTime()
   {
     return $this->updateTime;
+  }
+  /**
+   * @param string
+   */
+  public function setWebhookId($webhookId)
+  {
+    $this->webhookId = $webhookId;
+  }
+  /**
+   * @return string
+   */
+  public function getWebhookId()
+  {
+    return $this->webhookId;
   }
 }
 

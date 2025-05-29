@@ -8,6 +8,7 @@ use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\DBAL\Exception\InvalidFieldNameException;
 use Doctrine\DBAL\Exception\LockWaitTimeoutException;
 use Doctrine\DBAL\Exception\NonUniqueFieldNameException;
@@ -21,14 +22,10 @@ use Doctrine\DBAL\Query;
 
 use function strpos;
 
-/**
- * @internal
- */
+/** @internal */
 final class ExceptionConverter implements ExceptionConverterInterface
 {
-    /**
-     * @link http://www.sqlite.org/c3ref/c_abort.html
-     */
+    /** @link http://www.sqlite.org/c3ref/c_abort.html */
     public function convert(Exception $exception, ?Query $query): DriverException
     {
         if (strpos($exception->getMessage(), 'database is locked') !== false) {
@@ -77,6 +74,10 @@ final class ExceptionConverter implements ExceptionConverterInterface
 
         if (strpos($exception->getMessage(), 'unable to open database file') !== false) {
             return new ConnectionException($exception, $query);
+        }
+
+        if (strpos($exception->getMessage(), 'FOREIGN KEY constraint failed') !== false) {
+            return new ForeignKeyConstraintViolationException($exception, $query);
         }
 
         return new DriverException($exception, $query);

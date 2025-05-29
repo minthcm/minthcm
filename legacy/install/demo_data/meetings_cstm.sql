@@ -1,0 +1,16 @@
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('12075605-9b00-6eeb-68e1-5ce691546457',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('3717d90a-932a-9e30-a731-5cebfe3b319c',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('4b87edb7-2eeb-ce58-377c-5ce525fb1e68',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('5cec7fc7-cfa1-950b-4283-5d8e13ac9470',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('5fd2eee8-5ad3-60eb-57de-5ce546766b00',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('6c6e163e-ec5f-649d-cd0d-5e16ec236315',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('6d421883-729a-d97e-c5e8-5e4bbd40e290',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('956fb7f1-5699-d368-d14a-5e3161f8b087',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('b071dd65-ca8e-b9e7-bfd9-5e0768774031',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('b6172d63-48b8-1361-4c1c-5cec177dde4e',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('b9a664d0-556a-7f44-ae5a-5ce6b5781765',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('c5ffd727-648d-2f7b-4a8b-5ce4114b4dca',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('d8118ff7-a7ee-e744-715d-5cebfb9b870b',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('d8738543-760a-46a7-68c5-5cec49144a92',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('f21a7c35-b344-c932-e905-5ce3e67e6ee4',NULL,NULL,'','');
+REPLACE INTO meetings_cstm (id_c, jjwg_maps_lng_c, jjwg_maps_lat_c, jjwg_maps_geocode_status_c, jjwg_maps_address_c) VALUES ('f2c47f88-cb12-2c0f-fd11-5e392c27c6b6',NULL,NULL,'','');

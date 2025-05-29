@@ -25,7 +25,7 @@ class OnPremisesPublishing extends Entity
 {
     /**
     * Gets the alternateUrl
-    * If you are configuring a traffic manager in front of multiple App Proxy applications, the alternateUrl is the user-friendly URL that will point to the traffic manager.
+    * If you're configuring a traffic manager in front of multiple App Proxy applications, the alternateUrl is the user-friendly URL that points to the traffic manager.
     *
     * @return string|null The alternateUrl
     */
@@ -40,7 +40,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the alternateUrl
-    * If you are configuring a traffic manager in front of multiple App Proxy applications, the alternateUrl is the user-friendly URL that will point to the traffic manager.
+    * If you're configuring a traffic manager in front of multiple App Proxy applications, the alternateUrl is the user-friendly URL that points to the traffic manager.
     *
     * @param string $val The value of the alternateUrl
     *
@@ -53,7 +53,7 @@ class OnPremisesPublishing extends Entity
     }
     /**
     * Gets the applicationServerTimeout
-    * The duration the connector will wait for a response from the backend application before closing the connection. Possible values are default, long. When set to default, the backend application timeout has a length of 85 seconds. When set to long, the backend timeout is increased to 180 seconds. Use long if your server takes more than 85 seconds to respond to requests or if you are unable to access the application and the error status is 'Backend Timeout'. Default value is default.
+    * The duration the connector waits for a response from the backend application before closing the connection. Possible values are default, long. When set to default, the backend application timeout has a length of 85 seconds. When set to long, the backend timeout is increased to 180 seconds. Use long if your server takes more than 85 seconds to respond to requests or if you are unable to access the application and the error status is 'Backend Timeout'. Default value is default.
     *
     * @return string|null The applicationServerTimeout
     */
@@ -68,7 +68,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the applicationServerTimeout
-    * The duration the connector will wait for a response from the backend application before closing the connection. Possible values are default, long. When set to default, the backend application timeout has a length of 85 seconds. When set to long, the backend timeout is increased to 180 seconds. Use long if your server takes more than 85 seconds to respond to requests or if you are unable to access the application and the error status is 'Backend Timeout'. Default value is default.
+    * The duration the connector waits for a response from the backend application before closing the connection. Possible values are default, long. When set to default, the backend application timeout has a length of 85 seconds. When set to long, the backend timeout is increased to 180 seconds. Use long if your server takes more than 85 seconds to respond to requests or if you are unable to access the application and the error status is 'Backend Timeout'. Default value is default.
     *
     * @param string $val The value of the applicationServerTimeout
     *
@@ -110,7 +110,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Gets the externalAuthenticationType
-    * Details the pre-authentication setting for the application. Pre-authentication enforces that users must authenticate before accessing the app. Passthru does not require authentication. Possible values are: passthru, aadPreAuthentication.
+    * Details the pre-authentication setting for the application. Pre-authentication enforces that users must authenticate before accessing the app. Pass through doesn't require authentication. Possible values are: passthru, aadPreAuthentication.
     *
     * @return ExternalAuthenticationType|null The externalAuthenticationType
     */
@@ -129,7 +129,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the externalAuthenticationType
-    * Details the pre-authentication setting for the application. Pre-authentication enforces that users must authenticate before accessing the app. Passthru does not require authentication. Possible values are: passthru, aadPreAuthentication.
+    * Details the pre-authentication setting for the application. Pre-authentication enforces that users must authenticate before accessing the app. Pass through doesn't require authentication. Possible values are: passthru, aadPreAuthentication.
     *
     * @param ExternalAuthenticationType $val The value to assign to the externalAuthenticationType
     *
@@ -197,6 +197,86 @@ class OnPremisesPublishing extends Entity
         return $this;
     }
     /**
+    * Gets the isAccessibleViaZTNAClient
+    *
+    * @return bool|null The isAccessibleViaZTNAClient
+    */
+    public function getIsAccessibleViaZTNAClient()
+    {
+        if (array_key_exists("isAccessibleViaZTNAClient", $this->_propDict)) {
+            return $this->_propDict["isAccessibleViaZTNAClient"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isAccessibleViaZTNAClient
+    *
+    * @param bool $val The value of the isAccessibleViaZTNAClient
+    *
+    * @return OnPremisesPublishing
+    */
+    public function setIsAccessibleViaZTNAClient($val)
+    {
+        $this->_propDict["isAccessibleViaZTNAClient"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the isBackendCertificateValidationEnabled
+    * Indicates whether backend SSL certificate validation is enabled for the application. For all new Application Proxy apps, the property is set to true by default. For all existing apps, the property is set to false.
+    *
+    * @return bool|null The isBackendCertificateValidationEnabled
+    */
+    public function getIsBackendCertificateValidationEnabled()
+    {
+        if (array_key_exists("isBackendCertificateValidationEnabled", $this->_propDict)) {
+            return $this->_propDict["isBackendCertificateValidationEnabled"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isBackendCertificateValidationEnabled
+    * Indicates whether backend SSL certificate validation is enabled for the application. For all new Application Proxy apps, the property is set to true by default. For all existing apps, the property is set to false.
+    *
+    * @param bool $val The value of the isBackendCertificateValidationEnabled
+    *
+    * @return OnPremisesPublishing
+    */
+    public function setIsBackendCertificateValidationEnabled($val)
+    {
+        $this->_propDict["isBackendCertificateValidationEnabled"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the isDnsResolutionEnabled
+    *
+    * @return bool|null The isDnsResolutionEnabled
+    */
+    public function getIsDnsResolutionEnabled()
+    {
+        if (array_key_exists("isDnsResolutionEnabled", $this->_propDict)) {
+            return $this->_propDict["isDnsResolutionEnabled"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isDnsResolutionEnabled
+    *
+    * @param bool $val The value of the isDnsResolutionEnabled
+    *
+    * @return OnPremisesPublishing
+    */
+    public function setIsDnsResolutionEnabled($val)
+    {
+        $this->_propDict["isDnsResolutionEnabled"] = $val;
+        return $this;
+    }
+    /**
     * Gets the isHttpOnlyCookieEnabled
     * Indicates if the HTTPOnly cookie flag should be set in the HTTP response headers. Set this value to true to have Application Proxy cookies include the HTTPOnly flag in the HTTP response headers. If using Remote Desktop Services, set this value to False. Default value is false.
     *
@@ -226,7 +306,7 @@ class OnPremisesPublishing extends Entity
     }
     /**
     * Gets the isOnPremPublishingEnabled
-    * Indicates if the application is currently being published via Application Proxy or not. This is pre-set by the system. Read-only.
+    * Indicates if the application is currently being published via Application Proxy or not. This is preset by the system. Read-only.
     *
     * @return bool|null The isOnPremPublishingEnabled
     */
@@ -241,7 +321,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the isOnPremPublishingEnabled
-    * Indicates if the application is currently being published via Application Proxy or not. This is pre-set by the system. Read-only.
+    * Indicates if the application is currently being published via Application Proxy or not. This is preset by the system. Read-only.
     *
     * @param bool $val The value of the isOnPremPublishingEnabled
     *
@@ -254,7 +334,7 @@ class OnPremisesPublishing extends Entity
     }
     /**
     * Gets the isPersistentCookieEnabled
-    * Indicates if the Persistent cookie flag should be set in the HTTP response headers. Keep this value set to false. Only use this setting for applications that can't share cookies between processes. For more information about cookie settings, see Cookie settings for accessing on-premises applications in Azure Active Directory. Default value is false.
+    * Indicates if the Persistent cookie flag should be set in the HTTP response headers. Keep this value set to false. Only use this setting for applications that can't share cookies between processes. For more information about cookie settings, see Cookie settings for accessing on-premises applications in Microsoft Entra ID. Default value is false.
     *
     * @return bool|null The isPersistentCookieEnabled
     */
@@ -269,7 +349,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the isPersistentCookieEnabled
-    * Indicates if the Persistent cookie flag should be set in the HTTP response headers. Keep this value set to false. Only use this setting for applications that can't share cookies between processes. For more information about cookie settings, see Cookie settings for accessing on-premises applications in Azure Active Directory. Default value is false.
+    * Indicates if the Persistent cookie flag should be set in the HTTP response headers. Keep this value set to false. Only use this setting for applications that can't share cookies between processes. For more information about cookie settings, see Cookie settings for accessing on-premises applications in Microsoft Entra ID. Default value is false.
     *
     * @param bool $val The value of the isPersistentCookieEnabled
     *
@@ -309,8 +389,36 @@ class OnPremisesPublishing extends Entity
         return $this;
     }
     /**
+    * Gets the isStateSessionEnabled
+    * Indicates whether validation of the state parameter when the client uses the OAuth 2.0 authorization code grant flow is enabled. This setting allows admins to specify whether they want to enable CSRF protection for their apps.
+    *
+    * @return bool|null The isStateSessionEnabled
+    */
+    public function getIsStateSessionEnabled()
+    {
+        if (array_key_exists("isStateSessionEnabled", $this->_propDict)) {
+            return $this->_propDict["isStateSessionEnabled"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isStateSessionEnabled
+    * Indicates whether validation of the state parameter when the client uses the OAuth 2.0 authorization code grant flow is enabled. This setting allows admins to specify whether they want to enable CSRF protection for their apps.
+    *
+    * @param bool $val The value of the isStateSessionEnabled
+    *
+    * @return OnPremisesPublishing
+    */
+    public function setIsStateSessionEnabled($val)
+    {
+        $this->_propDict["isStateSessionEnabled"] = $val;
+        return $this;
+    }
+    /**
     * Gets the isTranslateHostHeaderEnabled
-    * Indicates if the application should translate urls in the reponse headers. Keep this value as true unless your application required the original host header in the authentication request. Default value is true.
+    * Indicates if the application should translate urls in the response headers. Keep this value as true unless your application required the original host header in the authentication request. Default value is true.
     *
     * @return bool|null The isTranslateHostHeaderEnabled
     */
@@ -325,7 +433,7 @@ class OnPremisesPublishing extends Entity
 
     /**
     * Sets the isTranslateHostHeaderEnabled
-    * Indicates if the application should translate urls in the reponse headers. Keep this value as true unless your application required the original host header in the authentication request. Default value is true.
+    * Indicates if the application should translate urls in the response headers. Keep this value as true unless your application required the original host header in the authentication request. Default value is true.
     *
     * @param bool $val The value of the isTranslateHostHeaderEnabled
     *
@@ -363,6 +471,70 @@ class OnPremisesPublishing extends Entity
     {
         $this->_propDict["isTranslateLinksInBodyEnabled"] = $val;
         return $this;
+    }
+
+    /**
+    * Gets the onPremisesApplicationSegments
+    *
+    * @return OnPremisesApplicationSegment|null The onPremisesApplicationSegments
+    */
+    public function getOnPremisesApplicationSegments()
+    {
+        if (array_key_exists("onPremisesApplicationSegments", $this->_propDict)) {
+            if (is_a($this->_propDict["onPremisesApplicationSegments"], "\Beta\Microsoft\Graph\Model\OnPremisesApplicationSegment") || is_null($this->_propDict["onPremisesApplicationSegments"])) {
+                return $this->_propDict["onPremisesApplicationSegments"];
+            } else {
+                $this->_propDict["onPremisesApplicationSegments"] = new OnPremisesApplicationSegment($this->_propDict["onPremisesApplicationSegments"]);
+                return $this->_propDict["onPremisesApplicationSegments"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the onPremisesApplicationSegments
+    *
+    * @param OnPremisesApplicationSegment $val The value to assign to the onPremisesApplicationSegments
+    *
+    * @return OnPremisesPublishing The OnPremisesPublishing
+    */
+    public function setOnPremisesApplicationSegments($val)
+    {
+        $this->_propDict["onPremisesApplicationSegments"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the segmentsConfiguration
+    * Represents the collection of application segments for an on-premises wildcard application that's published through Microsoft Entra application proxy.
+    *
+    * @return SegmentConfiguration|null The segmentsConfiguration
+    */
+    public function getSegmentsConfiguration()
+    {
+        if (array_key_exists("segmentsConfiguration", $this->_propDict)) {
+            if (is_a($this->_propDict["segmentsConfiguration"], "\Beta\Microsoft\Graph\Model\SegmentConfiguration") || is_null($this->_propDict["segmentsConfiguration"])) {
+                return $this->_propDict["segmentsConfiguration"];
+            } else {
+                $this->_propDict["segmentsConfiguration"] = new SegmentConfiguration($this->_propDict["segmentsConfiguration"]);
+                return $this->_propDict["segmentsConfiguration"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the segmentsConfiguration
+    * Represents the collection of application segments for an on-premises wildcard application that's published through Microsoft Entra application proxy.
+    *
+    * @param SegmentConfiguration $val The value to assign to the segmentsConfiguration
+    *
+    * @return OnPremisesPublishing The OnPremisesPublishing
+    */
+    public function setSegmentsConfiguration($val)
+    {
+        $this->_propDict["segmentsConfiguration"] = $val;
+         return $this;
     }
 
     /**

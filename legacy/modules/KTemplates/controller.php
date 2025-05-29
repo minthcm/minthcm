@@ -80,7 +80,7 @@ class KTemplatesController extends SugarController {
          $rows[$i++] = $row;
       }
 
-      $json = new JSON(JSON_LOOSE_TYPE);
+      $json = new JSON();
 
       echo $json->encode($rows);
    }
@@ -98,7 +98,7 @@ class KTemplatesController extends SugarController {
          sugar_file_put_contents('modules/KTemplates/templates/temp/template-' . $guid, html_entity_decode(str_replace('&nbsp;', '', $_REQUEST['html_data'])));
 
          $response['template_id'] = $guid;
-         $json = new JSON(JSON_LOOSE_TYPE);
+         $json = new JSON();
 
          echo $json->encode($response);
       }
@@ -141,7 +141,7 @@ class KTemplatesController extends SugarController {
          $response['message'] = 'LBL_SYNTAX_NO_INPUT_DATA';
       }
 
-      $json = new JSON(JSON_LOOSE_TYPE);
+      $json = new JSON();
 
       echo $json->encode($response);
    }

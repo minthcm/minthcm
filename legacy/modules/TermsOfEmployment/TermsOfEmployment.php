@@ -114,21 +114,20 @@ class TermsOfEmployment extends Basic {
    }
 
    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
-      $view = strtolower($view);
-      if ( in_array($view, array( 'delete' )) ) {
-         global $db;
-         $query = "SELECT t1.id, t2.id "
-                 . "FROM termsofemployment t1 JOIN termsofemployment t2 ON t1.contract_id = t2.contract_id "
-                 . "WHERE t1.deleted = 0 AND t2.deleted = 0 AND t1.contract_id = '{$this->contract_id}'"
-                 . "AND t1.term_ending_date < '{$this->term_starting_date}' AND t2.term_starting_date > IF "
-                 . "('{$this->term_ending_date}' != '', '{$this->term_ending_date}', '2099-12-31')";
-         $result = $db->query($query);
-         if ( $row = $db->fetchByAssoc($result) ) {
-            return false;
-         }
-      }
-      return parent::ACLAccess($view, $is_owner, $in_group);
-   }
+    $view = strtolower($view);
+    if ( in_array($view, array( 'delete' )) && !empty($this->contract_id) && !empty($this->term_ending_date)) {
+       global $db;
+       $date_end = getDateTimeObject($this->term_ending_date, true);
+       $query = "SELECT t1.id FROM termsofemployment t1 
+       WHERE t1.deleted=0 AND t1.contract_id = '{$this->contract_id}' 
+       AND t1.term_starting_date > '{$date_end->asDbDate()}' AND t1.id <> '{$this->id}'";
+       $result = $db->query($query);
+       if ( $row = $db->fetchByAssoc($result) ) {
+          return false;
+       }
+    }
+    return parent::ACLAccess($view, $is_owner, $in_group);
+ }
 
    protected function convertCurrencyFields() {
       $currency = new Currency();

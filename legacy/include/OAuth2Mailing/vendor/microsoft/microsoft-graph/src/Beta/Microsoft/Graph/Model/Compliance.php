@@ -28,10 +28,10 @@ class Compliance implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new Compliance
     *
@@ -54,7 +54,7 @@ class Compliance implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
+
     /**
     * Gets the ediscovery
     *
@@ -72,7 +72,7 @@ class Compliance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the ediscovery
     *
@@ -85,36 +85,40 @@ class Compliance implements \JsonSerializable
         $this->_propDict["ediscovery"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return Compliance
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -123,6 +127,10 @@ class Compliance implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

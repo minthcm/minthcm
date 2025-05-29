@@ -1,6 +1,6 @@
-p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, blockquote, address, pre, figure {display: block; padding-top: 10px; border: 1px dashed #BBB; background: transparent no-repeat}
-p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, address, pre, figure {margin-left: 3px}
-section, article, address, hgroup, aside, figure {margin: 0 0 1em 3px}
+p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, blockquote, address, pre, figure, repeat {display: block; padding-top: 12px; border: 1px dashed #BBB; background: transparent no-repeat}
+p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, address, pre, figure, repeat{margin-left: 3px}
+section, article, address, hgroup, aside, figure repeat {margin: 0 0 1em 3px}
 
 p {background-image: url(data:image/gif;base64,R0lGODlhCQAJAJEAAAAAAP///7u7u////yH5BAEAAAMALAAAAAAJAAkAAAIQnG+CqCN/mlyvsRUpThG6AgA7)}
 h1 {background-image: url(data:image/gif;base64,R0lGODlhDQAKAIABALu7u////yH5BAEAAAEALAAAAAANAAoAAAIXjI8GybGu1JuxHoAfRNRW3TWXyF2YiRUAOw==)}
@@ -19,3 +19,5 @@ hgroup {background-image: url(data:image/gif;base64,R0lGODlhJwAKAIABALu7uwAAACH5
 aside {background-image: url(data:image/gif;base64,R0lGODlhHgAKAIABAKqqqv///yH5BAEAAAEALAAAAAAeAAoAAAItjI+pG8APjZOTzgtqy7I3f1yehmQcFY4WKZbqByutmW4aHUd6vfcVbgudgpYCADs=)}
 figure {background-image: url(data:image/gif;base64,R0lGODlhJAAKAIAAALu7u////yH5BAEAAAEALAAAAAAkAAoAAAI0jI+py+2fwAHUSFvD3RlvG4HIp4nX5JFSpnZUJ6LlrM52OE7uSWosBHScgkSZj7dDKnWAAgA7)}
 figcaption {border: 1px dashed #BBB}
+repeat {background-image: url('data:image/gif;base64,R0lGODlhKgAMAIABALu7u////yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAAEALAAAAAAqAAwAAAJBjI+py+0Po5wLWHsu1sBwhHlfSHaZuZngtZ7i6waporVwyZZyvcO9yPLtgqET7/fTxZY3VfHZGamAs1iRgs1qIwUAOw==')}
+

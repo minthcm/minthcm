@@ -26,7 +26,7 @@ class UnifiedRoleScheduleInstanceBase extends Entity
 {
     /**
     * Gets the appScopeId
-    * Id of the app specific scope when the assignment scope is app specific. The scope of an assignment determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use '/' for tenant-wide scope. App scopes are scopes that are defined and understood by this application only.
+    * Identifier of the app-specific scope when the assignment or role eligibility is scoped to an app. The scope of an assignment or role eligibility determines the set of resources for which the principal has been granted access. App scopes are scopes that are defined and understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to particular directory objects, for example, administrative units.
     *
     * @return string|null The appScopeId
     */
@@ -38,10 +38,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appScopeId
-    * Id of the app specific scope when the assignment scope is app specific. The scope of an assignment determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use '/' for tenant-wide scope. App scopes are scopes that are defined and understood by this application only.
+    * Identifier of the app-specific scope when the assignment or role eligibility is scoped to an app. The scope of an assignment or role eligibility determines the set of resources for which the principal has been granted access. App scopes are scopes that are defined and understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to particular directory objects, for example, administrative units.
     *
     * @param string $val The appScopeId
     *
@@ -52,10 +52,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["appScopeId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the directoryScopeId
-    * Id of the directory object representing the scope of the assignment. The scope of an assignment determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. App scopes are scopes that are defined and understood by this application only.
+    * Identifier of the directory object representing the scope of the assignment or role eligibility. The scope of an assignment or role eligibility determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope to an application only.
     *
     * @return string|null The directoryScopeId
     */
@@ -67,10 +67,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the directoryScopeId
-    * Id of the directory object representing the scope of the assignment. The scope of an assignment determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. App scopes are scopes that are defined and understood by this application only.
+    * Identifier of the directory object representing the scope of the assignment or role eligibility. The scope of an assignment or role eligibility determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope to an application only.
     *
     * @param string $val The directoryScopeId
     *
@@ -81,10 +81,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["directoryScopeId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principalId
-    * Objectid of the principal to which the assignment is being granted to.
+    * Identifier of the principal that has been granted the role assignment or that's eligible for a role.
     *
     * @return string|null The principalId
     */
@@ -96,10 +96,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the principalId
-    * Objectid of the principal to which the assignment is being granted to.
+    * Identifier of the principal that has been granted the role assignment or that's eligible for a role.
     *
     * @param string $val The principalId
     *
@@ -110,10 +110,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["principalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinitionId
-    * ID of the unifiedRoleDefinition the assignment is for. Read only.
+    * Identifier of the unifiedRoleDefinition object that is being assigned to the principal or that the principal is eligible for.
     *
     * @return string|null The roleDefinitionId
     */
@@ -125,10 +125,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleDefinitionId
-    * ID of the unifiedRoleDefinition the assignment is for. Read only.
+    * Identifier of the unifiedRoleDefinition object that is being assigned to the principal or that the principal is eligible for.
     *
     * @param string $val The roleDefinitionId
     *
@@ -139,10 +139,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["roleDefinitionId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appScope
-    * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment entity.
+    * Read-only property with details of the app-specific scope when the assignment or role eligibility is scoped to an app. Nullable.
     *
     * @return AppScope|null The appScope
     */
@@ -158,10 +158,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the appScope
-    * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment entity.
+    * Read-only property with details of the app-specific scope when the assignment or role eligibility is scoped to an app. Nullable.
     *
     * @param AppScope $val The appScope
     *
@@ -172,10 +172,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["appScope"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the directoryScope
-    * The directory object that is the scope of the assignment. Enables the retrieval of the directory object using $expand at the same time as getting the role assignment. Read-only.
+    * The directory object that is the scope of the assignment or role eligibility. Read-only.
     *
     * @return DirectoryObject|null The directoryScope
     */
@@ -191,10 +191,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the directoryScope
-    * The directory object that is the scope of the assignment. Enables the retrieval of the directory object using $expand at the same time as getting the role assignment. Read-only.
+    * The directory object that is the scope of the assignment or role eligibility. Read-only.
     *
     * @param DirectoryObject $val The directoryScope
     *
@@ -205,10 +205,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["directoryScope"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principal
-    * The principal that is getting a role assignment through the request. Enables the retrieval of the principal using $expand at the same time as getting the role assignment. Read-only.
+    * The principal that's getting a role assignment or role eligibility through the request.
     *
     * @return DirectoryObject|null The principal
     */
@@ -224,10 +224,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the principal
-    * The principal that is getting a role assignment through the request. Enables the retrieval of the principal using $expand at the same time as getting the role assignment. Read-only.
+    * The principal that's getting a role assignment or role eligibility through the request.
     *
     * @param DirectoryObject $val The principal
     *
@@ -238,10 +238,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["principal"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinition
-    * The roleDefinition for the assignment. Enables the retrieval of the role definition using $expand at the same time as getting the role assignment. The roleDefinition.Id is automatically expanded.
+    * Detailed information for the roleDefinition object that is referenced through the roleDefinitionId property.
     *
     * @return UnifiedRoleDefinition|null The roleDefinition
     */
@@ -257,10 +257,10 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the roleDefinition
-    * The roleDefinition for the assignment. Enables the retrieval of the role definition using $expand at the same time as getting the role assignment. The roleDefinition.Id is automatically expanded.
+    * Detailed information for the roleDefinition object that is referenced through the roleDefinitionId property.
     *
     * @param UnifiedRoleDefinition $val The roleDefinition
     *
@@ -271,5 +271,5 @@ class UnifiedRoleScheduleInstanceBase extends Entity
         $this->_propDict["roleDefinition"] = $val;
         return $this;
     }
-    
+
 }

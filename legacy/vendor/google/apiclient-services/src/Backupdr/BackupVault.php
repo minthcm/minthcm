@@ -20,6 +20,10 @@ namespace Google\Service\Backupdr;
 class BackupVault extends \Google\Model
 {
   /**
+   * @var string
+   */
+  public $accessRestriction;
+  /**
    * @var string[]
    */
   public $annotations;
@@ -47,10 +51,6 @@ class BackupVault extends \Google\Model
    * @var string
    */
   public $effectiveTime;
-  /**
-   * @var string
-   */
-  public $enforcedRetentionDuration;
   /**
    * @var string
    */
@@ -84,6 +84,20 @@ class BackupVault extends \Google\Model
    */
   public $updateTime;
 
+  /**
+   * @param string
+   */
+  public function setAccessRestriction($accessRestriction)
+  {
+    $this->accessRestriction = $accessRestriction;
+  }
+  /**
+   * @return string
+   */
+  public function getAccessRestriction()
+  {
+    return $this->accessRestriction;
+  }
   /**
    * @param string[]
    */
@@ -181,20 +195,6 @@ class BackupVault extends \Google\Model
   public function getEffectiveTime()
   {
     return $this->effectiveTime;
-  }
-  /**
-   * @param string
-   */
-  public function setEnforcedRetentionDuration($enforcedRetentionDuration)
-  {
-    $this->enforcedRetentionDuration = $enforcedRetentionDuration;
-  }
-  /**
-   * @return string
-   */
-  public function getEnforcedRetentionDuration()
-  {
-    return $this->enforcedRetentionDuration;
   }
   /**
    * @param string

@@ -25,6 +25,39 @@ namespace Beta\Microsoft\Graph\Model;
 class TeamsAppInstallation extends Entity
 {
     /**
+    * Gets the consentedPermissionSet
+    * The set of resource-specific permissions consented to while installing or upgrading the teamsApp.
+    *
+    * @return TeamsAppPermissionSet|null The consentedPermissionSet
+    */
+    public function getConsentedPermissionSet()
+    {
+        if (array_key_exists("consentedPermissionSet", $this->_propDict)) {
+            if (is_a($this->_propDict["consentedPermissionSet"], "\Beta\Microsoft\Graph\Model\TeamsAppPermissionSet") || is_null($this->_propDict["consentedPermissionSet"])) {
+                return $this->_propDict["consentedPermissionSet"];
+            } else {
+                $this->_propDict["consentedPermissionSet"] = new TeamsAppPermissionSet($this->_propDict["consentedPermissionSet"]);
+                return $this->_propDict["consentedPermissionSet"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the consentedPermissionSet
+    * The set of resource-specific permissions consented to while installing or upgrading the teamsApp.
+    *
+    * @param TeamsAppPermissionSet $val The consentedPermissionSet
+    *
+    * @return TeamsAppInstallation
+    */
+    public function setConsentedPermissionSet($val)
+    {
+        $this->_propDict["consentedPermissionSet"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the teamsApp
     * The app that is installed.
     *
@@ -42,7 +75,7 @@ class TeamsAppInstallation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the teamsApp
     * The app that is installed.
@@ -56,7 +89,7 @@ class TeamsAppInstallation extends Entity
         $this->_propDict["teamsApp"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the teamsAppDefinition
     * The details of this version of the app.
@@ -75,7 +108,7 @@ class TeamsAppInstallation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the teamsAppDefinition
     * The details of this version of the app.
@@ -89,5 +122,5 @@ class TeamsAppInstallation extends Entity
         $this->_propDict["teamsAppDefinition"] = $val;
         return $this;
     }
-    
+
 }

@@ -25,8 +25,9 @@ namespace Beta\Microsoft\Graph\Model;
 class Approval extends Entity
 {
 
-     /** 
+     /**
      * Gets the steps
+    * Used to represent the decision associated with a single step in the approval process configured in approvalStage.
      *
      * @return array|null The steps
      */
@@ -38,11 +39,12 @@ class Approval extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the steps
+    * Used to represent the decision associated with a single step in the approval process configured in approvalStage.
     *
-    * @param ApprovalStep $val The steps
+    * @param ApprovalStep[] $val The steps
     *
     * @return Approval
     */
@@ -51,5 +53,5 @@ class Approval extends Entity
         $this->_propDict["steps"] = $val;
         return $this;
     }
-    
+
 }

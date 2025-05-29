@@ -11,17 +11,13 @@ use Throwable;
  * Base implementation of the {@see Exception} interface.
  *
  * @internal
- *
- * @psalm-immutable
  */
 abstract class AbstractException extends BaseException implements Exception
 {
     /**
      * The SQLSTATE of the driver.
-     *
-     * @var string|null
      */
-    private $sqlState;
+    private ?string $sqlState = null;
 
     /**
      * @param string         $message  The driver error message.
@@ -37,7 +33,7 @@ abstract class AbstractException extends BaseException implements Exception
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSQLState()
     {

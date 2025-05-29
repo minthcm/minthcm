@@ -26,6 +26,7 @@ class UnifiedRbacResourceNamespace extends Entity
 {
     /**
     * Gets the name
+    * Name of the resource namespace. Typically, the same name as the id property, such as microsoft.aad.b2c. Required. Supports $filter (eq, startsWith).
     *
     * @return string|null The name
     */
@@ -37,9 +38,10 @@ class UnifiedRbacResourceNamespace extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
+    * Name of the resource namespace. Typically, the same name as the id property, such as microsoft.aad.b2c. Required. Supports $filter (eq, startsWith).
     *
     * @param string $val The name
     *
@@ -50,10 +52,11 @@ class UnifiedRbacResourceNamespace extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the resourceActions
+    * Operations that an authorized principal is allowed to perform.
      *
      * @return array|null The resourceActions
      */
@@ -65,11 +68,12 @@ class UnifiedRbacResourceNamespace extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the resourceActions
+    * Operations that an authorized principal is allowed to perform.
     *
-    * @param UnifiedRbacResourceAction $val The resourceActions
+    * @param UnifiedRbacResourceAction[] $val The resourceActions
     *
     * @return UnifiedRbacResourceNamespace
     */
@@ -78,5 +82,5 @@ class UnifiedRbacResourceNamespace extends Entity
         $this->_propDict["resourceActions"] = $val;
         return $this;
     }
-    
+
 }

@@ -31,11 +31,11 @@ class vfsStreamWrapperUnregisterTestCase extends \BC_PHPUnit_Framework_TestCase
      * Unregistering a third party wrapper for vfs:// fails.
      *
      * @test
-     * @expectedException org\bovigo\vfs\vfsStreamException
      * @runInSeparateProcess
      */
     public function unregisterThirdPartyVfsScheme()
     {
+        $this->expectException(vfsStreamException::class);
         // Unregister possible registered URL wrapper.
         vfsStreamWrapper::unregister();
 
@@ -49,11 +49,11 @@ class vfsStreamWrapperUnregisterTestCase extends \BC_PHPUnit_Framework_TestCase
      * Unregistering when not in registered state will fail.
      *
      * @test
-     * @expectedException org\bovigo\vfs\vfsStreamException
      * @runInSeparateProcess
      */
     public function unregisterWhenNotInRegisteredState()
     {
+        $this->expectException(vfsStreamException::class);
         vfsStreamWrapper::register();
         stream_wrapper_unregister(vfsStream::SCHEME);
         vfsStreamWrapper::unregister();

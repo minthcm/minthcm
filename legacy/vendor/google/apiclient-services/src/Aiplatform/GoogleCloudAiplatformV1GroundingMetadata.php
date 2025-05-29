@@ -20,12 +20,12 @@ namespace Google\Service\Aiplatform;
 class GoogleCloudAiplatformV1GroundingMetadata extends \Google\Collection
 {
   protected $collection_key = 'webSearchQueries';
-  protected $groundingAttributionsType = GoogleCloudAiplatformV1GroundingAttribution::class;
-  protected $groundingAttributionsDataType = 'array';
   protected $groundingChunksType = GoogleCloudAiplatformV1GroundingChunk::class;
   protected $groundingChunksDataType = 'array';
   protected $groundingSupportsType = GoogleCloudAiplatformV1GroundingSupport::class;
   protected $groundingSupportsDataType = 'array';
+  protected $retrievalMetadataType = GoogleCloudAiplatformV1RetrievalMetadata::class;
+  protected $retrievalMetadataDataType = '';
   protected $searchEntryPointType = GoogleCloudAiplatformV1SearchEntryPoint::class;
   protected $searchEntryPointDataType = '';
   /**
@@ -33,20 +33,6 @@ class GoogleCloudAiplatformV1GroundingMetadata extends \Google\Collection
    */
   public $webSearchQueries;
 
-  /**
-   * @param GoogleCloudAiplatformV1GroundingAttribution[]
-   */
-  public function setGroundingAttributions($groundingAttributions)
-  {
-    $this->groundingAttributions = $groundingAttributions;
-  }
-  /**
-   * @return GoogleCloudAiplatformV1GroundingAttribution[]
-   */
-  public function getGroundingAttributions()
-  {
-    return $this->groundingAttributions;
-  }
   /**
    * @param GoogleCloudAiplatformV1GroundingChunk[]
    */
@@ -74,6 +60,20 @@ class GoogleCloudAiplatformV1GroundingMetadata extends \Google\Collection
   public function getGroundingSupports()
   {
     return $this->groundingSupports;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1RetrievalMetadata
+   */
+  public function setRetrievalMetadata(GoogleCloudAiplatformV1RetrievalMetadata $retrievalMetadata)
+  {
+    $this->retrievalMetadata = $retrievalMetadata;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1RetrievalMetadata
+   */
+  public function getRetrievalMetadata()
+  {
+    return $this->retrievalMetadata;
   }
   /**
    * @param GoogleCloudAiplatformV1SearchEntryPoint

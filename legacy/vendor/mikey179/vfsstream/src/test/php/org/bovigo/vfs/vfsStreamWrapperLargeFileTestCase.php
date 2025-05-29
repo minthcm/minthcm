@@ -29,7 +29,7 @@ class vfsStreamWrapperLargeFileTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $root = vfsStream::setup();
         $this->largeFile = vfsStream::newFile('large.txt')

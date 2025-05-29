@@ -59,17 +59,17 @@ class SynchronizationSchedule extends Entity
 
     /**
     * Gets the interval
-    * The interval between synchronization iterations.
+    * The interval between synchronization iterations. The value is represented in ISO 8601 format for durations. For example, PT1M represents a period of 1 month.
     *
-    * @return Duration|null The interval
+    * @return \DateInterval|null The interval
     */
     public function getInterval()
     {
         if (array_key_exists("interval", $this->_propDict)) {
-            if (is_a($this->_propDict["interval"], "\Beta\Microsoft\Graph\Model\Duration") || is_null($this->_propDict["interval"])) {
+            if (is_a($this->_propDict["interval"], "\DateInterval") || is_null($this->_propDict["interval"])) {
                 return $this->_propDict["interval"];
             } else {
-                $this->_propDict["interval"] = new Duration($this->_propDict["interval"]);
+                $this->_propDict["interval"] = new \DateInterval($this->_propDict["interval"]);
                 return $this->_propDict["interval"];
             }
         }
@@ -78,9 +78,9 @@ class SynchronizationSchedule extends Entity
 
     /**
     * Sets the interval
-    * The interval between synchronization iterations.
+    * The interval between synchronization iterations. The value is represented in ISO 8601 format for durations. For example, PT1M represents a period of 1 month.
     *
-    * @param Duration $val The value to assign to the interval
+    * @param \DateInterval $val The value to assign to the interval
     *
     * @return SynchronizationSchedule The SynchronizationSchedule
     */
@@ -92,7 +92,7 @@ class SynchronizationSchedule extends Entity
 
     /**
     * Gets the state
-    * Possible values are: Active, Disabled.
+    * The possible values are: Active, Disabled, Paused.
     *
     * @return SynchronizationScheduleState|null The state
     */
@@ -111,7 +111,7 @@ class SynchronizationSchedule extends Entity
 
     /**
     * Sets the state
-    * Possible values are: Active, Disabled.
+    * The possible values are: Active, Disabled, Paused.
     *
     * @param SynchronizationScheduleState $val The value to assign to the state
     *

@@ -28,10 +28,10 @@ class TrustFramework implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new TrustFramework
     *
@@ -54,9 +54,9 @@ class TrustFramework implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
 
-     /** 
+
+     /**
      * Gets the keySets
      *
      * @return array|null The keySets
@@ -69,11 +69,11 @@ class TrustFramework implements \JsonSerializable
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the keySets
     *
-    * @param TrustFrameworkKeySet $val The keySets
+    * @param TrustFrameworkKeySet[] $val The keySets
     *
     * @return TrustFramework
     */
@@ -82,9 +82,9 @@ class TrustFramework implements \JsonSerializable
         $this->_propDict["keySets"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the policies
      *
      * @return array|null The policies
@@ -97,11 +97,11 @@ class TrustFramework implements \JsonSerializable
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the policies
     *
-    * @param TrustFrameworkPolicy $val The policies
+    * @param TrustFrameworkPolicy[] $val The policies
     *
     * @return TrustFramework
     */
@@ -110,36 +110,40 @@ class TrustFramework implements \JsonSerializable
         $this->_propDict["policies"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return TrustFramework
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -148,6 +152,10 @@ class TrustFramework implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

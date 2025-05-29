@@ -32,8 +32,15 @@ class CloudPcStatus extends Enum
     const NOT_PROVISIONED = "notProvisioned";
     const PROVISIONING = "provisioning";
     const PROVISIONED = "provisioned";
-    const UPGRADING = "upgrading";
     const IN_GRACE_PERIOD = "inGracePeriod";
     const DEPROVISIONING = "deprovisioning";
     const FAILED = "failed";
+    const PROVISIONED_WITH_WARNINGS = "provisionedWithWarnings";
+    const RESIZING = "resizing";
+    const RESTORING = "restoring";
+    const PENDING_PROVISION = "pendingProvision";
+    const UNKNOWN_FUTURE_VALUE = "unknownFutureValue";
+    const MOVING_REGION = "movingRegion";
+    const RESIZE_PENDING_LICENSE = "resizePendingLicense";
+    const UPDATING_SINGLE_SIGN_ON = "updatingSingleSignOn";
 }

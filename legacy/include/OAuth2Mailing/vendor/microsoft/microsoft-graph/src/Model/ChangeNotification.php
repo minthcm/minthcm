@@ -58,7 +58,7 @@ class ChangeNotification extends Entity
     }
     /**
     * Gets the clientState
-    * Value of the clientState property sent specified in the subscription request (if any). The maximum length is 255 characters. The client can check whether the change notification came from the service by comparing the values of the clientState property. The value of the clientState property sent with the subscription is compared with the value of the clientState property received with each change notification. Optional.
+    * Value of the clientState property sent in the subscription request (if any). The maximum length is 255 characters. The client can check whether the change notification came from the service by comparing the values of the clientState property. The value of the clientState property sent with the subscription is compared with the value of the clientState property received with each change notification. Optional.
     *
     * @return string|null The clientState
     */
@@ -73,7 +73,7 @@ class ChangeNotification extends Entity
 
     /**
     * Sets the clientState
-    * Value of the clientState property sent specified in the subscription request (if any). The maximum length is 255 characters. The client can check whether the change notification came from the service by comparing the values of the clientState property. The value of the clientState property sent with the subscription is compared with the value of the clientState property received with each change notification. Optional.
+    * Value of the clientState property sent in the subscription request (if any). The maximum length is 255 characters. The client can check whether the change notification came from the service by comparing the values of the clientState property. The value of the clientState property sent with the subscription is compared with the value of the clientState property received with each change notification. Optional.
     *
     * @param string $val The value of the clientState
     *
@@ -148,7 +148,7 @@ class ChangeNotification extends Entity
 
     /**
     * Gets the lifecycleEvent
-    * The type of lifecycle notification if the current notification is a lifecycle notification. Optional. Supported values are missed, removed, reauthorizationRequired.
+    * The type of lifecycle notification if the current notification is a lifecycle notification. Optional. Supported values are missed, subscriptionRemoved, reauthorizationRequired. Optional.
     *
     * @return LifecycleEventType|null The lifecycleEvent
     */
@@ -167,7 +167,7 @@ class ChangeNotification extends Entity
 
     /**
     * Sets the lifecycleEvent
-    * The type of lifecycle notification if the current notification is a lifecycle notification. Optional. Supported values are missed, removed, reauthorizationRequired.
+    * The type of lifecycle notification if the current notification is a lifecycle notification. Optional. Supported values are missed, subscriptionRemoved, reauthorizationRequired. Optional.
     *
     * @param LifecycleEventType $val The value to assign to the lifecycleEvent
     *
@@ -209,7 +209,7 @@ class ChangeNotification extends Entity
 
     /**
     * Gets the resourceData
-    * The content of this property depends on the type of resource being subscribed to. Required.
+    * The content of this property depends on the type of resource being subscribed to. Optional.
     *
     * @return ResourceData|null The resourceData
     */
@@ -228,7 +228,7 @@ class ChangeNotification extends Entity
 
     /**
     * Sets the resourceData
-    * The content of this property depends on the type of resource being subscribed to. Required.
+    * The content of this property depends on the type of resource being subscribed to. Optional.
     *
     * @param ResourceData $val The value to assign to the resourceData
     *
@@ -274,7 +274,7 @@ class ChangeNotification extends Entity
     }
     /**
     * Gets the subscriptionId
-    * The unique identifier of the subscription that generated the notification.
+    * The unique identifier of the subscription that generated the notification.Required.
     *
     * @return string|null The subscriptionId
     */
@@ -289,7 +289,7 @@ class ChangeNotification extends Entity
 
     /**
     * Sets the subscriptionId
-    * The unique identifier of the subscription that generated the notification.
+    * The unique identifier of the subscription that generated the notification.Required.
     *
     * @param string $val The value of the subscriptionId
     *
@@ -302,7 +302,7 @@ class ChangeNotification extends Entity
     }
     /**
     * Gets the tenantId
-    * The unique identifier of the tenant from which the change notification originated.
+    * The unique identifier of the tenant from which the change notification originated. Required.
     *
     * @return string|null The tenantId
     */
@@ -317,7 +317,7 @@ class ChangeNotification extends Entity
 
     /**
     * Sets the tenantId
-    * The unique identifier of the tenant from which the change notification originated.
+    * The unique identifier of the tenant from which the change notification originated. Required.
     *
     * @param string $val The value of the tenantId
     *

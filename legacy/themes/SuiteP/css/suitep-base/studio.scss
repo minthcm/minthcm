@@ -81,15 +81,13 @@
 
 .le_panel {
   background: $default-tab-bg;
-  border: 1px solid transparent;
+  border: 1px solid $default-tab-bg;
   border-radius: $border-radius-base;
 }
 
 .le_row {
-  background: $default-btn-bg;
-  border: 1px solid transparent;
+  background: $color-68;
   border-radius: $border-radius-base;
-  //background: $main-bg;
 }
 
 
@@ -165,7 +163,9 @@ body > .le_panel .le_edit, #toolbox .le_panel .le_edit {
 }
 
 .le_field {
+  color: $lm-secondary-accent;
   background: $main-bg;
+  cursor: all-scroll;
 }
 
 #toolbox .le_panel img, #toolbox .le_row img, .le_field img {

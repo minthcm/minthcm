@@ -313,6 +313,7 @@ $dictionary['Employee']['fields']['deputy'] = array(
     'vname' => 'LBL_DEPUTY',
 );
 
+
 $dictionary["Employee"]["audited"] = true;
 $dictionary["Employee"]["fields"]["employee_status"]["audited"] = true;
 $dictionary["Employee"]["fields"]["first_name"]["audited"] = true;
@@ -362,3 +363,17 @@ $dictionary['Employee']['fields']['files'] = [
     'label' => 'LBL_FILES',
 ];
 
+$dictionary['Employee']['elasticsearch']['nested']['security_groups'] = [
+    'link' => 'SecurityGroups',
+    'fields' => array('id'),
+];
+
+$dictionary["Employee"]["fields"]["SecurityGroups"] = array(
+    'name' => 'SecurityGroups',
+    'type' => 'link',
+    'relationship' => 'securitygroups_users_employees',
+    'source' => 'non-db',
+    'module' => 'SecurityGroups',
+    'bean_name' => 'SecurityGroup',
+    'vname' => 'LBL_SECURITYGROUPS',
+);

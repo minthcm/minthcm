@@ -19,7 +19,7 @@ class vfsStreamExLockTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    protected function setUp()
+    public function setUp(): void
     {
         $root = vfsStream::setup();
         vfsStream::newFile('testfile')->at($root);

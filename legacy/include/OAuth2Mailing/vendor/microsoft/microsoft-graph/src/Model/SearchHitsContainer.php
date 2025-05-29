@@ -25,6 +25,37 @@ class SearchHitsContainer extends Entity
 {
 
     /**
+    * Gets the aggregations
+    *
+    * @return SearchAggregation|null The aggregations
+    */
+    public function getAggregations()
+    {
+        if (array_key_exists("aggregations", $this->_propDict)) {
+            if (is_a($this->_propDict["aggregations"], "\Microsoft\Graph\Model\SearchAggregation") || is_null($this->_propDict["aggregations"])) {
+                return $this->_propDict["aggregations"];
+            } else {
+                $this->_propDict["aggregations"] = new SearchAggregation($this->_propDict["aggregations"]);
+                return $this->_propDict["aggregations"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the aggregations
+    *
+    * @param SearchAggregation $val The value to assign to the aggregations
+    *
+    * @return SearchHitsContainer The SearchHitsContainer
+    */
+    public function setAggregations($val)
+    {
+        $this->_propDict["aggregations"] = $val;
+         return $this;
+    }
+
+    /**
     * Gets the hits
     * A collection of the search results.
     *
@@ -86,7 +117,7 @@ class SearchHitsContainer extends Entity
     }
     /**
     * Gets the total
-    * The total number of results. Note this is not the number of results on the page, but the total number of results satisfying the query.
+    * The total number of results. Note this isn't the number of results on the page, but the total number of results satisfying the query.
     *
     * @return int|null The total
     */
@@ -101,7 +132,7 @@ class SearchHitsContainer extends Entity
 
     /**
     * Sets the total
-    * The total number of results. Note this is not the number of results on the page, but the total number of results satisfying the query.
+    * The total number of results. Note this isn't the number of results on the page, but the total number of results satisfying the query.
     *
     * @param int $val The value of the total
     *

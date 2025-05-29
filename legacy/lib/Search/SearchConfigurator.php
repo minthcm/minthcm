@@ -109,10 +109,6 @@ class SearchConfigurator
             case 'BasicSearchEngine':
                 // Only basic search
                 break;
-            case 'BasicAndAodEngine':
-                // Basic search and AOD
-                $enableAod = true;
-                break;
             default:
                 // SearchWrapper with a specific engine
                 $searchController = 'Search';

@@ -139,7 +139,7 @@ class ElasticSearchIndexer extends AbstractIndexer
 
             foreach ($modules as $module) {
                 try {
-                    $instance_id = $GLOBALS['sugar_config']['unique_key'];
+                    $instance_id = static::getIndexPrefix();
                     $lowercaseModule = strtolower($module);
                     $index = $instance_id . '_' . $lowercaseModule;
                     $this->removeIndex($index);
@@ -206,8 +206,7 @@ class ElasticSearchIndexer extends AbstractIndexer
     }
 
     /** @inheritdoc */
-    public function indexModule($module)
-    {
+   public function indexModule($module) {
         global $sugar_config;
         $seed = \BeanFactory::getBean($module);
         if (empty($seed->table_name)) {
@@ -347,7 +346,7 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     protected function fillAllNestedPropertyValues(SugarBean $bean, array &$args): void
     {
-        $nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->module_name);
+      $nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->object_name);
         foreach ($nested_properties as $property_name => $nested_config) {
             $args[$property_name] = $this->getNestedPropertyValues($bean, $property_name, $nested_config);
         }
@@ -518,9 +517,8 @@ class ElasticSearchIndexer extends AbstractIndexer
     {
         $params = ['body' => []];
 
-        $instance_id = $GLOBALS['sugar_config']['unique_key'];
         $lowercaseModule = strtolower($module);
-        $this->index = $instance_id . '_' . $lowercaseModule;
+        $this->index = static::getIndexPrefix() . '_' . $lowercaseModule;
 
         foreach ($beans as $key => $bean) {
             // MintHCM #122342 START
@@ -657,11 +655,11 @@ class ElasticSearchIndexer extends AbstractIndexer
      */
     private function makeParamsHeaderFromBean(SugarBean $bean): array
     {
-        $instance_id = $GLOBALS['sugar_config']['unique_key'];
+        $index_prefix = static::getIndexPrefix();
         $lowercaseModule = strtolower($bean->module_name);
 
         return [
-            'index' => $instance_id . '_' . $lowercaseModule,
+            'index' => $index_prefix . '_' . $lowercaseModule,
             'id' => $bean->id,
         ];
     }
@@ -682,5 +680,10 @@ class ElasticSearchIndexer extends AbstractIndexer
             $indexer->setDocumentifier(new SearchDefsDocumentifier());
         }
         $indexer->index();
+    }
+
+    public static function getIndexPrefix() : string
+    {
+        return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
     }
 }

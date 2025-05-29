@@ -26,7 +26,6 @@ class OnenoteResource extends OnenoteEntityBaseModel
 {
     /**
     * Gets the content
-    * The content stream
     *
     * @return \GuzzleHttp\Psr7\Stream|null The content
     */
@@ -36,16 +35,15 @@ class OnenoteResource extends OnenoteEntityBaseModel
             if (is_a($this->_propDict["content"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["content"])) {
                 return $this->_propDict["content"];
             } else {
-                $this->_propDict["content"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["content"]);
+                $this->_propDict["content"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["content"]);
                 return $this->_propDict["content"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the content
-    * The content stream
     *
     * @param \GuzzleHttp\Psr7\Stream $val The content
     *
@@ -56,10 +54,9 @@ class OnenoteResource extends OnenoteEntityBaseModel
         $this->_propDict["content"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentUrl
-    * The URL for downloading the content
     *
     * @return string|null The contentUrl
     */
@@ -71,10 +68,9 @@ class OnenoteResource extends OnenoteEntityBaseModel
             return null;
         }
     }
-    
+
     /**
     * Sets the contentUrl
-    * The URL for downloading the content
     *
     * @param string $val The contentUrl
     *
@@ -85,5 +81,5 @@ class OnenoteResource extends OnenoteEntityBaseModel
         $this->_propDict["contentUrl"] = $val;
         return $this;
     }
-    
+
 }

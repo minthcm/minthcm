@@ -13,20 +13,17 @@ use function is_array;
 
 /**
  * Event Arguments used when SQL queries for adding table columns are generated inside {@see AbstractPlatform}.
+ *
+ * @deprecated
  */
 class SchemaAlterTableAddColumnEventArgs extends SchemaEventArgs
 {
-    /** @var Column */
-    private $column;
-
-    /** @var TableDiff */
-    private $tableDiff;
-
-    /** @var AbstractPlatform */
-    private $platform;
+    private Column $column;
+    private TableDiff $tableDiff;
+    private AbstractPlatform $platform;
 
     /** @var string[] */
-    private $sql = [];
+    private array $sql = [];
 
     public function __construct(Column $column, TableDiff $tableDiff, AbstractPlatform $platform)
     {
@@ -35,25 +32,19 @@ class SchemaAlterTableAddColumnEventArgs extends SchemaEventArgs
         $this->platform  = $platform;
     }
 
-    /**
-     * @return Column
-     */
+    /** @return Column */
     public function getColumn()
     {
         return $this->column;
     }
 
-    /**
-     * @return TableDiff
-     */
+    /** @return TableDiff */
     public function getTableDiff()
     {
         return $this->tableDiff;
     }
 
-    /**
-     * @return AbstractPlatform
-     */
+    /** @return AbstractPlatform */
     public function getPlatform()
     {
         return $this->platform;
@@ -73,7 +64,7 @@ class SchemaAlterTableAddColumnEventArgs extends SchemaEventArgs
                 'doctrine/dbal',
                 'https://github.com/doctrine/dbal/issues/3580',
                 'Passing multiple SQL statements as an array to SchemaAlterTableAddColumnEventaArrgs::addSql() ' .
-                'is deprecated. Pass each statement as an individual argument instead.'
+                'is deprecated. Pass each statement as an individual argument instead.',
             );
         }
 
@@ -82,9 +73,7 @@ class SchemaAlterTableAddColumnEventArgs extends SchemaEventArgs
         return $this;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getSql()
     {
         return $this->sql;

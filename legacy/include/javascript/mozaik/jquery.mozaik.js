@@ -159,13 +159,16 @@ var plgBackground = {
     $.fn.mozaik = function(options) {
 
         var tinyMCESettings = {
+            // MintHCM #137532 start
             plugins: [
-                'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-                'searchreplace wordcount visualblocks visualchars code fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons template paste textcolor colorpicker textpattern imagetools'
+                'link','image','charmap','print','preview','hr','anchor','pagebreak',
+                'searchreplace','wordcount','visualblocks','visualchars','code','fullscreen',
+                'insertdatetime','media','nonbreaking','save','table','contextmenu','directionality',
+                'emoticons','template','paste','textcolor','colorpicker','textpattern','imagetools',
+                'lists','advlist'
             ],
-            toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+            toolbar1: 'insertfile undo redo styles bold italic alignleft aligncenter alignright alignjustify bullist numlist outdent indent',
+            // MintHCM #137532 end
             toolbar2: 'print preview media | forecolor backcolor | image | emoticons | table | link | fontsizeselect',
             table_toolbar: "",
             image_advtab: true,

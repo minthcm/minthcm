@@ -37,6 +37,10 @@ class ComputeInstanceBackupProperties extends \Google\Collection
    */
   public $keyRevocationActionType;
   /**
+   * @var string[]
+   */
+  public $labels;
+  /**
    * @var string
    */
   public $machineType;
@@ -55,7 +59,7 @@ class ComputeInstanceBackupProperties extends \Google\Collection
   /**
    * @var string
    */
-  public $sourceInstanceName;
+  public $sourceInstance;
   protected $tagsType = Tags::class;
   protected $tagsDataType = '';
 
@@ -128,6 +132,20 @@ class ComputeInstanceBackupProperties extends \Google\Collection
   public function getKeyRevocationActionType()
   {
     return $this->keyRevocationActionType;
+  }
+  /**
+   * @param string[]
+   */
+  public function setLabels($labels)
+  {
+    $this->labels = $labels;
+  }
+  /**
+   * @return string[]
+   */
+  public function getLabels()
+  {
+    return $this->labels;
   }
   /**
    * @param string
@@ -216,16 +234,16 @@ class ComputeInstanceBackupProperties extends \Google\Collection
   /**
    * @param string
    */
-  public function setSourceInstanceName($sourceInstanceName)
+  public function setSourceInstance($sourceInstance)
   {
-    $this->sourceInstanceName = $sourceInstanceName;
+    $this->sourceInstance = $sourceInstance;
   }
   /**
    * @return string
    */
-  public function getSourceInstanceName()
+  public function getSourceInstance()
   {
-    return $this->sourceInstanceName;
+    return $this->sourceInstance;
   }
   /**
    * @param Tags

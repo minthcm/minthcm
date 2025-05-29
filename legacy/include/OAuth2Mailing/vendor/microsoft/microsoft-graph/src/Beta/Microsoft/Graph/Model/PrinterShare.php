@@ -38,7 +38,7 @@ class PrinterShare extends PrinterBase
             return null;
         }
     }
-    
+
     /**
     * Sets the allowAllUsers
     * If true, all users and groups will be granted access to this printer share. This supersedes the allow lists defined by the allowedUsers and allowedGroups navigation properties.
@@ -52,7 +52,7 @@ class PrinterShare extends PrinterBase
         $this->_propDict["allowAllUsers"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The DateTimeOffset when the printer share was created. Read-only.
@@ -71,7 +71,7 @@ class PrinterShare extends PrinterBase
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The DateTimeOffset when the printer share was created. Read-only.
@@ -85,9 +85,42 @@ class PrinterShare extends PrinterBase
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
 
-     /** 
+    /**
+    * Gets the viewPoint
+    * Additional data for a printer share as viewed by the signed-in user.
+    *
+    * @return PrinterShareViewpoint|null The viewPoint
+    */
+    public function getViewPoint()
+    {
+        if (array_key_exists("viewPoint", $this->_propDict)) {
+            if (is_a($this->_propDict["viewPoint"], "\Beta\Microsoft\Graph\Model\PrinterShareViewpoint") || is_null($this->_propDict["viewPoint"])) {
+                return $this->_propDict["viewPoint"];
+            } else {
+                $this->_propDict["viewPoint"] = new PrinterShareViewpoint($this->_propDict["viewPoint"]);
+                return $this->_propDict["viewPoint"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the viewPoint
+    * Additional data for a printer share as viewed by the signed-in user.
+    *
+    * @param PrinterShareViewpoint $val The viewPoint
+    *
+    * @return PrinterShare
+    */
+    public function setViewPoint($val)
+    {
+        $this->_propDict["viewPoint"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the allowedGroups
     * The groups whose users have access to print using the printer.
      *
@@ -101,12 +134,12 @@ class PrinterShare extends PrinterBase
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the allowedGroups
     * The groups whose users have access to print using the printer.
     *
-    * @param Group $val The allowedGroups
+    * @param Group[] $val The allowedGroups
     *
     * @return PrinterShare
     */
@@ -115,9 +148,9 @@ class PrinterShare extends PrinterBase
         $this->_propDict["allowedGroups"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the allowedUsers
     * The users who have access to print using the printer.
      *
@@ -131,12 +164,12 @@ class PrinterShare extends PrinterBase
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the allowedUsers
     * The users who have access to print using the printer.
     *
-    * @param User $val The allowedUsers
+    * @param User[] $val The allowedUsers
     *
     * @return PrinterShare
     */
@@ -145,7 +178,7 @@ class PrinterShare extends PrinterBase
         $this->_propDict["allowedUsers"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the printer
     * The printer that this printer share is related to.
@@ -164,7 +197,7 @@ class PrinterShare extends PrinterBase
         }
         return null;
     }
-    
+
     /**
     * Sets the printer
     * The printer that this printer share is related to.
@@ -178,5 +211,5 @@ class PrinterShare extends PrinterBase
         $this->_propDict["printer"] = $val;
         return $this;
     }
-    
+
 }

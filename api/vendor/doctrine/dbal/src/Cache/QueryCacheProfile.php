@@ -23,8 +23,7 @@ use function sprintf;
  */
 class QueryCacheProfile
 {
-    /** @var CacheItemPoolInterface|null */
-    private $resultCache;
+    private ?CacheItemPoolInterface $resultCache = null;
 
     /** @var int */
     private $lifetime;
@@ -50,7 +49,7 @@ class QueryCacheProfile
                 'Passing an instance of %s to %s as $resultCache is deprecated. Pass an instance of %s instead.',
                 Cache::class,
                 __METHOD__,
-                CacheItemPoolInterface::class
+                CacheItemPoolInterface::class,
             );
 
             $this->resultCache = CacheAdapter::wrap($resultCache);
@@ -59,7 +58,7 @@ class QueryCacheProfile
                 '$resultCache: Expected either null or an instance of %s or %s, got %s.',
                 CacheItemPoolInterface::class,
                 Cache::class,
-                get_class($resultCache)
+                get_class($resultCache),
             ));
         }
     }
@@ -80,15 +79,13 @@ class QueryCacheProfile
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/4620',
             '%s is deprecated, call getResultCache() instead.',
-            __METHOD__
+            __METHOD__,
         );
 
         return $this->resultCache !== null ? DoctrineProvider::wrap($this->resultCache) : null;
     }
 
-    /**
-     * @return int
-     */
+    /** @return int */
     public function getLifetime()
     {
         return $this->lifetime;
@@ -116,7 +113,7 @@ class QueryCacheProfile
      * @param array<int, Type|int|string|null>|array<string, Type|int|string|null> $types
      * @param array<string, mixed>                                                 $connectionParams
      *
-     * @return string[]
+     * @return array{string, string}
      */
     public function generateCacheKeys($sql, $params, $types, array $connectionParams = [])
     {
@@ -130,11 +127,7 @@ class QueryCacheProfile
             '&connectionParams=' . hash('sha256', serialize($connectionParams));
 
         // should the key be automatically generated using the inputs or is the cache key set?
-        if ($this->cacheKey === null) {
-            $cacheKey = sha1($realCacheKey);
-        } else {
-            $cacheKey = $this->cacheKey;
-        }
+        $cacheKey = $this->cacheKey ?? sha1($realCacheKey);
 
         return [$cacheKey, $realCacheKey];
     }
@@ -155,7 +148,7 @@ class QueryCacheProfile
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/4620',
             '%s is deprecated, call setResultCache() instead.',
-            __METHOD__
+            __METHOD__,
         );
 
         return new QueryCacheProfile($this->lifetime, $this->cacheKey, CacheAdapter::wrap($cache));

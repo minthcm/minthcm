@@ -79,6 +79,28 @@ class ESElasticSearchEngine extends ElasticSearchEngine {
         return new ESSearchResults($results, true, $searchTime, $hits['hits']['total']['value']);
     }
 
+    public function globalSearch(SearchQuery $query): SearchResults {
+        global $current_user;
+        require_once('../api/vendor/autoload.php');
+        $search_manager = MintHCM\Lib\Search\Search::getManager();
+            
+        $start = microtime(true);
+        $search_manager->setElasticACL(!is_admin($current_user));
+
+        $search_manager->setQuery(array(
+            "search" => 'global',
+            "fields" => array("name.*^5", "*"),
+            "items" => 5,
+            "query" => $query->getSearchString() . '*',
+            "sort_order" => "desc",
+        ));
+        $hits = $search_manager->search(false, true);
+        $results = $this->parseHits($hits);
+        $end = microtime(true);
+        $searchTime = ($end - $start);
+        return new SearchResults($results, true, $searchTime, $hits['hits']['total']['value']);
+    }
+
     protected function addPagination($params, $from, $size) {
         if (isset($from) && isset($size)) {
             $from = (($from - 1)<0)? 1 :$from;

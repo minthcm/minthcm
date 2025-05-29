@@ -54,7 +54,7 @@ class PlannerPlanContextDetails extends Entity
 
     /**
     * Gets the displayLinkType
-    * Specifies how an application should display the link to the associated plannerPlanContext. Applications may choose to provide customized text, description, icons, or other experiences based on the type of the link. Possible values are: teamsTab, sharePointPage, meetingNotes, other, unknownFutureValue.
+    * Specifies how an application should display the link to the associated plannerPlanContext. Applications may choose to provide customized text, description, icons, or other experiences based on the type of the link. Possible values are: teamsTab, sharePointPage, meetingNotes, loopPage, project, other, unknownFutureValue.
     *
     * @return PlannerPlanContextType|null The displayLinkType
     */
@@ -73,7 +73,7 @@ class PlannerPlanContextDetails extends Entity
 
     /**
     * Sets the displayLinkType
-    * Specifies how an application should display the link to the associated plannerPlanContext. Applications may choose to provide customized text, description, icons, or other experiences based on the type of the link. Possible values are: teamsTab, sharePointPage, meetingNotes, other, unknownFutureValue.
+    * Specifies how an application should display the link to the associated plannerPlanContext. Applications may choose to provide customized text, description, icons, or other experiences based on the type of the link. Possible values are: teamsTab, sharePointPage, meetingNotes, loopPage, project, other, unknownFutureValue.
     *
     * @param PlannerPlanContextType $val The value to assign to the displayLinkType
     *
@@ -82,6 +82,39 @@ class PlannerPlanContextDetails extends Entity
     public function setDisplayLinkType($val)
     {
         $this->_propDict["displayLinkType"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the state
+    * Indicates the state of the associated plannerPlanContext.
+    *
+    * @return PlannerContextState|null The state
+    */
+    public function getState()
+    {
+        if (array_key_exists("state", $this->_propDict)) {
+            if (is_a($this->_propDict["state"], "\Beta\Microsoft\Graph\Model\PlannerContextState") || is_null($this->_propDict["state"])) {
+                return $this->_propDict["state"];
+            } else {
+                $this->_propDict["state"] = new PlannerContextState($this->_propDict["state"]);
+                return $this->_propDict["state"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the state
+    * Indicates the state of the associated plannerPlanContext.
+    *
+    * @param PlannerContextState $val The value to assign to the state
+    *
+    * @return PlannerPlanContextDetails The PlannerPlanContextDetails
+    */
+    public function setState($val)
+    {
+        $this->_propDict["state"] = $val;
          return $this;
     }
     /**

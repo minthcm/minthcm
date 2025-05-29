@@ -211,8 +211,14 @@ class Objects extends \Google\Service\Resource
    * @opt_param string ifMetagenerationNotMatch Makes the operation conditional on
    * whether the object's current metageneration does not match the given value.
    * @opt_param string projection Set of properties to return. Defaults to noAcl.
+   * @opt_param string restoreToken Restore token used to differentiate soft-
+   * deleted objects with the same name and generation. Only applicable for
+   * hierarchical namespace buckets and if softDeleted is set to true. This
+   * parameter is optional, and is only required in the rare case when there are
+   * multiple soft-deleted objects with the same name and generation.
    * @opt_param bool softDeleted If true, only soft-deleted object versions will
-   * be listed. The default is false. For more information, see Soft Delete.
+   * be listed. The default is false. For more information, see [Soft
+   * Delete](https://cloud.google.com/storage/docs/soft-delete).
    * @opt_param string userProject The project to be billed for this request.
    * Required for Requester Pays buckets.
    * @return StorageObject
@@ -328,7 +334,8 @@ class Objects extends \Google\Service\Resource
    * this prefix.
    * @opt_param string projection Set of properties to return. Defaults to noAcl.
    * @opt_param bool softDeleted If true, only soft-deleted object versions will
-   * be listed. The default is false. For more information, see Soft Delete.
+   * be listed. The default is false. For more information, see [Soft
+   * Delete](https://cloud.google.com/storage/docs/soft-delete).
    * @opt_param string startOffset Filter results to objects whose names are
    * lexicographically equal to or after startOffset. If endOffset is also set,
    * the objects listed will have names between startOffset (inclusive) and
@@ -336,7 +343,8 @@ class Objects extends \Google\Service\Resource
    * @opt_param string userProject The project to be billed for this request.
    * Required for Requester Pays buckets.
    * @opt_param bool versions If true, lists all versions of an object as distinct
-   * results. The default is false. For more information, see Object Versioning.
+   * results. The default is false. For more information, see [Object
+   * Versioning](https://cloud.google.com/storage/docs/object-versioning).
    * @return ObjectsModel
    * @throws \Google\Service\Exception
    */
@@ -345,6 +353,70 @@ class Objects extends \Google\Service\Resource
     $params = ['bucket' => $bucket];
     $params = array_merge($params, $optParams);
     return $this->call('list', [$params], ObjectsModel::class);
+  }
+  /**
+   * Moves the source object to the destination object in the same bucket.
+   * (objects.move)
+   *
+   * @param string $bucket Name of the bucket in which the object resides.
+   * @param string $sourceObject Name of the source object. For information about
+   * how to URL encode object names to be path safe, see [Encoding URI Path
+   * Parts](https://cloud.google.com/storage/docs/request-endpoints#encoding).
+   * @param string $destinationObject Name of the destination object. For
+   * information about how to URL encode object names to be path safe, see
+   * [Encoding URI Path Parts](https://cloud.google.com/storage/docs/request-
+   * endpoints#encoding).
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string ifGenerationMatch Makes the operation conditional on
+   * whether the destination object's current generation matches the given value.
+   * Setting to 0 makes the operation succeed only if there are no live versions
+   * of the object. `ifGenerationMatch` and `ifGenerationNotMatch` conditions are
+   * mutually exclusive: it's an error for both of them to be set in the request.
+   * @opt_param string ifGenerationNotMatch Makes the operation conditional on
+   * whether the destination object's current generation does not match the given
+   * value. If no live object exists, the precondition fails. Setting to 0 makes
+   * the operation succeed only if there is a live version of the
+   * object.`ifGenerationMatch` and `ifGenerationNotMatch` conditions are mutually
+   * exclusive: it's an error for both of them to be set in the request.
+   * @opt_param string ifMetagenerationMatch Makes the operation conditional on
+   * whether the destination object's current metageneration matches the given
+   * value. `ifMetagenerationMatch` and `ifMetagenerationNotMatch` conditions are
+   * mutually exclusive: it's an error for both of them to be set in the request.
+   * @opt_param string ifMetagenerationNotMatch Makes the operation conditional on
+   * whether the destination object's current metageneration does not match the
+   * given value. `ifMetagenerationMatch` and `ifMetagenerationNotMatch`
+   * conditions are mutually exclusive: it's an error for both of them to be set
+   * in the request.
+   * @opt_param string ifSourceGenerationMatch Makes the operation conditional on
+   * whether the source object's current generation matches the given value.
+   * `ifSourceGenerationMatch` and `ifSourceGenerationNotMatch` conditions are
+   * mutually exclusive: it's an error for both of them to be set in the request.
+   * @opt_param string ifSourceGenerationNotMatch Makes the operation conditional
+   * on whether the source object's current generation does not match the given
+   * value. `ifSourceGenerationMatch` and `ifSourceGenerationNotMatch` conditions
+   * are mutually exclusive: it's an error for both of them to be set in the
+   * request.
+   * @opt_param string ifSourceMetagenerationMatch Makes the operation conditional
+   * on whether the source object's current metageneration matches the given
+   * value. `ifSourceMetagenerationMatch` and `ifSourceMetagenerationNotMatch`
+   * conditions are mutually exclusive: it's an error for both of them to be set
+   * in the request.
+   * @opt_param string ifSourceMetagenerationNotMatch Makes the operation
+   * conditional on whether the source object's current metageneration does not
+   * match the given value. `ifSourceMetagenerationMatch` and
+   * `ifSourceMetagenerationNotMatch` conditions are mutually exclusive: it's an
+   * error for both of them to be set in the request.
+   * @opt_param string userProject The project to be billed for this request.
+   * Required for Requester Pays buckets.
+   * @return StorageObject
+   * @throws \Google\Service\Exception
+   */
+  public function move($bucket, $sourceObject, $destinationObject, $optParams = [])
+  {
+    $params = ['bucket' => $bucket, 'sourceObject' => $sourceObject, 'destinationObject' => $destinationObject];
+    $params = array_merge($params, $optParams);
+    return $this->call('move', [$params], StorageObject::class);
   }
   /**
    * Patches an object's metadata. (objects.patch)
@@ -391,7 +463,8 @@ class Objects extends \Google\Service\Resource
    *
    * @param string $bucket Name of the bucket in which the object resides.
    * @param string $object Name of the object. For information about how to URL
-   * encode object names to be path safe, see Encoding URI Path Parts.
+   * encode object names to be path safe, see [Encoding URI Path
+   * Parts](https://cloud.google.com/storage/docs/request-endpoints#encoding).
    * @param string $generation Selects a specific revision of this object.
    * @param array $optParams Optional parameters.
    *
@@ -410,6 +483,11 @@ class Objects extends \Google\Service\Resource
    * @opt_param string ifMetagenerationNotMatch Makes the operation conditional on
    * whether none of the object's live metagenerations match the given value.
    * @opt_param string projection Set of properties to return. Defaults to full.
+   * @opt_param string restoreToken Restore token used to differentiate sof-
+   * deleted objects with the same name and generation. Only applicable for
+   * hierarchical namespace buckets. This parameter is optional, and is only
+   * required in the rare case when there are multiple soft-deleted objects with
+   * the same name and generation.
    * @opt_param string userProject The project to be billed for this request.
    * Required for Requester Pays buckets.
    * @return StorageObject
@@ -620,7 +698,8 @@ class Objects extends \Google\Service\Resource
    * @opt_param string userProject The project to be billed for this request.
    * Required for Requester Pays buckets.
    * @opt_param bool versions If true, lists all versions of an object as distinct
-   * results. The default is false. For more information, see Object Versioning.
+   * results. The default is false. For more information, see [Object
+   * Versioning](https://cloud.google.com/storage/docs/object-versioning).
    * @return Channel
    * @throws \Google\Service\Exception
    */

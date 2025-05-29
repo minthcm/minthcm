@@ -38,7 +38,7 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the appRoleId
     * The identifier (id) for the app role which is assigned to the principal. This app role must be exposed in the appRoles property on the resource application's service principal (resourceId). If the resource application has not declared any app roles, a default app role ID of 00000000-0000-0000-0000-000000000000 can be specified to signal that the principal is assigned to the resource app without any specific app roles. Required on create.
@@ -52,10 +52,10 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["appRoleId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
-    * The time when the app role assignment was created.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+    * The time when the app role assignment was created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -71,10 +71,10 @@ class AppRoleAssignment extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
-    * The time when the app role assignment was created.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+    * The time when the app role assignment was created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -85,7 +85,7 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principalDisplayName
     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports $filter (eq and startswith).
@@ -100,7 +100,7 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the principalDisplayName
     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports $filter (eq and startswith).
@@ -114,10 +114,10 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["principalDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principalId
-    * The unique identifier (id) for the user, group or service principal being granted the app role. Required on create.
+    * The unique identifier (id) for the user, security group, or service principal being granted the app role. Security groups with dynamic memberships are supported. Required on create.
     *
     * @return string|null The principalId
     */
@@ -129,10 +129,10 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the principalId
-    * The unique identifier (id) for the user, group or service principal being granted the app role. Required on create.
+    * The unique identifier (id) for the user, security group, or service principal being granted the app role. Security groups with dynamic memberships are supported. Required on create.
     *
     * @param string $val The principalId
     *
@@ -143,10 +143,10 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["principalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principalType
-    * The type of the assigned principal. This can either be User, Group or ServicePrincipal. Read-only.
+    * The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
     *
     * @return string|null The principalType
     */
@@ -158,10 +158,10 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the principalType
-    * The type of the assigned principal. This can either be User, Group or ServicePrincipal. Read-only.
+    * The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
     *
     * @param string $val The principalType
     *
@@ -172,7 +172,7 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["principalType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceDisplayName
     * The display name of the resource app's service principal to which the assignment is made.
@@ -187,7 +187,7 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceDisplayName
     * The display name of the resource app's service principal to which the assignment is made.
@@ -201,7 +201,7 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["resourceDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceId
     * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create. Supports $filter (eq only).
@@ -216,7 +216,7 @@ class AppRoleAssignment extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceId
     * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create. Supports $filter (eq only).
@@ -230,5 +230,5 @@ class AppRoleAssignment extends DirectoryObject
         $this->_propDict["resourceId"] = $val;
         return $this;
     }
-    
+
 }

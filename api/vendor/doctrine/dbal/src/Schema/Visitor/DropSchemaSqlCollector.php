@@ -7,6 +7,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Schema\Sequence;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\Deprecations\Deprecation;
 use SplObjectStorage;
 
 use function assert;
@@ -14,29 +15,30 @@ use function strlen;
 
 /**
  * Gathers SQL statements that allow to completely drop the current schema.
+ *
+ * @deprecated Use {@link DropSchemaObjectsSQLBuilder} instead.
  */
 class DropSchemaSqlCollector extends AbstractVisitor
 {
-    /** @var SplObjectStorage */
-    private $constraints;
-
-    /** @var SplObjectStorage */
-    private $sequences;
-
-    /** @var SplObjectStorage */
-    private $tables;
-
-    /** @var AbstractPlatform */
-    private $platform;
+    private SplObjectStorage $constraints;
+    private SplObjectStorage $sequences;
+    private SplObjectStorage $tables;
+    private AbstractPlatform $platform;
 
     public function __construct(AbstractPlatform $platform)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5416',
+            'DropSchemaSqlCollector is deprecated. Use DropSchemaObjectsSQLBuilder instead.',
+        );
+
         $this->platform = $platform;
         $this->initializeQueries();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptTable(Table $table)
     {
@@ -44,7 +46,7 @@ class DropSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
@@ -56,24 +58,20 @@ class DropSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptSequence(Sequence $sequence)
     {
         $this->sequences->attach($sequence);
     }
 
-    /**
-     * @return void
-     */
+    /** @return void */
     public function clearQueries()
     {
         $this->initializeQueries();
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getQueries()
     {
         $sql = [];
@@ -81,17 +79,20 @@ class DropSchemaSqlCollector extends AbstractVisitor
         foreach ($this->constraints as $fkConstraint) {
             assert($fkConstraint instanceof ForeignKeyConstraint);
             $localTable = $this->constraints[$fkConstraint];
-            $sql[]      = $this->platform->getDropForeignKeySQL($fkConstraint, $localTable);
+            $sql[]      = $this->platform->getDropForeignKeySQL(
+                $fkConstraint->getQuotedName($this->platform),
+                $localTable->getQuotedName($this->platform),
+            );
         }
 
         foreach ($this->sequences as $sequence) {
             assert($sequence instanceof Sequence);
-            $sql[] = $this->platform->getDropSequenceSQL($sequence);
+            $sql[] = $this->platform->getDropSequenceSQL($sequence->getQuotedName($this->platform));
         }
 
         foreach ($this->tables as $table) {
             assert($table instanceof Table);
-            $sql[] = $this->platform->getDropTableSQL($table);
+            $sql[] = $this->platform->getDropTableSQL($table->getQuotedName($this->platform));
         }
 
         return $sql;

@@ -6,16 +6,10 @@ namespace Doctrine\DBAL\Driver\IBMDB2\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
 
-/**
- * @internal
- *
- * @psalm-immutable
- */
+/** @internal */
 final class PrepareFailed extends AbstractException
 {
-    /**
-     * @psalm-param array{message: string}|null $error
-     */
+    /** @param array{message: string}|null $error */
     public static function new(?array $error): self
     {
         if ($error === null) {

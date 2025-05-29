@@ -7,24 +7,24 @@ use Doctrine\DBAL\Schema\Index;
 
 /**
  * Event Arguments used when the portable index definition is generated inside {@see AbstractSchemaManager}.
+ *
+ * @deprecated
  */
 class SchemaIndexDefinitionEventArgs extends SchemaEventArgs
 {
-    /** @var Index|null */
-    private $index;
+    private ?Index $index = null;
 
     /**
      * Raw index data as fetched from the database.
      *
      * @var mixed[]
      */
-    private $tableIndex;
+    private array $tableIndex;
 
     /** @var string */
     private $table;
 
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /**
      * @param mixed[] $tableIndex
@@ -49,33 +49,25 @@ class SchemaIndexDefinitionEventArgs extends SchemaEventArgs
         return $this;
     }
 
-    /**
-     * @return Index|null
-     */
+    /** @return Index|null */
     public function getIndex()
     {
         return $this->index;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getTableIndex()
     {
         return $this->tableIndex;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getTable()
     {
         return $this->table;
     }
 
-    /**
-     * @return Connection
-     */
+    /** @return Connection */
     public function getConnection()
     {
         return $this->connection;

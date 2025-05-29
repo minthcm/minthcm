@@ -1,0 +1,2 @@
+REPLACE INTO candidates_employees (id, date_modified, deleted, candidate_id, employee_id) VALUES ('2c770b46-dcfc-d75b-2ba2-67b4ab0f1ab0','2025-03-15 15:43:35','0','c7cee1c1-25c8-8360-8089-5ce2a3f23db4','ed6cb023-a3ba-b1c5-ad75-5dca74c006ac');
+REPLACE INTO candidates_employees (id, date_modified, deleted, candidate_id, employee_id) VALUES ('335f8383-540f-2188-96c2-67b4abe2f1e4','2025-03-15 15:43:35','0','15894e90-fc9c-fd98-7f99-5ce299796e08','c74cbf0a-50a5-85e6-d4c3-5cf62f1f31c8');

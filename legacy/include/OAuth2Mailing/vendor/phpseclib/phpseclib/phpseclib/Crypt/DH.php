@@ -49,7 +49,7 @@ abstract class DH extends AsymmetricKey
     /**
      * DH prime
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $prime;
 
@@ -58,14 +58,14 @@ abstract class DH extends AsymmetricKey
      *
      * Prime divisor of p-1
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $base;
 
     /**
      * Public Key
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $publicKey;
 
@@ -81,6 +81,11 @@ abstract class DH extends AsymmetricKey
      */
     public static function createParameters(...$args)
     {
+        $class = new \ReflectionClass(static::class);
+        if ($class->isFinal()) {
+            throw new \RuntimeException('createParameters() should not be called from final classes (' . static::class . ')');
+        }
+
         $params = new Parameters();
         if (count($args) == 2 && $args[0] instanceof BigInteger && $args[1] instanceof BigInteger) {
             //if (!$args[0]->isPrime()) {
@@ -238,10 +243,15 @@ abstract class DH extends AsymmetricKey
      *
      * @param Parameters $params
      * @param int $length optional
-     * @return DH\PrivateKey
+     * @return PrivateKey
      */
     public static function createKey(Parameters $params, $length = 0)
     {
+        $class = new \ReflectionClass(static::class);
+        if ($class->isFinal()) {
+            throw new \RuntimeException('createKey() should not be called from final classes (' . static::class . ')');
+        }
+
         $one = new BigInteger(1);
         if ($length) {
             $max = $one->bitwise_leftShift($length);
@@ -387,9 +397,9 @@ abstract class DH extends AsymmetricKey
      */
     public function getParameters()
     {
-        $type = self::validatePlugin('Keys', 'PKCS1', 'saveParameters');
+        $type = DH::validatePlugin('Keys', 'PKCS1', 'saveParameters');
 
         $key = $type::saveParameters($this->prime, $this->base);
-        return self::load($key, 'PKCS1');
+        return DH::load($key, 'PKCS1');
     }
 }

@@ -60,5 +60,4 @@ class WorkSchedulesDashlet extends DashletGeneric
         $this->seedBean = BeanFactory::getBean('WorkSchedules');
         $this->lvs = new WorkSchedulesListViewSmarty();
     }
-
 }

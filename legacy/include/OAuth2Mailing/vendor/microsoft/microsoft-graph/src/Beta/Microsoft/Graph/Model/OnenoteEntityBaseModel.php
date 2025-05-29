@@ -26,7 +26,6 @@ class OnenoteEntityBaseModel extends Entity
 {
     /**
     * Gets the self
-    * The endpoint where you can get details about the page. Read-only.
     *
     * @return string|null The self
     */
@@ -38,10 +37,9 @@ class OnenoteEntityBaseModel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the self
-    * The endpoint where you can get details about the page. Read-only.
     *
     * @param string $val The self
     *
@@ -52,5 +50,5 @@ class OnenoteEntityBaseModel extends Entity
         $this->_propDict["self"] = $val;
         return $this;
     }
-    
+
 }

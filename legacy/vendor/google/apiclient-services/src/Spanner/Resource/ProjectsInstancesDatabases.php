@@ -17,6 +17,8 @@
 
 namespace Google\Service\Spanner\Resource;
 
+use Google\Service\Spanner\AddSplitPointsRequest;
+use Google\Service\Spanner\AddSplitPointsResponse;
 use Google\Service\Spanner\ChangeQuorumRequest;
 use Google\Service\Spanner\CreateDatabaseRequest;
 use Google\Service\Spanner\Database;
@@ -44,17 +46,35 @@ use Google\Service\Spanner\UpdateDatabaseDdlRequest;
 class ProjectsInstancesDatabases extends \Google\Service\Resource
 {
   /**
-   * ChangeQuorum is strictly restricted to databases that use dual region
-   * instance configurations. Initiates a background operation to change quorum a
-   * database from dual-region mode to single-region mode and vice versa. The
-   * returned long-running operation will have a name of the format
+   * Adds split points to specified tables, indexes of a database.
+   * (databases.addSplitPoints)
+   *
+   * @param string $database Required. The database on whose tables/indexes split
+   * points are to be added. Values are of the form
+   * `projects//instances//databases/`.
+   * @param AddSplitPointsRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return AddSplitPointsResponse
+   * @throws \Google\Service\Exception
+   */
+  public function addSplitPoints($database, AddSplitPointsRequest $postBody, $optParams = [])
+  {
+    $params = ['database' => $database, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('addSplitPoints', [$params], AddSplitPointsResponse::class);
+  }
+  /**
+   * `ChangeQuorum` is strictly restricted to databases that use dual-region
+   * instance configurations. Initiates a background operation to change the
+   * quorum of a database from dual-region mode to single-region mode or vice
+   * versa. The returned long-running operation has a name of the format
    * `projects//instances//databases//operations/` and can be used to track
-   * execution of the ChangeQuorum. The metadata field type is
+   * execution of the `ChangeQuorum`. The metadata field type is
    * ChangeQuorumMetadata. Authorization requires `spanner.databases.changequorum`
    * permission on the resource database. (databases.changequorum)
    *
-   * @param string $name Required. Name of the database in which to apply the
-   * ChangeQuorum. Values are of the form `projects//instances//databases/`.
+   * @param string $name Required. Name of the database in which to apply
+   * `ChangeQuorum`. Values are of the form `projects//instances//databases/`.
    * @param ChangeQuorumRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Operation
@@ -67,11 +87,11 @@ class ProjectsInstancesDatabases extends \Google\Service\Resource
     return $this->call('changequorum', [$params], Operation::class);
   }
   /**
-   * Creates a new Cloud Spanner database and starts to prepare it for serving.
-   * The returned long-running operation will have a name of the format
-   * `/operations/` and can be used to track preparation of the database. The
-   * metadata field type is CreateDatabaseMetadata. The response field type is
-   * Database, if successful. (databases.create)
+   * Creates a new Spanner database and starts to prepare it for serving. The
+   * returned long-running operation will have a name of the format `/operations/`
+   * and can be used to track preparation of the database. The metadata field type
+   * is CreateDatabaseMetadata. The response field type is Database, if
+   * successful. (databases.create)
    *
    * @param string $parent Required. The name of the instance that will serve the
    * new database. Values are of the form `projects//instances/`.
@@ -140,7 +160,9 @@ class ProjectsInstancesDatabases extends \Google\Service\Resource
    * empty policy if a database or backup exists but does not have a policy set.
    * Authorization requires `spanner.databases.getIamPolicy` permission on
    * resource. For backups, authorization requires `spanner.backups.getIamPolicy`
-   * permission on resource. (databases.getIamPolicy)
+   * permission on resource. For backup schedules, authorization requires
+   * `spanner.backupSchedules.getIamPolicy` permission on resource.
+   * (databases.getIamPolicy)
    *
    * @param string $resource REQUIRED: The Cloud Spanner resource for which the
    * policy is being retrieved. The format is `projects//instances/` for instance
@@ -272,8 +294,9 @@ class ProjectsInstancesDatabases extends \Google\Service\Resource
    * Sets the access control policy on a database or backup resource. Replaces any
    * existing policy. Authorization requires `spanner.databases.setIamPolicy`
    * permission on resource. For backups, authorization requires
-   * `spanner.backups.setIamPolicy` permission on resource.
-   * (databases.setIamPolicy)
+   * `spanner.backups.setIamPolicy` permission on resource. For backup schedules,
+   * authorization requires `spanner.backupSchedules.setIamPolicy` permission on
+   * resource. (databases.setIamPolicy)
    *
    * @param string $resource REQUIRED: The Cloud Spanner resource for which the
    * policy is being set. The format is `projects//instances/` for instance
@@ -296,7 +319,10 @@ class ProjectsInstancesDatabases extends \Google\Service\Resource
    * permission on the containing Cloud Spanner instance. Otherwise returns an
    * empty set of permissions. Calling this method on a backup that does not exist
    * will result in a NOT_FOUND error if the user has `spanner.backups.list`
-   * permission on the containing instance. (databases.testIamPermissions)
+   * permission on the containing instance. Calling this method on a backup
+   * schedule that does not exist will result in a NOT_FOUND error if the user has
+   * `spanner.backupSchedules.list` permission on the containing database.
+   * (databases.testIamPermissions)
    *
    * @param string $resource REQUIRED: The Cloud Spanner resource for which
    * permissions are being tested. The format is `projects//instances/` for

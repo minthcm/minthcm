@@ -26,7 +26,7 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
 {
     /**
     * Gets the deployableUntilDateTime
-    * The date on which the content is no longer available to deploy using the service. Read-only.
+    * The date on which the content is no longer available to deploy using the service. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @return \DateTime|null The deployableUntilDateTime
     */
@@ -42,10 +42,10 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the deployableUntilDateTime
-    * The date on which the content is no longer available to deploy using the service. Read-only.
+    * The date on which the content is no longer available to deploy using the service. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @param \DateTime $val The deployableUntilDateTime
     *
@@ -56,7 +56,7 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["deployableUntilDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The display name of the content. Read-only.
@@ -71,7 +71,7 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name of the content. Read-only.
@@ -85,10 +85,10 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the releaseDateTime
-    * The release date for the content. Read-only.
+    * The release date for the content. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @return \DateTime|null The releaseDateTime
     */
@@ -104,10 +104,10 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the releaseDateTime
-    * The release date for the content. Read-only.
+    * The release date for the content. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @param \DateTime $val The releaseDateTime
     *
@@ -118,5 +118,5 @@ class CatalogEntry extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["releaseDateTime"] = $val;
         return $this;
     }
-    
+
 }

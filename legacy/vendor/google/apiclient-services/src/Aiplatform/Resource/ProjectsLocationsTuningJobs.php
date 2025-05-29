@@ -19,7 +19,9 @@ namespace Google\Service\Aiplatform\Resource;
 
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1CancelTuningJobRequest;
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1ListTuningJobsResponse;
+use Google\Service\Aiplatform\GoogleCloudAiplatformV1RebaseTunedModelRequest;
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1TuningJob;
+use Google\Service\Aiplatform\GoogleLongrunningOperation;
 use Google\Service\Aiplatform\GoogleProtobufEmpty;
 
 /**
@@ -97,7 +99,7 @@ class ProjectsLocationsTuningJobs extends \Google\Service\Resource
    * @opt_param string filter Optional. The standard list filter.
    * @opt_param int pageSize Optional. The standard list page size.
    * @opt_param string pageToken Optional. The standard list page token. Typically
-   * obtained via ListTuningJob.next_page_token of the previous
+   * obtained via ListTuningJobsResponse.next_page_token of the previous
    * GenAiTuningService.ListTuningJob][] call.
    * @return GoogleCloudAiplatformV1ListTuningJobsResponse
    * @throws \Google\Service\Exception
@@ -107,6 +109,22 @@ class ProjectsLocationsTuningJobs extends \Google\Service\Resource
     $params = ['parent' => $parent];
     $params = array_merge($params, $optParams);
     return $this->call('list', [$params], GoogleCloudAiplatformV1ListTuningJobsResponse::class);
+  }
+  /**
+   * Rebase a TunedModel. (tuningJobs.rebaseTunedModel)
+   *
+   * @param string $parent Required. The resource name of the Location into which
+   * to rebase the Model. Format: `projects/{project}/locations/{location}`
+   * @param GoogleCloudAiplatformV1RebaseTunedModelRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleLongrunningOperation
+   * @throws \Google\Service\Exception
+   */
+  public function rebaseTunedModel($parent, GoogleCloudAiplatformV1RebaseTunedModelRequest $postBody, $optParams = [])
+  {
+    $params = ['parent' => $parent, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('rebaseTunedModel', [$params], GoogleLongrunningOperation::class);
   }
 }
 

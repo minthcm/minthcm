@@ -12,6 +12,7 @@
 * @link      https://graph.microsoft.com
 */
 namespace Beta\Microsoft\Graph\Model;
+
 /**
 * AttendanceRecord class
 *
@@ -24,41 +25,38 @@ namespace Beta\Microsoft\Graph\Model;
 class AttendanceRecord extends Entity
 {
 
-    /**
-    * Gets the attendanceIntervals
-    * List of time periods between joining and leaving.
-    *
-    * @return AttendanceInterval|null The attendanceIntervals
-    */
+     /**
+     * Gets the attendanceIntervals
+    * List of time periods between joining and leaving a meeting.
+     *
+     * @return array|null The attendanceIntervals
+     */
     public function getAttendanceIntervals()
     {
         if (array_key_exists("attendanceIntervals", $this->_propDict)) {
-            if (is_a($this->_propDict["attendanceIntervals"], "\Beta\Microsoft\Graph\Model\AttendanceInterval") || is_null($this->_propDict["attendanceIntervals"])) {
-                return $this->_propDict["attendanceIntervals"];
-            } else {
-                $this->_propDict["attendanceIntervals"] = new AttendanceInterval($this->_propDict["attendanceIntervals"]);
-                return $this->_propDict["attendanceIntervals"];
-            }
+           return $this->_propDict["attendanceIntervals"];
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
     * Sets the attendanceIntervals
-    * List of time periods between joining and leaving.
+    * List of time periods between joining and leaving a meeting.
     *
-    * @param AttendanceInterval $val The value to assign to the attendanceIntervals
+    * @param AttendanceInterval[] $val The attendanceIntervals
     *
-    * @return AttendanceRecord The AttendanceRecord
+    * @return AttendanceRecord
     */
     public function setAttendanceIntervals($val)
     {
         $this->_propDict["attendanceIntervals"] = $val;
-         return $this;
+        return $this;
     }
+
     /**
     * Gets the emailAddress
-    * Email address.
+    * Email address of the user associated with this attendance record.
     *
     * @return string|null The emailAddress
     */
@@ -73,9 +71,9 @@ class AttendanceRecord extends Entity
 
     /**
     * Sets the emailAddress
-    * Email address.
+    * Email address of the user associated with this attendance record.
     *
-    * @param string $val The value of the emailAddress
+    * @param string $val The emailAddress
     *
     * @return AttendanceRecord
     */
@@ -87,7 +85,7 @@ class AttendanceRecord extends Entity
 
     /**
     * Gets the identity
-    * Identifier, such as display name.
+    * Identity of the user associated with this attendance record. The specific type will be one of the following derived types of identity, depending on the type of the user: communicationsUserIdentity, azureCommunicationServicesUserIdentity.
     *
     * @return Identity|null The identity
     */
@@ -106,20 +104,50 @@ class AttendanceRecord extends Entity
 
     /**
     * Sets the identity
-    * Identifier, such as display name.
+    * Identity of the user associated with this attendance record. The specific type will be one of the following derived types of identity, depending on the type of the user: communicationsUserIdentity, azureCommunicationServicesUserIdentity.
     *
-    * @param Identity $val The value to assign to the identity
+    * @param Identity $val The identity
     *
-    * @return AttendanceRecord The AttendanceRecord
+    * @return AttendanceRecord
     */
     public function setIdentity($val)
     {
         $this->_propDict["identity"] = $val;
-         return $this;
+        return $this;
     }
+
+    /**
+    * Gets the registrantId
+    * Unique identifier of a meetingRegistrant. Presents when the participant has registered for the meeting.
+    *
+    * @return string|null The registrantId
+    */
+    public function getRegistrantId()
+    {
+        if (array_key_exists("registrantId", $this->_propDict)) {
+            return $this->_propDict["registrantId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the registrantId
+    * Unique identifier of a meetingRegistrant. Presents when the participant has registered for the meeting.
+    *
+    * @param string $val The registrantId
+    *
+    * @return AttendanceRecord
+    */
+    public function setRegistrantId($val)
+    {
+        $this->_propDict["registrantId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the role
-    * Role of the attendee. Possible values are None, Attendee, Presenter, and Organizer.
+    * Role of the attendee. Possible values are: None, Attendee, Presenter, and Organizer.
     *
     * @return string|null The role
     */
@@ -134,9 +162,9 @@ class AttendanceRecord extends Entity
 
     /**
     * Sets the role
-    * Role of the attendee. Possible values are None, Attendee, Presenter, and Organizer.
+    * Role of the attendee. Possible values are: None, Attendee, Presenter, and Organizer.
     *
-    * @param string $val The value of the role
+    * @param string $val The role
     *
     * @return AttendanceRecord
     */
@@ -145,6 +173,7 @@ class AttendanceRecord extends Entity
         $this->_propDict["role"] = $val;
         return $this;
     }
+
     /**
     * Gets the totalAttendanceInSeconds
     * Total duration of the attendances in seconds.
@@ -164,13 +193,14 @@ class AttendanceRecord extends Entity
     * Sets the totalAttendanceInSeconds
     * Total duration of the attendances in seconds.
     *
-    * @param int $val The value of the totalAttendanceInSeconds
+    * @param int $val The totalAttendanceInSeconds
     *
     * @return AttendanceRecord
     */
     public function setTotalAttendanceInSeconds($val)
     {
-        $this->_propDict["totalAttendanceInSeconds"] = $val;
+        $this->_propDict["totalAttendanceInSeconds"] = intval($val);
         return $this;
     }
+
 }

@@ -45,14 +45,14 @@ export const useAlertsStore = defineStore('alerts', () => {
         const response = await axios.patch(`api/Alerts/${id}`, {
             is_read: true,
         })
-        alerts.value = response.data ?? []
+        alerts.value = response.data?.alerts ?? []
     }
 
     async function close(id: string) {
         const response = await axios.patch(`api/Alerts/${id}`, {
             is_closed: true,
         })
-        alerts.value = response.data ?? []
+        alerts.value = response.data?.alerts ?? []
     }
 
     const unreadAlertsCount = computed(() => {
@@ -60,7 +60,9 @@ export const useAlertsStore = defineStore('alerts', () => {
     })
 
     const unreadAlertsCountText = computed(() => {
-        return (moreResults.value && unreadAlertsCount.value >= 50) ? unreadAlertsCount.value + "+" : unreadAlertsCount.value
+        return moreResults.value && unreadAlertsCount.value >= 50
+            ? unreadAlertsCount.value + '+'
+            : unreadAlertsCount.value
     })
 
     const sortedAlerts = computed(() => {

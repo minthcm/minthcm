@@ -38,7 +38,7 @@ class PrinterCreateOperation extends PrintOperation
             return null;
         }
     }
-    
+
     /**
     * Sets the certificate
     * The signed certificate created during the registration process. Read-only.
@@ -52,10 +52,9 @@ class PrinterCreateOperation extends PrintOperation
         $this->_propDict["certificate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the printer
-    * The created printer entity. Read-only.
     *
     * @return Printer|null The printer
     */
@@ -71,10 +70,9 @@ class PrinterCreateOperation extends PrintOperation
         }
         return null;
     }
-    
+
     /**
     * Sets the printer
-    * The created printer entity. Read-only.
     *
     * @param Printer $val The printer
     *
@@ -85,5 +83,5 @@ class PrinterCreateOperation extends PrintOperation
         $this->_propDict["printer"] = $val;
         return $this;
     }
-    
+
 }

@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory;
@@ -56,9 +57,13 @@ abstract class AbstractParser implements IParser
         $this->partBuilderFactory = $partBuilderFactory;
     }
 
+    /**
+     * @return static
+     */
     public function setParserManager(ParserManager $pm)
     {
         $this->parserManager = $pm;
+        return $this;
     }
 
     public function getParserMessageProxyFactory()

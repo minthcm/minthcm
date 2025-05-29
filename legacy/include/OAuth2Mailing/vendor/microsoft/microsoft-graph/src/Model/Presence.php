@@ -26,7 +26,7 @@ class Presence extends Entity
 {
     /**
     * Gets the activity
-    * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy, DoNotDisturb, InACall, InAConferenceCall, Inactive,InAMeeting, Offline, OffWork,OutOfOffice, PresenceUnknown,Presenting, UrgentInterruptionsOnly.
+    * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy, DoNotDisturb, InACall, InAConferenceCall, Inactive, InAMeeting, Offline, OffWork, OutOfOffice, PresenceUnknown, Presenting, UrgentInterruptionsOnly.
     *
     * @return string|null The activity
     */
@@ -38,10 +38,10 @@ class Presence extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the activity
-    * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy, DoNotDisturb, InACall, InAConferenceCall, Inactive,InAMeeting, Offline, OffWork,OutOfOffice, PresenceUnknown,Presenting, UrgentInterruptionsOnly.
+    * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy, DoNotDisturb, InACall, InAConferenceCall, Inactive, InAMeeting, Offline, OffWork, OutOfOffice, PresenceUnknown, Presenting, UrgentInterruptionsOnly.
     *
     * @param string $val The activity
     *
@@ -52,7 +52,7 @@ class Presence extends Entity
         $this->_propDict["activity"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the availability
     * The base presence information for a user. Possible values are Available, AvailableIdle,  Away, BeRightBack, Busy, BusyIdle, DoNotDisturb, Offline, PresenceUnknown
@@ -67,7 +67,7 @@ class Presence extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the availability
     * The base presence information for a user. Possible values are Available, AvailableIdle,  Away, BeRightBack, Busy, BusyIdle, DoNotDisturb, Offline, PresenceUnknown
@@ -81,5 +81,38 @@ class Presence extends Entity
         $this->_propDict["availability"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the statusMessage
+    * The presence status message of a user.
+    *
+    * @return PresenceStatusMessage|null The statusMessage
+    */
+    public function getStatusMessage()
+    {
+        if (array_key_exists("statusMessage", $this->_propDict)) {
+            if (is_a($this->_propDict["statusMessage"], "\Microsoft\Graph\Model\PresenceStatusMessage") || is_null($this->_propDict["statusMessage"])) {
+                return $this->_propDict["statusMessage"];
+            } else {
+                $this->_propDict["statusMessage"] = new PresenceStatusMessage($this->_propDict["statusMessage"]);
+                return $this->_propDict["statusMessage"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the statusMessage
+    * The presence status message of a user.
+    *
+    * @param PresenceStatusMessage $val The statusMessage
+    *
+    * @return Presence
+    */
+    public function setStatusMessage($val)
+    {
+        $this->_propDict["statusMessage"] = $val;
+        return $this;
+    }
+
 }

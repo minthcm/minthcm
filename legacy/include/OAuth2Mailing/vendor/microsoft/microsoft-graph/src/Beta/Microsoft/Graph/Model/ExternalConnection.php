@@ -26,7 +26,6 @@ class ExternalConnection extends Entity
 {
     /**
     * Gets the configuration
-    * Specifies additional application IDs that are allowed to manage the connection and to index content in the connection. Optional.
     *
     * @return Configuration|null The configuration
     */
@@ -42,10 +41,9 @@ class ExternalConnection extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the configuration
-    * Specifies additional application IDs that are allowed to manage the connection and to index content in the connection. Optional.
     *
     * @param Configuration $val The configuration
     *
@@ -56,10 +54,9 @@ class ExternalConnection extends Entity
         $this->_propDict["configuration"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
-    * Description of the connection displayed in the Microsoft 365 admin center. Optional.
     *
     * @return string|null The description
     */
@@ -71,10 +68,9 @@ class ExternalConnection extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * Description of the connection displayed in the Microsoft 365 admin center. Optional.
     *
     * @param string $val The description
     *
@@ -85,10 +81,9 @@ class ExternalConnection extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the name
-    * The display name of the connection to be displayed in the Microsoft 365 admin center. Maximum length of 128 characters. Required.
     *
     * @return string|null The name
     */
@@ -100,10 +95,9 @@ class ExternalConnection extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
-    * The display name of the connection to be displayed in the Microsoft 365 admin center. Maximum length of 128 characters. Required.
     *
     * @param string $val The name
     *
@@ -114,10 +108,9 @@ class ExternalConnection extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the state
-    * Indicates the current state of the connection. Possible values are draft, ready, obsolete, and limitExceeded. Required.
     *
     * @return ConnectionState|null The state
     */
@@ -133,10 +126,9 @@ class ExternalConnection extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the state
-    * Indicates the current state of the connection. Possible values are draft, ready, obsolete, and limitExceeded. Required.
     *
     * @param ConnectionState $val The state
     *
@@ -147,9 +139,9 @@ class ExternalConnection extends Entity
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the groups
      *
      * @return array|null The groups
@@ -162,11 +154,11 @@ class ExternalConnection extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the groups
     *
-    * @param ExternalGroup $val The groups
+    * @param ExternalGroup[] $val The groups
     *
     * @return ExternalConnection
     */
@@ -175,11 +167,10 @@ class ExternalConnection extends Entity
         $this->_propDict["groups"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the items
-    * Read-only. Nullable.
      *
      * @return array|null The items
      */
@@ -191,12 +182,11 @@ class ExternalConnection extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the items
-    * Read-only. Nullable.
     *
-    * @param ExternalItem $val The items
+    * @param ExternalItem[] $val The items
     *
     * @return ExternalConnection
     */
@@ -205,11 +195,10 @@ class ExternalConnection extends Entity
         $this->_propDict["items"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the operations
-    * Read-only. Nullable.
      *
      * @return array|null The operations
      */
@@ -221,12 +210,11 @@ class ExternalConnection extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the operations
-    * Read-only. Nullable.
     *
-    * @param ConnectionOperation $val The operations
+    * @param ConnectionOperation[] $val The operations
     *
     * @return ExternalConnection
     */
@@ -235,10 +223,9 @@ class ExternalConnection extends Entity
         $this->_propDict["operations"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the schema
-    * Read-only. Nullable.
     *
     * @return Schema|null The schema
     */
@@ -254,10 +241,9 @@ class ExternalConnection extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the schema
-    * Read-only. Nullable.
     *
     * @param Schema $val The schema
     *
@@ -268,5 +254,5 @@ class ExternalConnection extends Entity
         $this->_propDict["schema"] = $val;
         return $this;
     }
-    
+
 }

@@ -26,7 +26,7 @@ class SwapShiftsChangeRequest extends OfferShiftRequest
 {
     /**
     * Gets the recipientShiftId
-    * Shift ID for the recipient user with whom the request is to swap.
+    * ShiftId for the recipient user with whom the request is to swap.
     *
     * @return string|null The recipientShiftId
     */
@@ -38,10 +38,10 @@ class SwapShiftsChangeRequest extends OfferShiftRequest
             return null;
         }
     }
-    
+
     /**
     * Sets the recipientShiftId
-    * Shift ID for the recipient user with whom the request is to swap.
+    * ShiftId for the recipient user with whom the request is to swap.
     *
     * @param string $val The recipientShiftId
     *
@@ -52,5 +52,5 @@ class SwapShiftsChangeRequest extends OfferShiftRequest
         $this->_propDict["recipientShiftId"] = $val;
         return $this;
     }
-    
+
 }

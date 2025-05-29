@@ -25,7 +25,7 @@ namespace Microsoft\Graph\Model;
 class Organization extends DirectoryObject
 {
 
-     /** 
+     /**
      * Gets the assignedPlans
     * The collection of service plans associated with the tenant. Not nullable.
      *
@@ -39,12 +39,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignedPlans
     * The collection of service plans associated with the tenant. Not nullable.
     *
-    * @param AssignedPlan $val The assignedPlans
+    * @param AssignedPlan[] $val The assignedPlans
     *
     * @return Organization
     */
@@ -53,12 +53,12 @@ class Organization extends DirectoryObject
         $this->_propDict["assignedPlans"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the businessPhones
     * Telephone number for the organization. Although this is a string collection, only one number can be set for this property.
     *
-    * @return string|null The businessPhones
+    * @return array|null The businessPhones
     */
     public function getBusinessPhones()
     {
@@ -68,12 +68,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the businessPhones
     * Telephone number for the organization. Although this is a string collection, only one number can be set for this property.
     *
-    * @param string $val The businessPhones
+    * @param string[] $val The businessPhones
     *
     * @return Organization
     */
@@ -82,7 +82,7 @@ class Organization extends DirectoryObject
         $this->_propDict["businessPhones"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the city
     * City name of the address for the organization.
@@ -97,7 +97,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the city
     * City name of the address for the organization.
@@ -111,7 +111,7 @@ class Organization extends DirectoryObject
         $this->_propDict["city"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the country
     * Country/region name of the address for the organization.
@@ -126,7 +126,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the country
     * Country/region name of the address for the organization.
@@ -140,10 +140,10 @@ class Organization extends DirectoryObject
         $this->_propDict["country"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the countryLetterCode
-    * Country/region abbreviation for the organization.
+    * Country or region abbreviation for the organization in ISO 3166-2 format.
     *
     * @return string|null The countryLetterCode
     */
@@ -155,10 +155,10 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the countryLetterCode
-    * Country/region abbreviation for the organization.
+    * Country or region abbreviation for the organization in ISO 3166-2 format.
     *
     * @param string $val The countryLetterCode
     *
@@ -169,7 +169,7 @@ class Organization extends DirectoryObject
         $this->_propDict["countryLetterCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the organization is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -188,7 +188,7 @@ class Organization extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the organization is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -202,7 +202,36 @@ class Organization extends DirectoryObject
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the defaultUsageLocation
+    * Two-letter ISO 3166 country code indicating the default service usage location of an organization.
+    *
+    * @return string|null The defaultUsageLocation
+    */
+    public function getDefaultUsageLocation()
+    {
+        if (array_key_exists("defaultUsageLocation", $this->_propDict)) {
+            return $this->_propDict["defaultUsageLocation"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the defaultUsageLocation
+    * Two-letter ISO 3166 country code indicating the default service usage location of an organization.
+    *
+    * @param string $val The defaultUsageLocation
+    *
+    * @return Organization
+    */
+    public function setDefaultUsageLocation($val)
+    {
+        $this->_propDict["defaultUsageLocation"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the displayName
     * The display name for the tenant.
@@ -217,7 +246,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name for the tenant.
@@ -231,12 +260,12 @@ class Organization extends DirectoryObject
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the marketingNotificationEmails
     * Not nullable.
     *
-    * @return string|null The marketingNotificationEmails
+    * @return array|null The marketingNotificationEmails
     */
     public function getMarketingNotificationEmails()
     {
@@ -246,12 +275,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the marketingNotificationEmails
     * Not nullable.
     *
-    * @param string $val The marketingNotificationEmails
+    * @param string[] $val The marketingNotificationEmails
     *
     * @return Organization
     */
@@ -260,10 +289,10 @@ class Organization extends DirectoryObject
         $this->_propDict["marketingNotificationEmails"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the onPremisesLastSyncDateTime
-    * The time and date at which the tenant was last synced with the on-premise directory. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+    * The time and date at which the tenant was last synced with the on-premises directory. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @return \DateTime|null The onPremisesLastSyncDateTime
     */
@@ -279,10 +308,10 @@ class Organization extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the onPremisesLastSyncDateTime
-    * The time and date at which the tenant was last synced with the on-premise directory. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+    * The time and date at which the tenant was last synced with the on-premises directory. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @param \DateTime $val The onPremisesLastSyncDateTime
     *
@@ -293,10 +322,10 @@ class Organization extends DirectoryObject
         $this->_propDict["onPremisesLastSyncDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the onPremisesSyncEnabled
-    * true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; Nullable. null if this object has never been synced from an on-premises directory (default).
+    * true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced. Nullable. null if this object has never been synced from an on-premises directory (default).
     *
     * @return bool|null The onPremisesSyncEnabled
     */
@@ -308,10 +337,10 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the onPremisesSyncEnabled
-    * true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; Nullable. null if this object has never been synced from an on-premises directory (default).
+    * true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced. Nullable. null if this object has never been synced from an on-premises directory (default).
     *
     * @param bool $val The onPremisesSyncEnabled
     *
@@ -322,7 +351,40 @@ class Organization extends DirectoryObject
         $this->_propDict["onPremisesSyncEnabled"] = boolval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the partnerTenantType
+    * The type of partnership this tenant has with Microsoft. The possible values are: microsoftSupport, syndicatePartner, breadthPartner, breadthPartnerDelegatedAdmin, resellerPartnerDelegatedAdmin, valueAddedResellerPartnerDelegatedAdmin, unknownFutureValue. Nullable. For more information about the possible types, see partnerTenantType values.
+    *
+    * @return PartnerTenantType|null The partnerTenantType
+    */
+    public function getPartnerTenantType()
+    {
+        if (array_key_exists("partnerTenantType", $this->_propDict)) {
+            if (is_a($this->_propDict["partnerTenantType"], "\Microsoft\Graph\Model\PartnerTenantType") || is_null($this->_propDict["partnerTenantType"])) {
+                return $this->_propDict["partnerTenantType"];
+            } else {
+                $this->_propDict["partnerTenantType"] = new PartnerTenantType($this->_propDict["partnerTenantType"]);
+                return $this->_propDict["partnerTenantType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the partnerTenantType
+    * The type of partnership this tenant has with Microsoft. The possible values are: microsoftSupport, syndicatePartner, breadthPartner, breadthPartnerDelegatedAdmin, resellerPartnerDelegatedAdmin, valueAddedResellerPartnerDelegatedAdmin, unknownFutureValue. Nullable. For more information about the possible types, see partnerTenantType values.
+    *
+    * @param PartnerTenantType $val The partnerTenantType
+    *
+    * @return Organization
+    */
+    public function setPartnerTenantType($val)
+    {
+        $this->_propDict["partnerTenantType"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the postalCode
     * Postal code of the address for the organization.
@@ -337,7 +399,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the postalCode
     * Postal code of the address for the organization.
@@ -351,10 +413,10 @@ class Organization extends DirectoryObject
         $this->_propDict["postalCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the preferredLanguage
-    * The preferred language for the organization. Should follow ISO 639-1 Code; for example en.
+    * The preferred language for the organization. Should follow ISO 639-1 Code; for example, en.
     *
     * @return string|null The preferredLanguage
     */
@@ -366,10 +428,10 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the preferredLanguage
-    * The preferred language for the organization. Should follow ISO 639-1 Code; for example en.
+    * The preferred language for the organization. Should follow ISO 639-1 Code; for example, en.
     *
     * @param string $val The preferredLanguage
     *
@@ -380,7 +442,7 @@ class Organization extends DirectoryObject
         $this->_propDict["preferredLanguage"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the privacyProfile
     * The privacy profile of an organization.
@@ -399,7 +461,7 @@ class Organization extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the privacyProfile
     * The privacy profile of an organization.
@@ -413,9 +475,9 @@ class Organization extends DirectoryObject
         $this->_propDict["privacyProfile"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the provisionedPlans
     * Not nullable.
      *
@@ -429,12 +491,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the provisionedPlans
     * Not nullable.
     *
-    * @param ProvisionedPlan $val The provisionedPlans
+    * @param ProvisionedPlan[] $val The provisionedPlans
     *
     * @return Organization
     */
@@ -443,11 +505,12 @@ class Organization extends DirectoryObject
         $this->_propDict["provisionedPlans"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the securityComplianceNotificationMails
+    * Not nullable.
     *
-    * @return string|null The securityComplianceNotificationMails
+    * @return array|null The securityComplianceNotificationMails
     */
     public function getSecurityComplianceNotificationMails()
     {
@@ -457,11 +520,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the securityComplianceNotificationMails
+    * Not nullable.
     *
-    * @param string $val The securityComplianceNotificationMails
+    * @param string[] $val The securityComplianceNotificationMails
     *
     * @return Organization
     */
@@ -470,11 +534,12 @@ class Organization extends DirectoryObject
         $this->_propDict["securityComplianceNotificationMails"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the securityComplianceNotificationPhones
+    * Not nullable.
     *
-    * @return string|null The securityComplianceNotificationPhones
+    * @return array|null The securityComplianceNotificationPhones
     */
     public function getSecurityComplianceNotificationPhones()
     {
@@ -484,11 +549,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the securityComplianceNotificationPhones
+    * Not nullable.
     *
-    * @param string $val The securityComplianceNotificationPhones
+    * @param string[] $val The securityComplianceNotificationPhones
     *
     * @return Organization
     */
@@ -497,7 +563,7 @@ class Organization extends DirectoryObject
         $this->_propDict["securityComplianceNotificationPhones"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the state
     * State name of the address for the organization.
@@ -512,7 +578,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the state
     * State name of the address for the organization.
@@ -526,7 +592,7 @@ class Organization extends DirectoryObject
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the street
     * Street name of the address for organization.
@@ -541,7 +607,7 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the street
     * Street name of the address for organization.
@@ -555,12 +621,12 @@ class Organization extends DirectoryObject
         $this->_propDict["street"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the technicalNotificationMails
     * Not nullable.
     *
-    * @return string|null The technicalNotificationMails
+    * @return array|null The technicalNotificationMails
     */
     public function getTechnicalNotificationMails()
     {
@@ -570,12 +636,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the technicalNotificationMails
     * Not nullable.
     *
-    * @param string $val The technicalNotificationMails
+    * @param string[] $val The technicalNotificationMails
     *
     * @return Organization
     */
@@ -584,9 +650,10 @@ class Organization extends DirectoryObject
         $this->_propDict["technicalNotificationMails"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tenantType
+    * Not nullable. The tenant type option that was selected when the tenant was created. The possible values are:  AAD - An enterprise identity access management (IAM) service that serves business-to-employee and business-to-business (B2B) scenarios.  AAD B2C A customer identity access management (CIAM) service that serves business-to-consumer (B2C) scenarios.
     *
     * @return string|null The tenantType
     */
@@ -598,9 +665,10 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the tenantType
+    * Not nullable. The tenant type option that was selected when the tenant was created. The possible values are:  AAD - An enterprise identity access management (IAM) service that serves business-to-employee and business-to-business (B2B) scenarios.  AAD B2C A customer identity access management (CIAM) service that serves business-to-consumer (B2C) scenarios.
     *
     * @param string $val The tenantType
     *
@@ -611,9 +679,9 @@ class Organization extends DirectoryObject
         $this->_propDict["tenantType"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the verifiedDomains
     * The collection of domains associated with this tenant. Not nullable.
      *
@@ -627,12 +695,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the verifiedDomains
     * The collection of domains associated with this tenant. Not nullable.
     *
-    * @param VerifiedDomain $val The verifiedDomains
+    * @param VerifiedDomain[] $val The verifiedDomains
     *
     * @return Organization
     */
@@ -641,7 +709,7 @@ class Organization extends DirectoryObject
         $this->_propDict["verifiedDomains"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the mobileDeviceManagementAuthority
     * Mobile device management authority. Possible values are: unknown, intune, sccm, office365.
@@ -660,7 +728,7 @@ class Organization extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the mobileDeviceManagementAuthority
     * Mobile device management authority. Possible values are: unknown, intune, sccm, office365.
@@ -674,9 +742,10 @@ class Organization extends DirectoryObject
         $this->_propDict["mobileDeviceManagementAuthority"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the branding
+    * Branding for the organization. Nullable.
     *
     * @return OrganizationalBranding|null The branding
     */
@@ -692,9 +761,10 @@ class Organization extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the branding
+    * Branding for the organization. Nullable.
     *
     * @param OrganizationalBranding $val The branding
     *
@@ -705,11 +775,11 @@ class Organization extends DirectoryObject
         $this->_propDict["branding"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the certificateBasedAuthConfiguration
-    * Navigation property to manage  certificate-based authentication configuration. Only a single instance of certificateBasedAuthConfiguration can be created in the collection.
+    * Navigation property to manage certificate-based authentication configuration. Only a single instance of certificateBasedAuthConfiguration can be created in the collection.
      *
      * @return array|null The certificateBasedAuthConfiguration
      */
@@ -721,12 +791,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the certificateBasedAuthConfiguration
-    * Navigation property to manage  certificate-based authentication configuration. Only a single instance of certificateBasedAuthConfiguration can be created in the collection.
+    * Navigation property to manage certificate-based authentication configuration. Only a single instance of certificateBasedAuthConfiguration can be created in the collection.
     *
-    * @param CertificateBasedAuthConfiguration $val The certificateBasedAuthConfiguration
+    * @param CertificateBasedAuthConfiguration[] $val The certificateBasedAuthConfiguration
     *
     * @return Organization
     */
@@ -735,11 +805,11 @@ class Organization extends DirectoryObject
         $this->_propDict["certificateBasedAuthConfiguration"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the extensions
-    * The collection of open extensions defined for the organization resource. Nullable.
+    * The collection of open extensions defined for the organization. Read-only. Nullable.
      *
      * @return array|null The extensions
      */
@@ -751,12 +821,12 @@ class Organization extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the extensions
-    * The collection of open extensions defined for the organization resource. Nullable.
+    * The collection of open extensions defined for the organization. Read-only. Nullable.
     *
-    * @param Extension $val The extensions
+    * @param Extension[] $val The extensions
     *
     * @return Organization
     */
@@ -765,5 +835,5 @@ class Organization extends DirectoryObject
         $this->_propDict["extensions"] = $val;
         return $this;
     }
-    
+
 }

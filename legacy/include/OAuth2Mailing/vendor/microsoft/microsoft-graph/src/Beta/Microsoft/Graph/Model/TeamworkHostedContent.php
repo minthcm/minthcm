@@ -36,13 +36,13 @@ class TeamworkHostedContent extends Entity
             if (is_a($this->_propDict["contentBytes"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["contentBytes"])) {
                 return $this->_propDict["contentBytes"];
             } else {
-                $this->_propDict["contentBytes"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["contentBytes"]);
+                $this->_propDict["contentBytes"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["contentBytes"]);
                 return $this->_propDict["contentBytes"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the contentBytes
     * Write only. Bytes for the hosted content (such as images).
@@ -56,7 +56,7 @@ class TeamworkHostedContent extends Entity
         $this->_propDict["contentBytes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentType
     * Write only. Content type, such as image/png, image/jpg.
@@ -71,7 +71,7 @@ class TeamworkHostedContent extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the contentType
     * Write only. Content type, such as image/png, image/jpg.
@@ -85,5 +85,5 @@ class TeamworkHostedContent extends Entity
         $this->_propDict["contentType"] = $val;
         return $this;
     }
-    
+
 }

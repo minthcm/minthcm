@@ -43,7 +43,6 @@
  */
 
 *}
-
 <script language="javascript">
     var _form_id = '{$form_id}';
     {literal}

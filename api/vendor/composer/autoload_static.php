@@ -7,20 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
 {
     public static $files = array (
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
-        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
-        '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
+        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
         'f881e40a2efd4c02f2013a3f1d7a4749' => __DIR__ . '/../..' . '/configs/mint/config.php',
         '2965eef7759ab8bf4130f663f696b0c2' => __DIR__ . '/../..' . '/configs/list/config.php',
@@ -29,10 +27,9 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'Symfony\\Polyfill\\Php81\\' => 23,
+            'Symfony\\Polyfill\\Php84\\' => 23,
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Php73\\' => 23,
-            'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
@@ -61,10 +58,6 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
             'Psr\\Cache\\' => 10,
             'PhpDocReader\\' => 13,
         ),
-        'O' => 
-        array (
-            'Opis\\Closure\\' => 13,
-        ),
         'M' => 
         array (
             'MintHCM\\Utils\\' => 14,
@@ -74,6 +67,10 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
             'MintHCM\\Custom\\Modules\\' => 23,
             'MintHCM\\Custom\\Api\\' => 19,
             'MintHCM\\Api\\' => 12,
+        ),
+        'L' => 
+        array (
+            'Laravel\\SerializableClosure\\' => 28,
         ),
         'I' => 
         array (
@@ -106,9 +103,9 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Php81\\' => 
+        'Symfony\\Polyfill\\Php84\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php84',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
@@ -117,10 +114,6 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         'Symfony\\Polyfill\\Php73\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php73',
-        ),
-        'Symfony\\Polyfill\\Php72\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -208,10 +201,6 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         array (
             0 => __DIR__ . '/..' . '/php-di/phpdoc-reader/src/PhpDocReader',
         ),
-        'Opis\\Closure\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/opis/closure/src',
-        ),
         'MintHCM\\Utils\\' => 
         array (
             0 => __DIR__ . '/../..' . '/utils',
@@ -240,6 +229,10 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
+        'Laravel\\SerializableClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
+        ),
         'Invoker\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-di/invoker/src',
@@ -258,7 +251,7 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         ),
         'Doctrine\\ORM\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/orm/lib/Doctrine/ORM',
+            0 => __DIR__ . '/..' . '/doctrine/orm/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -270,7 +263,7 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         ),
         'Doctrine\\Deprecations\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/src',
         ),
         'Doctrine\\DBAL\\' => 
         array (
@@ -282,7 +275,7 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
         ),
         'Doctrine\\Common\\Collections\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/collections/lib/Doctrine/Common/Collections',
+            0 => __DIR__ . '/..' . '/doctrine/collections/src',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
@@ -309,10 +302,11 @@ class ComposerStaticInitb37ba7854db44afda592f3ed7ba9e139
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Deprecated' => __DIR__ . '/..' . '/symfony/polyfill-php84/Resources/stubs/Deprecated.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',

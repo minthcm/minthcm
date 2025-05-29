@@ -25,7 +25,7 @@ class AppIdentity extends Entity
 {
     /**
     * Gets the appId
-    * Refers to the Unique GUID representing Application Id in the Azure Active Directory.
+    * Refers to the unique ID representing application in Microsoft Entra ID.
     *
     * @return string|null The appId
     */
@@ -40,7 +40,7 @@ class AppIdentity extends Entity
 
     /**
     * Sets the appId
-    * Refers to the Unique GUID representing Application Id in the Azure Active Directory.
+    * Refers to the unique ID representing application in Microsoft Entra ID.
     *
     * @param string $val The value of the appId
     *
@@ -53,7 +53,7 @@ class AppIdentity extends Entity
     }
     /**
     * Gets the displayName
-    * Refers to the Application Name displayed in the Azure Portal.
+    * Refers to the application name displayed in the Microsoft Entra admin center.
     *
     * @return string|null The displayName
     */
@@ -68,7 +68,7 @@ class AppIdentity extends Entity
 
     /**
     * Sets the displayName
-    * Refers to the Application Name displayed in the Azure Portal.
+    * Refers to the application name displayed in the Microsoft Entra admin center.
     *
     * @param string $val The value of the displayName
     *
@@ -81,7 +81,7 @@ class AppIdentity extends Entity
     }
     /**
     * Gets the servicePrincipalId
-    * Refers to the Unique GUID indicating Service Principal Id in Azure Active Directory for the corresponding App.
+    * Refers to the unique ID for the service principal in Microsoft Entra ID.
     *
     * @return string|null The servicePrincipalId
     */
@@ -96,7 +96,7 @@ class AppIdentity extends Entity
 
     /**
     * Sets the servicePrincipalId
-    * Refers to the Unique GUID indicating Service Principal Id in Azure Active Directory for the corresponding App.
+    * Refers to the unique ID for the service principal in Microsoft Entra ID.
     *
     * @param string $val The value of the servicePrincipalId
     *

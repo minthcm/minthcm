@@ -203,13 +203,13 @@ class Employee extends Person implements EmailInterface
 
         $where_auto = " users.deleted = 0";
 
-        if ($where != "") {
-            $query .= " WHERE $where AND ".$where_auto;
+        if ("" != $where) {
+            $query .= " WHERE $where AND " . $where_auto;
         } else {
-            $query .= " WHERE ".$where_auto;
+            $query .= " WHERE " . $where_auto;
         }
 
-        if ($order_by != "") {
+        if ("" != $order_by) {
             $query .= " ORDER BY $order_by";
         } else {
             $query .= " ORDER BY users.user_name";
@@ -223,12 +223,12 @@ class Employee extends Person implements EmailInterface
      * Generate the name field from the first_name and last_name fields.
      */
     /*
-      function _create_proper_name_field() {
-      global $locale;
-      $full_name = $locale->getLocaleFormattedName($this->first_name, $this->last_name);
-      $this->name = $full_name;
-      $this->full_name = $full_name;
-      }
+    function _create_proper_name_field() {
+    global $locale;
+    $full_name = $locale->getLocaleFormattedName($this->first_name, $this->last_name);
+    $this->name = $full_name;
+    $this->full_name = $full_name;
+    }
      */
 
     public function preprocess_fields_on_save()
@@ -265,8 +265,7 @@ class Employee extends Person implements EmailInterface
         $parentbean = null,
         $singleSelect = false,
         $ifListForExport = false
-    )
-    {
+    ) {
         //create the filter for portal only users, as they should not be showing up in query results
         if (empty($where)) {
             $where = ' users.portal_only = 0 ';
@@ -276,16 +275,16 @@ class Employee extends Person implements EmailInterface
 
         //return parent method, specifying for array to be returned
         return parent::create_new_list_query(
-                $order_by,
-                $where,
-                $filter,
-                $params,
-                $show_deleted,
-                $join_type,
-                $return_array,
-                $parentbean,
-                $singleSelect,
-                $ifListForExport
+            $order_by,
+            $where,
+            $filter,
+            $params,
+            $show_deleted,
+            $join_type,
+            $return_array,
+            $parentbean,
+            $singleSelect,
+            $ifListForExport
         );
     }
     /*
@@ -300,7 +299,7 @@ class Employee extends Person implements EmailInterface
         if (!$userCustomfields) {
             //custom Fields not set, so traverse employee fields to see if any custom fields exist
             foreach ($GLOBALS['dictionary']['Employee']['fields'] as $k => $v) {
-                if (!empty($v['source']) && $v['source'] == 'custom_fields') {
+                if (!empty($v['source']) && 'custom_fields' == $v['source']) {
                     //custom field has been found, set flag to true and break
                     $userCustomfields = true;
                     break;
@@ -323,24 +322,10 @@ class Employee extends Person implements EmailInterface
      */
     public function save($check_notify = false)
     {
-        global $current_user;
-        if ($current_user->id && $this->id != $current_user->id) {
-            if (
-                !is_admin($current_user) &&
-                !ACLAction::userHasAccess($GLOBALS['current_user']->id, 'Employees', 'edit', 'module', $current_user->id == $this->id)
-                ) {
-                $GLOBALS['log']->security("{$current_user->name} tried to update {$this->name} record with out permission.");
-                $GLOBALS['log']->fatal("You can change only your own employee data.");
-
-                return false;
-            }
-        }
-        // MintHCM 77675 start
         if ($this->reports_to_id != $this->fetched_row['reports_to_id']) {
             $private_group = new PrivateGroup($this);
             $private_group->update($this->reports_to_id, $this->fetched_row['reports_to_id']);
         }
-        // MintHCM 77675 end
 
         if (!$this->hasSaveAccess()) {
             throw new RuntimeException('Not authorized');
@@ -386,13 +371,13 @@ class Employee extends Person implements EmailInterface
 
     protected function postSave()
     {
-        if($this->securitygroup_id != $this->fetched_row['securitygroup_id'] && empty($this->securitygroup_id)){
+        if ($this->securitygroup_id != $this->fetched_row['securitygroup_id'] && empty($this->securitygroup_id)) {
             $this->load_relationship('SecurityGroups');
             $this->SecurityGroups->delete($this->fetched_row['securitygroup_id']);
         }
-        if(!empty($this->user_name)){
+        if (!empty($this->user_name)) {
             $user = BeanFactory::getBean('Users', $this->id);
-            if(!empty($user->id) && $user->id === $this->id){
+            if (!empty($user->id) && $user->id === $this->id) {
                 (new ElasticSearchHooks())->beanSaved($user, 'after_save', []);
             }
         }
@@ -401,7 +386,8 @@ class Employee extends Person implements EmailInterface
 
     // MintHCM start
 
-    public function getActiveWorkplaces($workplace_id = null, $date_start = null, $date_end = null) {
+    public function getActiveWorkplaces($workplace_id = null, $date_start = null, $date_end = null)
+    {
         $date_start = empty($date_start) ? 'UTC_TIMESTAMP' : "{$this->db->quoted($date_start)}";
         $date_end = empty($date_end) ? 'UTC_TIMESTAMP' : "{$this->db->quoted($date_end)}";
         $sql = "SELECT w.id, w.name
@@ -430,7 +416,7 @@ class Employee extends Person implements EmailInterface
         return $result;
     }
     // MintHCM end
-    
+
     /**
      * Check if current user can save the current employee record
      * @return bool
@@ -438,18 +424,7 @@ class Employee extends Person implements EmailInterface
     protected function hasSaveAccess(): bool
     {
         global $current_user;
-
-        if (empty($this->id)) {
-            return true;
-        }
-
-        if (empty($current_user->id)) {
-            return true;
-        }
-
-        $sameUser = $current_user->id === $this->id;
-
-        return $sameUser || is_admin($current_user);
+        return $this->ACLAccess('edit', $this->isOwner($current_user->id), 'not_set');
     }
 
     /**
@@ -488,23 +463,47 @@ class Employee extends Person implements EmailInterface
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
         global $current_user;
-        if ('edit' === $this->ACLNormalizeViewContext($view)) {
-            return is_admin($current_user)
-            || $this->id == $current_user->id
-            || empty($this->id)
-            || $this->created_by == $current_user->id;
+        $access = parent::ACLAccess($view, $is_owner, $in_group);
+        if ($access && 'edit' === $this->ACLNormalizeViewContext($view)
+        && ACLController::requireOwner($this->module_dir, 'edit')
+        && (empty($this->id) || $this->id != $current_user->id)) {
+                return false;
         }
-        if('delete' === $this->ACLNormalizeViewContext($view)){
-            return is_admin($current_user)
-            || (
-                !is_admin($current_user) 
-                && $this->id !== $current_user->id 
-                && $this->is_admin != '1'
-                && $this->created_by == $current_user->id
-            );
+
+        if ($access && 'delete' === $this->ACLNormalizeViewContext($view)
+        && !empty($this->id) && $this->id == $current_user->id) {
+                return false;
         }
-        return parent::ACLAccess($view, $is_owner, $in_group);
+        return $access;
+
     }
     // MintHCM #123323 Users|Employees ACLAccess END
+
+    public function isOwner($user_id)
+    {
+        global $current_user; /** @var User */
+        if ($this->id == $current_user->id) {
+            return true;
+        }
+        return parent::isOwner($user_id);
+    }
+
+    public function getOwnerWhere($user_id)
+    {
+        $owner_where = parent::getOwnerWhere($user_id);
+        global $current_user;
+        $owner_where .= " OR users.id = '{$current_user->id}'";
+        return $owner_where;
+    }
+
+    public function bean_implements($interface)
+    {
+        switch ($interface) {
+            case 'ACL':
+                return true;
+        }
+
+        return false;
+    }
 
 }

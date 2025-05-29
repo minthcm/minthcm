@@ -7,7 +7,7 @@ async function changeNewsStatus(status) {
             format: 'JSON',
             dataPOST: { news_id },
         });
-
+ 
         if (!hasTarget) {
             MintHCMPopup.alert(viewTools.language.get('News', 'LBL_NO_TARGET_MSG'));
             return;

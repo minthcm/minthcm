@@ -26,7 +26,6 @@ class PrivilegedRole extends Entity
 {
     /**
     * Gets the name
-    * Role name.
     *
     * @return string|null The name
     */
@@ -38,10 +37,9 @@ class PrivilegedRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
-    * Role name.
     *
     * @param string $val The name
     *
@@ -52,11 +50,10 @@ class PrivilegedRole extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
-    * The assignments for this role. Read-only. Nullable.
      *
      * @return array|null The assignments
      */
@@ -68,12 +65,11 @@ class PrivilegedRole extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
-    * The assignments for this role. Read-only. Nullable.
     *
-    * @param PrivilegedRoleAssignment $val The assignments
+    * @param PrivilegedRoleAssignment[] $val The assignments
     *
     * @return PrivilegedRole
     */
@@ -82,10 +78,9 @@ class PrivilegedRole extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the settings
-    * The settings for this role. Read-only. Nullable.
     *
     * @return PrivilegedRoleSettings|null The settings
     */
@@ -101,10 +96,9 @@ class PrivilegedRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the settings
-    * The settings for this role. Read-only. Nullable.
     *
     * @param PrivilegedRoleSettings $val The settings
     *
@@ -115,10 +109,9 @@ class PrivilegedRole extends Entity
         $this->_propDict["settings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the summary
-    * The summary information for this role. Read-only. Nullable.
     *
     * @return PrivilegedRoleSummary|null The summary
     */
@@ -134,10 +127,9 @@ class PrivilegedRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the summary
-    * The summary information for this role. Read-only. Nullable.
     *
     * @param PrivilegedRoleSummary $val The summary
     *
@@ -148,5 +140,5 @@ class PrivilegedRole extends Entity
         $this->_propDict["summary"] = $val;
         return $this;
     }
-    
+
 }

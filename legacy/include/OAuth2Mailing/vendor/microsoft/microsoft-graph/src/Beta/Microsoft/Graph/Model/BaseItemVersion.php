@@ -26,7 +26,7 @@ class BaseItemVersion extends Entity
 {
     /**
     * Gets the lastModifiedBy
-    * Identity of the user which last modified the version. Read-only.
+    * Identity of the user that last modified the version. Read-only.
     *
     * @return IdentitySet|null The lastModifiedBy
     */
@@ -42,10 +42,10 @@ class BaseItemVersion extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedBy
-    * Identity of the user which last modified the version. Read-only.
+    * Identity of the user that last modified the version. Read-only.
     *
     * @param IdentitySet $val The lastModifiedBy
     *
@@ -56,10 +56,10 @@ class BaseItemVersion extends Entity
         $this->_propDict["lastModifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
-    * Date and time the version was last modified. Read-only.
+    * Date and time when the version was last modified. Read-only.
     *
     * @return \DateTime|null The lastModifiedDateTime
     */
@@ -75,10 +75,10 @@ class BaseItemVersion extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
-    * Date and time the version was last modified. Read-only.
+    * Date and time when the version was last modified. Read-only.
     *
     * @param \DateTime $val The lastModifiedDateTime
     *
@@ -89,7 +89,7 @@ class BaseItemVersion extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publication
     * Indicates the publication status of this particular version. Read-only.
@@ -108,7 +108,7 @@ class BaseItemVersion extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the publication
     * Indicates the publication status of this particular version. Read-only.
@@ -122,5 +122,5 @@ class BaseItemVersion extends Entity
         $this->_propDict["publication"] = $val;
         return $this;
     }
-    
+
 }

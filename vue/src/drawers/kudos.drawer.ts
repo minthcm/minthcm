@@ -20,4 +20,8 @@ export default {
     isAvaliable: () => {
         return useACL().hasAccess('Kudos', 'list', true)
     },
+    badge: () => {
+        const store = useMintKudosStore()
+        return store.badge()
+    },
 }

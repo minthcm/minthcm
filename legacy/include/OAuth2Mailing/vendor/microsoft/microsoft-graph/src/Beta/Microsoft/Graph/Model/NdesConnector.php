@@ -25,6 +25,35 @@ namespace Beta\Microsoft\Graph\Model;
 class NdesConnector extends Entity
 {
     /**
+    * Gets the connectorVersion
+    * The build version of the Ndes Connector.
+    *
+    * @return string|null The connectorVersion
+    */
+    public function getConnectorVersion()
+    {
+        if (array_key_exists("connectorVersion", $this->_propDict)) {
+            return $this->_propDict["connectorVersion"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the connectorVersion
+    * The build version of the Ndes Connector.
+    *
+    * @param string $val The connectorVersion
+    *
+    * @return NdesConnector
+    */
+    public function setConnectorVersion($val)
+    {
+        $this->_propDict["connectorVersion"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the displayName
     * The friendly name of the Ndes Connector.
     *
@@ -38,7 +67,7 @@ class NdesConnector extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The friendly name of the Ndes Connector.
@@ -52,7 +81,40 @@ class NdesConnector extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the enrolledDateTime
+    * Timestamp when on-prem certificate connector was enrolled in Intune.
+    *
+    * @return \DateTime|null The enrolledDateTime
+    */
+    public function getEnrolledDateTime()
+    {
+        if (array_key_exists("enrolledDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["enrolledDateTime"], "\DateTime") || is_null($this->_propDict["enrolledDateTime"])) {
+                return $this->_propDict["enrolledDateTime"];
+            } else {
+                $this->_propDict["enrolledDateTime"] = new \DateTime($this->_propDict["enrolledDateTime"]);
+                return $this->_propDict["enrolledDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the enrolledDateTime
+    * Timestamp when on-prem certificate connector was enrolled in Intune.
+    *
+    * @param \DateTime $val The enrolledDateTime
+    *
+    * @return NdesConnector
+    */
+    public function setEnrolledDateTime($val)
+    {
+        $this->_propDict["enrolledDateTime"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the lastConnectionDateTime
     * Last connection time for the Ndes Connector
@@ -71,7 +133,7 @@ class NdesConnector extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastConnectionDateTime
     * Last connection time for the Ndes Connector
@@ -85,7 +147,65 @@ class NdesConnector extends Entity
         $this->_propDict["lastConnectionDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the machineName
+    * Name of the machine running on-prem certificate connector service.
+    *
+    * @return string|null The machineName
+    */
+    public function getMachineName()
+    {
+        if (array_key_exists("machineName", $this->_propDict)) {
+            return $this->_propDict["machineName"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the machineName
+    * Name of the machine running on-prem certificate connector service.
+    *
+    * @param string $val The machineName
+    *
+    * @return NdesConnector
+    */
+    public function setMachineName($val)
+    {
+        $this->_propDict["machineName"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the roleScopeTagIds
+    * List of Scope Tags for this Entity instance.
+    *
+    * @return array|null The roleScopeTagIds
+    */
+    public function getRoleScopeTagIds()
+    {
+        if (array_key_exists("roleScopeTagIds", $this->_propDict)) {
+            return $this->_propDict["roleScopeTagIds"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the roleScopeTagIds
+    * List of Scope Tags for this Entity instance.
+    *
+    * @param string[] $val The roleScopeTagIds
+    *
+    * @return NdesConnector
+    */
+    public function setRoleScopeTagIds($val)
+    {
+        $this->_propDict["roleScopeTagIds"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the state
     * Ndes Connector Status. Possible values are: none, active, inactive.
@@ -104,7 +224,7 @@ class NdesConnector extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the state
     * Ndes Connector Status. Possible values are: none, active, inactive.
@@ -118,5 +238,5 @@ class NdesConnector extends Entity
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
+
 }

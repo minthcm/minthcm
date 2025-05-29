@@ -23,7 +23,7 @@ class vfsStreamDirectoryTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->dir = new vfsStreamDirectory('foo');
     }
@@ -32,10 +32,10 @@ class vfsStreamDirectoryTestCase extends \BC_PHPUnit_Framework_TestCase
      * assure that a directory seperator inside the name throws an exception
      *
      * @test
-     * @expectedException  org\bovigo\vfs\vfsStreamException
      */
     public function invalidCharacterInName()
     {
+        $this->expectException(vfsStreamException::class);
         $dir = new vfsStreamDirectory('foo/bar');
     }
 
@@ -72,10 +72,10 @@ class vfsStreamDirectoryTestCase extends \BC_PHPUnit_Framework_TestCase
      * renaming the directory to an invalid name throws a vfsStreamException
      *
      * @test
-     * @expectedException  org\bovigo\vfs\vfsStreamException
      */
     public function renameToInvalidNameThrowsvfsStreamException()
     {
+        $this->expectException(vfsStreamException::class);
         $this->dir->rename('foo/baz');
     }
 

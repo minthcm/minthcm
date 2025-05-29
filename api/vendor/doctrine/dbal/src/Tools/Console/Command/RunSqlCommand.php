@@ -26,12 +26,14 @@ use function stripos;
  */
 class RunSqlCommand extends Command
 {
-    /** @var ConnectionProvider */
-    private $connectionProvider;
+    use CommandCompatibility;
+
+    private ConnectionProvider $connectionProvider;
 
     public function __construct(ConnectionProvider $connectionProvider)
     {
         parent::__construct();
+
         $this->connectionProvider = $connectionProvider;
     }
 
@@ -47,23 +49,16 @@ class RunSqlCommand extends Command
             new InputOption('depth', null, InputOption::VALUE_REQUIRED, 'Dumping depth of result set (deprecated).'),
             new InputOption('force-fetch', null, InputOption::VALUE_NONE, 'Forces fetching the result.'),
         ])
-        ->setHelp(<<<EOT
+        ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command executes the given SQL query and
 outputs the results:
 
 <info>php %command.full_name% "SELECT * FROM users"</info>
-EOT
-        );
+EOT);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /** @throws Exception */
+    private function doExecute(InputInterface $input, OutputInterface $output): int
     {
         $conn = $this->getConnection($input);
         $io   = new SymfonyStyle($input, $output);
@@ -104,9 +99,7 @@ EOT
         return $this->connectionProvider->getDefaultConnection();
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     private function runQuery(SymfonyStyle $io, Connection $conn, string $sql): void
     {
         $resultSet = $conn->fetchAllAssociative($sql);
@@ -119,9 +112,7 @@ EOT
         $io->table(array_keys($resultSet[0]), $resultSet);
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     private function runStatement(SymfonyStyle $io, Connection $conn, string $sql): void
     {
         $io->success(sprintf('%d rows affected.', $conn->executeStatement($sql)));

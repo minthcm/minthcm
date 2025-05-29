@@ -78,7 +78,7 @@ $dashletData['WorkSchedulesDashlet']['columns'] = array(
         'width' => '10%',
     ),
     'status' => array(
-        'type' => 'enum',
+        'type' => 'ColoredEnum',
         'default' => true,
         'studio' => 'visible',
         'label' => 'LBL_STATUS',

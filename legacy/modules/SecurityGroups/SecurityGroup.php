@@ -174,6 +174,12 @@ class SecurityGroup extends SecurityGroup_sugar {
       global $sugar_config;
       $db = DBManagerFactory::getInstance();
       $quotedId = $db->quote($id);
+      if ($module == "Employees") {
+         $query = "SELECT 1 AS results FROM securitygroups_users sgu
+INNER JOIN securitygroups_users sgu2 ON sgu2.deleted=0 AND sgu2.user_id = '{$current_user->id}' AND sgu2.securitygroup_id=sgu.securitygroup_id
+WHERE sgu.deleted=0 AND sgu.user_id = '{$quotedId}'
+LIMIT 1";
+      } else {
       $query = 'select count(securitygroups.id) as results from securitygroups '
               . 'inner join securitygroups_users on securitygroups.id = securitygroups_users.securitygroup_id'
               . ' and securitygroups_users.deleted = 0 '
@@ -196,6 +202,7 @@ class SecurityGroup extends SecurityGroup_sugar {
       ) {
          $query .= ' and acl_roles_actions.access_override = 80  ';
       }
+    }
       $GLOBALS['log']->debug("SecuritySuite: groupHasAccess $query");
       $result = $db->query($query);
       $row = $db->fetchByAssoc($result);

@@ -26,7 +26,7 @@ class vfsStreamResolveIncludePathTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->backupIncludePath = get_include_path();
         vfsStream::setup();
@@ -37,7 +37,7 @@ class vfsStreamResolveIncludePathTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * clean up test environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         set_include_path($this->backupIncludePath);
     }

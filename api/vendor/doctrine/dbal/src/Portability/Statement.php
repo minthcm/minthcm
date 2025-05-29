@@ -11,8 +11,7 @@ use Doctrine\DBAL\Driver\Statement as DriverStatement;
  */
 final class Statement extends AbstractStatementMiddleware
 {
-    /** @var Converter */
-    private $converter;
+    private Converter $converter;
 
     /**
      * Wraps <tt>Statement</tt> and applies portability measures.
@@ -25,13 +24,13 @@ final class Statement extends AbstractStatementMiddleware
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($params = null): ResultInterface
     {
         return new Result(
             parent::execute($params),
-            $this->converter
+            $this->converter,
         );
     }
 }

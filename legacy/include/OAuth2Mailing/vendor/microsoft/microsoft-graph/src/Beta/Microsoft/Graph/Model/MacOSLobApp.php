@@ -26,7 +26,7 @@ class MacOSLobApp extends MobileLobApp
 {
     /**
     * Gets the buildNumber
-    * The build number of MacOS Line of Business (LoB) app.
+    * The build number of the package. This should match the package CFBundleShortVersionString of the .pkg file.
     *
     * @return string|null The buildNumber
     */
@@ -38,10 +38,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the buildNumber
-    * The build number of MacOS Line of Business (LoB) app.
+    * The build number of the package. This should match the package CFBundleShortVersionString of the .pkg file.
     *
     * @param string $val The buildNumber
     *
@@ -52,10 +52,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["buildNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the bundleId
-    * The bundle id.
+    * The primary bundleId of the package.
     *
     * @return string|null The bundleId
     */
@@ -67,10 +67,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the bundleId
-    * The bundle id.
+    * The primary bundleId of the package.
     *
     * @param string $val The bundleId
     *
@@ -81,11 +81,11 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["bundleId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the childApps
-    * The app list in this bundle package
+    * List of ComplexType macOSLobChildApp objects. Represents the apps expected to be installed by the package.
      *
      * @return array|null The childApps
      */
@@ -97,12 +97,12 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the childApps
-    * The app list in this bundle package
+    * List of ComplexType macOSLobChildApp objects. Represents the apps expected to be installed by the package.
     *
-    * @param MacOSLobChildApp $val The childApps
+    * @param MacOSLobChildApp[] $val The childApps
     *
     * @return MacOSLobApp
     */
@@ -111,39 +111,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["childApps"] = $val;
         return $this;
     }
-    
-    /**
-    * Gets the identityVersion
-    * The identity version.
-    *
-    * @return string|null The identityVersion
-    */
-    public function getIdentityVersion()
-    {
-        if (array_key_exists("identityVersion", $this->_propDict)) {
-            return $this->_propDict["identityVersion"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the identityVersion
-    * The identity version.
-    *
-    * @param string $val The identityVersion
-    *
-    * @return MacOSLobApp
-    */
-    public function setIdentityVersion($val)
-    {
-        $this->_propDict["identityVersion"] = $val;
-        return $this;
-    }
-    
+
     /**
     * Gets the ignoreVersionDetection
-    * A boolean to control whether the app's version will be used to detect the app after it is installed on a device. Set this to true for macOS Line of Business (LoB) apps that use a self update feature.
+    * When TRUE, indicates that the app's version will NOT be used to detect if the app is installed on a device. When FALSE, indicates that the app's version will be used to detect if the app is installed on a device. Set this to true for apps that use a self update feature. The default value is FALSE.
     *
     * @return bool|null The ignoreVersionDetection
     */
@@ -155,10 +126,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the ignoreVersionDetection
-    * A boolean to control whether the app's version will be used to detect the app after it is installed on a device. Set this to true for macOS Line of Business (LoB) apps that use a self update feature.
+    * When TRUE, indicates that the app's version will NOT be used to detect if the app is installed on a device. When FALSE, indicates that the app's version will be used to detect if the app is installed on a device. Set this to true for apps that use a self update feature. The default value is FALSE.
     *
     * @param bool $val The ignoreVersionDetection
     *
@@ -169,10 +140,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["ignoreVersionDetection"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the installAsManaged
-    * A boolean to control whether the app will be installed as managed (requires macOS 11.0 and other PKG restrictions).
+    * When TRUE, indicates that the app will be installed as managed (requires macOS 11.0 and other managed package restrictions). When FALSE, indicates that the app will be installed as unmanaged. The default value is FALSE.
     *
     * @return bool|null The installAsManaged
     */
@@ -184,10 +155,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the installAsManaged
-    * A boolean to control whether the app will be installed as managed (requires macOS 11.0 and other PKG restrictions).
+    * When TRUE, indicates that the app will be installed as managed (requires macOS 11.0 and other managed package restrictions). When FALSE, indicates that the app will be installed as unmanaged. The default value is FALSE.
     *
     * @param bool $val The installAsManaged
     *
@@ -198,12 +169,12 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["installAsManaged"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the md5Hash
-    * The MD5 hash codes
+    * The MD5 hash codes. This is empty if the package was uploaded directly. If the Intune App Wrapping Tool is used to create a .intunemac, this value can be found inside the Detection.xml file.
     *
-    * @return string|null The md5Hash
+    * @return array|null The md5Hash
     */
     public function getMd5Hash()
     {
@@ -213,12 +184,12 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the md5Hash
-    * The MD5 hash codes
+    * The MD5 hash codes. This is empty if the package was uploaded directly. If the Intune App Wrapping Tool is used to create a .intunemac, this value can be found inside the Detection.xml file.
     *
-    * @param string $val The md5Hash
+    * @param string[] $val The md5Hash
     *
     * @return MacOSLobApp
     */
@@ -227,10 +198,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["md5Hash"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the md5HashChunkSize
-    * The chunk size for MD5 hash
+    * The chunk size for MD5 hash. This is '0' or empty if the package was uploaded directly. If the Intune App Wrapping Tool is used to create a .intunemac, this value can be found inside the Detection.xml file.
     *
     * @return int|null The md5HashChunkSize
     */
@@ -242,10 +213,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the md5HashChunkSize
-    * The chunk size for MD5 hash
+    * The chunk size for MD5 hash. This is '0' or empty if the package was uploaded directly. If the Intune App Wrapping Tool is used to create a .intunemac, this value can be found inside the Detection.xml file.
     *
     * @param int $val The md5HashChunkSize
     *
@@ -256,10 +227,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["md5HashChunkSize"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the minimumSupportedOperatingSystem
-    * The value for the minimum applicable operating system.
+    * ComplexType macOSMinimumOperatingSystem that indicates the minimum operating system applicable for the application.
     *
     * @return MacOSMinimumOperatingSystem|null The minimumSupportedOperatingSystem
     */
@@ -275,10 +246,10 @@ class MacOSLobApp extends MobileLobApp
         }
         return null;
     }
-    
+
     /**
     * Sets the minimumSupportedOperatingSystem
-    * The value for the minimum applicable operating system.
+    * ComplexType macOSMinimumOperatingSystem that indicates the minimum operating system applicable for the application.
     *
     * @param MacOSMinimumOperatingSystem $val The minimumSupportedOperatingSystem
     *
@@ -289,10 +260,10 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["minimumSupportedOperatingSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the versionNumber
-    * The version number of MacOS Line of Business (LoB) app.
+    * The version number of the package. This should match the package CFBundleVersion in the packageinfo file.
     *
     * @return string|null The versionNumber
     */
@@ -304,10 +275,10 @@ class MacOSLobApp extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the versionNumber
-    * The version number of MacOS Line of Business (LoB) app.
+    * The version number of the package. This should match the package CFBundleVersion in the packageinfo file.
     *
     * @param string $val The versionNumber
     *
@@ -318,5 +289,5 @@ class MacOSLobApp extends MobileLobApp
         $this->_propDict["versionNumber"] = $val;
         return $this;
     }
-    
+
 }

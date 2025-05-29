@@ -44,6 +44,18 @@ class ElasticsearchService
         }
     }
 
+    public function isModueEnabled(string $moduleName): bool
+    {
+        require 'legacy/custom/modules/unified_search_modules_display.php';
+        if (!isset($unified_search_modules_display[$moduleName])) {
+            return false;
+        }
+        if (isset($unified_search_modules_display[$moduleName]['visible']) && $unified_search_modules_display[$moduleName]['visible'] == false) {
+            return false;
+        }
+        return true;
+    }
+
     protected function setupCurlOptions(string $host, string $port, ?string $username, ?string $password)
     {
         $options = [

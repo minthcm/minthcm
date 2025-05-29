@@ -36,4 +36,12 @@ class DatabaseService
             'status' => true,
         ];
     }
+
+    public function getConnection($host, $username, $password, $database, $port){
+        $connection = new \mysqli($host, $username, $password, $database, $port);
+        if ($connection->connect_error) {
+            return [ 'status' => false, 'message' => $connection->connect_error ];
+        }
+        return [ 'status' => true, 'message' => '', 'connection' => $connection ];
+    }
 }

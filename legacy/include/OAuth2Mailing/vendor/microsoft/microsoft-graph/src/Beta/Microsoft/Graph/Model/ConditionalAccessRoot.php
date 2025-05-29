@@ -24,9 +24,74 @@ namespace Beta\Microsoft\Graph\Model;
 */
 class ConditionalAccessRoot extends Entity
 {
+    /**
+    * Gets the authenticationStrength
+    * Defines the authentication strength policies, valid authentication method combinations, and authentication method mode details that can be required by a conditional access policy.
+    *
+    * @return AuthenticationStrengthRoot|null The authenticationStrength
+    */
+    public function getAuthenticationStrength()
+    {
+        if (array_key_exists("authenticationStrength", $this->_propDict)) {
+            if (is_a($this->_propDict["authenticationStrength"], "\Beta\Microsoft\Graph\Model\AuthenticationStrengthRoot") || is_null($this->_propDict["authenticationStrength"])) {
+                return $this->_propDict["authenticationStrength"];
+            } else {
+                $this->_propDict["authenticationStrength"] = new AuthenticationStrengthRoot($this->_propDict["authenticationStrength"]);
+                return $this->_propDict["authenticationStrength"];
+            }
+        }
+        return null;
+    }
 
-     /** 
+    /**
+    * Sets the authenticationStrength
+    * Defines the authentication strength policies, valid authentication method combinations, and authentication method mode details that can be required by a conditional access policy.
+    *
+    * @param AuthenticationStrengthRoot $val The authenticationStrength
+    *
+    * @return ConditionalAccessRoot
+    */
+    public function setAuthenticationStrength($val)
+    {
+        $this->_propDict["authenticationStrength"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the authenticationStrengths
+    *
+    * @return AuthenticationStrengthRoot|null The authenticationStrengths
+    */
+    public function getAuthenticationStrengths()
+    {
+        if (array_key_exists("authenticationStrengths", $this->_propDict)) {
+            if (is_a($this->_propDict["authenticationStrengths"], "\Beta\Microsoft\Graph\Model\AuthenticationStrengthRoot") || is_null($this->_propDict["authenticationStrengths"])) {
+                return $this->_propDict["authenticationStrengths"];
+            } else {
+                $this->_propDict["authenticationStrengths"] = new AuthenticationStrengthRoot($this->_propDict["authenticationStrengths"]);
+                return $this->_propDict["authenticationStrengths"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the authenticationStrengths
+    *
+    * @param AuthenticationStrengthRoot $val The authenticationStrengths
+    *
+    * @return ConditionalAccessRoot
+    */
+    public function setAuthenticationStrengths($val)
+    {
+        $this->_propDict["authenticationStrengths"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the authenticationContextClassReferences
+    * Read-only. Nullable. Returns a collection of the specified authentication context class references.
      *
      * @return array|null The authenticationContextClassReferences
      */
@@ -38,11 +103,12 @@ class ConditionalAccessRoot extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the authenticationContextClassReferences
+    * Read-only. Nullable. Returns a collection of the specified authentication context class references.
     *
-    * @param AuthenticationContextClassReference $val The authenticationContextClassReferences
+    * @param AuthenticationContextClassReference[] $val The authenticationContextClassReferences
     *
     * @return ConditionalAccessRoot
     */
@@ -51,10 +117,11 @@ class ConditionalAccessRoot extends Entity
         $this->_propDict["authenticationContextClassReferences"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the namedLocations
+    * Read-only. Nullable. Returns a collection of the specified named locations.
      *
      * @return array|null The namedLocations
      */
@@ -66,11 +133,12 @@ class ConditionalAccessRoot extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the namedLocations
+    * Read-only. Nullable. Returns a collection of the specified named locations.
     *
-    * @param NamedLocation $val The namedLocations
+    * @param NamedLocation[] $val The namedLocations
     *
     * @return ConditionalAccessRoot
     */
@@ -79,10 +147,11 @@ class ConditionalAccessRoot extends Entity
         $this->_propDict["namedLocations"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the policies
+    * Read-only. Nullable. Returns a collection of the specified Conditional Access policies.
      *
      * @return array|null The policies
      */
@@ -94,11 +163,12 @@ class ConditionalAccessRoot extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the policies
+    * Read-only. Nullable. Returns a collection of the specified Conditional Access policies.
     *
-    * @param ConditionalAccessPolicy $val The policies
+    * @param ConditionalAccessPolicy[] $val The policies
     *
     * @return ConditionalAccessRoot
     */
@@ -107,5 +177,35 @@ class ConditionalAccessRoot extends Entity
         $this->_propDict["policies"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the templates
+    * Read-only. Nullable. Returns a collection of the specified Conditional Access templates.
+     *
+     * @return array|null The templates
+     */
+    public function getTemplates()
+    {
+        if (array_key_exists("templates", $this->_propDict)) {
+           return $this->_propDict["templates"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the templates
+    * Read-only. Nullable. Returns a collection of the specified Conditional Access templates.
+    *
+    * @param ConditionalAccessTemplate[] $val The templates
+    *
+    * @return ConditionalAccessRoot
+    */
+    public function setTemplates($val)
+    {
+        $this->_propDict["templates"] = $val;
+        return $this;
+    }
+
 }

@@ -25,7 +25,37 @@ namespace Beta\Microsoft\Graph\WindowsUpdates\Model;
 class DeploymentAudience extends \Beta\Microsoft\Graph\Model\Entity
 {
 
-     /** 
+     /**
+     * Gets the applicableContent
+    * Content eligible to deploy to devices in the audience. Not nullable. Read-only.
+     *
+     * @return array|null The applicableContent
+     */
+    public function getApplicableContent()
+    {
+        if (array_key_exists("applicableContent", $this->_propDict)) {
+           return $this->_propDict["applicableContent"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the applicableContent
+    * Content eligible to deploy to devices in the audience. Not nullable. Read-only.
+    *
+    * @param ApplicableContent[] $val The applicableContent
+    *
+    * @return DeploymentAudience
+    */
+    public function setApplicableContent($val)
+    {
+        $this->_propDict["applicableContent"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the exclusions
     * Specifies the assets to exclude from the audience.
      *
@@ -39,12 +69,12 @@ class DeploymentAudience extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the exclusions
     * Specifies the assets to exclude from the audience.
     *
-    * @param UpdatableAsset $val The exclusions
+    * @param UpdatableAsset[] $val The exclusions
     *
     * @return DeploymentAudience
     */
@@ -53,9 +83,9 @@ class DeploymentAudience extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["exclusions"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the members
     * Specifies the assets to include in the audience.
      *
@@ -69,12 +99,12 @@ class DeploymentAudience extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the members
     * Specifies the assets to include in the audience.
     *
-    * @param UpdatableAsset $val The members
+    * @param UpdatableAsset[] $val The members
     *
     * @return DeploymentAudience
     */
@@ -83,5 +113,5 @@ class DeploymentAudience extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["members"] = $val;
         return $this;
     }
-    
+
 }

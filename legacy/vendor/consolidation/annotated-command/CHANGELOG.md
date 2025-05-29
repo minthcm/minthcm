@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.10.1 - 13 Dec 2024
+
+- Support PHP 8.4
+
 ### 4.10.0 - 5 Apr 2024
 
 - Support Symfony 7

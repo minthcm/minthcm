@@ -38,7 +38,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the color
     * The color that the UI should display for the label, if configured.
@@ -52,7 +52,7 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["color"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The admin-defined description for the label.
@@ -67,7 +67,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The admin-defined description for the label.
@@ -81,7 +81,7 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isActive
     * Indicates whether the label is active or not. Active labels should be hidden or disabled in UI.
@@ -96,7 +96,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isActive
     * Indicates whether the label is active or not. Active labels should be hidden or disabled in UI.
@@ -110,7 +110,7 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["isActive"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the name
     * The plaintext name of the label.
@@ -125,7 +125,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
     * The plaintext name of the label.
@@ -139,9 +139,10 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the parent
+    * The parent label associated with a child label. Null if label has no parent.
     *
     * @return ParentLabelDetails|null The parent
     */
@@ -157,9 +158,10 @@ class InformationProtectionLabel extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the parent
+    * The parent label associated with a child label. Null if label has no parent.
     *
     * @param ParentLabelDetails $val The parent
     *
@@ -170,7 +172,7 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["parent"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sensitivity
     * The sensitivity value of the label, where lower is less sensitive.
@@ -185,7 +187,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the sensitivity
     * The sensitivity value of the label, where lower is less sensitive.
@@ -199,7 +201,7 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["sensitivity"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the tooltip
     * The tooltip that should be displayed for the label in a UI.
@@ -214,7 +216,7 @@ class InformationProtectionLabel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the tooltip
     * The tooltip that should be displayed for the label in a UI.
@@ -228,5 +230,5 @@ class InformationProtectionLabel extends Entity
         $this->_propDict["tooltip"] = $val;
         return $this;
     }
-    
+
 }

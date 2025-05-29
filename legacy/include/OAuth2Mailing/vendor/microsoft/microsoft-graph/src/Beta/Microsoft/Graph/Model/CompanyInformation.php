@@ -22,8 +22,39 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class CompanyInformation extends Entity
+class CompanyInformation implements \JsonSerializable
 {
+    /**
+    * The array of properties available
+    * to the model
+    *
+    * @var array $_propDict
+    */
+    protected $_propDict;
+
+    /**
+    * Construct a new CompanyInformation
+    *
+    * @param array $propDict A list of properties to set
+    */
+    function __construct($propDict = array())
+    {
+        if (!is_array($propDict)) {
+           $propDict = array();
+        }
+        $this->_propDict = $propDict;
+    }
+
+    /**
+    * Gets the property dictionary of the CompanyInformation
+    *
+    * @return array The list of properties
+    */
+    public function getProperties()
+    {
+        return $this->_propDict;
+    }
+
     /**
     * Gets the address
     *
@@ -41,7 +72,7 @@ class CompanyInformation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the address
     *
@@ -54,7 +85,7 @@ class CompanyInformation extends Entity
         $this->_propDict["address"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currencyCode
     *
@@ -68,7 +99,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the currencyCode
     *
@@ -81,7 +112,7 @@ class CompanyInformation extends Entity
         $this->_propDict["currencyCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currentFiscalYearStartDate
     *
@@ -99,7 +130,7 @@ class CompanyInformation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the currentFiscalYearStartDate
     *
@@ -112,7 +143,7 @@ class CompanyInformation extends Entity
         $this->_propDict["currentFiscalYearStartDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     *
@@ -126,7 +157,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     *
@@ -139,7 +170,7 @@ class CompanyInformation extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the email
     *
@@ -153,7 +184,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the email
     *
@@ -166,7 +197,7 @@ class CompanyInformation extends Entity
         $this->_propDict["email"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the faxNumber
     *
@@ -180,7 +211,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the faxNumber
     *
@@ -193,7 +224,34 @@ class CompanyInformation extends Entity
         $this->_propDict["faxNumber"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the id
+    *
+    * @return string|null The id
+    */
+    public function getId()
+    {
+        if (array_key_exists("id", $this->_propDict)) {
+            return $this->_propDict["id"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the id
+    *
+    * @param string $val The id
+    *
+    * @return CompanyInformation
+    */
+    public function setId($val)
+    {
+        $this->_propDict["id"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the industry
     *
@@ -207,7 +265,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the industry
     *
@@ -220,7 +278,7 @@ class CompanyInformation extends Entity
         $this->_propDict["industry"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     *
@@ -238,7 +296,7 @@ class CompanyInformation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     *
@@ -251,7 +309,7 @@ class CompanyInformation extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the phoneNumber
     *
@@ -265,7 +323,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the phoneNumber
     *
@@ -278,7 +336,7 @@ class CompanyInformation extends Entity
         $this->_propDict["phoneNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the picture
     *
@@ -290,13 +348,13 @@ class CompanyInformation extends Entity
             if (is_a($this->_propDict["picture"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["picture"])) {
                 return $this->_propDict["picture"];
             } else {
-                $this->_propDict["picture"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["picture"]);
+                $this->_propDict["picture"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["picture"]);
                 return $this->_propDict["picture"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the picture
     *
@@ -309,7 +367,7 @@ class CompanyInformation extends Entity
         $this->_propDict["picture"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the taxRegistrationNumber
     *
@@ -323,7 +381,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the taxRegistrationNumber
     *
@@ -336,7 +394,7 @@ class CompanyInformation extends Entity
         $this->_propDict["taxRegistrationNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the website
     *
@@ -350,7 +408,7 @@ class CompanyInformation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the website
     *
@@ -363,5 +421,54 @@ class CompanyInformation extends Entity
         $this->_propDict["website"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the ODataType
+    *
+    * @return string|null The ODataType
+    */
+    public function getODataType()
+    {
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
+    }
+
+    /**
+    * Sets the ODataType
+    *
+    * @param string $val The ODataType
+    *
+    * @return CompanyInformation
+    */
+    public function setODataType($val)
+    {
+        $this->_propDict["@odata.type"] = $val;
+        return $this;
+    }
+
+    /**
+    * Serializes the object by property array
+    * Manually serialize DateTime into RFC3339 format
+    *
+    * @return array The list of properties
+    */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $serializableProperties = $this->getProperties();
+        foreach ($serializableProperties as $property => $val) {
+            if (is_a($val, "\DateTime")) {
+                $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
+            } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
+                $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
+            }
+        }
+        return $serializableProperties;
+    }
 }

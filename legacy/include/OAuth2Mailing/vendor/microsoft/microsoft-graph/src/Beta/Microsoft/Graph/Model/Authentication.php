@@ -24,9 +24,43 @@ namespace Beta\Microsoft\Graph\Model;
 */
 class Authentication extends Entity
 {
+    /**
+    * Gets the signInPreferences
+    * The settings and preferences for to the sign-in experience of a user.
+    *
+    * @return SignInPreferences|null The signInPreferences
+    */
+    public function getSignInPreferences()
+    {
+        if (array_key_exists("signInPreferences", $this->_propDict)) {
+            if (is_a($this->_propDict["signInPreferences"], "\Beta\Microsoft\Graph\Model\SignInPreferences") || is_null($this->_propDict["signInPreferences"])) {
+                return $this->_propDict["signInPreferences"];
+            } else {
+                $this->_propDict["signInPreferences"] = new SignInPreferences($this->_propDict["signInPreferences"]);
+                return $this->_propDict["signInPreferences"];
+            }
+        }
+        return null;
+    }
 
-     /** 
+    /**
+    * Sets the signInPreferences
+    * The settings and preferences for to the sign-in experience of a user.
+    *
+    * @param SignInPreferences $val The signInPreferences
+    *
+    * @return Authentication
+    */
+    public function setSignInPreferences($val)
+    {
+        $this->_propDict["signInPreferences"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the emailMethods
+    * Represents the email addresses registered to a user for authentication.
      *
      * @return array|null The emailMethods
      */
@@ -38,11 +72,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the emailMethods
+    * Represents the email addresses registered to a user for authentication.
     *
-    * @param EmailAuthenticationMethod $val The emailMethods
+    * @param EmailAuthenticationMethod[] $val The emailMethods
     *
     * @return Authentication
     */
@@ -51,10 +86,11 @@ class Authentication extends Entity
         $this->_propDict["emailMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the fido2Methods
+    * Represents the FIDO2 security keys registered to a user for authentication.
      *
      * @return array|null The fido2Methods
      */
@@ -66,11 +102,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the fido2Methods
+    * Represents the FIDO2 security keys registered to a user for authentication.
     *
-    * @param Fido2AuthenticationMethod $val The fido2Methods
+    * @param Fido2AuthenticationMethod[] $val The fido2Methods
     *
     * @return Authentication
     */
@@ -79,10 +116,11 @@ class Authentication extends Entity
         $this->_propDict["fido2Methods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the methods
+    * Represents all authentication methods registered to a user.
      *
      * @return array|null The methods
      */
@@ -94,11 +132,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the methods
+    * Represents all authentication methods registered to a user.
     *
-    * @param AuthenticationMethod $val The methods
+    * @param AuthenticationMethod[] $val The methods
     *
     * @return Authentication
     */
@@ -107,10 +146,11 @@ class Authentication extends Entity
         $this->_propDict["methods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the microsoftAuthenticatorMethods
+    * The details of the Microsoft Authenticator app registered to a user for authentication.
      *
      * @return array|null The microsoftAuthenticatorMethods
      */
@@ -122,11 +162,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the microsoftAuthenticatorMethods
+    * The details of the Microsoft Authenticator app registered to a user for authentication.
     *
-    * @param MicrosoftAuthenticatorAuthenticationMethod $val The microsoftAuthenticatorMethods
+    * @param MicrosoftAuthenticatorAuthenticationMethod[] $val The microsoftAuthenticatorMethods
     *
     * @return Authentication
     */
@@ -135,9 +176,9 @@ class Authentication extends Entity
         $this->_propDict["microsoftAuthenticatorMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the operations
      *
      * @return array|null The operations
@@ -150,11 +191,11 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the operations
     *
-    * @param LongRunningOperation $val The operations
+    * @param LongRunningOperation[] $val The operations
     *
     * @return Authentication
     */
@@ -163,10 +204,11 @@ class Authentication extends Entity
         $this->_propDict["operations"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the passwordlessMicrosoftAuthenticatorMethods
+    * Represents the Microsoft Authenticator Passwordless Phone Sign-in methods registered to a user for authentication.
      *
      * @return array|null The passwordlessMicrosoftAuthenticatorMethods
      */
@@ -178,11 +220,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the passwordlessMicrosoftAuthenticatorMethods
+    * Represents the Microsoft Authenticator Passwordless Phone Sign-in methods registered to a user for authentication.
     *
-    * @param PasswordlessMicrosoftAuthenticatorAuthenticationMethod $val The passwordlessMicrosoftAuthenticatorMethods
+    * @param PasswordlessMicrosoftAuthenticatorAuthenticationMethod[] $val The passwordlessMicrosoftAuthenticatorMethods
     *
     * @return Authentication
     */
@@ -191,10 +234,11 @@ class Authentication extends Entity
         $this->_propDict["passwordlessMicrosoftAuthenticatorMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the passwordMethods
+    * Represents the details of the password authentication method registered to a user for authentication.
      *
      * @return array|null The passwordMethods
      */
@@ -206,11 +250,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the passwordMethods
+    * Represents the details of the password authentication method registered to a user for authentication.
     *
-    * @param PasswordAuthenticationMethod $val The passwordMethods
+    * @param PasswordAuthenticationMethod[] $val The passwordMethods
     *
     * @return Authentication
     */
@@ -219,10 +264,11 @@ class Authentication extends Entity
         $this->_propDict["passwordMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the phoneMethods
+    * Represents the phone registered to a user for authentication.
      *
      * @return array|null The phoneMethods
      */
@@ -234,11 +280,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the phoneMethods
+    * Represents the phone registered to a user for authentication.
     *
-    * @param PhoneAuthenticationMethod $val The phoneMethods
+    * @param PhoneAuthenticationMethod[] $val The phoneMethods
     *
     * @return Authentication
     */
@@ -247,10 +294,67 @@ class Authentication extends Entity
         $this->_propDict["phoneMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the platformCredentialMethods
+     *
+     * @return array|null The platformCredentialMethods
+     */
+    public function getPlatformCredentialMethods()
+    {
+        if (array_key_exists("platformCredentialMethods", $this->_propDict)) {
+           return $this->_propDict["platformCredentialMethods"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the platformCredentialMethods
+    *
+    * @param PlatformCredentialAuthenticationMethod[] $val The platformCredentialMethods
+    *
+    * @return Authentication
+    */
+    public function setPlatformCredentialMethods($val)
+    {
+        $this->_propDict["platformCredentialMethods"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the softwareOathMethods
+     *
+     * @return array|null The softwareOathMethods
+     */
+    public function getSoftwareOathMethods()
+    {
+        if (array_key_exists("softwareOathMethods", $this->_propDict)) {
+           return $this->_propDict["softwareOathMethods"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the softwareOathMethods
+    *
+    * @param SoftwareOathAuthenticationMethod[] $val The softwareOathMethods
+    *
+    * @return Authentication
+    */
+    public function setSoftwareOathMethods($val)
+    {
+        $this->_propDict["softwareOathMethods"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the temporaryAccessPassMethods
+    * Represents a Temporary Access Pass registered to a user for authentication through time-limited passcodes.
      *
      * @return array|null The temporaryAccessPassMethods
      */
@@ -262,11 +366,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the temporaryAccessPassMethods
+    * Represents a Temporary Access Pass registered to a user for authentication through time-limited passcodes.
     *
-    * @param TemporaryAccessPassAuthenticationMethod $val The temporaryAccessPassMethods
+    * @param TemporaryAccessPassAuthenticationMethod[] $val The temporaryAccessPassMethods
     *
     * @return Authentication
     */
@@ -275,10 +380,11 @@ class Authentication extends Entity
         $this->_propDict["temporaryAccessPassMethods"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the windowsHelloForBusinessMethods
+    * Represents the Windows Hello for Business authentication method registered to a user for authentication.
      *
      * @return array|null The windowsHelloForBusinessMethods
      */
@@ -290,11 +396,12 @@ class Authentication extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the windowsHelloForBusinessMethods
+    * Represents the Windows Hello for Business authentication method registered to a user for authentication.
     *
-    * @param WindowsHelloForBusinessAuthenticationMethod $val The windowsHelloForBusinessMethods
+    * @param WindowsHelloForBusinessAuthenticationMethod[] $val The windowsHelloForBusinessMethods
     *
     * @return Authentication
     */
@@ -303,5 +410,5 @@ class Authentication extends Entity
         $this->_propDict["windowsHelloForBusinessMethods"] = $val;
         return $this;
     }
-    
+
 }

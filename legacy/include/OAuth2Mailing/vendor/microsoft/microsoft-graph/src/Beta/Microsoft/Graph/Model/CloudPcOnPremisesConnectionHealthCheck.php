@@ -25,7 +25,7 @@ class CloudPcOnPremisesConnectionHealthCheck extends Entity
 {
     /**
     * Gets the additionalDetails
-    * Additional details about the health check or the recommended action.
+    * More details about the health check or the recommended action.
     *
     * @return string|null The additionalDetails
     */
@@ -40,7 +40,7 @@ class CloudPcOnPremisesConnectionHealthCheck extends Entity
 
     /**
     * Sets the additionalDetails
-    * Additional details about the health check or the recommended action.
+    * More details about the health check or the recommended action.
     *
     * @param string $val The value of the additionalDetails
     *
@@ -49,6 +49,34 @@ class CloudPcOnPremisesConnectionHealthCheck extends Entity
     public function setAdditionalDetails($val)
     {
         $this->_propDict["additionalDetails"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the correlationId
+    * The unique identifier of the health check item-related activities. This identifier can be useful in troubleshooting.
+    *
+    * @return string|null The correlationId
+    */
+    public function getCorrelationId()
+    {
+        if (array_key_exists("correlationId", $this->_propDict)) {
+            return $this->_propDict["correlationId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the correlationId
+    * The unique identifier of the health check item-related activities. This identifier can be useful in troubleshooting.
+    *
+    * @param string $val The value of the correlationId
+    *
+    * @return CloudPcOnPremisesConnectionHealthCheck
+    */
+    public function setCorrelationId($val)
+    {
+        $this->_propDict["correlationId"] = $val;
         return $this;
     }
     /**
@@ -209,7 +237,7 @@ class CloudPcOnPremisesConnectionHealthCheck extends Entity
 
     /**
     * Gets the status
-    * The status of the health check item. Possible values are: pending, running, passed, failed, unknownFutureValue. Read-only.
+    * The status of the health check item. Possible values are: pending, running, passed, failed, warning, informational, unknownFutureValue. Read-only.
     *
     * @return CloudPcOnPremisesConnectionStatus|null The status
     */
@@ -228,7 +256,7 @@ class CloudPcOnPremisesConnectionHealthCheck extends Entity
 
     /**
     * Sets the status
-    * The status of the health check item. Possible values are: pending, running, passed, failed, unknownFutureValue. Read-only.
+    * The status of the health check item. Possible values are: pending, running, passed, failed, warning, informational, unknownFutureValue. Read-only.
     *
     * @param CloudPcOnPremisesConnectionStatus $val The value to assign to the status
     *

@@ -28,6 +28,8 @@ class GoogleCloudDialogflowCxV3Agent extends \Google\Collection
    * @var string
    */
   public $avatarUri;
+  protected $clientCertificateSettingsType = GoogleCloudDialogflowCxV3AgentClientCertificateSettings::class;
+  protected $clientCertificateSettingsDataType = '';
   /**
    * @var string
    */
@@ -66,6 +68,14 @@ class GoogleCloudDialogflowCxV3Agent extends \Google\Collection
   public $name;
   protected $personalizationSettingsType = GoogleCloudDialogflowCxV3AgentPersonalizationSettings::class;
   protected $personalizationSettingsDataType = '';
+  /**
+   * @var bool
+   */
+  public $satisfiesPzi;
+  /**
+   * @var bool
+   */
+  public $satisfiesPzs;
   /**
    * @var string
    */
@@ -128,6 +138,20 @@ class GoogleCloudDialogflowCxV3Agent extends \Google\Collection
   public function getAvatarUri()
   {
     return $this->avatarUri;
+  }
+  /**
+   * @param GoogleCloudDialogflowCxV3AgentClientCertificateSettings
+   */
+  public function setClientCertificateSettings(GoogleCloudDialogflowCxV3AgentClientCertificateSettings $clientCertificateSettings)
+  {
+    $this->clientCertificateSettings = $clientCertificateSettings;
+  }
+  /**
+   * @return GoogleCloudDialogflowCxV3AgentClientCertificateSettings
+   */
+  public function getClientCertificateSettings()
+  {
+    return $this->clientCertificateSettings;
   }
   /**
    * @param string
@@ -282,6 +306,34 @@ class GoogleCloudDialogflowCxV3Agent extends \Google\Collection
   public function getPersonalizationSettings()
   {
     return $this->personalizationSettings;
+  }
+  /**
+   * @param bool
+   */
+  public function setSatisfiesPzi($satisfiesPzi)
+  {
+    $this->satisfiesPzi = $satisfiesPzi;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPzi()
+  {
+    return $this->satisfiesPzi;
+  }
+  /**
+   * @param bool
+   */
+  public function setSatisfiesPzs($satisfiesPzs)
+  {
+    $this->satisfiesPzs = $satisfiesPzs;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPzs()
+  {
+    return $this->satisfiesPzs;
   }
   /**
    * @param string

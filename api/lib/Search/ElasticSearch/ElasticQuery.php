@@ -103,14 +103,15 @@ class ElasticQuery extends SearchQuery
 
     private function getIndex()
     {
-        if (isset($GLOBALS['sugar_config']['unique_key'])) {
+        $prefix = static::getIndexPrefix();
+        if (isset($prefix)) {
             if(isset($this->params['search']) && $this->params['search'] == 'list' && !empty($this->params['type'])){
                 $search_modules = [$this->params['type']];
             }else{
                 $search_modules = $this->getGlobalSearchModuleList();
             }
             $searchModules = array_map('strtolower', $search_modules);
-            $searchModules = substr_replace($searchModules, $GLOBALS['sugar_config']['unique_key'].'_', 0, 0);
+            $searchModules = substr_replace($searchModules, $prefix.'_', 0, 0);
             $indexes = implode(',', $searchModules);
             $this->indice_module_map = array_combine($searchModules,$search_modules);
 
@@ -147,7 +148,7 @@ class ElasticQuery extends SearchQuery
     {
 
         if($this->add_acl_filters){
-            $uniq = $GLOBALS['sugar_config']['unique_key'];
+            $uniq = static::getIndexPrefix();
             $main_acl["bool"]["must"] = $this->noAclGlobalQuery();
             $main_acl["bool"]["filter"]["bool"]["should"] = [];
             $search_modules = $this->getGlobalSearchModuleList();
@@ -156,6 +157,9 @@ class ElasticQuery extends SearchQuery
             {
                 $bean = BeanFactory::newBean($module_to_search);
                 $acl_controller = new LegacyConnector('ACLController');
+                if($bean->bean_implements('ACL') && !$acl_controller::checkAccess($bean->module_dir, 'list')){
+                    continue;
+                }
                 if( $bean->bean_implements('ACL') &&  ($acl_controller::requireOwner($bean->module_dir, 'list') || $acl_controller::requireSecurityGroup($bean->module_dir, 'list')) ) { 
                   $module_filters = $this->getACLForModule($module_to_search);
                 }
@@ -200,7 +204,7 @@ class ElasticQuery extends SearchQuery
     }
 
     protected function getExcludeModules(){
-        $uniq = $GLOBALS['sugar_config']['unique_key'];
+        $uniq = static::getIndexPrefix();
         $excluded_queries = [];
         foreach($this->exclude_modules as $module){
             $excluded_queries[]['term']['_index'] = $uniq.'_'.strtolower($module);
@@ -211,7 +215,7 @@ class ElasticQuery extends SearchQuery
     protected function getACLForModule($module)
     {
         global $current_user;
-        $uniq = $GLOBALS['sugar_config']['unique_key'];
+        $uniq = static::getIndexPrefix();
         $acl = $this->getACLClassForModule($module);
         $restriction_filter = $acl->getAccessRestrictionFilter($current_user->id);
        
@@ -265,5 +269,10 @@ class ElasticQuery extends SearchQuery
         }
         $this->search_modules = $search_modules;
         return $search_modules;
+    }
+
+    public static function getIndexPrefix():string
+    {
+        return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
     }
 }

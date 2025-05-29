@@ -22,7 +22,7 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class GroupPolicyPresentationCheckBox extends GroupPolicyPresentation
+class GroupPolicyPresentationCheckBox extends GroupPolicyUploadedPresentation
 {
     /**
     * Gets the defaultChecked
@@ -38,7 +38,7 @@ class GroupPolicyPresentationCheckBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the defaultChecked
     * Default value for the check box. The default value is false.
@@ -52,5 +52,5 @@ class GroupPolicyPresentationCheckBox extends GroupPolicyPresentation
         $this->_propDict["defaultChecked"] = boolval($val);
         return $this;
     }
-    
+
 }

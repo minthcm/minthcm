@@ -42,7 +42,7 @@ class Participant extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the info
     * Information about the participant.
@@ -56,7 +56,7 @@ class Participant extends Entity
         $this->_propDict["info"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isInLobby
     * true if the participant is in lobby.
@@ -71,7 +71,7 @@ class Participant extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isInLobby
     * true if the participant is in lobby.
@@ -85,7 +85,7 @@ class Participant extends Entity
         $this->_propDict["isInLobby"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isMuted
     * true if the participant is muted (client or server muted).
@@ -100,7 +100,7 @@ class Participant extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isMuted
     * true if the participant is muted (client or server muted).
@@ -114,9 +114,9 @@ class Participant extends Entity
         $this->_propDict["isMuted"] = boolval($val);
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the mediaStreams
     * The list of media streams.
      *
@@ -130,12 +130,12 @@ class Participant extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the mediaStreams
     * The list of media streams.
     *
-    * @param MediaStream $val The mediaStreams
+    * @param MediaStream[] $val The mediaStreams
     *
     * @return Participant
     */
@@ -144,10 +144,39 @@ class Participant extends Entity
         $this->_propDict["mediaStreams"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the metadata
+    * A blob of data provided by the participant in the roster.
+    *
+    * @return string|null The metadata
+    */
+    public function getMetadata()
+    {
+        if (array_key_exists("metadata", $this->_propDict)) {
+            return $this->_propDict["metadata"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the metadata
+    * A blob of data provided by the participant in the roster.
+    *
+    * @param string $val The metadata
+    *
+    * @return Participant
+    */
+    public function setMetadata($val)
+    {
+        $this->_propDict["metadata"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the recordingInfo
-    * Information on whether the participant has recording capability.
+    * Information about whether the participant has recording capability.
     *
     * @return RecordingInfo|null The recordingInfo
     */
@@ -163,10 +192,10 @@ class Participant extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the recordingInfo
-    * Information on whether the participant has recording capability.
+    * Information about whether the participant has recording capability.
     *
     * @param RecordingInfo $val The recordingInfo
     *
@@ -177,5 +206,38 @@ class Participant extends Entity
         $this->_propDict["recordingInfo"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the restrictedExperience
+    * Indicates the reason or reasons media content from this participant is restricted.
+    *
+    * @return OnlineMeetingRestricted|null The restrictedExperience
+    */
+    public function getRestrictedExperience()
+    {
+        if (array_key_exists("restrictedExperience", $this->_propDict)) {
+            if (is_a($this->_propDict["restrictedExperience"], "\Microsoft\Graph\Model\OnlineMeetingRestricted") || is_null($this->_propDict["restrictedExperience"])) {
+                return $this->_propDict["restrictedExperience"];
+            } else {
+                $this->_propDict["restrictedExperience"] = new OnlineMeetingRestricted($this->_propDict["restrictedExperience"]);
+                return $this->_propDict["restrictedExperience"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the restrictedExperience
+    * Indicates the reason or reasons media content from this participant is restricted.
+    *
+    * @param OnlineMeetingRestricted $val The restrictedExperience
+    *
+    * @return Participant
+    */
+    public function setRestrictedExperience($val)
+    {
+        $this->_propDict["restrictedExperience"] = $val;
+        return $this;
+    }
+
 }

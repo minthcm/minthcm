@@ -24,8 +24,34 @@ namespace Beta\Microsoft\Graph\Model;
 class TicketInfo extends Entity
 {
     /**
+    * Gets the ticketApproverIdentityId
+    *
+    * @return string|null The ticketApproverIdentityId
+    */
+    public function getTicketApproverIdentityId()
+    {
+        if (array_key_exists("ticketApproverIdentityId", $this->_propDict)) {
+            return $this->_propDict["ticketApproverIdentityId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the ticketApproverIdentityId
+    *
+    * @param string $val The value of the ticketApproverIdentityId
+    *
+    * @return TicketInfo
+    */
+    public function setTicketApproverIdentityId($val)
+    {
+        $this->_propDict["ticketApproverIdentityId"] = $val;
+        return $this;
+    }
+    /**
     * Gets the ticketNumber
-    * Ticket number meta data
+    * The ticket number.
     *
     * @return string|null The ticketNumber
     */
@@ -40,7 +66,7 @@ class TicketInfo extends Entity
 
     /**
     * Sets the ticketNumber
-    * Ticket number meta data
+    * The ticket number.
     *
     * @param string $val The value of the ticketNumber
     *
@@ -52,8 +78,34 @@ class TicketInfo extends Entity
         return $this;
     }
     /**
+    * Gets the ticketSubmitterIdentityId
+    *
+    * @return string|null The ticketSubmitterIdentityId
+    */
+    public function getTicketSubmitterIdentityId()
+    {
+        if (array_key_exists("ticketSubmitterIdentityId", $this->_propDict)) {
+            return $this->_propDict["ticketSubmitterIdentityId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the ticketSubmitterIdentityId
+    *
+    * @param string $val The value of the ticketSubmitterIdentityId
+    *
+    * @return TicketInfo
+    */
+    public function setTicketSubmitterIdentityId($val)
+    {
+        $this->_propDict["ticketSubmitterIdentityId"] = $val;
+        return $this;
+    }
+    /**
     * Gets the ticketSystem
-    * Ticket system meta data
+    * The description of the ticket system.
     *
     * @return string|null The ticketSystem
     */
@@ -68,7 +120,7 @@ class TicketInfo extends Entity
 
     /**
     * Sets the ticketSystem
-    * Ticket system meta data
+    * The description of the ticket system.
     *
     * @param string $val The value of the ticketSystem
     *

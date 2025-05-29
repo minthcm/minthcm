@@ -38,7 +38,7 @@ class SocialIdentityProvider extends IdentityProviderBase
             return null;
         }
     }
-    
+
     /**
     * Sets the clientId
     * The client identifier for the application obtained when registering the application with the identity provider. Required.
@@ -52,10 +52,10 @@ class SocialIdentityProvider extends IdentityProviderBase
         $this->_propDict["clientId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the clientSecret
-    * The client secret for the application that is obtained when the application is registered with the identity provider. This is write-only. A read operation returns '****'. Required.
+    * The client secret for the application that is obtained when the application is registered with the identity provider. This is write-only. A read operation returns . Required.
     *
     * @return string|null The clientSecret
     */
@@ -67,10 +67,10 @@ class SocialIdentityProvider extends IdentityProviderBase
             return null;
         }
     }
-    
+
     /**
     * Sets the clientSecret
-    * The client secret for the application that is obtained when the application is registered with the identity provider. This is write-only. A read operation returns '****'. Required.
+    * The client secret for the application that is obtained when the application is registered with the identity provider. This is write-only. A read operation returns . Required.
     *
     * @param string $val The clientSecret
     *
@@ -81,7 +81,7 @@ class SocialIdentityProvider extends IdentityProviderBase
         $this->_propDict["clientSecret"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityProviderType
     * For a B2B scenario, possible values: Google, Facebook. For a B2C scenario, possible values: Microsoft, Google, Amazon, LinkedIn, Facebook, GitHub, Twitter, Weibo, QQ, WeChat. Required.
@@ -96,7 +96,7 @@ class SocialIdentityProvider extends IdentityProviderBase
             return null;
         }
     }
-    
+
     /**
     * Sets the identityProviderType
     * For a B2B scenario, possible values: Google, Facebook. For a B2C scenario, possible values: Microsoft, Google, Amazon, LinkedIn, Facebook, GitHub, Twitter, Weibo, QQ, WeChat. Required.
@@ -110,5 +110,5 @@ class SocialIdentityProvider extends IdentityProviderBase
         $this->_propDict["identityProviderType"] = $val;
         return $this;
     }
-    
+
 }

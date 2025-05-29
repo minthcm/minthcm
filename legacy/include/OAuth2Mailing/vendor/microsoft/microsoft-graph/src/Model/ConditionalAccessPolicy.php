@@ -42,7 +42,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the conditions
     * Specifies the rules that must be met for the policy to apply. Required.
@@ -56,7 +56,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["conditions"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
@@ -75,7 +75,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
@@ -89,10 +89,9 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
-    * Not used.
     *
     * @return string|null The description
     */
@@ -104,10 +103,9 @@ class ConditionalAccessPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * Not used.
     *
     * @param string $val The description
     *
@@ -118,7 +116,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * Specifies a display name for the conditionalAccessPolicy object.
@@ -133,7 +131,7 @@ class ConditionalAccessPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Specifies a display name for the conditionalAccessPolicy object.
@@ -147,7 +145,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the grantControls
     * Specifies the grant controls that must be fulfilled to pass the policy.
@@ -166,7 +164,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the grantControls
     * Specifies the grant controls that must be fulfilled to pass the policy.
@@ -180,7 +178,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["grantControls"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
@@ -199,7 +197,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
@@ -213,7 +211,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["modifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sessionControls
     * Specifies the session controls that are enforced after sign-in.
@@ -232,7 +230,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the sessionControls
     * Specifies the session controls that are enforced after sign-in.
@@ -246,7 +244,7 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["sessionControls"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the state
     * Specifies the state of the conditionalAccessPolicy object. Possible values are: enabled, disabled, enabledForReportingButNotEnforced. Required.
@@ -265,7 +263,7 @@ class ConditionalAccessPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the state
     * Specifies the state of the conditionalAccessPolicy object. Possible values are: enabled, disabled, enabledForReportingButNotEnforced. Required.
@@ -279,5 +277,32 @@ class ConditionalAccessPolicy extends Entity
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the templateId
+    *
+    * @return string|null The templateId
+    */
+    public function getTemplateId()
+    {
+        if (array_key_exists("templateId", $this->_propDict)) {
+            return $this->_propDict["templateId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the templateId
+    *
+    * @param string $val The templateId
+    *
+    * @return ConditionalAccessPolicy
+    */
+    public function setTemplateId($val)
+    {
+        $this->_propDict["templateId"] = $val;
+        return $this;
+    }
+
 }

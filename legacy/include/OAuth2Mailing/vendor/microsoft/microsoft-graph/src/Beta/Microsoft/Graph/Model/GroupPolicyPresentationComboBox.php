@@ -22,7 +22,7 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
+class GroupPolicyPresentationComboBox extends GroupPolicyUploadedPresentation
 {
     /**
     * Gets the defaultValue
@@ -38,7 +38,7 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the defaultValue
     * Localized default string displayed in the combo box. The default value is empty.
@@ -52,7 +52,7 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
         $this->_propDict["defaultValue"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the maxLength
     * An unsigned integer that specifies the maximum number of text characters for the parameter. The default value is 1023.
@@ -67,7 +67,7 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the maxLength
     * An unsigned integer that specifies the maximum number of text characters for the parameter. The default value is 1023.
@@ -81,7 +81,7 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
         $this->_propDict["maxLength"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the required
     * Specifies whether a value must be specified for the parameter. The default value is false.
@@ -96,7 +96,7 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the required
     * Specifies whether a value must be specified for the parameter. The default value is false.
@@ -110,12 +110,12 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
         $this->_propDict["required"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the suggestions
     * Localized strings listed in the drop-down list of the combo box. The default value is empty.
     *
-    * @return string|null The suggestions
+    * @return array|null The suggestions
     */
     public function getSuggestions()
     {
@@ -125,12 +125,12 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the suggestions
     * Localized strings listed in the drop-down list of the combo box. The default value is empty.
     *
-    * @param string $val The suggestions
+    * @param string[] $val The suggestions
     *
     * @return GroupPolicyPresentationComboBox
     */
@@ -139,5 +139,5 @@ class GroupPolicyPresentationComboBox extends GroupPolicyPresentation
         $this->_propDict["suggestions"] = $val;
         return $this;
     }
-    
+
 }

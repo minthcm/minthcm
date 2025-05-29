@@ -113,8 +113,8 @@ class BasePDFGenerator
     /**
      *
      * @param SugarBean $bean
-     * @param type $regex
-     * @return type
+     * @param string $regex
+     * @return string
      */
     protected function prepareFileName($bean, $regex)
     {
@@ -218,9 +218,9 @@ class BasePDFGenerator
     {
         $tpl_str = str_replace('#CURRENT_PAGE', '{{:pnp:}}', $tpl_str);
         $tpl_str = str_replace('#NO_PAGES', '{{:ptp:}}', $tpl_str);
-        $paramsP = $this->pdf->serializeTCPDFtagParameters(array('P'));
+        $paramsP = $this->pdf->serializeTCPDFtag(array('P'));
         $tpl_str = str_replace('#ADD_PAGE_P', '<tcpdf method="AddPage" params="' . $paramsP . '" />', $tpl_str);
-        $paramsL = $this->pdf->serializeTCPDFtagParameters(array('L'));
+        $paramsL = $this->pdf->serializeTCPDFtag(array('L'));
         $tpl_str = str_replace('#ADD_PAGE_L', '<tcpdf method="AddPage" params="' . $paramsL . '" />', $tpl_str);
         $tpl_str = str_replace('#ADD_PAGE', '<tcpdf method="AddPage" />', $tpl_str);
         global $timedate;

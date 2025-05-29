@@ -18,8 +18,7 @@ final class Connection extends AbstractConnectionMiddleware
     public const PORTABILITY_EMPTY_TO_NULL = 4;
     public const PORTABILITY_FIX_CASE      = 8;
 
-    /** @var Converter */
-    private $converter;
+    private Converter $converter;
 
     public function __construct(ConnectionInterface $connection, Converter $converter)
     {
@@ -32,7 +31,7 @@ final class Connection extends AbstractConnectionMiddleware
     {
         return new Statement(
             parent::prepare($sql),
-            $this->converter
+            $this->converter,
         );
     }
 
@@ -40,7 +39,7 @@ final class Connection extends AbstractConnectionMiddleware
     {
         return new Result(
             parent::query($sql),
-            $this->converter
+            $this->converter,
         );
     }
 }

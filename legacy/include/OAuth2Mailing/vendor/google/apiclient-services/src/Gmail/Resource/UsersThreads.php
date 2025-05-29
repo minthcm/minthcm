@@ -26,19 +26,21 @@ use Google\Service\Gmail\Thread;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $threads = $gmailService->threads;
+ *   $threads = $gmailService->users_threads;
  *  </code>
  */
 class UsersThreads extends \Google\Service\Resource
 {
   /**
-   * Immediately and permanently deletes the specified thread. This operation
-   * cannot be undone. Prefer `threads.trash` instead. (threads.delete)
+   * Immediately and permanently deletes the specified thread. Any messages that
+   * belong to the thread are also deleted. This operation cannot be undone.
+   * Prefer `threads.trash` instead. (threads.delete)
    *
    * @param string $userId The user's email address. The special value `me` can be
    * used to indicate the authenticated user.
    * @param string $id ID of the Thread to delete.
    * @param array $optParams Optional parameters.
+   * @throws \Google\Service\Exception
    */
   public function delete($userId, $id, $optParams = [])
   {
@@ -58,6 +60,7 @@ class UsersThreads extends \Google\Service\Resource
    * @opt_param string metadataHeaders When given and format is METADATA, only
    * include headers specified.
    * @return Thread
+   * @throws \Google\Service\Exception
    */
   public function get($userId, $id, $optParams = [])
   {
@@ -85,6 +88,7 @@ class UsersThreads extends \Google\Service\Resource
    * `"from:someuser@example.com rfc822msgid: is:unread"`. Parameter cannot be
    * used when accessing the api using the gmail.metadata scope.
    * @return ListThreadsResponse
+   * @throws \Google\Service\Exception
    */
   public function listUsersThreads($userId, $optParams = [])
   {
@@ -102,6 +106,7 @@ class UsersThreads extends \Google\Service\Resource
    * @param ModifyThreadRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Thread
+   * @throws \Google\Service\Exception
    */
   public function modify($userId, $id, ModifyThreadRequest $postBody, $optParams = [])
   {
@@ -110,13 +115,15 @@ class UsersThreads extends \Google\Service\Resource
     return $this->call('modify', [$params], Thread::class);
   }
   /**
-   * Moves the specified thread to the trash. (threads.trash)
+   * Moves the specified thread to the trash. Any messages that belong to the
+   * thread are also moved to the trash. (threads.trash)
    *
    * @param string $userId The user's email address. The special value `me` can be
    * used to indicate the authenticated user.
    * @param string $id The ID of the thread to Trash.
    * @param array $optParams Optional parameters.
    * @return Thread
+   * @throws \Google\Service\Exception
    */
   public function trash($userId, $id, $optParams = [])
   {
@@ -125,13 +132,15 @@ class UsersThreads extends \Google\Service\Resource
     return $this->call('trash', [$params], Thread::class);
   }
   /**
-   * Removes the specified thread from the trash. (threads.untrash)
+   * Removes the specified thread from the trash. Any messages that belong to the
+   * thread are also removed from the trash. (threads.untrash)
    *
    * @param string $userId The user's email address. The special value `me` can be
    * used to indicate the authenticated user.
    * @param string $id The ID of the thread to remove from Trash.
    * @param array $optParams Optional parameters.
    * @return Thread
+   * @throws \Google\Service\Exception
    */
   public function untrash($userId, $id, $optParams = [])
   {

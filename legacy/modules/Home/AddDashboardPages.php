@@ -49,73 +49,155 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $current_user;
 
+$type = 'Home';
+$pages = $current_user->getPreference('pages', $type);
+$page = $pages[$_POST['page_id']] ?? null;
+
+if(isset($page['columns']) && isset($page['numColumns']) && is_array($page['columns']) && count($page['columns']) != $page['numColumns']){
+    $page['numColumns'] = count($page['columns']);
+}
 
 if(!isset($_POST['dashName'])){
     $html  ='<form method="post" name="addpageform" id="addpageform" action="index.php?module=Home&action=AddDashboardPages"/>';
     $html .='<table>';
     $html .='<tr>';
     $html .='<td><label for="dashName">'.$GLOBALS['app_strings']['LBL_ENTER_DASHBOARD_NAME'].'</label></td>';
-    $html .='<td><input type="text" name="dashName" id="dashName"/></td>';
+    if (empty($page)) {
+        $html .= '<td><input type="text" name="dashName" id="dashName"/></td>';
+    } else if($page && $_POST['page_id'] == 0 && empty($page['pageTitle'])) {
+        $html .= '<td><input type="text" name="dashName" id="dashName" value="' . $GLOBALS['app_strings']['LBL_SUITE_DASHBOARD'] . '"/></td>';
+    } else {
+        $html .= '<td><input type="text" name="dashName" id="dashName" value="' . $page['pageTitle'] . '"/></td>';
+    }
     $html .='</tr>';
     $html .='<tr>';
     $html .='<td><label for="numColumns">'.$GLOBALS['app_strings']['LBL_NUMBER_OF_COLUMNS'].' </label></td>';
     $html .='<td><select name="numColumns">';
-    $html .='<option value="1">1</option>';
-    $html .='<option value="2">2</option>';
-    $html .='<option value="3">3</option>';
+    for ($option=1; $option <= 3; $option++) { 
+        if(!empty($page) && $option == $page['numColumns']){
+            $html .= '<option value="'. $option .'" selected>'. $option .'</option>';
+        } else {
+            $html .= '<option value="'. $option .'">'. $option .'</option>';
+        }
+    }
     $html .='</select></td>';
     $html .='</tr>';
     $html .='</table>';
+    $html .= '<input type="hidden" name="page_id" value="' . $_POST['page_id'] . '" />';
     $html .='</form>';
 
     echo $html;
-}else{
-    $type = 'Home';
-
-    $existingPages = $current_user->getPreference('pages',$type);
-    $dashboardPage = array();
+ 
+} else {
     $numberColumns = $_POST['numColumns'];
     $pageName = $_POST['dashName'];
 
-    switch ($numberColumns) {
-        case 1:
-            $pagecolumns[0] = array();
-            $pagecolumns[0]['dashlets'] = array();
-            $pagecolumns[0]['width'] = '100%';
-            break;
-        case 2:
-            $pagecolumns[0] = array();
-            $pagecolumns[0]['dashlets'] = array();
-            $pagecolumns[0]['width'] = '60%';
-            $pagecolumns[1] = array();
-            $pagecolumns[1]['dashlets'] = array();
-            $pagecolumns[1]['width'] = '40%';
-            break;
-        case 3:
-            $pagecolumns[0] = array();
-            $pagecolumns[0]['dashlets'] = array();
-            $pagecolumns[0]['width'] = '30%';
-            $pagecolumns[1] = array();
-            $pagecolumns[1]['dashlets'] = array();
-            $pagecolumns[1]['width'] = '30%';
-            $pagecolumns[2] = array();
-            $pagecolumns[2]['dashlets'] = array();
-            $pagecolumns[2]['width'] = '30%';
-            break;
+    
+    if(empty($page)){
+        switch ($numberColumns) {
+            case 1:
+                $pagecolumns[0] = array();
+                $pagecolumns[0]['dashlets'] = array();
+                $pagecolumns[0]['width'] = '100%';
+                break;
+            case 2:
+                $pagecolumns[0] = array();
+                $pagecolumns[0]['dashlets'] = array();
+                $pagecolumns[0]['width'] = '60%';
+                $pagecolumns[1] = array();
+                $pagecolumns[1]['dashlets'] = array();
+                $pagecolumns[1]['width'] = '40%';
+                break;
+            case 3:
+                $pagecolumns[0] = array();
+                $pagecolumns[0]['dashlets'] = array();
+                $pagecolumns[0]['width'] = '30%';
+                $pagecolumns[1] = array();
+                $pagecolumns[1]['dashlets'] = array();
+                $pagecolumns[1]['width'] = '30%';
+                $pagecolumns[2] = array();
+                $pagecolumns[2]['dashlets'] = array();
+                $pagecolumns[2]['width'] = '30%';
+                break;
+        }
+    } else if($page['numColumns'] == $numberColumns){
+        $pagecolumns = $page['columns'];
+    } else {
+        switch ($numberColumns) {
+            case 1:
+                if($page['numColumns'] == 2){
+                    $pagecolumns[0]['dashlets'] = array_merge($page['columns'][0]['dashlets'], $page['columns'][1]['dashlets']);
+                } else if($page['numColumns'] == 3) {
+                    $pagecolumns[0]['dashlets'] = array_merge($page['columns'][0]['dashlets'], $page['columns'][1]['dashlets'], $page['columns'][2]['dashlets']);
+                }
+                $pagecolumns[0]['width'] = '100%';
+                break;
+            case 2:
+                if($page['numColumns'] == 1){
+                    $dashletsCount = ceil(count($page['columns'][0]['dashlets'])/2);
+                    $columns = array_chunk($page['columns'][0]['dashlets'], $dashletsCount);
+                    $pagecolumns[0]['dashlets'] = $columns[0];
+                    $pagecolumns[0]['width'] = '60%';
+                    $pagecolumns[1]['dashlets'] = $columns[1];
+                    $pagecolumns[1]['width'] = '40%';
+                } else if($page['numColumns'] == 3) {
+                    $dashlets = array_merge($page['columns'][0]['dashlets'], $page['columns'][1]['dashlets'], $page['columns'][2]['dashlets']);
+                    $dashletsCount = ceil(count($dashlets)/2);
+                    $columns = array_chunk($dashlets, $dashletsCount);
+                    $pagecolumns[0]['dashlets'] = $columns[0];
+                    $pagecolumns[0]['width'] = '60%';
+                    $pagecolumns[1]['dashlets'] = $columns[1];
+                    $pagecolumns[1]['width'] = '40%';
+                }
+                break;
+            case 3:
+                if($page['numColumns'] == 1){
+                    $pagecolumns[0]['dashlets'] = $page['columns'][0]['dashlets'];
+                    $pagecolumns[0]['width'] = '30%';
+                    $pagecolumns[1]['dashlets'] = [];
+                    $pagecolumns[1]['width'] = '30%';
+                    $pagecolumns[2]['dashlets'] = [];
+                    $pagecolumns[2]['width'] = '30%';
+                }
+                if($page['numColumns'] == 2){
+                    $pagecolumns[0]['dashlets'] = $page['columns'][0]['dashlets'];
+                    $pagecolumns[0]['width'] = '30%';
+                    $pagecolumns[1]['dashlets'] = $page['columns'][1]['dashlets'];
+                    $pagecolumns[1]['width'] = '30%';
+                    $pagecolumns[2]['dashlets'] = [];
+                    $pagecolumns[2]['width'] = '30%';
+
+                }
+
+                break;
+        }
     }
 
-    $dashboardPage['columns'] = $pagecolumns;
-    $dashboardPage['pageTitle'] = $pageName;
-    $dashboardPage['numColumns'] = $numberColumns;
+    if(empty($page)){
+        $dashboardPage = array();
+        $dashboardPage['columns'] = $pagecolumns;
+        $dashboardPage['pageTitle'] = $pageName;
+        $dashboardPage['numColumns'] = $numberColumns;
 
-    array_push($existingPages,$dashboardPage);
+        array_push($pages, $dashboardPage);
+    } else {
+        $dashboardPage = $page;
+        $dashboardPage['columns'] = $pagecolumns;
+        
+        $dashboardPage['pageTitle'] = $pageName;
+        
+        $dashboardPage['numColumns'] = $numberColumns;
+        
+        $pages[$_POST['page_id']] = $dashboardPage;
+    }
 
-    $current_user->setPreference('pages', $existingPages, 0, $type);
+    $current_user->setPreference('pages', $pages, 0, $type);
 
     $display = array();
 
-    foreach($dashboardPage['columns'] as $colNum => $column)
+    foreach($dashboardPage['columns'] as $colNum => $column) {
         $display[$colNum]['width'] = $column['width'];
+    }
 
     $home_mod_strings = return_module_language($current_language, $type);
 

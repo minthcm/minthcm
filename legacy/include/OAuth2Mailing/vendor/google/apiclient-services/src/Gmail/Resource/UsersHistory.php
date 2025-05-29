@@ -24,7 +24,7 @@ use Google\Service\Gmail\ListHistoryResponse;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $history = $gmailService->history;
+ *   $history = $gmailService->users_history;
  *  </code>
  */
 class UsersHistory extends \Google\Service\Resource
@@ -56,6 +56,7 @@ class UsersHistory extends \Google\Service\Resource
    * response, there are no updates to retrieve and you can store the returned
    * `historyId` for a future request.
    * @return ListHistoryResponse
+   * @throws \Google\Service\Exception
    */
   public function listUsersHistory($userId, $optParams = [])
   {

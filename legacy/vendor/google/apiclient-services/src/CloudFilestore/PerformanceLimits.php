@@ -22,11 +22,15 @@ class PerformanceLimits extends \Google\Model
   /**
    * @var string
    */
+  public $maxIops;
+  /**
+   * @var string
+   */
   public $maxReadIops;
   /**
    * @var string
    */
-  public $maxReadThroughput;
+  public $maxReadThroughputBps;
   /**
    * @var string
    */
@@ -34,8 +38,22 @@ class PerformanceLimits extends \Google\Model
   /**
    * @var string
    */
-  public $maxWriteThroughput;
+  public $maxWriteThroughputBps;
 
+  /**
+   * @param string
+   */
+  public function setMaxIops($maxIops)
+  {
+    $this->maxIops = $maxIops;
+  }
+  /**
+   * @return string
+   */
+  public function getMaxIops()
+  {
+    return $this->maxIops;
+  }
   /**
    * @param string
    */
@@ -53,16 +71,16 @@ class PerformanceLimits extends \Google\Model
   /**
    * @param string
    */
-  public function setMaxReadThroughput($maxReadThroughput)
+  public function setMaxReadThroughputBps($maxReadThroughputBps)
   {
-    $this->maxReadThroughput = $maxReadThroughput;
+    $this->maxReadThroughputBps = $maxReadThroughputBps;
   }
   /**
    * @return string
    */
-  public function getMaxReadThroughput()
+  public function getMaxReadThroughputBps()
   {
-    return $this->maxReadThroughput;
+    return $this->maxReadThroughputBps;
   }
   /**
    * @param string
@@ -81,16 +99,16 @@ class PerformanceLimits extends \Google\Model
   /**
    * @param string
    */
-  public function setMaxWriteThroughput($maxWriteThroughput)
+  public function setMaxWriteThroughputBps($maxWriteThroughputBps)
   {
-    $this->maxWriteThroughput = $maxWriteThroughput;
+    $this->maxWriteThroughputBps = $maxWriteThroughputBps;
   }
   /**
    * @return string
    */
-  public function getMaxWriteThroughput()
+  public function getMaxWriteThroughputBps()
   {
-    return $this->maxWriteThroughput;
+    return $this->maxWriteThroughputBps;
   }
 }
 

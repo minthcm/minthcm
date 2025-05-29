@@ -21,14 +21,14 @@ use phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class PrivateKey extends DSA implements Common\PrivateKey
+final class PrivateKey extends DSA implements Common\PrivateKey
 {
     use Common\Traits\PasswordProtected;
 
     /**
      * DSA secret exponent x
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $x;
 

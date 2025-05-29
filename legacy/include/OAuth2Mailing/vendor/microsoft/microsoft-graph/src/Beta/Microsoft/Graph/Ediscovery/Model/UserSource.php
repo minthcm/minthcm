@@ -38,7 +38,7 @@ class UserSource extends DataSource
             return null;
         }
     }
-    
+
     /**
     * Sets the email
     * Email address of the user's mailbox.
@@ -52,7 +52,7 @@ class UserSource extends DataSource
         $this->_propDict["email"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the includedSources
     * Specifies which sources are included in this group. Possible values are: mailbox, site.
@@ -71,7 +71,7 @@ class UserSource extends DataSource
         }
         return null;
     }
-    
+
     /**
     * Sets the includedSources
     * Specifies which sources are included in this group. Possible values are: mailbox, site.
@@ -85,5 +85,34 @@ class UserSource extends DataSource
         $this->_propDict["includedSources"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the siteWebUrl
+    * The URL of the user's OneDrive for Business site. Read-only.
+    *
+    * @return string|null The siteWebUrl
+    */
+    public function getSiteWebUrl()
+    {
+        if (array_key_exists("siteWebUrl", $this->_propDict)) {
+            return $this->_propDict["siteWebUrl"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the siteWebUrl
+    * The URL of the user's OneDrive for Business site. Read-only.
+    *
+    * @param string $val The siteWebUrl
+    *
+    * @return UserSource
+    */
+    public function setSiteWebUrl($val)
+    {
+        $this->_propDict["siteWebUrl"] = $val;
+        return $this;
+    }
+
 }

@@ -25,6 +25,18 @@ class Instance extends \Google\Collection
    */
   public $createTime;
   /**
+   * @var bool
+   */
+  public $customPerformanceSupported;
+  /**
+   * @var bool
+   */
+  public $deletionProtectionEnabled;
+  /**
+   * @var string
+   */
+  public $deletionProtectionReason;
+  /**
    * @var string
    */
   public $description;
@@ -48,6 +60,14 @@ class Instance extends \Google\Collection
   public $name;
   protected $networksType = NetworkConfig::class;
   protected $networksDataType = 'array';
+  protected $performanceConfigType = PerformanceConfig::class;
+  protected $performanceConfigDataType = '';
+  protected $performanceLimitsType = PerformanceLimits::class;
+  protected $performanceLimitsDataType = '';
+  /**
+   * @var string
+   */
+  public $protocol;
   protected $replicationType = Replication::class;
   protected $replicationDataType = '';
   /**
@@ -92,6 +112,48 @@ class Instance extends \Google\Collection
   public function getCreateTime()
   {
     return $this->createTime;
+  }
+  /**
+   * @param bool
+   */
+  public function setCustomPerformanceSupported($customPerformanceSupported)
+  {
+    $this->customPerformanceSupported = $customPerformanceSupported;
+  }
+  /**
+   * @return bool
+   */
+  public function getCustomPerformanceSupported()
+  {
+    return $this->customPerformanceSupported;
+  }
+  /**
+   * @param bool
+   */
+  public function setDeletionProtectionEnabled($deletionProtectionEnabled)
+  {
+    $this->deletionProtectionEnabled = $deletionProtectionEnabled;
+  }
+  /**
+   * @return bool
+   */
+  public function getDeletionProtectionEnabled()
+  {
+    return $this->deletionProtectionEnabled;
+  }
+  /**
+   * @param string
+   */
+  public function setDeletionProtectionReason($deletionProtectionReason)
+  {
+    $this->deletionProtectionReason = $deletionProtectionReason;
+  }
+  /**
+   * @return string
+   */
+  public function getDeletionProtectionReason()
+  {
+    return $this->deletionProtectionReason;
   }
   /**
    * @param string
@@ -190,6 +252,48 @@ class Instance extends \Google\Collection
   public function getNetworks()
   {
     return $this->networks;
+  }
+  /**
+   * @param PerformanceConfig
+   */
+  public function setPerformanceConfig(PerformanceConfig $performanceConfig)
+  {
+    $this->performanceConfig = $performanceConfig;
+  }
+  /**
+   * @return PerformanceConfig
+   */
+  public function getPerformanceConfig()
+  {
+    return $this->performanceConfig;
+  }
+  /**
+   * @param PerformanceLimits
+   */
+  public function setPerformanceLimits(PerformanceLimits $performanceLimits)
+  {
+    $this->performanceLimits = $performanceLimits;
+  }
+  /**
+   * @return PerformanceLimits
+   */
+  public function getPerformanceLimits()
+  {
+    return $this->performanceLimits;
+  }
+  /**
+   * @param string
+   */
+  public function setProtocol($protocol)
+  {
+    $this->protocol = $protocol;
+  }
+  /**
+   * @return string
+   */
+  public function getProtocol()
+  {
+    return $this->protocol;
   }
   /**
    * @param Replication

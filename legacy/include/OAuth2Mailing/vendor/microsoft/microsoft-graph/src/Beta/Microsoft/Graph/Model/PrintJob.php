@@ -25,6 +25,68 @@ namespace Beta\Microsoft\Graph\Model;
 class PrintJob extends Entity
 {
     /**
+    * Gets the acknowledgedDateTime
+    *
+    * @return \DateTime|null The acknowledgedDateTime
+    */
+    public function getAcknowledgedDateTime()
+    {
+        if (array_key_exists("acknowledgedDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["acknowledgedDateTime"], "\DateTime") || is_null($this->_propDict["acknowledgedDateTime"])) {
+                return $this->_propDict["acknowledgedDateTime"];
+            } else {
+                $this->_propDict["acknowledgedDateTime"] = new \DateTime($this->_propDict["acknowledgedDateTime"]);
+                return $this->_propDict["acknowledgedDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the acknowledgedDateTime
+    *
+    * @param \DateTime $val The acknowledgedDateTime
+    *
+    * @return PrintJob
+    */
+    public function setAcknowledgedDateTime($val)
+    {
+        $this->_propDict["acknowledgedDateTime"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the completedDateTime
+    *
+    * @return \DateTime|null The completedDateTime
+    */
+    public function getCompletedDateTime()
+    {
+        if (array_key_exists("completedDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["completedDateTime"], "\DateTime") || is_null($this->_propDict["completedDateTime"])) {
+                return $this->_propDict["completedDateTime"];
+            } else {
+                $this->_propDict["completedDateTime"] = new \DateTime($this->_propDict["completedDateTime"]);
+                return $this->_propDict["completedDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the completedDateTime
+    *
+    * @param \DateTime $val The completedDateTime
+    *
+    * @return PrintJob
+    */
+    public function setCompletedDateTime($val)
+    {
+        $this->_propDict["completedDateTime"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the configuration
     * A group of settings that a printer should use to print a job.
     *
@@ -42,7 +104,7 @@ class PrintJob extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the configuration
     * A group of settings that a printer should use to print a job.
@@ -56,10 +118,9 @@ class PrintJob extends Entity
         $this->_propDict["configuration"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdBy
-    * Read-only. Nullable.
     *
     * @return UserIdentity|null The createdBy
     */
@@ -75,10 +136,9 @@ class PrintJob extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
-    * Read-only. Nullable.
     *
     * @param UserIdentity $val The createdBy
     *
@@ -89,7 +149,7 @@ class PrintJob extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The DateTimeOffset when the job was created. Read-only.
@@ -108,7 +168,7 @@ class PrintJob extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The DateTimeOffset when the job was created. Read-only.
@@ -122,7 +182,63 @@ class PrintJob extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the displayName
+    * The name of the print job.
+    *
+    * @return string|null The displayName
+    */
+    public function getDisplayName()
+    {
+        if (array_key_exists("displayName", $this->_propDict)) {
+            return $this->_propDict["displayName"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the displayName
+    * The name of the print job.
+    *
+    * @param string $val The displayName
+    *
+    * @return PrintJob
+    */
+    public function setDisplayName($val)
+    {
+        $this->_propDict["displayName"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the errorCode
+    *
+    * @return int|null The errorCode
+    */
+    public function getErrorCode()
+    {
+        if (array_key_exists("errorCode", $this->_propDict)) {
+            return $this->_propDict["errorCode"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the errorCode
+    *
+    * @param int $val The errorCode
+    *
+    * @return PrintJob
+    */
+    public function setErrorCode($val)
+    {
+        $this->_propDict["errorCode"] = intval($val);
+        return $this;
+    }
+
     /**
     * Gets the isFetchable
     * If true, document can be fetched by printer.
@@ -137,7 +253,7 @@ class PrintJob extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isFetchable
     * If true, document can be fetched by printer.
@@ -151,7 +267,7 @@ class PrintJob extends Entity
         $this->_propDict["isFetchable"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the redirectedFrom
     * Contains the source job URL, if the job has been redirected from another printer.
@@ -166,7 +282,7 @@ class PrintJob extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the redirectedFrom
     * Contains the source job URL, if the job has been redirected from another printer.
@@ -180,7 +296,7 @@ class PrintJob extends Entity
         $this->_propDict["redirectedFrom"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the redirectedTo
     * Contains the destination job URL, if the job has been redirected to another printer.
@@ -195,7 +311,7 @@ class PrintJob extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the redirectedTo
     * Contains the destination job URL, if the job has been redirected to another printer.
@@ -209,7 +325,7 @@ class PrintJob extends Entity
         $this->_propDict["redirectedTo"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
     * The status of the print job. Read-only.
@@ -228,7 +344,7 @@ class PrintJob extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
     * The status of the print job. Read-only.
@@ -242,11 +358,10 @@ class PrintJob extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the documents
-    * Read-only.
      *
      * @return array|null The documents
      */
@@ -258,12 +373,11 @@ class PrintJob extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the documents
-    * Read-only.
     *
-    * @param PrintDocument $val The documents
+    * @param PrintDocument[] $val The documents
     *
     * @return PrintJob
     */
@@ -272,9 +386,9 @@ class PrintJob extends Entity
         $this->_propDict["documents"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the tasks
     * A list of printTasks that were triggered by this print job.
      *
@@ -288,12 +402,12 @@ class PrintJob extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tasks
     * A list of printTasks that were triggered by this print job.
     *
-    * @param PrintTask $val The tasks
+    * @param PrintTask[] $val The tasks
     *
     * @return PrintJob
     */
@@ -302,5 +416,5 @@ class PrintJob extends Entity
         $this->_propDict["tasks"] = $val;
         return $this;
     }
-    
+
 }

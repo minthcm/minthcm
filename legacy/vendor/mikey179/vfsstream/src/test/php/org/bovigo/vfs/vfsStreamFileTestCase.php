@@ -23,7 +23,7 @@ class vfsStreamFileTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->file = new vfsStreamFile('foo');
     }
@@ -327,11 +327,11 @@ class vfsStreamFileTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * @test
      * @group  issue_79
-     * @expectedException  \InvalidArgumentException
      * @since  1.3.0
      */
     public function withContentThrowsInvalidArgumentExceptionWhenContentIsNoStringAndNoFileContent()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->file->withContent(313);
     }
 }

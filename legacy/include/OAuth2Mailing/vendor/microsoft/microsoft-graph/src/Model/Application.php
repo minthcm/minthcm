@@ -25,7 +25,7 @@ namespace Microsoft\Graph\Model;
 class Application extends DirectoryObject
 {
 
-     /** 
+     /**
      * Gets the addIns
     * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services like Office 365 call the application in the context of a document the user is working on.
      *
@@ -39,12 +39,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the addIns
     * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services like Office 365 call the application in the context of a document the user is working on.
     *
-    * @param AddIn $val The addIns
+    * @param AddIn[] $val The addIns
     *
     * @return Application
     */
@@ -53,7 +53,7 @@ class Application extends DirectoryObject
         $this->_propDict["addIns"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the api
     * Specifies settings for an application that implements a web API.
@@ -72,7 +72,7 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the api
     * Specifies settings for an application that implements a web API.
@@ -86,10 +86,10 @@ class Application extends DirectoryObject
         $this->_propDict["api"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appId
-    * The unique identifier for the application that is assigned by Azure AD. Not nullable. Read-only.
+    * The unique identifier for the application that is assigned to an application by Microsoft Entra ID. Not nullable. Read-only. Alternate key. Supports $filter (eq).
     *
     * @return string|null The appId
     */
@@ -101,10 +101,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the appId
-    * The unique identifier for the application that is assigned by Azure AD. Not nullable. Read-only.
+    * The unique identifier for the application that is assigned to an application by Microsoft Entra ID. Not nullable. Read-only. Alternate key. Supports $filter (eq).
     *
     * @param string $val The appId
     *
@@ -115,10 +115,10 @@ class Application extends DirectoryObject
         $this->_propDict["appId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the applicationTemplateId
-    * Unique identifier of the applicationTemplate.
+    * Unique identifier of the applicationTemplate. Supports $filter (eq, not, ne).
     *
     * @return string|null The applicationTemplateId
     */
@@ -130,10 +130,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the applicationTemplateId
-    * Unique identifier of the applicationTemplate.
+    * Unique identifier of the applicationTemplate. Supports $filter (eq, not, ne).
     *
     * @param string $val The applicationTemplateId
     *
@@ -144,11 +144,11 @@ class Application extends DirectoryObject
         $this->_propDict["applicationTemplateId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the appRoles
-    * The collection of roles assigned to the application. With app role assignments, these roles can be assigned to users, groups, or service principals associated with other applications. Not nullable.
+    * The collection of roles defined for the application. With app role assignments, these roles can be assigned to users, groups, or service principals associated with other applications. Not nullable.
      *
      * @return array|null The appRoles
      */
@@ -160,12 +160,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the appRoles
-    * The collection of roles assigned to the application. With app role assignments, these roles can be assigned to users, groups, or service principals associated with other applications. Not nullable.
+    * The collection of roles defined for the application. With app role assignments, these roles can be assigned to users, groups, or service principals associated with other applications. Not nullable.
     *
-    * @param AppRole $val The appRoles
+    * @param AppRole[] $val The appRoles
     *
     * @return Application
     */
@@ -174,10 +174,43 @@ class Application extends DirectoryObject
         $this->_propDict["appRoles"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the certification
+    * Specifies the certification status of the application.
+    *
+    * @return Certification|null The certification
+    */
+    public function getCertification()
+    {
+        if (array_key_exists("certification", $this->_propDict)) {
+            if (is_a($this->_propDict["certification"], "\Microsoft\Graph\Model\Certification") || is_null($this->_propDict["certification"])) {
+                return $this->_propDict["certification"];
+            } else {
+                $this->_propDict["certification"] = new Certification($this->_propDict["certification"]);
+                return $this->_propDict["certification"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the certification
+    * Specifies the certification status of the application.
+    *
+    * @param Certification $val The certification
+    *
+    * @return Application
+    */
+    public function setCertification($val)
+    {
+        $this->_propDict["certification"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the createdDateTime
-    * The date and time the application was registered. The DateTimeOffset type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+    * The date and time the application was registered. The DateTimeOffset type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.  Supports $filter (eq, ne, not, ge, le, in, and eq on null values) and $orderby.
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -193,10 +226,10 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
-    * The date and time the application was registered. The DateTimeOffset type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+    * The date and time the application was registered. The DateTimeOffset type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.  Supports $filter (eq, ne, not, ge, le, in, and eq on null values) and $orderby.
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -207,9 +240,37 @@ class Application extends DirectoryObject
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the defaultRedirectUri
+    *
+    * @return string|null The defaultRedirectUri
+    */
+    public function getDefaultRedirectUri()
+    {
+        if (array_key_exists("defaultRedirectUri", $this->_propDict)) {
+            return $this->_propDict["defaultRedirectUri"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the defaultRedirectUri
+    *
+    * @param string $val The defaultRedirectUri
+    *
+    * @return Application
+    */
+    public function setDefaultRedirectUri($val)
+    {
+        $this->_propDict["defaultRedirectUri"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the description
+    * Free text field to provide a description of the application object to end users. The maximum allowed size is 1024 characters. Supports $filter (eq, ne, not, ge, le, startsWith) and $search.
     *
     * @return string|null The description
     */
@@ -221,9 +282,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the description
+    * Free text field to provide a description of the application object to end users. The maximum allowed size is 1024 characters. Supports $filter (eq, ne, not, ge, le, startsWith) and $search.
     *
     * @param string $val The description
     *
@@ -234,10 +296,39 @@ class Application extends DirectoryObject
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the disabledByMicrosoftStatus
+    * Specifies whether Microsoft has disabled the registered application. Possible values are: null (default value), NotDisabled, and DisabledDueToViolationOfServicesAgreement (reasons may include suspicious, abusive, or malicious activity, or a violation of the Microsoft Services Agreement).  Supports $filter (eq, ne, not).
+    *
+    * @return string|null The disabledByMicrosoftStatus
+    */
+    public function getDisabledByMicrosoftStatus()
+    {
+        if (array_key_exists("disabledByMicrosoftStatus", $this->_propDict)) {
+            return $this->_propDict["disabledByMicrosoftStatus"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the disabledByMicrosoftStatus
+    * Specifies whether Microsoft has disabled the registered application. Possible values are: null (default value), NotDisabled, and DisabledDueToViolationOfServicesAgreement (reasons may include suspicious, abusive, or malicious activity, or a violation of the Microsoft Services Agreement).  Supports $filter (eq, ne, not).
+    *
+    * @param string $val The disabledByMicrosoftStatus
+    *
+    * @return Application
+    */
+    public function setDisabledByMicrosoftStatus($val)
+    {
+        $this->_propDict["disabledByMicrosoftStatus"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the displayName
-    * The display name for the application.
+    * The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
     *
     * @return string|null The displayName
     */
@@ -249,10 +340,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The display name for the application.
+    * The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
     *
     * @param string $val The displayName
     *
@@ -263,10 +354,10 @@ class Application extends DirectoryObject
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the groupMembershipClaims
-    * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this attribute, use one of the following string values: None, SecurityGroup (for security groups and Azure AD roles), All (this gets all security groups, distribution groups, and Azure AD directory roles that the signed-in user is a member of).
+    * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this attribute, use one of the following valid string values: None, SecurityGroup (for security groups and Microsoft Entra roles), All (this gets all of the security groups, distribution groups, and Microsoft Entra directory roles that the signed-in user is a member of).
     *
     * @return string|null The groupMembershipClaims
     */
@@ -278,10 +369,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the groupMembershipClaims
-    * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this attribute, use one of the following string values: None, SecurityGroup (for security groups and Azure AD roles), All (this gets all security groups, distribution groups, and Azure AD directory roles that the signed-in user is a member of).
+    * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this attribute, use one of the following valid string values: None, SecurityGroup (for security groups and Microsoft Entra roles), All (this gets all of the security groups, distribution groups, and Microsoft Entra directory roles that the signed-in user is a member of).
     *
     * @param string $val The groupMembershipClaims
     *
@@ -292,12 +383,12 @@ class Application extends DirectoryObject
         $this->_propDict["groupMembershipClaims"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identifierUris
-    * The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the application is multi-tenant. For more information, see Application Objects and Service Principal Objects. The any operator is required for filter expressions on multi-valued properties. Not nullable.
+    * Also known as App ID URI, this value is set when an application is used as a resource app. The identifierUris acts as the prefix for the scopes you'll reference in your API's code, and it must be globally unique. You can use the default value provided, which is in the form api://&amp;lt;application-client-id&amp;gt;, or specify a more readable URI like https://contoso.com/api. For more information on valid identifierUris patterns and best practices, see Microsoft Entra application registration security best practices. Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
     *
-    * @return string|null The identifierUris
+    * @return array|null The identifierUris
     */
     public function getIdentifierUris()
     {
@@ -307,12 +398,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the identifierUris
-    * The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the application is multi-tenant. For more information, see Application Objects and Service Principal Objects. The any operator is required for filter expressions on multi-valued properties. Not nullable.
+    * Also known as App ID URI, this value is set when an application is used as a resource app. The identifierUris acts as the prefix for the scopes you'll reference in your API's code, and it must be globally unique. You can use the default value provided, which is in the form api://&amp;lt;application-client-id&amp;gt;, or specify a more readable URI like https://contoso.com/api. For more information on valid identifierUris patterns and best practices, see Microsoft Entra application registration security best practices. Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
     *
-    * @param string $val The identifierUris
+    * @param string[] $val The identifierUris
     *
     * @return Application
     */
@@ -321,10 +412,10 @@ class Application extends DirectoryObject
         $this->_propDict["identifierUris"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the info
-    * Basic profile information of the application, such as it's marketing, support, terms of service, and privacy statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more information, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+    * Basic profile information of the application such as  app's marketing, support, terms of service and privacy statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more info, see How to: Add Terms of service and privacy statement for registered Microsoft Entra apps. Supports $filter (eq, ne, not, ge, le, and eq on null values).
     *
     * @return InformationalUrl|null The info
     */
@@ -340,10 +431,10 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the info
-    * Basic profile information of the application, such as it's marketing, support, terms of service, and privacy statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more information, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+    * Basic profile information of the application such as  app's marketing, support, terms of service and privacy statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more info, see How to: Add Terms of service and privacy statement for registered Microsoft Entra apps. Supports $filter (eq, ne, not, ge, le, and eq on null values).
     *
     * @param InformationalUrl $val The info
     *
@@ -354,7 +445,7 @@ class Application extends DirectoryObject
         $this->_propDict["info"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isDeviceOnlyAuthSupported
     * Specifies whether this application supports device authentication without a user. The default is false.
@@ -369,7 +460,7 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the isDeviceOnlyAuthSupported
     * Specifies whether this application supports device authentication without a user. The default is false.
@@ -383,10 +474,10 @@ class Application extends DirectoryObject
         $this->_propDict["isDeviceOnlyAuthSupported"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isFallbackPublicClient
-    * Specifies the fallback application type as public client, such as an installed application running on a mobile device. The default value is false which means the fallback application type is confidential client such as a web app. There are certain scenarios where Azure AD cannot determine the client application type. For example, the ROPC flow where the application is configured without specifying a redirect URI. In those cases Azure AD interprets the application type based on the value of this property.
+    * Specifies the fallback application type as public client, such as an installed application running on a mobile device. The default value is false which means the fallback application type is confidential client such as a web app. There are certain scenarios where Microsoft Entra ID cannot determine the client application type. For example, the ROPC flow where it is configured without specifying a redirect URI. In those cases Microsoft Entra ID interprets the application type based on the value of this property.
     *
     * @return bool|null The isFallbackPublicClient
     */
@@ -398,10 +489,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the isFallbackPublicClient
-    * Specifies the fallback application type as public client, such as an installed application running on a mobile device. The default value is false which means the fallback application type is confidential client such as a web app. There are certain scenarios where Azure AD cannot determine the client application type. For example, the ROPC flow where the application is configured without specifying a redirect URI. In those cases Azure AD interprets the application type based on the value of this property.
+    * Specifies the fallback application type as public client, such as an installed application running on a mobile device. The default value is false which means the fallback application type is confidential client such as a web app. There are certain scenarios where Microsoft Entra ID cannot determine the client application type. For example, the ROPC flow where it is configured without specifying a redirect URI. In those cases Microsoft Entra ID interprets the application type based on the value of this property.
     *
     * @param bool $val The isFallbackPublicClient
     *
@@ -412,11 +503,11 @@ class Application extends DirectoryObject
         $this->_propDict["isFallbackPublicClient"] = boolval($val);
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the keyCredentials
-    * The collection of key credentials associated with the application. Not nullable.
+    * The collection of key credentials associated with the application. Not nullable. Supports $filter (eq, not, ge, le).
      *
      * @return array|null The keyCredentials
      */
@@ -428,12 +519,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the keyCredentials
-    * The collection of key credentials associated with the application. Not nullable.
+    * The collection of key credentials associated with the application. Not nullable. Supports $filter (eq, not, ge, le).
     *
-    * @param KeyCredential $val The keyCredentials
+    * @param KeyCredential[] $val The keyCredentials
     *
     * @return Application
     */
@@ -442,7 +533,7 @@ class Application extends DirectoryObject
         $this->_propDict["keyCredentials"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the logo
     * The main logo for the application. Not nullable.
@@ -455,13 +546,13 @@ class Application extends DirectoryObject
             if (is_a($this->_propDict["logo"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["logo"])) {
                 return $this->_propDict["logo"];
             } else {
-                $this->_propDict["logo"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["logo"]);
+                $this->_propDict["logo"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["logo"]);
                 return $this->_propDict["logo"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the logo
     * The main logo for the application. Not nullable.
@@ -475,7 +566,7 @@ class Application extends DirectoryObject
         $this->_propDict["logo"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the notes
     * Notes relevant for the management of the application.
@@ -490,7 +581,7 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the notes
     * Notes relevant for the management of the application.
@@ -504,7 +595,7 @@ class Application extends DirectoryObject
         $this->_propDict["notes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the oauth2RequirePostResponse
     *
@@ -518,7 +609,7 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the oauth2RequirePostResponse
     *
@@ -531,10 +622,10 @@ class Application extends DirectoryObject
         $this->_propDict["oauth2RequirePostResponse"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the optionalClaims
-    * Application developers can configure optional claims in their Azure AD applications to specify the claims that are sent to their application by the Microsoft security token service. For more information, see How to: Provide optional claims to your app.
+    * Application developers can configure optional claims in their Microsoft Entra applications to specify the claims that are sent to their application by the Microsoft security token service. For more information, see How to: Provide optional claims to your app.
     *
     * @return OptionalClaims|null The optionalClaims
     */
@@ -550,10 +641,10 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the optionalClaims
-    * Application developers can configure optional claims in their Azure AD applications to specify the claims that are sent to their application by the Microsoft security token service. For more information, see How to: Provide optional claims to your app.
+    * Application developers can configure optional claims in their Microsoft Entra applications to specify the claims that are sent to their application by the Microsoft security token service. For more information, see How to: Provide optional claims to your app.
     *
     * @param OptionalClaims $val The optionalClaims
     *
@@ -564,7 +655,7 @@ class Application extends DirectoryObject
         $this->_propDict["optionalClaims"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the parentalControlSettings
     * Specifies parental control settings for an application.
@@ -583,7 +674,7 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the parentalControlSettings
     * Specifies parental control settings for an application.
@@ -597,9 +688,9 @@ class Application extends DirectoryObject
         $this->_propDict["parentalControlSettings"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the passwordCredentials
     * The collection of password credentials associated with the application. Not nullable.
      *
@@ -613,12 +704,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the passwordCredentials
     * The collection of password credentials associated with the application. Not nullable.
     *
-    * @param PasswordCredential $val The passwordCredentials
+    * @param PasswordCredential[] $val The passwordCredentials
     *
     * @return Application
     */
@@ -627,7 +718,7 @@ class Application extends DirectoryObject
         $this->_propDict["passwordCredentials"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publicClient
     * Specifies settings for installed clients such as desktop or mobile devices.
@@ -646,7 +737,7 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the publicClient
     * Specifies settings for installed clients such as desktop or mobile devices.
@@ -660,10 +751,10 @@ class Application extends DirectoryObject
         $this->_propDict["publicClient"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publisherDomain
-    * The verified publisher domain for the application. Read-only.
+    * The verified publisher domain for the application. Read-only. For more information, see How to: Configure an application's publisher domain. Supports $filter (eq, ne, ge, le, startsWith).
     *
     * @return string|null The publisherDomain
     */
@@ -675,10 +766,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the publisherDomain
-    * The verified publisher domain for the application. Read-only.
+    * The verified publisher domain for the application. Read-only. For more information, see How to: Configure an application's publisher domain. Supports $filter (eq, ne, ge, le, startsWith).
     *
     * @param string $val The publisherDomain
     *
@@ -689,11 +780,44 @@ class Application extends DirectoryObject
         $this->_propDict["publisherDomain"] = $val;
         return $this;
     }
-    
 
-     /** 
+    /**
+    * Gets the requestSignatureVerification
+    * Specifies whether this application requires Microsoft Entra ID to verify the signed authentication requests.
+    *
+    * @return RequestSignatureVerification|null The requestSignatureVerification
+    */
+    public function getRequestSignatureVerification()
+    {
+        if (array_key_exists("requestSignatureVerification", $this->_propDict)) {
+            if (is_a($this->_propDict["requestSignatureVerification"], "\Microsoft\Graph\Model\RequestSignatureVerification") || is_null($this->_propDict["requestSignatureVerification"])) {
+                return $this->_propDict["requestSignatureVerification"];
+            } else {
+                $this->_propDict["requestSignatureVerification"] = new RequestSignatureVerification($this->_propDict["requestSignatureVerification"]);
+                return $this->_propDict["requestSignatureVerification"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the requestSignatureVerification
+    * Specifies whether this application requires Microsoft Entra ID to verify the signed authentication requests.
+    *
+    * @param RequestSignatureVerification $val The requestSignatureVerification
+    *
+    * @return Application
+    */
+    public function setRequestSignatureVerification($val)
+    {
+        $this->_propDict["requestSignatureVerification"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the requiredResourceAccess
-    * Specifies the resources that the application needs to access. This property also specifies the set of OAuth permission scopes and application roles that it needs for each of those resources. This configuration of access to the required resources drives the consent experience. Not nullable.
+    * Specifies the resources that the application needs to access. This property also specifies the set of delegated permissions and application roles that it needs for each of those resources. This configuration of access to the required resources drives the consent experience. No more than 50 resource services (APIs) can be configured. Beginning mid-October 2021, the total number of required permissions must not exceed 400. For more information, see Limits on requested permissions per app. Not nullable. Supports $filter (eq, not, ge, le).
      *
      * @return array|null The requiredResourceAccess
      */
@@ -705,12 +829,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the requiredResourceAccess
-    * Specifies the resources that the application needs to access. This property also specifies the set of OAuth permission scopes and application roles that it needs for each of those resources. This configuration of access to the required resources drives the consent experience. Not nullable.
+    * Specifies the resources that the application needs to access. This property also specifies the set of delegated permissions and application roles that it needs for each of those resources. This configuration of access to the required resources drives the consent experience. No more than 50 resource services (APIs) can be configured. Beginning mid-October 2021, the total number of required permissions must not exceed 400. For more information, see Limits on requested permissions per app. Not nullable. Supports $filter (eq, not, ge, le).
     *
-    * @param RequiredResourceAccess $val The requiredResourceAccess
+    * @param RequiredResourceAccess[] $val The requiredResourceAccess
     *
     * @return Application
     */
@@ -719,10 +843,101 @@ class Application extends DirectoryObject
         $this->_propDict["requiredResourceAccess"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the samlMetadataUrl
+    * The URL where the service exposes SAML metadata for federation. This property is valid only for single-tenant applications. Nullable.
+    *
+    * @return string|null The samlMetadataUrl
+    */
+    public function getSamlMetadataUrl()
+    {
+        if (array_key_exists("samlMetadataUrl", $this->_propDict)) {
+            return $this->_propDict["samlMetadataUrl"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the samlMetadataUrl
+    * The URL where the service exposes SAML metadata for federation. This property is valid only for single-tenant applications. Nullable.
+    *
+    * @param string $val The samlMetadataUrl
+    *
+    * @return Application
+    */
+    public function setSamlMetadataUrl($val)
+    {
+        $this->_propDict["samlMetadataUrl"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the serviceManagementReference
+    * References application or service contact information from a Service or Asset Management database. Nullable.
+    *
+    * @return string|null The serviceManagementReference
+    */
+    public function getServiceManagementReference()
+    {
+        if (array_key_exists("serviceManagementReference", $this->_propDict)) {
+            return $this->_propDict["serviceManagementReference"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the serviceManagementReference
+    * References application or service contact information from a Service or Asset Management database. Nullable.
+    *
+    * @param string $val The serviceManagementReference
+    *
+    * @return Application
+    */
+    public function setServiceManagementReference($val)
+    {
+        $this->_propDict["serviceManagementReference"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the servicePrincipalLockConfiguration
+    * Specifies whether sensitive properties of a multi-tenant application should be locked for editing after the application is provisioned in a tenant. Nullable. null by default.
+    *
+    * @return ServicePrincipalLockConfiguration|null The servicePrincipalLockConfiguration
+    */
+    public function getServicePrincipalLockConfiguration()
+    {
+        if (array_key_exists("servicePrincipalLockConfiguration", $this->_propDict)) {
+            if (is_a($this->_propDict["servicePrincipalLockConfiguration"], "\Microsoft\Graph\Model\ServicePrincipalLockConfiguration") || is_null($this->_propDict["servicePrincipalLockConfiguration"])) {
+                return $this->_propDict["servicePrincipalLockConfiguration"];
+            } else {
+                $this->_propDict["servicePrincipalLockConfiguration"] = new ServicePrincipalLockConfiguration($this->_propDict["servicePrincipalLockConfiguration"]);
+                return $this->_propDict["servicePrincipalLockConfiguration"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the servicePrincipalLockConfiguration
+    * Specifies whether sensitive properties of a multi-tenant application should be locked for editing after the application is provisioned in a tenant. Nullable. null by default.
+    *
+    * @param ServicePrincipalLockConfiguration $val The servicePrincipalLockConfiguration
+    *
+    * @return Application
+    */
+    public function setServicePrincipalLockConfiguration($val)
+    {
+        $this->_propDict["servicePrincipalLockConfiguration"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the signInAudience
-    * Specifies the Microsoft accounts that are supported for the current application. Supported values are: AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount, PersonalMicrosoftAccount. See more in the table below.
+    * Specifies the Microsoft accounts that are supported for the current application. The possible values are: AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount (default), and PersonalMicrosoftAccount. See more in the table. The value of this object also limits the number of permissions an app can request. For more information, see Limits on requested permissions per app. The value for this property has implications on other app object properties. As a result, if you change this property, you may need to change other properties first. For more information, see Validation differences for signInAudience.Supports $filter (eq, ne, not).
     *
     * @return string|null The signInAudience
     */
@@ -734,10 +949,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the signInAudience
-    * Specifies the Microsoft accounts that are supported for the current application. Supported values are: AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount, PersonalMicrosoftAccount. See more in the table below.
+    * Specifies the Microsoft accounts that are supported for the current application. The possible values are: AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount (default), and PersonalMicrosoftAccount. See more in the table. The value of this object also limits the number of permissions an app can request. For more information, see Limits on requested permissions per app. The value for this property has implications on other app object properties. As a result, if you change this property, you may need to change other properties first. For more information, see Validation differences for signInAudience.Supports $filter (eq, ne, not).
     *
     * @param string $val The signInAudience
     *
@@ -748,7 +963,7 @@ class Application extends DirectoryObject
         $this->_propDict["signInAudience"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the spa
     * Specifies settings for a single-page application, including sign out URLs and redirect URIs for authorization codes and access tokens.
@@ -767,7 +982,7 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the spa
     * Specifies settings for a single-page application, including sign out URLs and redirect URIs for authorization codes and access tokens.
@@ -781,12 +996,12 @@ class Application extends DirectoryObject
         $this->_propDict["spa"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tags
-    * Custom strings that can be used to categorize and identify the application. Not nullable.
+    * Custom strings that can be used to categorize and identify the application. Not nullable. Strings added here will also appear in the tags property of any associated service principals.Supports $filter (eq, not, ge, le, startsWith) and $search.
     *
-    * @return string|null The tags
+    * @return array|null The tags
     */
     public function getTags()
     {
@@ -796,12 +1011,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the tags
-    * Custom strings that can be used to categorize and identify the application. Not nullable.
+    * Custom strings that can be used to categorize and identify the application. Not nullable. Strings added here will also appear in the tags property of any associated service principals.Supports $filter (eq, not, ge, le, startsWith) and $search.
     *
-    * @param string $val The tags
+    * @param string[] $val The tags
     *
     * @return Application
     */
@@ -810,10 +1025,10 @@ class Application extends DirectoryObject
         $this->_propDict["tags"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tokenEncryptionKeyId
-    * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD encrypts all the tokens it emits by using the key this property points to. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.
+    * Specifies the keyId of a public key from the keyCredentials collection. When configured, Microsoft Entra ID encrypts all the tokens it emits by using the key this property points to. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.
     *
     * @return string|null The tokenEncryptionKeyId
     */
@@ -825,10 +1040,10 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the tokenEncryptionKeyId
-    * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD encrypts all the tokens it emits by using the key this property points to. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.
+    * Specifies the keyId of a public key from the keyCredentials collection. When configured, Microsoft Entra ID encrypts all the tokens it emits by using the key this property points to. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.
     *
     * @param string $val The tokenEncryptionKeyId
     *
@@ -839,7 +1054,40 @@ class Application extends DirectoryObject
         $this->_propDict["tokenEncryptionKeyId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the verifiedPublisher
+    * Specifies the verified publisher of the application. For more information about how publisher verification helps support application security, trustworthiness, and compliance, see Publisher verification.
+    *
+    * @return VerifiedPublisher|null The verifiedPublisher
+    */
+    public function getVerifiedPublisher()
+    {
+        if (array_key_exists("verifiedPublisher", $this->_propDict)) {
+            if (is_a($this->_propDict["verifiedPublisher"], "\Microsoft\Graph\Model\VerifiedPublisher") || is_null($this->_propDict["verifiedPublisher"])) {
+                return $this->_propDict["verifiedPublisher"];
+            } else {
+                $this->_propDict["verifiedPublisher"] = new VerifiedPublisher($this->_propDict["verifiedPublisher"]);
+                return $this->_propDict["verifiedPublisher"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the verifiedPublisher
+    * Specifies the verified publisher of the application. For more information about how publisher verification helps support application security, trustworthiness, and compliance, see Publisher verification.
+    *
+    * @param VerifiedPublisher $val The verifiedPublisher
+    *
+    * @return Application
+    */
+    public function setVerifiedPublisher($val)
+    {
+        $this->_propDict["verifiedPublisher"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the web
     * Specifies settings for a web application.
@@ -858,7 +1106,7 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the web
     * Specifies settings for a web application.
@@ -872,10 +1120,40 @@ class Application extends DirectoryObject
         $this->_propDict["web"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the appManagementPolicies
+    * The appManagementPolicy applied to this application.
+     *
+     * @return array|null The appManagementPolicies
+     */
+    public function getAppManagementPolicies()
+    {
+        if (array_key_exists("appManagementPolicies", $this->_propDict)) {
+           return $this->_propDict["appManagementPolicies"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the appManagementPolicies
+    * The appManagementPolicy applied to this application.
+    *
+    * @param AppManagementPolicy[] $val The appManagementPolicies
+    *
+    * @return Application
+    */
+    public function setAppManagementPolicies($val)
+    {
+        $this->_propDict["appManagementPolicies"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the createdOnBehalfOf
-    * Read-only.
+    * Supports $filter (/$count eq 0, /$count ne 0). Read-only.
     *
     * @return DirectoryObject|null The createdOnBehalfOf
     */
@@ -891,10 +1169,10 @@ class Application extends DirectoryObject
         }
         return null;
     }
-    
+
     /**
     * Sets the createdOnBehalfOf
-    * Read-only.
+    * Supports $filter (/$count eq 0, /$count ne 0). Read-only.
     *
     * @param DirectoryObject $val The createdOnBehalfOf
     *
@@ -905,11 +1183,11 @@ class Application extends DirectoryObject
         $this->_propDict["createdOnBehalfOf"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the extensionProperties
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand and $filter (/$count eq 0, /$count ne 0).
      *
      * @return array|null The extensionProperties
      */
@@ -921,12 +1199,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the extensionProperties
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand and $filter (/$count eq 0, /$count ne 0).
     *
-    * @param ExtensionProperty $val The extensionProperties
+    * @param ExtensionProperty[] $val The extensionProperties
     *
     * @return Application
     */
@@ -935,9 +1213,39 @@ class Application extends DirectoryObject
         $this->_propDict["extensionProperties"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the federatedIdentityCredentials
+    * Federated identities for applications. Supports $expand and $filter (startsWith, /$count eq 0, /$count ne 0).
+     *
+     * @return array|null The federatedIdentityCredentials
+     */
+    public function getFederatedIdentityCredentials()
+    {
+        if (array_key_exists("federatedIdentityCredentials", $this->_propDict)) {
+           return $this->_propDict["federatedIdentityCredentials"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the federatedIdentityCredentials
+    * Federated identities for applications. Supports $expand and $filter (startsWith, /$count eq 0, /$count ne 0).
+    *
+    * @param FederatedIdentityCredential[] $val The federatedIdentityCredentials
+    *
+    * @return Application
+    */
+    public function setFederatedIdentityCredentials($val)
+    {
+        $this->_propDict["federatedIdentityCredentials"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the homeRealmDiscoveryPolicies
      *
      * @return array|null The homeRealmDiscoveryPolicies
@@ -950,11 +1258,11 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the homeRealmDiscoveryPolicies
     *
-    * @param HomeRealmDiscoveryPolicy $val The homeRealmDiscoveryPolicies
+    * @param HomeRealmDiscoveryPolicy[] $val The homeRealmDiscoveryPolicies
     *
     * @return Application
     */
@@ -963,11 +1271,11 @@ class Application extends DirectoryObject
         $this->_propDict["homeRealmDiscoveryPolicies"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the owners
-    * Directory objects that are owners of the application. Read-only. Nullable.
+    * Directory objects that are owners of the application. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
      *
      * @return array|null The owners
      */
@@ -979,12 +1287,12 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the owners
-    * Directory objects that are owners of the application. Read-only. Nullable.
+    * Directory objects that are owners of the application. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
     *
-    * @param DirectoryObject $val The owners
+    * @param DirectoryObject[] $val The owners
     *
     * @return Application
     */
@@ -993,9 +1301,9 @@ class Application extends DirectoryObject
         $this->_propDict["owners"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the tokenIssuancePolicies
      *
      * @return array|null The tokenIssuancePolicies
@@ -1008,11 +1316,11 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tokenIssuancePolicies
     *
-    * @param TokenIssuancePolicy $val The tokenIssuancePolicies
+    * @param TokenIssuancePolicy[] $val The tokenIssuancePolicies
     *
     * @return Application
     */
@@ -1021,11 +1329,10 @@ class Application extends DirectoryObject
         $this->_propDict["tokenIssuancePolicies"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the tokenLifetimePolicies
-    * The tokenLifetimePolicies assigned to this application.
      *
      * @return array|null The tokenLifetimePolicies
      */
@@ -1037,12 +1344,11 @@ class Application extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tokenLifetimePolicies
-    * The tokenLifetimePolicies assigned to this application.
     *
-    * @param TokenLifetimePolicy $val The tokenLifetimePolicies
+    * @param TokenLifetimePolicy[] $val The tokenLifetimePolicies
     *
     * @return Application
     */
@@ -1051,5 +1357,38 @@ class Application extends DirectoryObject
         $this->_propDict["tokenLifetimePolicies"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the synchronization
+    * Represents the capability for Microsoft Entra identity synchronization through the Microsoft Graph API.
+    *
+    * @return Synchronization|null The synchronization
+    */
+    public function getSynchronization()
+    {
+        if (array_key_exists("synchronization", $this->_propDict)) {
+            if (is_a($this->_propDict["synchronization"], "\Microsoft\Graph\Model\Synchronization") || is_null($this->_propDict["synchronization"])) {
+                return $this->_propDict["synchronization"];
+            } else {
+                $this->_propDict["synchronization"] = new Synchronization($this->_propDict["synchronization"]);
+                return $this->_propDict["synchronization"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the synchronization
+    * Represents the capability for Microsoft Entra identity synchronization through the Microsoft Graph API.
+    *
+    * @param Synchronization $val The synchronization
+    *
+    * @return Application
+    */
+    public function setSynchronization($val)
+    {
+        $this->_propDict["synchronization"] = $val;
+        return $this;
+    }
+
 }

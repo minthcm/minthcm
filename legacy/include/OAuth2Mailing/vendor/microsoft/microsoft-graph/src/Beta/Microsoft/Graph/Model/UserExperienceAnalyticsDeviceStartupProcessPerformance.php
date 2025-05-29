@@ -26,7 +26,7 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
 {
     /**
     * Gets the deviceCount
-    * User experience analytics device startup process summarized count.
+    * The count of devices which initiated this process on startup. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @return int|null The deviceCount
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceCount
-    * User experience analytics device startup process summarized count.
+    * The count of devices which initiated this process on startup. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @param int $val The deviceCount
     *
@@ -52,10 +52,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["deviceCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the medianImpactInMs
-    * User experience analytics device startup process median impact in milliseconds.
+    * The median impact of startup process on device boot time in milliseconds. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @return int|null The medianImpactInMs
     */
@@ -67,10 +67,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the medianImpactInMs
-    * User experience analytics device startup process median impact in milliseconds.
+    * The median impact of startup process on device boot time in milliseconds. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @param int $val The medianImpactInMs
     *
@@ -81,10 +81,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["medianImpactInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the processName
-    * User experience analytics device startup process name.
+    * The name of the startup process. Examples: outlook, excel. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The processName
     */
@@ -96,10 +96,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the processName
-    * User experience analytics device startup process name.
+    * The name of the startup process. Examples: outlook, excel. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The processName
     *
@@ -110,10 +110,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["processName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the productName
-    * The user experience analytics device startup process product name.
+    * The product name of the startup process. Examples: Microsoft Outlook, Microsoft Excel. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The productName
     */
@@ -125,10 +125,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the productName
-    * The user experience analytics device startup process product name.
+    * The product name of the startup process. Examples: Microsoft Outlook, Microsoft Excel. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The productName
     *
@@ -139,10 +139,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["productName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publisher
-    * The User experience analytics device startup process publisher.
+    * The publisher of the startup process. Examples: Microsoft Corporation, Contoso Corp. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The publisher
     */
@@ -154,10 +154,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the publisher
-    * The User experience analytics device startup process publisher.
+    * The publisher of the startup process. Examples: Microsoft Corporation, Contoso Corp. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The publisher
     *
@@ -168,10 +168,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["publisher"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the totalImpactInMs
-    * User experience analytics device startup process total impact in milliseconds.
+    * The total impact of startup process on device boot time in milliseconds. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @return int|null The totalImpactInMs
     */
@@ -183,10 +183,10 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the totalImpactInMs
-    * User experience analytics device startup process total impact in milliseconds.
+    * The total impact of startup process on device boot time in milliseconds. Supports: $filter, $select, $OrderBy. Read-only.
     *
     * @param int $val The totalImpactInMs
     *
@@ -197,5 +197,5 @@ class UserExperienceAnalyticsDeviceStartupProcessPerformance extends Entity
         $this->_propDict["totalImpactInMs"] = intval($val);
         return $this;
     }
-    
+
 }

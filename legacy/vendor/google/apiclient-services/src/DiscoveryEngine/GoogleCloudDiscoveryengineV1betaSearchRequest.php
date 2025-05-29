@@ -45,9 +45,19 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
   protected $imageQueryType = GoogleCloudDiscoveryengineV1betaSearchRequestImageQuery::class;
   protected $imageQueryDataType = '';
   /**
+   * @var string
+   */
+  public $languageCode;
+  protected $naturalLanguageQueryUnderstandingSpecType = GoogleCloudDiscoveryengineV1betaSearchRequestNaturalLanguageQueryUnderstandingSpec::class;
+  protected $naturalLanguageQueryUnderstandingSpecDataType = '';
+  /**
    * @var int
    */
   public $offset;
+  /**
+   * @var int
+   */
+  public $oneBoxPageSize;
   /**
    * @var string
    */
@@ -64,6 +74,8 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
    * @var array[]
    */
   public $params;
+  protected $personalizationSpecType = GoogleCloudDiscoveryengineV1betaSearchRequestPersonalizationSpec::class;
+  protected $personalizationSpecDataType = '';
   /**
    * @var string
    */
@@ -75,9 +87,33 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
    */
   public $rankingExpression;
   /**
+   * @var string
+   */
+  public $rankingExpressionBackend;
+  /**
+   * @var string
+   */
+  public $regionCode;
+  /**
+   * @var string
+   */
+  public $relevanceThreshold;
+  /**
    * @var bool
    */
   public $safeSearch;
+  protected $searchAsYouTypeSpecType = GoogleCloudDiscoveryengineV1betaSearchRequestSearchAsYouTypeSpec::class;
+  protected $searchAsYouTypeSpecDataType = '';
+  /**
+   * @var string
+   */
+  public $servingConfig;
+  /**
+   * @var string
+   */
+  public $session;
+  protected $sessionSpecType = GoogleCloudDiscoveryengineV1betaSearchRequestSessionSpec::class;
+  protected $sessionSpecDataType = '';
   protected $spellCorrectionSpecType = GoogleCloudDiscoveryengineV1betaSearchRequestSpellCorrectionSpec::class;
   protected $spellCorrectionSpecDataType = '';
   protected $userInfoType = GoogleCloudDiscoveryengineV1betaUserInfo::class;
@@ -218,6 +254,34 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
     return $this->imageQuery;
   }
   /**
+   * @param string
+   */
+  public function setLanguageCode($languageCode)
+  {
+    $this->languageCode = $languageCode;
+  }
+  /**
+   * @return string
+   */
+  public function getLanguageCode()
+  {
+    return $this->languageCode;
+  }
+  /**
+   * @param GoogleCloudDiscoveryengineV1betaSearchRequestNaturalLanguageQueryUnderstandingSpec
+   */
+  public function setNaturalLanguageQueryUnderstandingSpec(GoogleCloudDiscoveryengineV1betaSearchRequestNaturalLanguageQueryUnderstandingSpec $naturalLanguageQueryUnderstandingSpec)
+  {
+    $this->naturalLanguageQueryUnderstandingSpec = $naturalLanguageQueryUnderstandingSpec;
+  }
+  /**
+   * @return GoogleCloudDiscoveryengineV1betaSearchRequestNaturalLanguageQueryUnderstandingSpec
+   */
+  public function getNaturalLanguageQueryUnderstandingSpec()
+  {
+    return $this->naturalLanguageQueryUnderstandingSpec;
+  }
+  /**
    * @param int
    */
   public function setOffset($offset)
@@ -230,6 +294,20 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
   public function getOffset()
   {
     return $this->offset;
+  }
+  /**
+   * @param int
+   */
+  public function setOneBoxPageSize($oneBoxPageSize)
+  {
+    $this->oneBoxPageSize = $oneBoxPageSize;
+  }
+  /**
+   * @return int
+   */
+  public function getOneBoxPageSize()
+  {
+    return $this->oneBoxPageSize;
   }
   /**
    * @param string
@@ -288,6 +366,20 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
     return $this->params;
   }
   /**
+   * @param GoogleCloudDiscoveryengineV1betaSearchRequestPersonalizationSpec
+   */
+  public function setPersonalizationSpec(GoogleCloudDiscoveryengineV1betaSearchRequestPersonalizationSpec $personalizationSpec)
+  {
+    $this->personalizationSpec = $personalizationSpec;
+  }
+  /**
+   * @return GoogleCloudDiscoveryengineV1betaSearchRequestPersonalizationSpec
+   */
+  public function getPersonalizationSpec()
+  {
+    return $this->personalizationSpec;
+  }
+  /**
    * @param string
    */
   public function setQuery($query)
@@ -330,6 +422,48 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
     return $this->rankingExpression;
   }
   /**
+   * @param string
+   */
+  public function setRankingExpressionBackend($rankingExpressionBackend)
+  {
+    $this->rankingExpressionBackend = $rankingExpressionBackend;
+  }
+  /**
+   * @return string
+   */
+  public function getRankingExpressionBackend()
+  {
+    return $this->rankingExpressionBackend;
+  }
+  /**
+   * @param string
+   */
+  public function setRegionCode($regionCode)
+  {
+    $this->regionCode = $regionCode;
+  }
+  /**
+   * @return string
+   */
+  public function getRegionCode()
+  {
+    return $this->regionCode;
+  }
+  /**
+   * @param string
+   */
+  public function setRelevanceThreshold($relevanceThreshold)
+  {
+    $this->relevanceThreshold = $relevanceThreshold;
+  }
+  /**
+   * @return string
+   */
+  public function getRelevanceThreshold()
+  {
+    return $this->relevanceThreshold;
+  }
+  /**
    * @param bool
    */
   public function setSafeSearch($safeSearch)
@@ -342,6 +476,62 @@ class GoogleCloudDiscoveryengineV1betaSearchRequest extends \Google\Collection
   public function getSafeSearch()
   {
     return $this->safeSearch;
+  }
+  /**
+   * @param GoogleCloudDiscoveryengineV1betaSearchRequestSearchAsYouTypeSpec
+   */
+  public function setSearchAsYouTypeSpec(GoogleCloudDiscoveryengineV1betaSearchRequestSearchAsYouTypeSpec $searchAsYouTypeSpec)
+  {
+    $this->searchAsYouTypeSpec = $searchAsYouTypeSpec;
+  }
+  /**
+   * @return GoogleCloudDiscoveryengineV1betaSearchRequestSearchAsYouTypeSpec
+   */
+  public function getSearchAsYouTypeSpec()
+  {
+    return $this->searchAsYouTypeSpec;
+  }
+  /**
+   * @param string
+   */
+  public function setServingConfig($servingConfig)
+  {
+    $this->servingConfig = $servingConfig;
+  }
+  /**
+   * @return string
+   */
+  public function getServingConfig()
+  {
+    return $this->servingConfig;
+  }
+  /**
+   * @param string
+   */
+  public function setSession($session)
+  {
+    $this->session = $session;
+  }
+  /**
+   * @return string
+   */
+  public function getSession()
+  {
+    return $this->session;
+  }
+  /**
+   * @param GoogleCloudDiscoveryengineV1betaSearchRequestSessionSpec
+   */
+  public function setSessionSpec(GoogleCloudDiscoveryengineV1betaSearchRequestSessionSpec $sessionSpec)
+  {
+    $this->sessionSpec = $sessionSpec;
+  }
+  /**
+   * @return GoogleCloudDiscoveryengineV1betaSearchRequestSessionSpec
+   */
+  public function getSessionSpec()
+  {
+    return $this->sessionSpec;
   }
   /**
    * @param GoogleCloudDiscoveryengineV1betaSearchRequestSpellCorrectionSpec

@@ -23,8 +23,42 @@ namespace Beta\Microsoft\Graph\CallRecords\Model;
 */
 class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 {
+
+    /**
+    * Gets the callDurationSource
+    * The source of the call duration data. If the call uses a third-party telecommunications operator via the Operator Connect Program, the operator may provide their own call duration data. In this case, the property value is operator. Otherwise, the value is microsoft.
+    *
+    * @return PstnCallDurationSource|null The callDurationSource
+    */
+    public function getCallDurationSource()
+    {
+        if (array_key_exists("callDurationSource", $this->_propDict)) {
+            if (is_a($this->_propDict["callDurationSource"], "\Beta\Microsoft\Graph\CallRecords\Model\PstnCallDurationSource") || is_null($this->_propDict["callDurationSource"])) {
+                return $this->_propDict["callDurationSource"];
+            } else {
+                $this->_propDict["callDurationSource"] = new PstnCallDurationSource($this->_propDict["callDurationSource"]);
+                return $this->_propDict["callDurationSource"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the callDurationSource
+    * The source of the call duration data. If the call uses a third-party telecommunications operator via the Operator Connect Program, the operator may provide their own call duration data. In this case, the property value is operator. Otherwise, the value is microsoft.
+    *
+    * @param PstnCallDurationSource $val The value to assign to the callDurationSource
+    *
+    * @return PstnCallLogRow The PstnCallLogRow
+    */
+    public function setCallDurationSource($val)
+    {
+        $this->_propDict["callDurationSource"] = $val;
+         return $this;
+    }
     /**
     * Gets the calleeNumber
+    * Number of the user or bot who received the call (E.164).
     *
     * @return string|null The calleeNumber
     */
@@ -39,6 +73,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the calleeNumber
+    * Number of the user or bot who received the call (E.164).
     *
     * @param string $val The value of the calleeNumber
     *
@@ -51,6 +86,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callerNumber
+    * Number of the user or bot who made the call (E.164).
     *
     * @return string|null The callerNumber
     */
@@ -65,6 +101,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callerNumber
+    * Number of the user or bot who made the call (E.164).
     *
     * @param string $val The value of the callerNumber
     *
@@ -77,6 +114,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callId
+    * Call identifier. Not guaranteed to be unique.
     *
     * @return string|null The callId
     */
@@ -91,6 +129,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callId
+    * Call identifier. Not guaranteed to be unique.
     *
     * @param string $val The value of the callId
     *
@@ -103,6 +142,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callType
+    * Indicates whether the call was a PSTN outbound or inbound call and the type of call such as a call placed by a user or an audio conference.
     *
     * @return string|null The callType
     */
@@ -117,6 +157,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callType
+    * Indicates whether the call was a PSTN outbound or inbound call and the type of call such as a call placed by a user or an audio conference.
     *
     * @param string $val The value of the callType
     *
@@ -130,6 +171,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the charge
+    * Amount of money or cost of the call that is charged to your account.
     *
     * @return \Beta\Microsoft\Graph\Model\Decimal|null The charge
     */
@@ -148,6 +190,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the charge
+    * Amount of money or cost of the call that is charged to your account.
     *
     * @param \Beta\Microsoft\Graph\Model\Decimal $val The value to assign to the charge
     *
@@ -159,7 +202,120 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
          return $this;
     }
     /**
+    * Gets the clientLocalIpV4Address
+    * Local IPv4 of the client that is retrieved from the operating system of the client.
+    *
+    * @return string|null The clientLocalIpV4Address
+    */
+    public function getClientLocalIpV4Address()
+    {
+        if (array_key_exists("clientLocalIpV4Address", $this->_propDict)) {
+            return $this->_propDict["clientLocalIpV4Address"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the clientLocalIpV4Address
+    * Local IPv4 of the client that is retrieved from the operating system of the client.
+    *
+    * @param string $val The value of the clientLocalIpV4Address
+    *
+    * @return PstnCallLogRow
+    */
+    public function setClientLocalIpV4Address($val)
+    {
+        $this->_propDict["clientLocalIpV4Address"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the clientLocalIpV6Address
+    * Local IPv6 of the client that is retrieved from the operating system of the client.
+    *
+    * @return string|null The clientLocalIpV6Address
+    */
+    public function getClientLocalIpV6Address()
+    {
+        if (array_key_exists("clientLocalIpV6Address", $this->_propDict)) {
+            return $this->_propDict["clientLocalIpV6Address"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the clientLocalIpV6Address
+    * Local IPv6 of the client that is retrieved from the operating system of the client.
+    *
+    * @param string $val The value of the clientLocalIpV6Address
+    *
+    * @return PstnCallLogRow
+    */
+    public function setClientLocalIpV6Address($val)
+    {
+        $this->_propDict["clientLocalIpV6Address"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the clientPublicIpV4Address
+    * Public IPv4 of the client that can be used to determine the location of the client.
+    *
+    * @return string|null The clientPublicIpV4Address
+    */
+    public function getClientPublicIpV4Address()
+    {
+        if (array_key_exists("clientPublicIpV4Address", $this->_propDict)) {
+            return $this->_propDict["clientPublicIpV4Address"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the clientPublicIpV4Address
+    * Public IPv4 of the client that can be used to determine the location of the client.
+    *
+    * @param string $val The value of the clientPublicIpV4Address
+    *
+    * @return PstnCallLogRow
+    */
+    public function setClientPublicIpV4Address($val)
+    {
+        $this->_propDict["clientPublicIpV4Address"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the clientPublicIpV6Address
+    * Public IPv6 of the client that can be used to determine the location of the client.
+    *
+    * @return string|null The clientPublicIpV6Address
+    */
+    public function getClientPublicIpV6Address()
+    {
+        if (array_key_exists("clientPublicIpV6Address", $this->_propDict)) {
+            return $this->_propDict["clientPublicIpV6Address"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the clientPublicIpV6Address
+    * Public IPv6 of the client that can be used to determine the location of the client.
+    *
+    * @param string $val The value of the clientPublicIpV6Address
+    *
+    * @return PstnCallLogRow
+    */
+    public function setClientPublicIpV6Address($val)
+    {
+        $this->_propDict["clientPublicIpV6Address"] = $val;
+        return $this;
+    }
+    /**
     * Gets the conferenceId
+    * ID of the audio conference.
     *
     * @return string|null The conferenceId
     */
@@ -174,6 +330,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the conferenceId
+    * ID of the audio conference.
     *
     * @param string $val The value of the conferenceId
     *
@@ -187,6 +344,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the connectionCharge
+    * Connection fee price.
     *
     * @return \Beta\Microsoft\Graph\Model\Decimal|null The connectionCharge
     */
@@ -205,6 +363,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the connectionCharge
+    * Connection fee price.
     *
     * @param \Beta\Microsoft\Graph\Model\Decimal $val The value to assign to the connectionCharge
     *
@@ -217,6 +376,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the currency
+    * Type of currency used to calculate the cost of the call (ISO 4217).
     *
     * @return string|null The currency
     */
@@ -231,6 +391,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the currency
+    * Type of currency used to calculate the cost of the call (ISO 4217).
     *
     * @param string $val The value of the currency
     *
@@ -243,6 +404,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the destinationContext
+    * Indicates whether the call was Domestic (within a country or region) or International (outside a country or region) based on the user's location.
     *
     * @return string|null The destinationContext
     */
@@ -257,6 +419,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the destinationContext
+    * Indicates whether the call was Domestic (within a country or region) or International (outside a country or region) based on the user's location.
     *
     * @param string $val The value of the destinationContext
     *
@@ -269,6 +432,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the destinationName
+    * Country or region dialed.
     *
     * @return string|null The destinationName
     */
@@ -283,6 +447,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the destinationName
+    * Country or region dialed.
     *
     * @param string $val The value of the destinationName
     *
@@ -295,6 +460,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the duration
+    * How long the call was connected, in seconds.
     *
     * @return int|null The duration
     */
@@ -309,6 +475,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the duration
+    * How long the call was connected, in seconds.
     *
     * @param int $val The value of the duration
     *
@@ -322,6 +489,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the endDateTime
+    * Call end time.
     *
     * @return \DateTime|null The endDateTime
     */
@@ -340,6 +508,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the endDateTime
+    * Call end time.
     *
     * @param \DateTime $val The value to assign to the endDateTime
     *
@@ -352,6 +521,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the id
+    * Unique call identifier (GUID).
     *
     * @return string|null The id
     */
@@ -366,6 +536,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the id
+    * Unique call identifier (GUID).
     *
     * @param string $val The value of the id
     *
@@ -378,6 +549,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the inventoryType
+    * User's phone number type, such as a service of toll-free number.
     *
     * @return string|null The inventoryType
     */
@@ -392,6 +564,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the inventoryType
+    * User's phone number type, such as a service of toll-free number.
     *
     * @param string $val The value of the inventoryType
     *
@@ -404,6 +577,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the licenseCapability
+    * The license used for the call.
     *
     * @return string|null The licenseCapability
     */
@@ -418,6 +592,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the licenseCapability
+    * The license used for the call.
     *
     * @param string $val The value of the licenseCapability
     *
@@ -428,9 +603,66 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["licenseCapability"] = $val;
         return $this;
     }
+    /**
+    * Gets the operator
+    * The telecommunications operator that provided PSTN services for this call. This may be Microsoft, or it may be a third-party operator via the Operator Connect Program.
+    *
+    * @return string|null The operator
+    */
+    public function getOperator()
+    {
+        if (array_key_exists("operator", $this->_propDict)) {
+            return $this->_propDict["operator"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the operator
+    * The telecommunications operator that provided PSTN services for this call. This may be Microsoft, or it may be a third-party operator via the Operator Connect Program.
+    *
+    * @param string $val The value of the operator
+    *
+    * @return PstnCallLogRow
+    */
+    public function setOperator($val)
+    {
+        $this->_propDict["operator"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the otherPartyCountryCode
+    * Country code of the caller for an incoming call, or callee for an outgoing call. For details, see ISO 3166-1 alpha-2.
+    *
+    * @return string|null The otherPartyCountryCode
+    */
+    public function getOtherPartyCountryCode()
+    {
+        if (array_key_exists("otherPartyCountryCode", $this->_propDict)) {
+            return $this->_propDict["otherPartyCountryCode"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the otherPartyCountryCode
+    * Country code of the caller for an incoming call, or callee for an outgoing call. For details, see ISO 3166-1 alpha-2.
+    *
+    * @param string $val The value of the otherPartyCountryCode
+    *
+    * @return PstnCallLogRow
+    */
+    public function setOtherPartyCountryCode($val)
+    {
+        $this->_propDict["otherPartyCountryCode"] = $val;
+        return $this;
+    }
 
     /**
     * Gets the startDateTime
+    * Call start time.
     *
     * @return \DateTime|null The startDateTime
     */
@@ -449,6 +681,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the startDateTime
+    * Call start time.
     *
     * @param \DateTime $val The value to assign to the startDateTime
     *
@@ -461,6 +694,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the tenantCountryCode
+    * Country code of the tenant. For details, see ISO 3166-1 alpha-2.
     *
     * @return string|null The tenantCountryCode
     */
@@ -475,6 +709,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the tenantCountryCode
+    * Country code of the tenant. For details, see ISO 3166-1 alpha-2.
     *
     * @param string $val The value of the tenantCountryCode
     *
@@ -487,6 +722,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the usageCountryCode
+    * Country code of the user. For details, see ISO 3166-1 alpha-2.
     *
     * @return string|null The usageCountryCode
     */
@@ -501,6 +737,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the usageCountryCode
+    * Country code of the user. For details, see ISO 3166-1 alpha-2.
     *
     * @param string $val The value of the usageCountryCode
     *
@@ -513,6 +750,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the userDisplayName
+    * Display name of the user.
     *
     * @return string|null The userDisplayName
     */
@@ -527,6 +765,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userDisplayName
+    * Display name of the user.
     *
     * @param string $val The value of the userDisplayName
     *
@@ -539,6 +778,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the userId
+    * The unique identifier (GUID) of the user in Microsoft Entra ID. This and other user info will be null/empty for bot call types (ucapin, ucapout).
     *
     * @return string|null The userId
     */
@@ -553,6 +793,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userId
+    * The unique identifier (GUID) of the user in Microsoft Entra ID. This and other user info will be null/empty for bot call types (ucapin, ucapout).
     *
     * @param string $val The value of the userId
     *
@@ -565,6 +806,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the userPrincipalName
+    * The user principal name (sign-in name) in Microsoft Entra ID. This is usually the same as the user's SIP address, and can be same as the user's e-mail address.
     *
     * @return string|null The userPrincipalName
     */
@@ -579,6 +821,7 @@ class PstnCallLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userPrincipalName
+    * The user principal name (sign-in name) in Microsoft Entra ID. This is usually the same as the user's SIP address, and can be same as the user's e-mail address.
     *
     * @param string $val The value of the userPrincipalName
     *

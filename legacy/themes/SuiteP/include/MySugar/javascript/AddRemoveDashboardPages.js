@@ -42,27 +42,34 @@ function removeDashboardForm(page_id) {
 
 function get_form(data,titleval,myButtons){}
 
-function addDashboardForm(page_id){
-
-    $.ajax({
-
-        url : "index.php?entryPoint=add_dash_page",
-        dataType: 'HTML',
-        type: 'POST',
-
-        success : function(data) {
-            var titleval = SUGAR.language.get('app_strings', 'LBL_ADD_DASHBOARD_PAGE');
-            $("#dashName").attr('type', 'text');
-            $('.modal-add-dashboard > .modal-dialog > .modal-content > .modal-header .modal-title').html(titleval);
-            $('.modal-add-dashboard > .modal-dialog > .modal-content > .modal-body').html(data);
-
-        },
-        error : function(request,error)
-        {
-
-        }
-    })
-}
+function addDashboardForm(page_id, edit = false){
+        $.ajax({
+    
+            url : "index.php?entryPoint=add_dash_page",
+            dataType: 'HTML',
+            type: 'POST',
+            data: {
+                'page_id': page_id,
+            },
+    
+            success : function(data) {
+                if(edit){
+                    var titleval = SUGAR.language.get('app_strings', 'LBL_EDIT_TAB');
+                } else {
+                    var titleval = SUGAR.language.get('app_strings', 'LBL_ADD_DASHBOARD_PAGE');
+                }
+                $("#dashName").attr('type', 'text');
+                $('.modal-add-dashboard > .modal-dialog > .modal-content > .modal-header .modal-title').html(titleval);
+                $('.modal-add-dashboard > .modal-dialog > .modal-content > .modal-body').html(data);
+    
+            },
+            error : function(request,error)
+            {
+    
+            }
+        })
+    }
+    
 
 
 function renameTab(page_id){

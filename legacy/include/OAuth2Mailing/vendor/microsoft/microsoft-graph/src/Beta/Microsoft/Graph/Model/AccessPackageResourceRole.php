@@ -38,7 +38,7 @@ class AccessPackageResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * A description for the resource role.
@@ -52,7 +52,7 @@ class AccessPackageResourceRole extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The display name of the resource role such as the role defined by the application.
@@ -67,7 +67,7 @@ class AccessPackageResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name of the resource role such as the role defined by the application.
@@ -81,10 +81,10 @@ class AccessPackageResourceRole extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the originId
-    * The unique identifier of the resource role in the origin system.
+    * The unique identifier of the resource role in the origin system. For a SharePoint Online site, the originId will be the sequence number of the role in the site.
     *
     * @return string|null The originId
     */
@@ -96,10 +96,10 @@ class AccessPackageResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the originId
-    * The unique identifier of the resource role in the origin system.
+    * The unique identifier of the resource role in the origin system. For a SharePoint Online site, the originId will be the sequence number of the role in the site.
     *
     * @param string $val The originId
     *
@@ -110,7 +110,7 @@ class AccessPackageResourceRole extends Entity
         $this->_propDict["originId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the originSystem
     * The type of the resource in the origin system, such as SharePointOnline, AadApplication or AadGroup.
@@ -125,7 +125,7 @@ class AccessPackageResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the originSystem
     * The type of the resource in the origin system, such as SharePointOnline, AadApplication or AadGroup.
@@ -139,10 +139,9 @@ class AccessPackageResourceRole extends Entity
         $this->_propDict["originSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResource
-    * Read-only. Nullable.
     *
     * @return AccessPackageResource|null The accessPackageResource
     */
@@ -158,10 +157,9 @@ class AccessPackageResourceRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResource
-    * Read-only. Nullable.
     *
     * @param AccessPackageResource $val The accessPackageResource
     *
@@ -172,5 +170,5 @@ class AccessPackageResourceRole extends Entity
         $this->_propDict["accessPackageResource"] = $val;
         return $this;
     }
-    
+
 }

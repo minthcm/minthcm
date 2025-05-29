@@ -1,0 +1,21 @@
+div.detail-view-row-item[data-field="content_of_announcement"] div.label,
+div.detail-view-row-item[data-field="comments_widget"] div.label
+{
+    display: none;
+}
+div.news-photo { 
+    display: flex;
+    justify-content: center;
+}
+div.news-photo img {
+    max-width: 100%;
+    max-height: 280px;
+    margin-bottom: 10px;
+}
+div.detail-view-field[field="content_of_announcement"],
+div.detail-view-field[field="comments_widget"] {
+    width: 100%;
+}
+span#content_of_announcement {
+    width:100%
+}

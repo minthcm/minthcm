@@ -77,6 +77,15 @@ $dictionary['Project'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
         ),
+        'date_indexed' => [
+            'name' => 'date_indexed',
+            'vname' => 'LBL_DATE_INDEXED',
+            'type' => 'datetime',
+            'comment' => 'Date record last indexed',
+            'enable_range_search' => true,
+            'options' => 'date_range_search_dom',
+            'inline_edit' => false,
+        ],
         'assigned_user_id' => array(
             'name' => 'assigned_user_id',
             'rname' => 'user_name',

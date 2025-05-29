@@ -26,7 +26,7 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
 {
     /**
     * Gets the assignmentType
-    * Type of the assignment. It can either be Assigned or Activated.
+    * Type of the assignment which can either be Assigned or Activated. Supports $filter (eq, ne).
     *
     * @return string|null The assignmentType
     */
@@ -38,10 +38,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
             return null;
         }
     }
-    
+
     /**
     * Sets the assignmentType
-    * Type of the assignment. It can either be Assigned or Activated.
+    * Type of the assignment which can either be Assigned or Activated. Supports $filter (eq, ne).
     *
     * @param string $val The assignmentType
     *
@@ -52,10 +52,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         $this->_propDict["assignmentType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the memberType
-    * Membership type of the assignment. It can either be Inherited, Direct, or Group.
+    * How the assignments is inherited. It can either be Inherited, Direct, or Group. It can further imply whether the unifiedRoleAssignmentSchedule can be managed by the caller. Supports $filter (eq, ne).
     *
     * @return string|null The memberType
     */
@@ -67,10 +67,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
             return null;
         }
     }
-    
+
     /**
     * Sets the memberType
-    * Membership type of the assignment. It can either be Inherited, Direct, or Group.
+    * How the assignments is inherited. It can either be Inherited, Direct, or Group. It can further imply whether the unifiedRoleAssignmentSchedule can be managed by the caller. Supports $filter (eq, ne).
     *
     * @param string $val The memberType
     *
@@ -81,10 +81,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         $this->_propDict["memberType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the scheduleInfo
-    * The schedule object of the role assignment request.
+    * The period of the role assignment. It can represent a single occurrence or multiple recurrences.
     *
     * @return RequestSchedule|null The scheduleInfo
     */
@@ -100,10 +100,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         }
         return null;
     }
-    
+
     /**
     * Sets the scheduleInfo
-    * The schedule object of the role assignment request.
+    * The period of the role assignment. It can represent a single occurrence or multiple recurrences.
     *
     * @param RequestSchedule $val The scheduleInfo
     *
@@ -114,10 +114,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         $this->_propDict["scheduleInfo"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the activatedUsing
-    * If the roleAssignmentSchedule is activated by a roleEligibilitySchedule, this is the link to that schedule.
+    * If the request is from an eligible administrator to activate a role, this parameter will show the related eligible assignment for that activation. Otherwise, it is null. Supports $expand.
     *
     * @return UnifiedRoleEligibilitySchedule|null The activatedUsing
     */
@@ -133,10 +133,10 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         }
         return null;
     }
-    
+
     /**
     * Sets the activatedUsing
-    * If the roleAssignmentSchedule is activated by a roleEligibilitySchedule, this is the link to that schedule.
+    * If the request is from an eligible administrator to activate a role, this parameter will show the related eligible assignment for that activation. Otherwise, it is null. Supports $expand.
     *
     * @param UnifiedRoleEligibilitySchedule $val The activatedUsing
     *
@@ -147,5 +147,5 @@ class UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase
         $this->_propDict["activatedUsing"] = $val;
         return $this;
     }
-    
+
 }

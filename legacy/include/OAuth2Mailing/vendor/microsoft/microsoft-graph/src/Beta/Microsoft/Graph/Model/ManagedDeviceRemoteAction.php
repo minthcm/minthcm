@@ -39,4 +39,13 @@ class ManagedDeviceRemoteAction extends Enum
     const REBOOT_NOW = "rebootNow";
     const SET_DEVICE_NAME = "setDeviceName";
     const SYNC_DEVICE = "syncDevice";
+    const DEPROVISION = "deprovision";
+    const DISABLE = "disable";
+    const REENABLE = "reenable";
+    const MOVE_DEVICE_TO_ORGANIZATIONAL_UNIT = "moveDeviceToOrganizationalUnit";
+    const ACTIVATE_DEVICE_ESIM = "activateDeviceEsim";
+    const COLLECT_DIAGNOSTICS = "collectDiagnostics";
+    const INITIATE_MOBILE_DEVICE_MANAGEMENT_KEY_RECOVERY = "initiateMobileDeviceManagementKeyRecovery";
+    const INITIATE_ON_DEMAND_PROACTIVE_REMEDIATION = "initiateOnDemandProactiveRemediation";
+    const UNKNOWN_FUTURE_VALUE = "unknownFutureValue";
 }

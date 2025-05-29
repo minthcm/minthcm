@@ -42,7 +42,7 @@ class WindowsFeatureUpdateProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The date time that the profile was created.
@@ -56,7 +56,7 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deployableContentDisplayName
     * Friendly display name of the quality update profile deployable content
@@ -71,7 +71,7 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deployableContentDisplayName
     * Friendly display name of the quality update profile deployable content
@@ -85,7 +85,7 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["deployableContentDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The description of the profile which is specified by the user.
@@ -100,7 +100,7 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The description of the profile which is specified by the user.
@@ -114,7 +114,7 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The display name of the profile.
@@ -129,7 +129,7 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name of the profile.
@@ -143,7 +143,7 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the endOfSupportDate
     * The last supported date for a feature update
@@ -162,7 +162,7 @@ class WindowsFeatureUpdateProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the endOfSupportDate
     * The last supported date for a feature update
@@ -176,7 +176,7 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["endOfSupportDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdateVersion
     * The feature update version that will be deployed to the devices targeted by this profile. The version could be any supported version for example 1709, 1803 or 1809 and so on.
@@ -191,7 +191,7 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdateVersion
     * The feature update version that will be deployed to the devices targeted by this profile. The version could be any supported version for example 1709, 1803 or 1809 and so on.
@@ -205,7 +205,36 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["featureUpdateVersion"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the installLatestWindows10OnWindows11IneligibleDevice
+    * If true, the latest Microsoft Windows 10 update will be installed on devices ineligible for Microsoft Windows 11
+    *
+    * @return bool|null The installLatestWindows10OnWindows11IneligibleDevice
+    */
+    public function getInstallLatestWindows10OnWindows11IneligibleDevice()
+    {
+        if (array_key_exists("installLatestWindows10OnWindows11IneligibleDevice", $this->_propDict)) {
+            return $this->_propDict["installLatestWindows10OnWindows11IneligibleDevice"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the installLatestWindows10OnWindows11IneligibleDevice
+    * If true, the latest Microsoft Windows 10 update will be installed on devices ineligible for Microsoft Windows 11
+    *
+    * @param bool $val The installLatestWindows10OnWindows11IneligibleDevice
+    *
+    * @return WindowsFeatureUpdateProfile
+    */
+    public function setInstallLatestWindows10OnWindows11IneligibleDevice($val)
+    {
+        $this->_propDict["installLatestWindows10OnWindows11IneligibleDevice"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the lastModifiedDateTime
     * The date time that the profile was last modified.
@@ -224,7 +253,7 @@ class WindowsFeatureUpdateProfile extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * The date time that the profile was last modified.
@@ -238,12 +267,12 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
     * List of Scope Tags for this Feature Update entity.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -253,12 +282,12 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * List of Scope Tags for this Feature Update entity.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return WindowsFeatureUpdateProfile
     */
@@ -267,9 +296,42 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
 
-     /** 
+    /**
+    * Gets the rolloutSettings
+    * The windows update rollout settings, including offer start date time, offer end date time, and days between each set of offers.
+    *
+    * @return WindowsUpdateRolloutSettings|null The rolloutSettings
+    */
+    public function getRolloutSettings()
+    {
+        if (array_key_exists("rolloutSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["rolloutSettings"], "\Beta\Microsoft\Graph\Model\WindowsUpdateRolloutSettings") || is_null($this->_propDict["rolloutSettings"])) {
+                return $this->_propDict["rolloutSettings"];
+            } else {
+                $this->_propDict["rolloutSettings"] = new WindowsUpdateRolloutSettings($this->_propDict["rolloutSettings"]);
+                return $this->_propDict["rolloutSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the rolloutSettings
+    * The windows update rollout settings, including offer start date time, offer end date time, and days between each set of offers.
+    *
+    * @param WindowsUpdateRolloutSettings $val The rolloutSettings
+    *
+    * @return WindowsFeatureUpdateProfile
+    */
+    public function setRolloutSettings($val)
+    {
+        $this->_propDict["rolloutSettings"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the assignments
     * The list of group assignments of the profile.
      *
@@ -283,12 +345,12 @@ class WindowsFeatureUpdateProfile extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * The list of group assignments of the profile.
     *
-    * @param WindowsFeatureUpdateProfileAssignment $val The assignments
+    * @param WindowsFeatureUpdateProfileAssignment[] $val The assignments
     *
     * @return WindowsFeatureUpdateProfile
     */
@@ -297,35 +359,5 @@ class WindowsFeatureUpdateProfile extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
 
-     /** 
-     * Gets the deviceUpdateStates
-    * The list of device states this profile targeted to
-     *
-     * @return array|null The deviceUpdateStates
-     */
-    public function getDeviceUpdateStates()
-    {
-        if (array_key_exists("deviceUpdateStates", $this->_propDict)) {
-           return $this->_propDict["deviceUpdateStates"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the deviceUpdateStates
-    * The list of device states this profile targeted to
-    *
-    * @param WindowsUpdateState $val The deviceUpdateStates
-    *
-    * @return WindowsFeatureUpdateProfile
-    */
-    public function setDeviceUpdateStates($val)
-    {
-        $this->_propDict["deviceUpdateStates"] = $val;
-        return $this;
-    }
-    
 }

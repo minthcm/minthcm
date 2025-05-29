@@ -42,6 +42,14 @@ class Bucket extends \Google\Collection
    * @var string
    */
   public $etag;
+  /**
+   * @var string
+   */
+  public $generation;
+  /**
+   * @var string
+   */
+  public $hardDeleteTime;
   protected $hierarchicalNamespaceType = BucketHierarchicalNamespace::class;
   protected $hierarchicalNamespaceDataType = '';
   protected $iamConfigurationType = BucketIamConfiguration::class;
@@ -97,6 +105,10 @@ class Bucket extends \Google\Collection
   /**
    * @var bool
    */
+  public $satisfiesPZI;
+  /**
+   * @var bool
+   */
   public $satisfiesPZS;
   /**
    * @var string
@@ -104,6 +116,10 @@ class Bucket extends \Google\Collection
   public $selfLink;
   protected $softDeletePolicyType = BucketSoftDeletePolicy::class;
   protected $softDeletePolicyDataType = '';
+  /**
+   * @var string
+   */
+  public $softDeleteTime;
   /**
    * @var string
    */
@@ -246,6 +262,34 @@ class Bucket extends \Google\Collection
   public function getEtag()
   {
     return $this->etag;
+  }
+  /**
+   * @param string
+   */
+  public function setGeneration($generation)
+  {
+    $this->generation = $generation;
+  }
+  /**
+   * @return string
+   */
+  public function getGeneration()
+  {
+    return $this->generation;
+  }
+  /**
+   * @param string
+   */
+  public function setHardDeleteTime($hardDeleteTime)
+  {
+    $this->hardDeleteTime = $hardDeleteTime;
+  }
+  /**
+   * @return string
+   */
+  public function getHardDeleteTime()
+  {
+    return $this->hardDeleteTime;
   }
   /**
    * @param BucketHierarchicalNamespace
@@ -488,6 +532,20 @@ class Bucket extends \Google\Collection
   /**
    * @param bool
    */
+  public function setSatisfiesPZI($satisfiesPZI)
+  {
+    $this->satisfiesPZI = $satisfiesPZI;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPZI()
+  {
+    return $this->satisfiesPZI;
+  }
+  /**
+   * @param bool
+   */
   public function setSatisfiesPZS($satisfiesPZS)
   {
     $this->satisfiesPZS = $satisfiesPZS;
@@ -526,6 +584,20 @@ class Bucket extends \Google\Collection
   public function getSoftDeletePolicy()
   {
     return $this->softDeletePolicy;
+  }
+  /**
+   * @param string
+   */
+  public function setSoftDeleteTime($softDeleteTime)
+  {
+    $this->softDeleteTime = $softDeleteTime;
+  }
+  /**
+   * @return string
+   */
+  public function getSoftDeleteTime()
+  {
+    return $this->softDeleteTime;
   }
   /**
    * @param string

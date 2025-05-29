@@ -25,7 +25,7 @@ class vfsStreamWrapperQuotaTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
         vfsStream::setQuota(10);

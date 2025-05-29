@@ -19,7 +19,7 @@ class vfsStreamTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         vfsStreamWrapper::register();
     }
@@ -387,11 +387,11 @@ class vfsStreamTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * @test
      * @group  issue_20
-     * @expectedException  \InvalidArgumentException
      * @since  0.11.0
      */
     public function createThrowsExceptionIfNoBaseDirGivenAndNoRootSet()
     {
+        $this->expectException(\InvalidArgumentException::class);
         vfsStream::create(array('test' => array()));
     }
 
@@ -566,11 +566,11 @@ class vfsStreamTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * @test
      * @group  issue_10
-     * @expectedException  \InvalidArgumentException
      * @since  0.10.0
      */
     public function inspectWithoutContentAndWithoutRootThrowsInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $mockVisitor = $this->bc_getMock('org\\bovigo\\vfs\\visitor\\vfsStreamVisitor');
         $mockVisitor->expects($this->never())
                     ->method('visit');
@@ -592,11 +592,11 @@ class vfsStreamTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * @test
      * @group  issue_4
-     * @expectedException  \InvalidArgumentException
      * @since  0.11.0
      */
     public function copyFromFileSystemThrowsExceptionIfNoBaseDirGivenAndNoRootSet()
     {
+        $this->expectException(\InvalidArgumentException::class);
         vfsStream::copyFromFileSystem($this->getFileSystemCopyDir());
     }
 

@@ -227,7 +227,7 @@ Alerts.prototype.redirectToLogin = function () {
    var params = getQueryParams( document.location.search );
    params.entryPoint = undefined;
    if ( params.entryPoint !== 'Changenewpassword' && params.module !== 'Users' && params.action !== 'Login' ) {
-      document.location.href = 'index.php?module=Users&action=Login&loginErrorMessage=LBL_SESSION_EXPIRED';
+      window.location.reload();
       return true;
    }
    return false;
@@ -239,7 +239,7 @@ Alerts.prototype.redirectToLogin = function () {
 Alerts.prototype.updateManager = function () {
    var url = 'index.php?module=Alerts&action=get&to_pdf=1&view=json';
    $.ajax( url ).done( function ( data ) {
-      if ( data === 'lost session' ) {
+      if ( data === 'lost session' || data === 'lost password' ) {
          Alerts.prototype.redirectToLogin();
          return false;
       }

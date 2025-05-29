@@ -22,8 +22,39 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class SalesQuote extends Entity
+class SalesQuote implements \JsonSerializable
 {
+    /**
+    * The array of properties available
+    * to the model
+    *
+    * @var array $_propDict
+    */
+    protected $_propDict;
+
+    /**
+    * Construct a new SalesQuote
+    *
+    * @param array $propDict A list of properties to set
+    */
+    function __construct($propDict = array())
+    {
+        if (!is_array($propDict)) {
+           $propDict = array();
+        }
+        $this->_propDict = $propDict;
+    }
+
+    /**
+    * Gets the property dictionary of the SalesQuote
+    *
+    * @return array The list of properties
+    */
+    public function getProperties()
+    {
+        return $this->_propDict;
+    }
+
     /**
     * Gets the acceptedDate
     *
@@ -41,7 +72,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the acceptedDate
     *
@@ -54,7 +85,7 @@ class SalesQuote extends Entity
         $this->_propDict["acceptedDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the billingPostalAddress
     *
@@ -72,7 +103,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the billingPostalAddress
     *
@@ -85,7 +116,7 @@ class SalesQuote extends Entity
         $this->_propDict["billingPostalAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the billToCustomerId
     *
@@ -99,7 +130,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the billToCustomerId
     *
@@ -112,7 +143,7 @@ class SalesQuote extends Entity
         $this->_propDict["billToCustomerId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the billToCustomerNumber
     *
@@ -126,7 +157,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the billToCustomerNumber
     *
@@ -139,7 +170,7 @@ class SalesQuote extends Entity
         $this->_propDict["billToCustomerNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the billToName
     *
@@ -153,7 +184,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the billToName
     *
@@ -166,7 +197,7 @@ class SalesQuote extends Entity
         $this->_propDict["billToName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currencyCode
     *
@@ -180,7 +211,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the currencyCode
     *
@@ -193,7 +224,7 @@ class SalesQuote extends Entity
         $this->_propDict["currencyCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currencyId
     *
@@ -207,7 +238,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the currencyId
     *
@@ -220,7 +251,7 @@ class SalesQuote extends Entity
         $this->_propDict["currencyId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the customerId
     *
@@ -234,7 +265,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the customerId
     *
@@ -247,7 +278,7 @@ class SalesQuote extends Entity
         $this->_propDict["customerId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the customerName
     *
@@ -261,7 +292,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the customerName
     *
@@ -274,7 +305,7 @@ class SalesQuote extends Entity
         $this->_propDict["customerName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the customerNumber
     *
@@ -288,7 +319,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the customerNumber
     *
@@ -301,7 +332,7 @@ class SalesQuote extends Entity
         $this->_propDict["customerNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the discountAmount
     *
@@ -319,7 +350,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the discountAmount
     *
@@ -332,7 +363,7 @@ class SalesQuote extends Entity
         $this->_propDict["discountAmount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the documentDate
     *
@@ -350,7 +381,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the documentDate
     *
@@ -363,7 +394,7 @@ class SalesQuote extends Entity
         $this->_propDict["documentDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the dueDate
     *
@@ -381,7 +412,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the dueDate
     *
@@ -394,7 +425,7 @@ class SalesQuote extends Entity
         $this->_propDict["dueDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the email
     *
@@ -408,7 +439,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the email
     *
@@ -421,7 +452,7 @@ class SalesQuote extends Entity
         $this->_propDict["email"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalDocumentNumber
     *
@@ -435,7 +466,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the externalDocumentNumber
     *
@@ -448,7 +479,34 @@ class SalesQuote extends Entity
         $this->_propDict["externalDocumentNumber"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the id
+    *
+    * @return string|null The id
+    */
+    public function getId()
+    {
+        if (array_key_exists("id", $this->_propDict)) {
+            return $this->_propDict["id"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the id
+    *
+    * @param string $val The id
+    *
+    * @return SalesQuote
+    */
+    public function setId($val)
+    {
+        $this->_propDict["id"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the lastModifiedDateTime
     *
@@ -466,7 +524,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     *
@@ -479,7 +537,7 @@ class SalesQuote extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the number
     *
@@ -493,7 +551,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the number
     *
@@ -506,7 +564,7 @@ class SalesQuote extends Entity
         $this->_propDict["number"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the paymentTermsId
     *
@@ -520,7 +578,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the paymentTermsId
     *
@@ -533,7 +591,7 @@ class SalesQuote extends Entity
         $this->_propDict["paymentTermsId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the phoneNumber
     *
@@ -547,7 +605,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the phoneNumber
     *
@@ -560,7 +618,7 @@ class SalesQuote extends Entity
         $this->_propDict["phoneNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the salesperson
     *
@@ -574,7 +632,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the salesperson
     *
@@ -587,7 +645,7 @@ class SalesQuote extends Entity
         $this->_propDict["salesperson"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sellingPostalAddress
     *
@@ -605,7 +663,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the sellingPostalAddress
     *
@@ -618,7 +676,7 @@ class SalesQuote extends Entity
         $this->_propDict["sellingPostalAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sentDate
     *
@@ -636,7 +694,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the sentDate
     *
@@ -649,7 +707,7 @@ class SalesQuote extends Entity
         $this->_propDict["sentDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the shipmentMethodId
     *
@@ -663,7 +721,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the shipmentMethodId
     *
@@ -676,7 +734,7 @@ class SalesQuote extends Entity
         $this->_propDict["shipmentMethodId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the shippingPostalAddress
     *
@@ -694,7 +752,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the shippingPostalAddress
     *
@@ -707,7 +765,7 @@ class SalesQuote extends Entity
         $this->_propDict["shippingPostalAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the shipToContact
     *
@@ -721,7 +779,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the shipToContact
     *
@@ -734,7 +792,7 @@ class SalesQuote extends Entity
         $this->_propDict["shipToContact"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the shipToName
     *
@@ -748,7 +806,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the shipToName
     *
@@ -761,7 +819,7 @@ class SalesQuote extends Entity
         $this->_propDict["shipToName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
     *
@@ -775,7 +833,7 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the status
     *
@@ -788,7 +846,7 @@ class SalesQuote extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the totalAmountExcludingTax
     *
@@ -806,7 +864,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the totalAmountExcludingTax
     *
@@ -819,7 +877,7 @@ class SalesQuote extends Entity
         $this->_propDict["totalAmountExcludingTax"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the totalAmountIncludingTax
     *
@@ -837,7 +895,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the totalAmountIncludingTax
     *
@@ -850,7 +908,7 @@ class SalesQuote extends Entity
         $this->_propDict["totalAmountIncludingTax"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the totalTaxAmount
     *
@@ -868,7 +926,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the totalTaxAmount
     *
@@ -881,7 +939,7 @@ class SalesQuote extends Entity
         $this->_propDict["totalTaxAmount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the validUntilDate
     *
@@ -899,7 +957,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the validUntilDate
     *
@@ -912,7 +970,7 @@ class SalesQuote extends Entity
         $this->_propDict["validUntilDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currency
     *
@@ -930,7 +988,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the currency
     *
@@ -943,7 +1001,7 @@ class SalesQuote extends Entity
         $this->_propDict["currency"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the customer
     *
@@ -961,7 +1019,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the customer
     *
@@ -974,7 +1032,7 @@ class SalesQuote extends Entity
         $this->_propDict["customer"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the paymentTerm
     *
@@ -992,7 +1050,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the paymentTerm
     *
@@ -1005,9 +1063,9 @@ class SalesQuote extends Entity
         $this->_propDict["paymentTerm"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the salesQuoteLines
      *
      * @return array|null The salesQuoteLines
@@ -1020,11 +1078,11 @@ class SalesQuote extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the salesQuoteLines
     *
-    * @param SalesQuoteLine $val The salesQuoteLines
+    * @param SalesQuoteLine[] $val The salesQuoteLines
     *
     * @return SalesQuote
     */
@@ -1033,7 +1091,7 @@ class SalesQuote extends Entity
         $this->_propDict["salesQuoteLines"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the shipmentMethod
     *
@@ -1051,7 +1109,7 @@ class SalesQuote extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the shipmentMethod
     *
@@ -1064,5 +1122,54 @@ class SalesQuote extends Entity
         $this->_propDict["shipmentMethod"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the ODataType
+    *
+    * @return string|null The ODataType
+    */
+    public function getODataType()
+    {
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
+    }
+
+    /**
+    * Sets the ODataType
+    *
+    * @param string $val The ODataType
+    *
+    * @return SalesQuote
+    */
+    public function setODataType($val)
+    {
+        $this->_propDict["@odata.type"] = $val;
+        return $this;
+    }
+
+    /**
+    * Serializes the object by property array
+    * Manually serialize DateTime into RFC3339 format
+    *
+    * @return array The list of properties
+    */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $serializableProperties = $this->getProperties();
+        foreach ($serializableProperties as $property => $val) {
+            if (is_a($val, "\DateTime")) {
+                $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
+            } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
+                $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
+            }
+        }
+        return $serializableProperties;
+    }
 }

@@ -26,7 +26,7 @@ class Office365GroupsActivityGroupCounts extends Entity
 {
     /**
     * Gets the active
-    * The number of active groups. A group is considered active if any of the following occurred: group mailbox received email; user viewed, edited, shared, or synced files in SharePoint document library; user viewed SharePoint pages; user posted, read, or liked messages in Yammer groups.
+    * The number of active groups. A group is considered active if any of the following occurred: group mailbox received email, or  a user viewed, edited, shared, or synced files in SharePoint document library, or a user viewed SharePoint pages, or a user posted, read, or liked messages in Yammer groups.
     *
     * @return int|null The active
     */
@@ -38,10 +38,10 @@ class Office365GroupsActivityGroupCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the active
-    * The number of active groups. A group is considered active if any of the following occurred: group mailbox received email; user viewed, edited, shared, or synced files in SharePoint document library; user viewed SharePoint pages; user posted, read, or liked messages in Yammer groups.
+    * The number of active groups. A group is considered active if any of the following occurred: group mailbox received email, or  a user viewed, edited, shared, or synced files in SharePoint document library, or a user viewed SharePoint pages, or a user posted, read, or liked messages in Yammer groups.
     *
     * @param int $val The active
     *
@@ -52,10 +52,10 @@ class Office365GroupsActivityGroupCounts extends Entity
         $this->_propDict["active"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the reportDate
-    * The date on which a number of groups were active.
+    * The date on which groups were active.
     *
     * @return \DateTime|null The reportDate
     */
@@ -71,10 +71,10 @@ class Office365GroupsActivityGroupCounts extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the reportDate
-    * The date on which a number of groups were active.
+    * The date on which groups were active.
     *
     * @param \DateTime $val The reportDate
     *
@@ -85,7 +85,7 @@ class Office365GroupsActivityGroupCounts extends Entity
         $this->_propDict["reportDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reportPeriod
     * The number of days the report covers.
@@ -100,7 +100,7 @@ class Office365GroupsActivityGroupCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the reportPeriod
     * The number of days the report covers.
@@ -114,7 +114,7 @@ class Office365GroupsActivityGroupCounts extends Entity
         $this->_propDict["reportPeriod"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reportRefreshDate
     * The latest date of the content.
@@ -133,7 +133,7 @@ class Office365GroupsActivityGroupCounts extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the reportRefreshDate
     * The latest date of the content.
@@ -147,7 +147,7 @@ class Office365GroupsActivityGroupCounts extends Entity
         $this->_propDict["reportRefreshDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the total
     * The total number of groups.
@@ -162,7 +162,7 @@ class Office365GroupsActivityGroupCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the total
     * The total number of groups.
@@ -176,5 +176,5 @@ class Office365GroupsActivityGroupCounts extends Entity
         $this->_propDict["total"] = intval($val);
         return $this;
     }
-    
+
 }

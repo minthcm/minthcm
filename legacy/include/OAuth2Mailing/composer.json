@@ -3,7 +3,15 @@
         "javanile/php-imap2": "^0.1.10",
         "league/oauth2-google": "^4.0",
         "stevenmaguire/oauth2-microsoft": "^2.2",
-        "microsoft/microsoft-graph": "1.33.0",
-        "google/apiclient": "2.10.0"
+        "microsoft/microsoft-graph": "^1.109.1",
+        "google/apiclient": "^2.17.0"
+    },
+    "scripts": {
+        "post-update-cmd": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Gmail"
+        ]
     }
 }

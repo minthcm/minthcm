@@ -14,6 +14,10 @@ namespace Symfony\Contracts\Service;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+// Help opcache.preload discover always-needed symbols
+class_exists(ContainerExceptionInterface::class);
+class_exists(NotFoundExceptionInterface::class);
+
 /**
  * A trait to help implement ServiceProviderInterface.
  *
@@ -22,30 +26,24 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 trait ServiceLocatorTrait
 {
-    private $factories;
-    private $loading = [];
-    private $providedTypes;
+    private array $factories;
+    private array $loading = [];
+    private array $providedTypes;
 
     /**
-     * @param callable[] $factories
+     * @param array<string, callable> $factories
      */
     public function __construct(array $factories)
     {
         $this->factories = $factories;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function has($id)
+    public function has(string $id): bool
     {
         return isset($this->factories[$id]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get($id)
+    public function get(string $id): mixed
     {
         if (!isset($this->factories[$id])) {
             throw $this->createNotFoundException($id);
@@ -67,12 +65,9 @@ trait ServiceLocatorTrait
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProvidedServices(): array
     {
-        if (null === $this->providedTypes) {
+        if (!isset($this->providedTypes)) {
             $this->providedTypes = [];
 
             foreach ($this->factories as $name => $factory) {
@@ -81,7 +76,7 @@ trait ServiceLocatorTrait
                 } else {
                     $type = (new \ReflectionFunction($factory))->getReturnType();
 
-                    $this->providedTypes[$name] = $type ? ($type->allowsNull() ? '?' : '').$type->getName() : '?';
+                    $this->providedTypes[$name] = $type ? ($type->allowsNull() ? '?' : '').($type instanceof \ReflectionNamedType ? $type->getName() : $type) : '?';
                 }
             }
         }

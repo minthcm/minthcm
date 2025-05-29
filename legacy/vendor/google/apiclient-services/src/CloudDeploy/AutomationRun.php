@@ -43,6 +43,8 @@ class AutomationRun extends \Google\Model
    * @var string
    */
   public $name;
+  protected $policyViolationType = PolicyViolation::class;
+  protected $policyViolationDataType = '';
   protected $promoteReleaseOperationType = PromoteReleaseOperation::class;
   protected $promoteReleaseOperationDataType = '';
   protected $repairRolloutOperationType = RepairRolloutOperation::class;
@@ -67,6 +69,8 @@ class AutomationRun extends \Google\Model
    * @var string
    */
   public $targetId;
+  protected $timedPromoteReleaseOperationType = TimedPromoteReleaseOperation::class;
+  protected $timedPromoteReleaseOperationDataType = '';
   /**
    * @var string
    */
@@ -175,6 +179,20 @@ class AutomationRun extends \Google\Model
     return $this->name;
   }
   /**
+   * @param PolicyViolation
+   */
+  public function setPolicyViolation(PolicyViolation $policyViolation)
+  {
+    $this->policyViolation = $policyViolation;
+  }
+  /**
+   * @return PolicyViolation
+   */
+  public function getPolicyViolation()
+  {
+    return $this->policyViolation;
+  }
+  /**
    * @param PromoteReleaseOperation
    */
   public function setPromoteReleaseOperation(PromoteReleaseOperation $promoteReleaseOperation)
@@ -271,6 +289,20 @@ class AutomationRun extends \Google\Model
   public function getTargetId()
   {
     return $this->targetId;
+  }
+  /**
+   * @param TimedPromoteReleaseOperation
+   */
+  public function setTimedPromoteReleaseOperation(TimedPromoteReleaseOperation $timedPromoteReleaseOperation)
+  {
+    $this->timedPromoteReleaseOperation = $timedPromoteReleaseOperation;
+  }
+  /**
+   * @return TimedPromoteReleaseOperation
+   */
+  public function getTimedPromoteReleaseOperation()
+  {
+    return $this->timedPromoteReleaseOperation;
   }
   /**
    * @param string

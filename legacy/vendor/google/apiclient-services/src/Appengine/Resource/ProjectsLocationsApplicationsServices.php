@@ -17,8 +17,7 @@
 
 namespace Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\ListServicesResponse;
-use Google\Service\Appengine\Service;
+use Google\Service\Appengine\Operation;
 
 /**
  * The "services" collection of methods.
@@ -31,7 +30,7 @@ use Google\Service\Appengine\Service;
 class ProjectsLocationsApplicationsServices extends \Google\Service\Resource
 {
   /**
-   * Gets the current configuration of the specified service. (services.get)
+   * Deletes the specified service and all enclosed versions. (services.delete)
    *
    * @param string $projectsId Part of `name`. Name of the resource requested.
    * Example: apps/myapp/services/default.
@@ -40,36 +39,18 @@ class ProjectsLocationsApplicationsServices extends \Google\Service\Resource
    * `projectsId`.
    * @param string $servicesId Part of `name`. See documentation of `projectsId`.
    * @param array $optParams Optional parameters.
-   * @return Service
+   *
+   * @opt_param bool force Optional. If set to true, any versions of this service
+   * will also be deleted. (Otherwise, the request will only succeed if the
+   * service has no versions.)
+   * @return Operation
+   * @throws \Google\Service\Exception
    */
-  public function get($projectsId, $locationsId, $applicationsId, $servicesId, $optParams = [])
+  public function delete($projectsId, $locationsId, $applicationsId, $servicesId, $optParams = [])
   {
     $params = ['projectsId' => $projectsId, 'locationsId' => $locationsId, 'applicationsId' => $applicationsId, 'servicesId' => $servicesId];
     $params = array_merge($params, $optParams);
-    return $this->call('get', [$params], Service::class);
-  }
-  /**
-   * Lists all the services in the application.
-   * (services.listProjectsLocationsApplicationsServices)
-   *
-   * @param string $projectsId Part of `parent`. Name of the parent Application
-   * resource. Example: apps/myapp.
-   * @param string $locationsId Part of `parent`. See documentation of
-   * `projectsId`.
-   * @param string $applicationsId Part of `parent`. See documentation of
-   * `projectsId`.
-   * @param array $optParams Optional parameters.
-   *
-   * @opt_param int pageSize Maximum results to return per page.
-   * @opt_param string pageToken Continuation token for fetching the next page of
-   * results.
-   * @return ListServicesResponse
-   */
-  public function listProjectsLocationsApplicationsServices($projectsId, $locationsId, $applicationsId, $optParams = [])
-  {
-    $params = ['projectsId' => $projectsId, 'locationsId' => $locationsId, 'applicationsId' => $applicationsId];
-    $params = array_merge($params, $optParams);
-    return $this->call('list', [$params], ListServicesResponse::class);
+    return $this->call('delete', [$params], Operation::class);
   }
 }
 

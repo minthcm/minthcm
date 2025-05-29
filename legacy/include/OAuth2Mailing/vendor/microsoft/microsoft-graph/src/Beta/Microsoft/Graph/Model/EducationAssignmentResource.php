@@ -26,7 +26,7 @@ class EducationAssignmentResource extends Entity
 {
     /**
     * Gets the distributeForStudentWork
-    * Indicates whether this resource should be copied to each student submission for modification and submission.
+    * Indicates whether this resource should be copied to each student submission for modification and submission. Required
     *
     * @return bool|null The distributeForStudentWork
     */
@@ -38,10 +38,10 @@ class EducationAssignmentResource extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the distributeForStudentWork
-    * Indicates whether this resource should be copied to each student submission for modification and submission.
+    * Indicates whether this resource should be copied to each student submission for modification and submission. Required
     *
     * @param bool $val The distributeForStudentWork
     *
@@ -52,7 +52,7 @@ class EducationAssignmentResource extends Entity
         $this->_propDict["distributeForStudentWork"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the resource
     * Resource object that has been associated with this assignment.
@@ -71,7 +71,7 @@ class EducationAssignmentResource extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the resource
     * Resource object that has been associated with this assignment.
@@ -85,5 +85,33 @@ class EducationAssignmentResource extends Entity
         $this->_propDict["resource"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the dependentResources
+     *
+     * @return array|null The dependentResources
+     */
+    public function getDependentResources()
+    {
+        if (array_key_exists("dependentResources", $this->_propDict)) {
+           return $this->_propDict["dependentResources"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the dependentResources
+    *
+    * @param EducationAssignmentResource[] $val The dependentResources
+    *
+    * @return EducationAssignmentResource
+    */
+    public function setDependentResources($val)
+    {
+        $this->_propDict["dependentResources"] = $val;
+        return $this;
+    }
+
 }

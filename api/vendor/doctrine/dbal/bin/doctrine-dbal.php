@@ -5,8 +5,8 @@ use Doctrine\DBAL\Tools\Console\ConsoleRunner;
 fwrite(
     STDERR,
     '[Warning] The use of this script is discouraged.'
-        . ' You find instructions on how to boostrap the console runner in our documentation.'
-        . PHP_EOL
+        . ' You find instructions on how to bootstrap the console runner in our documentation.'
+        . PHP_EOL,
 );
 
 echo PHP_EOL . PHP_EOL;

@@ -45,6 +45,7 @@
 
 namespace SuiteCRM\Search\AOD;
 
+// TODO: TO delete
 use ACLController;
 use BeanFactory;
 use SecurityGroup;
@@ -72,6 +73,11 @@ class LuceneSearchEngine extends SearchEngine
     public function __construct()
     {
         $this->index = BeanFactory::getBean("AOD_Index")->getIndex();
+    }
+
+    public function globalSearch(SearchQuery $query): SearchResults
+    {
+        return $this->search($query);
     }
 
     /**

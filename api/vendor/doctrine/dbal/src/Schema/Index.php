@@ -43,7 +43,7 @@ class Index extends AbstractAsset implements Constraint
      * @todo $_flags should eventually be refactored into options
      * @var mixed[]
      */
-    private $options;
+    private array $options = [];
 
     /**
      * @param string   $name
@@ -77,16 +77,14 @@ class Index extends AbstractAsset implements Constraint
         }
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     protected function _addColumn(string $column): void
     {
         $this->_columns[$column] = new Identifier($column);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getColumns()
     {
@@ -94,7 +92,7 @@ class Index extends AbstractAsset implements Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getQuotedColumns(AbstractPlatform $platform)
     {
@@ -118,9 +116,7 @@ class Index extends AbstractAsset implements Constraint
         return $columns;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getUnquotedColumns()
     {
         return array_map([$this, 'trimQuotes'], $this->getColumns());
@@ -136,17 +132,13 @@ class Index extends AbstractAsset implements Constraint
         return ! $this->_isPrimary && ! $this->_isUnique;
     }
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     public function isUnique()
     {
         return $this->_isUnique;
     }
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     public function isPrimary()
     {
         return $this->_isPrimary;
@@ -194,11 +186,21 @@ class Index extends AbstractAsset implements Constraint
     }
 
     /**
-     * Checks if the other index already fulfills all the indexing and constraint needs of the current one.
+     * Keeping misspelled function name for backwards compatibility
+     *
+     * @deprecated Use {@see isFulfilledBy()} instead.
      *
      * @return bool
      */
     public function isFullfilledBy(Index $other)
+    {
+        return $this->isFulfilledBy($other);
+    }
+
+    /**
+     * Checks if the other index already fulfills all the indexing and constraint needs of the current one.
+     */
+    public function isFulfilledBy(Index $other): bool
     {
         // allow the other index to be equally large only. It being larger is an option
         // but it creates a problem with scenarios of the kind PRIMARY KEY(foo,bar) UNIQUE(foo)
@@ -326,9 +328,7 @@ class Index extends AbstractAsset implements Constraint
         return $this->options[strtolower($name)];
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getOptions()
     {
         return $this->options;

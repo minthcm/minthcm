@@ -28,6 +28,12 @@ class InstancesGetEffectiveFirewallsResponseEffectiveFirewallPolicy extends \Goo
    * @var string
    */
   public $name;
+  protected $packetMirroringRulesType = FirewallPolicyRule::class;
+  protected $packetMirroringRulesDataType = 'array';
+  /**
+   * @var int
+   */
+  public $priority;
   protected $rulesType = FirewallPolicyRule::class;
   protected $rulesDataType = 'array';
   /**
@@ -66,6 +72,34 @@ class InstancesGetEffectiveFirewallsResponseEffectiveFirewallPolicy extends \Goo
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param FirewallPolicyRule[]
+   */
+  public function setPacketMirroringRules($packetMirroringRules)
+  {
+    $this->packetMirroringRules = $packetMirroringRules;
+  }
+  /**
+   * @return FirewallPolicyRule[]
+   */
+  public function getPacketMirroringRules()
+  {
+    return $this->packetMirroringRules;
+  }
+  /**
+   * @param int
+   */
+  public function setPriority($priority)
+  {
+    $this->priority = $priority;
+  }
+  /**
+   * @return int
+   */
+  public function getPriority()
+  {
+    return $this->priority;
   }
   /**
    * @param FirewallPolicyRule[]

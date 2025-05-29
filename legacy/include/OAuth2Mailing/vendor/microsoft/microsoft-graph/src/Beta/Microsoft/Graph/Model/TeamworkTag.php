@@ -26,6 +26,7 @@ class TeamworkTag extends Entity
 {
     /**
     * Gets the description
+    * Tag description as it appears to the user in Microsoft Teams. A teamworkTag can't have more than 200 teamworkTagMembers.
     *
     * @return string|null The description
     */
@@ -37,9 +38,10 @@ class TeamworkTag extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
+    * Tag description as it appears to the user in Microsoft Teams. A teamworkTag can't have more than 200 teamworkTagMembers.
     *
     * @param string $val The description
     *
@@ -50,9 +52,10 @@ class TeamworkTag extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
+    * Tag name as it appears to the user in Microsoft Teams.
     *
     * @return string|null The displayName
     */
@@ -64,9 +67,10 @@ class TeamworkTag extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
+    * Tag name as it appears to the user in Microsoft Teams.
     *
     * @param string $val The displayName
     *
@@ -77,9 +81,10 @@ class TeamworkTag extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the memberCount
+    * The number of users assigned to the tag.
     *
     * @return int|null The memberCount
     */
@@ -91,9 +96,10 @@ class TeamworkTag extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the memberCount
+    * The number of users assigned to the tag.
     *
     * @param int $val The memberCount
     *
@@ -104,9 +110,10 @@ class TeamworkTag extends Entity
         $this->_propDict["memberCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the tagType
+    * The type of tag. Default is standard.
     *
     * @return TeamworkTagType|null The tagType
     */
@@ -122,9 +129,10 @@ class TeamworkTag extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the tagType
+    * The type of tag. Default is standard.
     *
     * @param TeamworkTagType $val The tagType
     *
@@ -135,9 +143,10 @@ class TeamworkTag extends Entity
         $this->_propDict["tagType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the teamId
+    * ID of the team in which the tag is defined.
     *
     * @return string|null The teamId
     */
@@ -149,9 +158,10 @@ class TeamworkTag extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the teamId
+    * ID of the team in which the tag is defined.
     *
     * @param string $val The teamId
     *
@@ -162,10 +172,11 @@ class TeamworkTag extends Entity
         $this->_propDict["teamId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the members
+    * Users assigned to the tag.
      *
      * @return array|null The members
      */
@@ -177,11 +188,12 @@ class TeamworkTag extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the members
+    * Users assigned to the tag.
     *
-    * @param TeamworkTagMember $val The members
+    * @param TeamworkTagMember[] $val The members
     *
     * @return TeamworkTag
     */
@@ -190,5 +202,5 @@ class TeamworkTag extends Entity
         $this->_propDict["members"] = $val;
         return $this;
     }
-    
+
 }

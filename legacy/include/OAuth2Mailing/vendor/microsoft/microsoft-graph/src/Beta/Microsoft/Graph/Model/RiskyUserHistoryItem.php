@@ -42,7 +42,7 @@ class RiskyUserHistoryItem extends RiskyUser
         }
         return null;
     }
-    
+
     /**
     * Sets the activity
     * The activity related to user risk level change.
@@ -56,10 +56,10 @@ class RiskyUserHistoryItem extends RiskyUser
         $this->_propDict["activity"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the initiatedBy
-    * The id of actor that does the operation.
+    * The ID of actor that does the operation.
     *
     * @return string|null The initiatedBy
     */
@@ -71,10 +71,10 @@ class RiskyUserHistoryItem extends RiskyUser
             return null;
         }
     }
-    
+
     /**
     * Sets the initiatedBy
-    * The id of actor that does the operation.
+    * The ID of actor that does the operation.
     *
     * @param string $val The initiatedBy
     *
@@ -85,10 +85,10 @@ class RiskyUserHistoryItem extends RiskyUser
         $this->_propDict["initiatedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
-    * The id of the user.
+    * The ID of the user.
     *
     * @return string|null The userId
     */
@@ -100,10 +100,10 @@ class RiskyUserHistoryItem extends RiskyUser
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
-    * The id of the user.
+    * The ID of the user.
     *
     * @param string $val The userId
     *
@@ -114,5 +114,5 @@ class RiskyUserHistoryItem extends RiskyUser
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
+
 }

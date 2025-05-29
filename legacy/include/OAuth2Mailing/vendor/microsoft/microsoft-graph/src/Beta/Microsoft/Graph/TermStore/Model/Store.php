@@ -38,7 +38,7 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the defaultLanguageTag
     * Default language of the term store.
@@ -52,12 +52,12 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["defaultLanguageTag"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the languageTags
     * List of languages for the term store.
     *
-    * @return string|null The languageTags
+    * @return array|null The languageTags
     */
     public function getLanguageTags()
     {
@@ -67,12 +67,12 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the languageTags
     * List of languages for the term store.
     *
-    * @param string $val The languageTags
+    * @param string[] $val The languageTags
     *
     * @return Store
     */
@@ -81,9 +81,9 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["languageTags"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the groups
     * Collection of all groups available in the term store.
      *
@@ -97,12 +97,12 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the groups
     * Collection of all groups available in the term store.
     *
-    * @param Group $val The groups
+    * @param Group[] $val The groups
     *
     * @return Store
     */
@@ -111,9 +111,9 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["groups"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the sets
     * Collection of all sets available in the term store.
      *
@@ -127,12 +127,12 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the sets
     * Collection of all sets available in the term store.
     *
-    * @param Set $val The sets
+    * @param Set[] $val The sets
     *
     * @return Store
     */
@@ -141,5 +141,5 @@ class Store extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["sets"] = $val;
         return $this;
     }
-    
+
 }

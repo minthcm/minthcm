@@ -26,7 +26,7 @@ class UserExperienceAnalyticsMetricHistory extends Entity
 {
     /**
     * Gets the deviceId
-    * The user experience analytics device id.
+    * The Intune device id of the device.
     *
     * @return string|null The deviceId
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsMetricHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceId
-    * The user experience analytics device id.
+    * The Intune device id of the device.
     *
     * @param string $val The deviceId
     *
@@ -52,10 +52,10 @@ class UserExperienceAnalyticsMetricHistory extends Entity
         $this->_propDict["deviceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the metricDateTime
-    * The user experience analytics metric date time.
+    * The metric date time. The value cannot be modified and is automatically populated when the metric is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default.
     *
     * @return \DateTime|null The metricDateTime
     */
@@ -71,10 +71,10 @@ class UserExperienceAnalyticsMetricHistory extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the metricDateTime
-    * The user experience analytics metric date time.
+    * The metric date time. The value cannot be modified and is automatically populated when the metric is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default.
     *
     * @param \DateTime $val The metricDateTime
     *
@@ -85,7 +85,7 @@ class UserExperienceAnalyticsMetricHistory extends Entity
         $this->_propDict["metricDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the metricType
     * The user experience analytics metric type.
@@ -100,7 +100,7 @@ class UserExperienceAnalyticsMetricHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the metricType
     * The user experience analytics metric type.
@@ -114,38 +114,5 @@ class UserExperienceAnalyticsMetricHistory extends Entity
         $this->_propDict["metricType"] = $val;
         return $this;
     }
-    
-    /**
-    * Gets the userExperienceAnalyticsMetric
-    * User experience analytics metric.
-    *
-    * @return UserExperienceAnalyticsMetric|null The userExperienceAnalyticsMetric
-    */
-    public function getUserExperienceAnalyticsMetric()
-    {
-        if (array_key_exists("userExperienceAnalyticsMetric", $this->_propDict)) {
-            if (is_a($this->_propDict["userExperienceAnalyticsMetric"], "\Beta\Microsoft\Graph\Model\UserExperienceAnalyticsMetric") || is_null($this->_propDict["userExperienceAnalyticsMetric"])) {
-                return $this->_propDict["userExperienceAnalyticsMetric"];
-            } else {
-                $this->_propDict["userExperienceAnalyticsMetric"] = new UserExperienceAnalyticsMetric($this->_propDict["userExperienceAnalyticsMetric"]);
-                return $this->_propDict["userExperienceAnalyticsMetric"];
-            }
-        }
-        return null;
-    }
-    
-    /**
-    * Sets the userExperienceAnalyticsMetric
-    * User experience analytics metric.
-    *
-    * @param UserExperienceAnalyticsMetric $val The userExperienceAnalyticsMetric
-    *
-    * @return UserExperienceAnalyticsMetricHistory
-    */
-    public function setUserExperienceAnalyticsMetric($val)
-    {
-        $this->_propDict["userExperienceAnalyticsMetric"] = $val;
-        return $this;
-    }
-    
+
 }

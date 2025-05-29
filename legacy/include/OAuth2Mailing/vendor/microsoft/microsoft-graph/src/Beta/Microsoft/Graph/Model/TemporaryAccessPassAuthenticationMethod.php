@@ -26,7 +26,7 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
 {
     /**
     * Gets the createdDateTime
-    * The date and time when the temporaryAccessPass was created.
+    * The date and time when the Temporary Access Pass was created.
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -42,10 +42,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
-    * The date and time when the temporaryAccessPass was created.
+    * The date and time when the Temporary Access Pass was created.
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -56,39 +56,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
-    /**
-    * Gets the isUsable
-    * The state of the authentication method that indicates whether it's currently usable by the user.
-    *
-    * @return bool|null The isUsable
-    */
-    public function getIsUsable()
-    {
-        if (array_key_exists("isUsable", $this->_propDict)) {
-            return $this->_propDict["isUsable"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the isUsable
-    * The state of the authentication method that indicates whether it's currently usable by the user.
-    *
-    * @param bool $val The isUsable
-    *
-    * @return TemporaryAccessPassAuthenticationMethod
-    */
-    public function setIsUsable($val)
-    {
-        $this->_propDict["isUsable"] = boolval($val);
-        return $this;
-    }
-    
+
     /**
     * Gets the isUsableOnce
-    * Determines whether the pass is limited to a one time use. If true, the pass can be used once; if false, the pass can be used multiple times within the temporaryAccessPass lifetime.
+    * Determines whether the pass is limited to a one-time use. If true, the pass can be used once; if false, the pass can be used multiple times within the Temporary Access Pass lifetime.
     *
     * @return bool|null The isUsableOnce
     */
@@ -100,10 +71,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
             return null;
         }
     }
-    
+
     /**
     * Sets the isUsableOnce
-    * Determines whether the pass is limited to a one time use. If true, the pass can be used once; if false, the pass can be used multiple times within the temporaryAccessPass lifetime.
+    * Determines whether the pass is limited to a one-time use. If true, the pass can be used once; if false, the pass can be used multiple times within the Temporary Access Pass lifetime.
     *
     * @param bool $val The isUsableOnce
     *
@@ -114,10 +85,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         $this->_propDict["isUsableOnce"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the lifetimeInMinutes
-    * The lifetime of the temporaryAccessPass in minutes starting at startDateTime. Minimum 10, Maximum 43200 (equivalent to 30 days).
+    * The lifetime of the Temporary Access Pass in minutes starting at startDateTime. Must be between 10 and 43200 inclusive (equivalent to 30 days).
     *
     * @return int|null The lifetimeInMinutes
     */
@@ -129,10 +100,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
             return null;
         }
     }
-    
+
     /**
     * Sets the lifetimeInMinutes
-    * The lifetime of the temporaryAccessPass in minutes starting at startDateTime. Minimum 10, Maximum 43200 (equivalent to 30 days).
+    * The lifetime of the Temporary Access Pass in minutes starting at startDateTime. Must be between 10 and 43200 inclusive (equivalent to 30 days).
     *
     * @param int $val The lifetimeInMinutes
     *
@@ -143,39 +114,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         $this->_propDict["lifetimeInMinutes"] = intval($val);
         return $this;
     }
-    
-    /**
-    * Gets the methodUsabilityReason
-    * Details about usability state (isUsable). Reasons can include: enabledByPolicy, disabledByPolicy, expired, notYetValid, oneTimeUsed.
-    *
-    * @return string|null The methodUsabilityReason
-    */
-    public function getMethodUsabilityReason()
-    {
-        if (array_key_exists("methodUsabilityReason", $this->_propDict)) {
-            return $this->_propDict["methodUsabilityReason"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the methodUsabilityReason
-    * Details about usability state (isUsable). Reasons can include: enabledByPolicy, disabledByPolicy, expired, notYetValid, oneTimeUsed.
-    *
-    * @param string $val The methodUsabilityReason
-    *
-    * @return TemporaryAccessPassAuthenticationMethod
-    */
-    public function setMethodUsabilityReason($val)
-    {
-        $this->_propDict["methodUsabilityReason"] = $val;
-        return $this;
-    }
-    
+
     /**
     * Gets the startDateTime
-    * The date and time when the temporaryAccessPass becomes available to use.
+    * The date and time when the Temporary Access Pass becomes available to use and when isUsable is true is enforced.
     *
     * @return \DateTime|null The startDateTime
     */
@@ -191,10 +133,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         }
         return null;
     }
-    
+
     /**
     * Sets the startDateTime
-    * The date and time when the temporaryAccessPass becomes available to use.
+    * The date and time when the Temporary Access Pass becomes available to use and when isUsable is true is enforced.
     *
     * @param \DateTime $val The startDateTime
     *
@@ -205,10 +147,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         $this->_propDict["startDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the temporaryAccessPass
-    * The temporaryAccessPass used to authenticate. Returned only on creation of a new temporaryAccessPass; returned as NULL with GET.
+    * The Temporary Access Pass used to authenticate. Returned only on creation of a new temporaryAccessPassAuthenticationMethod object; Hidden in subsequent read operations and returned as null with GET.
     *
     * @return string|null The temporaryAccessPass
     */
@@ -220,10 +162,10 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
             return null;
         }
     }
-    
+
     /**
     * Sets the temporaryAccessPass
-    * The temporaryAccessPass used to authenticate. Returned only on creation of a new temporaryAccessPass; returned as NULL with GET.
+    * The Temporary Access Pass used to authenticate. Returned only on creation of a new temporaryAccessPassAuthenticationMethod object; Hidden in subsequent read operations and returned as null with GET.
     *
     * @param string $val The temporaryAccessPass
     *
@@ -234,5 +176,5 @@ class TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod
         $this->_propDict["temporaryAccessPass"] = $val;
         return $this;
     }
-    
+
 }

@@ -28,7 +28,7 @@ class CountryNamedLocation extends NamedLocation
     * Gets the countriesAndRegions
     * List of countries and/or regions in two-letter format specified by ISO 3166-2.
     *
-    * @return string|null The countriesAndRegions
+    * @return array|null The countriesAndRegions
     */
     public function getCountriesAndRegions()
     {
@@ -38,12 +38,12 @@ class CountryNamedLocation extends NamedLocation
             return null;
         }
     }
-    
+
     /**
     * Sets the countriesAndRegions
     * List of countries and/or regions in two-letter format specified by ISO 3166-2.
     *
-    * @param string $val The countriesAndRegions
+    * @param string[] $val The countriesAndRegions
     *
     * @return CountryNamedLocation
     */
@@ -52,10 +52,10 @@ class CountryNamedLocation extends NamedLocation
         $this->_propDict["countriesAndRegions"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the countryLookupMethod
-    * Determines what method is used to decide which country the user is located in. Possible values are clientIpAddress and authenticatorAppGps.
+    * Determines what method is used to decide which country the user is located in. Possible values are clientIpAddress (default) and authenticatorAppGps.
     *
     * @return CountryLookupMethodType|null The countryLookupMethod
     */
@@ -71,10 +71,10 @@ class CountryNamedLocation extends NamedLocation
         }
         return null;
     }
-    
+
     /**
     * Sets the countryLookupMethod
-    * Determines what method is used to decide which country the user is located in. Possible values are clientIpAddress and authenticatorAppGps.
+    * Determines what method is used to decide which country the user is located in. Possible values are clientIpAddress (default) and authenticatorAppGps.
     *
     * @param CountryLookupMethodType $val The countryLookupMethod
     *
@@ -85,10 +85,10 @@ class CountryNamedLocation extends NamedLocation
         $this->_propDict["countryLookupMethod"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the includeUnknownCountriesAndRegions
-    * True if IP addresses that don't map to a country or region should be included in the named location.
+    * true if IP addresses that don't map to a country or region should be included in the named location. Optional. Default value is false.
     *
     * @return bool|null The includeUnknownCountriesAndRegions
     */
@@ -100,10 +100,10 @@ class CountryNamedLocation extends NamedLocation
             return null;
         }
     }
-    
+
     /**
     * Sets the includeUnknownCountriesAndRegions
-    * True if IP addresses that don't map to a country or region should be included in the named location.
+    * true if IP addresses that don't map to a country or region should be included in the named location. Optional. Default value is false.
     *
     * @param bool $val The includeUnknownCountriesAndRegions
     *
@@ -114,5 +114,5 @@ class CountryNamedLocation extends NamedLocation
         $this->_propDict["includeUnknownCountriesAndRegions"] = boolval($val);
         return $this;
     }
-    
+
 }

@@ -46,8 +46,8 @@ class Costs extends Costs_sugar
 
     public function save($check_notify = false)
     {
+        $stored_fetched_row = $this->fetched_row;
         $this->setCostFields();
-
         $result = parent::save($check_notify);
 
         $costs_feed = new CostsFeed();
@@ -59,12 +59,12 @@ class Costs extends Costs_sugar
         );
 
         foreach ($rel_map as $key => $value) {
-            if ($this->$value && ( $this->cost_amount != $this->fetched_row['cost_amount'] || $this->$value != $this->fetched_row[$value] )) {
+            if ($this->$value && ( $this->cost_amount != $stored_fetched_row['cost_amount'] || $this->$value != $stored_fetched_row[$value] )) {
                 $this->countCostsInRelatedModule($this->$value, $key);
             }
 
-            if ($this->fetched_row[$value] && $this->$value != $this->fetched_row[$value]) {
-                $this->countCostsInRelatedModule($this->fetched_row[$value], $key);
+            if ($stored_fetched_row[$value] && $this->$value != $stored_fetched_row[$value]) {
+                $this->countCostsInRelatedModule($stored_fetched_row[$value], $key);
             }
         }
 

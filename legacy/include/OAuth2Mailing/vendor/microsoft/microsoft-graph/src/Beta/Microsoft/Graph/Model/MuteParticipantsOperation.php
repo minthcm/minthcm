@@ -27,7 +27,7 @@ class MuteParticipantsOperation extends CommsOperation
     /**
     * Gets the participants
     *
-    * @return string|null The participants
+    * @return array|null The participants
     */
     public function getParticipants()
     {
@@ -37,11 +37,11 @@ class MuteParticipantsOperation extends CommsOperation
             return null;
         }
     }
-    
+
     /**
     * Sets the participants
     *
-    * @param string $val The participants
+    * @param string[] $val The participants
     *
     * @return MuteParticipantsOperation
     */
@@ -50,5 +50,5 @@ class MuteParticipantsOperation extends CommsOperation
         $this->_propDict["participants"] = $val;
         return $this;
     }
-    
+
 }

@@ -26,9 +26,9 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
 {
     /**
     * Gets the childIds
-    * Dependent child settings to this group of settings
+    * Dependent child settings to this group of settings.
     *
-    * @return string|null The childIds
+    * @return array|null The childIds
     */
     public function getChildIds()
     {
@@ -38,12 +38,12 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
             return null;
         }
     }
-    
+
     /**
     * Sets the childIds
-    * Dependent child settings to this group of settings
+    * Dependent child settings to this group of settings.
     *
-    * @param string $val The childIds
+    * @param string[] $val The childIds
     *
     * @return DeviceManagementConfigurationSettingGroupDefinition
     */
@@ -52,9 +52,9 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
         $this->_propDict["childIds"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the dependedOnBy
     * List of child settings that depend on this setting
      *
@@ -68,12 +68,12 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the dependedOnBy
     * List of child settings that depend on this setting
     *
-    * @param DeviceManagementConfigurationSettingDependedOnBy $val The dependedOnBy
+    * @param DeviceManagementConfigurationSettingDependedOnBy[] $val The dependedOnBy
     *
     * @return DeviceManagementConfigurationSettingGroupDefinition
     */
@@ -82,9 +82,9 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
         $this->_propDict["dependedOnBy"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the dependentOn
     * List of Dependencies for the setting group
      *
@@ -98,12 +98,12 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the dependentOn
     * List of Dependencies for the setting group
     *
-    * @param DeviceManagementConfigurationDependentOn $val The dependentOn
+    * @param DeviceManagementConfigurationDependentOn[] $val The dependentOn
     *
     * @return DeviceManagementConfigurationSettingGroupDefinition
     */
@@ -112,5 +112,5 @@ class DeviceManagementConfigurationSettingGroupDefinition extends DeviceManageme
         $this->_propDict["dependentOn"] = $val;
         return $this;
     }
-    
+
 }

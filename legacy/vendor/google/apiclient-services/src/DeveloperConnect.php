@@ -243,6 +243,16 @@ class DeveloperConnect extends \Google\Service
                   'type' => 'boolean',
                 ],
               ],
+            ],'processGitHubEnterpriseWebhook' => [
+              'path' => 'v1/{+parent}/connections:processGitHubEnterpriseWebhook',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
             ],
           ]
         ]
@@ -373,6 +383,46 @@ class DeveloperConnect extends \Google\Service
                 'pageToken' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],'processBitbucketCloudWebhook' => [
+              'path' => 'v1/{+name}:processBitbucketCloudWebhook',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'processBitbucketDataCenterWebhook' => [
+              'path' => 'v1/{+name}:processBitbucketDataCenterWebhook',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'processGitLabEnterpriseWebhook' => [
+              'path' => 'v1/{+name}:processGitLabEnterpriseWebhook',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'processGitLabWebhook' => [
+              'path' => 'v1/{+name}:processGitLabWebhook',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ],
               ],
             ],

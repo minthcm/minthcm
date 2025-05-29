@@ -16,7 +16,7 @@ class vfsStreamWrapperWithoutRootTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         vfsStreamWrapper::register();
     }

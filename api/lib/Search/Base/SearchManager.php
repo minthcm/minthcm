@@ -62,6 +62,6 @@ abstract class SearchManager
 
     abstract protected function setResultManager($result, $handle_acl): void;
 
-    abstract public function search($handle_acl = false): SearchResult;
+    abstract public function search($handle_acl = false): SearchResult | array;
 
 }

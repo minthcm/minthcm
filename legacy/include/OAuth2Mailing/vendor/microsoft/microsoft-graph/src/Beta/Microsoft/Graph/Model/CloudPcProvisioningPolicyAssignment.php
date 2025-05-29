@@ -26,7 +26,7 @@ class CloudPcProvisioningPolicyAssignment extends Entity
 {
     /**
     * Gets the target
-    * The assignment target for the provisioning policy. Currently, the only target supported for this policy is a user group.
+    * The assignment target for the provisioning policy. Currently, the only target supported for this policy is a user group. For details, see cloudPcManagementGroupAssignmentTarget.
     *
     * @return CloudPcManagementAssignmentTarget|null The target
     */
@@ -42,10 +42,10 @@ class CloudPcProvisioningPolicyAssignment extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the target
-    * The assignment target for the provisioning policy. Currently, the only target supported for this policy is a user group.
+    * The assignment target for the provisioning policy. Currently, the only target supported for this policy is a user group. For details, see cloudPcManagementGroupAssignmentTarget.
     *
     * @param CloudPcManagementAssignmentTarget $val The target
     *
@@ -56,5 +56,35 @@ class CloudPcProvisioningPolicyAssignment extends Entity
         $this->_propDict["target"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the assignedUsers
+    * The assignment targeted users for the provisioning policy. This list of users is computed based on assignments, licenses, group memberships, and policies. This property is read-only. Supports$expand.
+     *
+     * @return array|null The assignedUsers
+     */
+    public function getAssignedUsers()
+    {
+        if (array_key_exists("assignedUsers", $this->_propDict)) {
+           return $this->_propDict["assignedUsers"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the assignedUsers
+    * The assignment targeted users for the provisioning policy. This list of users is computed based on assignments, licenses, group memberships, and policies. This property is read-only. Supports$expand.
+    *
+    * @param User[] $val The assignedUsers
+    *
+    * @return CloudPcProvisioningPolicyAssignment
+    */
+    public function setAssignedUsers($val)
+    {
+        $this->_propDict["assignedUsers"] = $val;
+        return $this;
+    }
+
 }

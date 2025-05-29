@@ -26,6 +26,18 @@ class SecurityProfileGroup extends \Google\Model
   /**
    * @var string
    */
+  public $customInterceptProfile;
+  /**
+   * @var string
+   */
+  public $customMirroringProfile;
+  /**
+   * @var string
+   */
+  public $dataPathId;
+  /**
+   * @var string
+   */
   public $description;
   /**
    * @var string
@@ -61,6 +73,48 @@ class SecurityProfileGroup extends \Google\Model
   public function getCreateTime()
   {
     return $this->createTime;
+  }
+  /**
+   * @param string
+   */
+  public function setCustomInterceptProfile($customInterceptProfile)
+  {
+    $this->customInterceptProfile = $customInterceptProfile;
+  }
+  /**
+   * @return string
+   */
+  public function getCustomInterceptProfile()
+  {
+    return $this->customInterceptProfile;
+  }
+  /**
+   * @param string
+   */
+  public function setCustomMirroringProfile($customMirroringProfile)
+  {
+    $this->customMirroringProfile = $customMirroringProfile;
+  }
+  /**
+   * @return string
+   */
+  public function getCustomMirroringProfile()
+  {
+    return $this->customMirroringProfile;
+  }
+  /**
+   * @param string
+   */
+  public function setDataPathId($dataPathId)
+  {
+    $this->dataPathId = $dataPathId;
+  }
+  /**
+   * @return string
+   */
+  public function getDataPathId()
+  {
+    return $this->dataPathId;
   }
   /**
    * @param string

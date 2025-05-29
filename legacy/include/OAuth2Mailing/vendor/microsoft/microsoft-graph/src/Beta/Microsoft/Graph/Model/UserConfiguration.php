@@ -35,13 +35,13 @@ class UserConfiguration extends Entity
             if (is_a($this->_propDict["binaryData"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["binaryData"])) {
                 return $this->_propDict["binaryData"];
             } else {
-                $this->_propDict["binaryData"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["binaryData"]);
+                $this->_propDict["binaryData"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["binaryData"]);
                 return $this->_propDict["binaryData"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the binaryData
     *
@@ -54,5 +54,5 @@ class UserConfiguration extends Entity
         $this->_propDict["binaryData"] = $val;
         return $this;
     }
-    
+
 }

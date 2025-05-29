@@ -26,7 +26,7 @@ class Agreement extends Entity
 {
     /**
     * Gets the displayName
-    * Display name of the agreement. The display name is used for internal tracking of the agreement but is not shown to end users who view the agreement.
+    * Display name of the agreement. The display name is used for internal tracking of the agreement but is not shown to end users who view the agreement. Supports $filter (eq).
     *
     * @return string|null The displayName
     */
@@ -38,10 +38,10 @@ class Agreement extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * Display name of the agreement. The display name is used for internal tracking of the agreement but is not shown to end users who view the agreement.
+    * Display name of the agreement. The display name is used for internal tracking of the agreement but is not shown to end users who view the agreement. Supports $filter (eq).
     *
     * @param string $val The displayName
     *
@@ -52,10 +52,10 @@ class Agreement extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isPerDeviceAcceptanceRequired
-    * This setting enables you to require end users to accept this agreement on every device that they are accessing it from. The end user will be required to register their device in Azure AD, if they haven't already done so.
+    * Indicates whether end users are required to accept this agreement on every device that they access it from. The end user is required to register their device in Microsoft Entra ID, if they haven't already done so. Supports $filter (eq).
     *
     * @return bool|null The isPerDeviceAcceptanceRequired
     */
@@ -67,10 +67,10 @@ class Agreement extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isPerDeviceAcceptanceRequired
-    * This setting enables you to require end users to accept this agreement on every device that they are accessing it from. The end user will be required to register their device in Azure AD, if they haven't already done so.
+    * Indicates whether end users are required to accept this agreement on every device that they access it from. The end user is required to register their device in Microsoft Entra ID, if they haven't already done so. Supports $filter (eq).
     *
     * @param bool $val The isPerDeviceAcceptanceRequired
     *
@@ -81,10 +81,10 @@ class Agreement extends Entity
         $this->_propDict["isPerDeviceAcceptanceRequired"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isViewingBeforeAcceptanceRequired
-    * Indicates whether the user has to expand the agreement before accepting.
+    * Indicates whether the user has to expand the agreement before accepting. Supports $filter (eq).
     *
     * @return bool|null The isViewingBeforeAcceptanceRequired
     */
@@ -96,10 +96,10 @@ class Agreement extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isViewingBeforeAcceptanceRequired
-    * Indicates whether the user has to expand the agreement before accepting.
+    * Indicates whether the user has to expand the agreement before accepting. Supports $filter (eq).
     *
     * @param bool $val The isViewingBeforeAcceptanceRequired
     *
@@ -110,10 +110,10 @@ class Agreement extends Entity
         $this->_propDict["isViewingBeforeAcceptanceRequired"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the termsExpiration
-    * Expiration schedule and frequency of agreement for all users.
+    * Expiration schedule and frequency of agreement for all users. Supports $filter (eq).
     *
     * @return TermsExpiration|null The termsExpiration
     */
@@ -129,10 +129,10 @@ class Agreement extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the termsExpiration
-    * Expiration schedule and frequency of agreement for all users.
+    * Expiration schedule and frequency of agreement for all users. Supports $filter (eq).
     *
     * @param TermsExpiration $val The termsExpiration
     *
@@ -143,31 +143,31 @@ class Agreement extends Entity
         $this->_propDict["termsExpiration"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userReacceptRequiredFrequency
-    * The duration after which the user must re-accept the terms of use. The value is represented in ISO 8601 format for durations.
+    * The duration after which the user must re-accept the terms of use. The value is represented in ISO 8601 format for durations. Supports $filter (eq).
     *
-    * @return Duration|null The userReacceptRequiredFrequency
+    * @return \DateInterval|null The userReacceptRequiredFrequency
     */
     public function getUserReacceptRequiredFrequency()
     {
         if (array_key_exists("userReacceptRequiredFrequency", $this->_propDict)) {
-            if (is_a($this->_propDict["userReacceptRequiredFrequency"], "\Microsoft\Graph\Model\Duration") || is_null($this->_propDict["userReacceptRequiredFrequency"])) {
+            if (is_a($this->_propDict["userReacceptRequiredFrequency"], "\DateInterval") || is_null($this->_propDict["userReacceptRequiredFrequency"])) {
                 return $this->_propDict["userReacceptRequiredFrequency"];
             } else {
-                $this->_propDict["userReacceptRequiredFrequency"] = new Duration($this->_propDict["userReacceptRequiredFrequency"]);
+                $this->_propDict["userReacceptRequiredFrequency"] = new \DateInterval($this->_propDict["userReacceptRequiredFrequency"]);
                 return $this->_propDict["userReacceptRequiredFrequency"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the userReacceptRequiredFrequency
-    * The duration after which the user must re-accept the terms of use. The value is represented in ISO 8601 format for durations.
+    * The duration after which the user must re-accept the terms of use. The value is represented in ISO 8601 format for durations. Supports $filter (eq).
     *
-    * @param Duration $val The userReacceptRequiredFrequency
+    * @param \DateInterval $val The userReacceptRequiredFrequency
     *
     * @return Agreement
     */
@@ -176,9 +176,9 @@ class Agreement extends Entity
         $this->_propDict["userReacceptRequiredFrequency"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the acceptances
     * Read-only. Information about acceptances of this agreement.
      *
@@ -192,12 +192,12 @@ class Agreement extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the acceptances
     * Read-only. Information about acceptances of this agreement.
     *
-    * @param AgreementAcceptance $val The acceptances
+    * @param AgreementAcceptance[] $val The acceptances
     *
     * @return Agreement
     */
@@ -206,7 +206,7 @@ class Agreement extends Entity
         $this->_propDict["acceptances"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the file
     * Default PDF linked to this agreement.
@@ -225,7 +225,7 @@ class Agreement extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the file
     * Default PDF linked to this agreement.
@@ -239,11 +239,11 @@ class Agreement extends Entity
         $this->_propDict["file"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the files
-    * PDFs linked to this agreement. Note: This property is in the process of being deprecated. Use the  file property instead.
+    * PDFs linked to this agreement. This property is in the process of being deprecated. Use the  file property instead. Supports $expand.
      *
      * @return array|null The files
      */
@@ -255,12 +255,12 @@ class Agreement extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the files
-    * PDFs linked to this agreement. Note: This property is in the process of being deprecated. Use the  file property instead.
+    * PDFs linked to this agreement. This property is in the process of being deprecated. Use the  file property instead. Supports $expand.
     *
-    * @param AgreementFileLocalization $val The files
+    * @param AgreementFileLocalization[] $val The files
     *
     * @return Agreement
     */
@@ -269,5 +269,5 @@ class Agreement extends Entity
         $this->_propDict["files"] = $val;
         return $this;
     }
-    
+
 }

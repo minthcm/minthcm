@@ -71,8 +71,11 @@ class ProjectsLocations extends \Google\Service\Resource
     return $this->call('list', [$params], GoogleCloudLocationListLocationsResponse::class);
   }
   /**
-   * Looks up a single Entry by name using the permission on the source system.
-   * (locations.lookupEntry)
+   * Looks up a single Entry by name using the permission on the source
+   * system.Caution: The BigQuery metadata that is stored in Dataplex Catalog is
+   * changing. For more information, see Changes to BigQuery metadata stored in
+   * Dataplex Catalog (https://cloud.google.com/dataplex/docs/biqquery-metadata-
+   * changes). (locations.lookupEntry)
    *
    * @param string $name Required. The project to which the request should be
    * attributed in the following form: projects/{project}/locations/{location}.
@@ -105,13 +108,16 @@ class ProjectsLocations extends \Google\Service\Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string orderBy Optional. Specifies the ordering of results.
+   * Supported values are: relevance (default) last_modified_timestamp
+   * last_modified_timestamp asc
    * @opt_param int pageSize Optional. Number of results in the search page. If
    * <=0, then defaults to 10. Max limit for page_size is 1000. Throws an invalid
    * argument for page_size > 1000.
    * @opt_param string pageToken Optional. Page token received from a previous
    * SearchEntries call. Provide this to retrieve the subsequent page.
    * @opt_param string query Required. The query against which entries in scope
-   * should be matched.
+   * should be matched. The query syntax is defined in Search syntax for Dataplex
+   * Catalog (https://cloud.google.com/dataplex/docs/search-syntax).
    * @opt_param string scope Optional. The scope under which the search should be
    * operating. It must either be organizations/ or projects/. If it is
    * unspecified, it defaults to the organization where the project provided in

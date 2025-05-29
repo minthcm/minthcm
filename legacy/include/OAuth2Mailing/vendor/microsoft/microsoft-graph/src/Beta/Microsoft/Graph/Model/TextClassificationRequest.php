@@ -25,6 +25,37 @@ namespace Beta\Microsoft\Graph\Model;
 class TextClassificationRequest extends Entity
 {
     /**
+    * Gets the contentMetaData
+    *
+    * @return ClassificationRequestContentMetaData|null The contentMetaData
+    */
+    public function getContentMetaData()
+    {
+        if (array_key_exists("contentMetaData", $this->_propDict)) {
+            if (is_a($this->_propDict["contentMetaData"], "\Beta\Microsoft\Graph\Model\ClassificationRequestContentMetaData") || is_null($this->_propDict["contentMetaData"])) {
+                return $this->_propDict["contentMetaData"];
+            } else {
+                $this->_propDict["contentMetaData"] = new ClassificationRequestContentMetaData($this->_propDict["contentMetaData"]);
+                return $this->_propDict["contentMetaData"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the contentMetaData
+    *
+    * @param ClassificationRequestContentMetaData $val The contentMetaData
+    *
+    * @return TextClassificationRequest
+    */
+    public function setContentMetaData($val)
+    {
+        $this->_propDict["contentMetaData"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the fileExtension
     *
     * @return string|null The fileExtension
@@ -37,7 +68,7 @@ class TextClassificationRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the fileExtension
     *
@@ -50,7 +81,7 @@ class TextClassificationRequest extends Entity
         $this->_propDict["fileExtension"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the matchTolerancesToInclude
     *
@@ -68,7 +99,7 @@ class TextClassificationRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the matchTolerancesToInclude
     *
@@ -81,7 +112,7 @@ class TextClassificationRequest extends Entity
         $this->_propDict["matchTolerancesToInclude"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the scopesToRun
     *
@@ -99,7 +130,7 @@ class TextClassificationRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the scopesToRun
     *
@@ -112,11 +143,11 @@ class TextClassificationRequest extends Entity
         $this->_propDict["scopesToRun"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sensitiveTypeIds
     *
-    * @return string|null The sensitiveTypeIds
+    * @return array|null The sensitiveTypeIds
     */
     public function getSensitiveTypeIds()
     {
@@ -126,11 +157,11 @@ class TextClassificationRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the sensitiveTypeIds
     *
-    * @param string $val The sensitiveTypeIds
+    * @param string[] $val The sensitiveTypeIds
     *
     * @return TextClassificationRequest
     */
@@ -139,7 +170,7 @@ class TextClassificationRequest extends Entity
         $this->_propDict["sensitiveTypeIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the text
     *
@@ -153,7 +184,7 @@ class TextClassificationRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the text
     *
@@ -166,5 +197,5 @@ class TextClassificationRequest extends Entity
         $this->_propDict["text"] = $val;
         return $this;
     }
-    
+
 }

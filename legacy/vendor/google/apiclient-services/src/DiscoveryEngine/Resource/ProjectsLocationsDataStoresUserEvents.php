@@ -19,6 +19,7 @@ namespace Google\Service\DiscoveryEngine\Resource;
 
 use Google\Service\DiscoveryEngine\GoogleApiHttpBody;
 use Google\Service\DiscoveryEngine\GoogleCloudDiscoveryengineV1ImportUserEventsRequest;
+use Google\Service\DiscoveryEngine\GoogleCloudDiscoveryengineV1PurgeUserEventsRequest;
 use Google\Service\DiscoveryEngine\GoogleCloudDiscoveryengineV1UserEvent;
 use Google\Service\DiscoveryEngine\GoogleLongrunningOperation;
 
@@ -38,9 +39,12 @@ class ProjectsLocationsDataStoresUserEvents extends \Google\Service\Resource
    * used only by the Discovery Engine API JavaScript pixel and Google Tag
    * Manager. Users should not call this method directly. (userEvents.collect)
    *
-   * @param string $parent Required. The parent DataStore resource name, such as `
-   * projects/{project}/locations/{location}/collections/{collection}/dataStores/{
-   * data_store}`.
+   * @param string $parent Required. The parent resource name. If the collect user
+   * event action is applied in DataStore level, the format is: `projects/{project
+   * }/locations/{location}/collections/{collection}/dataStores/{data_store}`. If
+   * the collect user event action is applied in Location level, for example, the
+   * event with Document across multiple DataStore, the format is:
+   * `projects/{project}/locations/{location}`.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string ets The event timestamp in milliseconds. This prevents
@@ -81,6 +85,26 @@ class ProjectsLocationsDataStoresUserEvents extends \Google\Service\Resource
     $params = ['parent' => $parent, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
     return $this->call('import', [$params], GoogleLongrunningOperation::class);
+  }
+  /**
+   * Deletes permanently all user events specified by the filter provided.
+   * Depending on the number of events specified by the filter, this operation
+   * could take hours or days to complete. To test a filter, use the list command
+   * first. (userEvents.purge)
+   *
+   * @param string $parent Required. The resource name of the catalog under which
+   * the events are created. The format is `projects/{project}/locations/global/co
+   * llections/{collection}/dataStores/{dataStore}`.
+   * @param GoogleCloudDiscoveryengineV1PurgeUserEventsRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleLongrunningOperation
+   * @throws \Google\Service\Exception
+   */
+  public function purge($parent, GoogleCloudDiscoveryengineV1PurgeUserEventsRequest $postBody, $optParams = [])
+  {
+    $params = ['parent' => $parent, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('purge', [$params], GoogleLongrunningOperation::class);
   }
   /**
    * Writes a single user event. (userEvents.write)

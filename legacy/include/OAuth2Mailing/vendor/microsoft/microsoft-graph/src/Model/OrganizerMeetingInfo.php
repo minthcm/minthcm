@@ -26,16 +26,18 @@ class OrganizerMeetingInfo extends MeetingInfo
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.organizerMeetingInfo");
     }
 
 
     /**
     * Gets the organizer
-    * The organizer Azure Active Directory identity.
+    * The organizer Microsoft Entra identity.
     *
     * @return IdentitySet|null The organizer
     */
@@ -54,7 +56,7 @@ class OrganizerMeetingInfo extends MeetingInfo
 
     /**
     * Sets the organizer
-    * The organizer Azure Active Directory identity.
+    * The organizer Microsoft Entra identity.
     *
     * @param IdentitySet $val The value to assign to the organizer
     *

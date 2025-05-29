@@ -12,6 +12,8 @@ use Doctrine\DBAL\Schema\Table;
 
 /**
  * Schema Visitor used for Validation or Generation purposes.
+ *
+ * @deprecated
  */
 interface Visitor
 {
@@ -22,14 +24,10 @@ interface Visitor
      */
     public function acceptSchema(Schema $schema);
 
-    /**
-     * @return void
-     */
+    /** @return void */
     public function acceptTable(Table $table);
 
-    /**
-     * @return void
-     */
+    /** @return void */
     public function acceptColumn(Table $table, Column $column);
 
     /**
@@ -39,13 +37,9 @@ interface Visitor
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint);
 
-    /**
-     * @return void
-     */
+    /** @return void */
     public function acceptIndex(Table $table, Index $index);
 
-    /**
-     * @return void
-     */
+    /** @return void */
     public function acceptSequence(Sequence $sequence);
 }

@@ -17,8 +17,7 @@
 
 namespace Microsoft\Graph\Http;
 
-use Microsoft\Graph\Exception\GraphException;
-use Microsoft\Graph\Core\GraphConstants;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Class GraphResponse
@@ -33,7 +32,7 @@ class GraphResponse
     /**
     * The body of the response
     *
-    * @var string
+    * @var StreamInterface|null
     */
     private $_body;
     /**
@@ -55,12 +54,14 @@ class GraphResponse
     * @var string
     */
     private $_httpStatusCode;
+    
+    private $_request;
 
     /**
     * Creates a new Graph HTTP response entity
     *
     * @param object $request        The request
-    * @param string $body           The body of the response
+    * @param StreamInterface|null $body           The body of the response
     * @param string $httpStatusCode The returned status code
     * @param array  $headers        The returned headers
     */
@@ -100,7 +101,7 @@ class GraphResponse
     /**
     * Get the undecoded body of the HTTP response
     *
-    * @return string|null The undecoded body
+    * @return StreamInterface|null The undecoded body
     */
     public function getRawBody()
     {

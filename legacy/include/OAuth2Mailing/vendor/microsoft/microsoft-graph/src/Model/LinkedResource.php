@@ -26,7 +26,7 @@ class LinkedResource extends Entity
 {
     /**
     * Gets the applicationName
-    * Field indicating the app name of the source that is sending the linkedResource.
+    * The app name of the source that sends the linkedResource.
     *
     * @return string|null The applicationName
     */
@@ -38,10 +38,10 @@ class LinkedResource extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the applicationName
-    * Field indicating the app name of the source that is sending the linkedResource.
+    * The app name of the source that sends the linkedResource.
     *
     * @param string $val The applicationName
     *
@@ -52,10 +52,10 @@ class LinkedResource extends Entity
         $this->_propDict["applicationName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * Field indicating the title of the linkedResource.
+    * The title of the linkedResource.
     *
     * @return string|null The displayName
     */
@@ -67,10 +67,10 @@ class LinkedResource extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * Field indicating the title of the linkedResource.
+    * The title of the linkedResource.
     *
     * @param string $val The displayName
     *
@@ -81,10 +81,10 @@ class LinkedResource extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalId
-    * Id of the object that is associated with this task on the third-party/partner system.
+    * ID of the object that is associated with this task on the third-party/partner system.
     *
     * @return string|null The externalId
     */
@@ -96,10 +96,10 @@ class LinkedResource extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the externalId
-    * Id of the object that is associated with this task on the third-party/partner system.
+    * ID of the object that is associated with this task on the third-party/partner system.
     *
     * @param string $val The externalId
     *
@@ -110,7 +110,7 @@ class LinkedResource extends Entity
         $this->_propDict["externalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the webUrl
     * Deep link to the linkedResource.
@@ -125,7 +125,7 @@ class LinkedResource extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the webUrl
     * Deep link to the linkedResource.
@@ -139,5 +139,5 @@ class LinkedResource extends Entity
         $this->_propDict["webUrl"] = $val;
         return $this;
     }
-    
+
 }

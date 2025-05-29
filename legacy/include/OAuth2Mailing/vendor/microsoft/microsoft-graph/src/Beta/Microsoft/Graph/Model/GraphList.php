@@ -38,24 +38,24 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The displayable title of the list.
     *
     * @param string $val The displayName
     *
-    * @return List
+    * @return GraphList
     */
     public function setDisplayName($val)
     {
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the list
-    * Provides additional details about the list.
+    * Contains more details about the list.
     *
     * @return ListInfo|null The list
     */
@@ -71,21 +71,21 @@ class GraphList extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the list
-    * Provides additional details about the list.
+    * Contains more details about the list.
     *
     * @param ListInfo $val The list
     *
-    * @return List
+    * @return GraphList
     */
     public function setList($val)
     {
         $this->_propDict["list"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -104,24 +104,24 @@ class GraphList extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
     *
     * @param SharepointIds $val The sharepointIds
     *
-    * @return List
+    * @return GraphList
     */
     public function setSharepointIds($val)
     {
         $this->_propDict["sharepointIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the system
-    * If present, indicates that this is a system-managed list. Read-only.
+    * If present, indicates that the list is system-managed. Read-only.
     *
     * @return SystemFacet|null The system
     */
@@ -137,23 +137,23 @@ class GraphList extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the system
-    * If present, indicates that this is a system-managed list. Read-only.
+    * If present, indicates that the list is system-managed. Read-only.
     *
     * @param SystemFacet $val The system
     *
-    * @return List
+    * @return GraphList
     */
     public function setSystem($val)
     {
         $this->_propDict["system"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the activities
     * The recent activities that took place within this list.
      *
@@ -167,23 +167,23 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the activities
     * The recent activities that took place within this list.
     *
-    * @param ItemActivityOLD $val The activities
+    * @param ItemActivityOLD[] $val The activities
     *
-    * @return List
+    * @return GraphList
     */
     public function setActivities($val)
     {
         $this->_propDict["activities"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the columns
     * The collection of field definitions for this list.
      *
@@ -197,23 +197,23 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the columns
     * The collection of field definitions for this list.
     *
-    * @param ColumnDefinition $val The columns
+    * @param ColumnDefinition[] $val The columns
     *
-    * @return List
+    * @return GraphList
     */
     public function setColumns($val)
     {
         $this->_propDict["columns"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the contentTypes
     * The collection of content types present in this list.
      *
@@ -227,24 +227,24 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the contentTypes
     * The collection of content types present in this list.
     *
-    * @param ContentType $val The contentTypes
+    * @param ContentType[] $val The contentTypes
     *
-    * @return List
+    * @return GraphList
     */
     public function setContentTypes($val)
     {
         $this->_propDict["contentTypes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the drive
-    * Only present on document libraries. Allows access to the list as a [drive][] resource with [driveItems][driveItem].
+    * Allows access to the list as a drive resource with driveItems. Only present on document libraries.
     *
     * @return Drive|null The drive
     */
@@ -260,23 +260,23 @@ class GraphList extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the drive
-    * Only present on document libraries. Allows access to the list as a [drive][] resource with [driveItems][driveItem].
+    * Allows access to the list as a drive resource with driveItems. Only present on document libraries.
     *
     * @param Drive $val The drive
     *
-    * @return List
+    * @return GraphList
     */
     public function setDrive($val)
     {
         $this->_propDict["drive"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the items
     * All items contained in the list.
      *
@@ -290,23 +290,53 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the items
     * All items contained in the list.
     *
-    * @param ListItem $val The items
+    * @param ListItem[] $val The items
     *
-    * @return List
+    * @return GraphList
     */
     public function setItems($val)
     {
         $this->_propDict["items"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the operations
+    * The collection of long-running operations on the list.
+     *
+     * @return array|null The operations
+     */
+    public function getOperations()
+    {
+        if (array_key_exists("operations", $this->_propDict)) {
+           return $this->_propDict["operations"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the operations
+    * The collection of long-running operations on the list.
+    *
+    * @param RichLongRunningOperation[] $val The operations
+    *
+    * @return GraphList
+    */
+    public function setOperations($val)
+    {
+        $this->_propDict["operations"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the subscriptions
     * The set of subscriptions on the list.
      *
@@ -320,19 +350,19 @@ class GraphList extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the subscriptions
     * The set of subscriptions on the list.
     *
-    * @param Subscription $val The subscriptions
+    * @param Subscription[] $val The subscriptions
     *
-    * @return List
+    * @return GraphList
     */
     public function setSubscriptions($val)
     {
         $this->_propDict["subscriptions"] = $val;
         return $this;
     }
-    
+
 }

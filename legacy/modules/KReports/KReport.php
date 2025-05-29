@@ -2376,8 +2376,8 @@ class KReportRenderer
 
     public static function kintRenderer($fieldid, $record)
     {
-        // Mint start ref #48478 Nieprawidłowe przekazywanie liczb zmiennoprzecinkowych do wykresów
-        return number_format($record[$fieldid], 0, $GLOBALS['current_user']->getPreference('dec_sep'), $GLOBALS['current_user']->getPreference('num_grp_sep'));
+        // Mint start ref #48478 Nieprawidłowe przekazywanie liczb zmiennoprzecinkowych do wykresów, #137532
+        return number_format((float)$record[$fieldid], 0, $GLOBALS['current_user']->getPreference('dec_sep'), $GLOBALS['current_user']->getPreference('num_grp_sep'));
         // return round($record[$fieldid]);
         // Mint end #48478 Nieprawidłowe przekazywanie liczb zmiennoprzecinkowych do wykresów
         //        return format_number($record[$fieldid], 0);

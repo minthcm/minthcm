@@ -36,7 +36,7 @@ class FileEncryptionInfo extends Entity
             if (is_a($this->_propDict["encryptionKey"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["encryptionKey"])) {
                 return $this->_propDict["encryptionKey"];
             } else {
-                $this->_propDict["encryptionKey"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["encryptionKey"]);
+                $this->_propDict["encryptionKey"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["encryptionKey"]);
                 return $this->_propDict["encryptionKey"];
             }
         }
@@ -59,7 +59,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Gets the fileDigest
-    * The file digest prior to encryption.
+    * The file digest prior to encryption. ProfileVersion1 requires a non-null FileDigest.
     *
     * @return \GuzzleHttp\Psr7\Stream|null The fileDigest
     */
@@ -69,7 +69,7 @@ class FileEncryptionInfo extends Entity
             if (is_a($this->_propDict["fileDigest"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["fileDigest"])) {
                 return $this->_propDict["fileDigest"];
             } else {
-                $this->_propDict["fileDigest"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["fileDigest"]);
+                $this->_propDict["fileDigest"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["fileDigest"]);
                 return $this->_propDict["fileDigest"];
             }
         }
@@ -78,7 +78,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the fileDigest
-    * The file digest prior to encryption.
+    * The file digest prior to encryption. ProfileVersion1 requires a non-null FileDigest.
     *
     * @param \GuzzleHttp\Psr7\Stream $val The value to assign to the fileDigest
     *
@@ -91,7 +91,7 @@ class FileEncryptionInfo extends Entity
     }
     /**
     * Gets the fileDigestAlgorithm
-    * The file digest algorithm.
+    * The file digest algorithm. ProfileVersion1 currently only supports SHA256 for the FileDigestAlgorithm.
     *
     * @return string|null The fileDigestAlgorithm
     */
@@ -106,7 +106,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the fileDigestAlgorithm
-    * The file digest algorithm.
+    * The file digest algorithm. ProfileVersion1 currently only supports SHA256 for the FileDigestAlgorithm.
     *
     * @param string $val The value of the fileDigestAlgorithm
     *
@@ -120,7 +120,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Gets the initializationVector
-    * The initialization vector used for the encryption algorithm.
+    * The initialization vector (IV) used for the encryption algorithm. Must be 16 bytes.
     *
     * @return \GuzzleHttp\Psr7\Stream|null The initializationVector
     */
@@ -130,7 +130,7 @@ class FileEncryptionInfo extends Entity
             if (is_a($this->_propDict["initializationVector"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["initializationVector"])) {
                 return $this->_propDict["initializationVector"];
             } else {
-                $this->_propDict["initializationVector"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["initializationVector"]);
+                $this->_propDict["initializationVector"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["initializationVector"]);
                 return $this->_propDict["initializationVector"];
             }
         }
@@ -139,7 +139,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the initializationVector
-    * The initialization vector used for the encryption algorithm.
+    * The initialization vector (IV) used for the encryption algorithm. Must be 16 bytes.
     *
     * @param \GuzzleHttp\Psr7\Stream $val The value to assign to the initializationVector
     *
@@ -153,7 +153,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Gets the mac
-    * The hash of the encrypted file content + IV (content hash).
+    * The hash of the concatenation of the IV and encrypted file content. Must be 32 bytes.
     *
     * @return \GuzzleHttp\Psr7\Stream|null The mac
     */
@@ -163,7 +163,7 @@ class FileEncryptionInfo extends Entity
             if (is_a($this->_propDict["mac"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["mac"])) {
                 return $this->_propDict["mac"];
             } else {
-                $this->_propDict["mac"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["mac"]);
+                $this->_propDict["mac"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["mac"]);
                 return $this->_propDict["mac"];
             }
         }
@@ -172,7 +172,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the mac
-    * The hash of the encrypted file content + IV (content hash).
+    * The hash of the concatenation of the IV and encrypted file content. Must be 32 bytes.
     *
     * @param \GuzzleHttp\Psr7\Stream $val The value to assign to the mac
     *
@@ -186,7 +186,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Gets the macKey
-    * The key used to get mac.
+    * The key used to compute the message authentication code of the concatenation of the IV and encrypted file content. Must be 32 bytes.
     *
     * @return \GuzzleHttp\Psr7\Stream|null The macKey
     */
@@ -196,7 +196,7 @@ class FileEncryptionInfo extends Entity
             if (is_a($this->_propDict["macKey"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["macKey"])) {
                 return $this->_propDict["macKey"];
             } else {
-                $this->_propDict["macKey"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["macKey"]);
+                $this->_propDict["macKey"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["macKey"]);
                 return $this->_propDict["macKey"];
             }
         }
@@ -205,7 +205,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the macKey
-    * The key used to get mac.
+    * The key used to compute the message authentication code of the concatenation of the IV and encrypted file content. Must be 32 bytes.
     *
     * @param \GuzzleHttp\Psr7\Stream $val The value to assign to the macKey
     *
@@ -218,7 +218,7 @@ class FileEncryptionInfo extends Entity
     }
     /**
     * Gets the profileIdentifier
-    * The the profile identifier.
+    * The profile identifier. Maps to the strategy used to encrypt the file. Currently, only ProfileVersion1 is supported.
     *
     * @return string|null The profileIdentifier
     */
@@ -233,7 +233,7 @@ class FileEncryptionInfo extends Entity
 
     /**
     * Sets the profileIdentifier
-    * The the profile identifier.
+    * The profile identifier. Maps to the strategy used to encrypt the file. Currently, only ProfileVersion1 is supported.
     *
     * @param string $val The value of the profileIdentifier
     *

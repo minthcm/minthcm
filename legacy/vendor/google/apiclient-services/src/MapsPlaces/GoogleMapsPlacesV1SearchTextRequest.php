@@ -23,6 +23,10 @@ class GoogleMapsPlacesV1SearchTextRequest extends \Google\Collection
   protected $evOptionsType = GoogleMapsPlacesV1SearchTextRequestEVOptions::class;
   protected $evOptionsDataType = '';
   /**
+   * @var bool
+   */
+  public $includePureServiceAreaBusinesses;
+  /**
    * @var string
    */
   public $includedType;
@@ -63,6 +67,10 @@ class GoogleMapsPlacesV1SearchTextRequest extends \Google\Collection
    * @var string
    */
   public $regionCode;
+  protected $routingParametersType = GoogleMapsPlacesV1RoutingParameters::class;
+  protected $routingParametersDataType = '';
+  protected $searchAlongRouteParametersType = GoogleMapsPlacesV1SearchTextRequestSearchAlongRouteParameters::class;
+  protected $searchAlongRouteParametersDataType = '';
   /**
    * @var bool
    */
@@ -85,6 +93,20 @@ class GoogleMapsPlacesV1SearchTextRequest extends \Google\Collection
   public function getEvOptions()
   {
     return $this->evOptions;
+  }
+  /**
+   * @param bool
+   */
+  public function setIncludePureServiceAreaBusinesses($includePureServiceAreaBusinesses)
+  {
+    $this->includePureServiceAreaBusinesses = $includePureServiceAreaBusinesses;
+  }
+  /**
+   * @return bool
+   */
+  public function getIncludePureServiceAreaBusinesses()
+  {
+    return $this->includePureServiceAreaBusinesses;
   }
   /**
    * @param string
@@ -247,6 +269,34 @@ class GoogleMapsPlacesV1SearchTextRequest extends \Google\Collection
   public function getRegionCode()
   {
     return $this->regionCode;
+  }
+  /**
+   * @param GoogleMapsPlacesV1RoutingParameters
+   */
+  public function setRoutingParameters(GoogleMapsPlacesV1RoutingParameters $routingParameters)
+  {
+    $this->routingParameters = $routingParameters;
+  }
+  /**
+   * @return GoogleMapsPlacesV1RoutingParameters
+   */
+  public function getRoutingParameters()
+  {
+    return $this->routingParameters;
+  }
+  /**
+   * @param GoogleMapsPlacesV1SearchTextRequestSearchAlongRouteParameters
+   */
+  public function setSearchAlongRouteParameters(GoogleMapsPlacesV1SearchTextRequestSearchAlongRouteParameters $searchAlongRouteParameters)
+  {
+    $this->searchAlongRouteParameters = $searchAlongRouteParameters;
+  }
+  /**
+   * @return GoogleMapsPlacesV1SearchTextRequestSearchAlongRouteParameters
+   */
+  public function getSearchAlongRouteParameters()
+  {
+    return $this->searchAlongRouteParameters;
   }
   /**
    * @param bool

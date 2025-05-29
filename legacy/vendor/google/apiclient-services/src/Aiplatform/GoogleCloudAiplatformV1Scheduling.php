@@ -24,9 +24,17 @@ class GoogleCloudAiplatformV1Scheduling extends \Google\Model
    */
   public $disableRetries;
   /**
+   * @var string
+   */
+  public $maxWaitDuration;
+  /**
    * @var bool
    */
   public $restartJobOnWorkerRestart;
+  /**
+   * @var string
+   */
+  public $strategy;
   /**
    * @var string
    */
@@ -47,6 +55,20 @@ class GoogleCloudAiplatformV1Scheduling extends \Google\Model
     return $this->disableRetries;
   }
   /**
+   * @param string
+   */
+  public function setMaxWaitDuration($maxWaitDuration)
+  {
+    $this->maxWaitDuration = $maxWaitDuration;
+  }
+  /**
+   * @return string
+   */
+  public function getMaxWaitDuration()
+  {
+    return $this->maxWaitDuration;
+  }
+  /**
    * @param bool
    */
   public function setRestartJobOnWorkerRestart($restartJobOnWorkerRestart)
@@ -59,6 +81,20 @@ class GoogleCloudAiplatformV1Scheduling extends \Google\Model
   public function getRestartJobOnWorkerRestart()
   {
     return $this->restartJobOnWorkerRestart;
+  }
+  /**
+   * @param string
+   */
+  public function setStrategy($strategy)
+  {
+    $this->strategy = $strategy;
+  }
+  /**
+   * @return string
+   */
+  public function getStrategy()
+  {
+    return $this->strategy;
   }
   /**
    * @param string

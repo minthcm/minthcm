@@ -42,7 +42,7 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
     * The user who created the dataSource.
@@ -56,7 +56,7 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The date and time the dataSource was created.
@@ -75,7 +75,7 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The date and time the dataSource was created.
@@ -89,10 +89,10 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The display name of the dataSource. This will be the name of the SharePoint site.
+    * The display name of the dataSource, and is the name of the SharePoint site.
     *
     * @return string|null The displayName
     */
@@ -104,10 +104,10 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The display name of the dataSource. This will be the name of the SharePoint site.
+    * The display name of the dataSource, and is the name of the SharePoint site.
     *
     * @param string $val The displayName
     *
@@ -118,5 +118,36 @@ class DataSource extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the holdStatus
+    *
+    * @return DataSourceHoldStatus|null The holdStatus
+    */
+    public function getHoldStatus()
+    {
+        if (array_key_exists("holdStatus", $this->_propDict)) {
+            if (is_a($this->_propDict["holdStatus"], "\Beta\Microsoft\Graph\Ediscovery\Model\DataSourceHoldStatus") || is_null($this->_propDict["holdStatus"])) {
+                return $this->_propDict["holdStatus"];
+            } else {
+                $this->_propDict["holdStatus"] = new DataSourceHoldStatus($this->_propDict["holdStatus"]);
+                return $this->_propDict["holdStatus"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the holdStatus
+    *
+    * @param DataSourceHoldStatus $val The holdStatus
+    *
+    * @return DataSource
+    */
+    public function setHoldStatus($val)
+    {
+        $this->_propDict["holdStatus"] = $val;
+        return $this;
+    }
+
 }

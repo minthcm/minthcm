@@ -38,7 +38,7 @@ class GroupSettingTemplate extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Description of the template.
@@ -52,10 +52,10 @@ class GroupSettingTemplate extends DirectoryObject
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * Display name of the template.
+    * Display name of the template. The template named Group.Unified can be used to configure tenant-wide Microsoft 365 group settings, while the template named Group.Unified.Guest can be used to configure group-specific settings.
     *
     * @return string|null The displayName
     */
@@ -67,10 +67,10 @@ class GroupSettingTemplate extends DirectoryObject
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * Display name of the template.
+    * Display name of the template. The template named Group.Unified can be used to configure tenant-wide Microsoft 365 group settings, while the template named Group.Unified.Guest can be used to configure group-specific settings.
     *
     * @param string $val The displayName
     *
@@ -81,9 +81,9 @@ class GroupSettingTemplate extends DirectoryObject
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the values
     * Collection of settingTemplateValues that list the set of available settings, defaults and types that make up this template.
      *
@@ -97,12 +97,12 @@ class GroupSettingTemplate extends DirectoryObject
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the values
     * Collection of settingTemplateValues that list the set of available settings, defaults and types that make up this template.
     *
-    * @param SettingTemplateValue $val The values
+    * @param SettingTemplateValue[] $val The values
     *
     * @return GroupSettingTemplate
     */
@@ -111,5 +111,5 @@ class GroupSettingTemplate extends DirectoryObject
         $this->_propDict["values"] = $val;
         return $this;
     }
-    
+
 }

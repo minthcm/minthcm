@@ -25,8 +25,41 @@ class AppliedConditionalAccessPolicy extends Entity
 {
 
     /**
+    * Gets the authenticationStrength
+    * The custom authentication strength enforced in a Conditional Access policy.
+    *
+    * @return AuthenticationStrength|null The authenticationStrength
+    */
+    public function getAuthenticationStrength()
+    {
+        if (array_key_exists("authenticationStrength", $this->_propDict)) {
+            if (is_a($this->_propDict["authenticationStrength"], "\Beta\Microsoft\Graph\Model\AuthenticationStrength") || is_null($this->_propDict["authenticationStrength"])) {
+                return $this->_propDict["authenticationStrength"];
+            } else {
+                $this->_propDict["authenticationStrength"] = new AuthenticationStrength($this->_propDict["authenticationStrength"]);
+                return $this->_propDict["authenticationStrength"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the authenticationStrength
+    * The custom authentication strength enforced in a Conditional Access policy.
+    *
+    * @param AuthenticationStrength $val The value to assign to the authenticationStrength
+    *
+    * @return AppliedConditionalAccessPolicy The AppliedConditionalAccessPolicy
+    */
+    public function setAuthenticationStrength($val)
+    {
+        $this->_propDict["authenticationStrength"] = $val;
+         return $this;
+    }
+
+    /**
     * Gets the conditionsNotSatisfied
-    * Refers to the conditional access policy conditions that are not satisfied. Possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client.
+    * Refers to the conditional access policy conditions that aren't satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk . You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. conditionalAccessConditions is a multi-valued enumeration and the property can contain multiple values in a comma-separated list.
     *
     * @return ConditionalAccessConditions|null The conditionsNotSatisfied
     */
@@ -45,7 +78,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the conditionsNotSatisfied
-    * Refers to the conditional access policy conditions that are not satisfied. Possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client.
+    * Refers to the conditional access policy conditions that aren't satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk . You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. conditionalAccessConditions is a multi-valued enumeration and the property can contain multiple values in a comma-separated list.
     *
     * @param ConditionalAccessConditions $val The value to assign to the conditionsNotSatisfied
     *
@@ -59,7 +92,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Gets the conditionsSatisfied
-    * Refers to the conditional access policy conditions that are satisfied. Possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client.
+    * Refers to the conditional access policy conditions that are satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. conditionalAccessConditions is a multi-valued enumeration and the property can contain multiple values in a comma-separated list.
     *
     * @return ConditionalAccessConditions|null The conditionsSatisfied
     */
@@ -78,7 +111,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the conditionsSatisfied
-    * Refers to the conditional access policy conditions that are satisfied. Possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client.
+    * Refers to the conditional access policy conditions that are satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk, authenticationFlows, insiderRisk. conditionalAccessConditions is a multi-valued enumeration and the property can contain multiple values in a comma-separated list.
     *
     * @param ConditionalAccessConditions $val The value to assign to the conditionsSatisfied
     *
@@ -91,7 +124,7 @@ class AppliedConditionalAccessPolicy extends Entity
     }
     /**
     * Gets the displayName
-    * Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce').
+    * Name of the conditional access policy.
     *
     * @return string|null The displayName
     */
@@ -106,7 +139,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the displayName
-    * Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce').
+    * Name of the conditional access policy.
     *
     * @param string $val The value of the displayName
     *
@@ -176,6 +209,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Gets the excludeRulesSatisfied
+    * List of key-value pairs containing each matched exclude condition in the conditional access policy. Example: [{'devicePlatform' : 'DevicePlatform'}] means the policy didn't apply, because the DevicePlatform condition was a match.
     *
     * @return ConditionalAccessRuleSatisfied|null The excludeRulesSatisfied
     */
@@ -194,6 +228,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the excludeRulesSatisfied
+    * List of key-value pairs containing each matched exclude condition in the conditional access policy. Example: [{'devicePlatform' : 'DevicePlatform'}] means the policy didn't apply, because the DevicePlatform condition was a match.
     *
     * @param ConditionalAccessRuleSatisfied $val The value to assign to the excludeRulesSatisfied
     *
@@ -235,6 +270,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Gets the includeRulesSatisfied
+    * List of key-value pairs containing each matched include condition in the conditional access policy. Example: [{ 'application' : 'AllApps'}, {'users': 'Group'}], meaning Application condition was a match because AllApps are included and Users condition was a match because the user was part of the included Group rule.
     *
     * @return ConditionalAccessRuleSatisfied|null The includeRulesSatisfied
     */
@@ -253,6 +289,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the includeRulesSatisfied
+    * List of key-value pairs containing each matched include condition in the conditional access policy. Example: [{ 'application' : 'AllApps'}, {'users': 'Group'}], meaning Application condition was a match because AllApps are included and Users condition was a match because the user was part of the included Group rule.
     *
     * @param ConditionalAccessRuleSatisfied $val The value to assign to the includeRulesSatisfied
     *
@@ -266,7 +303,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Gets the result
-    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions were not met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted
+    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions weren't met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted. You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted.
     *
     * @return AppliedConditionalAccessPolicyResult|null The result
     */
@@ -285,7 +322,7 @@ class AppliedConditionalAccessPolicy extends Entity
 
     /**
     * Sets the result
-    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions were not met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted
+    * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (Policy isn't applied because policy conditions weren't met),notEnabled (This is due to the policy in disabled state), unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted. You must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted.
     *
     * @param AppliedConditionalAccessPolicyResult $val The value to assign to the result
     *
@@ -295,5 +332,33 @@ class AppliedConditionalAccessPolicy extends Entity
     {
         $this->_propDict["result"] = $val;
          return $this;
+    }
+    /**
+    * Gets the sessionControlsNotSatisfied
+    * Refers to the session controls that a sign-in activity didn't satisfy. (Example: Application enforced Restrictions).
+    *
+    * @return string|null The sessionControlsNotSatisfied
+    */
+    public function getSessionControlsNotSatisfied()
+    {
+        if (array_key_exists("sessionControlsNotSatisfied", $this->_propDict)) {
+            return $this->_propDict["sessionControlsNotSatisfied"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the sessionControlsNotSatisfied
+    * Refers to the session controls that a sign-in activity didn't satisfy. (Example: Application enforced Restrictions).
+    *
+    * @param string $val The value of the sessionControlsNotSatisfied
+    *
+    * @return AppliedConditionalAccessPolicy
+    */
+    public function setSessionControlsNotSatisfied($val)
+    {
+        $this->_propDict["sessionControlsNotSatisfied"] = $val;
+        return $this;
     }
 }

@@ -26,9 +26,11 @@ class AccessPackageTextInputQuestion extends AccessPackageQuestion
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.accessPackageTextInputQuestion");
     }
 
@@ -58,6 +60,34 @@ class AccessPackageTextInputQuestion extends AccessPackageQuestion
     public function setIsSingleLineQuestion($val)
     {
         $this->_propDict["isSingleLineQuestion"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the regexPattern
+    * The regex pattern that the corresponding text answer must follow.
+    *
+    * @return string|null The regexPattern
+    */
+    public function getRegexPattern()
+    {
+        if (array_key_exists("regexPattern", $this->_propDict)) {
+            return $this->_propDict["regexPattern"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the regexPattern
+    * The regex pattern that the corresponding text answer must follow.
+    *
+    * @param string $val The value of the regexPattern
+    *
+    * @return AccessPackageTextInputQuestion
+    */
+    public function setRegexPattern($val)
+    {
+        $this->_propDict["regexPattern"] = $val;
         return $this;
     }
 }

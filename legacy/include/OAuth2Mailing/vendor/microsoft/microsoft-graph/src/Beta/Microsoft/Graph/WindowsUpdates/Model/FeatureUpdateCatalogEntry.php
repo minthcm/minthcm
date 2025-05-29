@@ -25,6 +25,35 @@ namespace Beta\Microsoft\Graph\WindowsUpdates\Model;
 class FeatureUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
 {
     /**
+    * Gets the buildNumber
+    * The build number of the feature update. Read-only.
+    *
+    * @return string|null The buildNumber
+    */
+    public function getBuildNumber()
+    {
+        if (array_key_exists("buildNumber", $this->_propDict)) {
+            return $this->_propDict["buildNumber"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the buildNumber
+    * The build number of the feature update. Read-only.
+    *
+    * @param string $val The buildNumber
+    *
+    * @return FeatureUpdateCatalogEntry
+    */
+    public function setBuildNumber($val)
+    {
+        $this->_propDict["buildNumber"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the version
     * The version of the feature update. Read-only.
     *
@@ -38,7 +67,7 @@ class FeatureUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
             return null;
         }
     }
-    
+
     /**
     * Sets the version
     * The version of the feature update. Read-only.
@@ -52,5 +81,5 @@ class FeatureUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
         $this->_propDict["version"] = $val;
         return $this;
     }
-    
+
 }

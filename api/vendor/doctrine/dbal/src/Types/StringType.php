@@ -10,15 +10,15 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class StringType extends Type
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getVarcharTypeDeclarationSQL($column);
+        return $platform->getStringTypeDeclarationSQL($column);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {

@@ -2470,7 +2470,7 @@ function clean_string($str, $filter = 'STANDARD', $dieOnBadData = true)
             $GLOBALS['log']->fatal("SECURITY[$filter]: bad data passed in; string: {$str}");
         }
         if ($dieOnBadData) {
-            die("Bad data passed in; <a href=\"{$sugar_config['site_url']}\">Return to Home</a>");
+            die("Bad data passed in; <a href=\"index.php\">Return to Home</a>");
         }
 
         return false;
@@ -2719,7 +2719,7 @@ function securexsskey($value, $die = true)
     preg_match('/[\'"<>]/', $value, $matches);
     if (!empty($matches)) {
         if ($die) {
-            die("Bad data passed in; <a href=\"{$sugar_config['site_url']}\">Return to Home</a>");
+            die("Bad data passed in; <a href=\"index.php\">Return to Home</a>");
         } 
         unset($_REQUEST[$value]);
         unset($_POST[$value]);

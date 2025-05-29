@@ -54,6 +54,7 @@ class Integrations extends \Google\Service
   public $projects_locations_integrations_executions;
   public $projects_locations_integrations_executions_suspensions;
   public $projects_locations_integrations_versions;
+  public $projects_locations_integrations_versions_testCases;
   public $projects_locations_products_authConfigs;
   public $projects_locations_products_certificates;
   public $projects_locations_products_cloudFunctions;
@@ -160,7 +161,17 @@ class Integrations extends \Google\Service
         'locations',
         [
           'methods' => [
-            'getClients' => [
+            'generateOpenApiSpec' => [
+              'path' => 'v1/{+name}:generateOpenApiSpec',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'getClients' => [
               'path' => 'v1/{+parent}/clients',
               'httpMethod' => 'GET',
               'parameters' => [
@@ -613,6 +624,10 @@ class Integrations extends \Google\Service
                   'type' => 'string',
                   'required' => true,
                 ],
+                'GCPCloudEventsMode' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
                 'triggerId' => [
                   'location' => 'query',
                   'type' => 'string',
@@ -674,7 +689,17 @@ class Integrations extends \Google\Service
         'executions',
         [
           'methods' => [
-            'download' => [
+            'cancel' => [
+              'path' => 'v1/{+name}:cancel',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'download' => [
               'path' => 'v1/{+name}:download',
               'httpMethod' => 'GET',
               'parameters' => [
@@ -1012,6 +1037,182 @@ class Integrations extends \Google\Service
           ]
         ]
     );
+    $this->projects_locations_integrations_versions_testCases = new Integrations\Resource\ProjectsLocationsIntegrationsVersionsTestCases(
+        $this,
+        $this->serviceName,
+        'testCases',
+        [
+          'methods' => [
+            'create' => [
+              'path' => 'v1/{+parent}/testCases',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'testCaseId' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],'delete' => [
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'download' => [
+              'path' => 'v1/{+name}:download',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'fileFormat' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],'execute' => [
+              'path' => 'v1/{+parent}/testCases:execute',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'executeTest' => [
+              'path' => 'v1/{+testCaseName}:executeTest',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'testCaseName' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'get' => [
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'list' => [
+              'path' => 'v1/{+parent}/testCases',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'filter' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'orderBy' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'pageSize' => [
+                  'location' => 'query',
+                  'type' => 'integer',
+                ],
+                'pageToken' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'readMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],'listExecutions' => [
+              'path' => 'v1/{+parent}:executions',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'filter' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'orderBy' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'pageSize' => [
+                  'location' => 'query',
+                  'type' => 'integer',
+                ],
+                'pageToken' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'readMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'truncateParams' => [
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ],
+              ],
+            ],'patch' => [
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'PATCH',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'updateMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],'takeoverEditLock' => [
+              'path' => 'v1/{+name}:takeoverEditLock',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'upload' => [
+              'path' => 'v1/{+parent}/testCases:upload',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
     $this->projects_locations_products_authConfigs = new Integrations\Resource\ProjectsLocationsProductsAuthConfigs(
         $this,
         $this->serviceName,
@@ -1288,17 +1489,7 @@ class Integrations extends \Google\Service
         'executions',
         [
           'methods' => [
-            'cancel' => [
-              'path' => 'v1/{+name}:cancel',
-              'httpMethod' => 'POST',
-              'parameters' => [
-                'name' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ],
-              ],
-            ],'download' => [
+            'download' => [
               'path' => 'v1/{+name}:download',
               'httpMethod' => 'GET',
               'parameters' => [

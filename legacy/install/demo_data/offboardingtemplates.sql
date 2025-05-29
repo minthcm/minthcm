@@ -1,0 +1,1 @@
+REPLACE INTO offboardingtemplates (id, name, date_entered, date_modified, date_indexed, modified_user_id, created_by, description, deleted, assigned_user_id) VALUES ('8ea0c93b-72b0-d1ad-c647-5cec2bcdac97','General Offboarding','2025-03-15 15:43:35','2025-03-15 15:43:35','2025-03-18 15:36:50','1','1',NULL,'0','7451ac0d-c4d1-04f6-4666-5ce3c54ff383');

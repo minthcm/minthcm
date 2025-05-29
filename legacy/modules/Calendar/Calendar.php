@@ -127,6 +127,10 @@ class Calendar
             $date_arr['year'] = $_REQUEST['year'];
         }
 
+        if(!empty($_REQUEST['#/modules/Calendar?year'])) {
+            $date_arr['year'] = $_REQUEST['#/modules/Calendar?year'];
+        }
+
         if (empty($_REQUEST['day'])) {
             $_REQUEST['day'] = "";
         }

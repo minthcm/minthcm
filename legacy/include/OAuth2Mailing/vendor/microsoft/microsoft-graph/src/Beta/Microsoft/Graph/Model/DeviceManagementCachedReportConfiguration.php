@@ -26,7 +26,7 @@ class DeviceManagementCachedReportConfiguration extends Entity
 {
     /**
     * Gets the expirationDateTime
-    * Time that the cached report expires
+    * Time that the cached report expires. This property is read-only.
     *
     * @return \DateTime|null The expirationDateTime
     */
@@ -42,10 +42,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
-    * Time that the cached report expires
+    * Time that the cached report expires. This property is read-only.
     *
     * @param \DateTime $val The expirationDateTime
     *
@@ -56,7 +56,7 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the filter
     * Filters applied on report creation.
@@ -71,7 +71,7 @@ class DeviceManagementCachedReportConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the filter
     * Filters applied on report creation.
@@ -85,10 +85,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["filter"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastRefreshDateTime
-    * Time that the cached report was last refreshed
+    * Time that the cached report was last refreshed. This property is read-only.
     *
     * @return \DateTime|null The lastRefreshDateTime
     */
@@ -104,10 +104,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastRefreshDateTime
-    * Time that the cached report was last refreshed
+    * Time that the cached report was last refreshed. This property is read-only.
     *
     * @param \DateTime $val The lastRefreshDateTime
     *
@@ -118,7 +118,7 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["lastRefreshDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the metadata
     * Caller-managed metadata associated with the report
@@ -133,7 +133,7 @@ class DeviceManagementCachedReportConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the metadata
     * Caller-managed metadata associated with the report
@@ -147,12 +147,12 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["metadata"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the orderBy
     * Ordering of columns in the report
     *
-    * @return string|null The orderBy
+    * @return array|null The orderBy
     */
     public function getOrderBy()
     {
@@ -162,12 +162,12 @@ class DeviceManagementCachedReportConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the orderBy
     * Ordering of columns in the report
     *
-    * @param string $val The orderBy
+    * @param string[] $val The orderBy
     *
     * @return DeviceManagementCachedReportConfiguration
     */
@@ -176,10 +176,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["orderBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reportName
-    * Name of the report
+    * Name of the report. This property is read-only.
     *
     * @return string|null The reportName
     */
@@ -191,10 +191,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the reportName
-    * Name of the report
+    * Name of the report. This property is read-only.
     *
     * @param string $val The reportName
     *
@@ -205,12 +205,12 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["reportName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the select
     * Columns selected from the report
     *
-    * @return string|null The select
+    * @return array|null The select
     */
     public function getSelect()
     {
@@ -220,12 +220,12 @@ class DeviceManagementCachedReportConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the select
     * Columns selected from the report
     *
-    * @param string $val The select
+    * @param string[] $val The select
     *
     * @return DeviceManagementCachedReportConfiguration
     */
@@ -234,10 +234,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["select"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
-    * Status of the cached report. Possible values are: unknown, notStarted, inProgress, completed, failed.
+    * Status of the cached report. This property is read-only. Possible values are: unknown, notStarted, inProgress, completed, failed.
     *
     * @return DeviceManagementReportStatus|null The status
     */
@@ -253,10 +253,10 @@ class DeviceManagementCachedReportConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
-    * Status of the cached report. Possible values are: unknown, notStarted, inProgress, completed, failed.
+    * Status of the cached report. This property is read-only. Possible values are: unknown, notStarted, inProgress, completed, failed.
     *
     * @param DeviceManagementReportStatus $val The status
     *
@@ -267,5 +267,5 @@ class DeviceManagementCachedReportConfiguration extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
 }

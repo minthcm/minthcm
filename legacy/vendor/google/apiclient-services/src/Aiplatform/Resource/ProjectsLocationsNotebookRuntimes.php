@@ -21,6 +21,7 @@ use Google\Service\Aiplatform\GoogleCloudAiplatformV1AssignNotebookRuntimeReques
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1ListNotebookRuntimesResponse;
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1NotebookRuntime;
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1StartNotebookRuntimeRequest;
+use Google\Service\Aiplatform\GoogleCloudAiplatformV1StopNotebookRuntimeRequest;
 use Google\Service\Aiplatform\GoogleCloudAiplatformV1UpgradeNotebookRuntimeRequest;
 use Google\Service\Aiplatform\GoogleLongrunningOperation;
 
@@ -111,13 +112,15 @@ class ProjectsLocationsNotebookRuntimes extends \Google\Service\Resource
    * [UI_RESOURCE_STATE_UNSPECIFIED, UI_RESOURCE_STATE_BEING_CREATED,
    * UI_RESOURCE_STATE_ACTIVE, UI_RESOURCE_STATE_BEING_DELETED,
    * UI_RESOURCE_STATE_CREATION_FAILED]. * `notebookRuntimeType` supports = and
-   * !=. notebookRuntimeType enum: [USER_DEFINED, ONE_CLICK]. Some examples: *
+   * !=. notebookRuntimeType enum: [USER_DEFINED, ONE_CLICK]. * `machineType`
+   * supports = and !=. * `acceleratorType` supports = and !=. Some examples: *
    * `notebookRuntime="notebookRuntime123"` * `displayName="myDisplayName"` and
    * `displayName=~"myDisplayNameRegex"` *
    * `notebookRuntimeTemplate="notebookRuntimeTemplate321"` *
    * `healthState=HEALTHY` * `runtimeState=RUNNING` *
    * `runtimeUser="test@google.com"` * `uiState=UI_RESOURCE_STATE_BEING_DELETED` *
-   * `notebookRuntimeType=USER_DEFINED`
+   * `notebookRuntimeType=USER_DEFINED` * `machineType=e2-standard-4` *
+   * `acceleratorType=NVIDIA_TESLA_T4`
    * @opt_param string orderBy Optional. A comma-separated list of fields to order
    * by, sorted in ascending order. Use "desc" after a field name for descending.
    * Supported fields: * `display_name` * `create_time` * `update_time` Example:
@@ -153,6 +156,24 @@ class ProjectsLocationsNotebookRuntimes extends \Google\Service\Resource
     $params = ['name' => $name, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
     return $this->call('start', [$params], GoogleLongrunningOperation::class);
+  }
+  /**
+   * Stops a NotebookRuntime. (notebookRuntimes.stop)
+   *
+   * @param string $name Required. The name of the NotebookRuntime resource to be
+   * stopped. Instead of checking whether the name is in valid NotebookRuntime
+   * resource name format, directly throw NotFound exception if there is no such
+   * NotebookRuntime in spanner.
+   * @param GoogleCloudAiplatformV1StopNotebookRuntimeRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleLongrunningOperation
+   * @throws \Google\Service\Exception
+   */
+  public function stop($name, GoogleCloudAiplatformV1StopNotebookRuntimeRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('stop', [$params], GoogleLongrunningOperation::class);
   }
   /**
    * Upgrades a NotebookRuntime. (notebookRuntimes.upgrade)

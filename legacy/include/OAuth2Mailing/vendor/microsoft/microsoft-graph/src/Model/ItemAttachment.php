@@ -26,7 +26,7 @@ class ItemAttachment extends Attachment
 {
     /**
     * Gets the item
-    * The attached contact, message or event. Navigation property.
+    * The attached message or event. Navigation property.
     *
     * @return OutlookItem|null The item
     */
@@ -42,10 +42,10 @@ class ItemAttachment extends Attachment
         }
         return null;
     }
-    
+
     /**
     * Sets the item
-    * The attached contact, message or event. Navigation property.
+    * The attached message or event. Navigation property.
     *
     * @param OutlookItem $val The item
     *
@@ -56,5 +56,5 @@ class ItemAttachment extends Attachment
         $this->_propDict["item"] = $val;
         return $this;
     }
-    
+
 }

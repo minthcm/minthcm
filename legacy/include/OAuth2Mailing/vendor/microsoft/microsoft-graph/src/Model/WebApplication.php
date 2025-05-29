@@ -86,7 +86,7 @@ class WebApplication extends Entity
     }
     /**
     * Gets the logoutUrl
-    * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel, back-channel or SAML logout protocols.
+    * Specifies the URL that is used by Microsoft's authorization service to log out a user using front-channel, back-channel or SAML logout protocols.
     *
     * @return string|null The logoutUrl
     */
@@ -101,7 +101,7 @@ class WebApplication extends Entity
 
     /**
     * Sets the logoutUrl
-    * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel, back-channel or SAML logout protocols.
+    * Specifies the URL that is used by Microsoft's authorization service to log out a user using front-channel, back-channel or SAML logout protocols.
     *
     * @param string $val The value of the logoutUrl
     *
@@ -139,5 +139,36 @@ class WebApplication extends Entity
     {
         $this->_propDict["redirectUris"] = $val;
         return $this;
+    }
+
+    /**
+    * Gets the redirectUriSettings
+    *
+    * @return RedirectUriSettings|null The redirectUriSettings
+    */
+    public function getRedirectUriSettings()
+    {
+        if (array_key_exists("redirectUriSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["redirectUriSettings"], "\Microsoft\Graph\Model\RedirectUriSettings") || is_null($this->_propDict["redirectUriSettings"])) {
+                return $this->_propDict["redirectUriSettings"];
+            } else {
+                $this->_propDict["redirectUriSettings"] = new RedirectUriSettings($this->_propDict["redirectUriSettings"]);
+                return $this->_propDict["redirectUriSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the redirectUriSettings
+    *
+    * @param RedirectUriSettings $val The value to assign to the redirectUriSettings
+    *
+    * @return WebApplication The WebApplication
+    */
+    public function setRedirectUriSettings($val)
+    {
+        $this->_propDict["redirectUriSettings"] = $val;
+         return $this;
     }
 }

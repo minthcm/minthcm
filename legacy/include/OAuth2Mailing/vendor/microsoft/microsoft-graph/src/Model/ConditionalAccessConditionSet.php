@@ -58,8 +58,41 @@ class ConditionalAccessConditionSet extends Entity
     }
 
     /**
+    * Gets the clientApplications
+    * Client applications (service principals and workload identities) included in and excluded from the policy. Either users or clientApplications is required.
+    *
+    * @return ConditionalAccessClientApplications|null The clientApplications
+    */
+    public function getClientApplications()
+    {
+        if (array_key_exists("clientApplications", $this->_propDict)) {
+            if (is_a($this->_propDict["clientApplications"], "\Microsoft\Graph\Model\ConditionalAccessClientApplications") || is_null($this->_propDict["clientApplications"])) {
+                return $this->_propDict["clientApplications"];
+            } else {
+                $this->_propDict["clientApplications"] = new ConditionalAccessClientApplications($this->_propDict["clientApplications"]);
+                return $this->_propDict["clientApplications"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the clientApplications
+    * Client applications (service principals and workload identities) included in and excluded from the policy. Either users or clientApplications is required.
+    *
+    * @param ConditionalAccessClientApplications $val The value to assign to the clientApplications
+    *
+    * @return ConditionalAccessConditionSet The ConditionalAccessConditionSet
+    */
+    public function setClientApplications($val)
+    {
+        $this->_propDict["clientApplications"] = $val;
+         return $this;
+    }
+
+    /**
     * Gets the clientAppTypes
-    * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients, exchangeActiveSync, easSupported, other. Required.
+    * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients, exchangeActiveSync, easSupported, other. Required.  The easUnsupported enumeration member will be deprecated in favor of exchangeActiveSync which includes EAS supported and unsupported platforms.
     *
     * @return ConditionalAccessClientApp|null The clientAppTypes
     */
@@ -78,7 +111,7 @@ class ConditionalAccessConditionSet extends Entity
 
     /**
     * Sets the clientAppTypes
-    * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients, exchangeActiveSync, easSupported, other. Required.
+    * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients, exchangeActiveSync, easSupported, other. Required.  The easUnsupported enumeration member will be deprecated in favor of exchangeActiveSync which includes EAS supported and unsupported platforms.
     *
     * @param ConditionalAccessClientApp $val The value to assign to the clientAppTypes
     *
@@ -87,6 +120,39 @@ class ConditionalAccessConditionSet extends Entity
     public function setClientAppTypes($val)
     {
         $this->_propDict["clientAppTypes"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the devices
+    * Devices in the policy.
+    *
+    * @return ConditionalAccessDevices|null The devices
+    */
+    public function getDevices()
+    {
+        if (array_key_exists("devices", $this->_propDict)) {
+            if (is_a($this->_propDict["devices"], "\Microsoft\Graph\Model\ConditionalAccessDevices") || is_null($this->_propDict["devices"])) {
+                return $this->_propDict["devices"];
+            } else {
+                $this->_propDict["devices"] = new ConditionalAccessDevices($this->_propDict["devices"]);
+                return $this->_propDict["devices"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the devices
+    * Devices in the policy.
+    *
+    * @param ConditionalAccessDevices $val The value to assign to the devices
+    *
+    * @return ConditionalAccessConditionSet The ConditionalAccessConditionSet
+    */
+    public function setDevices($val)
+    {
+        $this->_propDict["devices"] = $val;
          return $this;
     }
 
@@ -153,6 +219,39 @@ class ConditionalAccessConditionSet extends Entity
     public function setPlatforms($val)
     {
         $this->_propDict["platforms"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the servicePrincipalRiskLevels
+    * Service principal risk levels included in the policy. Possible values are: low, medium, high, none, unknownFutureValue.
+    *
+    * @return RiskLevel|null The servicePrincipalRiskLevels
+    */
+    public function getServicePrincipalRiskLevels()
+    {
+        if (array_key_exists("servicePrincipalRiskLevels", $this->_propDict)) {
+            if (is_a($this->_propDict["servicePrincipalRiskLevels"], "\Microsoft\Graph\Model\RiskLevel") || is_null($this->_propDict["servicePrincipalRiskLevels"])) {
+                return $this->_propDict["servicePrincipalRiskLevels"];
+            } else {
+                $this->_propDict["servicePrincipalRiskLevels"] = new RiskLevel($this->_propDict["servicePrincipalRiskLevels"]);
+                return $this->_propDict["servicePrincipalRiskLevels"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the servicePrincipalRiskLevels
+    * Service principal risk levels included in the policy. Possible values are: low, medium, high, none, unknownFutureValue.
+    *
+    * @param RiskLevel $val The value to assign to the servicePrincipalRiskLevels
+    *
+    * @return ConditionalAccessConditionSet The ConditionalAccessConditionSet
+    */
+    public function setServicePrincipalRiskLevels($val)
+    {
+        $this->_propDict["servicePrincipalRiskLevels"] = $val;
          return $this;
     }
 
@@ -224,7 +323,7 @@ class ConditionalAccessConditionSet extends Entity
 
     /**
     * Gets the users
-    * Users, groups, and roles included in and excluded from the policy. Required.
+    * Users, groups, and roles included in and excluded from the policy. Either users or clientApplications is required.
     *
     * @return ConditionalAccessUsers|null The users
     */
@@ -243,7 +342,7 @@ class ConditionalAccessConditionSet extends Entity
 
     /**
     * Sets the users
-    * Users, groups, and roles included in and excluded from the policy. Required.
+    * Users, groups, and roles included in and excluded from the policy. Either users or clientApplications is required.
     *
     * @param ConditionalAccessUsers $val The value to assign to the users
     *

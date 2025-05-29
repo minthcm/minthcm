@@ -38,7 +38,7 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the allowedToSignUpEmailBasedSubscriptions
     * Indicates whether users can sign up for email based subscriptions.
@@ -52,10 +52,10 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["allowedToSignUpEmailBasedSubscriptions"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the allowedToUseSSPR
-    * Indicates whether the Self-Serve Password Reset feature can be used by users on the tenant.
+    * Indicates whether users can use the Self-Service Password Reset feature on the tenant.
     *
     * @return bool|null The allowedToUseSSPR
     */
@@ -67,10 +67,10 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the allowedToUseSSPR
-    * Indicates whether the Self-Serve Password Reset feature can be used by users on the tenant.
+    * Indicates whether users can use the Self-Service Password Reset feature on the tenant.
     *
     * @param bool $val The allowedToUseSSPR
     *
@@ -81,7 +81,7 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["allowedToUseSSPR"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the allowEmailVerifiedUsersToJoinOrganization
     * Indicates whether a user can join the tenant by email validation.
@@ -96,7 +96,7 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the allowEmailVerifiedUsersToJoinOrganization
     * Indicates whether a user can join the tenant by email validation.
@@ -110,10 +110,10 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["allowEmailVerifiedUsersToJoinOrganization"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the allowInvitesFrom
-    * Indicates who can invite external users to the organization. Possible values are: none, adminsAndGuestInviters, adminsGuestInvitersAndAllMembers, everyone.  everyone is the default setting for all cloud environments except US Government. See more in the table below.
+    * Indicates who can invite guests to the organization. Possible values are: none, adminsAndGuestInviters, adminsGuestInvitersAndAllMembers, everyone. everyone is the default setting for all cloud environments except US Government. See more in the table below.
     *
     * @return AllowInvitesFrom|null The allowInvitesFrom
     */
@@ -129,10 +129,10 @@ class AuthorizationPolicy extends PolicyBase
         }
         return null;
     }
-    
+
     /**
     * Sets the allowInvitesFrom
-    * Indicates who can invite external users to the organization. Possible values are: none, adminsAndGuestInviters, adminsGuestInvitersAndAllMembers, everyone.  everyone is the default setting for all cloud environments except US Government. See more in the table below.
+    * Indicates who can invite guests to the organization. Possible values are: none, adminsAndGuestInviters, adminsGuestInvitersAndAllMembers, everyone. everyone is the default setting for all cloud environments except US Government. See more in the table below.
     *
     * @param AllowInvitesFrom $val The allowInvitesFrom
     *
@@ -143,10 +143,39 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["allowInvitesFrom"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the allowUserConsentForRiskyApps
+    * Indicates whether user consent for risky apps is allowed. Default value is false. We recommend that you keep the value set to false.
+    *
+    * @return bool|null The allowUserConsentForRiskyApps
+    */
+    public function getAllowUserConsentForRiskyApps()
+    {
+        if (array_key_exists("allowUserConsentForRiskyApps", $this->_propDict)) {
+            return $this->_propDict["allowUserConsentForRiskyApps"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the allowUserConsentForRiskyApps
+    * Indicates whether user consent for risky apps is allowed. Default value is false. We recommend that you keep the value set to false.
+    *
+    * @param bool $val The allowUserConsentForRiskyApps
+    *
+    * @return AuthorizationPolicy
+    */
+    public function setAllowUserConsentForRiskyApps($val)
+    {
+        $this->_propDict["allowUserConsentForRiskyApps"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the blockMsolPowerShell
-    * To disable the use of MSOL PowerShell set this property to true. This will also disable user-based access to the legacy service endpoint used by MSOL PowerShell. This does not affect Azure AD Connect or Microsoft Graph.
+    * To disable the use of the MSOnline PowerShell module set this property to true. This will also disable user-based access to the legacy service endpoint used by the MSOnline PowerShell module. This doesn't affect Microsoft Entra Connect or Microsoft Graph.
     *
     * @return bool|null The blockMsolPowerShell
     */
@@ -158,10 +187,10 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the blockMsolPowerShell
-    * To disable the use of MSOL PowerShell set this property to true. This will also disable user-based access to the legacy service endpoint used by MSOL PowerShell. This does not affect Azure AD Connect or Microsoft Graph.
+    * To disable the use of the MSOnline PowerShell module set this property to true. This will also disable user-based access to the legacy service endpoint used by the MSOnline PowerShell module. This doesn't affect Microsoft Entra Connect or Microsoft Graph.
     *
     * @param bool $val The blockMsolPowerShell
     *
@@ -172,7 +201,7 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["blockMsolPowerShell"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the defaultUserRolePermissions
     * Specifies certain customizable permissions for default user role.
@@ -191,7 +220,7 @@ class AuthorizationPolicy extends PolicyBase
         }
         return null;
     }
-    
+
     /**
     * Sets the defaultUserRolePermissions
     * Specifies certain customizable permissions for default user role.
@@ -205,12 +234,12 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["defaultUserRolePermissions"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the enabledPreviewFeatures
     * List of features enabled for private preview on the tenant.
     *
-    * @return string|null The enabledPreviewFeatures
+    * @return array|null The enabledPreviewFeatures
     */
     public function getEnabledPreviewFeatures()
     {
@@ -220,12 +249,12 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the enabledPreviewFeatures
     * List of features enabled for private preview on the tenant.
     *
-    * @param string $val The enabledPreviewFeatures
+    * @param string[] $val The enabledPreviewFeatures
     *
     * @return AuthorizationPolicy
     */
@@ -234,10 +263,10 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["enabledPreviewFeatures"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the guestUserRoleId
-    * Represents role templateId for the role that should be granted to guest user. Refer to List unifiedRoleDefinitions to find the list of available role templates. Currently following roles are supported:  User (a0b1b346-4d3e-4e8b-98f8-753987be4970), Guest User (10dae51f-b6af-4016-8d66-8c2a99b929b3), and Restricted Guest User (2af84b1e-32c8-42b7-82bc-daa82404023b).
+    * Represents role templateId for the role that should be granted to guests. Refer to List unifiedRoleDefinitions to find the list of available role templates. Currently following roles are supported:  User (a0b1b346-4d3e-4e8b-98f8-753987be4970), Guest User (10dae51f-b6af-4016-8d66-8c2a99b929b3), and Restricted Guest User (2af84b1e-32c8-42b7-82bc-daa82404023b).
     *
     * @return string|null The guestUserRoleId
     */
@@ -249,10 +278,10 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the guestUserRoleId
-    * Represents role templateId for the role that should be granted to guest user. Refer to List unifiedRoleDefinitions to find the list of available role templates. Currently following roles are supported:  User (a0b1b346-4d3e-4e8b-98f8-753987be4970), Guest User (10dae51f-b6af-4016-8d66-8c2a99b929b3), and Restricted Guest User (2af84b1e-32c8-42b7-82bc-daa82404023b).
+    * Represents role templateId for the role that should be granted to guests. Refer to List unifiedRoleDefinitions to find the list of available role templates. Currently following roles are supported:  User (a0b1b346-4d3e-4e8b-98f8-753987be4970), Guest User (10dae51f-b6af-4016-8d66-8c2a99b929b3), and Restricted Guest User (2af84b1e-32c8-42b7-82bc-daa82404023b).
     *
     * @param string $val The guestUserRoleId
     *
@@ -263,12 +292,12 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["guestUserRoleId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the permissionGrantPolicyIdsAssignedToDefaultUserRole
     * Indicates if user consent to apps is allowed, and if it is, which app consent policy (permissionGrantPolicy) governs the permission for users to grant consent. Values should be in the format managePermissionGrantsForSelf.{id}, where {id} is the id of a built-in or custom app consent policy. An empty list indicates user consent to apps is disabled.
     *
-    * @return string|null The permissionGrantPolicyIdsAssignedToDefaultUserRole
+    * @return array|null The permissionGrantPolicyIdsAssignedToDefaultUserRole
     */
     public function getPermissionGrantPolicyIdsAssignedToDefaultUserRole()
     {
@@ -278,12 +307,12 @@ class AuthorizationPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the permissionGrantPolicyIdsAssignedToDefaultUserRole
     * Indicates if user consent to apps is allowed, and if it is, which app consent policy (permissionGrantPolicy) governs the permission for users to grant consent. Values should be in the format managePermissionGrantsForSelf.{id}, where {id} is the id of a built-in or custom app consent policy. An empty list indicates user consent to apps is disabled.
     *
-    * @param string $val The permissionGrantPolicyIdsAssignedToDefaultUserRole
+    * @param string[] $val The permissionGrantPolicyIdsAssignedToDefaultUserRole
     *
     * @return AuthorizationPolicy
     */
@@ -292,5 +321,33 @@ class AuthorizationPolicy extends PolicyBase
         $this->_propDict["permissionGrantPolicyIdsAssignedToDefaultUserRole"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the defaultUserRoleOverrides
+     *
+     * @return array|null The defaultUserRoleOverrides
+     */
+    public function getDefaultUserRoleOverrides()
+    {
+        if (array_key_exists("defaultUserRoleOverrides", $this->_propDict)) {
+           return $this->_propDict["defaultUserRoleOverrides"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the defaultUserRoleOverrides
+    *
+    * @param DefaultUserRoleOverride[] $val The defaultUserRoleOverrides
+    *
+    * @return AuthorizationPolicy
+    */
+    public function setDefaultUserRoleOverrides($val)
+    {
+        $this->_propDict["defaultUserRoleOverrides"] = $val;
+        return $this;
+    }
+
 }

@@ -25,7 +25,7 @@ class AccessReviewReviewerScope extends AccessReviewScope
 {
     /**
     * Gets the query
-    * The query specifying who will be the reviewer. See table for examples.
+    * The query specifying who will be the reviewer.
     *
     * @return string|null The query
     */
@@ -40,7 +40,7 @@ class AccessReviewReviewerScope extends AccessReviewScope
 
     /**
     * Sets the query
-    * The query specifying who will be the reviewer. See table for examples.
+    * The query specifying who will be the reviewer.
     *
     * @param string $val The value of the query
     *
@@ -53,7 +53,7 @@ class AccessReviewReviewerScope extends AccessReviewScope
     }
     /**
     * Gets the queryRoot
-    * In the scenario where reviewers need to be specified dynamically, this property is used to indicate the relative source of the query. This property is only required if a relative query (i.e., ./manager) is specified.
+    * In the scenario where reviewers need to be specified dynamically, this property is used to indicate the relative source of the query. This property is only required if a relative query, for example, ./manager, is specified. Possible value: decisions.
     *
     * @return string|null The queryRoot
     */
@@ -68,7 +68,7 @@ class AccessReviewReviewerScope extends AccessReviewScope
 
     /**
     * Sets the queryRoot
-    * In the scenario where reviewers need to be specified dynamically, this property is used to indicate the relative source of the query. This property is only required if a relative query (i.e., ./manager) is specified.
+    * In the scenario where reviewers need to be specified dynamically, this property is used to indicate the relative source of the query. This property is only required if a relative query, for example, ./manager, is specified. Possible value: decisions.
     *
     * @param string $val The value of the queryRoot
     *

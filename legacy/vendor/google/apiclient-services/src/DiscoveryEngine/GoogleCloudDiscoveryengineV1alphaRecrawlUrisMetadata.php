@@ -19,7 +19,7 @@ namespace Google\Service\DiscoveryEngine;
 
 class GoogleCloudDiscoveryengineV1alphaRecrawlUrisMetadata extends \Google\Collection
 {
-  protected $collection_key = 'invalidUris';
+  protected $collection_key = 'urisNotMatchingTargetSites';
   /**
    * @var string
    */
@@ -28,6 +28,18 @@ class GoogleCloudDiscoveryengineV1alphaRecrawlUrisMetadata extends \Google\Colle
    * @var string[]
    */
   public $invalidUris;
+  /**
+   * @var int
+   */
+  public $invalidUrisCount;
+  /**
+   * @var string[]
+   */
+  public $noindexUris;
+  /**
+   * @var int
+   */
+  public $noindexUrisCount;
   /**
    * @var int
    */
@@ -44,6 +56,14 @@ class GoogleCloudDiscoveryengineV1alphaRecrawlUrisMetadata extends \Google\Colle
    * @var string
    */
   public $updateTime;
+  /**
+   * @var string[]
+   */
+  public $urisNotMatchingTargetSites;
+  /**
+   * @var int
+   */
+  public $urisNotMatchingTargetSitesCount;
   /**
    * @var int
    */
@@ -76,6 +96,48 @@ class GoogleCloudDiscoveryengineV1alphaRecrawlUrisMetadata extends \Google\Colle
   public function getInvalidUris()
   {
     return $this->invalidUris;
+  }
+  /**
+   * @param int
+   */
+  public function setInvalidUrisCount($invalidUrisCount)
+  {
+    $this->invalidUrisCount = $invalidUrisCount;
+  }
+  /**
+   * @return int
+   */
+  public function getInvalidUrisCount()
+  {
+    return $this->invalidUrisCount;
+  }
+  /**
+   * @param string[]
+   */
+  public function setNoindexUris($noindexUris)
+  {
+    $this->noindexUris = $noindexUris;
+  }
+  /**
+   * @return string[]
+   */
+  public function getNoindexUris()
+  {
+    return $this->noindexUris;
+  }
+  /**
+   * @param int
+   */
+  public function setNoindexUrisCount($noindexUrisCount)
+  {
+    $this->noindexUrisCount = $noindexUrisCount;
+  }
+  /**
+   * @return int
+   */
+  public function getNoindexUrisCount()
+  {
+    return $this->noindexUrisCount;
   }
   /**
    * @param int
@@ -132,6 +194,34 @@ class GoogleCloudDiscoveryengineV1alphaRecrawlUrisMetadata extends \Google\Colle
   public function getUpdateTime()
   {
     return $this->updateTime;
+  }
+  /**
+   * @param string[]
+   */
+  public function setUrisNotMatchingTargetSites($urisNotMatchingTargetSites)
+  {
+    $this->urisNotMatchingTargetSites = $urisNotMatchingTargetSites;
+  }
+  /**
+   * @return string[]
+   */
+  public function getUrisNotMatchingTargetSites()
+  {
+    return $this->urisNotMatchingTargetSites;
+  }
+  /**
+   * @param int
+   */
+  public function setUrisNotMatchingTargetSitesCount($urisNotMatchingTargetSitesCount)
+  {
+    $this->urisNotMatchingTargetSitesCount = $urisNotMatchingTargetSitesCount;
+  }
+  /**
+   * @return int
+   */
+  public function getUrisNotMatchingTargetSitesCount()
+  {
+    return $this->urisNotMatchingTargetSitesCount;
   }
   /**
    * @param int

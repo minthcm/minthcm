@@ -22,19 +22,19 @@ class vfsStreamPrintVisitorTestCase extends \BC_PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException  \InvalidArgumentException
      */
     public function constructWithNonResourceThrowsInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         new vfsStreamPrintVisitor('invalid');
     }
 
     /**
      * @test
-     * @expectedException  \InvalidArgumentException
      */
     public function constructWithNonStreamResourceThrowsInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         new vfsStreamPrintVisitor(xml_parser_create());
     }
 

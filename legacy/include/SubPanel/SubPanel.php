@@ -171,7 +171,16 @@ class SubPanel
         //		}else{
         //			$this->listview = new ListViewSubPanel();
         //		}
-        $this->listview = new ListViewSubPanel();
+        $lv_subpanel_class = 'ListViewSubPanel';
+        if(file_exists('custom/modules/'.$this->parent_module.'/views/view.subpanel.php')){
+            require_once 'custom/modules/'.$this->parent_module.'/views/view.subpanel.php';
+            $lv_subpanel_class = 'Custom'.$this->parent_module.'ListViewSubPanel';
+        } else if(file_exists('modules/'.$this->parent_module.'/views/view.subpanel.php')) {
+            require_once 'modules/'.$this->parent_module.'/views/view.subpanel.php';
+            $lv_subpanel_class = $this->parent_module.'ListViewSubPanel';
+        }
+        
+        $this->listview = new $lv_subpanel_class();
         $ListView =& $this->listview;
         $ListView->initNewSmartyTemplate($xTemplatePath, $this->subpanel_defs->mod_strings);
         $ListView->smartyTemplateAssign("RETURN_URL", "&return_module=".$this->parent_module."&return_action=DetailView&return_id=".$this->parent_bean->id);

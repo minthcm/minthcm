@@ -22,129 +22,231 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class SitePage extends BaseItem
+class SitePage extends BaseSitePage
 {
     /**
-    * Gets the contentType
-    * The content type of the page.
+    * Gets the promotionKind
+    * Indicates the promotion kind of the sitePage. The possible values are: microsoftReserved, page, newsPost, unknownFutureValue.
     *
-    * @return ContentTypeInfo|null The contentType
+    * @return PagePromotionType|null The promotionKind
     */
-    public function getContentType()
+    public function getPromotionKind()
     {
-        if (array_key_exists("contentType", $this->_propDict)) {
-            if (is_a($this->_propDict["contentType"], "\Beta\Microsoft\Graph\Model\ContentTypeInfo") || is_null($this->_propDict["contentType"])) {
-                return $this->_propDict["contentType"];
+        if (array_key_exists("promotionKind", $this->_propDict)) {
+            if (is_a($this->_propDict["promotionKind"], "\Beta\Microsoft\Graph\Model\PagePromotionType") || is_null($this->_propDict["promotionKind"])) {
+                return $this->_propDict["promotionKind"];
             } else {
-                $this->_propDict["contentType"] = new ContentTypeInfo($this->_propDict["contentType"]);
-                return $this->_propDict["contentType"];
+                $this->_propDict["promotionKind"] = new PagePromotionType($this->_propDict["promotionKind"]);
+                return $this->_propDict["promotionKind"];
             }
         }
         return null;
     }
-    
-    /**
-    * Sets the contentType
-    * The content type of the page.
-    *
-    * @param ContentTypeInfo $val The contentType
-    *
-    * @return SitePage
-    */
-    public function setContentType($val)
-    {
-        $this->_propDict["contentType"] = $val;
-        return $this;
-    }
-    
-    /**
-    * Gets the pageLayoutType
-    *
-    * @return string|null The pageLayoutType
-    */
-    public function getPageLayoutType()
-    {
-        if (array_key_exists("pageLayoutType", $this->_propDict)) {
-            return $this->_propDict["pageLayoutType"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the pageLayoutType
-    *
-    * @param string $val The pageLayoutType
-    *
-    * @return SitePage
-    */
-    public function setPageLayoutType($val)
-    {
-        $this->_propDict["pageLayoutType"] = $val;
-        return $this;
-    }
-    
-    /**
-    * Gets the publishingState
-    *
-    * @return PublicationFacet|null The publishingState
-    */
-    public function getPublishingState()
-    {
-        if (array_key_exists("publishingState", $this->_propDict)) {
-            if (is_a($this->_propDict["publishingState"], "\Beta\Microsoft\Graph\Model\PublicationFacet") || is_null($this->_propDict["publishingState"])) {
-                return $this->_propDict["publishingState"];
-            } else {
-                $this->_propDict["publishingState"] = new PublicationFacet($this->_propDict["publishingState"]);
-                return $this->_propDict["publishingState"];
-            }
-        }
-        return null;
-    }
-    
-    /**
-    * Sets the publishingState
-    *
-    * @param PublicationFacet $val The publishingState
-    *
-    * @return SitePage
-    */
-    public function setPublishingState($val)
-    {
-        $this->_propDict["publishingState"] = $val;
-        return $this;
-    }
-    
-    /**
-    * Gets the title
-    *
-    * @return string|null The title
-    */
-    public function getTitle()
-    {
-        if (array_key_exists("title", $this->_propDict)) {
-            return $this->_propDict["title"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the title
-    *
-    * @param string $val The title
-    *
-    * @return SitePage
-    */
-    public function setTitle($val)
-    {
-        $this->_propDict["title"] = $val;
-        return $this;
-    }
-    
 
-     /** 
+    /**
+    * Sets the promotionKind
+    * Indicates the promotion kind of the sitePage. The possible values are: microsoftReserved, page, newsPost, unknownFutureValue.
+    *
+    * @param PagePromotionType $val The promotionKind
+    *
+    * @return SitePage
+    */
+    public function setPromotionKind($val)
+    {
+        $this->_propDict["promotionKind"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the reactions
+    * Reactions information for the page.
+    *
+    * @return ReactionsFacet|null The reactions
+    */
+    public function getReactions()
+    {
+        if (array_key_exists("reactions", $this->_propDict)) {
+            if (is_a($this->_propDict["reactions"], "\Beta\Microsoft\Graph\Model\ReactionsFacet") || is_null($this->_propDict["reactions"])) {
+                return $this->_propDict["reactions"];
+            } else {
+                $this->_propDict["reactions"] = new ReactionsFacet($this->_propDict["reactions"]);
+                return $this->_propDict["reactions"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the reactions
+    * Reactions information for the page.
+    *
+    * @param ReactionsFacet $val The reactions
+    *
+    * @return SitePage
+    */
+    public function setReactions($val)
+    {
+        $this->_propDict["reactions"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the showComments
+    * Determines whether or not to show comments at the bottom of the page.
+    *
+    * @return bool|null The showComments
+    */
+    public function getShowComments()
+    {
+        if (array_key_exists("showComments", $this->_propDict)) {
+            return $this->_propDict["showComments"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the showComments
+    * Determines whether or not to show comments at the bottom of the page.
+    *
+    * @param bool $val The showComments
+    *
+    * @return SitePage
+    */
+    public function setShowComments($val)
+    {
+        $this->_propDict["showComments"] = boolval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the showRecommendedPages
+    * Determines whether or not to show recommended pages at the bottom of the page.
+    *
+    * @return bool|null The showRecommendedPages
+    */
+    public function getShowRecommendedPages()
+    {
+        if (array_key_exists("showRecommendedPages", $this->_propDict)) {
+            return $this->_propDict["showRecommendedPages"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the showRecommendedPages
+    * Determines whether or not to show recommended pages at the bottom of the page.
+    *
+    * @param bool $val The showRecommendedPages
+    *
+    * @return SitePage
+    */
+    public function setShowRecommendedPages($val)
+    {
+        $this->_propDict["showRecommendedPages"] = boolval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the thumbnailWebUrl
+    * Url of the sitePage's thumbnail image
+    *
+    * @return string|null The thumbnailWebUrl
+    */
+    public function getThumbnailWebUrl()
+    {
+        if (array_key_exists("thumbnailWebUrl", $this->_propDict)) {
+            return $this->_propDict["thumbnailWebUrl"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the thumbnailWebUrl
+    * Url of the sitePage's thumbnail image
+    *
+    * @param string $val The thumbnailWebUrl
+    *
+    * @return SitePage
+    */
+    public function setThumbnailWebUrl($val)
+    {
+        $this->_propDict["thumbnailWebUrl"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the titleArea
+    * Title area on the SharePoint page.
+    *
+    * @return TitleArea|null The titleArea
+    */
+    public function getTitleArea()
+    {
+        if (array_key_exists("titleArea", $this->_propDict)) {
+            if (is_a($this->_propDict["titleArea"], "\Beta\Microsoft\Graph\Model\TitleArea") || is_null($this->_propDict["titleArea"])) {
+                return $this->_propDict["titleArea"];
+            } else {
+                $this->_propDict["titleArea"] = new TitleArea($this->_propDict["titleArea"]);
+                return $this->_propDict["titleArea"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the titleArea
+    * Title area on the SharePoint page.
+    *
+    * @param TitleArea $val The titleArea
+    *
+    * @return SitePage
+    */
+    public function setTitleArea($val)
+    {
+        $this->_propDict["titleArea"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the canvasLayout
+    * Indicates the layout of the content in a given SharePoint page, including horizontal sections and vertical sections.
+    *
+    * @return CanvasLayout|null The canvasLayout
+    */
+    public function getCanvasLayout()
+    {
+        if (array_key_exists("canvasLayout", $this->_propDict)) {
+            if (is_a($this->_propDict["canvasLayout"], "\Beta\Microsoft\Graph\Model\CanvasLayout") || is_null($this->_propDict["canvasLayout"])) {
+                return $this->_propDict["canvasLayout"];
+            } else {
+                $this->_propDict["canvasLayout"] = new CanvasLayout($this->_propDict["canvasLayout"]);
+                return $this->_propDict["canvasLayout"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the canvasLayout
+    * Indicates the layout of the content in a given SharePoint page, including horizontal sections and vertical sections.
+    *
+    * @param CanvasLayout $val The canvasLayout
+    *
+    * @return SitePage
+    */
+    public function setCanvasLayout($val)
+    {
+        $this->_propDict["canvasLayout"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the webParts
+    * Collection of webparts on the SharePoint page.
      *
      * @return array|null The webParts
      */
@@ -156,11 +258,12 @@ class SitePage extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the webParts
+    * Collection of webparts on the SharePoint page.
     *
-    * @param WebPart $val The webParts
+    * @param WebPart[] $val The webParts
     *
     * @return SitePage
     */
@@ -169,5 +272,5 @@ class SitePage extends BaseItem
         $this->_propDict["webParts"] = $val;
         return $this;
     }
-    
+
 }

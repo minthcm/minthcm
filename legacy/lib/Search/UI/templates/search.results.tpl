@@ -108,7 +108,11 @@
         <tbody>
             {foreach from=$beans item=bean}
             <tr class="{cycle values="oddListRowS1,evenListRowS1"}">
-                <td><a href="{$APP_CONFIG.site_url}/index.php?action=EditView&module={$module}&record={$bean->id}&offset=1"><span class="suitepicon suitepicon-action-edit"></span></a></td>
+                {if substr($APP_CONFIG.site_url, -1) != '/'}
+                    <td><a href="{$APP_CONFIG.site_url}/legacy/index.php?action=EditView&module={$module}&record={$bean->id}&offset=1"><span class="suitepicon suitepicon-action-edit"></span></a></td> 
+                {else}
+                    <td><a href="{$APP_CONFIG.site_url}legacy/index.php?action=EditView&module={$module}&record={$bean->id}&offset=1"><span class="suitepicon suitepicon-action-edit"></span></a></td>
+                {/if}
                 {foreach from=$headers[$module] item=header}
                 <td>{php} 
                         // using php to access to a smarty template object 
