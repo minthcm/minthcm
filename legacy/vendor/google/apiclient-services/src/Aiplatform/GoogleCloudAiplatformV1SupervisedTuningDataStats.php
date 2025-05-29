@@ -21,6 +21,10 @@ class GoogleCloudAiplatformV1SupervisedTuningDataStats extends \Google\Collectio
 {
   protected $collection_key = 'userDatasetExamples';
   /**
+   * @var string[]
+   */
+  public $droppedExampleReasons;
+  /**
    * @var string
    */
   public $totalBillableCharacterCount;
@@ -31,7 +35,15 @@ class GoogleCloudAiplatformV1SupervisedTuningDataStats extends \Google\Collectio
   /**
    * @var string
    */
+  public $totalTruncatedExampleCount;
+  /**
+   * @var string
+   */
   public $totalTuningCharacterCount;
+  /**
+   * @var string[]
+   */
+  public $truncatedExampleIndices;
   /**
    * @var string
    */
@@ -49,6 +61,20 @@ class GoogleCloudAiplatformV1SupervisedTuningDataStats extends \Google\Collectio
   protected $userOutputTokenDistributionType = GoogleCloudAiplatformV1SupervisedTuningDatasetDistribution::class;
   protected $userOutputTokenDistributionDataType = '';
 
+  /**
+   * @param string[]
+   */
+  public function setDroppedExampleReasons($droppedExampleReasons)
+  {
+    $this->droppedExampleReasons = $droppedExampleReasons;
+  }
+  /**
+   * @return string[]
+   */
+  public function getDroppedExampleReasons()
+  {
+    return $this->droppedExampleReasons;
+  }
   /**
    * @param string
    */
@@ -80,6 +106,20 @@ class GoogleCloudAiplatformV1SupervisedTuningDataStats extends \Google\Collectio
   /**
    * @param string
    */
+  public function setTotalTruncatedExampleCount($totalTruncatedExampleCount)
+  {
+    $this->totalTruncatedExampleCount = $totalTruncatedExampleCount;
+  }
+  /**
+   * @return string
+   */
+  public function getTotalTruncatedExampleCount()
+  {
+    return $this->totalTruncatedExampleCount;
+  }
+  /**
+   * @param string
+   */
   public function setTotalTuningCharacterCount($totalTuningCharacterCount)
   {
     $this->totalTuningCharacterCount = $totalTuningCharacterCount;
@@ -90,6 +130,20 @@ class GoogleCloudAiplatformV1SupervisedTuningDataStats extends \Google\Collectio
   public function getTotalTuningCharacterCount()
   {
     return $this->totalTuningCharacterCount;
+  }
+  /**
+   * @param string[]
+   */
+  public function setTruncatedExampleIndices($truncatedExampleIndices)
+  {
+    $this->truncatedExampleIndices = $truncatedExampleIndices;
+  }
+  /**
+   * @return string[]
+   */
+  public function getTruncatedExampleIndices()
+  {
+    return $this->truncatedExampleIndices;
   }
   /**
    * @param string

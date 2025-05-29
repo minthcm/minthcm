@@ -26,7 +26,7 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
 {
     /**
     * Gets the policyId
-    * The id of the policy.
+    * The id of the policy. Inherited from entity.
     *
     * @return string|null The policyId
     */
@@ -38,10 +38,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the policyId
-    * The id of the policy.
+    * The id of the policy. Inherited from entity.
     *
     * @param string $val The policyId
     *
@@ -52,10 +52,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         $this->_propDict["policyId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinitionId
-    * The id of the role definition where the policy applies. If not specified, the policy applies to all roles.
+    * For Microsoft Entra roles policy, it's the identifier of the role definition object where the policy applies. For PIM for groups membership and ownership, it's either member or owner. Supports $filter (eq).
     *
     * @return string|null The roleDefinitionId
     */
@@ -67,10 +67,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleDefinitionId
-    * The id of the role definition where the policy applies. If not specified, the policy applies to all roles.
+    * For Microsoft Entra roles policy, it's the identifier of the role definition object where the policy applies. For PIM for groups membership and ownership, it's either member or owner. Supports $filter (eq).
     *
     * @param string $val The roleDefinitionId
     *
@@ -81,10 +81,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         $this->_propDict["roleDefinitionId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the scopeId
-    * The id of the scope where the policy is assigned. E.g. '/', groupId, etc.
+    * The identifier of the scope where the policy is assigned.  Can be / for the tenant or a group ID. Required.
     *
     * @return string|null The scopeId
     */
@@ -96,10 +96,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the scopeId
-    * The id of the scope where the policy is assigned. E.g. '/', groupId, etc.
+    * The identifier of the scope where the policy is assigned.  Can be / for the tenant or a group ID. Required.
     *
     * @param string $val The scopeId
     *
@@ -110,10 +110,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         $this->_propDict["scopeId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the scopeType
-    * The type of the scope where the policy is assigned. One of Directory, DirectoryRole, Group.
+    * The type of the scope where the policy is assigned. One of Directory, DirectoryRole, Group. Required.
     *
     * @return string|null The scopeType
     */
@@ -125,10 +125,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the scopeType
-    * The type of the scope where the policy is assigned. One of Directory, DirectoryRole, Group.
+    * The type of the scope where the policy is assigned. One of Directory, DirectoryRole, Group. Required.
     *
     * @param string $val The scopeType
     *
@@ -139,10 +139,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         $this->_propDict["scopeType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the policy
-    * The policy for the assignment.
+    * The policy that's associated with a policy assignment. Supports $expand and a nested $expand of the rules and effectiveRules relationships for the policy.
     *
     * @return UnifiedRoleManagementPolicy|null The policy
     */
@@ -158,10 +158,10 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the policy
-    * The policy for the assignment.
+    * The policy that's associated with a policy assignment. Supports $expand and a nested $expand of the rules and effectiveRules relationships for the policy.
     *
     * @param UnifiedRoleManagementPolicy $val The policy
     *
@@ -172,5 +172,5 @@ class UnifiedRoleManagementPolicyAssignment extends Entity
         $this->_propDict["policy"] = $val;
         return $this;
     }
-    
+
 }

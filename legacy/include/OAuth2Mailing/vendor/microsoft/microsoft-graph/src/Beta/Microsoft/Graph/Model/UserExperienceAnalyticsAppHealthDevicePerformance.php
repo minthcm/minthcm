@@ -26,7 +26,7 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
 {
     /**
     * Gets the appCrashCount
-    * The number of app crashes for the device. Valid values -2147483648 to 2147483647
+    * The number of application crashes for the device. Valid values 0 to 2147483647. Supports: $filter, $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The appCrashCount
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appCrashCount
-    * The number of app crashes for the device. Valid values -2147483648 to 2147483647
+    * The number of application crashes for the device. Valid values 0 to 2147483647. Supports: $filter, $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The appCrashCount
     *
@@ -52,10 +52,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["appCrashCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the appHangCount
-    * The number of app hangs for the device. Valid values -2147483648 to 2147483647
+    * The number of application hangs for the device. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The appHangCount
     */
@@ -67,10 +67,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appHangCount
-    * The number of app hangs for the device. Valid values -2147483648 to 2147483647
+    * The number of application hangs for the device. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The appHangCount
     *
@@ -81,10 +81,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["appHangCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the crashedAppCount
-    * The number of distinct app crashes for the device. Valid values -2147483648 to 2147483647
+    * The number of distinct application crashes for the device. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The crashedAppCount
     */
@@ -96,10 +96,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the crashedAppCount
-    * The number of distinct app crashes for the device. Valid values -2147483648 to 2147483647
+    * The number of distinct application crashes for the device. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The crashedAppCount
     *
@@ -110,10 +110,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["crashedAppCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the deviceAppHealthScore
-    * The app health score of the device. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
+    * The application health score of the device. Valid values 0 to 100. Supports: $filter, $select, $OrderBy. Read-only. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
     *
     * @return float|null The deviceAppHealthScore
     */
@@ -125,10 +125,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceAppHealthScore
-    * The app health score of the device. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
+    * The application health score of the device. Valid values 0 to 100. Supports: $filter, $select, $OrderBy. Read-only. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
     *
     * @param float $val The deviceAppHealthScore
     *
@@ -139,39 +139,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["deviceAppHealthScore"] = floatval($val);
         return $this;
     }
-    
-    /**
-    * Gets the deviceAppHealthStatus
-    * The overall app health status of the device.
-    *
-    * @return string|null The deviceAppHealthStatus
-    */
-    public function getDeviceAppHealthStatus()
-    {
-        if (array_key_exists("deviceAppHealthStatus", $this->_propDict)) {
-            return $this->_propDict["deviceAppHealthStatus"];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * Sets the deviceAppHealthStatus
-    * The overall app health status of the device.
-    *
-    * @param string $val The deviceAppHealthStatus
-    *
-    * @return UserExperienceAnalyticsAppHealthDevicePerformance
-    */
-    public function setDeviceAppHealthStatus($val)
-    {
-        $this->_propDict["deviceAppHealthStatus"] = $val;
-        return $this;
-    }
-    
+
     /**
     * Gets the deviceDisplayName
-    * The name of the device.
+    * The name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceDisplayName
     */
@@ -183,10 +154,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceDisplayName
-    * The name of the device.
+    * The name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceDisplayName
     *
@@ -197,10 +168,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["deviceDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceId
-    * The id of the device.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceId
     */
@@ -212,10 +183,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceId
-    * The id of the device.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceId
     *
@@ -226,10 +197,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["deviceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceManufacturer
-    * The manufacturer name of the device.
+    * The manufacturer name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceManufacturer
     */
@@ -241,10 +212,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceManufacturer
-    * The manufacturer name of the device.
+    * The manufacturer name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceManufacturer
     *
@@ -255,10 +226,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["deviceManufacturer"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceModel
-    * The model name of the device.
+    * The model name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceModel
     */
@@ -270,10 +241,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceModel
-    * The model name of the device.
+    * The model name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceModel
     *
@@ -284,10 +255,43 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["deviceModel"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the healthStatus
+    * The health state of the user experience analytics device. Possible values are: unknown, insufficientData, needsAttention, meetingGoals. Unknown by default. Supports: $filter, $select, $OrderBy. Read-only. Possible values are: unknown, insufficientData, needsAttention, meetingGoals, unknownFutureValue.
+    *
+    * @return UserExperienceAnalyticsHealthState|null The healthStatus
+    */
+    public function getHealthStatus()
+    {
+        if (array_key_exists("healthStatus", $this->_propDict)) {
+            if (is_a($this->_propDict["healthStatus"], "\Beta\Microsoft\Graph\Model\UserExperienceAnalyticsHealthState") || is_null($this->_propDict["healthStatus"])) {
+                return $this->_propDict["healthStatus"];
+            } else {
+                $this->_propDict["healthStatus"] = new UserExperienceAnalyticsHealthState($this->_propDict["healthStatus"]);
+                return $this->_propDict["healthStatus"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the healthStatus
+    * The health state of the user experience analytics device. Possible values are: unknown, insufficientData, needsAttention, meetingGoals. Unknown by default. Supports: $filter, $select, $OrderBy. Read-only. Possible values are: unknown, insufficientData, needsAttention, meetingGoals, unknownFutureValue.
+    *
+    * @param UserExperienceAnalyticsHealthState $val The healthStatus
+    *
+    * @return UserExperienceAnalyticsAppHealthDevicePerformance
+    */
+    public function setHealthStatus($val)
+    {
+        $this->_propDict["healthStatus"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the meanTimeToFailureInMinutes
-    * The mean time to failure for the device in minutes. Valid values -2147483648 to 2147483647
+    * The mean time to failure for the application in minutes. Valid values 0 to 2147483647. Supports: $filter, $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The meanTimeToFailureInMinutes
     */
@@ -299,10 +303,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the meanTimeToFailureInMinutes
-    * The mean time to failure for the device in minutes. Valid values -2147483648 to 2147483647
+    * The mean time to failure for the application in minutes. Valid values 0 to 2147483647. Supports: $filter, $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The meanTimeToFailureInMinutes
     *
@@ -313,5 +317,38 @@ class UserExperienceAnalyticsAppHealthDevicePerformance extends Entity
         $this->_propDict["meanTimeToFailureInMinutes"] = intval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the processedDateTime
+    * The date and time when the statistics were last computed. The value cannot be modified and is automatically populated when the statistics are computed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
+    *
+    * @return \DateTime|null The processedDateTime
+    */
+    public function getProcessedDateTime()
+    {
+        if (array_key_exists("processedDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["processedDateTime"], "\DateTime") || is_null($this->_propDict["processedDateTime"])) {
+                return $this->_propDict["processedDateTime"];
+            } else {
+                $this->_propDict["processedDateTime"] = new \DateTime($this->_propDict["processedDateTime"]);
+                return $this->_propDict["processedDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the processedDateTime
+    * The date and time when the statistics were last computed. The value cannot be modified and is automatically populated when the statistics are computed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
+    *
+    * @param \DateTime $val The processedDateTime
+    *
+    * @return UserExperienceAnalyticsAppHealthDevicePerformance
+    */
+    public function setProcessedDateTime($val)
+    {
+        $this->_propDict["processedDateTime"] = $val;
+        return $this;
+    }
+
 }

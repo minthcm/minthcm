@@ -38,7 +38,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
             return null;
         }
     }
-    
+
     /**
     * Sets the appSupportsOemConfig
     * Whether or not this AppConfig is an OEMConfig policy.
@@ -52,7 +52,36 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         $this->_propDict["appSupportsOemConfig"] = boolval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the connectedAppsEnabled
+    * Setting to specify whether to allow ConnectedApps experience for this app.
+    *
+    * @return bool|null The connectedAppsEnabled
+    */
+    public function getConnectedAppsEnabled()
+    {
+        if (array_key_exists("connectedAppsEnabled", $this->_propDict)) {
+            return $this->_propDict["connectedAppsEnabled"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the connectedAppsEnabled
+    * Setting to specify whether to allow ConnectedApps experience for this app.
+    *
+    * @param bool $val The connectedAppsEnabled
+    *
+    * @return AndroidManagedStoreAppConfiguration
+    */
+    public function setConnectedAppsEnabled($val)
+    {
+        $this->_propDict["connectedAppsEnabled"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the packageId
     * Android Enterprise app configuration package id.
@@ -67,7 +96,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
             return null;
         }
     }
-    
+
     /**
     * Sets the packageId
     * Android Enterprise app configuration package id.
@@ -81,7 +110,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         $this->_propDict["packageId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the payloadJson
     * Android Enterprise app configuration JSON payload.
@@ -96,7 +125,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
             return null;
         }
     }
-    
+
     /**
     * Sets the payloadJson
     * Android Enterprise app configuration JSON payload.
@@ -110,9 +139,9 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         $this->_propDict["payloadJson"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the permissionActions
     * List of Android app permissions and corresponding permission actions.
      *
@@ -126,12 +155,12 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the permissionActions
     * List of Android app permissions and corresponding permission actions.
     *
-    * @param AndroidPermissionAction $val The permissionActions
+    * @param AndroidPermissionAction[] $val The permissionActions
     *
     * @return AndroidManagedStoreAppConfiguration
     */
@@ -140,7 +169,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         $this->_propDict["permissionActions"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the profileApplicability
     * Android Enterprise profile applicability (AndroidWorkProfile, DeviceOwner, or default (applies to both)). Possible values are: default, androidWorkProfile, androidDeviceOwner.
@@ -159,7 +188,7 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         }
         return null;
     }
-    
+
     /**
     * Sets the profileApplicability
     * Android Enterprise profile applicability (AndroidWorkProfile, DeviceOwner, or default (applies to both)). Possible values are: default, androidWorkProfile, androidDeviceOwner.
@@ -173,5 +202,5 @@ class AndroidManagedStoreAppConfiguration extends ManagedDeviceMobileAppConfigur
         $this->_propDict["profileApplicability"] = $val;
         return $this;
     }
-    
+
 }

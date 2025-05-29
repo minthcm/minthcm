@@ -25,8 +25,12 @@ class GooglePrivacyDlpV2DiscoveryTarget extends \Google\Model
   protected $cloudSqlTargetDataType = '';
   protected $cloudStorageTargetType = GooglePrivacyDlpV2CloudStorageDiscoveryTarget::class;
   protected $cloudStorageTargetDataType = '';
+  protected $otherCloudTargetType = GooglePrivacyDlpV2OtherCloudDiscoveryTarget::class;
+  protected $otherCloudTargetDataType = '';
   protected $secretsTargetType = GooglePrivacyDlpV2SecretsDiscoveryTarget::class;
   protected $secretsTargetDataType = '';
+  protected $vertexDatasetTargetType = GooglePrivacyDlpV2VertexDatasetDiscoveryTarget::class;
+  protected $vertexDatasetTargetDataType = '';
 
   /**
    * @param GooglePrivacyDlpV2BigQueryDiscoveryTarget
@@ -71,6 +75,20 @@ class GooglePrivacyDlpV2DiscoveryTarget extends \Google\Model
     return $this->cloudStorageTarget;
   }
   /**
+   * @param GooglePrivacyDlpV2OtherCloudDiscoveryTarget
+   */
+  public function setOtherCloudTarget(GooglePrivacyDlpV2OtherCloudDiscoveryTarget $otherCloudTarget)
+  {
+    $this->otherCloudTarget = $otherCloudTarget;
+  }
+  /**
+   * @return GooglePrivacyDlpV2OtherCloudDiscoveryTarget
+   */
+  public function getOtherCloudTarget()
+  {
+    return $this->otherCloudTarget;
+  }
+  /**
    * @param GooglePrivacyDlpV2SecretsDiscoveryTarget
    */
   public function setSecretsTarget(GooglePrivacyDlpV2SecretsDiscoveryTarget $secretsTarget)
@@ -83,6 +101,20 @@ class GooglePrivacyDlpV2DiscoveryTarget extends \Google\Model
   public function getSecretsTarget()
   {
     return $this->secretsTarget;
+  }
+  /**
+   * @param GooglePrivacyDlpV2VertexDatasetDiscoveryTarget
+   */
+  public function setVertexDatasetTarget(GooglePrivacyDlpV2VertexDatasetDiscoveryTarget $vertexDatasetTarget)
+  {
+    $this->vertexDatasetTarget = $vertexDatasetTarget;
+  }
+  /**
+   * @return GooglePrivacyDlpV2VertexDatasetDiscoveryTarget
+   */
+  public function getVertexDatasetTarget()
+  {
+    return $this->vertexDatasetTarget;
   }
 }
 

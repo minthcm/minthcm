@@ -38,7 +38,7 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the assignmentState
     * Required. The state of the assignment. The possible values are: Eligible (for eligible assignment),  Active (if it is directly assigned), Active (by administrators, or activated on an eligible assignment by the users).
@@ -52,7 +52,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["assignmentState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the linkedEligibleRoleAssignmentId
     * If this is a request for role activation, it represents the id of the eligible assignment being referred; Otherwise, the value is null.
@@ -67,7 +67,7 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the linkedEligibleRoleAssignmentId
     * If this is a request for role activation, it represents the id of the eligible assignment being referred; Otherwise, the value is null.
@@ -81,7 +81,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["linkedEligibleRoleAssignmentId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reason
     * A message provided by users and administrators when create the request about why it is needed.
@@ -96,7 +96,7 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the reason
     * A message provided by users and administrators when create the request about why it is needed.
@@ -110,7 +110,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["reason"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestedDateTime
     * Read-only. The request create time. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -129,7 +129,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the requestedDateTime
     * Read-only. The request create time. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -143,10 +143,10 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["requestedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceId
-    * Required. The id of the resource which the role assignment request is associated with.
+    * Required. The unique identifier of the Azure resource that is associated with the role assignment request. Azure resources can include subscriptions, resource groups, virtual machines, and SQL databases.
     *
     * @return string|null The resourceId
     */
@@ -158,10 +158,10 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceId
-    * Required. The id of the resource which the role assignment request is associated with.
+    * Required. The unique identifier of the Azure resource that is associated with the role assignment request. Azure resources can include subscriptions, resource groups, virtual machines, and SQL databases.
     *
     * @param string $val The resourceId
     *
@@ -172,10 +172,10 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["resourceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinitionId
-    * Required. The id of the role definition which the role assignment request is associated with.
+    * Required. The identifier of the Azure role definition that the role assignment request is associated with.
     *
     * @return string|null The roleDefinitionId
     */
@@ -187,10 +187,10 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleDefinitionId
-    * Required. The id of the role definition which the role assignment request is associated with.
+    * Required. The identifier of the Azure role definition that the role assignment request is associated with.
     *
     * @param string $val The roleDefinitionId
     *
@@ -201,7 +201,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["roleDefinitionId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the schedule
     * The schedule object of the role assignment request.
@@ -220,7 +220,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the schedule
     * The schedule object of the role assignment request.
@@ -234,7 +234,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["schedule"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
     * The status of the role assignment request.
@@ -253,7 +253,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
     * The status of the role assignment request.
@@ -267,10 +267,10 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the subjectId
-    * Required. The id of the subject which the role assignment request is associated with.
+    * Required. The unique identifier of the principal or subject that the role assignment request is associated with. Principals can be users, groups, or service principals.
     *
     * @return string|null The subjectId
     */
@@ -282,10 +282,10 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the subjectId
-    * Required. The id of the subject which the role assignment request is associated with.
+    * Required. The unique identifier of the principal or subject that the role assignment request is associated with. Principals can be users, groups, or service principals.
     *
     * @param string $val The subjectId
     *
@@ -296,7 +296,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["subjectId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the type
     * Required. Representing the type of the operation on the role assignment. The possible values are: AdminAdd , UserAdd , AdminUpdate , AdminRemove , UserRemove , UserExtend , AdminExtend , UserRenew , AdminRenew.
@@ -311,7 +311,7 @@ class GovernanceRoleAssignmentRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the type
     * Required. Representing the type of the operation on the role assignment. The possible values are: AdminAdd , UserAdd , AdminUpdate , AdminRemove , UserRemove , UserExtend , AdminExtend , UserRenew , AdminRenew.
@@ -325,7 +325,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["type"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resource
     * Read-only. The resource that the request aims to.
@@ -344,7 +344,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the resource
     * Read-only. The resource that the request aims to.
@@ -358,7 +358,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["resource"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinition
     * Read-only. The role definition that the request aims to.
@@ -377,7 +377,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the roleDefinition
     * Read-only. The role definition that the request aims to.
@@ -391,7 +391,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["roleDefinition"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the subject
     * Read-only. The user/group principal.
@@ -410,7 +410,7 @@ class GovernanceRoleAssignmentRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the subject
     * Read-only. The user/group principal.
@@ -424,5 +424,5 @@ class GovernanceRoleAssignmentRequest extends Entity
         $this->_propDict["subject"] = $val;
         return $this;
     }
-    
+
 }

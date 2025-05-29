@@ -23,6 +23,34 @@ namespace Beta\Microsoft\Graph\Model;
 */
 class DeviceManagementConfigurationStringSettingValueDefinition extends DeviceManagementConfigurationSettingValueDefinition
 {
+    /**
+    * Gets the fileTypes
+    * Supported file types for this setting.
+    *
+    * @return string|null The fileTypes
+    */
+    public function getFileTypes()
+    {
+        if (array_key_exists("fileTypes", $this->_propDict)) {
+            return $this->_propDict["fileTypes"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the fileTypes
+    * Supported file types for this setting.
+    *
+    * @param string $val The value of the fileTypes
+    *
+    * @return DeviceManagementConfigurationStringSettingValueDefinition
+    */
+    public function setFileTypes($val)
+    {
+        $this->_propDict["fileTypes"] = $val;
+        return $this;
+    }
 
     /**
     * Gets the format
@@ -114,7 +142,7 @@ class DeviceManagementConfigurationStringSettingValueDefinition extends DeviceMa
     }
     /**
     * Gets the maximumLength
-    * Maximum length of string. Valid values 0 to 87516
+    * Maximum length of string
     *
     * @return int|null The maximumLength
     */
@@ -129,7 +157,7 @@ class DeviceManagementConfigurationStringSettingValueDefinition extends DeviceMa
 
     /**
     * Sets the maximumLength
-    * Maximum length of string. Valid values 0 to 87516
+    * Maximum length of string
     *
     * @param int $val The value of the maximumLength
     *
@@ -142,7 +170,7 @@ class DeviceManagementConfigurationStringSettingValueDefinition extends DeviceMa
     }
     /**
     * Gets the minimumLength
-    * Minimum length of string. Valid values 0 to 87516
+    * Minimum length of string
     *
     * @return int|null The minimumLength
     */
@@ -157,7 +185,7 @@ class DeviceManagementConfigurationStringSettingValueDefinition extends DeviceMa
 
     /**
     * Sets the minimumLength
-    * Minimum length of string. Valid values 0 to 87516
+    * Minimum length of string
     *
     * @param int $val The value of the minimumLength
     *

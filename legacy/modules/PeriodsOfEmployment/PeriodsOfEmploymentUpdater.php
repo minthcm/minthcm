@@ -82,7 +82,7 @@ class PeriodsOfEmploymentUpdater {
       if ( $new_period->end_date ) {
          $new_period_of_employment->period_ending_date = $new_period->end_date->format($timedate->get_date_format());
       } else {
-         $new_period_of_employment->period_ending_date = null;
+         $new_period_of_employment->period_ending_date = '';
       }
       $new_period_of_employment->save(false);
       $id_of_first_period_in_first_contract = $new_period_of_employment->id;

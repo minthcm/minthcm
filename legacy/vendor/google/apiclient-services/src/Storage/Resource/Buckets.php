@@ -20,7 +20,9 @@ namespace Google\Service\Storage\Resource;
 use Google\Service\Storage\Bucket;
 use Google\Service\Storage\BucketStorageLayout;
 use Google\Service\Storage\Buckets as BucketsModel;
+use Google\Service\Storage\GoogleLongrunningOperation;
 use Google\Service\Storage\Policy;
+use Google\Service\Storage\RelocateBucketRequest;
 use Google\Service\Storage\TestIamPermissionsResponse;
 
 /**
@@ -34,7 +36,8 @@ use Google\Service\Storage\TestIamPermissionsResponse;
 class Buckets extends \Google\Service\Resource
 {
   /**
-   * Permanently deletes an empty bucket. (buckets.delete)
+   * Deletes an empty bucket. Deletions are permanent unless soft delete is
+   * enabled on the bucket. (buckets.delete)
    *
    * @param string $bucket Name of a bucket.
    * @param array $optParams Optional parameters.
@@ -59,6 +62,8 @@ class Buckets extends \Google\Service\Resource
    * @param string $bucket Name of a bucket.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string generation If present, specifies the generation of the
+   * bucket. This is required if softDeleted is true.
    * @opt_param string ifMetagenerationMatch Makes the return of the bucket
    * metadata conditional on whether the bucket's current metageneration matches
    * the given value.
@@ -66,6 +71,9 @@ class Buckets extends \Google\Service\Resource
    * metadata conditional on whether the bucket's current metageneration does not
    * match the given value.
    * @opt_param string projection Set of properties to return. Defaults to noAcl.
+   * @opt_param bool softDeleted If true, return the soft-deleted version of this
+   * bucket. The default is false. For more information, see [Soft
+   * Delete](https://cloud.google.com/storage/docs/soft-delete).
    * @opt_param string userProject The project to be billed for this request.
    * Required for Requester Pays buckets.
    * @return Bucket
@@ -157,6 +165,9 @@ class Buckets extends \Google\Service\Resource
    * @opt_param string prefix Filter results to buckets whose names begin with
    * this prefix.
    * @opt_param string projection Set of properties to return. Defaults to noAcl.
+   * @opt_param bool softDeleted If true, only soft-deleted bucket versions will
+   * be returned. The default is false. For more information, see [Soft
+   * Delete](https://cloud.google.com/storage/docs/soft-delete).
    * @opt_param string userProject The project to be billed for this request.
    * @return BucketsModel
    * @throws \Google\Service\Exception
@@ -216,6 +227,41 @@ class Buckets extends \Google\Service\Resource
     $params = ['bucket' => $bucket, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
     return $this->call('patch', [$params], Bucket::class);
+  }
+  /**
+   * Initiates a long-running Relocate Bucket operation on the specified bucket.
+   * (buckets.relocate)
+   *
+   * @param string $bucket Name of the bucket to be moved.
+   * @param RelocateBucketRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleLongrunningOperation
+   * @throws \Google\Service\Exception
+   */
+  public function relocate($bucket, RelocateBucketRequest $postBody, $optParams = [])
+  {
+    $params = ['bucket' => $bucket, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('relocate', [$params], GoogleLongrunningOperation::class);
+  }
+  /**
+   * Restores a soft-deleted bucket. (buckets.restore)
+   *
+   * @param string $bucket Name of a bucket.
+   * @param string $generation Generation of a bucket.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string projection Set of properties to return. Defaults to full.
+   * @opt_param string userProject The project to be billed for this request.
+   * Required for Requester Pays buckets.
+   * @return Bucket
+   * @throws \Google\Service\Exception
+   */
+  public function restore($bucket, $generation, $optParams = [])
+  {
+    $params = ['bucket' => $bucket, 'generation' => $generation];
+    $params = array_merge($params, $optParams);
+    return $this->call('restore', [$params], Bucket::class);
   }
   /**
    * Updates an IAM policy for the specified bucket. (buckets.setIamPolicy)

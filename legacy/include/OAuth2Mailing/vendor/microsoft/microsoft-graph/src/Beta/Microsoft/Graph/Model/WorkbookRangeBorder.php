@@ -26,7 +26,7 @@ class WorkbookRangeBorder extends Entity
 {
     /**
     * Gets the color
-    * HTML color code representing the color of the border line, of the form #RRGGBB (e.g. 'FFA500') or as a named HTML color (e.g. 'orange').
+    * HTML color code representing the color of the border line, of the form #RRGGBB (for example 'FFA500') or as a named HTML color (for example 'orange').
     *
     * @return string|null The color
     */
@@ -38,10 +38,10 @@ class WorkbookRangeBorder extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the color
-    * HTML color code representing the color of the border line, of the form #RRGGBB (e.g. 'FFA500') or as a named HTML color (e.g. 'orange').
+    * HTML color code representing the color of the border line, of the form #RRGGBB (for example 'FFA500') or as a named HTML color (for example 'orange').
     *
     * @param string $val The color
     *
@@ -52,7 +52,7 @@ class WorkbookRangeBorder extends Entity
         $this->_propDict["color"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sideIndex
     * Constant value that indicates the specific side of the border. Possible values are: EdgeTop, EdgeBottom, EdgeLeft, EdgeRight, InsideVertical, InsideHorizontal, DiagonalDown, DiagonalUp. Read-only.
@@ -67,7 +67,7 @@ class WorkbookRangeBorder extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the sideIndex
     * Constant value that indicates the specific side of the border. Possible values are: EdgeTop, EdgeBottom, EdgeLeft, EdgeRight, InsideVertical, InsideHorizontal, DiagonalDown, DiagonalUp. Read-only.
@@ -81,7 +81,7 @@ class WorkbookRangeBorder extends Entity
         $this->_propDict["sideIndex"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the style
     * One of the constants of line style specifying the line style for the border. Possible values are: None, Continuous, Dash, DashDot, DashDotDot, Dot, Double, SlantDashDot.
@@ -96,7 +96,7 @@ class WorkbookRangeBorder extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the style
     * One of the constants of line style specifying the line style for the border. Possible values are: None, Continuous, Dash, DashDot, DashDotDot, Dot, Double, SlantDashDot.
@@ -110,7 +110,7 @@ class WorkbookRangeBorder extends Entity
         $this->_propDict["style"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the weight
     * Specifies the weight of the border around a range. Possible values are: Hairline, Thin, Medium, Thick.
@@ -125,7 +125,7 @@ class WorkbookRangeBorder extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the weight
     * Specifies the weight of the border around a range. Possible values are: Hairline, Thin, Medium, Thick.
@@ -139,5 +139,5 @@ class WorkbookRangeBorder extends Entity
         $this->_propDict["weight"] = $val;
         return $this;
     }
-    
+
 }

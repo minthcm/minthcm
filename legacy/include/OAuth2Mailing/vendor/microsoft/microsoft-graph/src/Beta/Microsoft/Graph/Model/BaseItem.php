@@ -26,7 +26,7 @@ class BaseItem extends Entity
 {
     /**
     * Gets the createdBy
-    * Identity of the user, device, or application which created the item. Read-only.
+    * Identity of the user, device, or application that created the item. Read-only.
     *
     * @return IdentitySet|null The createdBy
     */
@@ -42,10 +42,10 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
-    * Identity of the user, device, or application which created the item. Read-only.
+    * Identity of the user, device, or application that created the item. Read-only.
     *
     * @param IdentitySet $val The createdBy
     *
@@ -56,7 +56,7 @@ class BaseItem extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * Date and time of item creation. Read-only.
@@ -75,7 +75,7 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Date and time of item creation. Read-only.
@@ -89,10 +89,9 @@ class BaseItem extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
-    * Provides a user-visible description of the item. Optional.
     *
     * @return string|null The description
     */
@@ -104,10 +103,9 @@ class BaseItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * Provides a user-visible description of the item. Optional.
     *
     * @param string $val The description
     *
@@ -118,7 +116,7 @@ class BaseItem extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the eTag
     * ETag for the item. Read-only.
@@ -133,7 +131,7 @@ class BaseItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the eTag
     * ETag for the item. Read-only.
@@ -147,10 +145,10 @@ class BaseItem extends Entity
         $this->_propDict["eTag"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedBy
-    * Identity of the user, device, and application which last modified the item. Read-only.
+    * Identity of the user, device, and application that last modified the item. Read-only.
     *
     * @return IdentitySet|null The lastModifiedBy
     */
@@ -166,10 +164,10 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedBy
-    * Identity of the user, device, and application which last modified the item. Read-only.
+    * Identity of the user, device, and application that last modified the item. Read-only.
     *
     * @param IdentitySet $val The lastModifiedBy
     *
@@ -180,7 +178,7 @@ class BaseItem extends Entity
         $this->_propDict["lastModifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * Date and time the item was last modified. Read-only.
@@ -199,7 +197,7 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * Date and time the item was last modified. Read-only.
@@ -213,7 +211,7 @@ class BaseItem extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the name
     * The name of the item. Read-write.
@@ -228,7 +226,7 @@ class BaseItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
     * The name of the item. Read-write.
@@ -242,7 +240,7 @@ class BaseItem extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the parentReference
     * Parent information, if the item has a parent. Read-write.
@@ -261,7 +259,7 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the parentReference
     * Parent information, if the item has a parent. Read-write.
@@ -275,10 +273,10 @@ class BaseItem extends Entity
         $this->_propDict["parentReference"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the webUrl
-    * URL that displays the resource in the browser. Read-only.
+    * URL that either displays the resource in the browser (for Office file formats), or is a direct link to the file (for other formats). Read-only.
     *
     * @return string|null The webUrl
     */
@@ -290,10 +288,10 @@ class BaseItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the webUrl
-    * URL that displays the resource in the browser. Read-only.
+    * URL that either displays the resource in the browser (for Office file formats), or is a direct link to the file (for other formats). Read-only.
     *
     * @param string $val The webUrl
     *
@@ -304,10 +302,9 @@ class BaseItem extends Entity
         $this->_propDict["webUrl"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdByUser
-    * Identity of the user who created the item. Read-only.
     *
     * @return User|null The createdByUser
     */
@@ -323,10 +320,9 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdByUser
-    * Identity of the user who created the item. Read-only.
     *
     * @param User $val The createdByUser
     *
@@ -337,10 +333,9 @@ class BaseItem extends Entity
         $this->_propDict["createdByUser"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedByUser
-    * Identity of the user who last modified the item. Read-only.
     *
     * @return User|null The lastModifiedByUser
     */
@@ -356,10 +351,9 @@ class BaseItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedByUser
-    * Identity of the user who last modified the item. Read-only.
     *
     * @param User $val The lastModifiedByUser
     *
@@ -370,5 +364,5 @@ class BaseItem extends Entity
         $this->_propDict["lastModifiedByUser"] = $val;
         return $this;
     }
-    
+
 }

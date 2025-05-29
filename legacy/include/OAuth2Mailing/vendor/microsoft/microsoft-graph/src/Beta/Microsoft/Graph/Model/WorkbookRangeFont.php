@@ -38,7 +38,7 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the bold
     * Represents the bold status of font.
@@ -52,10 +52,10 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["bold"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the color
-    * HTML color code representation of the text color. E.g. #FF0000 represents Red.
+    * HTML color code representation of the text color. for example #FF0000 represents Red.
     *
     * @return string|null The color
     */
@@ -67,10 +67,10 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the color
-    * HTML color code representation of the text color. E.g. #FF0000 represents Red.
+    * HTML color code representation of the text color. for example #FF0000 represents Red.
     *
     * @param string $val The color
     *
@@ -81,7 +81,7 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["color"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the italic
     * Represents the italic status of the font.
@@ -96,7 +96,7 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the italic
     * Represents the italic status of the font.
@@ -110,10 +110,10 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["italic"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the name
-    * Font name (e.g. 'Calibri')
+    * Font name (for example 'Calibri')
     *
     * @return string|null The name
     */
@@ -125,10 +125,10 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
-    * Font name (e.g. 'Calibri')
+    * Font name (for example 'Calibri')
     *
     * @param string $val The name
     *
@@ -139,7 +139,7 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the size
     * Font size.
@@ -154,7 +154,7 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the size
     * Font size.
@@ -168,7 +168,7 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["size"] = floatval($val);
         return $this;
     }
-    
+
     /**
     * Gets the underline
     * Type of underline applied to the font. Possible values are: None, Single, Double, SingleAccountant, DoubleAccountant.
@@ -183,7 +183,7 @@ class WorkbookRangeFont extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the underline
     * Type of underline applied to the font. Possible values are: None, Single, Double, SingleAccountant, DoubleAccountant.
@@ -197,5 +197,5 @@ class WorkbookRangeFont extends Entity
         $this->_propDict["underline"] = $val;
         return $this;
     }
-    
+
 }

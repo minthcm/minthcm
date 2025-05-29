@@ -25,6 +25,39 @@ namespace Beta\Microsoft\Graph\Model;
 class TargetedManagedAppProtection extends ManagedAppProtection
 {
     /**
+    * Gets the appGroupType
+    * Public Apps selection: group or individual. Possible values are: selectedPublicApps, allCoreMicrosoftApps, allMicrosoftApps, allApps.
+    *
+    * @return TargetedManagedAppGroupType|null The appGroupType
+    */
+    public function getAppGroupType()
+    {
+        if (array_key_exists("appGroupType", $this->_propDict)) {
+            if (is_a($this->_propDict["appGroupType"], "\Beta\Microsoft\Graph\Model\TargetedManagedAppGroupType") || is_null($this->_propDict["appGroupType"])) {
+                return $this->_propDict["appGroupType"];
+            } else {
+                $this->_propDict["appGroupType"] = new TargetedManagedAppGroupType($this->_propDict["appGroupType"]);
+                return $this->_propDict["appGroupType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the appGroupType
+    * Public Apps selection: group or individual. Possible values are: selectedPublicApps, allCoreMicrosoftApps, allMicrosoftApps, allApps.
+    *
+    * @param TargetedManagedAppGroupType $val The appGroupType
+    *
+    * @return TargetedManagedAppProtection
+    */
+    public function setAppGroupType($val)
+    {
+        $this->_propDict["appGroupType"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the isAssigned
     * Indicates if the policy is deployed to any inclusion groups or not.
     *
@@ -38,7 +71,7 @@ class TargetedManagedAppProtection extends ManagedAppProtection
             return null;
         }
     }
-    
+
     /**
     * Sets the isAssigned
     * Indicates if the policy is deployed to any inclusion groups or not.
@@ -52,10 +85,10 @@ class TargetedManagedAppProtection extends ManagedAppProtection
         $this->_propDict["isAssigned"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the targetedAppManagementLevels
-    * The intended app management levels for this policy. Possible values are: unspecified, unmanaged, mdm, androidEnterprise.
+    * The intended app management levels for this policy. Possible values are: unspecified, unmanaged, mdm, androidEnterprise, androidEnterpriseDedicatedDevicesWithAzureAdSharedMode, androidOpenSourceProjectUserAssociated, androidOpenSourceProjectUserless, unknownFutureValue.
     *
     * @return AppManagementLevel|null The targetedAppManagementLevels
     */
@@ -71,10 +104,10 @@ class TargetedManagedAppProtection extends ManagedAppProtection
         }
         return null;
     }
-    
+
     /**
     * Sets the targetedAppManagementLevels
-    * The intended app management levels for this policy. Possible values are: unspecified, unmanaged, mdm, androidEnterprise.
+    * The intended app management levels for this policy. Possible values are: unspecified, unmanaged, mdm, androidEnterprise, androidEnterpriseDedicatedDevicesWithAzureAdSharedMode, androidOpenSourceProjectUserAssociated, androidOpenSourceProjectUserless, unknownFutureValue.
     *
     * @param AppManagementLevel $val The targetedAppManagementLevels
     *
@@ -85,9 +118,9 @@ class TargetedManagedAppProtection extends ManagedAppProtection
         $this->_propDict["targetedAppManagementLevels"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
     * Navigation property to list of inclusion and exclusion groups to which the policy is deployed.
      *
@@ -101,12 +134,12 @@ class TargetedManagedAppProtection extends ManagedAppProtection
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * Navigation property to list of inclusion and exclusion groups to which the policy is deployed.
     *
-    * @param TargetedManagedAppPolicyAssignment $val The assignments
+    * @param TargetedManagedAppPolicyAssignment[] $val The assignments
     *
     * @return TargetedManagedAppProtection
     */
@@ -115,5 +148,5 @@ class TargetedManagedAppProtection extends ManagedAppProtection
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
+
 }

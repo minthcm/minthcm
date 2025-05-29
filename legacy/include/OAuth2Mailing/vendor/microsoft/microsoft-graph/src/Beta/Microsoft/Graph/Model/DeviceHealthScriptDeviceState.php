@@ -25,6 +25,35 @@ namespace Beta\Microsoft\Graph\Model;
 class DeviceHealthScriptDeviceState extends Entity
 {
     /**
+    * Gets the assignmentFilterIds
+    * A list of the assignment filter ids used for health script applicability evaluation
+    *
+    * @return array|null The assignmentFilterIds
+    */
+    public function getAssignmentFilterIds()
+    {
+        if (array_key_exists("assignmentFilterIds", $this->_propDict)) {
+            return $this->_propDict["assignmentFilterIds"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the assignmentFilterIds
+    * A list of the assignment filter ids used for health script applicability evaluation
+    *
+    * @param string[] $val The assignmentFilterIds
+    *
+    * @return DeviceHealthScriptDeviceState
+    */
+    public function setAssignmentFilterIds($val)
+    {
+        $this->_propDict["assignmentFilterIds"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the detectionState
     * Detection state from the lastest device health script execution. Possible values are: unknown, success, fail, scriptError, pending, notApplicable.
     *
@@ -42,7 +71,7 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the detectionState
     * Detection state from the lastest device health script execution. Possible values are: unknown, success, fail, scriptError, pending, notApplicable.
@@ -56,7 +85,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["detectionState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the expectedStateUpdateDateTime
     * The next timestamp of when the device health script is expected to execute
@@ -75,7 +104,7 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expectedStateUpdateDateTime
     * The next timestamp of when the device health script is expected to execute
@@ -89,7 +118,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["expectedStateUpdateDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastStateUpdateDateTime
     * The last timestamp of when the device health script executed
@@ -108,7 +137,7 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastStateUpdateDateTime
     * The last timestamp of when the device health script executed
@@ -122,7 +151,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["lastStateUpdateDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastSyncDateTime
     * The last time that Intune Managment Extension synced with Intune
@@ -141,7 +170,7 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastSyncDateTime
     * The last time that Intune Managment Extension synced with Intune
@@ -155,7 +184,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["lastSyncDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the postRemediationDetectionScriptError
     * Error from the detection script after remediation
@@ -170,7 +199,7 @@ class DeviceHealthScriptDeviceState extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the postRemediationDetectionScriptError
     * Error from the detection script after remediation
@@ -184,7 +213,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["postRemediationDetectionScriptError"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the postRemediationDetectionScriptOutput
     * Detection script output after remediation
@@ -199,7 +228,7 @@ class DeviceHealthScriptDeviceState extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the postRemediationDetectionScriptOutput
     * Detection script output after remediation
@@ -213,7 +242,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["postRemediationDetectionScriptOutput"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the preRemediationDetectionScriptError
     * Error from the detection script before remediation
@@ -228,7 +257,7 @@ class DeviceHealthScriptDeviceState extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the preRemediationDetectionScriptError
     * Error from the detection script before remediation
@@ -242,7 +271,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["preRemediationDetectionScriptError"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the preRemediationDetectionScriptOutput
     * Output of the detection script before remediation
@@ -257,7 +286,7 @@ class DeviceHealthScriptDeviceState extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the preRemediationDetectionScriptOutput
     * Output of the detection script before remediation
@@ -271,7 +300,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["preRemediationDetectionScriptOutput"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the remediationScriptError
     * Error output of the remediation script
@@ -286,7 +315,7 @@ class DeviceHealthScriptDeviceState extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the remediationScriptError
     * Error output of the remediation script
@@ -300,10 +329,10 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["remediationScriptError"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the remediationState
-    * Remediation state from the lastest device health script execution. Possible values are: unknown, skipped, success, remediationFailed, scriptError.
+    * Remediation state from the lastest device health script execution. Possible values are: unknown, skipped, success, remediationFailed, scriptError, unknownFutureValue.
     *
     * @return RemediationState|null The remediationState
     */
@@ -319,10 +348,10 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the remediationState
-    * Remediation state from the lastest device health script execution. Possible values are: unknown, skipped, success, remediationFailed, scriptError.
+    * Remediation state from the lastest device health script execution. Possible values are: unknown, skipped, success, remediationFailed, scriptError, unknownFutureValue.
     *
     * @param RemediationState $val The remediationState
     *
@@ -333,7 +362,7 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["remediationState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the managedDevice
     * The managed device on which the device health script executed
@@ -352,7 +381,7 @@ class DeviceHealthScriptDeviceState extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the managedDevice
     * The managed device on which the device health script executed
@@ -366,5 +395,5 @@ class DeviceHealthScriptDeviceState extends Entity
         $this->_propDict["managedDevice"] = $val;
         return $this;
     }
-    
+
 }

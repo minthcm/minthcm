@@ -34,7 +34,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
      *
      * @var mixed[]
      */
-    private $options;
+    private array $options;
 
     /**
      * @param string[] $columns
@@ -57,7 +57,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getColumns()
     {
@@ -65,7 +65,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getQuotedColumns(AbstractPlatform $platform)
     {
@@ -78,9 +78,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
         return $columns;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getUnquotedColumns(): array
     {
         return array_map([$this, 'trimQuotes'], $this->getColumns());
@@ -134,17 +132,13 @@ class UniqueConstraint extends AbstractAsset implements Constraint
         return isset($this->options[strtolower($name)]);
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function getOption(string $name)
     {
         return $this->options[strtolower($name)];
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getOptions(): array
     {
         return $this->options;

@@ -25,6 +25,68 @@ namespace Beta\Microsoft\Graph\WindowsUpdates\Model;
 class QualityUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
 {
     /**
+    * Gets the catalogName
+    * The catalog name of the content. Read-only.
+    *
+    * @return string|null The catalogName
+    */
+    public function getCatalogName()
+    {
+        if (array_key_exists("catalogName", $this->_propDict)) {
+            return $this->_propDict["catalogName"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the catalogName
+    * The catalog name of the content. Read-only.
+    *
+    * @param string $val The catalogName
+    *
+    * @return QualityUpdateCatalogEntry
+    */
+    public function setCatalogName($val)
+    {
+        $this->_propDict["catalogName"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the cveSeverityInformation
+    * Severity information of the Common Vulnerabilities and Exposures associated with the content.
+    *
+    * @return QualityUpdateCveSeverityInformation|null The cveSeverityInformation
+    */
+    public function getCveSeverityInformation()
+    {
+        if (array_key_exists("cveSeverityInformation", $this->_propDict)) {
+            if (is_a($this->_propDict["cveSeverityInformation"], "\Beta\Microsoft\Graph\WindowsUpdates\Model\QualityUpdateCveSeverityInformation") || is_null($this->_propDict["cveSeverityInformation"])) {
+                return $this->_propDict["cveSeverityInformation"];
+            } else {
+                $this->_propDict["cveSeverityInformation"] = new QualityUpdateCveSeverityInformation($this->_propDict["cveSeverityInformation"]);
+                return $this->_propDict["cveSeverityInformation"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the cveSeverityInformation
+    * Severity information of the Common Vulnerabilities and Exposures associated with the content.
+    *
+    * @param QualityUpdateCveSeverityInformation $val The cveSeverityInformation
+    *
+    * @return QualityUpdateCatalogEntry
+    */
+    public function setCveSeverityInformation($val)
+    {
+        $this->_propDict["cveSeverityInformation"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the isExpeditable
     * Indicates whether the content can be deployed as an expedited quality update. Read-only.
     *
@@ -38,7 +100,7 @@ class QualityUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
             return null;
         }
     }
-    
+
     /**
     * Sets the isExpeditable
     * Indicates whether the content can be deployed as an expedited quality update. Read-only.
@@ -52,10 +114,43 @@ class QualityUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
         $this->_propDict["isExpeditable"] = boolval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the qualityUpdateCadence
+    * The publishing cadence of the quality update. Possible values are: monthly, outOfBand, unknownFutureValue. Read-only.
+    *
+    * @return QualityUpdateCadence|null The qualityUpdateCadence
+    */
+    public function getQualityUpdateCadence()
+    {
+        if (array_key_exists("qualityUpdateCadence", $this->_propDict)) {
+            if (is_a($this->_propDict["qualityUpdateCadence"], "\Beta\Microsoft\Graph\WindowsUpdates\Model\QualityUpdateCadence") || is_null($this->_propDict["qualityUpdateCadence"])) {
+                return $this->_propDict["qualityUpdateCadence"];
+            } else {
+                $this->_propDict["qualityUpdateCadence"] = new QualityUpdateCadence($this->_propDict["qualityUpdateCadence"]);
+                return $this->_propDict["qualityUpdateCadence"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the qualityUpdateCadence
+    * The publishing cadence of the quality update. Possible values are: monthly, outOfBand, unknownFutureValue. Read-only.
+    *
+    * @param QualityUpdateCadence $val The qualityUpdateCadence
+    *
+    * @return QualityUpdateCatalogEntry
+    */
+    public function setQualityUpdateCadence($val)
+    {
+        $this->_propDict["qualityUpdateCadence"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the qualityUpdateClassification
-    * The classification on the quality update. Supports a subset of the values for qualityUpdateClassification. Possible values are: all, security, nonSecurity. Read-only.
+    * The classification on the quality update. Possible values are: all, security, nonSecurity, unknownFutureValue. Read-only.
     *
     * @return QualityUpdateClassification|null The qualityUpdateClassification
     */
@@ -71,10 +166,10 @@ class QualityUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
         }
         return null;
     }
-    
+
     /**
     * Sets the qualityUpdateClassification
-    * The classification on the quality update. Supports a subset of the values for qualityUpdateClassification. Possible values are: all, security, nonSecurity. Read-only.
+    * The classification on the quality update. Possible values are: all, security, nonSecurity, unknownFutureValue. Read-only.
     *
     * @param QualityUpdateClassification $val The qualityUpdateClassification
     *
@@ -85,5 +180,64 @@ class QualityUpdateCatalogEntry extends SoftwareUpdateCatalogEntry
         $this->_propDict["qualityUpdateClassification"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the shortName
+    * The short name of the content. Read-only.
+    *
+    * @return string|null The shortName
+    */
+    public function getShortName()
+    {
+        if (array_key_exists("shortName", $this->_propDict)) {
+            return $this->_propDict["shortName"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the shortName
+    * The short name of the content. Read-only.
+    *
+    * @param string $val The shortName
+    *
+    * @return QualityUpdateCatalogEntry
+    */
+    public function setShortName($val)
+    {
+        $this->_propDict["shortName"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the productRevisions
+    * The operating system product revisions that are released as part of this quality update.
+     *
+     * @return array|null The productRevisions
+     */
+    public function getProductRevisions()
+    {
+        if (array_key_exists("productRevisions", $this->_propDict)) {
+           return $this->_propDict["productRevisions"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the productRevisions
+    * The operating system product revisions that are released as part of this quality update.
+    *
+    * @param ProductRevision[] $val The productRevisions
+    *
+    * @return QualityUpdateCatalogEntry
+    */
+    public function setProductRevisions($val)
+    {
+        $this->_propDict["productRevisions"] = $val;
+        return $this;
+    }
+
 }

@@ -26,7 +26,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
 {
     /**
     * Gets the identityName
-    * The Identity Name.
+    * The Identity Name. This property is being deprecated in 2302(February 2023).
     *
     * @return string|null The identityName
     */
@@ -38,10 +38,10 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityName
-    * The Identity Name.
+    * The Identity Name. This property is being deprecated in 2302(February 2023).
     *
     * @param string $val The identityName
     *
@@ -52,10 +52,10 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["identityName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityVersion
-    * The identity version.
+    * The identity version. This property is being deprecated in 2302(February 2023).
     *
     * @return string|null The identityVersion
     */
@@ -67,10 +67,10 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityVersion
-    * The identity version.
+    * The identity version. This property is being deprecated in 2302(February 2023).
     *
     * @param string $val The identityVersion
     *
@@ -81,7 +81,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["identityVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the minimumSupportedOperatingSystem
     * The value for the minimum applicable operating system.
@@ -100,7 +100,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         }
         return null;
     }
-    
+
     /**
     * Sets the minimumSupportedOperatingSystem
     * The value for the minimum applicable operating system.
@@ -114,7 +114,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["minimumSupportedOperatingSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the packageId
     * The package identifier.
@@ -129,7 +129,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the packageId
     * The package identifier.
@@ -143,7 +143,40 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["packageId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the targetedPlatforms
+    * The platforms to which the application can be targeted. If not specified, will defauilt to Android Device Administrator. Possible values are: androidDeviceAdministrator, androidOpenSourceProject, unknownFutureValue.
+    *
+    * @return AndroidTargetedPlatforms|null The targetedPlatforms
+    */
+    public function getTargetedPlatforms()
+    {
+        if (array_key_exists("targetedPlatforms", $this->_propDict)) {
+            if (is_a($this->_propDict["targetedPlatforms"], "\Beta\Microsoft\Graph\Model\AndroidTargetedPlatforms") || is_null($this->_propDict["targetedPlatforms"])) {
+                return $this->_propDict["targetedPlatforms"];
+            } else {
+                $this->_propDict["targetedPlatforms"] = new AndroidTargetedPlatforms($this->_propDict["targetedPlatforms"]);
+                return $this->_propDict["targetedPlatforms"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the targetedPlatforms
+    * The platforms to which the application can be targeted. If not specified, will defauilt to Android Device Administrator. Possible values are: androidDeviceAdministrator, androidOpenSourceProject, unknownFutureValue.
+    *
+    * @param AndroidTargetedPlatforms $val The targetedPlatforms
+    *
+    * @return ManagedAndroidLobApp
+    */
+    public function setTargetedPlatforms($val)
+    {
+        $this->_propDict["targetedPlatforms"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the versionCode
     * The version code of managed Android Line of Business (LoB) app.
@@ -158,7 +191,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the versionCode
     * The version code of managed Android Line of Business (LoB) app.
@@ -172,7 +205,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["versionCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the versionName
     * The version name of managed Android Line of Business (LoB) app.
@@ -187,7 +220,7 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the versionName
     * The version name of managed Android Line of Business (LoB) app.
@@ -201,5 +234,5 @@ class ManagedAndroidLobApp extends ManagedMobileLobApp
         $this->_propDict["versionName"] = $val;
         return $this;
     }
-    
+
 }

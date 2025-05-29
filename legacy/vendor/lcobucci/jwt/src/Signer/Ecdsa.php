@@ -10,24 +10,16 @@ use const OPENSSL_KEYTYPE_EC;
 
 abstract class Ecdsa extends OpenSSL
 {
-    private SignatureConverter $converter;
-
-    public function __construct(?SignatureConverter $converter = null)
-    {
-        $this->converter = $converter ?? new MultibyteStringConverter();
-    }
-
-    /** @deprecated */
-    public static function create(): Ecdsa
-    {
-        return new static(); // @phpstan-ignore-line
+    public function __construct(
+        private readonly SignatureConverter $converter = new MultibyteStringConverter(),
+    ) {
     }
 
     final public function sign(string $payload, Key $key): string
     {
         return $this->converter->fromAsn1(
             $this->createSignature($key->contents(), $key->passphrase(), $payload),
-            $this->pointLength()
+            $this->pointLength(),
         );
     }
 
@@ -36,11 +28,11 @@ abstract class Ecdsa extends OpenSSL
         return $this->verifySignature(
             $this->converter->toAsn1($expected, $this->pointLength()),
             $payload,
-            $key->contents()
+            $key->contents(),
         );
     }
 
-    /** {@inheritdoc} */
+    /** {@inheritDoc} */
     final protected function guardAgainstIncompatibleKey(int $type, int $lengthInBits): void
     {
         if ($type !== OPENSSL_KEYTYPE_EC) {
@@ -57,13 +49,19 @@ abstract class Ecdsa extends OpenSSL
         }
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @return positive-int
+     */
     abstract public function expectedKeyLength(): int;
 
     /**
      * Returns the length of each point in the signature, so that we can calculate and verify R and S points properly
      *
      * @internal
+     *
+     * @return positive-int
      */
     abstract public function pointLength(): int;
 }

@@ -5,8 +5,8 @@
     "authors": [
         {
             "name": "Woody Gilk",
-            "email": "woody.gilk@gmail.com",
-            "homepage": "http://shadowhand.me"
+            "email": "hello@shadowhand.com",
+            "homepage": "https://shadowhand.com"
         }
     ],
     "keywords": [
@@ -19,7 +19,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=7.3",
+        "php": "^7.3 || ^8.0",
         "league/oauth2-client": "^2.0"
     },
     "require-dev": {

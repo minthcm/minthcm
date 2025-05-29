@@ -217,6 +217,12 @@ if (!$focus->is_group && !$focus->portal_only) {
         $focus->setPreference('subpanel_tabs', '', 0, 'global');
     }
 
+    if (isset($_POST['user_count_collapsed_subpanels'])) {
+        $focus->setPreference('count_collapsed_subpanels', $_POST['user_count_collapsed_subpanels'], 0, 'global');
+    } else {
+        $focus->setPreference('count_collapsed_subpanels', '', 0, 'global');
+    }
+
     if (isset($_POST['user_theme'])) {
         $focus->setPreference('user_theme', $_POST['user_theme'], 0, 'global');
         $_SESSION['authenticated_user_theme'] = $_POST['user_theme'];
@@ -231,19 +237,16 @@ if (!$focus->is_group && !$focus->portal_only) {
     $tabs = new TabController();
     if (isset($_POST['display_tabs'])) {
         $tabs->set_user_tabs($DISPLAY_ARR['display_tabs'], $focus, 'display');
-        $focus->setPreference('reload_module_menu', time(), 0, 'global');
     }
 
     if (isset($HIDE_ARR['hide_tabs'])) {
         $tabs->set_user_tabs($HIDE_ARR['hide_tabs'], $focus, 'hide');
-        $focus->setPreference('reload_module_menu', time(), 0, 'global');
     } else {
         $tabs->set_user_tabs(array(), $focus, 'hide');
     }
     if (is_admin($current_user)) {
         if (isset($REMOVE_ARR['remove_tabs'])) {
             $tabs->set_user_tabs($REMOVE_ARR['remove_tabs'], $focus, 'remove');
-            $focus->setPreference('reload_module_menu', time(), 0, 'global');
         } else {
             $tabs->set_user_tabs(array(), $focus, 'remove');
         }
@@ -254,18 +257,6 @@ if (!$focus->is_group && !$focus->portal_only) {
     } else {
         $focus->setPreference('no_opps', 'off', 0, 'global');
     }
-
-//        if(isset($_POST['reminder_checked']) && $_POST['reminder_checked'] == '1' && isset($_POST['reminder_checked'])){
-    //            $focus->setPreference('reminder_time', $_POST['reminder_time'], 0, 'global');
-    //        }else{
-    //            // cn: bug 5522, need to unset reminder time if unchecked.
-    //            $focus->setPreference('reminder_time', -1, 0, 'global');
-    //        }
-    //        if(isset($_POST['email_reminder_checked']) && $_POST['email_reminder_checked'] == '1' && isset($_POST['email_reminder_checked'])){
-    //            $focus->setPreference('email_reminder_time', $_POST['email_reminder_time'], 0, 'global');
-    //        }else{
-    //            $focus->setPreference('email_reminder_time', -1, 0, 'global');
-    //        }
 
     if (isset($_POST['reminder_time'])) {
         $focus->setPreference('reminder_time', $_POST['reminder_time'], 0, 'global');
@@ -430,6 +421,11 @@ if (!$focus->is_group && !$focus->portal_only) {
 
     if (isset($_POST['subtheme'])) {
         $focus->setPreference('subtheme', $_POST['subtheme'], 0, 'global');
+    }
+    if (isset($_POST['gsync_cal'])) {
+        $this->setPreference('syncGCal', 1, 0, 'GoogleSync');
+    } else {
+        $this->setPreference('syncGCal', 0, 0, 'GoogleSync');
     }
 }
 

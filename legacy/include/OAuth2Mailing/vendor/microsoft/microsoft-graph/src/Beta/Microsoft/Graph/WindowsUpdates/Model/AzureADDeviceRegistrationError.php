@@ -26,16 +26,18 @@ class AzureADDeviceRegistrationError extends UpdatableAssetError
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.windowsUpdates.azureADDeviceRegistrationError");
     }
 
 
     /**
     * Gets the reason
-    * The reason why the registration encountered an error. Possible values are: invalidGlobalDeviceId, invalidAzureADDeviceId, missingTrustType, invalidAzureADJoin.
+    * The reason why the registration encountered an error. Possible values are: invalidGlobalDeviceId, invalidAzureADDeviceId, missingTrustType, invalidAzureADJoin, unknownFutureValue.
     *
     * @return AzureADDeviceRegistrationErrorReason|null The reason
     */
@@ -54,7 +56,7 @@ class AzureADDeviceRegistrationError extends UpdatableAssetError
 
     /**
     * Sets the reason
-    * The reason why the registration encountered an error. Possible values are: invalidGlobalDeviceId, invalidAzureADDeviceId, missingTrustType, invalidAzureADJoin.
+    * The reason why the registration encountered an error. Possible values are: invalidGlobalDeviceId, invalidAzureADDeviceId, missingTrustType, invalidAzureADJoin, unknownFutureValue.
     *
     * @param AzureADDeviceRegistrationErrorReason $val The value to assign to the reason
     *

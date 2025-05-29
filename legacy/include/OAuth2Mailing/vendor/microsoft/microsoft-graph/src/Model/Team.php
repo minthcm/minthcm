@@ -38,7 +38,7 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the classification
     * An optional label. Typically describes the data or business sensitivity of the team. Must match one of a pre-configured set in the tenant's directory.
@@ -52,7 +52,7 @@ class Team extends Entity
         $this->_propDict["classification"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * Timestamp at which the team was created.
@@ -71,7 +71,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Timestamp at which the team was created.
@@ -85,10 +85,10 @@ class Team extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
-    * An optional description for the team.
+    * An optional description for the team. Maximum length: 1024 characters.
     *
     * @return string|null The description
     */
@@ -100,10 +100,10 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * An optional description for the team.
+    * An optional description for the team. Maximum length: 1024 characters.
     *
     * @param string $val The description
     *
@@ -114,7 +114,7 @@ class Team extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The name of the team.
@@ -129,7 +129,7 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The name of the team.
@@ -143,7 +143,7 @@ class Team extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the funSettings
     * Settings to configure use of Giphy, memes, and stickers in the team.
@@ -162,7 +162,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the funSettings
     * Settings to configure use of Giphy, memes, and stickers in the team.
@@ -176,7 +176,7 @@ class Team extends Entity
         $this->_propDict["funSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the guestSettings
     * Settings to configure whether guests can create, update, or delete channels in the team.
@@ -195,7 +195,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the guestSettings
     * Settings to configure whether guests can create, update, or delete channels in the team.
@@ -209,7 +209,7 @@ class Team extends Entity
         $this->_propDict["guestSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the internalId
     * A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
@@ -224,7 +224,7 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the internalId
     * A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
@@ -238,7 +238,7 @@ class Team extends Entity
         $this->_propDict["internalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isArchived
     * Whether this team is in read-only mode.
@@ -253,7 +253,7 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isArchived
     * Whether this team is in read-only mode.
@@ -267,7 +267,7 @@ class Team extends Entity
         $this->_propDict["isArchived"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the memberSettings
     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the team.
@@ -286,7 +286,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the memberSettings
     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the team.
@@ -300,7 +300,7 @@ class Team extends Entity
         $this->_propDict["memberSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the messagingSettings
     * Settings to configure messaging and mentions in the team.
@@ -319,7 +319,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the messagingSettings
     * Settings to configure messaging and mentions in the team.
@@ -333,7 +333,7 @@ class Team extends Entity
         $this->_propDict["messagingSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the specialization
     * Optional. Indicates whether the team is intended for a particular use case.  Each team specialization has access to unique behaviors and experiences targeted to its use case.
@@ -352,7 +352,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the specialization
     * Optional. Indicates whether the team is intended for a particular use case.  Each team specialization has access to unique behaviors and experiences targeted to its use case.
@@ -366,7 +366,69 @@ class Team extends Entity
         $this->_propDict["specialization"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the summary
+    * Contains summary information about the team, including number of owners, members, and guests.
+    *
+    * @return TeamSummary|null The summary
+    */
+    public function getSummary()
+    {
+        if (array_key_exists("summary", $this->_propDict)) {
+            if (is_a($this->_propDict["summary"], "\Microsoft\Graph\Model\TeamSummary") || is_null($this->_propDict["summary"])) {
+                return $this->_propDict["summary"];
+            } else {
+                $this->_propDict["summary"] = new TeamSummary($this->_propDict["summary"]);
+                return $this->_propDict["summary"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the summary
+    * Contains summary information about the team, including number of owners, members, and guests.
+    *
+    * @param TeamSummary $val The summary
+    *
+    * @return Team
+    */
+    public function setSummary($val)
+    {
+        $this->_propDict["summary"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the tenantId
+    * The ID of the Microsoft Entra tenant.
+    *
+    * @return string|null The tenantId
+    */
+    public function getTenantId()
+    {
+        if (array_key_exists("tenantId", $this->_propDict)) {
+            return $this->_propDict["tenantId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the tenantId
+    * The ID of the Microsoft Entra tenant.
+    *
+    * @param string $val The tenantId
+    *
+    * @return Team
+    */
+    public function setTenantId($val)
+    {
+        $this->_propDict["tenantId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the visibility
     * The visibility of the group and team. Defaults to Public.
@@ -385,7 +447,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the visibility
     * The visibility of the group and team. Defaults to Public.
@@ -399,7 +461,7 @@ class Team extends Entity
         $this->_propDict["visibility"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the webUrl
     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed.
@@ -414,7 +476,7 @@ class Team extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the webUrl
     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed.
@@ -428,44 +490,41 @@ class Team extends Entity
         $this->_propDict["webUrl"] = $val;
         return $this;
     }
-    
-    /**
-    * Gets the schedule
-    * The schedule of shifts for this team.
-    *
-    * @return Schedule|null The schedule
-    */
-    public function getSchedule()
+
+
+     /**
+     * Gets the allChannels
+    * List of channels either hosted in or shared with the team (incoming channels).
+     *
+     * @return array|null The allChannels
+     */
+    public function getAllChannels()
     {
-        if (array_key_exists("schedule", $this->_propDict)) {
-            if (is_a($this->_propDict["schedule"], "\Microsoft\Graph\Model\Schedule") || is_null($this->_propDict["schedule"])) {
-                return $this->_propDict["schedule"];
-            } else {
-                $this->_propDict["schedule"] = new Schedule($this->_propDict["schedule"]);
-                return $this->_propDict["schedule"];
-            }
+        if (array_key_exists("allChannels", $this->_propDict)) {
+           return $this->_propDict["allChannels"];
+        } else {
+            return null;
         }
-        return null;
     }
-    
+
     /**
-    * Sets the schedule
-    * The schedule of shifts for this team.
+    * Sets the allChannels
+    * List of channels either hosted in or shared with the team (incoming channels).
     *
-    * @param Schedule $val The schedule
+    * @param Channel[] $val The allChannels
     *
     * @return Team
     */
-    public function setSchedule($val)
+    public function setAllChannels($val)
     {
-        $this->_propDict["schedule"] = $val;
+        $this->_propDict["allChannels"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the channels
-    * The collection of channels &amp; messages associated with the team.
+    * The collection of channels and messages associated with the team.
      *
      * @return array|null The channels
      */
@@ -477,12 +536,12 @@ class Team extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the channels
-    * The collection of channels &amp; messages associated with the team.
+    * The collection of channels and messages associated with the team.
     *
-    * @param Channel $val The channels
+    * @param Channel[] $val The channels
     *
     * @return Team
     */
@@ -491,7 +550,7 @@ class Team extends Entity
         $this->_propDict["channels"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the group
     *
@@ -509,7 +568,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the group
     *
@@ -522,9 +581,39 @@ class Team extends Entity
         $this->_propDict["group"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the incomingChannels
+    * List of channels shared with the team.
+     *
+     * @return array|null The incomingChannels
+     */
+    public function getIncomingChannels()
+    {
+        if (array_key_exists("incomingChannels", $this->_propDict)) {
+           return $this->_propDict["incomingChannels"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the incomingChannels
+    * List of channels shared with the team.
+    *
+    * @param Channel[] $val The incomingChannels
+    *
+    * @return Team
+    */
+    public function setIncomingChannels($val)
+    {
+        $this->_propDict["incomingChannels"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the installedApps
     * The apps installed in this team.
      *
@@ -538,12 +627,12 @@ class Team extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the installedApps
     * The apps installed in this team.
     *
-    * @param TeamsAppInstallation $val The installedApps
+    * @param TeamsAppInstallation[] $val The installedApps
     *
     * @return Team
     */
@@ -552,9 +641,9 @@ class Team extends Entity
         $this->_propDict["installedApps"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the members
     * Members and owners of the team.
      *
@@ -568,12 +657,12 @@ class Team extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the members
     * Members and owners of the team.
     *
-    * @param ConversationMember $val The members
+    * @param ConversationMember[] $val The members
     *
     * @return Team
     */
@@ -582,9 +671,9 @@ class Team extends Entity
         $this->_propDict["members"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the operations
     * The async operations that ran or are running on this team.
      *
@@ -598,12 +687,12 @@ class Team extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the operations
     * The async operations that ran or are running on this team.
     *
-    * @param TeamsAsyncOperation $val The operations
+    * @param TeamsAsyncOperation[] $val The operations
     *
     * @return Team
     */
@@ -612,7 +701,70 @@ class Team extends Entity
         $this->_propDict["operations"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the permissionGrants
+    * A collection of permissions granted to apps to access the team.
+     *
+     * @return array|null The permissionGrants
+     */
+    public function getPermissionGrants()
+    {
+        if (array_key_exists("permissionGrants", $this->_propDict)) {
+           return $this->_propDict["permissionGrants"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the permissionGrants
+    * A collection of permissions granted to apps to access the team.
+    *
+    * @param ResourceSpecificPermissionGrant[] $val The permissionGrants
+    *
+    * @return Team
+    */
+    public function setPermissionGrants($val)
+    {
+        $this->_propDict["permissionGrants"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the photo
+    * The profile photo for the team.
+    *
+    * @return ProfilePhoto|null The photo
+    */
+    public function getPhoto()
+    {
+        if (array_key_exists("photo", $this->_propDict)) {
+            if (is_a($this->_propDict["photo"], "\Microsoft\Graph\Model\ProfilePhoto") || is_null($this->_propDict["photo"])) {
+                return $this->_propDict["photo"];
+            } else {
+                $this->_propDict["photo"] = new ProfilePhoto($this->_propDict["photo"]);
+                return $this->_propDict["photo"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the photo
+    * The profile photo for the team.
+    *
+    * @param ProfilePhoto $val The photo
+    *
+    * @return Team
+    */
+    public function setPhoto($val)
+    {
+        $this->_propDict["photo"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the primaryChannel
     * The general channel for the team.
@@ -631,7 +783,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the primaryChannel
     * The general channel for the team.
@@ -645,7 +797,37 @@ class Team extends Entity
         $this->_propDict["primaryChannel"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the tags
+    * The tags associated with the team.
+     *
+     * @return array|null The tags
+     */
+    public function getTags()
+    {
+        if (array_key_exists("tags", $this->_propDict)) {
+           return $this->_propDict["tags"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the tags
+    * The tags associated with the team.
+    *
+    * @param TeamworkTag[] $val The tags
+    *
+    * @return Team
+    */
+    public function setTags($val)
+    {
+        $this->_propDict["tags"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the template
     * The template this team was created from. See available templates.
@@ -664,7 +846,7 @@ class Team extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the template
     * The template this team was created from. See available templates.
@@ -678,5 +860,38 @@ class Team extends Entity
         $this->_propDict["template"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the schedule
+    * The schedule of shifts for this team.
+    *
+    * @return Schedule|null The schedule
+    */
+    public function getSchedule()
+    {
+        if (array_key_exists("schedule", $this->_propDict)) {
+            if (is_a($this->_propDict["schedule"], "\Microsoft\Graph\Model\Schedule") || is_null($this->_propDict["schedule"])) {
+                return $this->_propDict["schedule"];
+            } else {
+                $this->_propDict["schedule"] = new Schedule($this->_propDict["schedule"]);
+                return $this->_propDict["schedule"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the schedule
+    * The schedule of shifts for this team.
+    *
+    * @param Schedule $val The schedule
+    *
+    * @return Team
+    */
+    public function setSchedule($val)
+    {
+        $this->_propDict["schedule"] = $val;
+        return $this;
+    }
+
 }

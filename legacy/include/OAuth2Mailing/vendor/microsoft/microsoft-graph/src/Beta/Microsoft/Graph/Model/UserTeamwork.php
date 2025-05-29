@@ -25,7 +25,37 @@ namespace Beta\Microsoft\Graph\Model;
 class UserTeamwork extends Entity
 {
 
-     /** 
+     /**
+     * Gets the associatedTeams
+    * The list of associatedTeamInfo objects that a user is associated with.
+     *
+     * @return array|null The associatedTeams
+     */
+    public function getAssociatedTeams()
+    {
+        if (array_key_exists("associatedTeams", $this->_propDict)) {
+           return $this->_propDict["associatedTeams"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the associatedTeams
+    * The list of associatedTeamInfo objects that a user is associated with.
+    *
+    * @param AssociatedTeamInfo[] $val The associatedTeams
+    *
+    * @return UserTeamwork
+    */
+    public function setAssociatedTeams($val)
+    {
+        $this->_propDict["associatedTeams"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the installedApps
     * The apps installed in the personal scope of this user.
      *
@@ -39,12 +69,12 @@ class UserTeamwork extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the installedApps
     * The apps installed in the personal scope of this user.
     *
-    * @param UserScopeTeamsAppInstallation $val The installedApps
+    * @param UserScopeTeamsAppInstallation[] $val The installedApps
     *
     * @return UserTeamwork
     */
@@ -53,5 +83,5 @@ class UserTeamwork extends Entity
         $this->_propDict["installedApps"] = $val;
         return $this;
     }
-    
+
 }

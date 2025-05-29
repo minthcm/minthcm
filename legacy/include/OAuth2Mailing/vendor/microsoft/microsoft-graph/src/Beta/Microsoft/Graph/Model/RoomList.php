@@ -38,7 +38,7 @@ class RoomList extends Place
             return null;
         }
     }
-    
+
     /**
     * Sets the emailAddress
     * The email address of the room list.
@@ -52,11 +52,10 @@ class RoomList extends Place
         $this->_propDict["emailAddress"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the rooms
-    * Read-only. Nullable.
      *
      * @return array|null The rooms
      */
@@ -68,12 +67,11 @@ class RoomList extends Place
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the rooms
-    * Read-only. Nullable.
     *
-    * @param Room $val The rooms
+    * @param Room[] $val The rooms
     *
     * @return RoomList
     */
@@ -82,5 +80,33 @@ class RoomList extends Place
         $this->_propDict["rooms"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the workspaces
+     *
+     * @return array|null The workspaces
+     */
+    public function getWorkspaces()
+    {
+        if (array_key_exists("workspaces", $this->_propDict)) {
+           return $this->_propDict["workspaces"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the workspaces
+    *
+    * @param Workspace[] $val The workspaces
+    *
+    * @return RoomList
+    */
+    public function setWorkspaces($val)
+    {
+        $this->_propDict["workspaces"] = $val;
+        return $this;
+    }
+
 }

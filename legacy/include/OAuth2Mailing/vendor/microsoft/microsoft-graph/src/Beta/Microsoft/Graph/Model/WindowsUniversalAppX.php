@@ -26,7 +26,7 @@ class WindowsUniversalAppX extends MobileLobApp
 {
     /**
     * Gets the applicableArchitectures
-    * The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral, arm64.
+    * The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral; default value is none. Possible values are: none, x86, x64, arm, neutral, arm64.
     *
     * @return WindowsArchitecture|null The applicableArchitectures
     */
@@ -42,10 +42,10 @@ class WindowsUniversalAppX extends MobileLobApp
         }
         return null;
     }
-    
+
     /**
     * Sets the applicableArchitectures
-    * The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral, arm64.
+    * The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral; default value is none. Possible values are: none, x86, x64, arm, neutral, arm64.
     *
     * @param WindowsArchitecture $val The applicableArchitectures
     *
@@ -56,10 +56,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["applicableArchitectures"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the applicableDeviceTypes
-    * The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic, team.
+    * The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic, team; default value is none. Possible values are: none, desktop, mobile, holographic, team, unknownFutureValue.
     *
     * @return WindowsDeviceType|null The applicableDeviceTypes
     */
@@ -75,10 +75,10 @@ class WindowsUniversalAppX extends MobileLobApp
         }
         return null;
     }
-    
+
     /**
     * Sets the applicableDeviceTypes
-    * The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic, team.
+    * The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic, team; default value is none. Possible values are: none, desktop, mobile, holographic, team, unknownFutureValue.
     *
     * @param WindowsDeviceType $val The applicableDeviceTypes
     *
@@ -89,10 +89,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["applicableDeviceTypes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityName
-    * The Identity Name.
+    * The Identity Name of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'Contoso.DemoApp'.
     *
     * @return string|null The identityName
     */
@@ -104,10 +104,10 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityName
-    * The Identity Name.
+    * The Identity Name of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'Contoso.DemoApp'.
     *
     * @param string $val The identityName
     *
@@ -118,10 +118,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["identityName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityPublisherHash
-    * The Identity Publisher Hash.
+    * The Identity Publisher Hash of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'AB82CD0XYZ'.
     *
     * @return string|null The identityPublisherHash
     */
@@ -133,10 +133,10 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityPublisherHash
-    * The Identity Publisher Hash.
+    * The Identity Publisher Hash of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'AB82CD0XYZ'.
     *
     * @param string $val The identityPublisherHash
     *
@@ -147,10 +147,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["identityPublisherHash"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityResourceIdentifier
-    * The Identity Resource Identifier.
+    * The Identity Resource Identifier of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'TestResourceId'.
     *
     * @return string|null The identityResourceIdentifier
     */
@@ -162,10 +162,10 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityResourceIdentifier
-    * The Identity Resource Identifier.
+    * The Identity Resource Identifier of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For example: 'TestResourceId'.
     *
     * @param string $val The identityResourceIdentifier
     *
@@ -176,10 +176,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["identityResourceIdentifier"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityVersion
-    * The identity version.
+    * The Identity Version of the app, parsed from the appx file when it is uploaded through the Intune MEM console.  For example: '1.0.0.0'.
     *
     * @return string|null The identityVersion
     */
@@ -191,10 +191,10 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the identityVersion
-    * The identity version.
+    * The Identity Version of the app, parsed from the appx file when it is uploaded through the Intune MEM console.  For example: '1.0.0.0'.
     *
     * @param string $val The identityVersion
     *
@@ -205,10 +205,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["identityVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isBundle
-    * Whether or not the app is a bundle.
+    * Whether or not the app is a bundle. If TRUE, app is a bundle; if FALSE, app is not a bundle.
     *
     * @return bool|null The isBundle
     */
@@ -220,10 +220,10 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
+
     /**
     * Sets the isBundle
-    * Whether or not the app is a bundle.
+    * Whether or not the app is a bundle. If TRUE, app is a bundle; if FALSE, app is not a bundle.
     *
     * @param bool $val The isBundle
     *
@@ -234,10 +234,10 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["isBundle"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the minimumSupportedOperatingSystem
-    * The value for the minimum applicable operating system.
+    * The value for the minimum applicable Windows operating system.
     *
     * @return WindowsMinimumOperatingSystem|null The minimumSupportedOperatingSystem
     */
@@ -253,10 +253,10 @@ class WindowsUniversalAppX extends MobileLobApp
         }
         return null;
     }
-    
+
     /**
     * Sets the minimumSupportedOperatingSystem
-    * The value for the minimum applicable operating system.
+    * The value for the minimum applicable Windows operating system.
     *
     * @param WindowsMinimumOperatingSystem $val The minimumSupportedOperatingSystem
     *
@@ -267,9 +267,9 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["minimumSupportedOperatingSystem"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the committedContainedApps
     * The collection of contained apps in the committed mobileAppContent of a windowsUniversalAppX app.
      *
@@ -283,12 +283,12 @@ class WindowsUniversalAppX extends MobileLobApp
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the committedContainedApps
     * The collection of contained apps in the committed mobileAppContent of a windowsUniversalAppX app.
     *
-    * @param MobileContainedApp $val The committedContainedApps
+    * @param MobileContainedApp[] $val The committedContainedApps
     *
     * @return WindowsUniversalAppX
     */
@@ -297,5 +297,5 @@ class WindowsUniversalAppX extends MobileLobApp
         $this->_propDict["committedContainedApps"] = $val;
         return $this;
     }
-    
+
 }

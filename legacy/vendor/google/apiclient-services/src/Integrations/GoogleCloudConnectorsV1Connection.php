@@ -20,8 +20,16 @@ namespace Google\Service\Integrations;
 class GoogleCloudConnectorsV1Connection extends \Google\Collection
 {
   protected $collection_key = 'destinationConfigs';
+  /**
+   * @var bool
+   */
+  public $asyncOperationsEnabled;
   protected $authConfigType = GoogleCloudConnectorsV1AuthConfig::class;
   protected $authConfigDataType = '';
+  /**
+   * @var bool
+   */
+  public $authOverrideEnabled;
   protected $billingConfigType = GoogleCloudConnectorsV1BillingConfig::class;
   protected $billingConfigDataType = '';
   protected $configVariablesType = GoogleCloudConnectorsV1ConfigVariable::class;
@@ -62,6 +70,10 @@ class GoogleCloudConnectorsV1Connection extends \Google\Collection
   public $eventingEnablementType;
   protected $eventingRuntimeDataType = GoogleCloudConnectorsV1EventingRuntimeData::class;
   protected $eventingRuntimeDataDataType = '';
+  /**
+   * @var string
+   */
+  public $host;
   /**
    * @var string
    */
@@ -107,8 +119,26 @@ class GoogleCloudConnectorsV1Connection extends \Google\Collection
   /**
    * @var string
    */
+  public $tlsServiceDirectory;
+  /**
+   * @var string
+   */
   public $updateTime;
 
+  /**
+   * @param bool
+   */
+  public function setAsyncOperationsEnabled($asyncOperationsEnabled)
+  {
+    $this->asyncOperationsEnabled = $asyncOperationsEnabled;
+  }
+  /**
+   * @return bool
+   */
+  public function getAsyncOperationsEnabled()
+  {
+    return $this->asyncOperationsEnabled;
+  }
   /**
    * @param GoogleCloudConnectorsV1AuthConfig
    */
@@ -122,6 +152,20 @@ class GoogleCloudConnectorsV1Connection extends \Google\Collection
   public function getAuthConfig()
   {
     return $this->authConfig;
+  }
+  /**
+   * @param bool
+   */
+  public function setAuthOverrideEnabled($authOverrideEnabled)
+  {
+    $this->authOverrideEnabled = $authOverrideEnabled;
+  }
+  /**
+   * @return bool
+   */
+  public function getAuthOverrideEnabled()
+  {
+    return $this->authOverrideEnabled;
   }
   /**
    * @param GoogleCloudConnectorsV1BillingConfig
@@ -308,6 +352,20 @@ class GoogleCloudConnectorsV1Connection extends \Google\Collection
   /**
    * @param string
    */
+  public function setHost($host)
+  {
+    $this->host = $host;
+  }
+  /**
+   * @return string
+   */
+  public function getHost()
+  {
+    return $this->host;
+  }
+  /**
+   * @param string
+   */
   public function setImageLocation($imageLocation)
   {
     $this->imageLocation = $imageLocation;
@@ -486,6 +544,20 @@ class GoogleCloudConnectorsV1Connection extends \Google\Collection
   public function getSuspended()
   {
     return $this->suspended;
+  }
+  /**
+   * @param string
+   */
+  public function setTlsServiceDirectory($tlsServiceDirectory)
+  {
+    $this->tlsServiceDirectory = $tlsServiceDirectory;
+  }
+  /**
+   * @return string
+   */
+  public function getTlsServiceDirectory()
+  {
+    return $this->tlsServiceDirectory;
   }
   /**
    * @param string

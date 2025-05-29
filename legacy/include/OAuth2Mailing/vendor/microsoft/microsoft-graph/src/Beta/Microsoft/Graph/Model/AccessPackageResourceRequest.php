@@ -38,7 +38,7 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the catalogId
     * The unique ID of the access package catalog.
@@ -52,7 +52,7 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["catalogId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the executeImmediately
     *
@@ -66,7 +66,7 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the executeImmediately
     *
@@ -79,7 +79,7 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["executeImmediately"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the expirationDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -98,7 +98,7 @@ class AccessPackageResourceRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -112,7 +112,7 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isValidationOnly
     * If set, does not add the resource.
@@ -127,7 +127,7 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isValidationOnly
     * If set, does not add the resource.
@@ -141,7 +141,7 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["isValidationOnly"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the justification
     * The requestor's justification for adding or removing the resource.
@@ -156,7 +156,7 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the justification
     * The requestor's justification for adding or removing the resource.
@@ -170,7 +170,7 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["justification"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestState
     * The outcome of whether the service was able to add the resource to the catalog.  The value is Delivered if the resource was added or removed. Read-Only.
@@ -185,7 +185,7 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestState
     * The outcome of whether the service was able to add the resource to the catalog.  The value is Delivered if the resource was added or removed. Read-Only.
@@ -199,10 +199,9 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["requestState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestStatus
-    * Read-only.
     *
     * @return string|null The requestStatus
     */
@@ -214,10 +213,9 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestStatus
-    * Read-only.
     *
     * @param string $val The requestStatus
     *
@@ -228,10 +226,10 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["requestStatus"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestType
-    * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, or AdminRemove to remove a resource.
+    * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, AdminUpdate to update a resource, or AdminRemove to remove a resource.
     *
     * @return string|null The requestType
     */
@@ -243,10 +241,10 @@ class AccessPackageResourceRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestType
-    * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, or AdminRemove to remove a resource.
+    * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, AdminUpdate to update a resource, or AdminRemove to remove a resource.
     *
     * @param string $val The requestType
     *
@@ -257,10 +255,9 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["requestType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResource
-    * Nullable.
     *
     * @return AccessPackageResource|null The accessPackageResource
     */
@@ -276,10 +273,9 @@ class AccessPackageResourceRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResource
-    * Nullable.
     *
     * @param AccessPackageResource $val The accessPackageResource
     *
@@ -290,10 +286,10 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["accessPackageResource"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestor
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
     *
     * @return AccessPackageSubject|null The requestor
     */
@@ -309,10 +305,10 @@ class AccessPackageResourceRequest extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the requestor
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
     *
     * @param AccessPackageSubject $val The requestor
     *
@@ -323,5 +319,5 @@ class AccessPackageResourceRequest extends Entity
         $this->_propDict["requestor"] = $val;
         return $this;
     }
-    
+
 }

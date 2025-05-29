@@ -18,9 +18,11 @@
 namespace Google\Service\WorkflowExecutions\Resource;
 
 use Google\Service\WorkflowExecutions\CancelExecutionRequest;
+use Google\Service\WorkflowExecutions\DeleteExecutionHistoryRequest;
 use Google\Service\WorkflowExecutions\Execution;
 use Google\Service\WorkflowExecutions\ExportDataResponse;
 use Google\Service\WorkflowExecutions\ListExecutionsResponse;
+use Google\Service\WorkflowExecutions\WorkflowexecutionsEmpty;
 
 /**
  * The "executions" collection of methods.
@@ -67,6 +69,24 @@ class ProjectsLocationsWorkflowsExecutions extends \Google\Service\Resource
     $params = ['parent' => $parent, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
     return $this->call('create', [$params], Execution::class);
+  }
+  /**
+   * Deletes all step entries for an execution.
+   * (executions.deleteExecutionHistory)
+   *
+   * @param string $name Required. Name of the execution for which step entries
+   * should be deleted. Format: projects/{project}/locations/{location}/workflows/
+   * {workflow}/executions/{execution}
+   * @param DeleteExecutionHistoryRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return WorkflowexecutionsEmpty
+   * @throws \Google\Service\Exception
+   */
+  public function deleteExecutionHistory($name, DeleteExecutionHistoryRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('deleteExecutionHistory', [$params], WorkflowexecutionsEmpty::class);
   }
   /**
    * Returns all metadata stored about an execution, excluding most data that is
@@ -118,10 +138,11 @@ class ProjectsLocationsWorkflowsExecutions extends \Google\Service\Resource
    * @opt_param string filter Optional. Filters applied to the
    * `[Executions.ListExecutions]` results. The following fields are supported for
    * filtering: `executionId`, `state`, `createTime`, `startTime`, `endTime`,
-   * `duration`, `workflowRevisionId`, `stepName`, and `label`. For details, see
-   * AIP-160. For more information, see Filter executions. For example, if you are
-   * using the Google APIs Explorer: `state="SUCCEEDED"` or
-   * `startTime>"2023-08-01" AND state="FAILED"`
+   * `duration`, `workflowRevisionId`, `stepName`, `label`, and
+   * `disableConcurrencyQuotaOverflowBuffering`. For details, see AIP-160. For
+   * more information, see Filter executions. For example, if you are using the
+   * Google APIs Explorer: `state="SUCCEEDED"` or `startTime>"2023-08-01" AND
+   * state="FAILED"`
    * @opt_param string orderBy Optional. Comma-separated list of fields that
    * specify the ordering applied to the `[Executions.ListExecutions]` results. By
    * default the ordering is based on descending `createTime`. The following

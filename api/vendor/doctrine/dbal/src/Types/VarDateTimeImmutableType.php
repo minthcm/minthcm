@@ -4,8 +4,8 @@ namespace Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
-use function date_create_immutable;
+use Doctrine\Deprecations\Deprecation;
+use Exception;
 
 /**
  * Immutable type of {@see VarDateTimeType}.
@@ -13,7 +13,7 @@ use function date_create_immutable;
 class VarDateTimeImmutableType extends VarDateTimeType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -21,7 +21,13 @@ class VarDateTimeImmutableType extends VarDateTimeType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param T $value
+     *
+     * @return (T is null ? null : string)
+     *
+     * @template T
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -36,12 +42,18 @@ class VarDateTimeImmutableType extends VarDateTimeType
         throw ConversionException::conversionFailedInvalidType(
             $value,
             $this->getName(),
-            ['null', DateTimeImmutable::class]
+            ['null', DateTimeImmutable::class],
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param T $value
+     *
+     * @return (T is null ? null : DateTimeImmutable)
+     *
+     * @template T
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -49,20 +61,29 @@ class VarDateTimeImmutableType extends VarDateTimeType
             return $value;
         }
 
-        $dateTime = date_create_immutable($value);
-
-        if ($dateTime === false) {
-            throw ConversionException::conversionFailed($value, $this->getName());
+        try {
+            $dateTime = new DateTimeImmutable($value);
+        } catch (Exception $e) {
+            throw ConversionException::conversionFailed($value, $this->getName(), $e);
         }
 
         return $dateTime;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @deprecated
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
         return true;
     }
 }

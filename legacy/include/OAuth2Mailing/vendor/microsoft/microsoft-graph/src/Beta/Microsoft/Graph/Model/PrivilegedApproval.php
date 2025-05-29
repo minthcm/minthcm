@@ -27,25 +27,25 @@ class PrivilegedApproval extends Entity
     /**
     * Gets the approvalDuration
     *
-    * @return Duration|null The approvalDuration
+    * @return \DateInterval|null The approvalDuration
     */
     public function getApprovalDuration()
     {
         if (array_key_exists("approvalDuration", $this->_propDict)) {
-            if (is_a($this->_propDict["approvalDuration"], "\Beta\Microsoft\Graph\Model\Duration") || is_null($this->_propDict["approvalDuration"])) {
+            if (is_a($this->_propDict["approvalDuration"], "\DateInterval") || is_null($this->_propDict["approvalDuration"])) {
                 return $this->_propDict["approvalDuration"];
             } else {
-                $this->_propDict["approvalDuration"] = new Duration($this->_propDict["approvalDuration"]);
+                $this->_propDict["approvalDuration"] = new \DateInterval($this->_propDict["approvalDuration"]);
                 return $this->_propDict["approvalDuration"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the approvalDuration
     *
-    * @param Duration $val The approvalDuration
+    * @param \DateInterval $val The approvalDuration
     *
     * @return PrivilegedApproval
     */
@@ -54,10 +54,9 @@ class PrivilegedApproval extends Entity
         $this->_propDict["approvalDuration"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the approvalState
-    * Possible values are: pending, approved, denied, aborted, canceled.
     *
     * @return ApprovalState|null The approvalState
     */
@@ -73,10 +72,9 @@ class PrivilegedApproval extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the approvalState
-    * Possible values are: pending, approved, denied, aborted, canceled.
     *
     * @param ApprovalState $val The approvalState
     *
@@ -87,7 +85,7 @@ class PrivilegedApproval extends Entity
         $this->_propDict["approvalState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the approvalType
     *
@@ -101,7 +99,7 @@ class PrivilegedApproval extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the approvalType
     *
@@ -114,7 +112,7 @@ class PrivilegedApproval extends Entity
         $this->_propDict["approvalType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the approverReason
     *
@@ -128,7 +126,7 @@ class PrivilegedApproval extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the approverReason
     *
@@ -141,10 +139,9 @@ class PrivilegedApproval extends Entity
         $this->_propDict["approverReason"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the endDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @return \DateTime|null The endDateTime
     */
@@ -160,10 +157,9 @@ class PrivilegedApproval extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the endDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @param \DateTime $val The endDateTime
     *
@@ -174,7 +170,7 @@ class PrivilegedApproval extends Entity
         $this->_propDict["endDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestorReason
     *
@@ -188,7 +184,7 @@ class PrivilegedApproval extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the requestorReason
     *
@@ -201,7 +197,7 @@ class PrivilegedApproval extends Entity
         $this->_propDict["requestorReason"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleId
     *
@@ -215,7 +211,7 @@ class PrivilegedApproval extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleId
     *
@@ -228,10 +224,9 @@ class PrivilegedApproval extends Entity
         $this->_propDict["roleId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the startDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @return \DateTime|null The startDateTime
     */
@@ -247,10 +242,9 @@ class PrivilegedApproval extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the startDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @param \DateTime $val The startDateTime
     *
@@ -261,7 +255,7 @@ class PrivilegedApproval extends Entity
         $this->_propDict["startDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
     *
@@ -275,7 +269,7 @@ class PrivilegedApproval extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
     *
@@ -288,10 +282,9 @@ class PrivilegedApproval extends Entity
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the request
-    * Read-only. The role assignment request for this approval object
     *
     * @return PrivilegedRoleAssignmentRequest|null The request
     */
@@ -307,10 +300,9 @@ class PrivilegedApproval extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the request
-    * Read-only. The role assignment request for this approval object
     *
     * @param PrivilegedRoleAssignmentRequest $val The request
     *
@@ -321,10 +313,9 @@ class PrivilegedApproval extends Entity
         $this->_propDict["request"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleInfo
-    * Read-only. Nullable.
     *
     * @return PrivilegedRole|null The roleInfo
     */
@@ -340,10 +331,9 @@ class PrivilegedApproval extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the roleInfo
-    * Read-only. Nullable.
     *
     * @param PrivilegedRole $val The roleInfo
     *
@@ -354,5 +344,5 @@ class PrivilegedApproval extends Entity
         $this->_propDict["roleInfo"] = $val;
         return $this;
     }
-    
+
 }

@@ -26,7 +26,7 @@ class MicrosoftTunnelHealthThreshold extends Entity
 {
     /**
     * Gets the defaultHealthyThreshold
-    * The default threshold for being healthy
+    * The threshold for being healthy based on default health status metrics: CPU usage healthy &amp;lt; 50%, Memory usage healthy &amp;lt; 50%, Disk space healthy &amp;gt; 5GB, Latency healthy &amp;lt; 10ms, health metrics can be customized. Read-only.
     *
     * @return int|null The defaultHealthyThreshold
     */
@@ -38,10 +38,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the defaultHealthyThreshold
-    * The default threshold for being healthy
+    * The threshold for being healthy based on default health status metrics: CPU usage healthy &amp;lt; 50%, Memory usage healthy &amp;lt; 50%, Disk space healthy &amp;gt; 5GB, Latency healthy &amp;lt; 10ms, health metrics can be customized. Read-only.
     *
     * @param int $val The defaultHealthyThreshold
     *
@@ -52,10 +52,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
         $this->_propDict["defaultHealthyThreshold"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the defaultUnhealthyThreshold
-    * The default threshold for being unhealthy
+    * The threshold for being unhealthy based on default health status metrics: CPU usage unhealthy &amp;gt; 75%, Memory usage unhealthy &amp;gt; 75%, Disk space &amp;lt; 3GB, Latency unhealthy &amp;gt; 20ms, health metrics can be customized. Read-only.
     *
     * @return int|null The defaultUnhealthyThreshold
     */
@@ -67,10 +67,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the defaultUnhealthyThreshold
-    * The default threshold for being unhealthy
+    * The threshold for being unhealthy based on default health status metrics: CPU usage unhealthy &amp;gt; 75%, Memory usage unhealthy &amp;gt; 75%, Disk space &amp;lt; 3GB, Latency unhealthy &amp;gt; 20ms, health metrics can be customized. Read-only.
     *
     * @param int $val The defaultUnhealthyThreshold
     *
@@ -81,10 +81,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
         $this->_propDict["defaultUnhealthyThreshold"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the healthyThreshold
-    * The threshold for being healthy
+    * The threshold for being healthy based on default health status metrics: CPU usage healthy &amp;lt; 50%, Memory usage healthy &amp;lt; 50%, Disk space healthy &amp;gt; 5GB, Latency healthy &amp;lt; 10ms, health metrics can be customized.
     *
     * @return int|null The healthyThreshold
     */
@@ -96,10 +96,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the healthyThreshold
-    * The threshold for being healthy
+    * The threshold for being healthy based on default health status metrics: CPU usage healthy &amp;lt; 50%, Memory usage healthy &amp;lt; 50%, Disk space healthy &amp;gt; 5GB, Latency healthy &amp;lt; 10ms, health metrics can be customized.
     *
     * @param int $val The healthyThreshold
     *
@@ -110,10 +110,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
         $this->_propDict["healthyThreshold"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the unhealthyThreshold
-    * The threshold for being unhealthy
+    * The threshold for being unhealthy based on default health status metrics: CPU usage unhealthy &amp;gt; 75%, Memory usage unhealthy &amp;gt; 75%, Disk space &amp;lt; 3GB, Latency Unhealthy &amp;gt; 20ms, health metrics can be customized.
     *
     * @return int|null The unhealthyThreshold
     */
@@ -125,10 +125,10 @@ class MicrosoftTunnelHealthThreshold extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the unhealthyThreshold
-    * The threshold for being unhealthy
+    * The threshold for being unhealthy based on default health status metrics: CPU usage unhealthy &amp;gt; 75%, Memory usage unhealthy &amp;gt; 75%, Disk space &amp;lt; 3GB, Latency Unhealthy &amp;gt; 20ms, health metrics can be customized.
     *
     * @param int $val The unhealthyThreshold
     *
@@ -139,5 +139,5 @@ class MicrosoftTunnelHealthThreshold extends Entity
         $this->_propDict["unhealthyThreshold"] = intval($val);
         return $this;
     }
-    
+
 }

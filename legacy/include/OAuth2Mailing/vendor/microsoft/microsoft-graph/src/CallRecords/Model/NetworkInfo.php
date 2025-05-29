@@ -226,7 +226,7 @@ class NetworkInfo extends \Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the macAddress
-    * The media access control (MAC) address of the media endpoint's network device.
+    * The media access control (MAC) address of the media endpoint's network device. This value may be missing or shown as 02:00:00:00:00:00 due to operating system privacy policies.
     *
     * @return string|null The macAddress
     */
@@ -241,7 +241,7 @@ class NetworkInfo extends \Microsoft\Graph\Model\Entity
 
     /**
     * Sets the macAddress
-    * The media access control (MAC) address of the media endpoint's network device.
+    * The media access control (MAC) address of the media endpoint's network device. This value may be missing or shown as 02:00:00:00:00:00 due to operating system privacy policies.
     *
     * @param string $val The value of the macAddress
     *
@@ -251,6 +251,39 @@ class NetworkInfo extends \Microsoft\Graph\Model\Entity
     {
         $this->_propDict["macAddress"] = $val;
         return $this;
+    }
+
+    /**
+    * Gets the networkTransportProtocol
+    * Network protocol used for the transmission of stream. Possible values are: unknown, udp, tcp, unknownFutureValue.
+    *
+    * @return NetworkTransportProtocol|null The networkTransportProtocol
+    */
+    public function getNetworkTransportProtocol()
+    {
+        if (array_key_exists("networkTransportProtocol", $this->_propDict)) {
+            if (is_a($this->_propDict["networkTransportProtocol"], "\Microsoft\Graph\CallRecords\Model\NetworkTransportProtocol") || is_null($this->_propDict["networkTransportProtocol"])) {
+                return $this->_propDict["networkTransportProtocol"];
+            } else {
+                $this->_propDict["networkTransportProtocol"] = new NetworkTransportProtocol($this->_propDict["networkTransportProtocol"]);
+                return $this->_propDict["networkTransportProtocol"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the networkTransportProtocol
+    * Network protocol used for the transmission of stream. Possible values are: unknown, udp, tcp, unknownFutureValue.
+    *
+    * @param NetworkTransportProtocol $val The value to assign to the networkTransportProtocol
+    *
+    * @return NetworkInfo The NetworkInfo
+    */
+    public function setNetworkTransportProtocol($val)
+    {
+        $this->_propDict["networkTransportProtocol"] = $val;
+         return $this;
     }
     /**
     * Gets the port
@@ -447,6 +480,39 @@ class NetworkInfo extends \Microsoft\Graph\Model\Entity
     {
         $this->_propDict["subnet"] = $val;
         return $this;
+    }
+
+    /**
+    * Gets the traceRouteHops
+    * List of network trace route hops collected for this media stream.*
+    *
+    * @return TraceRouteHop|null The traceRouteHops
+    */
+    public function getTraceRouteHops()
+    {
+        if (array_key_exists("traceRouteHops", $this->_propDict)) {
+            if (is_a($this->_propDict["traceRouteHops"], "\Microsoft\Graph\CallRecords\Model\TraceRouteHop") || is_null($this->_propDict["traceRouteHops"])) {
+                return $this->_propDict["traceRouteHops"];
+            } else {
+                $this->_propDict["traceRouteHops"] = new TraceRouteHop($this->_propDict["traceRouteHops"]);
+                return $this->_propDict["traceRouteHops"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the traceRouteHops
+    * List of network trace route hops collected for this media stream.*
+    *
+    * @param TraceRouteHop $val The value to assign to the traceRouteHops
+    *
+    * @return NetworkInfo The NetworkInfo
+    */
+    public function setTraceRouteHops($val)
+    {
+        $this->_propDict["traceRouteHops"] = $val;
+         return $this;
     }
 
     /**

@@ -22,8 +22,39 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class Item extends Entity
+class Item implements \JsonSerializable
 {
+    /**
+    * The array of properties available
+    * to the model
+    *
+    * @var array $_propDict
+    */
+    protected $_propDict;
+
+    /**
+    * Construct a new Item
+    *
+    * @param array $propDict A list of properties to set
+    */
+    function __construct($propDict = array())
+    {
+        if (!is_array($propDict)) {
+           $propDict = array();
+        }
+        $this->_propDict = $propDict;
+    }
+
+    /**
+    * Gets the property dictionary of the Item
+    *
+    * @return array The list of properties
+    */
+    public function getProperties()
+    {
+        return $this->_propDict;
+    }
+
     /**
     * Gets the baseUnitOfMeasureId
     *
@@ -37,7 +68,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the baseUnitOfMeasureId
     *
@@ -50,7 +81,7 @@ class Item extends Entity
         $this->_propDict["baseUnitOfMeasureId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the blocked
     *
@@ -64,7 +95,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the blocked
     *
@@ -77,7 +108,7 @@ class Item extends Entity
         $this->_propDict["blocked"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     *
@@ -91,7 +122,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     *
@@ -104,7 +135,7 @@ class Item extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the gtin
     *
@@ -118,7 +149,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the gtin
     *
@@ -131,7 +162,34 @@ class Item extends Entity
         $this->_propDict["gtin"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the id
+    *
+    * @return string|null The id
+    */
+    public function getId()
+    {
+        if (array_key_exists("id", $this->_propDict)) {
+            return $this->_propDict["id"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the id
+    *
+    * @param string $val The id
+    *
+    * @return Item
+    */
+    public function setId($val)
+    {
+        $this->_propDict["id"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the inventory
     *
@@ -149,7 +207,7 @@ class Item extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the inventory
     *
@@ -162,7 +220,7 @@ class Item extends Entity
         $this->_propDict["inventory"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the itemCategoryCode
     *
@@ -176,7 +234,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the itemCategoryCode
     *
@@ -189,7 +247,7 @@ class Item extends Entity
         $this->_propDict["itemCategoryCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the itemCategoryId
     *
@@ -203,7 +261,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the itemCategoryId
     *
@@ -216,7 +274,7 @@ class Item extends Entity
         $this->_propDict["itemCategoryId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     *
@@ -234,7 +292,7 @@ class Item extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     *
@@ -247,7 +305,7 @@ class Item extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the number
     *
@@ -261,7 +319,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the number
     *
@@ -274,7 +332,7 @@ class Item extends Entity
         $this->_propDict["number"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the priceIncludesTax
     *
@@ -288,7 +346,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the priceIncludesTax
     *
@@ -301,7 +359,7 @@ class Item extends Entity
         $this->_propDict["priceIncludesTax"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the taxGroupCode
     *
@@ -315,7 +373,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the taxGroupCode
     *
@@ -328,7 +386,7 @@ class Item extends Entity
         $this->_propDict["taxGroupCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the taxGroupId
     *
@@ -342,7 +400,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the taxGroupId
     *
@@ -355,7 +413,7 @@ class Item extends Entity
         $this->_propDict["taxGroupId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the type
     *
@@ -369,7 +427,7 @@ class Item extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the type
     *
@@ -382,7 +440,7 @@ class Item extends Entity
         $this->_propDict["type"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the unitCost
     *
@@ -400,7 +458,7 @@ class Item extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the unitCost
     *
@@ -413,7 +471,7 @@ class Item extends Entity
         $this->_propDict["unitCost"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the unitPrice
     *
@@ -431,7 +489,7 @@ class Item extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the unitPrice
     *
@@ -444,7 +502,7 @@ class Item extends Entity
         $this->_propDict["unitPrice"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the itemCategory
     *
@@ -462,7 +520,7 @@ class Item extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the itemCategory
     *
@@ -475,9 +533,9 @@ class Item extends Entity
         $this->_propDict["itemCategory"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the picture
      *
      * @return array|null The picture
@@ -490,11 +548,11 @@ class Item extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the picture
     *
-    * @param Picture $val The picture
+    * @param Picture[] $val The picture
     *
     * @return Item
     */
@@ -503,5 +561,54 @@ class Item extends Entity
         $this->_propDict["picture"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the ODataType
+    *
+    * @return string|null The ODataType
+    */
+    public function getODataType()
+    {
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
+    }
+
+    /**
+    * Sets the ODataType
+    *
+    * @param string $val The ODataType
+    *
+    * @return Item
+    */
+    public function setODataType($val)
+    {
+        $this->_propDict["@odata.type"] = $val;
+        return $this;
+    }
+
+    /**
+    * Serializes the object by property array
+    * Manually serialize DateTime into RFC3339 format
+    *
+    * @return array The list of properties
+    */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $serializableProperties = $this->getProperties();
+        foreach ($serializableProperties as $property => $val) {
+            if (is_a($val, "\DateTime")) {
+                $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
+            } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
+                $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
+            }
+        }
+        return $serializableProperties;
+    }
 }

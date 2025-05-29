@@ -17,9 +17,9 @@ final class OptimizeFlags
      * Platform-specific portability flags that need to be excluded from the user-provided mode
      * since the platform already operates in this mode to avoid unnecessary conversion overhead.
      *
-     * @var array<string,int>
+     * @var array<class-string, int>
      */
-    private static $platforms = [
+    private static array $platforms = [
         DB2Platform::class        => 0,
         OraclePlatform::class     => Connection::PORTABILITY_EMPTY_TO_NULL,
         PostgreSQLPlatform::class => 0,

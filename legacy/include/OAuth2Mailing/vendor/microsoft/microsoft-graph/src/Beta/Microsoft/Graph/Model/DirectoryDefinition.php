@@ -26,7 +26,7 @@ class DirectoryDefinition extends Entity
 {
     /**
     * Gets the discoverabilities
-    * Read only value indicating what type of discovery the app supports. Possible values are: AttributeDataTypes, AttributeNames, AttributeReadOnly, None, ReferenceAttributes, UnknownFutureValue.
+    * Read-only value indicating what type of discovery the app supports. The possible values are: None, AttributeNames, AttributeDataTypes, AttributeReadOnly, ReferenceAttributes, UnknownFutureValue. This is a multi-valued object.
     *
     * @return DirectoryDefinitionDiscoverabilities|null The discoverabilities
     */
@@ -42,10 +42,10 @@ class DirectoryDefinition extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the discoverabilities
-    * Read only value indicating what type of discovery the app supports. Possible values are: AttributeDataTypes, AttributeNames, AttributeReadOnly, None, ReferenceAttributes, UnknownFutureValue.
+    * Read-only value indicating what type of discovery the app supports. The possible values are: None, AttributeNames, AttributeDataTypes, AttributeReadOnly, ReferenceAttributes, UnknownFutureValue. This is a multi-valued object.
     *
     * @param DirectoryDefinitionDiscoverabilities $val The discoverabilities
     *
@@ -56,7 +56,7 @@ class DirectoryDefinition extends Entity
         $this->_propDict["discoverabilities"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the discoveryDateTime
     * Represents the discovery date and time using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
@@ -75,7 +75,7 @@ class DirectoryDefinition extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the discoveryDateTime
     * Represents the discovery date and time using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
@@ -89,7 +89,7 @@ class DirectoryDefinition extends Entity
         $this->_propDict["discoveryDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the name
     * Name of the directory. Must be unique within the synchronization schema. Not nullable.
@@ -104,7 +104,7 @@ class DirectoryDefinition extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
     * Name of the directory. Must be unique within the synchronization schema. Not nullable.
@@ -118,9 +118,9 @@ class DirectoryDefinition extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the objects
     * Collection of objects supported by the directory.
      *
@@ -134,12 +134,12 @@ class DirectoryDefinition extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the objects
     * Collection of objects supported by the directory.
     *
-    * @param ObjectDefinition $val The objects
+    * @param ObjectDefinition[] $val The objects
     *
     * @return DirectoryDefinition
     */
@@ -148,9 +148,10 @@ class DirectoryDefinition extends Entity
         $this->_propDict["objects"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the readOnly
+    * Whether this object is read-only.
     *
     * @return bool|null The readOnly
     */
@@ -162,9 +163,10 @@ class DirectoryDefinition extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the readOnly
+    * Whether this object is read-only.
     *
     * @param bool $val The readOnly
     *
@@ -175,10 +177,10 @@ class DirectoryDefinition extends Entity
         $this->_propDict["readOnly"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the version
-    * Read only value that indicates version discovered. null if discovery has not yet occurred.
+    * Read only value that indicates version discovered. null if discovery hasn't yet occurred.
     *
     * @return string|null The version
     */
@@ -190,10 +192,10 @@ class DirectoryDefinition extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the version
-    * Read only value that indicates version discovered. null if discovery has not yet occurred.
+    * Read only value that indicates version discovered. null if discovery hasn't yet occurred.
     *
     * @param string $val The version
     *
@@ -204,5 +206,5 @@ class DirectoryDefinition extends Entity
         $this->_propDict["version"] = $val;
         return $this;
     }
-    
+
 }

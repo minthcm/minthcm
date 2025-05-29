@@ -1,4 +1,9 @@
-1.6.?? (2022-??-??)
+1.6.12 (2024-08-29)
+-------------------
+
+* Drop php 5 and 7.0 support as new versions enforced a syntax change that is not compatible with the old versions.
+
+1.6.11 (2022-07-26)
 -------------------
 
   * Add support for PHP 8.2's `$content` property in `vfsStreamWrapper`

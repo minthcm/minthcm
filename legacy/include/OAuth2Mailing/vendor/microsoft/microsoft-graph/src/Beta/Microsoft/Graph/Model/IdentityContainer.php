@@ -28,10 +28,10 @@ class IdentityContainer implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new IdentityContainer
     *
@@ -54,9 +54,274 @@ class IdentityContainer implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
+
+
+     /**
+     * Gets the apiConnectors
+    * Represents entry point for API connectors.
+     *
+     * @return array|null The apiConnectors
+     */
+    public function getApiConnectors()
+    {
+        if (array_key_exists("apiConnectors", $this->_propDict)) {
+           return $this->_propDict["apiConnectors"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the apiConnectors
+    * Represents entry point for API connectors.
+    *
+    * @param IdentityApiConnector[] $val The apiConnectors
+    *
+    * @return IdentityContainer
+    */
+    public function setApiConnectors($val)
+    {
+        $this->_propDict["apiConnectors"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the authenticationEventListeners
+     *
+     * @return array|null The authenticationEventListeners
+     */
+    public function getAuthenticationEventListeners()
+    {
+        if (array_key_exists("authenticationEventListeners", $this->_propDict)) {
+           return $this->_propDict["authenticationEventListeners"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the authenticationEventListeners
+    *
+    * @param AuthenticationEventListener[] $val The authenticationEventListeners
+    *
+    * @return IdentityContainer
+    */
+    public function setAuthenticationEventListeners($val)
+    {
+        $this->_propDict["authenticationEventListeners"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the authenticationEventsFlows
+    * Represents the entry point for self-service sign up and sign in user flows in both Microsoft Entra workforce and customer tenants.
+     *
+     * @return array|null The authenticationEventsFlows
+     */
+    public function getAuthenticationEventsFlows()
+    {
+        if (array_key_exists("authenticationEventsFlows", $this->_propDict)) {
+           return $this->_propDict["authenticationEventsFlows"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the authenticationEventsFlows
+    * Represents the entry point for self-service sign up and sign in user flows in both Microsoft Entra workforce and customer tenants.
+    *
+    * @param AuthenticationEventsFlow[] $val The authenticationEventsFlows
+    *
+    * @return IdentityContainer
+    */
+    public function setAuthenticationEventsFlows($val)
+    {
+        $this->_propDict["authenticationEventsFlows"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the b2cUserFlows
+    * Represents entry point for B2C identity userflows.
+     *
+     * @return array|null The b2cUserFlows
+     */
+    public function getB2cUserFlows()
+    {
+        if (array_key_exists("b2cUserFlows", $this->_propDict)) {
+           return $this->_propDict["b2cUserFlows"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the b2cUserFlows
+    * Represents entry point for B2C identity userflows.
+    *
+    * @param B2cIdentityUserFlow[] $val The b2cUserFlows
+    *
+    * @return IdentityContainer
+    */
+    public function setB2cUserFlows($val)
+    {
+        $this->_propDict["b2cUserFlows"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the b2xUserFlows
+    * Represents entry point for B2X and self-service sign-up identity userflows.
+     *
+     * @return array|null The b2xUserFlows
+     */
+    public function getB2xUserFlows()
+    {
+        if (array_key_exists("b2xUserFlows", $this->_propDict)) {
+           return $this->_propDict["b2xUserFlows"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the b2xUserFlows
+    * Represents entry point for B2X and self-service sign-up identity userflows.
+    *
+    * @param B2xIdentityUserFlow[] $val The b2xUserFlows
+    *
+    * @return IdentityContainer
+    */
+    public function setB2xUserFlows($val)
+    {
+        $this->_propDict["b2xUserFlows"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the customAuthenticationExtensions
+     *
+     * @return array|null The customAuthenticationExtensions
+     */
+    public function getCustomAuthenticationExtensions()
+    {
+        if (array_key_exists("customAuthenticationExtensions", $this->_propDict)) {
+           return $this->_propDict["customAuthenticationExtensions"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customAuthenticationExtensions
+    *
+    * @param CustomAuthenticationExtension[] $val The customAuthenticationExtensions
+    *
+    * @return IdentityContainer
+    */
+    public function setCustomAuthenticationExtensions($val)
+    {
+        $this->_propDict["customAuthenticationExtensions"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the identityProviders
+    * Represents entry point for identity provider base.
+     *
+     * @return array|null The identityProviders
+     */
+    public function getIdentityProviders()
+    {
+        if (array_key_exists("identityProviders", $this->_propDict)) {
+           return $this->_propDict["identityProviders"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the identityProviders
+    * Represents entry point for identity provider base.
+    *
+    * @param IdentityProviderBase[] $val The identityProviders
+    *
+    * @return IdentityContainer
+    */
+    public function setIdentityProviders($val)
+    {
+        $this->_propDict["identityProviders"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the userFlowAttributes
+    * Represents entry point for identity userflow attributes.
+     *
+     * @return array|null The userFlowAttributes
+     */
+    public function getUserFlowAttributes()
+    {
+        if (array_key_exists("userFlowAttributes", $this->_propDict)) {
+           return $this->_propDict["userFlowAttributes"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the userFlowAttributes
+    * Represents entry point for identity userflow attributes.
+    *
+    * @param IdentityUserFlowAttribute[] $val The userFlowAttributes
+    *
+    * @return IdentityContainer
+    */
+    public function setUserFlowAttributes($val)
+    {
+        $this->_propDict["userFlowAttributes"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the userFlows
+     *
+     * @return array|null The userFlows
+     */
+    public function getUserFlows()
+    {
+        if (array_key_exists("userFlows", $this->_propDict)) {
+           return $this->_propDict["userFlows"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the userFlows
+    *
+    * @param IdentityUserFlow[] $val The userFlows
+    *
+    * @return IdentityContainer
+    */
+    public function setUserFlows($val)
+    {
+        $this->_propDict["userFlows"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the conditionalAccess
+    * the entry point for the Conditional Access (CA) object model.
     *
     * @return ConditionalAccessRoot|null The conditionalAccess
     */
@@ -72,9 +337,10 @@ class IdentityContainer implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the conditionalAccess
+    * the entry point for the Conditional Access (CA) object model.
     *
     * @param ConditionalAccessRoot $val The conditionalAccess
     *
@@ -85,177 +351,10 @@ class IdentityContainer implements \JsonSerializable
         $this->_propDict["conditionalAccess"] = $val;
         return $this;
     }
-    
 
-     /** 
-     * Gets the apiConnectors
-     *
-     * @return array|null The apiConnectors
-     */
-    public function getApiConnectors()
-    {
-        if (array_key_exists("apiConnectors", $this->_propDict)) {
-           return $this->_propDict["apiConnectors"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the apiConnectors
-    *
-    * @param IdentityApiConnector $val The apiConnectors
-    *
-    * @return IdentityContainer
-    */
-    public function setApiConnectors($val)
-    {
-        $this->_propDict["apiConnectors"] = $val;
-        return $this;
-    }
-    
-
-     /** 
-     * Gets the b2cUserFlows
-     *
-     * @return array|null The b2cUserFlows
-     */
-    public function getB2cUserFlows()
-    {
-        if (array_key_exists("b2cUserFlows", $this->_propDict)) {
-           return $this->_propDict["b2cUserFlows"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the b2cUserFlows
-    *
-    * @param B2cIdentityUserFlow $val The b2cUserFlows
-    *
-    * @return IdentityContainer
-    */
-    public function setB2cUserFlows($val)
-    {
-        $this->_propDict["b2cUserFlows"] = $val;
-        return $this;
-    }
-    
-
-     /** 
-     * Gets the b2xUserFlows
-     *
-     * @return array|null The b2xUserFlows
-     */
-    public function getB2xUserFlows()
-    {
-        if (array_key_exists("b2xUserFlows", $this->_propDict)) {
-           return $this->_propDict["b2xUserFlows"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the b2xUserFlows
-    *
-    * @param B2xIdentityUserFlow $val The b2xUserFlows
-    *
-    * @return IdentityContainer
-    */
-    public function setB2xUserFlows($val)
-    {
-        $this->_propDict["b2xUserFlows"] = $val;
-        return $this;
-    }
-    
-
-     /** 
-     * Gets the identityProviders
-     *
-     * @return array|null The identityProviders
-     */
-    public function getIdentityProviders()
-    {
-        if (array_key_exists("identityProviders", $this->_propDict)) {
-           return $this->_propDict["identityProviders"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the identityProviders
-    *
-    * @param IdentityProviderBase $val The identityProviders
-    *
-    * @return IdentityContainer
-    */
-    public function setIdentityProviders($val)
-    {
-        $this->_propDict["identityProviders"] = $val;
-        return $this;
-    }
-    
-
-     /** 
-     * Gets the userFlowAttributes
-     *
-     * @return array|null The userFlowAttributes
-     */
-    public function getUserFlowAttributes()
-    {
-        if (array_key_exists("userFlowAttributes", $this->_propDict)) {
-           return $this->_propDict["userFlowAttributes"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the userFlowAttributes
-    *
-    * @param IdentityUserFlowAttribute $val The userFlowAttributes
-    *
-    * @return IdentityContainer
-    */
-    public function setUserFlowAttributes($val)
-    {
-        $this->_propDict["userFlowAttributes"] = $val;
-        return $this;
-    }
-    
-
-     /** 
-     * Gets the userFlows
-     *
-     * @return array|null The userFlows
-     */
-    public function getUserFlows()
-    {
-        if (array_key_exists("userFlows", $this->_propDict)) {
-           return $this->_propDict["userFlows"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the userFlows
-    *
-    * @param IdentityUserFlow $val The userFlows
-    *
-    * @return IdentityContainer
-    */
-    public function setUserFlows($val)
-    {
-        $this->_propDict["userFlows"] = $val;
-        return $this;
-    }
-    
     /**
     * Gets the continuousAccessEvaluationPolicy
+    * Represents entry point for continuous access evaluation policy.
     *
     * @return ContinuousAccessEvaluationPolicy|null The continuousAccessEvaluationPolicy
     */
@@ -271,9 +370,10 @@ class IdentityContainer implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the continuousAccessEvaluationPolicy
+    * Represents entry point for continuous access evaluation policy.
     *
     * @param ContinuousAccessEvaluationPolicy $val The continuousAccessEvaluationPolicy
     *
@@ -284,36 +384,40 @@ class IdentityContainer implements \JsonSerializable
         $this->_propDict["continuousAccessEvaluationPolicy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return IdentityContainer
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -322,6 +426,10 @@ class IdentityContainer implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

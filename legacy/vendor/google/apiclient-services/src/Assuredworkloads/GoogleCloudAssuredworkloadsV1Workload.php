@@ -75,6 +75,10 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   /**
    * @var string
    */
+  public $partnerServicesBillingAccount;
+  /**
+   * @var string
+   */
   public $provisionedResourcesParent;
   /**
    * @var bool
@@ -90,6 +94,8 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
    * @var bool
    */
   public $violationNotificationsEnabled;
+  protected $workloadOptionsType = GoogleCloudAssuredworkloadsV1WorkloadWorkloadOptions::class;
+  protected $workloadOptionsDataType = '';
 
   /**
    * @param string
@@ -304,6 +310,20 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   /**
    * @param string
    */
+  public function setPartnerServicesBillingAccount($partnerServicesBillingAccount)
+  {
+    $this->partnerServicesBillingAccount = $partnerServicesBillingAccount;
+  }
+  /**
+   * @return string
+   */
+  public function getPartnerServicesBillingAccount()
+  {
+    return $this->partnerServicesBillingAccount;
+  }
+  /**
+   * @param string
+   */
   public function setProvisionedResourcesParent($provisionedResourcesParent)
   {
     $this->provisionedResourcesParent = $provisionedResourcesParent;
@@ -384,6 +404,20 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   public function getViolationNotificationsEnabled()
   {
     return $this->violationNotificationsEnabled;
+  }
+  /**
+   * @param GoogleCloudAssuredworkloadsV1WorkloadWorkloadOptions
+   */
+  public function setWorkloadOptions(GoogleCloudAssuredworkloadsV1WorkloadWorkloadOptions $workloadOptions)
+  {
+    $this->workloadOptions = $workloadOptions;
+  }
+  /**
+   * @return GoogleCloudAssuredworkloadsV1WorkloadWorkloadOptions
+   */
+  public function getWorkloadOptions()
+  {
+    return $this->workloadOptions;
   }
 }
 

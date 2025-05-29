@@ -18,16 +18,22 @@ use function count;
 
 final class Result implements ResultInterface
 {
-    /** @var mysqli_stmt */
-    private $statement;
+    private mysqli_stmt $statement;
+
+    /**
+     * Maintains a reference to the Statement that generated this result. This ensures that the lifetime of the
+     * Statement is managed in conjunction with its associated results, so they are destroyed together
+     * at the appropriate time {@see Statement::__destruct()}.
+     *
+     * @phpstan-ignore property.onlyWritten
+     */
+    private ?Statement $statementReference = null;
 
     /**
      * Whether the statement result has columns. The property should be used only after the result metadata
      * has been fetched ({@see $metadataFetched}). Otherwise, the property value is undetermined.
-     *
-     * @var bool
      */
-    private $hasColumns = false;
+    private bool $hasColumns = false;
 
     /**
      * Mapping of statement result column indexes to their names. The property should be used only
@@ -35,19 +41,22 @@ final class Result implements ResultInterface
      *
      * @var array<int,string>
      */
-    private $columnNames = [];
+    private array $columnNames = [];
 
     /** @var mixed[] */
-    private $boundValues = [];
+    private array $boundValues = [];
 
     /**
      * @internal The result can be only instantiated by its driver connection or statement.
      *
      * @throws Exception
      */
-    public function __construct(mysqli_stmt $statement)
-    {
-        $this->statement = $statement;
+    public function __construct(
+        mysqli_stmt $statement,
+        ?Statement $statementReference = null
+    ) {
+        $this->statement          = $statement;
+        $this->statementReference = $statementReference;
 
         $meta = $statement->result_metadata();
 
@@ -88,7 +97,7 @@ final class Result implements ResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchNumeric()
     {
@@ -130,7 +139,7 @@ final class Result implements ResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchOne()
     {
@@ -138,7 +147,7 @@ final class Result implements ResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchAllNumeric(): array
     {
@@ -146,7 +155,7 @@ final class Result implements ResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchAllAssociative(): array
     {
@@ -154,7 +163,7 @@ final class Result implements ResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchFirstColumn(): array
     {

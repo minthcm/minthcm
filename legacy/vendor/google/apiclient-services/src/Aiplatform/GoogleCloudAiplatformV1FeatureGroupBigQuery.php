@@ -23,9 +23,19 @@ class GoogleCloudAiplatformV1FeatureGroupBigQuery extends \Google\Collection
   protected $bigQuerySourceType = GoogleCloudAiplatformV1BigQuerySource::class;
   protected $bigQuerySourceDataType = '';
   /**
+   * @var bool
+   */
+  public $dense;
+  /**
    * @var string[]
    */
   public $entityIdColumns;
+  /**
+   * @var bool
+   */
+  public $staticDataSource;
+  protected $timeSeriesType = GoogleCloudAiplatformV1FeatureGroupBigQueryTimeSeries::class;
+  protected $timeSeriesDataType = '';
 
   /**
    * @param GoogleCloudAiplatformV1BigQuerySource
@@ -42,6 +52,20 @@ class GoogleCloudAiplatformV1FeatureGroupBigQuery extends \Google\Collection
     return $this->bigQuerySource;
   }
   /**
+   * @param bool
+   */
+  public function setDense($dense)
+  {
+    $this->dense = $dense;
+  }
+  /**
+   * @return bool
+   */
+  public function getDense()
+  {
+    return $this->dense;
+  }
+  /**
    * @param string[]
    */
   public function setEntityIdColumns($entityIdColumns)
@@ -54,6 +78,34 @@ class GoogleCloudAiplatformV1FeatureGroupBigQuery extends \Google\Collection
   public function getEntityIdColumns()
   {
     return $this->entityIdColumns;
+  }
+  /**
+   * @param bool
+   */
+  public function setStaticDataSource($staticDataSource)
+  {
+    $this->staticDataSource = $staticDataSource;
+  }
+  /**
+   * @return bool
+   */
+  public function getStaticDataSource()
+  {
+    return $this->staticDataSource;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1FeatureGroupBigQueryTimeSeries
+   */
+  public function setTimeSeries(GoogleCloudAiplatformV1FeatureGroupBigQueryTimeSeries $timeSeries)
+  {
+    $this->timeSeries = $timeSeries;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1FeatureGroupBigQueryTimeSeries
+   */
+  public function getTimeSeries()
+  {
+    return $this->timeSeries;
   }
 }
 

@@ -93,6 +93,7 @@ class ESListViewGetRecords {
                 $this->parseBeanItem($item);
             }
             $number_of_request_into_elasticsearch++;
+            $total_records = $query_results->getTotalResults() ?? 0;
         }
         if ($this->selected_records > $this->itemsPerPage) {
             $next_page_exists = true;
@@ -105,8 +106,7 @@ class ESListViewGetRecords {
                 "[ESListView][Module: {$this->module}][User id: {$uid}][ES Requests: {$number_of_request_into_elasticsearch}] Requests number exceeded 1"
             );
         }
-
-        $total_records = ($this->page - 1) * $this->itemsPerPage + count($this->results) + $next_page_exists;
+        
         $offset = $this->offset + ($this->itemsPerPage * ($number_of_request_into_elasticsearch - 1)) + $this->add_to_offset;
         return [$total_records, $offset, array_values($this->results)];
     }

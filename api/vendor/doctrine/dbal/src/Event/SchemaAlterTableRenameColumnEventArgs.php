@@ -12,27 +12,22 @@ use function is_array;
 
 /**
  * Event Arguments used when SQL queries for renaming table columns are generated inside {@see AbstractPlatform}.
+ *
+ * @deprecated
  */
 class SchemaAlterTableRenameColumnEventArgs extends SchemaEventArgs
 {
     /** @var string */
     private $oldColumnName;
 
-    /** @var Column */
-    private $column;
-
-    /** @var TableDiff */
-    private $tableDiff;
-
-    /** @var AbstractPlatform */
-    private $platform;
+    private Column $column;
+    private TableDiff $tableDiff;
+    private AbstractPlatform $platform;
 
     /** @var string[] */
-    private $sql = [];
+    private array $sql = [];
 
-    /**
-     * @param string $oldColumnName
-     */
+    /** @param string $oldColumnName */
     public function __construct($oldColumnName, Column $column, TableDiff $tableDiff, AbstractPlatform $platform)
     {
         $this->oldColumnName = $oldColumnName;
@@ -41,33 +36,25 @@ class SchemaAlterTableRenameColumnEventArgs extends SchemaEventArgs
         $this->platform      = $platform;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getOldColumnName()
     {
         return $this->oldColumnName;
     }
 
-    /**
-     * @return Column
-     */
+    /** @return Column */
     public function getColumn()
     {
         return $this->column;
     }
 
-    /**
-     * @return TableDiff
-     */
+    /** @return TableDiff */
     public function getTableDiff()
     {
         return $this->tableDiff;
     }
 
-    /**
-     * @return AbstractPlatform
-     */
+    /** @return AbstractPlatform */
     public function getPlatform()
     {
         return $this->platform;
@@ -87,9 +74,7 @@ class SchemaAlterTableRenameColumnEventArgs extends SchemaEventArgs
         return $this;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getSql()
     {
         return $this->sql;

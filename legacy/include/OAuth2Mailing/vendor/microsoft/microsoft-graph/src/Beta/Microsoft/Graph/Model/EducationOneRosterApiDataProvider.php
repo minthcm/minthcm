@@ -26,15 +26,18 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.educationOneRosterApiDataProvider");
     }
 
 
     /**
     * Gets the connectionSettings
+    * The [OAuth 1.0][onerosteroauth1] or [OAuth 2.0][onerosteroauth2] settings for the OneRoster instance.
     *
     * @return EducationSynchronizationConnectionSettings|null The connectionSettings
     */
@@ -53,6 +56,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the connectionSettings
+    * The [OAuth 1.0][onerosteroauth1] or [OAuth 2.0][onerosteroauth2] settings for the OneRoster instance.
     *
     * @param EducationSynchronizationConnectionSettings $val The value to assign to the connectionSettings
     *
@@ -65,6 +69,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
     }
     /**
     * Gets the connectionUrl
+    * The connection URL to the OneRoster instance.
     *
     * @return string|null The connectionUrl
     */
@@ -79,6 +84,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the connectionUrl
+    * The connection URL to the OneRoster instance.
     *
     * @param string $val The value of the connectionUrl
     *
@@ -92,6 +98,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Gets the customizations
+    * Optional customization to be applied to the synchronization profile.
     *
     * @return EducationSynchronizationCustomizations|null The customizations
     */
@@ -110,6 +117,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the customizations
+    * Optional customization to be applied to the synchronization profile.
     *
     * @param EducationSynchronizationCustomizations $val The value to assign to the customizations
     *
@@ -122,6 +130,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
     }
     /**
     * Gets the providerName
+    * The OneRoster Service Provider name as defined by the [OneRoster specification][oneroster].
     *
     * @return string|null The providerName
     */
@@ -136,6 +145,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the providerName
+    * The OneRoster Service Provider name as defined by the [OneRoster specification][oneroster].
     *
     * @param string $val The value of the providerName
     *
@@ -148,6 +158,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
     }
     /**
     * Gets the schoolsIds
+    * The list of [School/Org][orgs] sourcedId to sync.
     *
     * @return string|null The schoolsIds
     */
@@ -162,6 +173,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the schoolsIds
+    * The list of [School/Org][orgs] sourcedId to sync.
     *
     * @param string $val The value of the schoolsIds
     *
@@ -174,6 +186,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
     }
     /**
     * Gets the termIds
+    * The list of [academic sessions][terms] to sync.
     *
     * @return string|null The termIds
     */
@@ -188,6 +201,7 @@ class EducationOneRosterApiDataProvider extends EducationSynchronizationDataProv
 
     /**
     * Sets the termIds
+    * The list of [academic sessions][terms] to sync.
     *
     * @param string $val The value of the termIds
     *

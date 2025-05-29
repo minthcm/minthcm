@@ -36,8 +36,8 @@ class ProjectsLocationsCollectionsDataStoresSessions extends \Google\Service\Res
    * error is returned. (sessions.create)
    *
    * @param string $parent Required. Full resource name of parent data store.
-   * Format: `projects/{project_number}/locations/{location_id}/collections/{colle
-   * ction}/dataStores/{data_store_id}`
+   * Format: `projects/{project}/locations/{location}/collections/{collection}/dat
+   * aStores/{data_store_id}`
    * @param GoogleCloudDiscoveryengineV1Session $postBody
    * @param array $optParams Optional parameters.
    * @return GoogleCloudDiscoveryengineV1Session
@@ -54,8 +54,8 @@ class ProjectsLocationsCollectionsDataStoresSessions extends \Google\Service\Res
    * is returned. (sessions.delete)
    *
    * @param string $name Required. The resource name of the Session to delete.
-   * Format: `projects/{project_number}/locations/{location_id}/collections/{colle
-   * ction}/dataStores/{data_store_id}/sessions/{session_id}`
+   * Format: `projects/{project}/locations/{location}/collections/{collection}/dat
+   * aStores/{data_store_id}/sessions/{session_id}`
    * @param array $optParams Optional parameters.
    * @return GoogleProtobufEmpty
    * @throws \Google\Service\Exception
@@ -70,9 +70,12 @@ class ProjectsLocationsCollectionsDataStoresSessions extends \Google\Service\Res
    * Gets a Session. (sessions.get)
    *
    * @param string $name Required. The resource name of the Session to get.
-   * Format: `projects/{project_number}/locations/{location_id}/collections/{colle
-   * ction}/dataStores/{data_store_id}/sessions/{session_id}`
+   * Format: `projects/{project}/locations/{location}/collections/{collection}/dat
+   * aStores/{data_store_id}/sessions/{session_id}`
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param bool includeAnswerDetails Optional. If set to true, the full
+   * session including all answer details will be returned.
    * @return GoogleCloudDiscoveryengineV1Session
    * @throws \Google\Service\Exception
    */
@@ -87,16 +90,18 @@ class ProjectsLocationsCollectionsDataStoresSessions extends \Google\Service\Res
    * (sessions.listProjectsLocationsCollectionsDataStoresSessions)
    *
    * @param string $parent Required. The data store resource name. Format: `projec
-   * ts/{project_number}/locations/{location_id}/collections/{collection}/dataStor
-   * es/{data_store_id}`
+   * ts/{project}/locations/{location}/collections/{collection}/dataStores/{data_s
+   * tore_id}`
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter A filter to apply on the list results. The supported
    * features are: user_pseudo_id, state. Example: "user_pseudo_id = some_id"
    * @opt_param string orderBy A comma-separated list of fields to order by,
    * sorted in ascending order. Use "desc" after a field name for descending.
-   * Supported fields: * `update_time` * `create_time` * `session_name` Example:
-   * "update_time desc" "create_time"
+   * Supported fields: * `update_time` * `create_time` * `session_name` *
+   * `is_pinned` Example: * "update_time desc" * "create_time" * "is_pinned
+   * desc,update_time desc": list sessions by is_pinned first, then by
+   * update_time.
    * @opt_param int pageSize Maximum number of results to return. If unspecified,
    * defaults to 50. Max allowed value is 1000.
    * @opt_param string pageToken A page token, received from a previous

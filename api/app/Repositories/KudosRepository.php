@@ -53,8 +53,7 @@ class KudosRepository extends EntityRepository
     public function get($page, $list_type)
     {
         global $current_user;
-        $list_type_where = $current_user->isAdmin() ? ''
-                                                    : 'AND ((kudos.announced IS NULL OR kudos.announced = 0) AND kudos.assigned_user_id = ' ."'$current_user->id'" .')
+        $list_type_where = 'AND ((kudos.announced IS NULL OR kudos.announced = 0) AND kudos.assigned_user_id = ' ."'$current_user->id'" .')
                                                        OR kudos.announced = 1';
         if($list_type === 'received') {
             $list_type_where = 'AND kudos.announced = 1 AND kudos.employee_id = ' ."'$current_user->id'" .'';
@@ -135,7 +134,7 @@ class KudosRepository extends EntityRepository
             $kudos[$index]['current_user_is_gifted'] = $current_user->id === $kudos[$index]['employee']['id'];
             $kudos[$index]['current_user_is_author'] = $current_user->id === $kudos[$index]['assigned_user']['id'];
             $kudos[$index]['current_user_is_admin'] = $current_user->isAdmin();
-            $kudos[$index]['current_user_access'] = $kudos[$index]['current_user_is_admin'] || $kudos[$index]['current_user_is_gifted'] || $kudos[$index]['current_user_is_author'];
+            $kudos[$index]['current_user_access'] = $kudos[$index]['current_user_is_gifted'] || $kudos[$index]['current_user_is_author'];
   
 
             if($kudos[$index]['private'] && !$kudos[$index]['current_user_access']) 

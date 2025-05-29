@@ -66,7 +66,7 @@ $viewdefs [$module_name] = array(
                  ),
                  'includes' =>
                  array(
-                    array('file' => 'modules/PDFTemplates/js/tiny_mce/tiny_mce.js'),
+                    array('file' => 'include/javascript/tiny_mce/tiny_mce.js'),
                     array('file' => 'modules/PDFTemplates/js/scripts.js'),
                  ),
                  'useTabs' => false,

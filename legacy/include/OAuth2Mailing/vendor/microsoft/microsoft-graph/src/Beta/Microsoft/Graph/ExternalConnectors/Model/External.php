@@ -28,10 +28,10 @@ class External implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new External
     *
@@ -54,9 +54,68 @@ class External implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
 
-     /** 
+    /**
+    * Gets the industryData
+    *
+    * @return \Beta\Microsoft\Graph\IndustryData\Model\IndustryDataRoot|null The industryData
+    */
+    public function getIndustryData()
+    {
+        if (array_key_exists("industryData", $this->_propDict)) {
+            if (is_a($this->_propDict["industryData"], "\Beta\Microsoft\Graph\IndustryData\Model\IndustryDataRoot") || is_null($this->_propDict["industryData"])) {
+                return $this->_propDict["industryData"];
+            } else {
+                $this->_propDict["industryData"] = new \Beta\Microsoft\Graph\IndustryData\Model\IndustryDataRoot($this->_propDict["industryData"]);
+                return $this->_propDict["industryData"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the industryData
+    *
+    * @param \Beta\Microsoft\Graph\IndustryData\Model\IndustryDataRoot $val The industryData
+    *
+    * @return External
+    */
+    public function setIndustryData($val)
+    {
+        $this->_propDict["industryData"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the authorizationSystems
+     *
+     * @return array|null The authorizationSystems
+     */
+    public function getAuthorizationSystems()
+    {
+        if (array_key_exists("authorizationSystems", $this->_propDict)) {
+           return $this->_propDict["authorizationSystems"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the authorizationSystems
+    *
+    * @param \Beta\Microsoft\Graph\Model\AuthorizationSystem[] $val The authorizationSystems
+    *
+    * @return External
+    */
+    public function setAuthorizationSystems($val)
+    {
+        $this->_propDict["authorizationSystems"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the connections
      *
      * @return array|null The connections
@@ -69,11 +128,11 @@ class External implements \JsonSerializable
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the connections
     *
-    * @param ExternalConnection $val The connections
+    * @param ExternalConnection[] $val The connections
     *
     * @return External
     */
@@ -82,36 +141,40 @@ class External implements \JsonSerializable
         $this->_propDict["connections"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return External
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -120,6 +183,10 @@ class External implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

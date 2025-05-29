@@ -15,4 +15,3 @@ phpseclib ongoing development is made possible by [Tidelift](https://tidelift.co
 - [cjhaas](https://github.com/cjhaas)
 - [istiak-tridip](https://github.com/istiak-tridip)
 - [Anna Filina](https://github.com/afilina)
-- [blakemckeeby](https://github.com/blakemckeeby)

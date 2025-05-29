@@ -39,8 +39,8 @@ class ProjectsLocationsConnections extends \Google\Service\Resource
    *
    * @param string $parent Required. Parent resource name. The format of this
    * value varies depending on the scope of the request (project or organization):
-   * + Projects scope: `projects/`PROJECT_ID`/locations/`LOCATION_ID +
-   * Organizations scope: `organizations/`ORG_ID`/locations/`LOCATION_ID
+   * + Projects scope: `projects/{project_id}/locations/{location_id}` +
+   * Organizations scope: `organizations/{org_id}/locations/{location_id}`
    * @param GooglePrivacyDlpV2CreateConnectionRequest $postBody
    * @param array $optParams Optional parameters.
    * @return GooglePrivacyDlpV2Connection
@@ -84,10 +84,12 @@ class ProjectsLocationsConnections extends \Google\Service\Resource
     return $this->call('get', [$params], GooglePrivacyDlpV2Connection::class);
   }
   /**
-   * Lists Connections in a parent. (connections.listProjectsLocationsConnections)
+   * Lists Connections in a parent. Use SearchConnections to see all connections
+   * within an organization. (connections.listProjectsLocationsConnections)
    *
-   * @param string $parent Required. Parent name, for example: `projects/project-
-   * id/locations/global`.
+   * @param string $parent Required. Resource name of the organization or project,
+   * for example, `organizations/433245324/locations/europe` or `projects/project-
+   * id/locations/asia`.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter Optional. Supported field/value: `state` -
@@ -124,8 +126,9 @@ class ProjectsLocationsConnections extends \Google\Service\Resource
   /**
    * Searches for Connections in a parent. (connections.search)
    *
-   * @param string $parent Required. Parent name, typically an organization,
-   * without location. For example: `organizations/12345678`.
+   * @param string $parent Required. Resource name of the organization or project
+   * with a wildcard location, for example, `organizations/433245324/locations/-`
+   * or `projects/project-id/locations/-`.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter Optional. Supported field/value: - `state` -

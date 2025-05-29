@@ -42,7 +42,7 @@ class DeviceHealthScript extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The timestamp of when the device health script was created. This property is read-only.
@@ -56,7 +56,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * Description of the device health script
@@ -71,7 +71,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Description of the device health script
@@ -85,7 +85,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the detectionScriptContent
     * The entire content of the detection powershell script
@@ -98,13 +98,13 @@ class DeviceHealthScript extends Entity
             if (is_a($this->_propDict["detectionScriptContent"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["detectionScriptContent"])) {
                 return $this->_propDict["detectionScriptContent"];
             } else {
-                $this->_propDict["detectionScriptContent"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["detectionScriptContent"]);
+                $this->_propDict["detectionScriptContent"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["detectionScriptContent"]);
                 return $this->_propDict["detectionScriptContent"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the detectionScriptContent
     * The entire content of the detection powershell script
@@ -118,9 +118,9 @@ class DeviceHealthScript extends Entity
         $this->_propDict["detectionScriptContent"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the detectionScriptParameters
     * List of ComplexType DetectionScriptParameters objects.
      *
@@ -134,12 +134,12 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the detectionScriptParameters
     * List of ComplexType DetectionScriptParameters objects.
     *
-    * @param DeviceHealthScriptParameter $val The detectionScriptParameters
+    * @param DeviceHealthScriptParameter[] $val The detectionScriptParameters
     *
     * @return DeviceHealthScript
     */
@@ -148,7 +148,40 @@ class DeviceHealthScript extends Entity
         $this->_propDict["detectionScriptParameters"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the deviceHealthScriptType
+    * DeviceHealthScriptType for the script policy. Possible values are: deviceHealthScript, managedInstallerScript.
+    *
+    * @return DeviceHealthScriptType|null The deviceHealthScriptType
+    */
+    public function getDeviceHealthScriptType()
+    {
+        if (array_key_exists("deviceHealthScriptType", $this->_propDict)) {
+            if (is_a($this->_propDict["deviceHealthScriptType"], "\Beta\Microsoft\Graph\Model\DeviceHealthScriptType") || is_null($this->_propDict["deviceHealthScriptType"])) {
+                return $this->_propDict["deviceHealthScriptType"];
+            } else {
+                $this->_propDict["deviceHealthScriptType"] = new DeviceHealthScriptType($this->_propDict["deviceHealthScriptType"]);
+                return $this->_propDict["deviceHealthScriptType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the deviceHealthScriptType
+    * DeviceHealthScriptType for the script policy. Possible values are: deviceHealthScript, managedInstallerScript.
+    *
+    * @param DeviceHealthScriptType $val The deviceHealthScriptType
+    *
+    * @return DeviceHealthScript
+    */
+    public function setDeviceHealthScriptType($val)
+    {
+        $this->_propDict["deviceHealthScriptType"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the displayName
     * Name of the device health script
@@ -163,7 +196,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Name of the device health script
@@ -177,7 +210,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the enforceSignatureCheck
     * Indicate whether the script signature needs be checked
@@ -192,7 +225,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the enforceSignatureCheck
     * Indicate whether the script signature needs be checked
@@ -206,7 +239,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["enforceSignatureCheck"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the highestAvailableVersion
     * Highest available version for a Microsoft Proprietary script
@@ -221,7 +254,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the highestAvailableVersion
     * Highest available version for a Microsoft Proprietary script
@@ -235,7 +268,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["highestAvailableVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isGlobalScript
     * Determines if this is Microsoft Proprietary Script. Proprietary scripts are read-only
@@ -250,7 +283,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isGlobalScript
     * Determines if this is Microsoft Proprietary Script. Proprietary scripts are read-only
@@ -264,7 +297,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["isGlobalScript"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * The timestamp of when the device health script was modified. This property is read-only.
@@ -283,7 +316,7 @@ class DeviceHealthScript extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * The timestamp of when the device health script was modified. This property is read-only.
@@ -297,7 +330,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publisher
     * Name of the device health script publisher
@@ -312,7 +345,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the publisher
     * Name of the device health script publisher
@@ -326,7 +359,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["publisher"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the remediationScriptContent
     * The entire content of the remediation powershell script
@@ -339,13 +372,13 @@ class DeviceHealthScript extends Entity
             if (is_a($this->_propDict["remediationScriptContent"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["remediationScriptContent"])) {
                 return $this->_propDict["remediationScriptContent"];
             } else {
-                $this->_propDict["remediationScriptContent"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["remediationScriptContent"]);
+                $this->_propDict["remediationScriptContent"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["remediationScriptContent"]);
                 return $this->_propDict["remediationScriptContent"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the remediationScriptContent
     * The entire content of the remediation powershell script
@@ -359,9 +392,9 @@ class DeviceHealthScript extends Entity
         $this->_propDict["remediationScriptContent"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the remediationScriptParameters
     * List of ComplexType RemediationScriptParameters objects.
      *
@@ -375,12 +408,12 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the remediationScriptParameters
     * List of ComplexType RemediationScriptParameters objects.
     *
-    * @param DeviceHealthScriptParameter $val The remediationScriptParameters
+    * @param DeviceHealthScriptParameter[] $val The remediationScriptParameters
     *
     * @return DeviceHealthScript
     */
@@ -389,12 +422,12 @@ class DeviceHealthScript extends Entity
         $this->_propDict["remediationScriptParameters"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
     * List of Scope Tag IDs for the device health script
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -404,12 +437,12 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * List of Scope Tag IDs for the device health script
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return DeviceHealthScript
     */
@@ -418,7 +451,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the runAs32Bit
     * Indicate whether PowerShell script(s) should run as 32-bit
@@ -433,7 +466,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the runAs32Bit
     * Indicate whether PowerShell script(s) should run as 32-bit
@@ -447,7 +480,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["runAs32Bit"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the runAsAccount
     * Indicates the type of execution context. Possible values are: system, user.
@@ -466,7 +499,7 @@ class DeviceHealthScript extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the runAsAccount
     * Indicates the type of execution context. Possible values are: system, user.
@@ -480,7 +513,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["runAsAccount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the version
     * Version of the device health script
@@ -495,7 +528,7 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the version
     * Version of the device health script
@@ -509,9 +542,9 @@ class DeviceHealthScript extends Entity
         $this->_propDict["version"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
     * The list of group assignments for the device health script
      *
@@ -525,12 +558,12 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * The list of group assignments for the device health script
     *
-    * @param DeviceHealthScriptAssignment $val The assignments
+    * @param DeviceHealthScriptAssignment[] $val The assignments
     *
     * @return DeviceHealthScript
     */
@@ -539,9 +572,9 @@ class DeviceHealthScript extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the deviceRunStates
     * List of run states for the device health script across all devices
      *
@@ -555,12 +588,12 @@ class DeviceHealthScript extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the deviceRunStates
     * List of run states for the device health script across all devices
     *
-    * @param DeviceHealthScriptDeviceState $val The deviceRunStates
+    * @param DeviceHealthScriptDeviceState[] $val The deviceRunStates
     *
     * @return DeviceHealthScript
     */
@@ -569,7 +602,7 @@ class DeviceHealthScript extends Entity
         $this->_propDict["deviceRunStates"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the runSummary
     * High level run summary for device health script.
@@ -588,7 +621,7 @@ class DeviceHealthScript extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the runSummary
     * High level run summary for device health script.
@@ -602,5 +635,5 @@ class DeviceHealthScript extends Entity
         $this->_propDict["runSummary"] = $val;
         return $this;
     }
-    
+
 }

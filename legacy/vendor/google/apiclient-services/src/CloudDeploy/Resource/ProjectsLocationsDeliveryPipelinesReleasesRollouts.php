@@ -96,11 +96,14 @@ class ProjectsLocationsDeliveryPipelinesReleasesRollouts extends \Google\Service
    * Creates a new Rollout in a given project and location. (rollouts.create)
    *
    * @param string $parent Required. The parent collection in which the `Rollout`
-   * should be created. Format should be `projects/{project_id}/locations/{locatio
-   * n_name}/deliveryPipelines/{pipeline_name}/releases/{release_name}`.
+   * must be created. The format is `projects/{project_id}/locations/{location_nam
+   * e}/deliveryPipelines/{pipeline_name}/releases/{release_name}`.
    * @param Rollout $postBody
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string overrideDeployPolicy Optional. Deploy policies to override.
+   * Format is
+   * `projects/{project}/locations/{location}/deployPolicies/{deployPolicy}`.
    * @opt_param string requestId Optional. A request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
    * server knows to ignore the request if it has already been completed. The

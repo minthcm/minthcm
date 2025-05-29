@@ -38,7 +38,7 @@ class BookingStaffMember extends BookingPerson
             return null;
         }
     }
-    
+
     /**
     * Sets the availabilityIsAffectedByPersonalCalendar
     * True means that if the staff member is a Microsoft 365 user, the Bookings API would verify the staff member's availability in their personal calendar in Microsoft 365, before making a booking.
@@ -52,7 +52,7 @@ class BookingStaffMember extends BookingPerson
         $this->_propDict["availabilityIsAffectedByPersonalCalendar"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the colorIndex
     * Identifies a color to represent the staff member. The color corresponds to the color palette in the Staff details page in the Bookings app.
@@ -67,7 +67,7 @@ class BookingStaffMember extends BookingPerson
             return null;
         }
     }
-    
+
     /**
     * Sets the colorIndex
     * Identifies a color to represent the staff member. The color corresponds to the color palette in the Staff details page in the Bookings app.
@@ -81,10 +81,70 @@ class BookingStaffMember extends BookingPerson
         $this->_propDict["colorIndex"] = intval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the isEmailNotificationEnabled
+    * True indicates that a staff member will be notified via email when a booking assigned to them is created or changed.
+    *
+    * @return bool|null The isEmailNotificationEnabled
+    */
+    public function getIsEmailNotificationEnabled()
+    {
+        if (array_key_exists("isEmailNotificationEnabled", $this->_propDict)) {
+            return $this->_propDict["isEmailNotificationEnabled"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isEmailNotificationEnabled
+    * True indicates that a staff member will be notified via email when a booking assigned to them is created or changed.
+    *
+    * @param bool $val The isEmailNotificationEnabled
+    *
+    * @return BookingStaffMember
+    */
+    public function setIsEmailNotificationEnabled($val)
+    {
+        $this->_propDict["isEmailNotificationEnabled"] = boolval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the membershipStatus
+    *
+    * @return BookingStaffMembershipStatus|null The membershipStatus
+    */
+    public function getMembershipStatus()
+    {
+        if (array_key_exists("membershipStatus", $this->_propDict)) {
+            if (is_a($this->_propDict["membershipStatus"], "\Beta\Microsoft\Graph\Model\BookingStaffMembershipStatus") || is_null($this->_propDict["membershipStatus"])) {
+                return $this->_propDict["membershipStatus"];
+            } else {
+                $this->_propDict["membershipStatus"] = new BookingStaffMembershipStatus($this->_propDict["membershipStatus"]);
+                return $this->_propDict["membershipStatus"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the membershipStatus
+    *
+    * @param BookingStaffMembershipStatus $val The membershipStatus
+    *
+    * @return BookingStaffMember
+    */
+    public function setMembershipStatus($val)
+    {
+        $this->_propDict["membershipStatus"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the role
-    * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest. Required.
+    * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest, unknownFutureValue, scheduler, teamMember. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum: scheduler, teamMember. Required.
     *
     * @return BookingStaffRole|null The role
     */
@@ -100,10 +160,10 @@ class BookingStaffMember extends BookingPerson
         }
         return null;
     }
-    
+
     /**
     * Sets the role
-    * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest. Required.
+    * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest, unknownFutureValue, scheduler, teamMember. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum: scheduler, teamMember. Required.
     *
     * @param BookingStaffRole $val The role
     *
@@ -114,7 +174,36 @@ class BookingStaffMember extends BookingPerson
         $this->_propDict["role"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the timeZone
+    * The time zone of the staff member. For a list of possible values, see dateTimeTimeZone.
+    *
+    * @return string|null The timeZone
+    */
+    public function getTimeZone()
+    {
+        if (array_key_exists("timeZone", $this->_propDict)) {
+            return $this->_propDict["timeZone"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the timeZone
+    * The time zone of the staff member. For a list of possible values, see dateTimeTimeZone.
+    *
+    * @param string $val The timeZone
+    *
+    * @return BookingStaffMember
+    */
+    public function setTimeZone($val)
+    {
+        $this->_propDict["timeZone"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the useBusinessHours
     * True means the staff member's availability is as specified in the businessHours property of the business. False means the availability is determined by the staff member's workingHours property setting.
@@ -129,7 +218,7 @@ class BookingStaffMember extends BookingPerson
             return null;
         }
     }
-    
+
     /**
     * Sets the useBusinessHours
     * True means the staff member's availability is as specified in the businessHours property of the business. False means the availability is determined by the staff member's workingHours property setting.
@@ -143,9 +232,9 @@ class BookingStaffMember extends BookingPerson
         $this->_propDict["useBusinessHours"] = boolval($val);
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the workingHours
     * The range of hours each day of the week that the staff member is available for booking. By default, they are initialized to be the same as the businessHours property of the business.
      *
@@ -159,12 +248,12 @@ class BookingStaffMember extends BookingPerson
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the workingHours
     * The range of hours each day of the week that the staff member is available for booking. By default, they are initialized to be the same as the businessHours property of the business.
     *
-    * @param BookingWorkHours $val The workingHours
+    * @param BookingWorkHours[] $val The workingHours
     *
     * @return BookingStaffMember
     */
@@ -173,5 +262,5 @@ class BookingStaffMember extends BookingPerson
         $this->_propDict["workingHours"] = $val;
         return $this;
     }
-    
+
 }

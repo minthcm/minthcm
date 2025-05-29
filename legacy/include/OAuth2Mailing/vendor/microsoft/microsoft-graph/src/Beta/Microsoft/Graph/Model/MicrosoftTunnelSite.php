@@ -26,7 +26,7 @@ class MicrosoftTunnelSite extends Entity
 {
     /**
     * Gets the description
-    * The MicrosoftTunnelSite's description
+    * The site's description (optional)
     *
     * @return string|null The description
     */
@@ -38,10 +38,10 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * The MicrosoftTunnelSite's description
+    * The site's description (optional)
     *
     * @param string $val The description
     *
@@ -52,10 +52,10 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The MicrosoftTunnelSite's display name
+    * The display name for the site. This property is required when a site is created.
     *
     * @return string|null The displayName
     */
@@ -67,10 +67,10 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The MicrosoftTunnelSite's display name
+    * The display name for the site. This property is required when a site is created.
     *
     * @param string $val The displayName
     *
@@ -81,10 +81,39 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the internalNetworkProbeUrl
+    * The site's Internal Network Access Probe URL
+    *
+    * @return string|null The internalNetworkProbeUrl
+    */
+    public function getInternalNetworkProbeUrl()
+    {
+        if (array_key_exists("internalNetworkProbeUrl", $this->_propDict)) {
+            return $this->_propDict["internalNetworkProbeUrl"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the internalNetworkProbeUrl
+    * The site's Internal Network Access Probe URL
+    *
+    * @param string $val The internalNetworkProbeUrl
+    *
+    * @return MicrosoftTunnelSite
+    */
+    public function setInternalNetworkProbeUrl($val)
+    {
+        $this->_propDict["internalNetworkProbeUrl"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the publicAddress
-    * The MicrosoftTunnelSite's public domain name or IP address
+    * The site's public domain name or IP address
     *
     * @return string|null The publicAddress
     */
@@ -96,10 +125,10 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the publicAddress
-    * The MicrosoftTunnelSite's public domain name or IP address
+    * The site's public domain name or IP address
     *
     * @param string $val The publicAddress
     *
@@ -110,12 +139,12 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["publicAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
-    * List of Scope Tags for this Entity instance.
+    * List of Scope Tags for this Entity instance
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -125,12 +154,12 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
-    * List of Scope Tags for this Entity instance.
+    * List of Scope Tags for this Entity instance
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return MicrosoftTunnelSite
     */
@@ -139,7 +168,7 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the upgradeAutomatically
     * The site's automatic upgrade setting. True for automatic upgrades, false for manual control
@@ -154,7 +183,7 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the upgradeAutomatically
     * The site's automatic upgrade setting. True for automatic upgrades, false for manual control
@@ -168,10 +197,10 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["upgradeAutomatically"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the upgradeAvailable
-    * True if an upgrade is available
+    * The site provides the state of when an upgrade is available
     *
     * @return bool|null The upgradeAvailable
     */
@@ -183,10 +212,10 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the upgradeAvailable
-    * True if an upgrade is available
+    * The site provides the state of when an upgrade is available
     *
     * @param bool $val The upgradeAvailable
     *
@@ -197,7 +226,7 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["upgradeAvailable"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the upgradeWindowEndTime
     * The site's upgrade window end time of day
@@ -216,7 +245,7 @@ class MicrosoftTunnelSite extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the upgradeWindowEndTime
     * The site's upgrade window end time of day
@@ -230,7 +259,7 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["upgradeWindowEndTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the upgradeWindowStartTime
     * The site's upgrade window start time of day
@@ -249,7 +278,7 @@ class MicrosoftTunnelSite extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the upgradeWindowStartTime
     * The site's upgrade window start time of day
@@ -263,7 +292,7 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["upgradeWindowStartTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the upgradeWindowUtcOffsetInMinutes
     * The site's timezone represented as a minute offset from UTC
@@ -278,7 +307,7 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the upgradeWindowUtcOffsetInMinutes
     * The site's timezone represented as a minute offset from UTC
@@ -292,7 +321,7 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["upgradeWindowUtcOffsetInMinutes"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the microsoftTunnelConfiguration
     * The MicrosoftTunnelConfiguration that has been applied to this MicrosoftTunnelSite
@@ -311,7 +340,7 @@ class MicrosoftTunnelSite extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the microsoftTunnelConfiguration
     * The MicrosoftTunnelConfiguration that has been applied to this MicrosoftTunnelSite
@@ -325,9 +354,9 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["microsoftTunnelConfiguration"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the microsoftTunnelServers
     * A list of MicrosoftTunnelServers that are registered to this MicrosoftTunnelSite
      *
@@ -341,12 +370,12 @@ class MicrosoftTunnelSite extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the microsoftTunnelServers
     * A list of MicrosoftTunnelServers that are registered to this MicrosoftTunnelSite
     *
-    * @param MicrosoftTunnelServer $val The microsoftTunnelServers
+    * @param MicrosoftTunnelServer[] $val The microsoftTunnelServers
     *
     * @return MicrosoftTunnelSite
     */
@@ -355,5 +384,5 @@ class MicrosoftTunnelSite extends Entity
         $this->_propDict["microsoftTunnelServers"] = $val;
         return $this;
     }
-    
+
 }

@@ -26,7 +26,7 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
 {
     /**
     * Gets the allOtherUpdateBehavior
-    * Update behavior for all other updates. Possible values are: notConfigured, default.
+    * Update behavior for all other updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @return MacOSSoftwareUpdateBehavior|null The allOtherUpdateBehavior
     */
@@ -42,10 +42,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the allOtherUpdateBehavior
-    * Update behavior for all other updates. Possible values are: notConfigured, default.
+    * Update behavior for all other updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @param MacOSSoftwareUpdateBehavior $val The allOtherUpdateBehavior
     *
@@ -56,10 +56,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["allOtherUpdateBehavior"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the configDataUpdateBehavior
-    * Update behavior for configuration data file updates. Possible values are: notConfigured, default.
+    * Update behavior for configuration data file updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @return MacOSSoftwareUpdateBehavior|null The configDataUpdateBehavior
     */
@@ -75,10 +75,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the configDataUpdateBehavior
-    * Update behavior for configuration data file updates. Possible values are: notConfigured, default.
+    * Update behavior for configuration data file updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @param MacOSSoftwareUpdateBehavior $val The configDataUpdateBehavior
     *
@@ -89,10 +89,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["configDataUpdateBehavior"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the criticalUpdateBehavior
-    * Update behavior for critical updates. Possible values are: notConfigured, default.
+    * Update behavior for critical updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @return MacOSSoftwareUpdateBehavior|null The criticalUpdateBehavior
     */
@@ -108,10 +108,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the criticalUpdateBehavior
-    * Update behavior for critical updates. Possible values are: notConfigured, default.
+    * Update behavior for critical updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @param MacOSSoftwareUpdateBehavior $val The criticalUpdateBehavior
     *
@@ -122,9 +122,9 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["criticalUpdateBehavior"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the customUpdateTimeWindows
     * Custom Time windows when updates will be allowed or blocked. This collection can contain a maximum of 20 elements.
      *
@@ -138,12 +138,12 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the customUpdateTimeWindows
     * Custom Time windows when updates will be allowed or blocked. This collection can contain a maximum of 20 elements.
     *
-    * @param CustomUpdateTimeWindow $val The customUpdateTimeWindows
+    * @param CustomUpdateTimeWindow[] $val The customUpdateTimeWindows
     *
     * @return MacOSSoftwareUpdateConfiguration
     */
@@ -152,10 +152,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["customUpdateTimeWindows"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the firmwareUpdateBehavior
-    * Update behavior for firmware updates. Possible values are: notConfigured, default.
+    * Update behavior for firmware updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @return MacOSSoftwareUpdateBehavior|null The firmwareUpdateBehavior
     */
@@ -171,10 +171,10 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the firmwareUpdateBehavior
-    * Update behavior for firmware updates. Possible values are: notConfigured, default.
+    * Update behavior for firmware updates. Possible values are: notConfigured, default, downloadOnly, installASAP, notifyOnly, installLater.
     *
     * @param MacOSSoftwareUpdateBehavior $val The firmwareUpdateBehavior
     *
@@ -185,7 +185,69 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["firmwareUpdateBehavior"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the maxUserDeferralsCount
+    * The maximum number of times the system allows the user to postpone an update before it’s installed. Supported values: 0 - 366. Valid values 0 to 365
+    *
+    * @return int|null The maxUserDeferralsCount
+    */
+    public function getMaxUserDeferralsCount()
+    {
+        if (array_key_exists("maxUserDeferralsCount", $this->_propDict)) {
+            return $this->_propDict["maxUserDeferralsCount"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the maxUserDeferralsCount
+    * The maximum number of times the system allows the user to postpone an update before it’s installed. Supported values: 0 - 366. Valid values 0 to 365
+    *
+    * @param int $val The maxUserDeferralsCount
+    *
+    * @return MacOSSoftwareUpdateConfiguration
+    */
+    public function setMaxUserDeferralsCount($val)
+    {
+        $this->_propDict["maxUserDeferralsCount"] = intval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the priority
+    * The scheduling priority for downloading and preparing the requested update. Default: Low. Possible values: Null, Low, High. Possible values are: low, high, unknownFutureValue.
+    *
+    * @return MacOSPriority|null The priority
+    */
+    public function getPriority()
+    {
+        if (array_key_exists("priority", $this->_propDict)) {
+            if (is_a($this->_propDict["priority"], "\Beta\Microsoft\Graph\Model\MacOSPriority") || is_null($this->_propDict["priority"])) {
+                return $this->_propDict["priority"];
+            } else {
+                $this->_propDict["priority"] = new MacOSPriority($this->_propDict["priority"]);
+                return $this->_propDict["priority"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the priority
+    * The scheduling priority for downloading and preparing the requested update. Default: Low. Possible values: Null, Low, High. Possible values are: low, high, unknownFutureValue.
+    *
+    * @param MacOSPriority $val The priority
+    *
+    * @return MacOSSoftwareUpdateConfiguration
+    */
+    public function setPriority($val)
+    {
+        $this->_propDict["priority"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the updateScheduleType
     * Update schedule type. Possible values are: alwaysUpdate, updateDuringTimeWindows, updateOutsideOfTimeWindows.
@@ -204,7 +266,7 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the updateScheduleType
     * Update schedule type. Possible values are: alwaysUpdate, updateDuringTimeWindows, updateOutsideOfTimeWindows.
@@ -218,7 +280,7 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["updateScheduleType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the updateTimeWindowUtcOffsetInMinutes
     * Minutes indicating UTC offset for each update time window
@@ -233,7 +295,7 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the updateTimeWindowUtcOffsetInMinutes
     * Minutes indicating UTC offset for each update time window
@@ -247,5 +309,5 @@ class MacOSSoftwareUpdateConfiguration extends DeviceConfiguration
         $this->_propDict["updateTimeWindowUtcOffsetInMinutes"] = intval($val);
         return $this;
     }
-    
+
 }

@@ -49,6 +49,10 @@ class Workflow extends \Google\Collection
    */
   public $description;
   /**
+   * @var string
+   */
+  public $executionHistoryLevel;
+  /**
    * @var string[]
    */
   public $labels;
@@ -78,6 +82,10 @@ class Workflow extends \Google\Collection
   public $state;
   protected $stateErrorType = StateError::class;
   protected $stateErrorDataType = '';
+  /**
+   * @var string[]
+   */
+  public $tags;
   /**
    * @var string
    */
@@ -184,6 +192,20 @@ class Workflow extends \Google\Collection
   public function getDescription()
   {
     return $this->description;
+  }
+  /**
+   * @param string
+   */
+  public function setExecutionHistoryLevel($executionHistoryLevel)
+  {
+    $this->executionHistoryLevel = $executionHistoryLevel;
+  }
+  /**
+   * @return string
+   */
+  public function getExecutionHistoryLevel()
+  {
+    return $this->executionHistoryLevel;
   }
   /**
    * @param string[]
@@ -296,6 +318,20 @@ class Workflow extends \Google\Collection
   public function getStateError()
   {
     return $this->stateError;
+  }
+  /**
+   * @param string[]
+   */
+  public function setTags($tags)
+  {
+    $this->tags = $tags;
+  }
+  /**
+   * @return string[]
+   */
+  public function getTags()
+  {
+    return $this->tags;
   }
   /**
    * @param string

@@ -11,17 +11,13 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Visitor\Visitor;
 use Doctrine\Deprecations\Deprecation;
 
-/**
- * @deprecated
- */
+/** @deprecated */
 class TableGeneratorSchemaVisitor implements Visitor
 {
     /** @var string */
     private $generatorTableName;
 
-    /**
-     * @param string $generatorTableName
-     */
+    /** @param string $generatorTableName */
     public function __construct($generatorTableName = 'sequences')
     {
         Deprecation::trigger(
@@ -34,7 +30,7 @@ class TableGeneratorSchemaVisitor implements Visitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptSchema(Schema $schema)
     {
@@ -45,35 +41,35 @@ class TableGeneratorSchemaVisitor implements Visitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptTable(Table $table)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptColumn(Table $table, Column $column)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptIndex(Table $table, Index $index)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptSequence(Sequence $sequence)
     {

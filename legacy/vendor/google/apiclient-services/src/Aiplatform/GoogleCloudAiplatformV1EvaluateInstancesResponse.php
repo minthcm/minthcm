@@ -23,6 +23,8 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   protected $bleuResultsDataType = '';
   protected $coherenceResultType = GoogleCloudAiplatformV1CoherenceResult::class;
   protected $coherenceResultDataType = '';
+  protected $cometResultType = GoogleCloudAiplatformV1CometResult::class;
+  protected $cometResultDataType = '';
   protected $exactMatchResultsType = GoogleCloudAiplatformV1ExactMatchResults::class;
   protected $exactMatchResultsDataType = '';
   protected $fluencyResultType = GoogleCloudAiplatformV1FluencyResult::class;
@@ -31,10 +33,16 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   protected $fulfillmentResultDataType = '';
   protected $groundednessResultType = GoogleCloudAiplatformV1GroundednessResult::class;
   protected $groundednessResultDataType = '';
+  protected $metricxResultType = GoogleCloudAiplatformV1MetricxResult::class;
+  protected $metricxResultDataType = '';
+  protected $pairwiseMetricResultType = GoogleCloudAiplatformV1PairwiseMetricResult::class;
+  protected $pairwiseMetricResultDataType = '';
   protected $pairwiseQuestionAnsweringQualityResultType = GoogleCloudAiplatformV1PairwiseQuestionAnsweringQualityResult::class;
   protected $pairwiseQuestionAnsweringQualityResultDataType = '';
   protected $pairwiseSummarizationQualityResultType = GoogleCloudAiplatformV1PairwiseSummarizationQualityResult::class;
   protected $pairwiseSummarizationQualityResultDataType = '';
+  protected $pointwiseMetricResultType = GoogleCloudAiplatformV1PointwiseMetricResult::class;
+  protected $pointwiseMetricResultDataType = '';
   protected $questionAnsweringCorrectnessResultType = GoogleCloudAiplatformV1QuestionAnsweringCorrectnessResult::class;
   protected $questionAnsweringCorrectnessResultDataType = '';
   protected $questionAnsweringHelpfulnessResultType = GoogleCloudAiplatformV1QuestionAnsweringHelpfulnessResult::class;
@@ -61,6 +69,18 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   protected $toolParameterKeyMatchResultsDataType = '';
   protected $toolParameterKvMatchResultsType = GoogleCloudAiplatformV1ToolParameterKVMatchResults::class;
   protected $toolParameterKvMatchResultsDataType = '';
+  protected $trajectoryAnyOrderMatchResultsType = GoogleCloudAiplatformV1TrajectoryAnyOrderMatchResults::class;
+  protected $trajectoryAnyOrderMatchResultsDataType = '';
+  protected $trajectoryExactMatchResultsType = GoogleCloudAiplatformV1TrajectoryExactMatchResults::class;
+  protected $trajectoryExactMatchResultsDataType = '';
+  protected $trajectoryInOrderMatchResultsType = GoogleCloudAiplatformV1TrajectoryInOrderMatchResults::class;
+  protected $trajectoryInOrderMatchResultsDataType = '';
+  protected $trajectoryPrecisionResultsType = GoogleCloudAiplatformV1TrajectoryPrecisionResults::class;
+  protected $trajectoryPrecisionResultsDataType = '';
+  protected $trajectoryRecallResultsType = GoogleCloudAiplatformV1TrajectoryRecallResults::class;
+  protected $trajectoryRecallResultsDataType = '';
+  protected $trajectorySingleToolUseResultsType = GoogleCloudAiplatformV1TrajectorySingleToolUseResults::class;
+  protected $trajectorySingleToolUseResultsDataType = '';
 
   /**
    * @param GoogleCloudAiplatformV1BleuResults
@@ -89,6 +109,20 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   public function getCoherenceResult()
   {
     return $this->coherenceResult;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1CometResult
+   */
+  public function setCometResult(GoogleCloudAiplatformV1CometResult $cometResult)
+  {
+    $this->cometResult = $cometResult;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1CometResult
+   */
+  public function getCometResult()
+  {
+    return $this->cometResult;
   }
   /**
    * @param GoogleCloudAiplatformV1ExactMatchResults
@@ -147,6 +181,34 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
     return $this->groundednessResult;
   }
   /**
+   * @param GoogleCloudAiplatformV1MetricxResult
+   */
+  public function setMetricxResult(GoogleCloudAiplatformV1MetricxResult $metricxResult)
+  {
+    $this->metricxResult = $metricxResult;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1MetricxResult
+   */
+  public function getMetricxResult()
+  {
+    return $this->metricxResult;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1PairwiseMetricResult
+   */
+  public function setPairwiseMetricResult(GoogleCloudAiplatformV1PairwiseMetricResult $pairwiseMetricResult)
+  {
+    $this->pairwiseMetricResult = $pairwiseMetricResult;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1PairwiseMetricResult
+   */
+  public function getPairwiseMetricResult()
+  {
+    return $this->pairwiseMetricResult;
+  }
+  /**
    * @param GoogleCloudAiplatformV1PairwiseQuestionAnsweringQualityResult
    */
   public function setPairwiseQuestionAnsweringQualityResult(GoogleCloudAiplatformV1PairwiseQuestionAnsweringQualityResult $pairwiseQuestionAnsweringQualityResult)
@@ -173,6 +235,20 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   public function getPairwiseSummarizationQualityResult()
   {
     return $this->pairwiseSummarizationQualityResult;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1PointwiseMetricResult
+   */
+  public function setPointwiseMetricResult(GoogleCloudAiplatformV1PointwiseMetricResult $pointwiseMetricResult)
+  {
+    $this->pointwiseMetricResult = $pointwiseMetricResult;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1PointwiseMetricResult
+   */
+  public function getPointwiseMetricResult()
+  {
+    return $this->pointwiseMetricResult;
   }
   /**
    * @param GoogleCloudAiplatformV1QuestionAnsweringCorrectnessResult
@@ -355,6 +431,90 @@ class GoogleCloudAiplatformV1EvaluateInstancesResponse extends \Google\Model
   public function getToolParameterKvMatchResults()
   {
     return $this->toolParameterKvMatchResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectoryAnyOrderMatchResults
+   */
+  public function setTrajectoryAnyOrderMatchResults(GoogleCloudAiplatformV1TrajectoryAnyOrderMatchResults $trajectoryAnyOrderMatchResults)
+  {
+    $this->trajectoryAnyOrderMatchResults = $trajectoryAnyOrderMatchResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectoryAnyOrderMatchResults
+   */
+  public function getTrajectoryAnyOrderMatchResults()
+  {
+    return $this->trajectoryAnyOrderMatchResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectoryExactMatchResults
+   */
+  public function setTrajectoryExactMatchResults(GoogleCloudAiplatformV1TrajectoryExactMatchResults $trajectoryExactMatchResults)
+  {
+    $this->trajectoryExactMatchResults = $trajectoryExactMatchResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectoryExactMatchResults
+   */
+  public function getTrajectoryExactMatchResults()
+  {
+    return $this->trajectoryExactMatchResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectoryInOrderMatchResults
+   */
+  public function setTrajectoryInOrderMatchResults(GoogleCloudAiplatformV1TrajectoryInOrderMatchResults $trajectoryInOrderMatchResults)
+  {
+    $this->trajectoryInOrderMatchResults = $trajectoryInOrderMatchResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectoryInOrderMatchResults
+   */
+  public function getTrajectoryInOrderMatchResults()
+  {
+    return $this->trajectoryInOrderMatchResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectoryPrecisionResults
+   */
+  public function setTrajectoryPrecisionResults(GoogleCloudAiplatformV1TrajectoryPrecisionResults $trajectoryPrecisionResults)
+  {
+    $this->trajectoryPrecisionResults = $trajectoryPrecisionResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectoryPrecisionResults
+   */
+  public function getTrajectoryPrecisionResults()
+  {
+    return $this->trajectoryPrecisionResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectoryRecallResults
+   */
+  public function setTrajectoryRecallResults(GoogleCloudAiplatformV1TrajectoryRecallResults $trajectoryRecallResults)
+  {
+    $this->trajectoryRecallResults = $trajectoryRecallResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectoryRecallResults
+   */
+  public function getTrajectoryRecallResults()
+  {
+    return $this->trajectoryRecallResults;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1TrajectorySingleToolUseResults
+   */
+  public function setTrajectorySingleToolUseResults(GoogleCloudAiplatformV1TrajectorySingleToolUseResults $trajectorySingleToolUseResults)
+  {
+    $this->trajectorySingleToolUseResults = $trajectorySingleToolUseResults;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1TrajectorySingleToolUseResults
+   */
+  public function getTrajectorySingleToolUseResults()
+  {
+    return $this->trajectorySingleToolUseResults;
   }
 }
 

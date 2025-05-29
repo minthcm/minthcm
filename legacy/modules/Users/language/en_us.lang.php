@@ -663,7 +663,7 @@ $mod_strings = array(
     'LBL_FACTOR_AUTH' => 'Factor Auth',
     'LBL_FACTOR_AUTH_INTERFACE' => 'Factor Auth Interface',
     'LBL_BUSINESS_ROLE' => 'Business role',
-    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Management of organizational units',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
     'LBL_USERS_CONFIRMATION_BUTTON_CONFIRM' => 'YES',
     'LBL_USERS_CONFIRMATION_BUTTON_CANCEL' => 'NO',
     'LBL_USER_DEACTIVE_SUPERVISOR'=>'The employee you want to deactivate is the current manager of the unit</br> <URL>In order to correctly generate the organizational structure of the department, a new manager should be indicated. Do you want to continue with deactivation?',
@@ -673,5 +673,6 @@ $mod_strings = array(
     'LNK_LIST_INBOUND_EMAIL_ACCOUNTS' => 'Inbound Email Accounts',
     'LNK_EXTERNAL_OAUTH_CONNECTIONS' => 'External OAuth Connections',
     'LBL_BIRTHDATE' => 'Birthdate',
+    'LBL_LIST_WORKSCHEDULE_TYPE' => 'Work Schedules',
 
 ); // END STRINGS DEFS

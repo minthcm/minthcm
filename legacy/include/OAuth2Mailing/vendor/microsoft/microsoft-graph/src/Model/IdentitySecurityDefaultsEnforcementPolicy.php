@@ -26,7 +26,7 @@ class IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase
 {
     /**
     * Gets the isEnabled
-    * If set to true, Azure Active Directory security defaults is enabled for the tenant.
+    * If set to true, Microsoft Entra security defaults are enabled for the tenant.
     *
     * @return bool|null The isEnabled
     */
@@ -38,10 +38,10 @@ class IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase
             return null;
         }
     }
-    
+
     /**
     * Sets the isEnabled
-    * If set to true, Azure Active Directory security defaults is enabled for the tenant.
+    * If set to true, Microsoft Entra security defaults are enabled for the tenant.
     *
     * @param bool $val The isEnabled
     *
@@ -52,5 +52,5 @@ class IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase
         $this->_propDict["isEnabled"] = boolval($val);
         return $this;
     }
-    
+
 }

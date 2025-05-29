@@ -20,6 +20,7 @@ namespace Google\Service\Backupdr\Resource;
 use Google\Service\Backupdr\Backup;
 use Google\Service\Backupdr\ListBackupsResponse;
 use Google\Service\Backupdr\Operation;
+use Google\Service\Backupdr\RestoreBackupRequest;
 
 /**
  * The "backups" collection of methods.
@@ -64,6 +65,9 @@ class ProjectsLocationsBackupVaultsDataSourcesBackups extends \Google\Service\Re
    * format 'projects/{project_id}/locations/{location}/backupVaults/{backupVault}
    * /dataSources/{datasource}/backups/{backup}'
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string view Optional. Reserved for future use to provide a BASIC &
+   * FULL view of Backup resource.
    * @return Backup
    * @throws \Google\Service\Exception
    */
@@ -91,6 +95,8 @@ class ProjectsLocationsBackupVaultsDataSourcesBackups extends \Google\Service\Re
    * default.
    * @opt_param string pageToken Optional. A token identifying a page of results
    * the server should return.
+   * @opt_param string view Optional. Reserved for future use to provide a BASIC &
+   * FULL view of Backup resource.
    * @return ListBackupsResponse
    * @throws \Google\Service\Exception
    */
@@ -103,7 +109,10 @@ class ProjectsLocationsBackupVaultsDataSourcesBackups extends \Google\Service\Re
   /**
    * Updates the settings of a Backup. (backups.patch)
    *
-   * @param string $name Output only. Name of the resource.
+   * @param string $name Output only. Identifier. Name of the backup to create. It
+   * must have the format`"projects//locations//backupVaults//dataSources/{datasou
+   * rce}/backups/{backup}"`. `{backup}` cannot be changed after creation. It must
+   * be between 3-63 characters long and must be unique within the datasource.
    * @param Backup $postBody
    * @param array $optParams Optional parameters.
    *
@@ -131,6 +140,22 @@ class ProjectsLocationsBackupVaultsDataSourcesBackups extends \Google\Service\Re
     $params = ['name' => $name, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
     return $this->call('patch', [$params], Operation::class);
+  }
+  /**
+   * Restore from a Backup (backups.restore)
+   *
+   * @param string $name Required. The resource name of the Backup instance, in
+   * the format 'projects/locations/backupVaults/dataSources/backups/'.
+   * @param RestoreBackupRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return Operation
+   * @throws \Google\Service\Exception
+   */
+  public function restore($name, RestoreBackupRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('restore', [$params], Operation::class);
   }
 }
 

@@ -35,6 +35,7 @@ use Google\Service\Backupdr\TestIamPermissionsResponse;
 class ProjectsLocationsBackupVaults extends \Google\Service\Resource
 {
   /**
+   * Creates a new BackupVault in a given project and location.
    * (backupVaults.create)
    *
    * @param string $parent Required. Value for parent.
@@ -79,6 +80,9 @@ class ProjectsLocationsBackupVaults extends \Google\Service\Resource
    * be blocked.
    * @opt_param bool force Optional. If set to true, any data source from this
    * backup vault will also be deleted.
+   * @opt_param bool ignoreBackupPlanReferences Optional. If set to true,
+   * backupvault deletion will proceed even if there are backup plans referencing
+   * the backupvault. The default is 'false'.
    * @opt_param string requestId Optional. An optional request ID to identify
    * requests. Specify a unique request ID so that if you must retry your request,
    * the server will know to ignore the request if it has already been completed.
@@ -137,6 +141,9 @@ class ProjectsLocationsBackupVaults extends \Google\Service\Resource
    * the format
    * 'projects/{project_id}/locations/{location}/backupVaults/{resource_name}'
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string view Optional. Reserved for future use to provide a BASIC &
+   * FULL view of Backup Vault
    * @return BackupVault
    * @throws \Google\Service\Exception
    */
@@ -165,6 +172,8 @@ class ProjectsLocationsBackupVaults extends \Google\Service\Resource
    * default.
    * @opt_param string pageToken Optional. A token identifying a page of results
    * the server should return.
+   * @opt_param string view Optional. Reserved for future use to provide a BASIC &
+   * FULL view of Backup Vault.
    * @return ListBackupVaultsResponse
    * @throws \Google\Service\Exception
    */
@@ -177,10 +186,16 @@ class ProjectsLocationsBackupVaults extends \Google\Service\Resource
   /**
    * Updates the settings of a BackupVault. (backupVaults.patch)
    *
-   * @param string $name Output only. The resource name.
+   * @param string $name Output only. Identifier. Name of the backup vault to
+   * create. It must have the
+   * format`"projects/{project}/locations/{location}/backupVaults/{backupvault}"`.
+   * `{backupvault}` cannot be changed after creation. It must be between 3-63
+   * characters long and must be unique within the project and location.
    * @param BackupVault $postBody
    * @param array $optParams Optional parameters.
    *
+   * @opt_param bool force Optional. If set to true, will not check plan duration
+   * against backup vault enforcement duration.
    * @opt_param string requestId Optional. An optional request ID to identify
    * requests. Specify a unique request ID so that if you must retry your request,
    * the server will know to ignore the request if it has already been completed.

@@ -27,6 +27,11 @@ class StorageDatabasecenterPartnerapiV1mainMachineConfiguration extends \Google\
    * @var string
    */
   public $memorySizeInBytes;
+  /**
+   * @var int
+   */
+  public $shardCount;
+  public $vcpuCount;
 
   /**
    * @param int
@@ -55,6 +60,28 @@ class StorageDatabasecenterPartnerapiV1mainMachineConfiguration extends \Google\
   public function getMemorySizeInBytes()
   {
     return $this->memorySizeInBytes;
+  }
+  /**
+   * @param int
+   */
+  public function setShardCount($shardCount)
+  {
+    $this->shardCount = $shardCount;
+  }
+  /**
+   * @return int
+   */
+  public function getShardCount()
+  {
+    return $this->shardCount;
+  }
+  public function setVcpuCount($vcpuCount)
+  {
+    $this->vcpuCount = $vcpuCount;
+  }
+  public function getVcpuCount()
+  {
+    return $this->vcpuCount;
   }
 }
 

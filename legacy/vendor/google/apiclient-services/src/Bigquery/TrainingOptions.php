@@ -79,6 +79,10 @@ class TrainingOptions extends \Google\Collection
   /**
    * @var string
    */
+  public $contributionMetric;
+  /**
+   * @var string
+   */
   public $dartNormalizeType;
   /**
    * @var string
@@ -97,6 +101,10 @@ class TrainingOptions extends \Google\Collection
    * @var bool
    */
   public $decomposeTimeSeries;
+  /**
+   * @var string[]
+   */
+  public $dimensionIdColumns;
   /**
    * @var string
    */
@@ -118,6 +126,8 @@ class TrainingOptions extends \Google\Collection
    * @var bool
    */
   public $fitIntercept;
+  public $forecastLimitLowerBound;
+  public $forecastLimitUpperBound;
   /**
    * @var string[]
    */
@@ -155,6 +165,10 @@ class TrainingOptions extends \Google\Collection
    * @var string
    */
   public $integratedGradientsNumSteps;
+  /**
+   * @var string
+   */
+  public $isTestColumn;
   /**
    * @var string
    */
@@ -196,6 +210,7 @@ class TrainingOptions extends \Google\Collection
    * @var string
    */
   public $maxTreeDepth;
+  public $minAprioriSupport;
   public $minRelativeProgress;
   public $minSplitLoss;
   /**
@@ -526,6 +541,20 @@ class TrainingOptions extends \Google\Collection
   /**
    * @param string
    */
+  public function setContributionMetric($contributionMetric)
+  {
+    $this->contributionMetric = $contributionMetric;
+  }
+  /**
+   * @return string
+   */
+  public function getContributionMetric()
+  {
+    return $this->contributionMetric;
+  }
+  /**
+   * @param string
+   */
   public function setDartNormalizeType($dartNormalizeType)
   {
     $this->dartNormalizeType = $dartNormalizeType;
@@ -600,6 +629,20 @@ class TrainingOptions extends \Google\Collection
   public function getDecomposeTimeSeries()
   {
     return $this->decomposeTimeSeries;
+  }
+  /**
+   * @param string[]
+   */
+  public function setDimensionIdColumns($dimensionIdColumns)
+  {
+    $this->dimensionIdColumns = $dimensionIdColumns;
+  }
+  /**
+   * @return string[]
+   */
+  public function getDimensionIdColumns()
+  {
+    return $this->dimensionIdColumns;
   }
   /**
    * @param string
@@ -678,6 +721,22 @@ class TrainingOptions extends \Google\Collection
   public function getFitIntercept()
   {
     return $this->fitIntercept;
+  }
+  public function setForecastLimitLowerBound($forecastLimitLowerBound)
+  {
+    $this->forecastLimitLowerBound = $forecastLimitLowerBound;
+  }
+  public function getForecastLimitLowerBound()
+  {
+    return $this->forecastLimitLowerBound;
+  }
+  public function setForecastLimitUpperBound($forecastLimitUpperBound)
+  {
+    $this->forecastLimitUpperBound = $forecastLimitUpperBound;
+  }
+  public function getForecastLimitUpperBound()
+  {
+    return $this->forecastLimitUpperBound;
   }
   /**
    * @param string[]
@@ -812,6 +871,20 @@ class TrainingOptions extends \Google\Collection
   public function getIntegratedGradientsNumSteps()
   {
     return $this->integratedGradientsNumSteps;
+  }
+  /**
+   * @param string
+   */
+  public function setIsTestColumn($isTestColumn)
+  {
+    $this->isTestColumn = $isTestColumn;
+  }
+  /**
+   * @return string
+   */
+  public function getIsTestColumn()
+  {
+    return $this->isTestColumn;
   }
   /**
    * @param string
@@ -978,6 +1051,14 @@ class TrainingOptions extends \Google\Collection
   public function getMaxTreeDepth()
   {
     return $this->maxTreeDepth;
+  }
+  public function setMinAprioriSupport($minAprioriSupport)
+  {
+    $this->minAprioriSupport = $minAprioriSupport;
+  }
+  public function getMinAprioriSupport()
+  {
+    return $this->minAprioriSupport;
   }
   public function setMinRelativeProgress($minRelativeProgress)
   {

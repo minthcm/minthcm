@@ -19,7 +19,7 @@ namespace Google\Service\Walletobjects;
 
 class EventTicketClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var bool
    */
@@ -98,12 +98,18 @@ class EventTicketClass extends \Google\Collection
   protected $locationsDataType = 'array';
   protected $logoType = Image::class;
   protected $logoDataType = '';
+  protected $merchantLocationsType = MerchantLocation::class;
+  protected $merchantLocationsDataType = 'array';
   protected $messagesType = Message::class;
   protected $messagesDataType = 'array';
   /**
    * @var string
    */
   public $multipleDevicesAndHoldersAllowedStatus;
+  /**
+   * @var string
+   */
+  public $notifyPreference;
   /**
    * @var string[]
    */
@@ -130,6 +136,8 @@ class EventTicketClass extends \Google\Collection
   protected $securityAnimationDataType = '';
   protected $textModulesDataType = TextModuleData::class;
   protected $textModulesDataDataType = 'array';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   protected $venueType = EventVenue::class;
   protected $venueDataType = '';
   /**
@@ -552,6 +560,20 @@ class EventTicketClass extends \Google\Collection
     return $this->logo;
   }
   /**
+   * @param MerchantLocation[]
+   */
+  public function setMerchantLocations($merchantLocations)
+  {
+    $this->merchantLocations = $merchantLocations;
+  }
+  /**
+   * @return MerchantLocation[]
+   */
+  public function getMerchantLocations()
+  {
+    return $this->merchantLocations;
+  }
+  /**
    * @param Message[]
    */
   public function setMessages($messages)
@@ -578,6 +600,20 @@ class EventTicketClass extends \Google\Collection
   public function getMultipleDevicesAndHoldersAllowedStatus()
   {
     return $this->multipleDevicesAndHoldersAllowedStatus;
+  }
+  /**
+   * @param string
+   */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
   }
   /**
    * @param string[]
@@ -690,6 +726,20 @@ class EventTicketClass extends \Google\Collection
   public function getTextModulesData()
   {
     return $this->textModulesData;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param EventVenue

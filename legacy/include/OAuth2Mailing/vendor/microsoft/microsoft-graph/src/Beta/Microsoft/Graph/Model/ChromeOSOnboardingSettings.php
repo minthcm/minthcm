@@ -42,7 +42,7 @@ class ChromeOSOnboardingSettings extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastDirectorySyncDateTime
     * The ChromebookTenant's LastDirectorySyncDateTime
@@ -56,7 +56,7 @@ class ChromeOSOnboardingSettings extends Entity
         $this->_propDict["lastDirectorySyncDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * The ChromebookTenant's LastModifiedDateTime
@@ -75,7 +75,7 @@ class ChromeOSOnboardingSettings extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * The ChromebookTenant's LastModifiedDateTime
@@ -89,10 +89,10 @@ class ChromeOSOnboardingSettings extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the onboardingStatus
-    * The ChromebookTenant's OnboardingStatus
+    * The ChromebookTenant's OnboardingStatus. Possible values are: unknown, inprogress, onboarded, failed, offboarding, unknownFutureValue.
     *
     * @return OnboardingStatus|null The onboardingStatus
     */
@@ -108,10 +108,10 @@ class ChromeOSOnboardingSettings extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the onboardingStatus
-    * The ChromebookTenant's OnboardingStatus
+    * The ChromebookTenant's OnboardingStatus. Possible values are: unknown, inprogress, onboarded, failed, offboarding, unknownFutureValue.
     *
     * @param OnboardingStatus $val The onboardingStatus
     *
@@ -122,7 +122,7 @@ class ChromeOSOnboardingSettings extends Entity
         $this->_propDict["onboardingStatus"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ownerUserPrincipalName
     * The ChromebookTenant's OwnerUserPrincipalName
@@ -137,7 +137,7 @@ class ChromeOSOnboardingSettings extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the ownerUserPrincipalName
     * The ChromebookTenant's OwnerUserPrincipalName
@@ -151,5 +151,5 @@ class ChromeOSOnboardingSettings extends Entity
         $this->_propDict["ownerUserPrincipalName"] = $val;
         return $this;
     }
-    
+
 }

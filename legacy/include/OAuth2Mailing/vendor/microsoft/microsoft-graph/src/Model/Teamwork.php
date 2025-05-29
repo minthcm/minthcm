@@ -25,7 +25,7 @@ namespace Microsoft\Graph\Model;
 class Teamwork extends Entity
 {
 
-     /** 
+     /**
      * Gets the workforceIntegrations
      *
      * @return array|null The workforceIntegrations
@@ -38,11 +38,11 @@ class Teamwork extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the workforceIntegrations
     *
-    * @param WorkforceIntegration $val The workforceIntegrations
+    * @param WorkforceIntegration[] $val The workforceIntegrations
     *
     * @return Teamwork
     */
@@ -51,5 +51,68 @@ class Teamwork extends Entity
         $this->_propDict["workforceIntegrations"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the deletedTeams
+    * The deleted team.
+     *
+     * @return array|null The deletedTeams
+     */
+    public function getDeletedTeams()
+    {
+        if (array_key_exists("deletedTeams", $this->_propDict)) {
+           return $this->_propDict["deletedTeams"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the deletedTeams
+    * The deleted team.
+    *
+    * @param DeletedTeam[] $val The deletedTeams
+    *
+    * @return Teamwork
+    */
+    public function setDeletedTeams($val)
+    {
+        $this->_propDict["deletedTeams"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the teamsAppSettings
+    * Represents tenant-wide settings for all Teams apps in the tenant.
+    *
+    * @return TeamsAppSettings|null The teamsAppSettings
+    */
+    public function getTeamsAppSettings()
+    {
+        if (array_key_exists("teamsAppSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["teamsAppSettings"], "\Microsoft\Graph\Model\TeamsAppSettings") || is_null($this->_propDict["teamsAppSettings"])) {
+                return $this->_propDict["teamsAppSettings"];
+            } else {
+                $this->_propDict["teamsAppSettings"] = new TeamsAppSettings($this->_propDict["teamsAppSettings"]);
+                return $this->_propDict["teamsAppSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the teamsAppSettings
+    * Represents tenant-wide settings for all Teams apps in the tenant.
+    *
+    * @param TeamsAppSettings $val The teamsAppSettings
+    *
+    * @return Teamwork
+    */
+    public function setTeamsAppSettings($val)
+    {
+        $this->_propDict["teamsAppSettings"] = $val;
+        return $this;
+    }
+
 }

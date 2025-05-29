@@ -26,7 +26,7 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
 {
     /**
     * Gets the coreBootTimeInMs
-    * The user experience analytics device core boot time in milliseconds.
+    * The device core boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The coreBootTimeInMs
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the coreBootTimeInMs
-    * The user experience analytics device core boot time in milliseconds.
+    * The device core boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The coreBootTimeInMs
     *
@@ -52,10 +52,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["coreBootTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the coreLoginTimeInMs
-    * The user experience analytics device core login time in milliseconds.
+    * The device core login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The coreLoginTimeInMs
     */
@@ -67,10 +67,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the coreLoginTimeInMs
-    * The user experience analytics device core login time in milliseconds.
+    * The device core login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The coreLoginTimeInMs
     *
@@ -81,10 +81,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["coreLoginTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the deviceId
-    * The user experience analytics device id.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceId
     */
@@ -96,10 +96,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceId
-    * The user experience analytics device id.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceId
     *
@@ -110,10 +110,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["deviceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the featureUpdateBootTimeInMs
-    * The user experience analytics device feature update time in milliseconds.
+    * The impact of device feature updates on boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The featureUpdateBootTimeInMs
     */
@@ -125,10 +125,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the featureUpdateBootTimeInMs
-    * The user experience analytics device feature update time in milliseconds.
+    * The impact of device feature updates on boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The featureUpdateBootTimeInMs
     *
@@ -139,10 +139,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["featureUpdateBootTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the groupPolicyBootTimeInMs
-    * The User experience analytics Device group policy boot time in milliseconds.
+    * The impact of device group policy client on boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The groupPolicyBootTimeInMs
     */
@@ -154,10 +154,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the groupPolicyBootTimeInMs
-    * The User experience analytics Device group policy boot time in milliseconds.
+    * The impact of device group policy client on boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The groupPolicyBootTimeInMs
     *
@@ -168,10 +168,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["groupPolicyBootTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the groupPolicyLoginTimeInMs
-    * The User experience analytics Device group policy login time in milliseconds.
+    * The impact of device group policy client on login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The groupPolicyLoginTimeInMs
     */
@@ -183,10 +183,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the groupPolicyLoginTimeInMs
-    * The User experience analytics Device group policy login time in milliseconds.
+    * The impact of device group policy client on login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The groupPolicyLoginTimeInMs
     *
@@ -197,10 +197,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["groupPolicyLoginTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isFeatureUpdate
-    * The user experience analytics device boot record is a feature update.
+    * When TRUE, indicates the device boot record is associated with feature updates. When FALSE, indicates the device boot record is not associated with feature updates. Supports: $select, $OrderBy. Read-only.
     *
     * @return bool|null The isFeatureUpdate
     */
@@ -212,10 +212,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isFeatureUpdate
-    * The user experience analytics device boot record is a feature update.
+    * When TRUE, indicates the device boot record is associated with feature updates. When FALSE, indicates the device boot record is not associated with feature updates. Supports: $select, $OrderBy. Read-only.
     *
     * @param bool $val The isFeatureUpdate
     *
@@ -226,10 +226,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["isFeatureUpdate"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isFirstLogin
-    * The user experience analytics device first login.
+    * When TRUE, indicates the device login is the first login after a reboot. When FALSE, indicates the device login is not the first login after a reboot. Supports: $select, $OrderBy. Read-only.
     *
     * @return bool|null The isFirstLogin
     */
@@ -241,10 +241,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isFirstLogin
-    * The user experience analytics device first login.
+    * When TRUE, indicates the device login is the first login after a reboot. When FALSE, indicates the device login is not the first login after a reboot. Supports: $select, $OrderBy. Read-only.
     *
     * @param bool $val The isFirstLogin
     *
@@ -255,10 +255,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["isFirstLogin"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the operatingSystemVersion
-    * The user experience analytics device boot record's operating system version.
+    * The user experience analytics device boot record's operating system version. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The operatingSystemVersion
     */
@@ -270,10 +270,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the operatingSystemVersion
-    * The user experience analytics device boot record's operating system version.
+    * The user experience analytics device boot record's operating system version. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The operatingSystemVersion
     *
@@ -284,10 +284,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["operatingSystemVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the responsiveDesktopTimeInMs
-    * The user experience analytics responsive desktop time in milliseconds.
+    * The time for desktop to become responsive during login process in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The responsiveDesktopTimeInMs
     */
@@ -299,10 +299,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the responsiveDesktopTimeInMs
-    * The user experience analytics responsive desktop time in milliseconds.
+    * The time for desktop to become responsive during login process in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The responsiveDesktopTimeInMs
     *
@@ -313,10 +313,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["responsiveDesktopTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the restartCategory
-    * OS restart category. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update.
+    * OS restart category. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update. Unknown by default. Supports: $select, $OrderBy. Read-only. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update, unknownFutureValue.
     *
     * @return UserExperienceAnalyticsOperatingSystemRestartCategory|null The restartCategory
     */
@@ -332,10 +332,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the restartCategory
-    * OS restart category. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update.
+    * OS restart category. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update. Unknown by default. Supports: $select, $OrderBy. Read-only. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen, shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update, unknownFutureValue.
     *
     * @param UserExperienceAnalyticsOperatingSystemRestartCategory $val The restartCategory
     *
@@ -346,10 +346,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["restartCategory"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the restartFaultBucket
-    * OS restart fault bucket. The fault bucket is used to find additional information about a system crash.
+    * OS restart fault bucket. The fault bucket is used to find additional information about a system crash. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The restartFaultBucket
     */
@@ -361,10 +361,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the restartFaultBucket
-    * OS restart fault bucket. The fault bucket is used to find additional information about a system crash.
+    * OS restart fault bucket. The fault bucket is used to find additional information about a system crash. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The restartFaultBucket
     *
@@ -375,10 +375,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["restartFaultBucket"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the restartStopCode
-    * OS restart stop code. This shows the bug check code which can be used to look up the blue screen reason.
+    * OS restart stop code. This shows the bug check code which can be used to look up the blue screen reason. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The restartStopCode
     */
@@ -390,10 +390,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the restartStopCode
-    * OS restart stop code. This shows the bug check code which can be used to look up the blue screen reason.
+    * OS restart stop code. This shows the bug check code which can be used to look up the blue screen reason. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The restartStopCode
     *
@@ -404,10 +404,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["restartStopCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the startTime
-    * The user experience analytics device boot start time.
+    * The device boot start time. The value cannot be modified and is automatically populated when the device performs a reboot. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
     *
     * @return \DateTime|null The startTime
     */
@@ -423,10 +423,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the startTime
-    * The user experience analytics device boot start time.
+    * The device boot start time. The value cannot be modified and is automatically populated when the device performs a reboot. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
     *
     * @param \DateTime $val The startTime
     *
@@ -437,10 +437,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["startTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the totalBootTimeInMs
-    * The user experience analytics device total boot time in milliseconds.
+    * The device total boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The totalBootTimeInMs
     */
@@ -452,10 +452,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the totalBootTimeInMs
-    * The user experience analytics device total boot time in milliseconds.
+    * The device total boot time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The totalBootTimeInMs
     *
@@ -466,10 +466,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["totalBootTimeInMs"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the totalLoginTimeInMs
-    * The user experience analytics device total login time in milliseconds.
+    * The device total login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @return int|null The totalLoginTimeInMs
     */
@@ -481,10 +481,10 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the totalLoginTimeInMs
-    * The user experience analytics device total login time in milliseconds.
+    * The device total login time in milliseconds. Supports: $select, $OrderBy. Read-only.
     *
     * @param int $val The totalLoginTimeInMs
     *
@@ -495,5 +495,5 @@ class UserExperienceAnalyticsDeviceStartupHistory extends Entity
         $this->_propDict["totalLoginTimeInMs"] = intval($val);
         return $this;
     }
-    
+
 }

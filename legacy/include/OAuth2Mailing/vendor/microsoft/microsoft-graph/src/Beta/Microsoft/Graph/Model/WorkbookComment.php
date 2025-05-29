@@ -38,7 +38,7 @@ class WorkbookComment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the content
     * The content of the comment.
@@ -52,7 +52,7 @@ class WorkbookComment extends Entity
         $this->_propDict["content"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentType
     * Indicates the type for the comment.
@@ -67,7 +67,7 @@ class WorkbookComment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the contentType
     * Indicates the type for the comment.
@@ -81,11 +81,10 @@ class WorkbookComment extends Entity
         $this->_propDict["contentType"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the replies
-    * Read-only. Nullable.
      *
      * @return array|null The replies
      */
@@ -97,12 +96,11 @@ class WorkbookComment extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the replies
-    * Read-only. Nullable.
     *
-    * @param WorkbookCommentReply $val The replies
+    * @param WorkbookCommentReply[] $val The replies
     *
     * @return WorkbookComment
     */
@@ -111,5 +109,38 @@ class WorkbookComment extends Entity
         $this->_propDict["replies"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the task
+    * The task associated with the comment. Read-only. Nullable.
+    *
+    * @return WorkbookDocumentTask|null The task
+    */
+    public function getTask()
+    {
+        if (array_key_exists("task", $this->_propDict)) {
+            if (is_a($this->_propDict["task"], "\Beta\Microsoft\Graph\Model\WorkbookDocumentTask") || is_null($this->_propDict["task"])) {
+                return $this->_propDict["task"];
+            } else {
+                $this->_propDict["task"] = new WorkbookDocumentTask($this->_propDict["task"]);
+                return $this->_propDict["task"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the task
+    * The task associated with the comment. Read-only. Nullable.
+    *
+    * @param WorkbookDocumentTask $val The task
+    *
+    * @return WorkbookComment
+    */
+    public function setTask($val)
+    {
+        $this->_propDict["task"] = $val;
+        return $this;
+    }
+
 }

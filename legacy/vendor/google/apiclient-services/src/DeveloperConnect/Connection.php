@@ -23,10 +23,16 @@ class Connection extends \Google\Model
    * @var string[]
    */
   public $annotations;
+  protected $bitbucketCloudConfigType = BitbucketCloudConfig::class;
+  protected $bitbucketCloudConfigDataType = '';
+  protected $bitbucketDataCenterConfigType = BitbucketDataCenterConfig::class;
+  protected $bitbucketDataCenterConfigDataType = '';
   /**
    * @var string
    */
   public $createTime;
+  protected $cryptoKeyConfigType = CryptoKeyConfig::class;
+  protected $cryptoKeyConfigDataType = '';
   /**
    * @var string
    */
@@ -39,8 +45,16 @@ class Connection extends \Google\Model
    * @var string
    */
   public $etag;
+  protected $gitProxyConfigType = GitProxyConfig::class;
+  protected $gitProxyConfigDataType = '';
   protected $githubConfigType = GitHubConfig::class;
   protected $githubConfigDataType = '';
+  protected $githubEnterpriseConfigType = GitHubEnterpriseConfig::class;
+  protected $githubEnterpriseConfigDataType = '';
+  protected $gitlabConfigType = GitLabConfig::class;
+  protected $gitlabConfigDataType = '';
+  protected $gitlabEnterpriseConfigType = GitLabEnterpriseConfig::class;
+  protected $gitlabEnterpriseConfigDataType = '';
   protected $installationStateType = InstallationState::class;
   protected $installationStateDataType = '';
   /**
@@ -79,6 +93,34 @@ class Connection extends \Google\Model
     return $this->annotations;
   }
   /**
+   * @param BitbucketCloudConfig
+   */
+  public function setBitbucketCloudConfig(BitbucketCloudConfig $bitbucketCloudConfig)
+  {
+    $this->bitbucketCloudConfig = $bitbucketCloudConfig;
+  }
+  /**
+   * @return BitbucketCloudConfig
+   */
+  public function getBitbucketCloudConfig()
+  {
+    return $this->bitbucketCloudConfig;
+  }
+  /**
+   * @param BitbucketDataCenterConfig
+   */
+  public function setBitbucketDataCenterConfig(BitbucketDataCenterConfig $bitbucketDataCenterConfig)
+  {
+    $this->bitbucketDataCenterConfig = $bitbucketDataCenterConfig;
+  }
+  /**
+   * @return BitbucketDataCenterConfig
+   */
+  public function getBitbucketDataCenterConfig()
+  {
+    return $this->bitbucketDataCenterConfig;
+  }
+  /**
    * @param string
    */
   public function setCreateTime($createTime)
@@ -91,6 +133,20 @@ class Connection extends \Google\Model
   public function getCreateTime()
   {
     return $this->createTime;
+  }
+  /**
+   * @param CryptoKeyConfig
+   */
+  public function setCryptoKeyConfig(CryptoKeyConfig $cryptoKeyConfig)
+  {
+    $this->cryptoKeyConfig = $cryptoKeyConfig;
+  }
+  /**
+   * @return CryptoKeyConfig
+   */
+  public function getCryptoKeyConfig()
+  {
+    return $this->cryptoKeyConfig;
   }
   /**
    * @param string
@@ -135,6 +191,20 @@ class Connection extends \Google\Model
     return $this->etag;
   }
   /**
+   * @param GitProxyConfig
+   */
+  public function setGitProxyConfig(GitProxyConfig $gitProxyConfig)
+  {
+    $this->gitProxyConfig = $gitProxyConfig;
+  }
+  /**
+   * @return GitProxyConfig
+   */
+  public function getGitProxyConfig()
+  {
+    return $this->gitProxyConfig;
+  }
+  /**
    * @param GitHubConfig
    */
   public function setGithubConfig(GitHubConfig $githubConfig)
@@ -147,6 +217,48 @@ class Connection extends \Google\Model
   public function getGithubConfig()
   {
     return $this->githubConfig;
+  }
+  /**
+   * @param GitHubEnterpriseConfig
+   */
+  public function setGithubEnterpriseConfig(GitHubEnterpriseConfig $githubEnterpriseConfig)
+  {
+    $this->githubEnterpriseConfig = $githubEnterpriseConfig;
+  }
+  /**
+   * @return GitHubEnterpriseConfig
+   */
+  public function getGithubEnterpriseConfig()
+  {
+    return $this->githubEnterpriseConfig;
+  }
+  /**
+   * @param GitLabConfig
+   */
+  public function setGitlabConfig(GitLabConfig $gitlabConfig)
+  {
+    $this->gitlabConfig = $gitlabConfig;
+  }
+  /**
+   * @return GitLabConfig
+   */
+  public function getGitlabConfig()
+  {
+    return $this->gitlabConfig;
+  }
+  /**
+   * @param GitLabEnterpriseConfig
+   */
+  public function setGitlabEnterpriseConfig(GitLabEnterpriseConfig $gitlabEnterpriseConfig)
+  {
+    $this->gitlabEnterpriseConfig = $gitlabEnterpriseConfig;
+  }
+  /**
+   * @return GitLabEnterpriseConfig
+   */
+  public function getGitlabEnterpriseConfig()
+  {
+    return $this->gitlabEnterpriseConfig;
   }
   /**
    * @param InstallationState

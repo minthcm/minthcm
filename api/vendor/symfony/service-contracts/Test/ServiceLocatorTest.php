@@ -11,84 +11,13 @@
 
 namespace Symfony\Contracts\Service\Test;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
-use Symfony\Contracts\Service\ServiceLocatorTrait;
+class_alias(ServiceLocatorTestCase::class, ServiceLocatorTest::class);
 
-class ServiceLocatorTest extends TestCase
-{
-    public function getServiceLocator(array $factories)
-    {
-        return new class($factories) implements ContainerInterface {
-            use ServiceLocatorTrait;
-        };
-    }
-
-    public function testHas()
-    {
-        $locator = $this->getServiceLocator([
-            'foo' => function () { return 'bar'; },
-            'bar' => function () { return 'baz'; },
-            function () { return 'dummy'; },
-        ]);
-
-        $this->assertTrue($locator->has('foo'));
-        $this->assertTrue($locator->has('bar'));
-        $this->assertFalse($locator->has('dummy'));
-    }
-
-    public function testGet()
-    {
-        $locator = $this->getServiceLocator([
-            'foo' => function () { return 'bar'; },
-            'bar' => function () { return 'baz'; },
-        ]);
-
-        $this->assertSame('bar', $locator->get('foo'));
-        $this->assertSame('baz', $locator->get('bar'));
-    }
-
-    public function testGetDoesNotMemoize()
-    {
-        $i = 0;
-        $locator = $this->getServiceLocator([
-            'foo' => function () use (&$i) {
-                ++$i;
-
-                return 'bar';
-            },
-        ]);
-
-        $this->assertSame('bar', $locator->get('foo'));
-        $this->assertSame('bar', $locator->get('foo'));
-        $this->assertSame(2, $i);
-    }
-
+if (false) {
     /**
-     * @expectedException        \Psr\Container\NotFoundExceptionInterface
-     * @expectedExceptionMessage The service "foo" has a dependency on a non-existent service "bar". This locator only knows about the "foo" service.
+     * @deprecated since PHPUnit 9.6
      */
-    public function testThrowsOnUndefinedInternalService()
+    class ServiceLocatorTest
     {
-        $locator = $this->getServiceLocator([
-            'foo' => function () use (&$locator) { return $locator->get('bar'); },
-        ]);
-
-        $locator->get('foo');
-    }
-
-    /**
-     * @expectedException        \Psr\Container\ContainerExceptionInterface
-     * @expectedExceptionMessage Circular reference detected for service "bar", path: "bar -> baz -> bar".
-     */
-    public function testThrowsOnCircularReference()
-    {
-        $locator = $this->getServiceLocator([
-            'foo' => function () use (&$locator) { return $locator->get('bar'); },
-            'bar' => function () use (&$locator) { return $locator->get('baz'); },
-            'baz' => function () use (&$locator) { return $locator->get('bar'); },
-        ]);
-
-        $locator->get('foo');
     }
 }

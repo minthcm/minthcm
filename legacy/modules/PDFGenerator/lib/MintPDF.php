@@ -116,7 +116,6 @@ class MintPDF extends TCPDF {
 
       $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-      $this->setLanguageArray($l);//TODO COTO!
       $this->SetFont($this->pdf_font, '', 8);
       $bottom = $this->setPdfMarginsOutput($arr);
       $this->SetAutoPageBreak(TRUE, $bottom);

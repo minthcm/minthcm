@@ -22,8 +22,39 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class GeneralLedgerEntry extends Entity
+class GeneralLedgerEntry implements \JsonSerializable
 {
+    /**
+    * The array of properties available
+    * to the model
+    *
+    * @var array $_propDict
+    */
+    protected $_propDict;
+
+    /**
+    * Construct a new GeneralLedgerEntry
+    *
+    * @param array $propDict A list of properties to set
+    */
+    function __construct($propDict = array())
+    {
+        if (!is_array($propDict)) {
+           $propDict = array();
+        }
+        $this->_propDict = $propDict;
+    }
+
+    /**
+    * Gets the property dictionary of the GeneralLedgerEntry
+    *
+    * @return array The list of properties
+    */
+    public function getProperties()
+    {
+        return $this->_propDict;
+    }
+
     /**
     * Gets the accountId
     *
@@ -37,7 +68,7 @@ class GeneralLedgerEntry extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the accountId
     *
@@ -50,7 +81,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["accountId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accountNumber
     *
@@ -64,7 +95,7 @@ class GeneralLedgerEntry extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the accountNumber
     *
@@ -77,7 +108,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["accountNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the creditAmount
     *
@@ -95,7 +126,7 @@ class GeneralLedgerEntry extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the creditAmount
     *
@@ -108,7 +139,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["creditAmount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the debitAmount
     *
@@ -126,7 +157,7 @@ class GeneralLedgerEntry extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the debitAmount
     *
@@ -139,7 +170,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["debitAmount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     *
@@ -153,7 +184,7 @@ class GeneralLedgerEntry extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     *
@@ -166,7 +197,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the documentNumber
     *
@@ -180,7 +211,7 @@ class GeneralLedgerEntry extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the documentNumber
     *
@@ -193,7 +224,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["documentNumber"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the documentType
     *
@@ -207,7 +238,7 @@ class GeneralLedgerEntry extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the documentType
     *
@@ -220,7 +251,34 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["documentType"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the id
+    *
+    * @return string|null The id
+    */
+    public function getId()
+    {
+        if (array_key_exists("id", $this->_propDict)) {
+            return $this->_propDict["id"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the id
+    *
+    * @param string $val The id
+    *
+    * @return GeneralLedgerEntry
+    */
+    public function setId($val)
+    {
+        $this->_propDict["id"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the lastModifiedDateTime
     *
@@ -238,7 +296,7 @@ class GeneralLedgerEntry extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     *
@@ -251,7 +309,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the postingDate
     *
@@ -269,7 +327,7 @@ class GeneralLedgerEntry extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the postingDate
     *
@@ -282,7 +340,7 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["postingDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the account
     *
@@ -300,7 +358,7 @@ class GeneralLedgerEntry extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the account
     *
@@ -313,5 +371,54 @@ class GeneralLedgerEntry extends Entity
         $this->_propDict["account"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the ODataType
+    *
+    * @return string|null The ODataType
+    */
+    public function getODataType()
+    {
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
+    }
+
+    /**
+    * Sets the ODataType
+    *
+    * @param string $val The ODataType
+    *
+    * @return GeneralLedgerEntry
+    */
+    public function setODataType($val)
+    {
+        $this->_propDict["@odata.type"] = $val;
+        return $this;
+    }
+
+    /**
+    * Serializes the object by property array
+    * Manually serialize DateTime into RFC3339 format
+    *
+    * @return array The list of properties
+    */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $serializableProperties = $this->getProperties();
+        foreach ($serializableProperties as $property => $val) {
+            if (is_a($val, "\DateTime")) {
+                $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
+            } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
+                $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
+            }
+        }
+        return $serializableProperties;
+    }
 }

@@ -26,6 +26,7 @@ class Request extends Entity
 {
     /**
     * Gets the approvalId
+    * The identifier of the approval of the request.
     *
     * @return string|null The approvalId
     */
@@ -37,9 +38,10 @@ class Request extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the approvalId
+    * The identifier of the approval of the request.
     *
     * @param string $val The approvalId
     *
@@ -50,9 +52,10 @@ class Request extends Entity
         $this->_propDict["approvalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the completedDateTime
+    * The request completion date time.
     *
     * @return \DateTime|null The completedDateTime
     */
@@ -68,9 +71,10 @@ class Request extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the completedDateTime
+    * The request completion date time.
     *
     * @param \DateTime $val The completedDateTime
     *
@@ -81,9 +85,10 @@ class Request extends Entity
         $this->_propDict["completedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdBy
+    * The principal that created the request.
     *
     * @return IdentitySet|null The createdBy
     */
@@ -99,9 +104,10 @@ class Request extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
+    * The principal that created the request.
     *
     * @param IdentitySet $val The createdBy
     *
@@ -112,9 +118,10 @@ class Request extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
+    * The request creation date time.
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -130,9 +137,10 @@ class Request extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
+    * The request creation date time.
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -143,9 +151,10 @@ class Request extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the customData
+    * Free text field to define any custom data for the request. Not used.
     *
     * @return string|null The customData
     */
@@ -157,9 +166,10 @@ class Request extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the customData
+    * Free text field to define any custom data for the request. Not used.
     *
     * @param string $val The customData
     *
@@ -170,9 +180,10 @@ class Request extends Entity
         $this->_propDict["customData"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
+    * The status of the request. Not nullable. The possible values are: Canceled, Denied, Failed, Granted, PendingAdminDecision, PendingApproval, PendingProvisioning, PendingScheduleCreation, Provisioned, Revoked, and ScheduleCreated. Not nullable.
     *
     * @return string|null The status
     */
@@ -184,9 +195,10 @@ class Request extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the status
+    * The status of the request. Not nullable. The possible values are: Canceled, Denied, Failed, Granted, PendingAdminDecision, PendingApproval, PendingProvisioning, PendingScheduleCreation, Provisioned, Revoked, and ScheduleCreated. Not nullable.
     *
     * @param string $val The status
     *
@@ -197,5 +209,5 @@ class Request extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
 }

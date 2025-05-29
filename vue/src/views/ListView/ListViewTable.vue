@@ -105,9 +105,8 @@ const languages = useLanguagesStore()
 const popups = usePopupsStore()
 
 const pageText = computed(() => {
-    const isOverflow = store.itemsLength > store.options.page * store.options.itemsPerPage
     const pageText = `{0} - {1} ${languages.label('LBL_ESLIST_PAGE_TEXT')} {2}`
-    return isOverflow ? `${pageText}+` : pageText
+    return pageText
 })
 
 const coreActions = {

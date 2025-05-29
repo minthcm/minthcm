@@ -26,7 +26,7 @@ class UnifiedRoleManagementPolicyApprovalRule extends UnifiedRoleManagementPolic
 {
     /**
     * Gets the setting
-    * The approval setting for the rule.
+    * The settings for approval of the role assignment.
     *
     * @return ApprovalSettings|null The setting
     */
@@ -42,10 +42,10 @@ class UnifiedRoleManagementPolicyApprovalRule extends UnifiedRoleManagementPolic
         }
         return null;
     }
-    
+
     /**
     * Sets the setting
-    * The approval setting for the rule.
+    * The settings for approval of the role assignment.
     *
     * @param ApprovalSettings $val The setting
     *
@@ -56,5 +56,5 @@ class UnifiedRoleManagementPolicyApprovalRule extends UnifiedRoleManagementPolic
         $this->_propDict["setting"] = $val;
         return $this;
     }
-    
+
 }

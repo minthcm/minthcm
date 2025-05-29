@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.6.0 - 18 Oct 2024
+
+- Add setTableDefaultFields method to FormatterOptions
+
 ### 4.5.0 - 2 Apr 2024
 
 - Support Symfony 7 (#111)

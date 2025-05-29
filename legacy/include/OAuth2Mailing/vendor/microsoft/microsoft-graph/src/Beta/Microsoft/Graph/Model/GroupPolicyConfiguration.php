@@ -42,7 +42,7 @@ class GroupPolicyConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The date and time the object was created.
@@ -56,7 +56,7 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * User provided description for the resource object.
@@ -71,7 +71,7 @@ class GroupPolicyConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * User provided description for the resource object.
@@ -85,7 +85,7 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * User provided name for the resource object.
@@ -100,7 +100,7 @@ class GroupPolicyConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * User provided name for the resource object.
@@ -114,7 +114,7 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * The date and time the entity was last modified.
@@ -133,7 +133,7 @@ class GroupPolicyConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * The date and time the entity was last modified.
@@ -147,12 +147,45 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the policyConfigurationIngestionType
+    * Type of definitions configured for this policy. Possible values are: unknown, custom, builtIn, mixed, unknownFutureValue.
+    *
+    * @return GroupPolicyConfigurationIngestionType|null The policyConfigurationIngestionType
+    */
+    public function getPolicyConfigurationIngestionType()
+    {
+        if (array_key_exists("policyConfigurationIngestionType", $this->_propDict)) {
+            if (is_a($this->_propDict["policyConfigurationIngestionType"], "\Beta\Microsoft\Graph\Model\GroupPolicyConfigurationIngestionType") || is_null($this->_propDict["policyConfigurationIngestionType"])) {
+                return $this->_propDict["policyConfigurationIngestionType"];
+            } else {
+                $this->_propDict["policyConfigurationIngestionType"] = new GroupPolicyConfigurationIngestionType($this->_propDict["policyConfigurationIngestionType"]);
+                return $this->_propDict["policyConfigurationIngestionType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the policyConfigurationIngestionType
+    * Type of definitions configured for this policy. Possible values are: unknown, custom, builtIn, mixed, unknownFutureValue.
+    *
+    * @param GroupPolicyConfigurationIngestionType $val The policyConfigurationIngestionType
+    *
+    * @return GroupPolicyConfiguration
+    */
+    public function setPolicyConfigurationIngestionType($val)
+    {
+        $this->_propDict["policyConfigurationIngestionType"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the roleScopeTagIds
     * The list of scope tags for the configuration.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -162,12 +195,12 @@ class GroupPolicyConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * The list of scope tags for the configuration.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return GroupPolicyConfiguration
     */
@@ -176,9 +209,9 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
     * The list of group assignments for the configuration.
      *
@@ -192,12 +225,12 @@ class GroupPolicyConfiguration extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * The list of group assignments for the configuration.
     *
-    * @param GroupPolicyConfigurationAssignment $val The assignments
+    * @param GroupPolicyConfigurationAssignment[] $val The assignments
     *
     * @return GroupPolicyConfiguration
     */
@@ -206,9 +239,9 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the definitionValues
     * The list of enabled or disabled group policy definition values for the configuration.
      *
@@ -222,12 +255,12 @@ class GroupPolicyConfiguration extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the definitionValues
     * The list of enabled or disabled group policy definition values for the configuration.
     *
-    * @param GroupPolicyDefinitionValue $val The definitionValues
+    * @param GroupPolicyDefinitionValue[] $val The definitionValues
     *
     * @return GroupPolicyConfiguration
     */
@@ -236,5 +269,5 @@ class GroupPolicyConfiguration extends Entity
         $this->_propDict["definitionValues"] = $val;
         return $this;
     }
-    
+
 }

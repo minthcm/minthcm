@@ -38,7 +38,7 @@ class AccessPackageAssignmentResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the originId
     * A unique identifier relative to the origin system, corresponding to the originId property of the accessPackageResourceRole.
@@ -52,7 +52,7 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["originId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the originSystem
     * The system where the role assignment is to be created or has been created for an access package assignment, such as SharePointOnline, AadGroup or AadApplication, corresponding to the originSystem property of the accessPackageResourceRole.
@@ -67,7 +67,7 @@ class AccessPackageAssignmentResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the originSystem
     * The system where the role assignment is to be created or has been created for an access package assignment, such as SharePointOnline, AadGroup or AadApplication, corresponding to the originSystem property of the accessPackageResourceRole.
@@ -81,10 +81,10 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["originSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
-    * The value is PendingFulfillment when the access package assignment has not yet been delivered to the origin system, and Fulfilled when the access package assignment has been delivered to the origin system.
+    * The value is PendingFulfillment when the access package assignment hasn't yet been delivered to the origin system, and Fulfilled when the access package assignment has been delivered to the origin system.
     *
     * @return string|null The status
     */
@@ -96,10 +96,10 @@ class AccessPackageAssignmentResourceRole extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the status
-    * The value is PendingFulfillment when the access package assignment has not yet been delivered to the origin system, and Fulfilled when the access package assignment has been delivered to the origin system.
+    * The value is PendingFulfillment when the access package assignment hasn't yet been delivered to the origin system, and Fulfilled when the access package assignment has been delivered to the origin system.
     *
     * @param string $val The status
     *
@@ -110,9 +110,9 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the accessPackageAssignments
     * The access package assignments resulting in this role assignment. Read-only. Nullable.
      *
@@ -126,12 +126,12 @@ class AccessPackageAssignmentResourceRole extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the accessPackageAssignments
     * The access package assignments resulting in this role assignment. Read-only. Nullable.
     *
-    * @param AccessPackageAssignment $val The accessPackageAssignments
+    * @param AccessPackageAssignment[] $val The accessPackageAssignments
     *
     * @return AccessPackageAssignmentResourceRole
     */
@@ -140,10 +140,9 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["accessPackageAssignments"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResourceRole
-    * Read-only. Nullable.
     *
     * @return AccessPackageResourceRole|null The accessPackageResourceRole
     */
@@ -159,10 +158,9 @@ class AccessPackageAssignmentResourceRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResourceRole
-    * Read-only. Nullable.
     *
     * @param AccessPackageResourceRole $val The accessPackageResourceRole
     *
@@ -173,10 +171,9 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["accessPackageResourceRole"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageResourceScope
-    * Read-only. Nullable.
     *
     * @return AccessPackageResourceScope|null The accessPackageResourceScope
     */
@@ -192,10 +189,9 @@ class AccessPackageAssignmentResourceRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageResourceScope
-    * Read-only. Nullable.
     *
     * @param AccessPackageResourceScope $val The accessPackageResourceScope
     *
@@ -206,10 +202,10 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["accessPackageResourceScope"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageSubject
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $filter (eq) on objectId and $expand query parameters.
     *
     * @return AccessPackageSubject|null The accessPackageSubject
     */
@@ -225,10 +221,10 @@ class AccessPackageAssignmentResourceRole extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageSubject
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $filter (eq) on objectId and $expand query parameters.
     *
     * @param AccessPackageSubject $val The accessPackageSubject
     *
@@ -239,5 +235,5 @@ class AccessPackageAssignmentResourceRole extends Entity
         $this->_propDict["accessPackageSubject"] = $val;
         return $this;
     }
-    
+
 }

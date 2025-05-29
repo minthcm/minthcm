@@ -75,6 +75,11 @@ class BasicSearchEngine extends SearchEngine
     /*search form class name*/
     public $searchFormClass = 'SearchForm';
 
+    public function globalSearch(SearchQuery $query): SearchResults
+    {
+        return $this->search($query);
+    }
+
     /**
      * Search function run when user goes to Show All and runs a search again.  This outputs the search results
      * calling upon the various listview display functions for each module searched on.

@@ -25,7 +25,72 @@ namespace Beta\Microsoft\Graph\ExternalConnectors\Model;
 class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
 {
     /**
+    * Gets the activitySettings
+    * Collects configurable settings related to activities involving connector content.
+    *
+    * @return ActivitySettings|null The activitySettings
+    */
+    public function getActivitySettings()
+    {
+        if (array_key_exists("activitySettings", $this->_propDict)) {
+            if (is_a($this->_propDict["activitySettings"], "\Beta\Microsoft\Graph\ExternalConnectors\Model\ActivitySettings") || is_null($this->_propDict["activitySettings"])) {
+                return $this->_propDict["activitySettings"];
+            } else {
+                $this->_propDict["activitySettings"] = new ActivitySettings($this->_propDict["activitySettings"]);
+                return $this->_propDict["activitySettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the activitySettings
+    * Collects configurable settings related to activities involving connector content.
+    *
+    * @param ActivitySettings $val The activitySettings
+    *
+    * @return ExternalConnection
+    */
+    public function setActivitySettings($val)
+    {
+        $this->_propDict["activitySettings"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the complianceSettings
+    *
+    * @return ComplianceSettings|null The complianceSettings
+    */
+    public function getComplianceSettings()
+    {
+        if (array_key_exists("complianceSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["complianceSettings"], "\Beta\Microsoft\Graph\ExternalConnectors\Model\ComplianceSettings") || is_null($this->_propDict["complianceSettings"])) {
+                return $this->_propDict["complianceSettings"];
+            } else {
+                $this->_propDict["complianceSettings"] = new ComplianceSettings($this->_propDict["complianceSettings"]);
+                return $this->_propDict["complianceSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the complianceSettings
+    *
+    * @param ComplianceSettings $val The complianceSettings
+    *
+    * @return ExternalConnection
+    */
+    public function setComplianceSettings($val)
+    {
+        $this->_propDict["complianceSettings"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the configuration
+    * Specifies additional application IDs that are allowed to manage the connection and to index content in the connection. Optional.
     *
     * @return Configuration|null The configuration
     */
@@ -41,9 +106,10 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the configuration
+    * Specifies additional application IDs that are allowed to manage the connection and to index content in the connection. Optional.
     *
     * @param Configuration $val The configuration
     *
@@ -54,9 +120,39 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["configuration"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the connectorId
+    * The Teams App ID. Optional.
+    *
+    * @return string|null The connectorId
+    */
+    public function getConnectorId()
+    {
+        if (array_key_exists("connectorId", $this->_propDict)) {
+            return $this->_propDict["connectorId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the connectorId
+    * The Teams App ID. Optional.
+    *
+    * @param string $val The connectorId
+    *
+    * @return ExternalConnection
+    */
+    public function setConnectorId($val)
+    {
+        $this->_propDict["connectorId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the description
+    * Description of the connection displayed in the Microsoft 365 admin center. Optional.
     *
     * @return string|null The description
     */
@@ -68,9 +164,10 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
+    * Description of the connection displayed in the Microsoft 365 admin center. Optional.
     *
     * @param string $val The description
     *
@@ -81,9 +178,72 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the enabledContentExperiences
+    * The list of content experiences the connection will participate in. Possible values are search.
+    *
+    * @return ContentExperienceType|null The enabledContentExperiences
+    */
+    public function getEnabledContentExperiences()
+    {
+        if (array_key_exists("enabledContentExperiences", $this->_propDict)) {
+            if (is_a($this->_propDict["enabledContentExperiences"], "\Beta\Microsoft\Graph\ExternalConnectors\Model\ContentExperienceType") || is_null($this->_propDict["enabledContentExperiences"])) {
+                return $this->_propDict["enabledContentExperiences"];
+            } else {
+                $this->_propDict["enabledContentExperiences"] = new ContentExperienceType($this->_propDict["enabledContentExperiences"]);
+                return $this->_propDict["enabledContentExperiences"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the enabledContentExperiences
+    * The list of content experiences the connection will participate in. Possible values are search.
+    *
+    * @param ContentExperienceType $val The enabledContentExperiences
+    *
+    * @return ExternalConnection
+    */
+    public function setEnabledContentExperiences($val)
+    {
+        $this->_propDict["enabledContentExperiences"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the ingestedItemsCount
+    * The number of items ingested into a connection. This value is refreshed every 15 minutes. If the connection state is draft, then ingestedItemsCount will be null.
+    *
+    * @return int|null The ingestedItemsCount
+    */
+    public function getIngestedItemsCount()
+    {
+        if (array_key_exists("ingestedItemsCount", $this->_propDict)) {
+            return $this->_propDict["ingestedItemsCount"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the ingestedItemsCount
+    * The number of items ingested into a connection. This value is refreshed every 15 minutes. If the connection state is draft, then ingestedItemsCount will be null.
+    *
+    * @param int $val The ingestedItemsCount
+    *
+    * @return ExternalConnection
+    */
+    public function setIngestedItemsCount($val)
+    {
+        $this->_propDict["ingestedItemsCount"] = intval($val);
+        return $this;
+    }
+
     /**
     * Gets the name
+    * The display name of the connection to be displayed in the Microsoft 365 admin center. Maximum length of 128 characters. Required.
     *
     * @return string|null The name
     */
@@ -95,9 +255,10 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
+    * The display name of the connection to be displayed in the Microsoft 365 admin center. Maximum length of 128 characters. Required.
     *
     * @param string $val The name
     *
@@ -108,9 +269,43 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the searchSettings
+    * The settings configuring the search experience for content in this connection, such as the display templates for search results.
+    *
+    * @return SearchSettings|null The searchSettings
+    */
+    public function getSearchSettings()
+    {
+        if (array_key_exists("searchSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["searchSettings"], "\Beta\Microsoft\Graph\ExternalConnectors\Model\SearchSettings") || is_null($this->_propDict["searchSettings"])) {
+                return $this->_propDict["searchSettings"];
+            } else {
+                $this->_propDict["searchSettings"] = new SearchSettings($this->_propDict["searchSettings"]);
+                return $this->_propDict["searchSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the searchSettings
+    * The settings configuring the search experience for content in this connection, such as the display templates for search results.
+    *
+    * @param SearchSettings $val The searchSettings
+    *
+    * @return ExternalConnection
+    */
+    public function setSearchSettings($val)
+    {
+        $this->_propDict["searchSettings"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the state
+    * Indicates the current state of the connection. Possible values are draft, ready, obsolete, and limitExceeded. Required.
     *
     * @return ConnectionState|null The state
     */
@@ -126,9 +321,10 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the state
+    * Indicates the current state of the connection. Possible values are draft, ready, obsolete, and limitExceeded. Required.
     *
     * @param ConnectionState $val The state
     *
@@ -139,9 +335,9 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the groups
      *
      * @return array|null The groups
@@ -154,11 +350,11 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the groups
     *
-    * @param ExternalGroup $val The groups
+    * @param ExternalGroup[] $val The groups
     *
     * @return ExternalConnection
     */
@@ -167,9 +363,9 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["groups"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the items
      *
      * @return array|null The items
@@ -182,11 +378,11 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the items
     *
-    * @param ExternalItem $val The items
+    * @param ExternalItem[] $val The items
     *
     * @return ExternalConnection
     */
@@ -195,9 +391,9 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["items"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the operations
      *
      * @return array|null The operations
@@ -210,11 +406,11 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the operations
     *
-    * @param ConnectionOperation $val The operations
+    * @param ConnectionOperation[] $val The operations
     *
     * @return ExternalConnection
     */
@@ -223,7 +419,38 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["operations"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the quota
+    *
+    * @return ConnectionQuota|null The quota
+    */
+    public function getQuota()
+    {
+        if (array_key_exists("quota", $this->_propDict)) {
+            if (is_a($this->_propDict["quota"], "\Beta\Microsoft\Graph\ExternalConnectors\Model\ConnectionQuota") || is_null($this->_propDict["quota"])) {
+                return $this->_propDict["quota"];
+            } else {
+                $this->_propDict["quota"] = new ConnectionQuota($this->_propDict["quota"]);
+                return $this->_propDict["quota"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the quota
+    *
+    * @param ConnectionQuota $val The quota
+    *
+    * @return ExternalConnection
+    */
+    public function setQuota($val)
+    {
+        $this->_propDict["quota"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the schema
     *
@@ -241,7 +468,7 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the schema
     *
@@ -254,5 +481,5 @@ class ExternalConnection extends \Beta\Microsoft\Graph\Model\Entity
         $this->_propDict["schema"] = $val;
         return $this;
     }
-    
+
 }

@@ -25,6 +25,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 {
     /**
     * Gets the calleeNumber
+    * Number of the user or bot who received the call (E.164 format, but may include more data).
     *
     * @return string|null The calleeNumber
     */
@@ -39,6 +40,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the calleeNumber
+    * Number of the user or bot who received the call (E.164 format, but may include more data).
     *
     * @param string $val The value of the calleeNumber
     *
@@ -51,6 +53,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callEndSubReason
+    * In addition to the SIP codes, Microsoft has own subcodes that indicate the specific issue.
     *
     * @return int|null The callEndSubReason
     */
@@ -65,6 +68,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callEndSubReason
+    * In addition to the SIP codes, Microsoft has own subcodes that indicate the specific issue.
     *
     * @param int $val The value of the callEndSubReason
     *
@@ -77,6 +81,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callerNumber
+    * Number of the user or bot who made the call (E.164 format, but may include more data).
     *
     * @return string|null The callerNumber
     */
@@ -91,6 +96,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callerNumber
+    * Number of the user or bot who made the call (E.164 format, but may include more data).
     *
     * @param string $val The value of the callerNumber
     *
@@ -103,6 +109,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the callType
+    * Call type and direction.
     *
     * @return string|null The callType
     */
@@ -117,6 +124,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the callType
+    * Call type and direction.
     *
     * @param string $val The value of the callType
     *
@@ -129,6 +137,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the correlationId
+    * Identifier (GUID) for the call that you can use when calling Microsoft Support.
     *
     * @return string|null The correlationId
     */
@@ -143,6 +152,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the correlationId
+    * Identifier (GUID) for the call that you can use when calling Microsoft Support.
     *
     * @param string $val The value of the correlationId
     *
@@ -155,6 +165,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the duration
+    * Duration of the call in seconds.
     *
     * @return int|null The duration
     */
@@ -169,6 +180,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the duration
+    * Duration of the call in seconds.
     *
     * @param int $val The value of the duration
     *
@@ -182,6 +194,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the endDateTime
+    * Only exists for successful (fully established) calls. Time when call ended.
     *
     * @return \DateTime|null The endDateTime
     */
@@ -200,6 +213,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the endDateTime
+    * Only exists for successful (fully established) calls. Time when call ended.
     *
     * @param \DateTime $val The value to assign to the endDateTime
     *
@@ -213,6 +227,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the failureDateTime
+    * Only exists for failed (not fully established) calls.
     *
     * @return \DateTime|null The failureDateTime
     */
@@ -231,6 +246,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the failureDateTime
+    * Only exists for failed (not fully established) calls.
     *
     * @param \DateTime $val The value to assign to the failureDateTime
     *
@@ -243,6 +259,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the finalSipCode
+    * The code with which the call ended (RFC 3261).
     *
     * @return int|null The finalSipCode
     */
@@ -257,6 +274,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the finalSipCode
+    * The code with which the call ended (RFC 3261).
     *
     * @param int $val The value of the finalSipCode
     *
@@ -269,6 +287,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the finalSipCodePhrase
+    * Description of the SIP code and Microsoft subcode.
     *
     * @return string|null The finalSipCodePhrase
     */
@@ -283,6 +302,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the finalSipCodePhrase
+    * Description of the SIP code and Microsoft subcode.
     *
     * @param string $val The value of the finalSipCodePhrase
     *
@@ -295,6 +315,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the id
+    * Unique call identifier (GUID).
     *
     * @return string|null The id
     */
@@ -309,6 +330,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the id
+    * Unique call identifier (GUID).
     *
     * @param string $val The value of the id
     *
@@ -322,6 +344,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the inviteDateTime
+    * The date and time when the initial invite was sent.
     *
     * @return \DateTime|null The inviteDateTime
     */
@@ -340,6 +363,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the inviteDateTime
+    * The date and time when the initial invite was sent.
     *
     * @param \DateTime $val The value to assign to the inviteDateTime
     *
@@ -352,6 +376,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the mediaBypassEnabled
+    * Indicates if the trunk was enabled for media bypass or not.
     *
     * @return bool|null The mediaBypassEnabled
     */
@@ -366,6 +391,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the mediaBypassEnabled
+    * Indicates if the trunk was enabled for media bypass or not.
     *
     * @param bool $val The value of the mediaBypassEnabled
     *
@@ -378,6 +404,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the mediaPathLocation
+    * The data center used for media path in non-bypass call.
     *
     * @return string|null The mediaPathLocation
     */
@@ -392,6 +419,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the mediaPathLocation
+    * The data center used for media path in non-bypass call.
     *
     * @param string $val The value of the mediaPathLocation
     *
@@ -403,7 +431,36 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
         return $this;
     }
     /**
+    * Gets the otherPartyCountryCode
+    * Country code of the caller for an incoming call, or callee for an outgoing call. For details, see ISO 3166-1 alpha-2.
+    *
+    * @return string|null The otherPartyCountryCode
+    */
+    public function getOtherPartyCountryCode()
+    {
+        if (array_key_exists("otherPartyCountryCode", $this->_propDict)) {
+            return $this->_propDict["otherPartyCountryCode"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the otherPartyCountryCode
+    * Country code of the caller for an incoming call, or callee for an outgoing call. For details, see ISO 3166-1 alpha-2.
+    *
+    * @param string $val The value of the otherPartyCountryCode
+    *
+    * @return DirectRoutingLogRow
+    */
+    public function setOtherPartyCountryCode($val)
+    {
+        $this->_propDict["otherPartyCountryCode"] = $val;
+        return $this;
+    }
+    /**
     * Gets the signalingLocation
+    * The data center used for signaling for both bypass and non-bypass calls.
     *
     * @return string|null The signalingLocation
     */
@@ -418,6 +475,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the signalingLocation
+    * The data center used for signaling for both bypass and non-bypass calls.
     *
     * @param string $val The value of the signalingLocation
     *
@@ -431,6 +489,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Gets the startDateTime
+    * Call start time.For failed and unanswered calls, this can be equal to invite or failure time.
     *
     * @return \DateTime|null The startDateTime
     */
@@ -449,6 +508,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the startDateTime
+    * Call start time.For failed and unanswered calls, this can be equal to invite or failure time.
     *
     * @param \DateTime $val The value to assign to the startDateTime
     *
@@ -461,6 +521,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the successfulCall
+    * Success or attempt.
     *
     * @return bool|null The successfulCall
     */
@@ -475,6 +536,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the successfulCall
+    * Success or attempt.
     *
     * @param bool $val The value of the successfulCall
     *
@@ -487,6 +549,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the trunkFullyQualifiedDomainName
+    * Fully qualified domain name of the session border controller.
     *
     * @return string|null The trunkFullyQualifiedDomainName
     */
@@ -501,6 +564,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the trunkFullyQualifiedDomainName
+    * Fully qualified domain name of the session border controller.
     *
     * @param string $val The value of the trunkFullyQualifiedDomainName
     *
@@ -512,7 +576,36 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
         return $this;
     }
     /**
+    * Gets the userCountryCode
+    * Country code of the user. For details, see ISO 3166-1 alpha-2.
+    *
+    * @return string|null The userCountryCode
+    */
+    public function getUserCountryCode()
+    {
+        if (array_key_exists("userCountryCode", $this->_propDict)) {
+            return $this->_propDict["userCountryCode"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the userCountryCode
+    * Country code of the user. For details, see ISO 3166-1 alpha-2.
+    *
+    * @param string $val The value of the userCountryCode
+    *
+    * @return DirectRoutingLogRow
+    */
+    public function setUserCountryCode($val)
+    {
+        $this->_propDict["userCountryCode"] = $val;
+        return $this;
+    }
+    /**
     * Gets the userDisplayName
+    * Display name of the user.
     *
     * @return string|null The userDisplayName
     */
@@ -527,6 +620,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userDisplayName
+    * Display name of the user.
     *
     * @param string $val The value of the userDisplayName
     *
@@ -539,6 +633,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the userId
+    * The unique identifier (GUID) of the user in Microsoft Entra ID. This and other user info is null/empty for bot call types.
     *
     * @return string|null The userId
     */
@@ -553,6 +648,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userId
+    * The unique identifier (GUID) of the user in Microsoft Entra ID. This and other user info is null/empty for bot call types.
     *
     * @param string $val The value of the userId
     *
@@ -565,6 +661,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
     }
     /**
     * Gets the userPrincipalName
+    * The user principal name (sign-in name) in Microsoft Entra ID, is usually the same as the user's SIP address, and can be same as the user's e-mail address.
     *
     * @return string|null The userPrincipalName
     */
@@ -579,6 +676,7 @@ class DirectRoutingLogRow extends \Beta\Microsoft\Graph\Model\Entity
 
     /**
     * Sets the userPrincipalName
+    * The user principal name (sign-in name) in Microsoft Entra ID, is usually the same as the user's SIP address, and can be same as the user's e-mail address.
     *
     * @param string $val The value of the userPrincipalName
     *

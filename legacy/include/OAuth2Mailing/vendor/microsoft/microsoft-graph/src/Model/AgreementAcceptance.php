@@ -26,7 +26,7 @@ class AgreementAcceptance extends Entity
 {
     /**
     * Gets the agreementFileId
-    * ID of the agreement file accepted by the user.
+    * The identifier of the agreement file accepted by the user.
     *
     * @return string|null The agreementFileId
     */
@@ -38,10 +38,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the agreementFileId
-    * ID of the agreement file accepted by the user.
+    * The identifier of the agreement file accepted by the user.
     *
     * @param string $val The agreementFileId
     *
@@ -52,10 +52,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["agreementFileId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the agreementId
-    * ID of the agreement.
+    * The identifier of the agreement.
     *
     * @return string|null The agreementId
     */
@@ -67,10 +67,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the agreementId
-    * ID of the agreement.
+    * The identifier of the agreement.
     *
     * @param string $val The agreementId
     *
@@ -81,7 +81,7 @@ class AgreementAcceptance extends Entity
         $this->_propDict["agreementId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceDisplayName
     * The display name of the device used for accepting the agreement.
@@ -96,7 +96,7 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceDisplayName
     * The display name of the device used for accepting the agreement.
@@ -110,10 +110,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["deviceDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceId
-    * The unique identifier of the device used for accepting the agreement.
+    * The unique identifier of the device used for accepting the agreement. Supports $filter (eq) and eq for null values.
     *
     * @return string|null The deviceId
     */
@@ -125,10 +125,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceId
-    * The unique identifier of the device used for accepting the agreement.
+    * The unique identifier of the device used for accepting the agreement. Supports $filter (eq) and eq for null values.
     *
     * @param string $val The deviceId
     *
@@ -139,10 +139,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["deviceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceOSType
-    * The operating system used for accepting the agreement.
+    * The operating system used to accept the agreement.
     *
     * @return string|null The deviceOSType
     */
@@ -154,10 +154,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceOSType
-    * The operating system used for accepting the agreement.
+    * The operating system used to accept the agreement.
     *
     * @param string $val The deviceOSType
     *
@@ -168,10 +168,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["deviceOSType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceOSVersion
-    * The operating system version of the device used for accepting the agreement.
+    * The operating system version of the device used to accept the agreement.
     *
     * @return string|null The deviceOSVersion
     */
@@ -183,10 +183,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceOSVersion
-    * The operating system version of the device used for accepting the agreement.
+    * The operating system version of the device used to accept the agreement.
     *
     * @param string $val The deviceOSVersion
     *
@@ -197,10 +197,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["deviceOSVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the expirationDateTime
-    * The expiration date time of the acceptance. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * The expiration date time of the acceptance. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Supports $filter (eq, ge, le) and eq for null values.
     *
     * @return \DateTime|null The expirationDateTime
     */
@@ -216,10 +216,10 @@ class AgreementAcceptance extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
-    * The expiration date time of the acceptance. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * The expiration date time of the acceptance. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Supports $filter (eq, ge, le) and eq for null values.
     *
     * @param \DateTime $val The expirationDateTime
     *
@@ -230,10 +230,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the recordedDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @return \DateTime|null The recordedDateTime
     */
@@ -249,10 +249,10 @@ class AgreementAcceptance extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the recordedDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @param \DateTime $val The recordedDateTime
     *
@@ -263,10 +263,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["recordedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the state
-    * Possible values are: accepted, declined.
+    * The state of the agreement acceptance. Possible values are: accepted, declined. Supports $filter (eq).
     *
     * @return AgreementAcceptanceState|null The state
     */
@@ -282,10 +282,10 @@ class AgreementAcceptance extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the state
-    * Possible values are: accepted, declined.
+    * The state of the agreement acceptance. Possible values are: accepted, declined. Supports $filter (eq).
     *
     * @param AgreementAcceptanceState $val The state
     *
@@ -296,7 +296,7 @@ class AgreementAcceptance extends Entity
         $this->_propDict["state"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userDisplayName
     * Display name of the user when the acceptance was recorded.
@@ -311,7 +311,7 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userDisplayName
     * Display name of the user when the acceptance was recorded.
@@ -325,7 +325,7 @@ class AgreementAcceptance extends Entity
         $this->_propDict["userDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userEmail
     * Email of the user when the acceptance was recorded.
@@ -340,7 +340,7 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userEmail
     * Email of the user when the acceptance was recorded.
@@ -354,10 +354,10 @@ class AgreementAcceptance extends Entity
         $this->_propDict["userEmail"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
-    * ID of the user who accepted the agreement.
+    * The identifier of the user who accepted the agreement. Supports $filter (eq).
     *
     * @return string|null The userId
     */
@@ -369,10 +369,10 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
-    * ID of the user who accepted the agreement.
+    * The identifier of the user who accepted the agreement. Supports $filter (eq).
     *
     * @param string $val The userId
     *
@@ -383,7 +383,7 @@ class AgreementAcceptance extends Entity
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userPrincipalName
     * UPN of the user when the acceptance was recorded.
@@ -398,7 +398,7 @@ class AgreementAcceptance extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userPrincipalName
     * UPN of the user when the acceptance was recorded.
@@ -412,5 +412,5 @@ class AgreementAcceptance extends Entity
         $this->_propDict["userPrincipalName"] = $val;
         return $this;
     }
-    
+
 }

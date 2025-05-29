@@ -38,7 +38,7 @@ class EducationOrganization extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Organization description.
@@ -52,7 +52,7 @@ class EducationOrganization extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * Organization display name.
@@ -67,7 +67,7 @@ class EducationOrganization extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Organization display name.
@@ -81,10 +81,10 @@ class EducationOrganization extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalSource
-    * Where this user was created from. Possible values are: sis, lms, or manual.
+    * Source where this organization was created from. Possible values are: sis, manual.
     *
     * @return EducationExternalSource|null The externalSource
     */
@@ -100,10 +100,10 @@ class EducationOrganization extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the externalSource
-    * Where this user was created from. Possible values are: sis, lms, or manual.
+    * Source where this organization was created from. Possible values are: sis, manual.
     *
     * @param EducationExternalSource $val The externalSource
     *
@@ -114,10 +114,10 @@ class EducationOrganization extends Entity
         $this->_propDict["externalSource"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalSourceDetail
-    * The name of the external source this resources was generated from.
+    * The name of the external source this resource was generated from.
     *
     * @return string|null The externalSourceDetail
     */
@@ -129,10 +129,10 @@ class EducationOrganization extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the externalSourceDetail
-    * The name of the external source this resources was generated from.
+    * The name of the external source this resource was generated from.
     *
     * @param string $val The externalSourceDetail
     *
@@ -143,5 +143,5 @@ class EducationOrganization extends Entity
         $this->_propDict["externalSourceDetail"] = $val;
         return $this;
     }
-    
+
 }

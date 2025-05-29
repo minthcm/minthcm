@@ -30,6 +30,12 @@ class GatewayServiceMesh extends \Google\Model
   /**
    * @var string
    */
+  public $podSelectorLabel;
+  protected $routeDestinationsType = RouteDestinations::class;
+  protected $routeDestinationsDataType = '';
+  /**
+   * @var string
+   */
   public $routeUpdateWaitTime;
   /**
    * @var string
@@ -67,6 +73,34 @@ class GatewayServiceMesh extends \Google\Model
   public function getHttpRoute()
   {
     return $this->httpRoute;
+  }
+  /**
+   * @param string
+   */
+  public function setPodSelectorLabel($podSelectorLabel)
+  {
+    $this->podSelectorLabel = $podSelectorLabel;
+  }
+  /**
+   * @return string
+   */
+  public function getPodSelectorLabel()
+  {
+    return $this->podSelectorLabel;
+  }
+  /**
+   * @param RouteDestinations
+   */
+  public function setRouteDestinations(RouteDestinations $routeDestinations)
+  {
+    $this->routeDestinations = $routeDestinations;
+  }
+  /**
+   * @return RouteDestinations
+   */
+  public function getRouteDestinations()
+  {
+    return $this->routeDestinations;
   }
   /**
    * @param string

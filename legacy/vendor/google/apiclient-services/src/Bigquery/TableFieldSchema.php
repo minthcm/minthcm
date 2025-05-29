@@ -26,6 +26,8 @@ class TableFieldSchema extends \Google\Collection
    * @var string
    */
   public $collation;
+  protected $dataPoliciesType = DataPolicyOption::class;
+  protected $dataPoliciesDataType = 'array';
   /**
    * @var string
    */
@@ -100,6 +102,20 @@ class TableFieldSchema extends \Google\Collection
   public function getCollation()
   {
     return $this->collation;
+  }
+  /**
+   * @param DataPolicyOption[]
+   */
+  public function setDataPolicies($dataPolicies)
+  {
+    $this->dataPolicies = $dataPolicies;
+  }
+  /**
+   * @return DataPolicyOption[]
+   */
+  public function getDataPolicies()
+  {
+    return $this->dataPolicies;
   }
   /**
    * @param string

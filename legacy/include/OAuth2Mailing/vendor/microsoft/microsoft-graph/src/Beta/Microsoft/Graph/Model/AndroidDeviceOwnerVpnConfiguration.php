@@ -38,7 +38,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the alwaysOn
     * Whether or not to enable always-on VPN connection.
@@ -52,7 +52,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["alwaysOn"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the alwaysOnLockdown
     * If always-on VPN connection is enabled, whether or not to lock network traffic when that VPN is disconnected.
@@ -67,7 +67,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the alwaysOnLockdown
     * If always-on VPN connection is enabled, whether or not to lock network traffic when that VPN is disconnected.
@@ -81,7 +81,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["alwaysOnLockdown"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the connectionType
     * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect, checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility, microsoftProtect.
@@ -100,7 +100,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the connectionType
     * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect, checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility, microsoftProtect.
@@ -114,9 +114,9 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["connectionType"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the customData
     * Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
      *
@@ -130,12 +130,12 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the customData
     * Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
     *
-    * @param KeyValue $val The customData
+    * @param KeyValue[] $val The customData
     *
     * @return AndroidDeviceOwnerVpnConfiguration
     */
@@ -144,9 +144,9 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["customData"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the customKeyValueData
     * Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
      *
@@ -160,12 +160,12 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the customKeyValueData
     * Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
     *
-    * @param KeyValuePair $val The customKeyValueData
+    * @param KeyValuePair[] $val The customKeyValueData
     *
     * @return AndroidDeviceOwnerVpnConfiguration
     */
@@ -174,7 +174,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["customKeyValueData"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the microsoftTunnelSiteId
     * Microsoft Tunnel site ID.
@@ -189,7 +189,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the microsoftTunnelSiteId
     * Microsoft Tunnel site ID.
@@ -203,7 +203,36 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["microsoftTunnelSiteId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the proxyExclusionList
+    * List of hosts to exclude using the proxy on connections for. These hosts can use wildcards such as .example.com.
+    *
+    * @return array|null The proxyExclusionList
+    */
+    public function getProxyExclusionList()
+    {
+        if (array_key_exists("proxyExclusionList", $this->_propDict)) {
+            return $this->_propDict["proxyExclusionList"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the proxyExclusionList
+    * List of hosts to exclude using the proxy on connections for. These hosts can use wildcards such as .example.com.
+    *
+    * @param string[] $val The proxyExclusionList
+    *
+    * @return AndroidDeviceOwnerVpnConfiguration
+    */
+    public function setProxyExclusionList($val)
+    {
+        $this->_propDict["proxyExclusionList"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the proxyServer
     * Proxy server.
@@ -222,7 +251,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the proxyServer
     * Proxy server.
@@ -236,9 +265,9 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["proxyServer"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the targetedMobileApps
     * Targeted mobile apps. This collection can contain a maximum of 500 elements.
      *
@@ -252,12 +281,12 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the targetedMobileApps
     * Targeted mobile apps. This collection can contain a maximum of 500 elements.
     *
-    * @param AppListItem $val The targetedMobileApps
+    * @param AppListItem[] $val The targetedMobileApps
     *
     * @return AndroidDeviceOwnerVpnConfiguration
     */
@@ -266,12 +295,12 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["targetedMobileApps"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the targetedPackageIds
     * Targeted App package IDs.
     *
-    * @return string|null The targetedPackageIds
+    * @return array|null The targetedPackageIds
     */
     public function getTargetedPackageIds()
     {
@@ -281,12 +310,12 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the targetedPackageIds
     * Targeted App package IDs.
     *
-    * @param string $val The targetedPackageIds
+    * @param string[] $val The targetedPackageIds
     *
     * @return AndroidDeviceOwnerVpnConfiguration
     */
@@ -295,7 +324,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["targetedPackageIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the derivedCredentialSettings
     * Tenant level settings for the Derived Credentials to be used for authentication.
@@ -314,7 +343,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the derivedCredentialSettings
     * Tenant level settings for the Derived Credentials to be used for authentication.
@@ -328,7 +357,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["derivedCredentialSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the identityCertificate
     * Identity certificate for client authentication when authentication method is certificate.
@@ -347,7 +376,7 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the identityCertificate
     * Identity certificate for client authentication when authentication method is certificate.
@@ -361,5 +390,5 @@ class AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration
         $this->_propDict["identityCertificate"] = $val;
         return $this;
     }
-    
+
 }

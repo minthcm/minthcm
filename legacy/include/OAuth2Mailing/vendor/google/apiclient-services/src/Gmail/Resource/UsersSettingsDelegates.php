@@ -25,7 +25,7 @@ use Google\Service\Gmail\ListDelegatesResponse;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $delegates = $gmailService->delegates;
+ *   $delegates = $gmailService->users_settings_delegates;
  *  </code>
  */
 class UsersSettingsDelegates extends \Google\Service\Resource
@@ -33,13 +33,13 @@ class UsersSettingsDelegates extends \Google\Service\Resource
   /**
    * Adds a delegate with its verification status set directly to `accepted`,
    * without sending any verification email. The delegate user must be a member of
-   * the same G Suite organization as the delegator user. Gmail imposes
-   * limitations on the number of delegates and delegators each user in a G Suite
-   * organization can have. These limits depend on your organization, but in
-   * general each user can have up to 25 delegates and up to 10 delegators. Note
-   * that a delegate user must be referred to by their primary email address, and
-   * not an email alias. Also note that when a new delegate is created, there may
-   * be up to a one minute delay before the new delegate is available for use.
+   * the same Google Workspace organization as the delegator user. Gmail imposes
+   * limitations on the number of delegates and delegators each user in a Google
+   * Workspace organization can have. These limits depend on your organization,
+   * but in general each user can have up to 25 delegates and up to 10 delegators.
+   * Note that a delegate user must be referred to by their primary email address,
+   * and not an email alias. Also note that when a new delegate is created, there
+   * may be up to a one minute delay before the new delegate is available for use.
    * This method is only available to service account clients that have been
    * delegated domain-wide authority. (delegates.create)
    *
@@ -48,6 +48,7 @@ class UsersSettingsDelegates extends \Google\Service\Resource
    * @param Delegate $postBody
    * @param array $optParams Optional parameters.
    * @return Delegate
+   * @throws \Google\Service\Exception
    */
   public function create($userId, Delegate $postBody, $optParams = [])
   {
@@ -67,6 +68,7 @@ class UsersSettingsDelegates extends \Google\Service\Resource
    * @param string $delegateEmail The email address of the user to be removed as a
    * delegate.
    * @param array $optParams Optional parameters.
+   * @throws \Google\Service\Exception
    */
   public function delete($userId, $delegateEmail, $optParams = [])
   {
@@ -86,6 +88,7 @@ class UsersSettingsDelegates extends \Google\Service\Resource
    * relationship is to be retrieved.
    * @param array $optParams Optional parameters.
    * @return Delegate
+   * @throws \Google\Service\Exception
    */
   public function get($userId, $delegateEmail, $optParams = [])
   {
@@ -102,6 +105,7 @@ class UsersSettingsDelegates extends \Google\Service\Resource
    * used to indicate the authenticated user.
    * @param array $optParams Optional parameters.
    * @return ListDelegatesResponse
+   * @throws \Google\Service\Exception
    */
   public function listUsersSettingsDelegates($userId, $optParams = [])
   {

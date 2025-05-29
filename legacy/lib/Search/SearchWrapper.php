@@ -48,9 +48,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-use SuiteCRM\Search\AOD\LuceneSearchEngine;
+
 use SuiteCRM\Search\BasicSearch\BasicSearchEngine;
-use SuiteCRM\Search\ElasticSearch\ElasticSearchEngine;
 use SuiteCRM\Search\Exceptions\SearchEngineNotFoundException;
 
 /**
@@ -64,20 +63,10 @@ class SearchWrapper
      * @var array stores an associative array matching the search engine class name with the file it is stored in.
      */
     private static $engines = [
-        'ElasticSearchEngine' => [
-            'name' => 'ElasticSearchEngine',
-            'FQN' => ElasticSearchEngine::class,
-            'filepath' => 'lib/Search/ElasticSearch/ElasticSearchEngine.php'
-        ],
         'BasicSearchEngine' => [
             'name' => 'BasicSearchEngine',
             'FQN' => BasicSearchEngine::class,
             'filepath' => 'lib/Search/BasicSearch/BasicSearchEngine.php'
-        ],
-        'LuceneSearchEngine' => [
-            'name' => 'LuceneSearchEngine',
-            'FQN' => LuceneSearchEngine::class,
-            'filepath' => 'lib/Search/AOD/LuceneSearchEngine.php'
         ],
     ];
 
@@ -96,7 +85,7 @@ class SearchWrapper
         $engine = $query->getEngine() ?: self::getDefaultEngine();
 
         $engine = self::fetchEngine($engine);
-        $engine->searchAndDisplay($query);
+        $engine->globalSearchAndDisplay($query);
     }
 
     /**

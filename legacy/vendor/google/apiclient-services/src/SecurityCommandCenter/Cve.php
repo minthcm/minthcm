@@ -25,7 +25,15 @@ class Cve extends \Google\Collection
   /**
    * @var string
    */
+  public $exploitReleaseDate;
+  /**
+   * @var string
+   */
   public $exploitationActivity;
+  /**
+   * @var string
+   */
+  public $firstExploitationDate;
   /**
    * @var string
    */
@@ -66,6 +74,20 @@ class Cve extends \Google\Collection
   /**
    * @param string
    */
+  public function setExploitReleaseDate($exploitReleaseDate)
+  {
+    $this->exploitReleaseDate = $exploitReleaseDate;
+  }
+  /**
+   * @return string
+   */
+  public function getExploitReleaseDate()
+  {
+    return $this->exploitReleaseDate;
+  }
+  /**
+   * @param string
+   */
   public function setExploitationActivity($exploitationActivity)
   {
     $this->exploitationActivity = $exploitationActivity;
@@ -76,6 +98,20 @@ class Cve extends \Google\Collection
   public function getExploitationActivity()
   {
     return $this->exploitationActivity;
+  }
+  /**
+   * @param string
+   */
+  public function setFirstExploitationDate($firstExploitationDate)
+  {
+    $this->firstExploitationDate = $firstExploitationDate;
+  }
+  /**
+   * @return string
+   */
+  public function getFirstExploitationDate()
+  {
+    return $this->firstExploitationDate;
   }
   /**
    * @param string

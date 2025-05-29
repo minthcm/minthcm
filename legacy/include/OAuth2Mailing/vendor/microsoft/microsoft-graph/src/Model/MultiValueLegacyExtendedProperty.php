@@ -28,7 +28,7 @@ class MultiValueLegacyExtendedProperty extends Entity
     * Gets the value
     * A collection of property values.
     *
-    * @return string|null The value
+    * @return array|null The value
     */
     public function getValue()
     {
@@ -38,12 +38,12 @@ class MultiValueLegacyExtendedProperty extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the value
     * A collection of property values.
     *
-    * @param string $val The value
+    * @param string[] $val The value
     *
     * @return MultiValueLegacyExtendedProperty
     */
@@ -52,5 +52,5 @@ class MultiValueLegacyExtendedProperty extends Entity
         $this->_propDict["value"] = $val;
         return $this;
     }
-    
+
 }

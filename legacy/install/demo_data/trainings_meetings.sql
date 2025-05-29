@@ -1,0 +1,1 @@
+REPLACE INTO trainings_meetings (id, date_modified, deleted, training_id, meeting_id) VALUES ('998419b2-e180-a77d-cfc6-67b4abbcad77','2025-03-15 15:43:35','0','cc8822d0-250e-ac16-7f9d-5e392c88b91f','f2c47f88-cb12-2c0f-fd11-5e392c27c6b6');

@@ -84,6 +84,39 @@ class SearchRequest extends Entity
         $this->_propDict["aggregations"] = $val;
          return $this;
     }
+
+    /**
+    * Gets the collapseProperties
+    * Contains the ordered collection of fields and limit to collapse results. Optional.
+    *
+    * @return CollapseProperty|null The collapseProperties
+    */
+    public function getCollapseProperties()
+    {
+        if (array_key_exists("collapseProperties", $this->_propDict)) {
+            if (is_a($this->_propDict["collapseProperties"], "\Beta\Microsoft\Graph\Model\CollapseProperty") || is_null($this->_propDict["collapseProperties"])) {
+                return $this->_propDict["collapseProperties"];
+            } else {
+                $this->_propDict["collapseProperties"] = new CollapseProperty($this->_propDict["collapseProperties"]);
+                return $this->_propDict["collapseProperties"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the collapseProperties
+    * Contains the ordered collection of fields and limit to collapse results. Optional.
+    *
+    * @param CollapseProperty $val The value to assign to the collapseProperties
+    *
+    * @return SearchRequest The SearchRequest
+    */
+    public function setCollapseProperties($val)
+    {
+        $this->_propDict["collapseProperties"] = $val;
+         return $this;
+    }
     /**
     * Gets the contentSources
     * Contains the connection to be targeted. Respects the following format : /external/connections/connectionid where connectionid is the ConnectionId defined in the Connectors Administration.  Note: contentSource is only applicable when entityType=externalItem. Optional.
@@ -143,7 +176,7 @@ class SearchRequest extends Entity
 
     /**
     * Gets the entityTypes
-    * One or more types of resources expected in the response. Possible values are: list, site, listItem, message, event, drive, driveItem, externalItem. See known limitations for those combinations of two or more entity types that are supported in the same search request. Required.
+    * One or more types of resources expected in the response. Possible values are: list, site, listItem, message, event, drive, driveItem, person, externalItem, acronym, bookmark, chatMessage. For details about combinations of two or more entity types that are supported in the same search request, see known limitations. Required.
     *
     * @return EntityType|null The entityTypes
     */
@@ -162,7 +195,7 @@ class SearchRequest extends Entity
 
     /**
     * Sets the entityTypes
-    * One or more types of resources expected in the response. Possible values are: list, site, listItem, message, event, drive, driveItem, externalItem. See known limitations for those combinations of two or more entity types that are supported in the same search request. Required.
+    * One or more types of resources expected in the response. Possible values are: list, site, listItem, message, event, drive, driveItem, person, externalItem, acronym, bookmark, chatMessage. For details about combinations of two or more entity types that are supported in the same search request, see known limitations. Required.
     *
     * @param EntityType $val The value to assign to the entityTypes
     *
@@ -262,9 +295,136 @@ class SearchRequest extends Entity
         $this->_propDict["query"] = $val;
          return $this;
     }
+
+    /**
+    * Gets the queryAlterationOptions
+    * Provides query alteration options formatted as a JSON blob that contains two optional flags related to spelling correction. Optional.
+    *
+    * @return SearchAlterationOptions|null The queryAlterationOptions
+    */
+    public function getQueryAlterationOptions()
+    {
+        if (array_key_exists("queryAlterationOptions", $this->_propDict)) {
+            if (is_a($this->_propDict["queryAlterationOptions"], "\Beta\Microsoft\Graph\Model\SearchAlterationOptions") || is_null($this->_propDict["queryAlterationOptions"])) {
+                return $this->_propDict["queryAlterationOptions"];
+            } else {
+                $this->_propDict["queryAlterationOptions"] = new SearchAlterationOptions($this->_propDict["queryAlterationOptions"]);
+                return $this->_propDict["queryAlterationOptions"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the queryAlterationOptions
+    * Provides query alteration options formatted as a JSON blob that contains two optional flags related to spelling correction. Optional.
+    *
+    * @param SearchAlterationOptions $val The value to assign to the queryAlterationOptions
+    *
+    * @return SearchRequest The SearchRequest
+    */
+    public function setQueryAlterationOptions($val)
+    {
+        $this->_propDict["queryAlterationOptions"] = $val;
+         return $this;
+    }
+    /**
+    * Gets the region
+    * Required for searches that use application permissions. Represents the geographic location for the search. For details, see Get the region value.
+    *
+    * @return string|null The region
+    */
+    public function getRegion()
+    {
+        if (array_key_exists("region", $this->_propDict)) {
+            return $this->_propDict["region"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the region
+    * Required for searches that use application permissions. Represents the geographic location for the search. For details, see Get the region value.
+    *
+    * @param string $val The value of the region
+    *
+    * @return SearchRequest
+    */
+    public function setRegion($val)
+    {
+        $this->_propDict["region"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the resultTemplateOptions
+    * Provides the search result templates options for rendering connectors search results.
+    *
+    * @return ResultTemplateOption|null The resultTemplateOptions
+    */
+    public function getResultTemplateOptions()
+    {
+        if (array_key_exists("resultTemplateOptions", $this->_propDict)) {
+            if (is_a($this->_propDict["resultTemplateOptions"], "\Beta\Microsoft\Graph\Model\ResultTemplateOption") || is_null($this->_propDict["resultTemplateOptions"])) {
+                return $this->_propDict["resultTemplateOptions"];
+            } else {
+                $this->_propDict["resultTemplateOptions"] = new ResultTemplateOption($this->_propDict["resultTemplateOptions"]);
+                return $this->_propDict["resultTemplateOptions"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the resultTemplateOptions
+    * Provides the search result templates options for rendering connectors search results.
+    *
+    * @param ResultTemplateOption $val The value to assign to the resultTemplateOptions
+    *
+    * @return SearchRequest The SearchRequest
+    */
+    public function setResultTemplateOptions($val)
+    {
+        $this->_propDict["resultTemplateOptions"] = $val;
+         return $this;
+    }
+
+    /**
+    * Gets the sharePointOneDriveOptions
+    * Indicates the kind of contents to be searched when a search is performed using application permissions. Optional.
+    *
+    * @return SharePointOneDriveOptions|null The sharePointOneDriveOptions
+    */
+    public function getSharePointOneDriveOptions()
+    {
+        if (array_key_exists("sharePointOneDriveOptions", $this->_propDict)) {
+            if (is_a($this->_propDict["sharePointOneDriveOptions"], "\Beta\Microsoft\Graph\Model\SharePointOneDriveOptions") || is_null($this->_propDict["sharePointOneDriveOptions"])) {
+                return $this->_propDict["sharePointOneDriveOptions"];
+            } else {
+                $this->_propDict["sharePointOneDriveOptions"] = new SharePointOneDriveOptions($this->_propDict["sharePointOneDriveOptions"]);
+                return $this->_propDict["sharePointOneDriveOptions"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the sharePointOneDriveOptions
+    * Indicates the kind of contents to be searched when a search is performed using application permissions. Optional.
+    *
+    * @param SharePointOneDriveOptions $val The value to assign to the sharePointOneDriveOptions
+    *
+    * @return SearchRequest The SearchRequest
+    */
+    public function setSharePointOneDriveOptions($val)
+    {
+        $this->_propDict["sharePointOneDriveOptions"] = $val;
+         return $this;
+    }
     /**
     * Gets the size
-    * The size of the page to be retrieved. Optional.
+    * The size of the page to be retrieved. The maximum value is 500. Optional.
     *
     * @return int|null The size
     */
@@ -279,7 +439,7 @@ class SearchRequest extends Entity
 
     /**
     * Sets the size
-    * The size of the page to be retrieved. Optional.
+    * The size of the page to be retrieved. The maximum value is 500. Optional.
     *
     * @param int $val The value of the size
     *
@@ -347,6 +507,34 @@ class SearchRequest extends Entity
     public function setStored_fields($val)
     {
         $this->_propDict["storedFields"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the trimDuplicates
+    * Indicates whether to trim away the duplicate SharePoint files from search results. Default value is false. Optional.
+    *
+    * @return bool|null The trimDuplicates
+    */
+    public function getTrimDuplicates()
+    {
+        if (array_key_exists("trimDuplicates", $this->_propDict)) {
+            return $this->_propDict["trimDuplicates"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the trimDuplicates
+    * Indicates whether to trim away the duplicate SharePoint files from search results. Default value is false. Optional.
+    *
+    * @param bool $val The value of the trimDuplicates
+    *
+    * @return SearchRequest
+    */
+    public function setTrimDuplicates($val)
+    {
+        $this->_propDict["trimDuplicates"] = $val;
         return $this;
     }
 }

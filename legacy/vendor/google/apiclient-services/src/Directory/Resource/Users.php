@@ -76,7 +76,12 @@ class Users extends \Google\Service\Resource
    * sometimes fail as the user isn't fully created due to propagation delay in
    * our backends. Check the error details for the "User creation is not complete"
    * message to see if this is the case. Retrying the calls after some time can
-   * help in this case. (users.insert)
+   * help in this case. If `resolveConflictAccount` is set to `true`, a `202`
+   * response code means that a conflicting unmanaged account exists and was
+   * invited to join the organization. A `409` response code means that a
+   * conflicting account exists so the user wasn't created based on the [handling
+   * unmanaged user accounts](https://support.google.com/a/answer/11112794) option
+   * selected. (users.insert)
    *
    * @param User $postBody
    * @param array $optParams Optional parameters.
@@ -118,7 +123,8 @@ class Users extends \Google\Service\Resource
    * subscribing)
    * @opt_param int maxResults Maximum number of results to return.
    * @opt_param string orderBy Property to use for sorting results.
-   * @opt_param string pageToken Token to specify next page in the list
+   * @opt_param string pageToken Token to specify next page in the list. The page
+   * token is only valid for three days.
    * @opt_param string projection What subset of fields to fetch for this user.
    * @opt_param string query Query string for searching user fields. For more
    * information on constructing user queries, see [Search for Users](/admin-

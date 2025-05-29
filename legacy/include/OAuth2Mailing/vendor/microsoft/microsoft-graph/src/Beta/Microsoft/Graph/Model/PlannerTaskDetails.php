@@ -42,7 +42,7 @@ class PlannerTaskDetails extends PlannerDelta
         }
         return null;
     }
-    
+
     /**
     * Sets the checklist
     * The collection of checklist items on the task.
@@ -56,10 +56,43 @@ class PlannerTaskDetails extends PlannerDelta
         $this->_propDict["checklist"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the completionRequirements
+    * Contains detailed information about requirements on the task.
+    *
+    * @return PlannerTaskCompletionRequirementDetails|null The completionRequirements
+    */
+    public function getCompletionRequirements()
+    {
+        if (array_key_exists("completionRequirements", $this->_propDict)) {
+            if (is_a($this->_propDict["completionRequirements"], "\Beta\Microsoft\Graph\Model\PlannerTaskCompletionRequirementDetails") || is_null($this->_propDict["completionRequirements"])) {
+                return $this->_propDict["completionRequirements"];
+            } else {
+                $this->_propDict["completionRequirements"] = new PlannerTaskCompletionRequirementDetails($this->_propDict["completionRequirements"]);
+                return $this->_propDict["completionRequirements"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the completionRequirements
+    * Contains detailed information about requirements on the task.
+    *
+    * @param PlannerTaskCompletionRequirementDetails $val The completionRequirements
+    *
+    * @return PlannerTaskDetails
+    */
+    public function setCompletionRequirements($val)
+    {
+        $this->_propDict["completionRequirements"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the description
-    * Description of the task
+    * Description of the task.
     *
     * @return string|null The description
     */
@@ -71,10 +104,10 @@ class PlannerTaskDetails extends PlannerDelta
             return null;
         }
     }
-    
+
     /**
     * Sets the description
-    * Description of the task
+    * Description of the task.
     *
     * @param string $val The description
     *
@@ -85,7 +118,40 @@ class PlannerTaskDetails extends PlannerDelta
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the notes
+    * Rich text description of the task. To be used by HTML-aware clients. For backwards compatibility, a plain-text version of the HTML description will be synced to the 'description' field. If this field hasn't previously been set but 'description' has been, the existing description is synchronized to 'notes' with minimal whitespace-preserving HTML markup. Setting both 'description' and 'notes' is an error and will result in an exception.
+    *
+    * @return ItemBody|null The notes
+    */
+    public function getNotes()
+    {
+        if (array_key_exists("notes", $this->_propDict)) {
+            if (is_a($this->_propDict["notes"], "\Beta\Microsoft\Graph\Model\ItemBody") || is_null($this->_propDict["notes"])) {
+                return $this->_propDict["notes"];
+            } else {
+                $this->_propDict["notes"] = new ItemBody($this->_propDict["notes"]);
+                return $this->_propDict["notes"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the notes
+    * Rich text description of the task. To be used by HTML-aware clients. For backwards compatibility, a plain-text version of the HTML description will be synced to the 'description' field. If this field hasn't previously been set but 'description' has been, the existing description is synchronized to 'notes' with minimal whitespace-preserving HTML markup. Setting both 'description' and 'notes' is an error and will result in an exception.
+    *
+    * @param ItemBody $val The notes
+    *
+    * @return PlannerTaskDetails
+    */
+    public function setNotes($val)
+    {
+        $this->_propDict["notes"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the previewType
     * This sets the type of preview that shows up on the task. Possible values are: automatic, noPreview, checklist, description, reference. When set to automatic the displayed preview is chosen by the app viewing the task.
@@ -104,7 +170,7 @@ class PlannerTaskDetails extends PlannerDelta
         }
         return null;
     }
-    
+
     /**
     * Sets the previewType
     * This sets the type of preview that shows up on the task. Possible values are: automatic, noPreview, checklist, description, reference. When set to automatic the displayed preview is chosen by the app viewing the task.
@@ -118,7 +184,7 @@ class PlannerTaskDetails extends PlannerDelta
         $this->_propDict["previewType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the references
     * The collection of references on the task.
@@ -137,7 +203,7 @@ class PlannerTaskDetails extends PlannerDelta
         }
         return null;
     }
-    
+
     /**
     * Sets the references
     * The collection of references on the task.
@@ -151,5 +217,5 @@ class PlannerTaskDetails extends PlannerDelta
         $this->_propDict["references"] = $val;
         return $this;
     }
-    
+
 }

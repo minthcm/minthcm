@@ -25,7 +25,7 @@ namespace Beta\Microsoft\Graph\Model;
 class DeviceManagementReports extends Entity
 {
 
-     /** 
+     /**
      * Gets the cachedReportConfigurations
     * Entity representing the configuration of a cached report
      *
@@ -39,12 +39,12 @@ class DeviceManagementReports extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the cachedReportConfigurations
     * Entity representing the configuration of a cached report
     *
-    * @param DeviceManagementCachedReportConfiguration $val The cachedReportConfigurations
+    * @param DeviceManagementCachedReportConfiguration[] $val The cachedReportConfigurations
     *
     * @return DeviceManagementReports
     */
@@ -53,9 +53,9 @@ class DeviceManagementReports extends Entity
         $this->_propDict["cachedReportConfigurations"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the exportJobs
     * Entity representing a job to export a report
      *
@@ -69,12 +69,12 @@ class DeviceManagementReports extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the exportJobs
     * Entity representing a job to export a report
     *
-    * @param DeviceManagementExportJob $val The exportJobs
+    * @param DeviceManagementExportJob[] $val The exportJobs
     *
     * @return DeviceManagementReports
     */
@@ -83,35 +83,5 @@ class DeviceManagementReports extends Entity
         $this->_propDict["exportJobs"] = $val;
         return $this;
     }
-    
 
-     /** 
-     * Gets the reportSchedules
-    * Entity representing a schedule for which reports are delivered
-     *
-     * @return array|null The reportSchedules
-     */
-    public function getReportSchedules()
-    {
-        if (array_key_exists("reportSchedules", $this->_propDict)) {
-           return $this->_propDict["reportSchedules"];
-        } else {
-            return null;
-        }
-    }
-    
-    /** 
-    * Sets the reportSchedules
-    * Entity representing a schedule for which reports are delivered
-    *
-    * @param DeviceManagementReportSchedule $val The reportSchedules
-    *
-    * @return DeviceManagementReports
-    */
-    public function setReportSchedules($val)
-    {
-        $this->_propDict["reportSchedules"] = $val;
-        return $this;
-    }
-    
 }

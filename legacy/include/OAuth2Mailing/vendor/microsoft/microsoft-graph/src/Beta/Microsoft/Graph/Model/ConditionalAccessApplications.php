@@ -23,9 +23,42 @@ namespace Beta\Microsoft\Graph\Model;
 */
 class ConditionalAccessApplications extends Entity
 {
+
+    /**
+    * Gets the applicationFilter
+    * Filter that defines the dynamic-application-syntax rule to include/exclude cloud applications. A filter can use custom security attributes to include/exclude applications.
+    *
+    * @return ConditionalAccessFilter|null The applicationFilter
+    */
+    public function getApplicationFilter()
+    {
+        if (array_key_exists("applicationFilter", $this->_propDict)) {
+            if (is_a($this->_propDict["applicationFilter"], "\Beta\Microsoft\Graph\Model\ConditionalAccessFilter") || is_null($this->_propDict["applicationFilter"])) {
+                return $this->_propDict["applicationFilter"];
+            } else {
+                $this->_propDict["applicationFilter"] = new ConditionalAccessFilter($this->_propDict["applicationFilter"]);
+                return $this->_propDict["applicationFilter"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the applicationFilter
+    * Filter that defines the dynamic-application-syntax rule to include/exclude cloud applications. A filter can use custom security attributes to include/exclude applications.
+    *
+    * @param ConditionalAccessFilter $val The value to assign to the applicationFilter
+    *
+    * @return ConditionalAccessApplications The ConditionalAccessApplications
+    */
+    public function setApplicationFilter($val)
+    {
+        $this->_propDict["applicationFilter"] = $val;
+         return $this;
+    }
     /**
     * Gets the excludeApplications
-    * The list of application IDs explicitly excluded from the policy.
+    * Can be one of the following:  The list of client IDs (appId) explicitly excluded from the policy. Office365 - For the list of apps included in Office365, see Conditional Access target apps: Office 365
     *
     * @return string|null The excludeApplications
     */
@@ -40,7 +73,7 @@ class ConditionalAccessApplications extends Entity
 
     /**
     * Sets the excludeApplications
-    * The list of application IDs explicitly excluded from the policy.
+    * Can be one of the following:  The list of client IDs (appId) explicitly excluded from the policy. Office365 - For the list of apps included in Office365, see Conditional Access target apps: Office 365
     *
     * @param string $val The value of the excludeApplications
     *
@@ -53,7 +86,7 @@ class ConditionalAccessApplications extends Entity
     }
     /**
     * Gets the includeApplications
-    * The list of application IDs the policy applies to, unless explicitly excluded (in excludeApplications). Can also be set to All.
+    * Can be one of the following:  The list of client IDs (appId) the policy applies to, unless explicitly excluded (in excludeApplications)  All  Office365 - For the list of apps included in Office365, see Conditional Access target apps: Office 365
     *
     * @return string|null The includeApplications
     */
@@ -68,7 +101,7 @@ class ConditionalAccessApplications extends Entity
 
     /**
     * Sets the includeApplications
-    * The list of application IDs the policy applies to, unless explicitly excluded (in excludeApplications). Can also be set to All.
+    * Can be one of the following:  The list of client IDs (appId) the policy applies to, unless explicitly excluded (in excludeApplications)  All  Office365 - For the list of apps included in Office365, see Conditional Access target apps: Office 365
     *
     * @param string $val The value of the includeApplications
     *
@@ -77,6 +110,34 @@ class ConditionalAccessApplications extends Entity
     public function setIncludeApplications($val)
     {
         $this->_propDict["includeApplications"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the includeAuthenticationContextClassReferences
+    * Authentication context class references include. Supported values are c1 through c25.
+    *
+    * @return string|null The includeAuthenticationContextClassReferences
+    */
+    public function getIncludeAuthenticationContextClassReferences()
+    {
+        if (array_key_exists("includeAuthenticationContextClassReferences", $this->_propDict)) {
+            return $this->_propDict["includeAuthenticationContextClassReferences"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the includeAuthenticationContextClassReferences
+    * Authentication context class references include. Supported values are c1 through c25.
+    *
+    * @param string $val The value of the includeAuthenticationContextClassReferences
+    *
+    * @return ConditionalAccessApplications
+    */
+    public function setIncludeAuthenticationContextClassReferences($val)
+    {
+        $this->_propDict["includeAuthenticationContextClassReferences"] = $val;
         return $this;
     }
     /**

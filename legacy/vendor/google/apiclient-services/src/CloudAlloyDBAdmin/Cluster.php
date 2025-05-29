@@ -27,6 +27,8 @@ class Cluster extends \Google\Model
   protected $automatedBackupPolicyDataType = '';
   protected $backupSourceType = BackupSource::class;
   protected $backupSourceDataType = '';
+  protected $cloudsqlBackupRunSourceType = CloudSQLBackupRunSource::class;
+  protected $cloudsqlBackupRunSourceDataType = '';
   /**
    * @var string
    */
@@ -105,6 +107,10 @@ class Cluster extends \Google\Model
    * @var string
    */
   public $subscriptionType;
+  /**
+   * @var string[]
+   */
+  public $tags;
   protected $trialMetadataType = TrialMetadata::class;
   protected $trialMetadataDataType = '';
   /**
@@ -157,6 +163,20 @@ class Cluster extends \Google\Model
   public function getBackupSource()
   {
     return $this->backupSource;
+  }
+  /**
+   * @param CloudSQLBackupRunSource
+   */
+  public function setCloudsqlBackupRunSource(CloudSQLBackupRunSource $cloudsqlBackupRunSource)
+  {
+    $this->cloudsqlBackupRunSource = $cloudsqlBackupRunSource;
+  }
+  /**
+   * @return CloudSQLBackupRunSource
+   */
+  public function getCloudsqlBackupRunSource()
+  {
+    return $this->cloudsqlBackupRunSource;
   }
   /**
    * @param string
@@ -521,6 +541,20 @@ class Cluster extends \Google\Model
   public function getSubscriptionType()
   {
     return $this->subscriptionType;
+  }
+  /**
+   * @param string[]
+   */
+  public function setTags($tags)
+  {
+    $this->tags = $tags;
+  }
+  /**
+   * @return string[]
+   */
+  public function getTags()
+  {
+    return $this->tags;
   }
   /**
    * @param TrialMetadata

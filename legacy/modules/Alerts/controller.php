@@ -58,7 +58,7 @@ class AlertsController extends SugarController
         if ('' == $this->view_object_map['Results']) {
             $this->view_object_map['Flash'] = $app_strings['LBL_NOTIFICATIONS_NONE'];
         }
-        if(count($this->view_object_map['Results']) > 50){
+        if(is_array($this->view_object_map['Results']) && count($this->view_object_map['Results']) > 50){
             array_pop($this->view_object_map['Results']);
             $this->view_object_map['More_Results'] = true;
         }

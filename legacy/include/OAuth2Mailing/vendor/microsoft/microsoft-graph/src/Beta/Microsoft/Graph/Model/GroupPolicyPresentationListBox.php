@@ -22,7 +22,7 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class GroupPolicyPresentationListBox extends GroupPolicyPresentation
+class GroupPolicyPresentationListBox extends GroupPolicyUploadedPresentation
 {
     /**
     * Gets the explicitValue
@@ -38,7 +38,7 @@ class GroupPolicyPresentationListBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the explicitValue
     * If this option is specified true the user must specify the registry subkey value and the registry subkey name. The list box shows two columns, one for the name and one for the data. The default value is false.
@@ -52,7 +52,7 @@ class GroupPolicyPresentationListBox extends GroupPolicyPresentation
         $this->_propDict["explicitValue"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the valuePrefix
     * Not yet documented
@@ -67,7 +67,7 @@ class GroupPolicyPresentationListBox extends GroupPolicyPresentation
             return null;
         }
     }
-    
+
     /**
     * Sets the valuePrefix
     * Not yet documented
@@ -81,5 +81,5 @@ class GroupPolicyPresentationListBox extends GroupPolicyPresentation
         $this->_propDict["valuePrefix"] = $val;
         return $this;
     }
-    
+
 }

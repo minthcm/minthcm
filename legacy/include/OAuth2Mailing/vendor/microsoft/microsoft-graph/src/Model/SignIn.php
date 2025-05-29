@@ -26,7 +26,7 @@ class SignIn extends Entity
 {
     /**
     * Gets the appDisplayName
-    * The application name displayed in the Azure Portal. Supports $filter (eq and startsWith operators only).
+    * App name displayed in the Microsoft Entra admin center.  Supports $filter (eq, startsWith).
     *
     * @return string|null The appDisplayName
     */
@@ -38,10 +38,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appDisplayName
-    * The application name displayed in the Azure Portal. Supports $filter (eq and startsWith operators only).
+    * App name displayed in the Microsoft Entra admin center.  Supports $filter (eq, startsWith).
     *
     * @param string $val The appDisplayName
     *
@@ -52,10 +52,10 @@ class SignIn extends Entity
         $this->_propDict["appDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appId
-    * The application identifier in Azure Active Directory. Supports $filter (eq operator only).
+    * Unique GUID representing the app ID in the Microsoft Entra ID.  Supports $filter (eq).
     *
     * @return string|null The appId
     */
@@ -67,10 +67,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appId
-    * The application identifier in Azure Active Directory. Supports $filter (eq operator only).
+    * Unique GUID representing the app ID in the Microsoft Entra ID.  Supports $filter (eq).
     *
     * @param string $val The appId
     *
@@ -81,11 +81,11 @@ class SignIn extends Entity
         $this->_propDict["appId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the appliedConditionalAccessPolicies
-    * A list of conditional access policies that are triggered by the corresponding sign-in activity.
+    * Provides a list of conditional access policies that are triggered by the corresponding sign-in activity. Apps need additional Conditional Access-related privileges to read the details of this property. For more information, see Viewing applied conditional access (CA) policies in sign-ins.
      *
      * @return array|null The appliedConditionalAccessPolicies
      */
@@ -97,12 +97,12 @@ class SignIn extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the appliedConditionalAccessPolicies
-    * A list of conditional access policies that are triggered by the corresponding sign-in activity.
+    * Provides a list of conditional access policies that are triggered by the corresponding sign-in activity. Apps need additional Conditional Access-related privileges to read the details of this property. For more information, see Viewing applied conditional access (CA) policies in sign-ins.
     *
-    * @param AppliedConditionalAccessPolicy $val The appliedConditionalAccessPolicies
+    * @param AppliedConditionalAccessPolicy[] $val The appliedConditionalAccessPolicies
     *
     * @return SignIn
     */
@@ -111,10 +111,10 @@ class SignIn extends Entity
         $this->_propDict["appliedConditionalAccessPolicies"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the clientAppUsed
-    * The legacy client used for sign-in activity. For example: Browser, Exchange Active Sync, Modern clients, IMAP, MAPI, SMTP, or POP. Supports $filter (eq operator only).
+    * Identifies the client used for the sign-in activity. Modern authentication clients include Browser, modern clients. Legacy authentication clients include Exchange ActiveSync, IMAP, MAPI, SMTP, POP, and other clients.  Supports $filter (eq).
     *
     * @return string|null The clientAppUsed
     */
@@ -126,10 +126,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the clientAppUsed
-    * The legacy client used for sign-in activity. For example: Browser, Exchange Active Sync, Modern clients, IMAP, MAPI, SMTP, or POP. Supports $filter (eq operator only).
+    * Identifies the client used for the sign-in activity. Modern authentication clients include Browser, modern clients. Legacy authentication clients include Exchange ActiveSync, IMAP, MAPI, SMTP, POP, and other clients.  Supports $filter (eq).
     *
     * @param string $val The clientAppUsed
     *
@@ -140,10 +140,10 @@ class SignIn extends Entity
         $this->_propDict["clientAppUsed"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the conditionalAccessStatus
-    * The status of the conditional access policy triggered. Possible values: success, failure, notApplied, or unknownFutureValue. Supports $filter (eq operator only).
+    * Reports status of an activated conditional access policy. Possible values are: success, failure, notApplied, and unknownFutureValue.  Supports $filter (eq).
     *
     * @return ConditionalAccessStatus|null The conditionalAccessStatus
     */
@@ -159,10 +159,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the conditionalAccessStatus
-    * The status of the conditional access policy triggered. Possible values: success, failure, notApplied, or unknownFutureValue. Supports $filter (eq operator only).
+    * Reports status of an activated conditional access policy. Possible values are: success, failure, notApplied, and unknownFutureValue.  Supports $filter (eq).
     *
     * @param ConditionalAccessStatus $val The conditionalAccessStatus
     *
@@ -173,10 +173,10 @@ class SignIn extends Entity
         $this->_propDict["conditionalAccessStatus"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the correlationId
-    * The identifier that's sent from the client when sign-in is initiated. This is used for troubleshooting the corresponding sign-in activity when calling for support. Supports $filter (eq operator only).
+    * The request ID sent from the client when the sign-in is initiated; used to troubleshoot sign-in activity.  Supports $filter (eq).
     *
     * @return string|null The correlationId
     */
@@ -188,10 +188,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the correlationId
-    * The identifier that's sent from the client when sign-in is initiated. This is used for troubleshooting the corresponding sign-in activity when calling for support. Supports $filter (eq operator only).
+    * The request ID sent from the client when the sign-in is initiated; used to troubleshoot sign-in activity.  Supports $filter (eq).
     *
     * @param string $val The correlationId
     *
@@ -202,10 +202,10 @@ class SignIn extends Entity
         $this->_propDict["correlationId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
-    * The date and time the sign-in was initiated. The Timestamp type is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Supports $orderby and $filter (eq, le, and ge operators only).
+    * Date and time (UTC) the sign-in was initiated. Example: midnight on Jan 1, 2014 is reported as 2014-01-01T00:00:00Z.  Supports $orderby, $filter (eq, le, and ge).
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -221,10 +221,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
-    * The date and time the sign-in was initiated. The Timestamp type is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Supports $orderby and $filter (eq, le, and ge operators only).
+    * Date and time (UTC) the sign-in was initiated. Example: midnight on Jan 1, 2014 is reported as 2014-01-01T00:00:00Z.  Supports $orderby, $filter (eq, le, and ge).
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -235,10 +235,10 @@ class SignIn extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceDetail
-    * The device information from where the sign-in occurred. Includes information such as deviceId, OS, and browser. Supports $filter (eq and startsWith operators only) on browser and operatingSytem properties.
+    * Device information from where the sign-in occurred; includes device ID, operating system, and browser.  Supports $filter (eq, startsWith) on browser and operatingSytem properties.
     *
     * @return DeviceDetail|null The deviceDetail
     */
@@ -254,10 +254,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the deviceDetail
-    * The device information from where the sign-in occurred. Includes information such as deviceId, OS, and browser. Supports $filter (eq and startsWith operators only) on browser and operatingSytem properties.
+    * Device information from where the sign-in occurred; includes device ID, operating system, and browser.  Supports $filter (eq, startsWith) on browser and operatingSytem properties.
     *
     * @param DeviceDetail $val The deviceDetail
     *
@@ -268,10 +268,10 @@ class SignIn extends Entity
         $this->_propDict["deviceDetail"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the ipAddress
-    * The IP address of the client from where the sign-in occurred. Supports $filter (eq and startsWith operators only).
+    * IP address of the client used to sign in.  Supports $filter (eq, startsWith).
     *
     * @return string|null The ipAddress
     */
@@ -283,10 +283,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the ipAddress
-    * The IP address of the client from where the sign-in occurred. Supports $filter (eq and startsWith operators only).
+    * IP address of the client used to sign in.  Supports $filter (eq, startsWith).
     *
     * @param string $val The ipAddress
     *
@@ -297,10 +297,10 @@ class SignIn extends Entity
         $this->_propDict["ipAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isInteractive
-    * Indicates whether a sign-in is interactive or not.
+    * Indicates if a sign-in is interactive or not.
     *
     * @return bool|null The isInteractive
     */
@@ -312,10 +312,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isInteractive
-    * Indicates whether a sign-in is interactive or not.
+    * Indicates if a sign-in is interactive or not.
     *
     * @param bool $val The isInteractive
     *
@@ -326,10 +326,10 @@ class SignIn extends Entity
         $this->_propDict["isInteractive"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the location
-    * The city, state, and 2 letter country code from where the sign-in occurred. Supports $filter (eq and startsWith operators only) on city, state, and countryOrRegion properties.
+    * Provides the city, state, and country code where the sign-in originated.  Supports $filter (eq, startsWith) on city, state, and countryOrRegion properties.
     *
     * @return SignInLocation|null The location
     */
@@ -345,10 +345,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the location
-    * The city, state, and 2 letter country code from where the sign-in occurred. Supports $filter (eq and startsWith operators only) on city, state, and countryOrRegion properties.
+    * Provides the city, state, and country code where the sign-in originated.  Supports $filter (eq, startsWith) on city, state, and countryOrRegion properties.
     *
     * @param SignInLocation $val The location
     *
@@ -359,10 +359,10 @@ class SignIn extends Entity
         $this->_propDict["location"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceDisplayName
-    * The name of the resource that the user signed in to. Supports $filter (eq operator only).
+    * Name of the resource the user signed into.  Supports $filter (eq).
     *
     * @return string|null The resourceDisplayName
     */
@@ -374,10 +374,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceDisplayName
-    * The name of the resource that the user signed in to. Supports $filter (eq operator only).
+    * Name of the resource the user signed into.  Supports $filter (eq).
     *
     * @param string $val The resourceDisplayName
     *
@@ -388,10 +388,10 @@ class SignIn extends Entity
         $this->_propDict["resourceDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceId
-    * The identifier of the resource that the user signed in to. Supports $filter (eq operator only).
+    * ID of the resource that the user signed into.  Supports $filter (eq).
     *
     * @return string|null The resourceId
     */
@@ -403,10 +403,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceId
-    * The identifier of the resource that the user signed in to. Supports $filter (eq operator only).
+    * ID of the resource that the user signed into.  Supports $filter (eq).
     *
     * @param string $val The resourceId
     *
@@ -417,10 +417,10 @@ class SignIn extends Entity
         $this->_propDict["resourceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the riskDetail
-    * The reason behind a specific state of a risky user, sign-in, or a risk event. Possible values: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, or unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Provides the 'reason' behind a specific state of a risky user, sign-in or a risk event. The possible values are: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far.  Supports $filter (eq).Note: Details for this property require a Microsoft Entra ID P2 license. Other licenses return the value hidden.
     *
     * @return RiskDetail|null The riskDetail
     */
@@ -436,10 +436,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the riskDetail
-    * The reason behind a specific state of a risky user, sign-in, or a risk event. Possible values: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, or unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Provides the 'reason' behind a specific state of a risky user, sign-in or a risk event. The possible values are: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far.  Supports $filter (eq).Note: Details for this property require a Microsoft Entra ID P2 license. Other licenses return the value hidden.
     *
     * @param RiskDetail $val The riskDetail
     *
@@ -450,11 +450,11 @@ class SignIn extends Entity
         $this->_propDict["riskDetail"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the riskEventTypes
-    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue. Supports $filter (eq operator only).
+    * Risk event types associated with the sign-in. The possible values are: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, and unknownFutureValue.  Supports $filter (eq).
      *
      * @return array|null The riskEventTypes
      */
@@ -466,12 +466,12 @@ class SignIn extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the riskEventTypes
-    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue. Supports $filter (eq operator only).
+    * Risk event types associated with the sign-in. The possible values are: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, and unknownFutureValue.  Supports $filter (eq).
     *
-    * @param RiskEventType $val The riskEventTypes
+    * @param RiskEventType[] $val The riskEventTypes
     *
     * @return SignIn
     */
@@ -480,12 +480,12 @@ class SignIn extends Entity
         $this->_propDict["riskEventTypes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the riskEventTypesV2
-    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue. Supports $filter (eq and startsWith operators only).
+    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue.  Supports $filter (eq, startsWith).
     *
-    * @return string|null The riskEventTypesV2
+    * @return array|null The riskEventTypesV2
     */
     public function getRiskEventTypesV2()
     {
@@ -495,12 +495,12 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the riskEventTypesV2
-    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue. Supports $filter (eq and startsWith operators only).
+    * The list of risk event types associated with the sign-in. Possible values: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, or unknownFutureValue.  Supports $filter (eq, startsWith).
     *
-    * @param string $val The riskEventTypesV2
+    * @param string[] $val The riskEventTypesV2
     *
     * @return SignIn
     */
@@ -509,10 +509,10 @@ class SignIn extends Entity
         $this->_propDict["riskEventTypes_v2"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the riskLevelAggregated
-    * The aggregated risk level. Possible values: none, low, medium, high, hidden, or unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Aggregated risk level. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in wasn't enabled for Microsoft Entra ID Protection.  Supports $filter (eq).  Note: Details for this property are only available for Microsoft Entra ID P2 customers. All other customers are returned hidden.
     *
     * @return RiskLevel|null The riskLevelAggregated
     */
@@ -528,10 +528,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the riskLevelAggregated
-    * The aggregated risk level. Possible values: none, low, medium, high, hidden, or unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Aggregated risk level. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in wasn't enabled for Microsoft Entra ID Protection.  Supports $filter (eq).  Note: Details for this property are only available for Microsoft Entra ID P2 customers. All other customers are returned hidden.
     *
     * @param RiskLevel $val The riskLevelAggregated
     *
@@ -542,10 +542,10 @@ class SignIn extends Entity
         $this->_propDict["riskLevelAggregated"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the riskLevelDuringSignIn
-    * The risk level during sign-in. Possible values: none, low, medium, high, hidden, or unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Risk level during sign-in. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in wasn't enabled for Microsoft Entra ID Protection.  Supports $filter (eq).  Note: Details for this property are only available for Microsoft Entra ID P2 customers. All other customers are returned hidden.
     *
     * @return RiskLevel|null The riskLevelDuringSignIn
     */
@@ -561,10 +561,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the riskLevelDuringSignIn
-    * The risk level during sign-in. Possible values: none, low, medium, high, hidden, or unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Supports $filter (eq operator only). Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers are returned hidden.
+    * Risk level during sign-in. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in wasn't enabled for Microsoft Entra ID Protection.  Supports $filter (eq).  Note: Details for this property are only available for Microsoft Entra ID P2 customers. All other customers are returned hidden.
     *
     * @param RiskLevel $val The riskLevelDuringSignIn
     *
@@ -575,10 +575,10 @@ class SignIn extends Entity
         $this->_propDict["riskLevelDuringSignIn"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the riskState
-    * The risk state of a risky user, sign-in, or a risk event. Possible values: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, or unknownFutureValue. Supports $filter (eq operator only).
+    * Reports status of the risky user, sign-in, or a risk event. The possible values are: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, unknownFutureValue.  Supports $filter (eq).
     *
     * @return RiskState|null The riskState
     */
@@ -594,10 +594,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the riskState
-    * The risk state of a risky user, sign-in, or a risk event. Possible values: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, or unknownFutureValue. Supports $filter (eq operator only).
+    * Reports status of the risky user, sign-in, or a risk event. The possible values are: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, unknownFutureValue.  Supports $filter (eq).
     *
     * @param RiskState $val The riskState
     *
@@ -608,10 +608,10 @@ class SignIn extends Entity
         $this->_propDict["riskState"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
-    * The sign-in status. Includes the error code and description of the error (in case of a sign-in failure). Supports $filter (eq operator only) on errorCode property.
+    * Sign-in status. Includes the error code and description of the error (if there's a sign-in failure).  Supports $filter (eq) on errorCode property.
     *
     * @return SignInStatus|null The status
     */
@@ -627,10 +627,10 @@ class SignIn extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
-    * The sign-in status. Includes the error code and description of the error (in case of a sign-in failure). Supports $filter (eq operator only) on errorCode property.
+    * Sign-in status. Includes the error code and description of the error (if there's a sign-in failure).  Supports $filter (eq) on errorCode property.
     *
     * @param SignInStatus $val The status
     *
@@ -641,10 +641,10 @@ class SignIn extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userDisplayName
-    * The display name of the user. Supports $filter (eq and startsWith operators only).
+    * Display name of the user that initiated the sign-in.  Supports $filter (eq, startsWith).
     *
     * @return string|null The userDisplayName
     */
@@ -656,10 +656,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userDisplayName
-    * The display name of the user. Supports $filter (eq and startsWith operators only).
+    * Display name of the user that initiated the sign-in.  Supports $filter (eq, startsWith).
     *
     * @param string $val The userDisplayName
     *
@@ -670,10 +670,10 @@ class SignIn extends Entity
         $this->_propDict["userDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userId
-    * The identifier of the user. Supports $filter (eq operator only).
+    * ID of the user that initiated the sign-in.  Supports $filter (eq).
     *
     * @return string|null The userId
     */
@@ -685,10 +685,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userId
-    * The identifier of the user. Supports $filter (eq operator only).
+    * ID of the user that initiated the sign-in.  Supports $filter (eq).
     *
     * @param string $val The userId
     *
@@ -699,10 +699,10 @@ class SignIn extends Entity
         $this->_propDict["userId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userPrincipalName
-    * The UPN of the user. Supports $filter (eq and startsWith operators only).
+    * User principal name of the user that initiated the sign-in.  Supports $filter (eq, startsWith).
     *
     * @return string|null The userPrincipalName
     */
@@ -714,10 +714,10 @@ class SignIn extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the userPrincipalName
-    * The UPN of the user. Supports $filter (eq and startsWith operators only).
+    * User principal name of the user that initiated the sign-in.  Supports $filter (eq, startsWith).
     *
     * @param string $val The userPrincipalName
     *
@@ -728,5 +728,5 @@ class SignIn extends Entity
         $this->_propDict["userPrincipalName"] = $val;
         return $this;
     }
-    
+
 }

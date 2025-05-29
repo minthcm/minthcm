@@ -26,7 +26,7 @@ class InferenceClassificationOverride extends Entity
 {
     /**
     * Gets the classifyAs
-    * Specifies how incoming messages from a specific sender should always be classified as. Possible values are: focused, other.
+    * Specifies how incoming messages from a specific sender should always be classified as. The possible values are: focused, other.
     *
     * @return InferenceClassificationType|null The classifyAs
     */
@@ -42,10 +42,10 @@ class InferenceClassificationOverride extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the classifyAs
-    * Specifies how incoming messages from a specific sender should always be classified as. Possible values are: focused, other.
+    * Specifies how incoming messages from a specific sender should always be classified as. The possible values are: focused, other.
     *
     * @param InferenceClassificationType $val The classifyAs
     *
@@ -56,7 +56,7 @@ class InferenceClassificationOverride extends Entity
         $this->_propDict["classifyAs"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the senderEmailAddress
     * The email address information of the sender for whom the override is created.
@@ -75,7 +75,7 @@ class InferenceClassificationOverride extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the senderEmailAddress
     * The email address information of the sender for whom the override is created.
@@ -89,5 +89,5 @@ class InferenceClassificationOverride extends Entity
         $this->_propDict["senderEmailAddress"] = $val;
         return $this;
     }
-    
+
 }

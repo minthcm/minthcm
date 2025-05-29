@@ -26,7 +26,7 @@ class WindowsMicrosoftEdgeApp extends MobileApp
 {
     /**
     * Gets the channel
-    * The channel to install on target devices. Possible values are: dev, beta, stable.
+    * The channel to install on target devices. The possible values are dev, beta, and stable. By default, this property is set to dev. Possible values are: dev, beta, stable, unknownFutureValue.
     *
     * @return MicrosoftEdgeChannel|null The channel
     */
@@ -42,10 +42,10 @@ class WindowsMicrosoftEdgeApp extends MobileApp
         }
         return null;
     }
-    
+
     /**
     * Sets the channel
-    * The channel to install on target devices. Possible values are: dev, beta, stable.
+    * The channel to install on target devices. The possible values are dev, beta, and stable. By default, this property is set to dev. Possible values are: dev, beta, stable, unknownFutureValue.
     *
     * @param MicrosoftEdgeChannel $val The channel
     *
@@ -56,7 +56,7 @@ class WindowsMicrosoftEdgeApp extends MobileApp
         $this->_propDict["channel"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayLanguageLocale
     * The language locale to use when the Edge app displays text to the user.
@@ -71,7 +71,7 @@ class WindowsMicrosoftEdgeApp extends MobileApp
             return null;
         }
     }
-    
+
     /**
     * Sets the displayLanguageLocale
     * The language locale to use when the Edge app displays text to the user.
@@ -85,5 +85,5 @@ class WindowsMicrosoftEdgeApp extends MobileApp
         $this->_propDict["displayLanguageLocale"] = $val;
         return $this;
     }
-    
+
 }

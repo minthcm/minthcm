@@ -28,10 +28,10 @@ class IdentityGovernance implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new IdentityGovernance
     *
@@ -54,7 +54,38 @@ class IdentityGovernance implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
+
+    /**
+    * Gets the lifecycleWorkflows
+    *
+    * @return \Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer|null The lifecycleWorkflows
+    */
+    public function getLifecycleWorkflows()
+    {
+        if (array_key_exists("lifecycleWorkflows", $this->_propDict)) {
+            if (is_a($this->_propDict["lifecycleWorkflows"], "\Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer") || is_null($this->_propDict["lifecycleWorkflows"])) {
+                return $this->_propDict["lifecycleWorkflows"];
+            } else {
+                $this->_propDict["lifecycleWorkflows"] = new \Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer($this->_propDict["lifecycleWorkflows"]);
+                return $this->_propDict["lifecycleWorkflows"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the lifecycleWorkflows
+    *
+    * @param \Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer $val The lifecycleWorkflows
+    *
+    * @return IdentityGovernance
+    */
+    public function setLifecycleWorkflows($val)
+    {
+        $this->_propDict["lifecycleWorkflows"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the accessReviews
     *
@@ -72,7 +103,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the accessReviews
     *
@@ -85,7 +116,7 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["accessReviews"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appConsent
     *
@@ -103,7 +134,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the appConsent
     *
@@ -116,7 +147,7 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["appConsent"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the termsOfUse
     *
@@ -134,7 +165,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the termsOfUse
     *
@@ -147,36 +178,102 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["termsOfUse"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the entitlementManagement
+    *
+    * @return EntitlementManagement|null The entitlementManagement
+    */
+    public function getEntitlementManagement()
+    {
+        if (array_key_exists("entitlementManagement", $this->_propDict)) {
+            if (is_a($this->_propDict["entitlementManagement"], "\Microsoft\Graph\Model\EntitlementManagement") || is_null($this->_propDict["entitlementManagement"])) {
+                return $this->_propDict["entitlementManagement"];
+            } else {
+                $this->_propDict["entitlementManagement"] = new EntitlementManagement($this->_propDict["entitlementManagement"]);
+                return $this->_propDict["entitlementManagement"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the entitlementManagement
+    *
+    * @param EntitlementManagement $val The entitlementManagement
+    *
+    * @return IdentityGovernance
+    */
+    public function setEntitlementManagement($val)
+    {
+        $this->_propDict["entitlementManagement"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the privilegedAccess
+    *
+    * @return PrivilegedAccessRoot|null The privilegedAccess
+    */
+    public function getPrivilegedAccess()
+    {
+        if (array_key_exists("privilegedAccess", $this->_propDict)) {
+            if (is_a($this->_propDict["privilegedAccess"], "\Microsoft\Graph\Model\PrivilegedAccessRoot") || is_null($this->_propDict["privilegedAccess"])) {
+                return $this->_propDict["privilegedAccess"];
+            } else {
+                $this->_propDict["privilegedAccess"] = new PrivilegedAccessRoot($this->_propDict["privilegedAccess"]);
+                return $this->_propDict["privilegedAccess"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the privilegedAccess
+    *
+    * @param PrivilegedAccessRoot $val The privilegedAccess
+    *
+    * @return IdentityGovernance
+    */
+    public function setPrivilegedAccess($val)
+    {
+        $this->_propDict["privilegedAccess"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return IdentityGovernance
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -185,6 +282,10 @@ class IdentityGovernance implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

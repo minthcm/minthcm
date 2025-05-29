@@ -116,9 +116,8 @@ class MappingsGenerator
                     }
                 }
             }
-
             $tracked_links = [];
-            $nested_properties = $esv_reader->getModuleNestedProperties($module['module']);
+            $nested_properties = $esv_reader->getModuleNestedProperties($bean->object_name);
             foreach ($nested_properties as $property_name => $nested_config) {
                 $link_field_name = $esv_reader->getLinkFieldName($property_name, $nested_config);
                 if (!$bean->load_relationship($link_field_name)) {

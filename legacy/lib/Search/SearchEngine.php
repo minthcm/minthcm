@@ -85,6 +85,26 @@ abstract class SearchEngine
     }
 
     /**
+     * Performs a search using the given query and shows a search view.
+     *
+     * The search view contains both a search bar and search results (if any).
+     *
+     * @param SearchQuery $query
+     */
+    public function globalSearchAndDisplay(SearchQuery $query): void
+    {
+        $this->validateQuery($query);
+        $this->displayForm($query);
+
+        if (!$query->isEmpty()) {
+            $results = $this->globalSearch($query);
+            $this->displayResults($query, $results);
+        }
+    }
+
+    abstract public function globalSearch(SearchQuery $query): SearchResults;
+
+    /**
      * Shows the default search form (search bar and options) for a given search query.
      *
      * @param SearchQuery $query

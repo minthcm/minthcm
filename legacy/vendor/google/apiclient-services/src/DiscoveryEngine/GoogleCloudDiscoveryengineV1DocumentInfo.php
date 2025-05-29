@@ -21,9 +21,17 @@ class GoogleCloudDiscoveryengineV1DocumentInfo extends \Google\Collection
 {
   protected $collection_key = 'promotionIds';
   /**
+   * @var float
+   */
+  public $conversionValue;
+  /**
    * @var string
    */
   public $id;
+  /**
+   * @var bool
+   */
+  public $joined;
   /**
    * @var string
    */
@@ -42,6 +50,20 @@ class GoogleCloudDiscoveryengineV1DocumentInfo extends \Google\Collection
   public $uri;
 
   /**
+   * @param float
+   */
+  public function setConversionValue($conversionValue)
+  {
+    $this->conversionValue = $conversionValue;
+  }
+  /**
+   * @return float
+   */
+  public function getConversionValue()
+  {
+    return $this->conversionValue;
+  }
+  /**
    * @param string
    */
   public function setId($id)
@@ -54,6 +76,20 @@ class GoogleCloudDiscoveryengineV1DocumentInfo extends \Google\Collection
   public function getId()
   {
     return $this->id;
+  }
+  /**
+   * @param bool
+   */
+  public function setJoined($joined)
+  {
+    $this->joined = $joined;
+  }
+  /**
+   * @return bool
+   */
+  public function getJoined()
+  {
+    return $this->joined;
   }
   /**
    * @param string

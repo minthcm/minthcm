@@ -26,7 +26,7 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
 {
     /**
     * Gets the appCrashCount
-    * The number of crashes for the app. Valid values -2147483648 to 2147483647
+    * The number of crashes for the application. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The appCrashCount
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appCrashCount
-    * The number of crashes for the app. Valid values -2147483648 to 2147483647
+    * The number of crashes for the application. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The appCrashCount
     *
@@ -52,10 +52,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appCrashCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the appDisplayName
-    * The friendly name of the application.
+    * The friendly name of the application. Possible values are: Outlook, Excel. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The appDisplayName
     */
@@ -67,10 +67,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appDisplayName
-    * The friendly name of the application.
+    * The friendly name of the application. Possible values are: Outlook, Excel. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The appDisplayName
     *
@@ -81,10 +81,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appName
-    * The name of the application.
+    * The name of the application. Possible values are: outlook.exe, excel.exe. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The appName
     */
@@ -96,10 +96,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appName
-    * The name of the application.
+    * The name of the application. Possible values are: outlook.exe, excel.exe. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The appName
     *
@@ -110,10 +110,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appPublisher
-    * The publisher of the application.
+    * The publisher of the application. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The appPublisher
     */
@@ -125,10 +125,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appPublisher
-    * The publisher of the application.
+    * The publisher of the application. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The appPublisher
     *
@@ -139,10 +139,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appPublisher"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appUsageDuration
-    * The total usage time of the application in minutes. Valid values -2147483648 to 2147483647
+    * The total usage time of the application in minutes. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The appUsageDuration
     */
@@ -154,10 +154,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appUsageDuration
-    * The total usage time of the application in minutes. Valid values -2147483648 to 2147483647
+    * The total usage time of the application in minutes. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The appUsageDuration
     *
@@ -168,7 +168,7 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appUsageDuration"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the appVersion
     * The version of the application.
@@ -183,7 +183,7 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appVersion
     * The version of the application.
@@ -197,10 +197,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["appVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the meanTimeToFailureInMinutes
-    * The mean time to failure for the app in minutes. Valid values -2147483648 to 2147483647
+    * The mean time to failure for the application in minutes. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @return int|null The meanTimeToFailureInMinutes
     */
@@ -212,10 +212,10 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the meanTimeToFailureInMinutes
-    * The mean time to failure for the app in minutes. Valid values -2147483648 to 2147483647
+    * The mean time to failure for the application in minutes. Valid values 0 to 2147483647. Supports: $select, $OrderBy. Read-only. Valid values -2147483648 to 2147483647
     *
     * @param int $val The meanTimeToFailureInMinutes
     *
@@ -226,5 +226,5 @@ class UserExperienceAnalyticsAppHealthAppPerformanceByAppVersion extends Entity
         $this->_propDict["meanTimeToFailureInMinutes"] = intval($val);
         return $this;
     }
-    
+
 }

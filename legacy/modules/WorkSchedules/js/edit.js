@@ -2,6 +2,7 @@ $(document).ready(function () {
     var redirected_from_calendar = $("#redirected_from_calendar").val();
     if (redirected_from_calendar == 1) {
         createActivitySelectDialog();
+        setCancelButton();
     }
 
     $("#delegation_duration")
@@ -339,4 +340,26 @@ function setDefaultWorkPlace() {
             }
         },
     });
+}
+
+function setCancelButton() {
+    let params = new URLSearchParams(document.location.search);
+    let ret_module = params.get("return_module");
+    
+    if(!ret_module || ret_module !== "Calendar") {
+        return;
+    }
+
+    let year = params.get("year");
+    let month = params.get("month");
+    let day = params.get("day");
+
+    if(!year || !month || !day) {
+        return;
+    }
+
+    let cancelButton = $('#CANCEL.button');
+    let href = cancelButton.attr('href');
+    href = href + '&year=' + year + '&month=' + month + '&day=' + day;
+    cancelButton.attr('href', href);
 }

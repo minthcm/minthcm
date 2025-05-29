@@ -43,8 +43,6 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-// SugarAutoLoader::requireWithCustom('include/ScheduleGenerateUsersNews/ScheduleGenerateUsersNews.php');
-// SugarAutoLoader::requireWithCustom('include/SugarQueue/SugarJobQueue.php');
 SugarAutoLoader::requireWithCustom('modules/Comments/RelatedComments.php');
 
 class CommentsApi

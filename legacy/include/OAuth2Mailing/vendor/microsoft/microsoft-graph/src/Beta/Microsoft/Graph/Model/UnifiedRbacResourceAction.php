@@ -26,6 +26,7 @@ class UnifiedRbacResourceAction extends Entity
 {
     /**
     * Gets the actionVerb
+    * HTTP method for the action, such as DELETE, GET, PATCH, POST, PUT, or null. Supports $filter (eq) but not for null values.
     *
     * @return string|null The actionVerb
     */
@@ -37,9 +38,10 @@ class UnifiedRbacResourceAction extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the actionVerb
+    * HTTP method for the action, such as DELETE, GET, PATCH, POST, PUT, or null. Supports $filter (eq) but not for null values.
     *
     * @param string $val The actionVerb
     *
@@ -50,9 +52,37 @@ class UnifiedRbacResourceAction extends Entity
         $this->_propDict["actionVerb"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the authenticationContextId
+    *
+    * @return string|null The authenticationContextId
+    */
+    public function getAuthenticationContextId()
+    {
+        if (array_key_exists("authenticationContextId", $this->_propDict)) {
+            return $this->_propDict["authenticationContextId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the authenticationContextId
+    *
+    * @param string $val The authenticationContextId
+    *
+    * @return UnifiedRbacResourceAction
+    */
+    public function setAuthenticationContextId($val)
+    {
+        $this->_propDict["authenticationContextId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the description
+    * Description for the action. Supports $filter (eq).
     *
     * @return string|null The description
     */
@@ -64,9 +94,10 @@ class UnifiedRbacResourceAction extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
+    * Description for the action. Supports $filter (eq).
     *
     * @param string $val The description
     *
@@ -77,9 +108,66 @@ class UnifiedRbacResourceAction extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the isAuthenticationContextSettable
+    *
+    * @return bool|null The isAuthenticationContextSettable
+    */
+    public function getIsAuthenticationContextSettable()
+    {
+        if (array_key_exists("isAuthenticationContextSettable", $this->_propDict)) {
+            return $this->_propDict["isAuthenticationContextSettable"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isAuthenticationContextSettable
+    *
+    * @param bool $val The isAuthenticationContextSettable
+    *
+    * @return UnifiedRbacResourceAction
+    */
+    public function setIsAuthenticationContextSettable($val)
+    {
+        $this->_propDict["isAuthenticationContextSettable"] = boolval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the isPrivileged
+    * Flag indicating if the action is a sensitive resource action. Applies only for actions in the microsoft.directory resource namespace. Read-only. Supports $filter (eq).
+    *
+    * @return bool|null The isPrivileged
+    */
+    public function getIsPrivileged()
+    {
+        if (array_key_exists("isPrivileged", $this->_propDict)) {
+            return $this->_propDict["isPrivileged"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isPrivileged
+    * Flag indicating if the action is a sensitive resource action. Applies only for actions in the microsoft.directory resource namespace. Read-only. Supports $filter (eq).
+    *
+    * @param bool $val The isPrivileged
+    *
+    * @return UnifiedRbacResourceAction
+    */
+    public function setIsPrivileged($val)
+    {
+        $this->_propDict["isPrivileged"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the name
+    * Name for the action within the resource namespace, such as microsoft.insights/programs/update. Can include slash character (/). Case insensitive. Required. Supports $filter (eq).
     *
     * @return string|null The name
     */
@@ -91,9 +179,10 @@ class UnifiedRbacResourceAction extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
+    * Name for the action within the resource namespace, such as microsoft.insights/programs/update. Can include slash character (/). Case insensitive. Required. Supports $filter (eq).
     *
     * @param string $val The name
     *
@@ -104,9 +193,10 @@ class UnifiedRbacResourceAction extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceScopeId
+    * Not implemented.
     *
     * @return string|null The resourceScopeId
     */
@@ -118,9 +208,10 @@ class UnifiedRbacResourceAction extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceScopeId
+    * Not implemented.
     *
     * @param string $val The resourceScopeId
     *
@@ -131,7 +222,38 @@ class UnifiedRbacResourceAction extends Entity
         $this->_propDict["resourceScopeId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the authenticationContext
+    *
+    * @return AuthenticationContextClassReference|null The authenticationContext
+    */
+    public function getAuthenticationContext()
+    {
+        if (array_key_exists("authenticationContext", $this->_propDict)) {
+            if (is_a($this->_propDict["authenticationContext"], "\Beta\Microsoft\Graph\Model\AuthenticationContextClassReference") || is_null($this->_propDict["authenticationContext"])) {
+                return $this->_propDict["authenticationContext"];
+            } else {
+                $this->_propDict["authenticationContext"] = new AuthenticationContextClassReference($this->_propDict["authenticationContext"]);
+                return $this->_propDict["authenticationContext"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the authenticationContext
+    *
+    * @param AuthenticationContextClassReference $val The authenticationContext
+    *
+    * @return UnifiedRbacResourceAction
+    */
+    public function setAuthenticationContext($val)
+    {
+        $this->_propDict["authenticationContext"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the resourceScope
     *
@@ -149,7 +271,7 @@ class UnifiedRbacResourceAction extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the resourceScope
     *
@@ -162,5 +284,5 @@ class UnifiedRbacResourceAction extends Entity
         $this->_propDict["resourceScope"] = $val;
         return $this;
     }
-    
+
 }

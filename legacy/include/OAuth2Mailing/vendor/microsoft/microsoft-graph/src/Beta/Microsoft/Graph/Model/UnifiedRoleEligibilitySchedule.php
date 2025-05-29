@@ -26,7 +26,7 @@ class UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase
 {
     /**
     * Gets the memberType
-    * Membership type of the eligible assignment. It can either be Inherited, Direct, or Group.
+    * Membership type of the eligible assignment. It can either be Inherited, Direct, or Group. Supports $filter (eq).
     *
     * @return string|null The memberType
     */
@@ -38,10 +38,10 @@ class UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase
             return null;
         }
     }
-    
+
     /**
     * Sets the memberType
-    * Membership type of the eligible assignment. It can either be Inherited, Direct, or Group.
+    * Membership type of the eligible assignment. It can either be Inherited, Direct, or Group. Supports $filter (eq).
     *
     * @param string $val The memberType
     *
@@ -52,7 +52,7 @@ class UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase
         $this->_propDict["memberType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the scheduleInfo
     * The schedule object of the eligible role assignment request.
@@ -71,7 +71,7 @@ class UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase
         }
         return null;
     }
-    
+
     /**
     * Sets the scheduleInfo
     * The schedule object of the eligible role assignment request.
@@ -85,5 +85,5 @@ class UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase
         $this->_propDict["scheduleInfo"] = $val;
         return $this;
     }
-    
+
 }

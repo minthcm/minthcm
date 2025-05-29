@@ -106,7 +106,7 @@ class Preferences
             ],
             'name_formats' => (new \Localization())->getUsableLocaleNameOptions($sugar_config['name_formats']),
         ];
-        if(!$minified || in_array('reload_currency', $rebuild_array)){
+        if(!$minified || in_array('reload_currency', $rebuild_array) || empty($global_settings['currencies'])){
             $global_settings['currencies'] = $this->getCurrenciesList();
         }
         return $global_settings;

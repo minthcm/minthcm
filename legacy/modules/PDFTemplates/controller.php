@@ -74,7 +74,7 @@ class PDFTemplatesController extends SugarController {
       while ( $row = $this->db->fetchByAssoc($result) ) {
          $rows[$i++] = $row;
       }
-      $json = new JSON(JSON_LOOSE_TYPE);
+      $json = new JSON();
 
       echo $json->encode($rows);
    }
@@ -93,7 +93,7 @@ class PDFTemplatesController extends SugarController {
          sugar_file_put_contents('modules/PDFTemplates/templates/temp/template-' . $guid, html_entity_decode(str_replace('&nbsp;', '', $_REQUEST['html_data']),ENT_COMPAT | ENT_HTML401,'UTF-8'));
 
          $response['template_id'] = $guid;
-         $json = new JSON(JSON_LOOSE_TYPE);
+         $json = new JSON();
          echo $json->encode($response);
       }
    }
@@ -134,7 +134,7 @@ class PDFTemplatesController extends SugarController {
          $response['message'] = 'LBL_SYNTAX_NO_INPUT_DATA';
       }
 
-      $json = new JSON(JSON_LOOSE_TYPE);
+      $json = new JSON();
       echo $json->encode($response);
    }
 

@@ -117,7 +117,6 @@ class StandardField extends DynamicField
         $this->loadCustomDef($field->name);
         $this->loadBaseDef($field->name);
         $newDef = $field->get_field_def();
-        
         require_once('modules/DynamicFields/FieldCases.php') ;
         $this->baseField = get_widget($field->type) ;
         foreach ($field->vardef_map as $property => $fmd_col) {
@@ -137,10 +136,13 @@ class StandardField extends DynamicField
                 $this->custom_def[$property] =
                     is_string($newDef[$property]) ? htmlspecialchars_decode($newDef[$property], ENT_QUOTES) : $newDef[$property];
             }
-            
             //Remove any orphaned entries
             if (isset($this->custom_def[$property]) && !isset($newDef[$property])) {
                 unset($this->custom_def[$property]);
+            }
+
+            if ($property === 'options' && empty($newDef[$property])) {
+                continue;
             }
 
             //Handle overrides of out of the box definitions with empty

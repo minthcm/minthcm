@@ -614,7 +614,12 @@ CAL.dialog_create = function (date, end_date, user_id) {
    // Mint start
    var module_name = CAL.get("current_module").value;
    var return_module = (typeof (moduleName) != 'undefined') ? moduleName : 'Calendar';
-   var url = "index.php?module=" + module_name + "&action=EditView&redirected_from_calendar=1&return_module=" + return_module + "&date_start=" + date + "&date_end=" + end_date + "&assigned_user_id=" + user_id;
+   var month = date.split('/')[0];
+   var day = date.split('/')[1];
+   var year = String(date.split('/')[2]).split(' ')[0];
+   var url = "index.php?module=" + module_name + "&action=EditView&return_action=index&redirected_from_calendar=1&return_module=" + return_module 
+   + "&date_start=" + date + "&date_end=" + end_date + "&assigned_user_id=" 
+   + user_id + "&year=" + year + "&month=" + month + "&day=" + day;
    window.parent.postMessage(new URL(url, document.location).href); // Mint-Vue
    // window.location.assign(url);
    //   var e, user_id, user_name;

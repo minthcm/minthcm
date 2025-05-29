@@ -58,7 +58,7 @@ class ConditionalAccessGrantControls extends Entity
     }
     /**
     * Gets the customAuthenticationFactors
-    * List of custom controls IDs required by the policy. Learn more about custom controls here: https://docs.microsoft.com/azure/active-directory/conditional-access/controls#custom-controls-preview
+    * List of custom controls IDs required by the policy. For more information, see Custom controls.
     *
     * @return string|null The customAuthenticationFactors
     */
@@ -73,7 +73,7 @@ class ConditionalAccessGrantControls extends Entity
 
     /**
     * Sets the customAuthenticationFactors
-    * List of custom controls IDs required by the policy. Learn more about custom controls here: https://docs.microsoft.com/azure/active-directory/conditional-access/controls#custom-controls-preview
+    * List of custom controls IDs required by the policy. For more information, see Custom controls.
     *
     * @param string $val The value of the customAuthenticationFactors
     *
@@ -139,5 +139,36 @@ class ConditionalAccessGrantControls extends Entity
     {
         $this->_propDict["termsOfUse"] = $val;
         return $this;
+    }
+
+    /**
+    * Gets the authenticationStrength
+    *
+    * @return AuthenticationStrengthPolicy|null The authenticationStrength
+    */
+    public function getAuthenticationStrength()
+    {
+        if (array_key_exists("authenticationStrength", $this->_propDict)) {
+            if (is_a($this->_propDict["authenticationStrength"], "\Microsoft\Graph\Model\AuthenticationStrengthPolicy") || is_null($this->_propDict["authenticationStrength"])) {
+                return $this->_propDict["authenticationStrength"];
+            } else {
+                $this->_propDict["authenticationStrength"] = new AuthenticationStrengthPolicy($this->_propDict["authenticationStrength"]);
+                return $this->_propDict["authenticationStrength"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the authenticationStrength
+    *
+    * @param AuthenticationStrengthPolicy $val The value to assign to the authenticationStrength
+    *
+    * @return ConditionalAccessGrantControls The ConditionalAccessGrantControls
+    */
+    public function setAuthenticationStrength($val)
+    {
+        $this->_propDict["authenticationStrength"] = $val;
+         return $this;
     }
 }

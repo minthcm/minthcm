@@ -8,7 +8,7 @@ use Consolidation\OutputFormatters\StructuredData\Xml\XmlSchema;
 use Consolidation\OutputFormatters\StructuredData\Xml\XmlSchemaInterface;
 
 /**
- * FormetterOptions holds information that affects the way a formatter
+ * FormatterOptions holds information that affects the way a formatter
  * renders its output.
  *
  * There are three places where a formatter might get options from:
@@ -141,6 +141,11 @@ class FormatterOptions
     public function setTableEmptyMessage($emptyMessage)
     {
         return $this->setConfigurationValue(FormatterOptions::TABLE_EMPTY_MESSAGE, $emptyMessage);
+    }
+
+    public function setTableDefaultFields($defaultTableFields)
+    {
+        return $this->setConfigurationValue(FormatterOptions::DEFAULT_TABLE_FIELDS, $defaultTableFields);
     }
 
     public function setDefaultStringField($defaultStringField)
@@ -369,7 +374,7 @@ class FormatterOptions
      *
      * @param string $key
      * @param mixed $value
-     * @return FormetterOptions
+     * @return FormatterOptions
      */
     protected function setConfigurationValue($key, $value)
     {
@@ -383,7 +388,7 @@ class FormatterOptions
      *
      * @param string $key
      * @param mixed $value
-     * @return FormetterOptions
+     * @return FormatterOptions
      */
     public function setConfigurationDefault($key, $value)
     {

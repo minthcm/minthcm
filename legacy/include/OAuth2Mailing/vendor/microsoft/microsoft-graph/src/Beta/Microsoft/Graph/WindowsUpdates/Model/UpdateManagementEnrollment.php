@@ -26,16 +26,18 @@ class UpdateManagementEnrollment extends UpdatableAssetEnrollment
     /**
     * Set the @odata.type since this type is immediately descended from an abstract
     * type that is referenced as the type in an entity.
+    * @param array $propDict The property dictionary
     */
-    public function __construct()
+    public function __construct($propDict = array())
     {
+        parent::__construct($propDict);
         $this->setODataType("#microsoft.graph.windowsUpdates.updateManagementEnrollment");
     }
 
 
     /**
     * Gets the updateCategory
-    * The category of updates that the service manages. Supports a subset of the values for updateCategory. Possible values are: feature.
+    * The category of updates that the service manages. Supports a subset of the values for updateCategory. Possible values are: driver, feature, quality, unknownFutureValue.
     *
     * @return UpdateCategory|null The updateCategory
     */
@@ -54,7 +56,7 @@ class UpdateManagementEnrollment extends UpdatableAssetEnrollment
 
     /**
     * Sets the updateCategory
-    * The category of updates that the service manages. Supports a subset of the values for updateCategory. Possible values are: feature.
+    * The category of updates that the service manages. Supports a subset of the values for updateCategory. Possible values are: driver, feature, quality, unknownFutureValue.
     *
     * @param UpdateCategory $val The value to assign to the updateCategory
     *

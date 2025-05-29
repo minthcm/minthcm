@@ -26,7 +26,7 @@ class AccessPackageAssignmentPolicy extends Entity
 {
     /**
     * Gets the accessPackageId
-    * ID of the access package.
+    * Identifier of the access package.
     *
     * @return string|null The accessPackageId
     */
@@ -38,10 +38,10 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the accessPackageId
-    * ID of the access package.
+    * Identifier of the access package.
     *
     * @param string $val The accessPackageId
     *
@@ -52,10 +52,10 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["accessPackageId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessReviewSettings
-    * Who must review, and how often, the assignments to the access package from this policy. This property is null if reviews are not required.
+    * Who must review, and how often, the assignments to the access package from this policy. This property is null if reviews aren't required.
     *
     * @return AssignmentReviewSettings|null The accessReviewSettings
     */
@@ -71,10 +71,10 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessReviewSettings
-    * Who must review, and how often, the assignments to the access package from this policy. This property is null if reviews are not required.
+    * Who must review, and how often, the assignments to the access package from this policy. This property is null if reviews aren't required.
     *
     * @param AssignmentReviewSettings $val The accessReviewSettings
     *
@@ -85,7 +85,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["accessReviewSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the canExtend
     * Indicates whether a user can extend the access package assignment duration after approval.
@@ -100,7 +100,7 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the canExtend
     * Indicates whether a user can extend the access package assignment duration after approval.
@@ -114,10 +114,9 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["canExtend"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the createdBy
-    * Read-only.
     *
     * @return string|null The createdBy
     */
@@ -129,10 +128,9 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the createdBy
-    * Read-only.
     *
     * @param string $val The createdBy
     *
@@ -143,7 +141,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -162,7 +160,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -176,7 +174,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The description of the policy.
@@ -191,7 +189,7 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The description of the policy.
@@ -205,10 +203,10 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The display name of the policy.
+    * The display name of the policy. Supports $filter (eq).
     *
     * @return string|null The displayName
     */
@@ -220,10 +218,10 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The display name of the policy.
+    * The display name of the policy. Supports $filter (eq).
     *
     * @param string $val The displayName
     *
@@ -234,10 +232,10 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the durationInDays
-    * The number of days in which assignments from this policy last until they are expired.
+    * The number of days in which assignments from this policy last until they're expired.
     *
     * @return int|null The durationInDays
     */
@@ -249,10 +247,10 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the durationInDays
-    * The number of days in which assignments from this policy last until they are expired.
+    * The number of days in which assignments from this policy last until they're expired.
     *
     * @param int $val The durationInDays
     *
@@ -263,7 +261,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["durationInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the expirationDateTime
     * The expiration date for assignments created in this policy. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -282,7 +280,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the expirationDateTime
     * The expiration date for assignments created in this policy. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -296,10 +294,9 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["expirationDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedBy
-    * Read-only.
     *
     * @return string|null The modifiedBy
     */
@@ -311,10 +308,9 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the modifiedBy
-    * Read-only.
     *
     * @param string $val The modifiedBy
     *
@@ -325,7 +321,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["modifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -344,7 +340,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -358,9 +354,9 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["modifiedDateTime"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the questions
     * Questions that are posed to the  requestor.
      *
@@ -374,12 +370,12 @@ class AccessPackageAssignmentPolicy extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the questions
     * Questions that are posed to the  requestor.
     *
-    * @param AccessPackageQuestion $val The questions
+    * @param AccessPackageQuestion[] $val The questions
     *
     * @return AccessPackageAssignmentPolicy
     */
@@ -388,7 +384,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["questions"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestApprovalSettings
     * Who must approve requests for access package in this policy.
@@ -407,7 +403,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the requestApprovalSettings
     * Who must approve requests for access package in this policy.
@@ -421,7 +417,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["requestApprovalSettings"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the requestorSettings
     * Who can request this access package from this policy.
@@ -440,7 +436,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the requestorSettings
     * Who can request this access package from this policy.
@@ -454,10 +450,43 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["requestorSettings"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the verifiableCredentialSettings
+    * Settings for verifiable credentials set up through the Microsoft Entra Verified I D service. These settings represent the verifiable credentials that a requestor of an access package in this policy can present to be assigned the access package.
+    *
+    * @return VerifiableCredentialSettings|null The verifiableCredentialSettings
+    */
+    public function getVerifiableCredentialSettings()
+    {
+        if (array_key_exists("verifiableCredentialSettings", $this->_propDict)) {
+            if (is_a($this->_propDict["verifiableCredentialSettings"], "\Beta\Microsoft\Graph\Model\VerifiableCredentialSettings") || is_null($this->_propDict["verifiableCredentialSettings"])) {
+                return $this->_propDict["verifiableCredentialSettings"];
+            } else {
+                $this->_propDict["verifiableCredentialSettings"] = new VerifiableCredentialSettings($this->_propDict["verifiableCredentialSettings"]);
+                return $this->_propDict["verifiableCredentialSettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the verifiableCredentialSettings
+    * Settings for verifiable credentials set up through the Microsoft Entra Verified I D service. These settings represent the verifiable credentials that a requestor of an access package in this policy can present to be assigned the access package.
+    *
+    * @param VerifiableCredentialSettings $val The verifiableCredentialSettings
+    *
+    * @return AccessPackageAssignmentPolicy
+    */
+    public function setVerifiableCredentialSettings($val)
+    {
+        $this->_propDict["verifiableCredentialSettings"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the accessPackage
-    * The access package with this policy. Read-only. Nullable.
+    * The access package with this policy. Read-only. Nullable. Supports $expand.
     *
     * @return AccessPackage|null The accessPackage
     */
@@ -473,10 +502,10 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackage
-    * The access package with this policy. Read-only. Nullable.
+    * The access package with this policy. Read-only. Nullable. Supports $expand.
     *
     * @param AccessPackage $val The accessPackage
     *
@@ -487,7 +516,7 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["accessPackage"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageCatalog
     *
@@ -505,7 +534,7 @@ class AccessPackageAssignmentPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageCatalog
     *
@@ -518,5 +547,65 @@ class AccessPackageAssignmentPolicy extends Entity
         $this->_propDict["accessPackageCatalog"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the customExtensionHandlers
+    * The collection of stages when to execute one or more custom access package workflow extensions. Supports $expand.
+     *
+     * @return array|null The customExtensionHandlers
+     */
+    public function getCustomExtensionHandlers()
+    {
+        if (array_key_exists("customExtensionHandlers", $this->_propDict)) {
+           return $this->_propDict["customExtensionHandlers"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customExtensionHandlers
+    * The collection of stages when to execute one or more custom access package workflow extensions. Supports $expand.
+    *
+    * @param CustomExtensionHandler[] $val The customExtensionHandlers
+    *
+    * @return AccessPackageAssignmentPolicy
+    */
+    public function setCustomExtensionHandlers($val)
+    {
+        $this->_propDict["customExtensionHandlers"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the customExtensionStageSettings
+    * The collection of stages when to execute one or more custom access package workflow extensions. Supports $expand.
+     *
+     * @return array|null The customExtensionStageSettings
+     */
+    public function getCustomExtensionStageSettings()
+    {
+        if (array_key_exists("customExtensionStageSettings", $this->_propDict)) {
+           return $this->_propDict["customExtensionStageSettings"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customExtensionStageSettings
+    * The collection of stages when to execute one or more custom access package workflow extensions. Supports $expand.
+    *
+    * @param CustomExtensionStageSetting[] $val The customExtensionStageSettings
+    *
+    * @return AccessPackageAssignmentPolicy
+    */
+    public function setCustomExtensionStageSettings($val)
+    {
+        $this->_propDict["customExtensionStageSettings"] = $val;
+        return $this;
+    }
+
 }

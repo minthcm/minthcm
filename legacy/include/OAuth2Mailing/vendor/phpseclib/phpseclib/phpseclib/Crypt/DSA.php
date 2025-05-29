@@ -53,7 +53,7 @@ abstract class DSA extends AsymmetricKey
     /**
      * DSA Prime P
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $p;
 
@@ -62,21 +62,21 @@ abstract class DSA extends AsymmetricKey
      *
      * Prime divisor of p-1
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $q;
 
     /**
      * DSA Group Generator G
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $g;
 
     /**
      * DSA public key value y
      *
-     * @var \phpseclib3\Math\BigInteger
+     * @var BigInteger
      */
     protected $y;
 
@@ -99,11 +99,16 @@ abstract class DSA extends AsymmetricKey
      *
      * @param int $L
      * @param int $N
-     * @return \phpseclib3\Crypt\DSA|bool
+     * @return DSA|bool
      */
     public static function createParameters($L = 2048, $N = 224)
     {
         self::initialize_static_variables();
+
+        $class = new \ReflectionClass(static::class);
+        if ($class->isFinal()) {
+            throw new \RuntimeException('createParameters() should not be called from final classes (' . static::class . ')');
+        }
 
         if (!isset(self::$engines['PHP'])) {
             self::useBestEngine();
@@ -174,11 +179,16 @@ abstract class DSA extends AsymmetricKey
      * Returns the private key, from which the publickey can be extracted
      *
      * @param int[] ...$args
-     * @return DSA\PrivateKey
+     * @return PrivateKey
      */
     public static function createKey(...$args)
     {
         self::initialize_static_variables();
+
+        $class = new \ReflectionClass(static::class);
+        if ($class->isFinal()) {
+            throw new \RuntimeException('createKey() should not be called from final classes (' . static::class . ')');
+        }
 
         if (!isset(self::$engines['PHP'])) {
             self::useBestEngine();

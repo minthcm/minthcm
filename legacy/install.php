@@ -772,17 +772,17 @@ EOQ;
             }
 
             $validation_errors = validate_dbConfig();
-            if (count($validation_errors) > 0) {
+            if (is_array($validation_errors) && count($validation_errors) > 0) {
                 $the_file = 'dbConfig_a.php';
                 $si_errors = true;
             }
             $validation_errors = validate_siteConfig('a');
-            if (count($validation_errors) > 0) {
+            if (is_array($validation_errors) && count($validation_errors) > 0) {
                 $the_file = 'siteConfig_a.php';
                 $si_errors = true;
             }
             $validation_errors = validate_siteConfig('b');
-            if (count($validation_errors) > 0) {
+            if (is_array($validation_errors) && count($validation_errors) > 0) {
                 $the_file = 'siteConfig_b.php';
                 $si_errors = true;
             }
@@ -827,7 +827,7 @@ EOQ;
             if (isset($_REQUEST['cli']) && ($_REQUEST['cli'] == 'true')) {
                 $_SESSION['cli'] = true;
                 // if we have errors, just shoot them back now
-                if (count($validation_errors) > 0) {
+                if (is_array($validation_errors) && count($validation_errors) > 0) {
                     foreach ($validation_errors as $error) {
                         print($mod_strings['ERR_ERROR_GENERAL'] . "\n");
                         print("    " . $error . "\n");

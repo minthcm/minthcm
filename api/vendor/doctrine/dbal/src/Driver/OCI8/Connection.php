@@ -29,11 +29,8 @@ final class Connection implements ServerInfoAwareConnection
     /** @var resource */
     private $connection;
 
-    /** @var Parser */
-    private $parser;
-
-    /** @var ExecutionMode */
-    private $executionMode;
+    private Parser $parser;
+    private ExecutionMode $executionMode;
 
     /**
      * @internal The connection can be only instantiated by its driver.
@@ -61,9 +58,7 @@ final class Connection implements ServerInfoAwareConnection
         return $matches[1];
     }
 
-    /**
-     * @throws Parser\Exception
-     */
+    /** @throws Parser\Exception */
     public function prepare(string $sql): DriverStatement
     {
         $visitor = new ConvertPositionalToNamedPlaceholders();
@@ -86,7 +81,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function quote($value, $type = ParameterType::STRING)
     {
@@ -109,7 +104,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string|null $name
      *
@@ -126,7 +121,7 @@ final class Connection implements ServerInfoAwareConnection
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/issues/4687',
-            'The usage of Connection::lastInsertId() with a sequence name is deprecated.'
+            'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
         );
 
         $result = $this->query('SELECT ' . $name . '.CURRVAL FROM DUAL')->fetchOne();
@@ -147,7 +142,7 @@ final class Connection implements ServerInfoAwareConnection
 
     public function commit(): bool
     {
-        if (! oci_commit($this->connection)) {
+        if (! @oci_commit($this->connection)) {
             throw Error::new($this->connection);
         }
 
@@ -167,9 +162,7 @@ final class Connection implements ServerInfoAwareConnection
         return true;
     }
 
-    /**
-     * @return resource
-     */
+    /** @return resource */
     public function getNativeConnection()
     {
         return $this->connection;

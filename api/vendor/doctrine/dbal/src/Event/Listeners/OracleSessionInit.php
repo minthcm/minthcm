@@ -23,6 +23,8 @@ use const CASE_UPPER;
  * NLS_DATE_FORMAT="YYYY-MM-DD HH24:MI:SS"
  * NLS_TIMESTAMP_FORMAT="YYYY-MM-DD HH24:MI:SS"
  * NLS_TIMESTAMP_TZ_FORMAT="YYYY-MM-DD HH24:MI:SS TZH:TZM"
+ *
+ * @deprecated Use {@see \Doctrine\DBAL\Driver\OCI8\Middleware\InitializeSession} instead.
  */
 class OracleSessionInit implements EventSubscriber
 {
@@ -35,9 +37,7 @@ class OracleSessionInit implements EventSubscriber
         'NLS_NUMERIC_CHARACTERS' => '.,',
     ];
 
-    /**
-     * @param string[] $oracleSessionVars
-     */
+    /** @param string[] $oracleSessionVars */
     public function __construct(array $oracleSessionVars = [])
     {
         $this->_defaultSessionVars = array_merge($this->_defaultSessionVars, $oracleSessionVars);
@@ -68,7 +68,7 @@ class OracleSessionInit implements EventSubscriber
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSubscribedEvents()
     {

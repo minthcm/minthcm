@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
+import { useAlertsStore } from '@/store/alerts'
 import { MintKudos, MintKudosUser, Form, NavOption, Views, InitialResponse } from './types'
 
 export const useMintKudosStore = defineStore('mint-kudos', () => {
@@ -173,6 +174,14 @@ export const useMintKudosStore = defineStore('mint-kudos', () => {
         formReset()
     }
 
+    function badge() {
+        const alerts = useAlertsStore()
+        const not_readed_alerts = alerts.alerts.filter(
+            (alert) => alert.parent_type === 'Kudos' && alert.is_read === false,
+        )
+        return not_readed_alerts.length ?? null
+    }
+
     return {
         kudos,
         isLoading,
@@ -197,5 +206,6 @@ export const useMintKudosStore = defineStore('mint-kudos', () => {
         showSuccess,
         formReset,
         closeSuccessMessage,
+        badge,
     }
 })

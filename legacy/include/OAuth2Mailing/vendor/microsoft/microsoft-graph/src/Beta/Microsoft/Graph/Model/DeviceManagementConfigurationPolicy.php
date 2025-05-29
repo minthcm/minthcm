@@ -26,7 +26,7 @@ class DeviceManagementConfigurationPolicy extends Entity
 {
     /**
     * Gets the createdDateTime
-    * Policy creation date and time. This property is read-only.
+    * Policy creation date and time
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -42,10 +42,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
-    * Policy creation date and time. This property is read-only.
+    * Policy creation date and time
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -56,7 +56,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the creationSource
     * Policy creation source
@@ -71,7 +71,7 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the creationSource
     * Policy creation source
@@ -85,7 +85,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["creationSource"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * Policy description
@@ -100,7 +100,7 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Policy description
@@ -114,7 +114,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isAssigned
     * Policy assignment status. This property is read-only.
@@ -129,7 +129,7 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isAssigned
     * Policy assignment status. This property is read-only.
@@ -143,10 +143,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["isAssigned"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
-    * Policy last modification date and time. This property is read-only.
+    * Policy last modification date and time
     *
     * @return \DateTime|null The lastModifiedDateTime
     */
@@ -162,10 +162,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
-    * Policy last modification date and time. This property is read-only.
+    * Policy last modification date and time
     *
     * @param \DateTime $val The lastModifiedDateTime
     *
@@ -176,7 +176,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the name
     * Policy name
@@ -191,7 +191,7 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
     * Policy name
@@ -205,10 +205,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the platforms
-    * Platforms for this policy. Possible values are: none, macOS, windows10X, windows10.
+    * Platforms for this policy. Possible values are: none, android, iOS, macOS, windows10X, windows10, linux, unknownFutureValue.
     *
     * @return DeviceManagementConfigurationPlatforms|null The platforms
     */
@@ -224,10 +224,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the platforms
-    * Platforms for this policy. Possible values are: none, macOS, windows10X, windows10.
+    * Platforms for this policy. Possible values are: none, android, iOS, macOS, windows10X, windows10, linux, unknownFutureValue.
     *
     * @param DeviceManagementConfigurationPlatforms $val The platforms
     *
@@ -238,12 +238,45 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["platforms"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the priorityMetaData
+    * Indicates the priority of each policies that are selected by the admin during enrollment process
+    *
+    * @return DeviceManagementPriorityMetaData|null The priorityMetaData
+    */
+    public function getPriorityMetaData()
+    {
+        if (array_key_exists("priorityMetaData", $this->_propDict)) {
+            if (is_a($this->_propDict["priorityMetaData"], "\Beta\Microsoft\Graph\Model\DeviceManagementPriorityMetaData") || is_null($this->_propDict["priorityMetaData"])) {
+                return $this->_propDict["priorityMetaData"];
+            } else {
+                $this->_propDict["priorityMetaData"] = new DeviceManagementPriorityMetaData($this->_propDict["priorityMetaData"]);
+                return $this->_propDict["priorityMetaData"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the priorityMetaData
+    * Indicates the priority of each policies that are selected by the admin during enrollment process
+    *
+    * @param DeviceManagementPriorityMetaData $val The priorityMetaData
+    *
+    * @return DeviceManagementConfigurationPolicy
+    */
+    public function setPriorityMetaData($val)
+    {
+        $this->_propDict["priorityMetaData"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the roleScopeTagIds
     * List of Scope Tags for this Entity instance.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -253,12 +286,12 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * List of Scope Tags for this Entity instance.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return DeviceManagementConfigurationPolicy
     */
@@ -267,10 +300,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the settingCount
-    * Number of settings. This property is read-only.
+    * Number of settings
     *
     * @return int|null The settingCount
     */
@@ -282,10 +315,10 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the settingCount
-    * Number of settings. This property is read-only.
+    * Number of settings
     *
     * @param int $val The settingCount
     *
@@ -296,10 +329,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["settingCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the technologies
-    * Technologies for this policy. Possible values are: none, mdm, windows10XManagement, configManager.
+    * Technologies for this policy. Possible values are: none, mdm, windows10XManagement, configManager, appleRemoteManagement, microsoftSense, exchangeOnline, mobileApplicationManagement, linuxMdm, enrollment, endpointPrivilegeManagement, unknownFutureValue.
     *
     * @return DeviceManagementConfigurationTechnologies|null The technologies
     */
@@ -315,10 +348,10 @@ class DeviceManagementConfigurationPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the technologies
-    * Technologies for this policy. Possible values are: none, mdm, windows10XManagement, configManager.
+    * Technologies for this policy. Possible values are: none, mdm, windows10XManagement, configManager, appleRemoteManagement, microsoftSense, exchangeOnline, mobileApplicationManagement, linuxMdm, enrollment, endpointPrivilegeManagement, unknownFutureValue.
     *
     * @param DeviceManagementConfigurationTechnologies $val The technologies
     *
@@ -329,7 +362,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["technologies"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the templateReference
     * Template reference information
@@ -348,7 +381,7 @@ class DeviceManagementConfigurationPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the templateReference
     * Template reference information
@@ -362,9 +395,9 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["templateReference"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
     * Policy assignments
      *
@@ -378,12 +411,12 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * Policy assignments
     *
-    * @param DeviceManagementConfigurationPolicyAssignment $val The assignments
+    * @param DeviceManagementConfigurationPolicyAssignment[] $val The assignments
     *
     * @return DeviceManagementConfigurationPolicy
     */
@@ -392,9 +425,9 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the settings
     * Policy settings
      *
@@ -408,12 +441,12 @@ class DeviceManagementConfigurationPolicy extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the settings
     * Policy settings
     *
-    * @param DeviceManagementConfigurationSetting $val The settings
+    * @param DeviceManagementConfigurationSetting[] $val The settings
     *
     * @return DeviceManagementConfigurationPolicy
     */
@@ -422,5 +455,5 @@ class DeviceManagementConfigurationPolicy extends Entity
         $this->_propDict["settings"] = $val;
         return $this;
     }
-    
+
 }

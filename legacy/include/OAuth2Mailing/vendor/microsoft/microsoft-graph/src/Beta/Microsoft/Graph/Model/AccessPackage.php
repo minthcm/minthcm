@@ -26,7 +26,7 @@ class AccessPackage extends Entity
 {
     /**
     * Gets the catalogId
-    * ID of the access package catalog referencing this access package. Read-only.
+    * Identifier of the access package catalog referencing this access package. Read-only.
     *
     * @return string|null The catalogId
     */
@@ -38,10 +38,10 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the catalogId
-    * ID of the access package catalog referencing this access package. Read-only.
+    * Identifier of the access package catalog referencing this access package. Read-only.
     *
     * @param string $val The catalogId
     *
@@ -52,10 +52,10 @@ class AccessPackage extends Entity
         $this->_propDict["catalogId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdBy
-    * UPN of the user or identity of the subject who created this resource. Read-only.
+    * The userPrincipalName of the user or identity of the subject who created this resource. Read-only.
     *
     * @return string|null The createdBy
     */
@@ -67,10 +67,10 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the createdBy
-    * UPN of the user or identity of the subject who created this resource. Read-only.
+    * The userPrincipalName of the user or identity of the subject who created this resource. Read-only.
     *
     * @param string $val The createdBy
     *
@@ -81,7 +81,7 @@ class AccessPackage extends Entity
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -100,7 +100,7 @@ class AccessPackage extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -114,7 +114,7 @@ class AccessPackage extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The description of the access package.
@@ -129,7 +129,7 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The description of the access package.
@@ -143,10 +143,10 @@ class AccessPackage extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The display name of the access package.
+    * The display name of the access package. Supports $filter (eq, contains).
     *
     * @return string|null The displayName
     */
@@ -158,10 +158,10 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The display name of the access package.
+    * The display name of the access package. Supports $filter (eq, contains).
     *
     * @param string $val The displayName
     *
@@ -172,7 +172,7 @@ class AccessPackage extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isHidden
     * Whether the access package is hidden from the requestor.
@@ -187,7 +187,7 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isHidden
     * Whether the access package is hidden from the requestor.
@@ -201,7 +201,7 @@ class AccessPackage extends Entity
         $this->_propDict["isHidden"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isRoleScopesVisible
     * Indicates whether role scopes are visible.
@@ -216,7 +216,7 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isRoleScopesVisible
     * Indicates whether role scopes are visible.
@@ -230,10 +230,10 @@ class AccessPackage extends Entity
         $this->_propDict["isRoleScopesVisible"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the modifiedBy
-    * The UPN of the user who last modified this resource. Read-only.
+    * The userPrincipalName of the user who last modified this resource. Read-only.
     *
     * @return string|null The modifiedBy
     */
@@ -245,10 +245,10 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the modifiedBy
-    * The UPN of the user who last modified this resource. Read-only.
+    * The userPrincipalName of the user who last modified this resource. Read-only.
     *
     * @param string $val The modifiedBy
     *
@@ -259,7 +259,7 @@ class AccessPackage extends Entity
         $this->_propDict["modifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -278,7 +278,7 @@ class AccessPackage extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the modifiedDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
@@ -292,11 +292,11 @@ class AccessPackage extends Entity
         $this->_propDict["modifiedDateTime"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the accessPackageAssignmentPolicies
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
      *
      * @return array|null The accessPackageAssignmentPolicies
      */
@@ -308,12 +308,12 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the accessPackageAssignmentPolicies
-    * Read-only. Nullable.
+    * Read-only. Nullable. Supports $expand.
     *
-    * @param AccessPackageAssignmentPolicy $val The accessPackageAssignmentPolicies
+    * @param AccessPackageAssignmentPolicy[] $val The accessPackageAssignmentPolicies
     *
     * @return AccessPackage
     */
@@ -322,10 +322,9 @@ class AccessPackage extends Entity
         $this->_propDict["accessPackageAssignmentPolicies"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the accessPackageCatalog
-    * Read-only. Nullable.
     *
     * @return AccessPackageCatalog|null The accessPackageCatalog
     */
@@ -341,10 +340,9 @@ class AccessPackage extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the accessPackageCatalog
-    * Read-only. Nullable.
     *
     * @param AccessPackageCatalog $val The accessPackageCatalog
     *
@@ -355,11 +353,10 @@ class AccessPackage extends Entity
         $this->_propDict["accessPackageCatalog"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the accessPackageResourceRoleScopes
-    * Nullable.
      *
      * @return array|null The accessPackageResourceRoleScopes
      */
@@ -371,12 +368,11 @@ class AccessPackage extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the accessPackageResourceRoleScopes
-    * Nullable.
     *
-    * @param AccessPackageResourceRoleScope $val The accessPackageResourceRoleScopes
+    * @param AccessPackageResourceRoleScope[] $val The accessPackageResourceRoleScopes
     *
     * @return AccessPackage
     */
@@ -385,5 +381,95 @@ class AccessPackage extends Entity
         $this->_propDict["accessPackageResourceRoleScopes"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the accessPackagesIncompatibleWith
+    * The access packages that are incompatible with this package. Read-only.
+     *
+     * @return array|null The accessPackagesIncompatibleWith
+     */
+    public function getAccessPackagesIncompatibleWith()
+    {
+        if (array_key_exists("accessPackagesIncompatibleWith", $this->_propDict)) {
+           return $this->_propDict["accessPackagesIncompatibleWith"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the accessPackagesIncompatibleWith
+    * The access packages that are incompatible with this package. Read-only.
+    *
+    * @param AccessPackage[] $val The accessPackagesIncompatibleWith
+    *
+    * @return AccessPackage
+    */
+    public function setAccessPackagesIncompatibleWith($val)
+    {
+        $this->_propDict["accessPackagesIncompatibleWith"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the incompatibleAccessPackages
+    * The  access packages whose assigned users are ineligible to be assigned this access package.
+     *
+     * @return array|null The incompatibleAccessPackages
+     */
+    public function getIncompatibleAccessPackages()
+    {
+        if (array_key_exists("incompatibleAccessPackages", $this->_propDict)) {
+           return $this->_propDict["incompatibleAccessPackages"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the incompatibleAccessPackages
+    * The  access packages whose assigned users are ineligible to be assigned this access package.
+    *
+    * @param AccessPackage[] $val The incompatibleAccessPackages
+    *
+    * @return AccessPackage
+    */
+    public function setIncompatibleAccessPackages($val)
+    {
+        $this->_propDict["incompatibleAccessPackages"] = $val;
+        return $this;
+    }
+
+
+     /**
+     * Gets the incompatibleGroups
+    * The groups whose members are ineligible to be assigned this access package.
+     *
+     * @return array|null The incompatibleGroups
+     */
+    public function getIncompatibleGroups()
+    {
+        if (array_key_exists("incompatibleGroups", $this->_propDict)) {
+           return $this->_propDict["incompatibleGroups"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the incompatibleGroups
+    * The groups whose members are ineligible to be assigned this access package.
+    *
+    * @param Group[] $val The incompatibleGroups
+    *
+    * @return AccessPackage
+    */
+    public function setIncompatibleGroups($val)
+    {
+        $this->_propDict["incompatibleGroups"] = $val;
+        return $this;
+    }
+
 }

@@ -71,6 +71,10 @@ class MigrationJob extends \Google\Model
    * @var string
    */
   public $name;
+  protected $objectsConfigType = MigrationJobObjectsConfig::class;
+  protected $objectsConfigDataType = '';
+  protected $oracleToPostgresConfigType = OracleToPostgresConfig::class;
+  protected $oracleToPostgresConfigDataType = '';
   protected $performanceConfigType = PerformanceConfig::class;
   protected $performanceConfigDataType = '';
   /**
@@ -79,6 +83,14 @@ class MigrationJob extends \Google\Model
   public $phase;
   protected $reverseSshConnectivityType = ReverseSshConnectivity::class;
   protected $reverseSshConnectivityDataType = '';
+  /**
+   * @var bool
+   */
+  public $satisfiesPzi;
+  /**
+   * @var bool
+   */
+  public $satisfiesPzs;
   /**
    * @var string
    */
@@ -315,6 +327,34 @@ class MigrationJob extends \Google\Model
     return $this->name;
   }
   /**
+   * @param MigrationJobObjectsConfig
+   */
+  public function setObjectsConfig(MigrationJobObjectsConfig $objectsConfig)
+  {
+    $this->objectsConfig = $objectsConfig;
+  }
+  /**
+   * @return MigrationJobObjectsConfig
+   */
+  public function getObjectsConfig()
+  {
+    return $this->objectsConfig;
+  }
+  /**
+   * @param OracleToPostgresConfig
+   */
+  public function setOracleToPostgresConfig(OracleToPostgresConfig $oracleToPostgresConfig)
+  {
+    $this->oracleToPostgresConfig = $oracleToPostgresConfig;
+  }
+  /**
+   * @return OracleToPostgresConfig
+   */
+  public function getOracleToPostgresConfig()
+  {
+    return $this->oracleToPostgresConfig;
+  }
+  /**
    * @param PerformanceConfig
    */
   public function setPerformanceConfig(PerformanceConfig $performanceConfig)
@@ -355,6 +395,34 @@ class MigrationJob extends \Google\Model
   public function getReverseSshConnectivity()
   {
     return $this->reverseSshConnectivity;
+  }
+  /**
+   * @param bool
+   */
+  public function setSatisfiesPzi($satisfiesPzi)
+  {
+    $this->satisfiesPzi = $satisfiesPzi;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPzi()
+  {
+    return $this->satisfiesPzi;
+  }
+  /**
+   * @param bool
+   */
+  public function setSatisfiesPzs($satisfiesPzs)
+  {
+    $this->satisfiesPzs = $satisfiesPzs;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPzs()
+  {
+    return $this->satisfiesPzs;
   }
   /**
    * @param string

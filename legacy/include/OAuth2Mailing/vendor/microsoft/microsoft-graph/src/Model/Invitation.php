@@ -38,7 +38,7 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the invitedUserDisplayName
     * The display name of the user being invited.
@@ -52,10 +52,10 @@ class Invitation extends Entity
         $this->_propDict["invitedUserDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the invitedUserEmailAddress
-    * The email address of the user being invited. Required. The following special characters are not permitted in the email address:Tilde (~)Exclamation point (!)At sign (@)Number sign (#)Dollar sign ($)Percent (%)Circumflex (^)Ampersand (&amp;)Asterisk (*)Parentheses (( ))Hyphen (-)Plus sign (+)Equal sign (=)Brackets ([ ])Braces ({ })Backslash (/)Slash mark (/)Pipe (`
+    * The email address of the user being invited. Required. The following special characters aren't permitted in the email address:Tilde (~)Exclamation point (!)Number sign (#)Dollar sign ($)Percent (%)Circumflex (^)Ampersand (&amp;)Asterisk (*)Parentheses (( ))Plus sign (+)Equal sign (=)Brackets ([ ])Braces ({ })Backslash (/)Slash mark (/)Pipe (/|)Semicolon (;)Colon (:)Quotation marks (')Angle brackets (&amp;lt; &amp;gt;)Question mark (?)Comma (,)However, the following exceptions apply:A period (.) or a hyphen (-) is permitted anywhere in the user name, except at the beginning or end of the name.An underscore (_) is permitted anywhere in the user name. This includes at the beginning or end of the name.
     *
     * @return string|null The invitedUserEmailAddress
     */
@@ -67,10 +67,10 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the invitedUserEmailAddress
-    * The email address of the user being invited. Required. The following special characters are not permitted in the email address:Tilde (~)Exclamation point (!)At sign (@)Number sign (#)Dollar sign ($)Percent (%)Circumflex (^)Ampersand (&amp;)Asterisk (*)Parentheses (( ))Hyphen (-)Plus sign (+)Equal sign (=)Brackets ([ ])Braces ({ })Backslash (/)Slash mark (/)Pipe (`
+    * The email address of the user being invited. Required. The following special characters aren't permitted in the email address:Tilde (~)Exclamation point (!)Number sign (#)Dollar sign ($)Percent (%)Circumflex (^)Ampersand (&amp;)Asterisk (*)Parentheses (( ))Plus sign (+)Equal sign (=)Brackets ([ ])Braces ({ })Backslash (/)Slash mark (/)Pipe (/|)Semicolon (;)Colon (:)Quotation marks (')Angle brackets (&amp;lt; &amp;gt;)Question mark (?)Comma (,)However, the following exceptions apply:A period (.) or a hyphen (-) is permitted anywhere in the user name, except at the beginning or end of the name.An underscore (_) is permitted anywhere in the user name. This includes at the beginning or end of the name.
     *
     * @param string $val The invitedUserEmailAddress
     *
@@ -81,7 +81,7 @@ class Invitation extends Entity
         $this->_propDict["invitedUserEmailAddress"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the invitedUserMessageInfo
     * Additional configuration for the message being sent to the invited user, including customizing message text, language and cc recipient list.
@@ -100,7 +100,7 @@ class Invitation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the invitedUserMessageInfo
     * Additional configuration for the message being sent to the invited user, including customizing message text, language and cc recipient list.
@@ -114,10 +114,10 @@ class Invitation extends Entity
         $this->_propDict["invitedUserMessageInfo"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the invitedUserType
-    * The userType of the user being invited. By default, this is Guest. You can invite as Member if you're are company administrator.
+    * The userType of the user being invited. By default, this is Guest. You can invite as Member if you're a company administrator.
     *
     * @return string|null The invitedUserType
     */
@@ -129,10 +129,10 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the invitedUserType
-    * The userType of the user being invited. By default, this is Guest. You can invite as Member if you're are company administrator.
+    * The userType of the user being invited. By default, this is Guest. You can invite as Member if you're a company administrator.
     *
     * @param string $val The invitedUserType
     *
@@ -143,7 +143,7 @@ class Invitation extends Entity
         $this->_propDict["invitedUserType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the inviteRedeemUrl
     * The URL the user can use to redeem their invitation. Read-only.
@@ -158,7 +158,7 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the inviteRedeemUrl
     * The URL the user can use to redeem their invitation. Read-only.
@@ -172,10 +172,10 @@ class Invitation extends Entity
         $this->_propDict["inviteRedeemUrl"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the inviteRedirectUrl
-    * The URL user should be redirected to once the invitation is redeemed. Required.
+    * The URL the user should be redirected to once the invitation is redeemed. Required.
     *
     * @return string|null The inviteRedirectUrl
     */
@@ -187,10 +187,10 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the inviteRedirectUrl
-    * The URL user should be redirected to once the invitation is redeemed. Required.
+    * The URL the user should be redirected to once the invitation is redeemed. Required.
     *
     * @param string $val The inviteRedirectUrl
     *
@@ -201,10 +201,39 @@ class Invitation extends Entity
         $this->_propDict["inviteRedirectUrl"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the resetRedemption
+    * Reset the user's redemption status and reinvite a user while retaining their user identifier, group memberships, and app assignments. This property allows you to enable a user to sign-in using a different email address from the one in the previous invitation. For more information about using this property, see Reset redemption status for a guest user.
+    *
+    * @return bool|null The resetRedemption
+    */
+    public function getResetRedemption()
+    {
+        if (array_key_exists("resetRedemption", $this->_propDict)) {
+            return $this->_propDict["resetRedemption"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the resetRedemption
+    * Reset the user's redemption status and reinvite a user while retaining their user identifier, group memberships, and app assignments. This property allows you to enable a user to sign-in using a different email address from the one in the previous invitation. For more information about using this property, see Reset redemption status for a guest user.
+    *
+    * @param bool $val The resetRedemption
+    *
+    * @return Invitation
+    */
+    public function setResetRedemption($val)
+    {
+        $this->_propDict["resetRedemption"] = boolval($val);
+        return $this;
+    }
+
     /**
     * Gets the sendInvitationMessage
-    * Indicates whether an email should be sent to the user being invited or not. The default is false.
+    * Indicates whether an email should be sent to the user being invited. The default is false.
     *
     * @return bool|null The sendInvitationMessage
     */
@@ -216,10 +245,10 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the sendInvitationMessage
-    * Indicates whether an email should be sent to the user being invited or not. The default is false.
+    * Indicates whether an email should be sent to the user being invited. The default is false.
     *
     * @param bool $val The sendInvitationMessage
     *
@@ -230,10 +259,10 @@ class Invitation extends Entity
         $this->_propDict["sendInvitationMessage"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the status
-    * The status of the invitation. Possible values: PendingAcceptance, Completed, InProgress, and Error
+    * The status of the invitation. Possible values are: PendingAcceptance, Completed, InProgress, and Error.
     *
     * @return string|null The status
     */
@@ -245,10 +274,10 @@ class Invitation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the status
-    * The status of the invitation. Possible values: PendingAcceptance, Completed, InProgress, and Error
+    * The status of the invitation. Possible values are: PendingAcceptance, Completed, InProgress, and Error.
     *
     * @param string $val The status
     *
@@ -259,7 +288,7 @@ class Invitation extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the invitedUser
     * The user created as part of the invitation creation. Read-Only
@@ -278,7 +307,7 @@ class Invitation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the invitedUser
     * The user created as part of the invitation creation. Read-Only
@@ -292,5 +321,5 @@ class Invitation extends Entity
         $this->_propDict["invitedUser"] = $val;
         return $this;
     }
-    
+
 }

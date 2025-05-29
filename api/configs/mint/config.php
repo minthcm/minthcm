@@ -68,6 +68,7 @@ $mint_config = array(
         'dbname' => '',
         'user' => '',
         'password' => '',
+        'charset' => 'utf8mb4',
     ),
 );
 

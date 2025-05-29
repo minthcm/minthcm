@@ -71,7 +71,6 @@
  
          $legacyEngines = [
              'BasicSearchEngine' => translate('LBL_BASIC_SEARCH_ENGINE'),
-             'BasicAndAodEngine' => translate('LBL_BASIC_AND_AOD_ENGINE'),
          ];
  
          $engines = $this->getEngines();

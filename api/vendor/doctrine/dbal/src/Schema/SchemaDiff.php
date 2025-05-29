@@ -3,8 +3,11 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\Deprecations\Deprecation;
 
+use function array_filter;
 use function array_merge;
+use function count;
 
 /**
  * Differences between two schemas.
@@ -14,11 +17,17 @@ use function array_merge;
  */
 class SchemaDiff
 {
-    /** @var Schema|null */
+    /**
+     * @deprecated
+     *
+     * @var Schema|null
+     */
     public $fromSchema;
 
     /**
      * All added namespaces.
+     *
+     * @internal Use {@link getCreatedSchemas()} instead.
      *
      * @var string[]
      */
@@ -27,12 +36,16 @@ class SchemaDiff
     /**
      * All removed namespaces.
      *
+     * @internal Use {@link getDroppedSchemas()} instead.
+     *
      * @var string[]
      */
     public $removedNamespaces = [];
 
     /**
      * All added tables.
+     *
+     * @internal Use {@link getCreatedTables()} instead.
      *
      * @var Table[]
      */
@@ -41,6 +54,8 @@ class SchemaDiff
     /**
      * All changed tables.
      *
+     * @internal Use {@link getAlteredTables()} instead.
+     *
      * @var TableDiff[]
      */
     public $changedTables = [];
@@ -48,35 +63,141 @@ class SchemaDiff
     /**
      * All removed tables.
      *
+     * @internal Use {@link getDroppedTables()} instead.
+     *
      * @var Table[]
      */
     public $removedTables = [];
 
-    /** @var Sequence[] */
+    /**
+     * @internal Use {@link getCreatedSequences()} instead.
+     *
+     * @var Sequence[]
+     */
     public $newSequences = [];
 
-    /** @var Sequence[] */
+    /**
+     * @internal Use {@link getAlteredSequences()} instead.
+     *
+     * @var Sequence[]
+     */
     public $changedSequences = [];
 
-    /** @var Sequence[] */
+    /**
+     * @internal Use {@link getDroppedSequences()} instead.
+     *
+     * @var Sequence[]
+     */
     public $removedSequences = [];
 
-    /** @var ForeignKeyConstraint[] */
+    /**
+     * @deprecated
+     *
+     * @var ForeignKeyConstraint[]
+     */
     public $orphanedForeignKeys = [];
 
     /**
      * Constructs an SchemaDiff object.
      *
-     * @param Table[]     $newTables
-     * @param TableDiff[] $changedTables
-     * @param Table[]     $removedTables
+     * @internal The diff can be only instantiated by a {@see Comparator}.
+     *
+     * @param Table[]         $newTables
+     * @param TableDiff[]     $changedTables
+     * @param Table[]         $removedTables
+     * @param array<string>   $createdSchemas
+     * @param array<string>   $droppedSchemas
+     * @param array<Sequence> $createdSequences
+     * @param array<Sequence> $alteredSequences
+     * @param array<Sequence> $droppedSequences
      */
-    public function __construct($newTables = [], $changedTables = [], $removedTables = [], ?Schema $fromSchema = null)
+    public function __construct(
+        $newTables = [],
+        $changedTables = [],
+        $removedTables = [],
+        ?Schema $fromSchema = null,
+        $createdSchemas = [],
+        $droppedSchemas = [],
+        $createdSequences = [],
+        $alteredSequences = [],
+        $droppedSequences = []
+    ) {
+        $this->newTables = $newTables;
+
+        $this->changedTables = array_filter($changedTables, static function (TableDiff $diff): bool {
+            return ! $diff->isEmpty();
+        });
+
+        $this->removedTables     = $removedTables;
+        $this->fromSchema        = $fromSchema;
+        $this->newNamespaces     = $createdSchemas;
+        $this->removedNamespaces = $droppedSchemas;
+        $this->newSequences      = $createdSequences;
+        $this->changedSequences  = $alteredSequences;
+        $this->removedSequences  = $droppedSequences;
+    }
+
+    /** @return array<string> */
+    public function getCreatedSchemas(): array
     {
-        $this->newTables     = $newTables;
-        $this->changedTables = $changedTables;
-        $this->removedTables = $removedTables;
-        $this->fromSchema    = $fromSchema;
+        return $this->newNamespaces;
+    }
+
+    /** @return array<string> */
+    public function getDroppedSchemas(): array
+    {
+        return $this->removedNamespaces;
+    }
+
+    /** @return array<Table> */
+    public function getCreatedTables(): array
+    {
+        return $this->newTables;
+    }
+
+    /** @return array<TableDiff> */
+    public function getAlteredTables(): array
+    {
+        return $this->changedTables;
+    }
+
+    /** @return array<Table> */
+    public function getDroppedTables(): array
+    {
+        return $this->removedTables;
+    }
+
+    /** @return array<Sequence> */
+    public function getCreatedSequences(): array
+    {
+        return $this->newSequences;
+    }
+
+    /** @return array<Sequence> */
+    public function getAlteredSequences(): array
+    {
+        return $this->changedSequences;
+    }
+
+    /** @return array<Sequence> */
+    public function getDroppedSequences(): array
+    {
+        return $this->removedSequences;
+    }
+
+    /**
+     * Returns whether the diff is empty (contains no changes).
+     */
+    public function isEmpty(): bool
+    {
+        return count($this->newNamespaces) === 0
+            && count($this->removedNamespaces) === 0
+            && count($this->newTables) === 0
+            && count($this->changedTables) === 0
+            && count($this->removedTables) === 0
+            && count($this->newSequences) === 0
+            && count($this->changedSequences) === 0
+            && count($this->removedSequences) === 0;
     }
 
     /**
@@ -88,33 +209,51 @@ class SchemaDiff
      *
      * This way it is ensured that assets are deleted which might not be relevant to the metadata schema at all.
      *
-     * @return string[]
+     * @deprecated
+     *
+     * @return list<string>
      */
     public function toSaveSql(AbstractPlatform $platform)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5766',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
         return $this->_toSql($platform, true);
     }
 
     /**
-     * @return string[]
+     * @deprecated Use {@link AbstractPlatform::getAlterSchemaSQL()} instead.
+     *
+     * @return list<string>
      */
     public function toSql(AbstractPlatform $platform)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5766',
+            '%s is deprecated. Use AbstractPlatform::getAlterSchemaSQL() instead.',
+            __METHOD__,
+        );
+
         return $this->_toSql($platform, false);
     }
 
     /**
      * @param bool $saveMode
      *
-     * @return string[]
+     * @return list<string>
      */
     protected function _toSql(AbstractPlatform $platform, $saveMode = false)
     {
         $sql = [];
 
         if ($platform->supportsSchemas()) {
-            foreach ($this->newNamespaces as $newNamespace) {
-                $sql[] = $platform->getCreateSchemaSQL($newNamespace);
+            foreach ($this->getCreatedSchemas() as $schema) {
+                $sql[] = $platform->getCreateSchemaSQL($schema);
             }
         }
 
@@ -125,46 +264,28 @@ class SchemaDiff
         }
 
         if ($platform->supportsSequences() === true) {
-            foreach ($this->changedSequences as $sequence) {
+            foreach ($this->getAlteredSequences() as $sequence) {
                 $sql[] = $platform->getAlterSequenceSQL($sequence);
             }
 
             if ($saveMode === false) {
-                foreach ($this->removedSequences as $sequence) {
+                foreach ($this->getDroppedSequences() as $sequence) {
                     $sql[] = $platform->getDropSequenceSQL($sequence);
                 }
             }
 
-            foreach ($this->newSequences as $sequence) {
+            foreach ($this->getCreatedSequences() as $sequence) {
                 $sql[] = $platform->getCreateSequenceSQL($sequence);
             }
         }
 
-        $foreignKeySql = [];
-        foreach ($this->newTables as $table) {
-            $sql = array_merge(
-                $sql,
-                $platform->getCreateTableSQL($table, AbstractPlatform::CREATE_INDEXES)
-            );
-
-            if (! $platform->supportsForeignKeyConstraints()) {
-                continue;
-            }
-
-            foreach ($table->getForeignKeys() as $foreignKey) {
-                $foreignKeySql[] = $platform->getCreateForeignKeySQL($foreignKey, $table);
-            }
-        }
-
-        $sql = array_merge($sql, $foreignKeySql);
+        $sql = array_merge($sql, $platform->getCreateTablesSQL($this->getCreatedTables()));
 
         if ($saveMode === false) {
-            foreach ($this->removedTables as $table) {
-                $sql[] = $platform->getDropTableSQL($table);
-            }
+            $sql = array_merge($sql, $platform->getDropTablesSQL($this->getDroppedTables()));
         }
 
-        foreach ($this->changedTables as $tableDiff) {
+        foreach ($this->getAlteredTables() as $tableDiff) {
             $sql = array_merge($sql, $platform->getAlterTableSQL($tableDiff));
         }
 

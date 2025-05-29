@@ -19,14 +19,50 @@ namespace Google\Service\PlayIntegrity;
 
 class DeviceIntegrity extends \Google\Collection
 {
-  protected $collection_key = 'deviceRecognitionVerdict';
+  protected $collection_key = 'legacyDeviceRecognitionVerdict';
+  protected $deviceAttributesType = DeviceAttributes::class;
+  protected $deviceAttributesDataType = '';
+  protected $deviceRecallType = DeviceRecall::class;
+  protected $deviceRecallDataType = '';
   /**
    * @var string[]
    */
   public $deviceRecognitionVerdict;
+  /**
+   * @var string[]
+   */
+  public $legacyDeviceRecognitionVerdict;
   protected $recentDeviceActivityType = RecentDeviceActivity::class;
   protected $recentDeviceActivityDataType = '';
 
+  /**
+   * @param DeviceAttributes
+   */
+  public function setDeviceAttributes(DeviceAttributes $deviceAttributes)
+  {
+    $this->deviceAttributes = $deviceAttributes;
+  }
+  /**
+   * @return DeviceAttributes
+   */
+  public function getDeviceAttributes()
+  {
+    return $this->deviceAttributes;
+  }
+  /**
+   * @param DeviceRecall
+   */
+  public function setDeviceRecall(DeviceRecall $deviceRecall)
+  {
+    $this->deviceRecall = $deviceRecall;
+  }
+  /**
+   * @return DeviceRecall
+   */
+  public function getDeviceRecall()
+  {
+    return $this->deviceRecall;
+  }
   /**
    * @param string[]
    */
@@ -40,6 +76,20 @@ class DeviceIntegrity extends \Google\Collection
   public function getDeviceRecognitionVerdict()
   {
     return $this->deviceRecognitionVerdict;
+  }
+  /**
+   * @param string[]
+   */
+  public function setLegacyDeviceRecognitionVerdict($legacyDeviceRecognitionVerdict)
+  {
+    $this->legacyDeviceRecognitionVerdict = $legacyDeviceRecognitionVerdict;
+  }
+  /**
+   * @return string[]
+   */
+  public function getLegacyDeviceRecognitionVerdict()
+  {
+    return $this->legacyDeviceRecognitionVerdict;
   }
   /**
    * @param RecentDeviceActivity

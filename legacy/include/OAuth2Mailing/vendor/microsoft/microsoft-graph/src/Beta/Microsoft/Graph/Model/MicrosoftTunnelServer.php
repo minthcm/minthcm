@@ -26,7 +26,7 @@ class MicrosoftTunnelServer extends Entity
 {
     /**
     * Gets the agentImageDigest
-    * The digest of the current agent image running on this server 
+    * The digest of the current agent image running on this server
     *
     * @return string|null The agentImageDigest
     */
@@ -38,10 +38,10 @@ class MicrosoftTunnelServer extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the agentImageDigest
-    * The digest of the current agent image running on this server 
+    * The digest of the current agent image running on this server
     *
     * @param string $val The agentImageDigest
     *
@@ -52,10 +52,10 @@ class MicrosoftTunnelServer extends Entity
         $this->_propDict["agentImageDigest"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The MicrosoftTunnelServer's display name
+    * The display name for the server. This property is required when a server is created and cannot be cleared during updates.
     *
     * @return string|null The displayName
     */
@@ -67,10 +67,10 @@ class MicrosoftTunnelServer extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The MicrosoftTunnelServer's display name
+    * The display name for the server. This property is required when a server is created and cannot be cleared during updates.
     *
     * @param string $val The displayName
     *
@@ -81,10 +81,10 @@ class MicrosoftTunnelServer extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastCheckinDateTime
-    * When the MicrosoftTunnelServer last checked in
+    * Indicates when the server last checked in
     *
     * @return \DateTime|null The lastCheckinDateTime
     */
@@ -100,10 +100,10 @@ class MicrosoftTunnelServer extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastCheckinDateTime
-    * When the MicrosoftTunnelServer last checked in
+    * Indicates when the server last checked in
     *
     * @param \DateTime $val The lastCheckinDateTime
     *
@@ -114,10 +114,10 @@ class MicrosoftTunnelServer extends Entity
         $this->_propDict["lastCheckinDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the serverImageDigest
-    * The digest of the current server image running on this server 
+    * The digest of the current server image running on this server
     *
     * @return string|null The serverImageDigest
     */
@@ -129,10 +129,10 @@ class MicrosoftTunnelServer extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the serverImageDigest
-    * The digest of the current server image running on this server 
+    * The digest of the current server image running on this server
     *
     * @param string $val The serverImageDigest
     *
@@ -143,10 +143,10 @@ class MicrosoftTunnelServer extends Entity
         $this->_propDict["serverImageDigest"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tunnelServerHealthStatus
-    * The MicrosoftTunnelServer's health status. Possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed.
+    * Indicates the server's health Status as of the last evaluation time. Health is evaluated every 60 seconds, and the possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed. Possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed, unknownFutureValue.
     *
     * @return MicrosoftTunnelServerHealthStatus|null The tunnelServerHealthStatus
     */
@@ -162,10 +162,10 @@ class MicrosoftTunnelServer extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the tunnelServerHealthStatus
-    * The MicrosoftTunnelServer's health status. Possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed.
+    * Indicates the server's health Status as of the last evaluation time. Health is evaluated every 60 seconds, and the possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed. Possible values are: unknown, healthy, unhealthy, warning, offline, upgradeInProgress, upgradeFailed, unknownFutureValue.
     *
     * @param MicrosoftTunnelServerHealthStatus $val The tunnelServerHealthStatus
     *
@@ -176,5 +176,5 @@ class MicrosoftTunnelServer extends Entity
         $this->_propDict["tunnelServerHealthStatus"] = $val;
         return $this;
     }
-    
+
 }

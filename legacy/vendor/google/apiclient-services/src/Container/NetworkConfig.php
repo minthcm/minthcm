@@ -23,8 +23,16 @@ class NetworkConfig extends \Google\Model
    * @var string
    */
   public $datapathProvider;
+  /**
+   * @var bool
+   */
+  public $defaultEnablePrivateNodes;
   protected $defaultSnatStatusType = DefaultSnatStatus::class;
   protected $defaultSnatStatusDataType = '';
+  /**
+   * @var bool
+   */
+  public $disableL4LbFirewallReconciliation;
   protected $dnsConfigType = DNSConfig::class;
   protected $dnsConfigDataType = '';
   /**
@@ -85,6 +93,20 @@ class NetworkConfig extends \Google\Model
     return $this->datapathProvider;
   }
   /**
+   * @param bool
+   */
+  public function setDefaultEnablePrivateNodes($defaultEnablePrivateNodes)
+  {
+    $this->defaultEnablePrivateNodes = $defaultEnablePrivateNodes;
+  }
+  /**
+   * @return bool
+   */
+  public function getDefaultEnablePrivateNodes()
+  {
+    return $this->defaultEnablePrivateNodes;
+  }
+  /**
    * @param DefaultSnatStatus
    */
   public function setDefaultSnatStatus(DefaultSnatStatus $defaultSnatStatus)
@@ -97,6 +119,20 @@ class NetworkConfig extends \Google\Model
   public function getDefaultSnatStatus()
   {
     return $this->defaultSnatStatus;
+  }
+  /**
+   * @param bool
+   */
+  public function setDisableL4LbFirewallReconciliation($disableL4LbFirewallReconciliation)
+  {
+    $this->disableL4LbFirewallReconciliation = $disableL4LbFirewallReconciliation;
+  }
+  /**
+   * @return bool
+   */
+  public function getDisableL4LbFirewallReconciliation()
+  {
+    return $this->disableL4LbFirewallReconciliation;
   }
   /**
    * @param DNSConfig

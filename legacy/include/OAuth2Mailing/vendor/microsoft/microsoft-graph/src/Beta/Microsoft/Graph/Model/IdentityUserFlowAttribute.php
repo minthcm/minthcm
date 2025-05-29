@@ -26,7 +26,7 @@ class IdentityUserFlowAttribute extends Entity
 {
     /**
     * Gets the dataType
-    * The data type of the user flow attribute. This cannot be modified after the custom user flow attribute is created. The supported values for dataType are: string , boolean , int64 , stringCollection , dateTime.
+    * The data type of the user flow attribute. This can't be modified after the custom user flow attribute is created. The supported values for dataType are: string , boolean , int64 , stringCollection , dateTime, unknownFutureValue.  Supports $filter (eq, ne).
     *
     * @return IdentityUserFlowAttributeDataType|null The dataType
     */
@@ -42,10 +42,10 @@ class IdentityUserFlowAttribute extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the dataType
-    * The data type of the user flow attribute. This cannot be modified after the custom user flow attribute is created. The supported values for dataType are: string , boolean , int64 , stringCollection , dateTime.
+    * The data type of the user flow attribute. This can't be modified after the custom user flow attribute is created. The supported values for dataType are: string , boolean , int64 , stringCollection , dateTime, unknownFutureValue.  Supports $filter (eq, ne).
     *
     * @param IdentityUserFlowAttributeDataType $val The dataType
     *
@@ -56,7 +56,7 @@ class IdentityUserFlowAttribute extends Entity
         $this->_propDict["dataType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The description of the user flow attribute that's shown to the user at the time of sign-up.
@@ -71,7 +71,7 @@ class IdentityUserFlowAttribute extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The description of the user flow attribute that's shown to the user at the time of sign-up.
@@ -85,10 +85,10 @@ class IdentityUserFlowAttribute extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The display name of the user flow attribute.
+    * The display name of the user flow attribute.  Supports $filter (eq, ne).
     *
     * @return string|null The displayName
     */
@@ -100,10 +100,10 @@ class IdentityUserFlowAttribute extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The display name of the user flow attribute.
+    * The display name of the user flow attribute.  Supports $filter (eq, ne).
     *
     * @param string $val The displayName
     *
@@ -114,10 +114,10 @@ class IdentityUserFlowAttribute extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the userFlowAttributeType
-    * The type of the user flow attribute. This is a read-only attribute that is automatically set. Depending on the type of attribute, the values for this property will be builtIn, custom, or required.
+    * The type of the user flow attribute. This is a read-only attribute that is automatically set. Depending on the type of attribute, the values for this property are builtIn, custom, required, unknownFutureValue.  Supports $filter (eq, ne).
     *
     * @return IdentityUserFlowAttributeType|null The userFlowAttributeType
     */
@@ -133,10 +133,10 @@ class IdentityUserFlowAttribute extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the userFlowAttributeType
-    * The type of the user flow attribute. This is a read-only attribute that is automatically set. Depending on the type of attribute, the values for this property will be builtIn, custom, or required.
+    * The type of the user flow attribute. This is a read-only attribute that is automatically set. Depending on the type of attribute, the values for this property are builtIn, custom, required, unknownFutureValue.  Supports $filter (eq, ne).
     *
     * @param IdentityUserFlowAttributeType $val The userFlowAttributeType
     *
@@ -147,5 +147,5 @@ class IdentityUserFlowAttribute extends Entity
         $this->_propDict["userFlowAttributeType"] = $val;
         return $this;
     }
-    
+
 }

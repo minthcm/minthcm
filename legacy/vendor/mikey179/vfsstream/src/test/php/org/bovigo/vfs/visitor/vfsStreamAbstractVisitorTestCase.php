@@ -30,7 +30,7 @@ class vfsStreamAbstractVisitorTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractVisitor = $this->bc_getMock('org\\bovigo\\vfs\\visitor\\vfsStreamAbstractVisitor',
                                                 array('visitFile', 'visitDirectory')
@@ -39,10 +39,10 @@ class vfsStreamAbstractVisitorTestCase extends \BC_PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  \InvalidArgumentException
      */
     public function visitThrowsInvalidArgumentExceptionOnUnknownContentType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $mockContent = $this->bc_getMock('org\\bovigo\\vfs\\vfsStreamContent');
         $mockContent->expects($this->any())
                     ->method('getType')

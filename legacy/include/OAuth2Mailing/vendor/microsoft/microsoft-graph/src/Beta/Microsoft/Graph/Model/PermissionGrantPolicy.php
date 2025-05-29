@@ -25,9 +25,9 @@ namespace Beta\Microsoft\Graph\Model;
 class PermissionGrantPolicy extends PolicyBase
 {
 
-     /** 
+     /**
      * Gets the excludes
-    * Condition sets which are excluded in this permission grant policy. Automatically expanded on GET.
+    * Condition sets that are excluded in this permission grant policy. Automatically expanded on GET.
      *
      * @return array|null The excludes
      */
@@ -39,12 +39,12 @@ class PermissionGrantPolicy extends PolicyBase
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the excludes
-    * Condition sets which are excluded in this permission grant policy. Automatically expanded on GET.
+    * Condition sets that are excluded in this permission grant policy. Automatically expanded on GET.
     *
-    * @param PermissionGrantConditionSet $val The excludes
+    * @param PermissionGrantConditionSet[] $val The excludes
     *
     * @return PermissionGrantPolicy
     */
@@ -53,11 +53,11 @@ class PermissionGrantPolicy extends PolicyBase
         $this->_propDict["excludes"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the includes
-    * Condition sets which are included in this permission grant policy. Automatically expanded on GET.
+    * Condition sets that are included in this permission grant policy. Automatically expanded on GET.
      *
      * @return array|null The includes
      */
@@ -69,12 +69,12 @@ class PermissionGrantPolicy extends PolicyBase
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the includes
-    * Condition sets which are included in this permission grant policy. Automatically expanded on GET.
+    * Condition sets that are included in this permission grant policy. Automatically expanded on GET.
     *
-    * @param PermissionGrantConditionSet $val The includes
+    * @param PermissionGrantConditionSet[] $val The includes
     *
     * @return PermissionGrantPolicy
     */
@@ -83,5 +83,5 @@ class PermissionGrantPolicy extends PolicyBase
         $this->_propDict["includes"] = $val;
         return $this;
     }
-    
+
 }

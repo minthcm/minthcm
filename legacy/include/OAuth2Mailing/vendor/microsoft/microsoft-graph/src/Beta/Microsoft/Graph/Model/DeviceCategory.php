@@ -38,7 +38,7 @@ class DeviceCategory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Optional description for the device category.
@@ -52,7 +52,7 @@ class DeviceCategory extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * Display name for the device category.
@@ -67,7 +67,7 @@ class DeviceCategory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Display name for the device category.
@@ -81,12 +81,12 @@ class DeviceCategory extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
     * Optional role scope tags for the device category.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -96,12 +96,12 @@ class DeviceCategory extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * Optional role scope tags for the device category.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return DeviceCategory
     */
@@ -110,5 +110,5 @@ class DeviceCategory extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
 }

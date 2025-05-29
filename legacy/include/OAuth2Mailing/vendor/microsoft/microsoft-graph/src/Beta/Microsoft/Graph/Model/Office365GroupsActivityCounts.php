@@ -38,7 +38,7 @@ class Office365GroupsActivityCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the exchangeEmailsReceived
     * The number of emails received by Group mailboxes.
@@ -52,7 +52,7 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["exchangeEmailsReceived"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the reportDate
     * The date on which a number of emails were sent to a group mailbox or a number of messages were posted, read, or liked in a Yammer group
@@ -71,7 +71,7 @@ class Office365GroupsActivityCounts extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the reportDate
     * The date on which a number of emails were sent to a group mailbox or a number of messages were posted, read, or liked in a Yammer group
@@ -85,7 +85,7 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["reportDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reportPeriod
     * The number of days the report covers.
@@ -100,7 +100,7 @@ class Office365GroupsActivityCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the reportPeriod
     * The number of days the report covers.
@@ -114,7 +114,7 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["reportPeriod"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reportRefreshDate
     * The latest date of the content.
@@ -133,7 +133,7 @@ class Office365GroupsActivityCounts extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the reportRefreshDate
     * The latest date of the content.
@@ -147,7 +147,65 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["reportRefreshDate"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the teamsChannelMessages
+    * The number of channel messages in Teams team.
+    *
+    * @return int|null The teamsChannelMessages
+    */
+    public function getTeamsChannelMessages()
+    {
+        if (array_key_exists("teamsChannelMessages", $this->_propDict)) {
+            return $this->_propDict["teamsChannelMessages"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the teamsChannelMessages
+    * The number of channel messages in Teams team.
+    *
+    * @param int $val The teamsChannelMessages
+    *
+    * @return Office365GroupsActivityCounts
+    */
+    public function setTeamsChannelMessages($val)
+    {
+        $this->_propDict["teamsChannelMessages"] = intval($val);
+        return $this;
+    }
+
+    /**
+    * Gets the teamsMeetingsOrganized
+    * The number of meetings organized in Teams team.
+    *
+    * @return int|null The teamsMeetingsOrganized
+    */
+    public function getTeamsMeetingsOrganized()
+    {
+        if (array_key_exists("teamsMeetingsOrganized", $this->_propDict)) {
+            return $this->_propDict["teamsMeetingsOrganized"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the teamsMeetingsOrganized
+    * The number of meetings organized in Teams team.
+    *
+    * @param int $val The teamsMeetingsOrganized
+    *
+    * @return Office365GroupsActivityCounts
+    */
+    public function setTeamsMeetingsOrganized($val)
+    {
+        $this->_propDict["teamsMeetingsOrganized"] = intval($val);
+        return $this;
+    }
+
     /**
     * Gets the yammerMessagesLiked
     * The number of messages liked in Yammer groups.
@@ -162,7 +220,7 @@ class Office365GroupsActivityCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the yammerMessagesLiked
     * The number of messages liked in Yammer groups.
@@ -176,7 +234,7 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["yammerMessagesLiked"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the yammerMessagesPosted
     * The number of messages posted to Yammer groups.
@@ -191,7 +249,7 @@ class Office365GroupsActivityCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the yammerMessagesPosted
     * The number of messages posted to Yammer groups.
@@ -205,7 +263,7 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["yammerMessagesPosted"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the yammerMessagesRead
     * The number of messages read in Yammer groups.
@@ -220,7 +278,7 @@ class Office365GroupsActivityCounts extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the yammerMessagesRead
     * The number of messages read in Yammer groups.
@@ -234,5 +292,5 @@ class Office365GroupsActivityCounts extends Entity
         $this->_propDict["yammerMessagesRead"] = intval($val);
         return $this;
     }
-    
+
 }

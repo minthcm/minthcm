@@ -35,13 +35,13 @@ class FileClassificationRequest extends Entity
             if (is_a($this->_propDict["file"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["file"])) {
                 return $this->_propDict["file"];
             } else {
-                $this->_propDict["file"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["file"]);
+                $this->_propDict["file"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["file"]);
                 return $this->_propDict["file"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the file
     *
@@ -54,11 +54,11 @@ class FileClassificationRequest extends Entity
         $this->_propDict["file"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sensitiveTypeIds
     *
-    * @return string|null The sensitiveTypeIds
+    * @return array|null The sensitiveTypeIds
     */
     public function getSensitiveTypeIds()
     {
@@ -68,11 +68,11 @@ class FileClassificationRequest extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the sensitiveTypeIds
     *
-    * @param string $val The sensitiveTypeIds
+    * @param string[] $val The sensitiveTypeIds
     *
     * @return FileClassificationRequest
     */
@@ -81,5 +81,5 @@ class FileClassificationRequest extends Entity
         $this->_propDict["sensitiveTypeIds"] = $val;
         return $this;
     }
-    
+
 }

@@ -123,6 +123,8 @@ class Statement
      *
      * Binding a parameter by reference does not support DBAL mapping types.
      *
+     * @deprecated Use {@see bindValue()} instead.
+     *
      * @param string|int $param    The name or position of the parameter.
      * @param mixed      $variable The reference to the variable to bind.
      * @param int        $type     The binding type.
@@ -135,6 +137,13 @@ class Statement
      */
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5563',
+            '%s is deprecated. Use bindValue() instead.',
+            __METHOD__,
+        );
+
         $this->params[$param] = $variable;
         $this->types[$param]  = $type;
 
@@ -163,7 +172,8 @@ class Statement
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/4580',
-            'Statement::execute() is deprecated, use Statement::executeQuery() or Statement::executeStatement() instead'
+            '%s() is deprecated, use Statement::executeQuery() or Statement::executeStatement() instead',
+            __METHOD__,
         );
 
         if ($params !== null) {
@@ -178,7 +188,7 @@ class Statement
         try {
             return new Result(
                 $this->stmt->execute($params),
-                $this->conn
+                $this->conn,
             );
         } catch (Driver\Exception $ex) {
             throw $this->conn->convertExceptionDuringQuery($ex, $this->sql, $this->params, $this->types);
@@ -198,6 +208,15 @@ class Statement
      */
     public function executeQuery(array $params = []): Result
     {
+        if (func_num_args() > 0) {
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5556',
+                'Passing $params to Statement::executeQuery() is deprecated. Bind parameters using'
+                    . ' Statement::bindParam() or Statement::bindValue() instead.',
+            );
+        }
+
         if ($params === []) {
             $params = null; // Workaround as long execute() exists and used internally.
         }
@@ -214,6 +233,15 @@ class Statement
      */
     public function executeStatement(array $params = []): int
     {
+        if (func_num_args() > 0) {
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5556',
+                'Passing $params to Statement::executeStatement() is deprecated. Bind parameters using'
+                    . ' Statement::bindParam() or Statement::bindValue() instead.',
+            );
+        }
+
         if ($params === []) {
             $params = null; // Workaround as long execute() exists and used internally.
         }

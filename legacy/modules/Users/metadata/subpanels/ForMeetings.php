@@ -63,6 +63,11 @@ $subpanel_layout = array(
 			'width' => '11%',
 			'sortable' => false,
 		),
+        'workschedule_type' => array(
+            'vname' => 'LBL_LIST_WORKSCHEDULE_TYPE',
+            'width' => '11%',
+            'sortable' => false,
+        ),
 		'm_accept_status_fields'=>array(
 			'usage' => 'query_only',
 		),

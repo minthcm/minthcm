@@ -28,7 +28,7 @@ class ApplicationTemplate extends Entity
     * Gets the categories
     * The list of categories for the application. Supported values can be: Collaboration, Business Management, Consumer, Content management, CRM, Data services, Developer services, E-commerce, Education, ERP, Finance, Health, Human resources, IT infrastructure, Mail, Management, Marketing, Media, Productivity, Project management, Telecommunications, Tools, Travel, and Web design &amp; hosting.
     *
-    * @return string|null The categories
+    * @return array|null The categories
     */
     public function getCategories()
     {
@@ -38,12 +38,12 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the categories
     * The list of categories for the application. Supported values can be: Collaboration, Business Management, Consumer, Content management, CRM, Data services, Developer services, E-commerce, Education, ERP, Finance, Health, Human resources, IT infrastructure, Mail, Management, Marketing, Media, Productivity, Project management, Telecommunications, Tools, Travel, and Web design &amp; hosting.
     *
-    * @param string $val The categories
+    * @param string[] $val The categories
     *
     * @return ApplicationTemplate
     */
@@ -52,7 +52,7 @@ class ApplicationTemplate extends Entity
         $this->_propDict["categories"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * A description of the application.
@@ -67,7 +67,7 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * A description of the application.
@@ -81,7 +81,7 @@ class ApplicationTemplate extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The name of the application.
@@ -96,7 +96,7 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The name of the application.
@@ -110,7 +110,7 @@ class ApplicationTemplate extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the homePageUrl
     * The home page URL of the application.
@@ -125,7 +125,7 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the homePageUrl
     * The home page URL of the application.
@@ -139,7 +139,38 @@ class ApplicationTemplate extends Entity
         $this->_propDict["homePageUrl"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the informationalUrls
+    *
+    * @return InformationalUrls|null The informationalUrls
+    */
+    public function getInformationalUrls()
+    {
+        if (array_key_exists("informationalUrls", $this->_propDict)) {
+            if (is_a($this->_propDict["informationalUrls"], "\Beta\Microsoft\Graph\Model\InformationalUrls") || is_null($this->_propDict["informationalUrls"])) {
+                return $this->_propDict["informationalUrls"];
+            } else {
+                $this->_propDict["informationalUrls"] = new InformationalUrls($this->_propDict["informationalUrls"]);
+                return $this->_propDict["informationalUrls"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the informationalUrls
+    *
+    * @param InformationalUrls $val The informationalUrls
+    *
+    * @return ApplicationTemplate
+    */
+    public function setInformationalUrls($val)
+    {
+        $this->_propDict["informationalUrls"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the logoUrl
     * The URL to get the logo for this application.
@@ -154,7 +185,7 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the logoUrl
     * The URL to get the logo for this application.
@@ -168,7 +199,7 @@ class ApplicationTemplate extends Entity
         $this->_propDict["logoUrl"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the publisher
     * The name of the publisher for this application.
@@ -183,7 +214,7 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the publisher
     * The name of the publisher for this application.
@@ -197,12 +228,43 @@ class ApplicationTemplate extends Entity
         $this->_propDict["publisher"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the supportedClaimConfiguration
+    *
+    * @return SupportedClaimConfiguration|null The supportedClaimConfiguration
+    */
+    public function getSupportedClaimConfiguration()
+    {
+        if (array_key_exists("supportedClaimConfiguration", $this->_propDict)) {
+            if (is_a($this->_propDict["supportedClaimConfiguration"], "\Beta\Microsoft\Graph\Model\SupportedClaimConfiguration") || is_null($this->_propDict["supportedClaimConfiguration"])) {
+                return $this->_propDict["supportedClaimConfiguration"];
+            } else {
+                $this->_propDict["supportedClaimConfiguration"] = new SupportedClaimConfiguration($this->_propDict["supportedClaimConfiguration"]);
+                return $this->_propDict["supportedClaimConfiguration"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the supportedClaimConfiguration
+    *
+    * @param SupportedClaimConfiguration $val The supportedClaimConfiguration
+    *
+    * @return ApplicationTemplate
+    */
+    public function setSupportedClaimConfiguration($val)
+    {
+        $this->_propDict["supportedClaimConfiguration"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the supportedProvisioningTypes
     * The list of provisioning modes supported by this application. The only valid value is sync.
     *
-    * @return string|null The supportedProvisioningTypes
+    * @return array|null The supportedProvisioningTypes
     */
     public function getSupportedProvisioningTypes()
     {
@@ -212,12 +274,12 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the supportedProvisioningTypes
     * The list of provisioning modes supported by this application. The only valid value is sync.
     *
-    * @param string $val The supportedProvisioningTypes
+    * @param string[] $val The supportedProvisioningTypes
     *
     * @return ApplicationTemplate
     */
@@ -226,12 +288,12 @@ class ApplicationTemplate extends Entity
         $this->_propDict["supportedProvisioningTypes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the supportedSingleSignOnModes
     * The list of single sign-on modes supported by this application. The supported values are oidc, password, saml, and notSupported.
     *
-    * @return string|null The supportedSingleSignOnModes
+    * @return array|null The supportedSingleSignOnModes
     */
     public function getSupportedSingleSignOnModes()
     {
@@ -241,12 +303,12 @@ class ApplicationTemplate extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the supportedSingleSignOnModes
     * The list of single sign-on modes supported by this application. The supported values are oidc, password, saml, and notSupported.
     *
-    * @param string $val The supportedSingleSignOnModes
+    * @param string[] $val The supportedSingleSignOnModes
     *
     * @return ApplicationTemplate
     */
@@ -255,5 +317,5 @@ class ApplicationTemplate extends Entity
         $this->_propDict["supportedSingleSignOnModes"] = $val;
         return $this;
     }
-    
+
 }

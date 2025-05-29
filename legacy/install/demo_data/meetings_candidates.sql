@@ -1,0 +1,2 @@
+REPLACE INTO meetings_candidates (id, meeting_id, candidate_id, required, accept_status, date_modified, deleted) VALUES ('22b6c74b-ec89-a623-bd10-67dc36604cc0','956fb7f1-5699-d368-d14a-5e3161f8b087','640903df-25eb-42d1-a5b0-5ce2962ef775','1','none','2025-03-20 15:39:09','0');
+REPLACE INTO meetings_candidates (id, meeting_id, candidate_id, required, accept_status, date_modified, deleted) VALUES ('ef048b0d-9e6f-b3ab-eaa2-67dc35bdc4b3','d8118ff7-a7ee-e744-715d-5cebfb9b870b','3053f573-518f-9e4e-688d-5ce2aa6f2f0e','1','none','2025-03-20 15:35:20','0');

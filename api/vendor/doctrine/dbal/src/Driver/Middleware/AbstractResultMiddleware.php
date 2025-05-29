@@ -6,8 +6,7 @@ use Doctrine\DBAL\Driver\Result;
 
 abstract class AbstractResultMiddleware implements Result
 {
-    /** @var Result */
-    private $wrappedResult;
+    private Result $wrappedResult;
 
     public function __construct(Result $result)
     {
@@ -15,7 +14,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchNumeric()
     {
@@ -23,7 +22,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchAssociative()
     {
@@ -31,7 +30,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchOne()
     {
@@ -39,7 +38,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchAllNumeric(): array
     {
@@ -47,7 +46,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchAllAssociative(): array
     {
@@ -55,7 +54,7 @@ abstract class AbstractResultMiddleware implements Result
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function fetchFirstColumn(): array
     {

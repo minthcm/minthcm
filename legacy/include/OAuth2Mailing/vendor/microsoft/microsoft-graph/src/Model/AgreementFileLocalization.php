@@ -25,8 +25,9 @@ namespace Microsoft\Graph\Model;
 class AgreementFileLocalization extends AgreementFileProperties
 {
 
-     /** 
+     /**
      * Gets the versions
+    * Read-only. Customized versions of the terms of use agreement in the Microsoft Entra tenant.
      *
      * @return array|null The versions
      */
@@ -38,11 +39,12 @@ class AgreementFileLocalization extends AgreementFileProperties
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the versions
+    * Read-only. Customized versions of the terms of use agreement in the Microsoft Entra tenant.
     *
-    * @param AgreementFileVersion $val The versions
+    * @param AgreementFileVersion[] $val The versions
     *
     * @return AgreementFileLocalization
     */
@@ -51,5 +53,5 @@ class AgreementFileLocalization extends AgreementFileProperties
         $this->_propDict["versions"] = $val;
         return $this;
     }
-    
+
 }

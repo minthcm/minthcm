@@ -28,10 +28,10 @@ class IdentityGovernance implements \JsonSerializable
     * The array of properties available
     * to the model
     *
-    * @var array(string => string)
+    * @var array $_propDict
     */
     protected $_propDict;
-    
+
     /**
     * Construct a new IdentityGovernance
     *
@@ -54,7 +54,38 @@ class IdentityGovernance implements \JsonSerializable
     {
         return $this->_propDict;
     }
-    
+
+    /**
+    * Gets the lifecycleWorkflows
+    *
+    * @return \Beta\Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer|null The lifecycleWorkflows
+    */
+    public function getLifecycleWorkflows()
+    {
+        if (array_key_exists("lifecycleWorkflows", $this->_propDict)) {
+            if (is_a($this->_propDict["lifecycleWorkflows"], "\Beta\Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer") || is_null($this->_propDict["lifecycleWorkflows"])) {
+                return $this->_propDict["lifecycleWorkflows"];
+            } else {
+                $this->_propDict["lifecycleWorkflows"] = new \Beta\Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer($this->_propDict["lifecycleWorkflows"]);
+                return $this->_propDict["lifecycleWorkflows"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the lifecycleWorkflows
+    *
+    * @param \Beta\Microsoft\Graph\IdentityGovernanceNamespace\Model\LifecycleWorkflowsContainer $val The lifecycleWorkflows
+    *
+    * @return IdentityGovernance
+    */
+    public function setLifecycleWorkflows($val)
+    {
+        $this->_propDict["lifecycleWorkflows"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the accessReviews
     *
@@ -72,7 +103,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the accessReviews
     *
@@ -85,7 +116,7 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["accessReviews"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the appConsent
     *
@@ -103,7 +134,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the appConsent
     *
@@ -116,7 +147,7 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["appConsent"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the termsOfUse
     *
@@ -134,7 +165,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the termsOfUse
     *
@@ -147,7 +178,7 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["termsOfUse"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the entitlementManagement
     *
@@ -165,7 +196,7 @@ class IdentityGovernance implements \JsonSerializable
         }
         return null;
     }
-    
+
     /**
     * Sets the entitlementManagement
     *
@@ -178,36 +209,164 @@ class IdentityGovernance implements \JsonSerializable
         $this->_propDict["entitlementManagement"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the permissionsAnalytics
+    *
+    * @return PermissionsAnalyticsAggregation|null The permissionsAnalytics
+    */
+    public function getPermissionsAnalytics()
+    {
+        if (array_key_exists("permissionsAnalytics", $this->_propDict)) {
+            if (is_a($this->_propDict["permissionsAnalytics"], "\Beta\Microsoft\Graph\Model\PermissionsAnalyticsAggregation") || is_null($this->_propDict["permissionsAnalytics"])) {
+                return $this->_propDict["permissionsAnalytics"];
+            } else {
+                $this->_propDict["permissionsAnalytics"] = new PermissionsAnalyticsAggregation($this->_propDict["permissionsAnalytics"]);
+                return $this->_propDict["permissionsAnalytics"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the permissionsAnalytics
+    *
+    * @param PermissionsAnalyticsAggregation $val The permissionsAnalytics
+    *
+    * @return IdentityGovernance
+    */
+    public function setPermissionsAnalytics($val)
+    {
+        $this->_propDict["permissionsAnalytics"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the permissionsManagement
+    *
+    * @return PermissionsManagement|null The permissionsManagement
+    */
+    public function getPermissionsManagement()
+    {
+        if (array_key_exists("permissionsManagement", $this->_propDict)) {
+            if (is_a($this->_propDict["permissionsManagement"], "\Beta\Microsoft\Graph\Model\PermissionsManagement") || is_null($this->_propDict["permissionsManagement"])) {
+                return $this->_propDict["permissionsManagement"];
+            } else {
+                $this->_propDict["permissionsManagement"] = new PermissionsManagement($this->_propDict["permissionsManagement"]);
+                return $this->_propDict["permissionsManagement"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the permissionsManagement
+    *
+    * @param PermissionsManagement $val The permissionsManagement
+    *
+    * @return IdentityGovernance
+    */
+    public function setPermissionsManagement($val)
+    {
+        $this->_propDict["permissionsManagement"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the privilegedAccess
+    *
+    * @return PrivilegedAccessRoot|null The privilegedAccess
+    */
+    public function getPrivilegedAccess()
+    {
+        if (array_key_exists("privilegedAccess", $this->_propDict)) {
+            if (is_a($this->_propDict["privilegedAccess"], "\Beta\Microsoft\Graph\Model\PrivilegedAccessRoot") || is_null($this->_propDict["privilegedAccess"])) {
+                return $this->_propDict["privilegedAccess"];
+            } else {
+                $this->_propDict["privilegedAccess"] = new PrivilegedAccessRoot($this->_propDict["privilegedAccess"]);
+                return $this->_propDict["privilegedAccess"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the privilegedAccess
+    *
+    * @param PrivilegedAccessRoot $val The privilegedAccess
+    *
+    * @return IdentityGovernance
+    */
+    public function setPrivilegedAccess($val)
+    {
+        $this->_propDict["privilegedAccess"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the roleManagementAlerts
+    *
+    * @return RoleManagementAlert|null The roleManagementAlerts
+    */
+    public function getRoleManagementAlerts()
+    {
+        if (array_key_exists("roleManagementAlerts", $this->_propDict)) {
+            if (is_a($this->_propDict["roleManagementAlerts"], "\Beta\Microsoft\Graph\Model\RoleManagementAlert") || is_null($this->_propDict["roleManagementAlerts"])) {
+                return $this->_propDict["roleManagementAlerts"];
+            } else {
+                $this->_propDict["roleManagementAlerts"] = new RoleManagementAlert($this->_propDict["roleManagementAlerts"]);
+                return $this->_propDict["roleManagementAlerts"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the roleManagementAlerts
+    *
+    * @param RoleManagementAlert $val The roleManagementAlerts
+    *
+    * @return IdentityGovernance
+    */
+    public function setRoleManagementAlerts($val)
+    {
+        $this->_propDict["roleManagementAlerts"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the ODataType
     *
-    * @return string The ODataType
+    * @return string|null The ODataType
     */
     public function getODataType()
     {
-        return $this->_propDict["@odata.type"];
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
     }
-    
+
     /**
     * Sets the ODataType
     *
-    * @param string The ODataType
+    * @param string $val The ODataType
     *
-    * @return Entity
+    * @return IdentityGovernance
     */
     public function setODataType($val)
     {
         $this->_propDict["@odata.type"] = $val;
         return $this;
     }
-    
+
     /**
     * Serializes the object by property array
     * Manually serialize DateTime into RFC3339 format
     *
     * @return array The list of properties
     */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializableProperties = $this->getProperties();
@@ -216,6 +375,10 @@ class IdentityGovernance implements \JsonSerializable
                 $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
             } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
                 $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
             }
         }
         return $serializableProperties;

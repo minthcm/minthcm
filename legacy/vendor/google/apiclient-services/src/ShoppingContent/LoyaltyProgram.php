@@ -25,12 +25,20 @@ class LoyaltyProgram extends \Google\Model
    * @var string
    */
   public $loyaltyPoints;
+  /**
+   * @var string
+   */
+  public $memberPriceEffectiveDate;
   protected $priceType = Price::class;
   protected $priceDataType = '';
   /**
    * @var string
    */
   public $programLabel;
+  /**
+   * @var string
+   */
+  public $shippingLabel;
   /**
    * @var string
    */
@@ -65,6 +73,20 @@ class LoyaltyProgram extends \Google\Model
     return $this->loyaltyPoints;
   }
   /**
+   * @param string
+   */
+  public function setMemberPriceEffectiveDate($memberPriceEffectiveDate)
+  {
+    $this->memberPriceEffectiveDate = $memberPriceEffectiveDate;
+  }
+  /**
+   * @return string
+   */
+  public function getMemberPriceEffectiveDate()
+  {
+    return $this->memberPriceEffectiveDate;
+  }
+  /**
    * @param Price
    */
   public function setPrice(Price $price)
@@ -91,6 +113,20 @@ class LoyaltyProgram extends \Google\Model
   public function getProgramLabel()
   {
     return $this->programLabel;
+  }
+  /**
+   * @param string
+   */
+  public function setShippingLabel($shippingLabel)
+  {
+    $this->shippingLabel = $shippingLabel;
+  }
+  /**
+   * @return string
+   */
+  public function getShippingLabel()
+  {
+    return $this->shippingLabel;
   }
   /**
    * @param string

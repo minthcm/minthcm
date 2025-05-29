@@ -53,7 +53,7 @@ class SearchAlterationOptions extends Entity
     }
     /**
     * Gets the enableSuggestion
-    * Indicates whether spelling suggestions are enabled. If enabled, user will get the search results for original search query and suggesting spelling correction in queryAlterationResponse property of the response for typos in query. Optional.
+    * Indicates whether spelling suggestions are enabled. If enabled, the user will get the search results for the original search query and suggestions for spelling correction in the queryAlterationResponse property of the response for the typos in the query. Optional.
     *
     * @return bool|null The enableSuggestion
     */
@@ -68,7 +68,7 @@ class SearchAlterationOptions extends Entity
 
     /**
     * Sets the enableSuggestion
-    * Indicates whether spelling suggestions are enabled. If enabled, user will get the search results for original search query and suggesting spelling correction in queryAlterationResponse property of the response for typos in query. Optional.
+    * Indicates whether spelling suggestions are enabled. If enabled, the user will get the search results for the original search query and suggestions for spelling correction in the queryAlterationResponse property of the response for the typos in the query. Optional.
     *
     * @param bool $val The value of the enableSuggestion
     *

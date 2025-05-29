@@ -40,6 +40,10 @@ class Endpoint extends \Google\Model
   /**
    * @var string
    */
+  public $fqdn;
+  /**
+   * @var string
+   */
   public $gkeMasterCluster;
   /**
    * @var string
@@ -73,6 +77,14 @@ class Endpoint extends \Google\Model
    * @var string
    */
   public $projectId;
+  /**
+   * @var string
+   */
+  public $redisCluster;
+  /**
+   * @var string
+   */
+  public $redisInstance;
 
   /**
    * @param AppEngineVersionEndpoint
@@ -157,6 +169,20 @@ class Endpoint extends \Google\Model
   public function getForwardingRuleTarget()
   {
     return $this->forwardingRuleTarget;
+  }
+  /**
+   * @param string
+   */
+  public function setFqdn($fqdn)
+  {
+    $this->fqdn = $fqdn;
+  }
+  /**
+   * @return string
+   */
+  public function getFqdn()
+  {
+    return $this->fqdn;
   }
   /**
    * @param string
@@ -283,6 +309,34 @@ class Endpoint extends \Google\Model
   public function getProjectId()
   {
     return $this->projectId;
+  }
+  /**
+   * @param string
+   */
+  public function setRedisCluster($redisCluster)
+  {
+    $this->redisCluster = $redisCluster;
+  }
+  /**
+   * @return string
+   */
+  public function getRedisCluster()
+  {
+    return $this->redisCluster;
+  }
+  /**
+   * @param string
+   */
+  public function setRedisInstance($redisInstance)
+  {
+    $this->redisInstance = $redisInstance;
+  }
+  /**
+   * @return string
+   */
+  public function getRedisInstance()
+  {
+    return $this->redisInstance;
   }
 }
 

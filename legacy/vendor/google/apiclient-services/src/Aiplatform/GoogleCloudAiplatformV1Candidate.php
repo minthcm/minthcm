@@ -20,6 +20,7 @@ namespace Google\Service\Aiplatform;
 class GoogleCloudAiplatformV1Candidate extends \Google\Collection
 {
   protected $collection_key = 'safetyRatings';
+  public $avgLogprobs;
   protected $citationMetadataType = GoogleCloudAiplatformV1CitationMetadata::class;
   protected $citationMetadataDataType = '';
   protected $contentType = GoogleCloudAiplatformV1Content::class;
@@ -38,9 +39,19 @@ class GoogleCloudAiplatformV1Candidate extends \Google\Collection
    * @var int
    */
   public $index;
+  protected $logprobsResultType = GoogleCloudAiplatformV1LogprobsResult::class;
+  protected $logprobsResultDataType = '';
   protected $safetyRatingsType = GoogleCloudAiplatformV1SafetyRating::class;
   protected $safetyRatingsDataType = 'array';
 
+  public function setAvgLogprobs($avgLogprobs)
+  {
+    $this->avgLogprobs = $avgLogprobs;
+  }
+  public function getAvgLogprobs()
+  {
+    return $this->avgLogprobs;
+  }
   /**
    * @param GoogleCloudAiplatformV1CitationMetadata
    */
@@ -124,6 +135,20 @@ class GoogleCloudAiplatformV1Candidate extends \Google\Collection
   public function getIndex()
   {
     return $this->index;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1LogprobsResult
+   */
+  public function setLogprobsResult(GoogleCloudAiplatformV1LogprobsResult $logprobsResult)
+  {
+    $this->logprobsResult = $logprobsResult;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1LogprobsResult
+   */
+  public function getLogprobsResult()
+  {
+    return $this->logprobsResult;
   }
   /**
    * @param GoogleCloudAiplatformV1SafetyRating[]

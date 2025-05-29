@@ -110,6 +110,10 @@ class StorageObject extends \Google\Collection
   public $name;
   protected $ownerType = StorageObjectOwner::class;
   protected $ownerDataType = '';
+  /**
+   * @var string
+   */
+  public $restoreToken;
   protected $retentionType = StorageObjectRetention::class;
   protected $retentionDataType = '';
   /**
@@ -144,6 +148,10 @@ class StorageObject extends \Google\Collection
    * @var string
    */
   public $timeDeleted;
+  /**
+   * @var string
+   */
+  public $timeFinalized;
   /**
    * @var string
    */
@@ -490,6 +498,20 @@ class StorageObject extends \Google\Collection
     return $this->owner;
   }
   /**
+   * @param string
+   */
+  public function setRestoreToken($restoreToken)
+  {
+    $this->restoreToken = $restoreToken;
+  }
+  /**
+   * @return string
+   */
+  public function getRestoreToken()
+  {
+    return $this->restoreToken;
+  }
+  /**
    * @param StorageObjectRetention
    */
   public function setRetention(StorageObjectRetention $retention)
@@ -614,6 +636,20 @@ class StorageObject extends \Google\Collection
   public function getTimeDeleted()
   {
     return $this->timeDeleted;
+  }
+  /**
+   * @param string
+   */
+  public function setTimeFinalized($timeFinalized)
+  {
+    $this->timeFinalized = $timeFinalized;
+  }
+  /**
+   * @return string
+   */
+  public function getTimeFinalized()
+  {
+    return $this->timeFinalized;
   }
   /**
    * @param string

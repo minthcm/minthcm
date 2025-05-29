@@ -22,8 +22,39 @@ namespace Beta\Microsoft\Graph\Model;
 * @license   https://opensource.org/licenses/MIT MIT License
 * @link      https://graph.microsoft.com
 */
-class AgedAccountsReceivable extends Entity
+class AgedAccountsReceivable implements \JsonSerializable
 {
+    /**
+    * The array of properties available
+    * to the model
+    *
+    * @var array $_propDict
+    */
+    protected $_propDict;
+
+    /**
+    * Construct a new AgedAccountsReceivable
+    *
+    * @param array $propDict A list of properties to set
+    */
+    function __construct($propDict = array())
+    {
+        if (!is_array($propDict)) {
+           $propDict = array();
+        }
+        $this->_propDict = $propDict;
+    }
+
+    /**
+    * Gets the property dictionary of the AgedAccountsReceivable
+    *
+    * @return array The list of properties
+    */
+    public function getProperties()
+    {
+        return $this->_propDict;
+    }
+
     /**
     * Gets the agedAsOfDate
     *
@@ -41,7 +72,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the agedAsOfDate
     *
@@ -54,7 +85,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["agedAsOfDate"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the balanceDue
     *
@@ -72,7 +103,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the balanceDue
     *
@@ -85,7 +116,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["balanceDue"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currencyCode
     *
@@ -99,7 +130,7 @@ class AgedAccountsReceivable extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the currencyCode
     *
@@ -112,7 +143,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["currencyCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the currentAmount
     *
@@ -130,7 +161,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the currentAmount
     *
@@ -143,7 +174,34 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["currentAmount"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the customerId
+    *
+    * @return string|null The customerId
+    */
+    public function getCustomerId()
+    {
+        if (array_key_exists("customerId", $this->_propDict)) {
+            return $this->_propDict["customerId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the customerId
+    *
+    * @param string $val The customerId
+    *
+    * @return AgedAccountsReceivable
+    */
+    public function setCustomerId($val)
+    {
+        $this->_propDict["customerId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the customerNumber
     *
@@ -157,7 +215,7 @@ class AgedAccountsReceivable extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the customerNumber
     *
@@ -170,7 +228,34 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["customerNumber"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the id
+    *
+    * @return string|null The id
+    */
+    public function getId()
+    {
+        if (array_key_exists("id", $this->_propDict)) {
+            return $this->_propDict["id"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the id
+    *
+    * @param string $val The id
+    *
+    * @return AgedAccountsReceivable
+    */
+    public function setId($val)
+    {
+        $this->_propDict["id"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the name
     *
@@ -184,7 +269,7 @@ class AgedAccountsReceivable extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the name
     *
@@ -197,7 +282,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["name"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the period1Amount
     *
@@ -215,7 +300,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the period1Amount
     *
@@ -228,7 +313,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["period1Amount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the period2Amount
     *
@@ -246,7 +331,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the period2Amount
     *
@@ -259,7 +344,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["period2Amount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the period3Amount
     *
@@ -277,7 +362,7 @@ class AgedAccountsReceivable extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the period3Amount
     *
@@ -290,7 +375,7 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["period3Amount"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the periodLengthFilter
     *
@@ -304,7 +389,7 @@ class AgedAccountsReceivable extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the periodLengthFilter
     *
@@ -317,5 +402,54 @@ class AgedAccountsReceivable extends Entity
         $this->_propDict["periodLengthFilter"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the ODataType
+    *
+    * @return string|null The ODataType
+    */
+    public function getODataType()
+    {
+        if (array_key_exists('@odata.type', $this->_propDict)) {
+            return $this->_propDict["@odata.type"];
+        }
+        return null;
+    }
+
+    /**
+    * Sets the ODataType
+    *
+    * @param string $val The ODataType
+    *
+    * @return AgedAccountsReceivable
+    */
+    public function setODataType($val)
+    {
+        $this->_propDict["@odata.type"] = $val;
+        return $this;
+    }
+
+    /**
+    * Serializes the object by property array
+    * Manually serialize DateTime into RFC3339 format
+    *
+    * @return array The list of properties
+    */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $serializableProperties = $this->getProperties();
+        foreach ($serializableProperties as $property => $val) {
+            if (is_a($val, "\DateTime")) {
+                $serializableProperties[$property] = $val->format(\DateTime::RFC3339);
+            } else if (is_a($val, "\Microsoft\Graph\Core\Enum")) {
+                $serializableProperties[$property] = $val->value();
+            } else if (is_a($val, "\Entity")) {
+                $serializableProperties[$property] = $val->jsonSerialize();
+            } else if (is_a($val, "\GuzzleHttp\Psr7\Stream")) {
+                $serializableProperties[$property] = (string) $val;
+            }
+        }
+        return $serializableProperties;
+    }
 }

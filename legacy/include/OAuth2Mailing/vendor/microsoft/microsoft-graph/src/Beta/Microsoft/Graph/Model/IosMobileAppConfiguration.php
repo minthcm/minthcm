@@ -36,13 +36,13 @@ class IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration
             if (is_a($this->_propDict["encodedSettingXml"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["encodedSettingXml"])) {
                 return $this->_propDict["encodedSettingXml"];
             } else {
-                $this->_propDict["encodedSettingXml"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["encodedSettingXml"]);
+                $this->_propDict["encodedSettingXml"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["encodedSettingXml"]);
                 return $this->_propDict["encodedSettingXml"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the encodedSettingXml
     * mdm app configuration Base64 binary.
@@ -56,9 +56,9 @@ class IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration
         $this->_propDict["encodedSettingXml"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the settings
     * app configuration setting items.
      *
@@ -72,12 +72,12 @@ class IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the settings
     * app configuration setting items.
     *
-    * @param AppConfigurationSettingItem $val The settings
+    * @param AppConfigurationSettingItem[] $val The settings
     *
     * @return IosMobileAppConfiguration
     */
@@ -86,5 +86,5 @@ class IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration
         $this->_propDict["settings"] = $val;
         return $this;
     }
-    
+
 }

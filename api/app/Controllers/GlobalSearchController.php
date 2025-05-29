@@ -78,7 +78,6 @@ class GlobalSearchController
             $query = $request->getAttribute('query');
 
             $search_manager = Search::getManager();
-            ;
             $search_manager->setElasticACL(!is_admin($current_user));
 
             $search_manager->setQuery(array(

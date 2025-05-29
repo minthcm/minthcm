@@ -42,7 +42,7 @@ class DeviceEnrollmentConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Created date time in UTC of the device enrollment configuration
@@ -56,7 +56,7 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The description of the device enrollment configuration
@@ -71,7 +71,7 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The description of the device enrollment configuration
@@ -85,7 +85,40 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the deviceEnrollmentConfigurationType
+    * Support for Enrollment Configuration Type
+    *
+    * @return DeviceEnrollmentConfigurationType|null The deviceEnrollmentConfigurationType
+    */
+    public function getDeviceEnrollmentConfigurationType()
+    {
+        if (array_key_exists("deviceEnrollmentConfigurationType", $this->_propDict)) {
+            if (is_a($this->_propDict["deviceEnrollmentConfigurationType"], "\Beta\Microsoft\Graph\Model\DeviceEnrollmentConfigurationType") || is_null($this->_propDict["deviceEnrollmentConfigurationType"])) {
+                return $this->_propDict["deviceEnrollmentConfigurationType"];
+            } else {
+                $this->_propDict["deviceEnrollmentConfigurationType"] = new DeviceEnrollmentConfigurationType($this->_propDict["deviceEnrollmentConfigurationType"]);
+                return $this->_propDict["deviceEnrollmentConfigurationType"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the deviceEnrollmentConfigurationType
+    * Support for Enrollment Configuration Type
+    *
+    * @param DeviceEnrollmentConfigurationType $val The deviceEnrollmentConfigurationType
+    *
+    * @return DeviceEnrollmentConfiguration
+    */
+    public function setDeviceEnrollmentConfigurationType($val)
+    {
+        $this->_propDict["deviceEnrollmentConfigurationType"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the displayName
     * The display name of the device enrollment configuration
@@ -100,7 +133,7 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name of the device enrollment configuration
@@ -114,7 +147,7 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * Last modified date time in UTC of the device enrollment configuration
@@ -133,7 +166,7 @@ class DeviceEnrollmentConfiguration extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * Last modified date time in UTC of the device enrollment configuration
@@ -147,7 +180,7 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the priority
     * Priority is used when a user exists in multiple groups that are assigned enrollment configuration. Users are subject only to the configuration with the lowest priority value.
@@ -162,7 +195,7 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the priority
     * Priority is used when a user exists in multiple groups that are assigned enrollment configuration. Users are subject only to the configuration with the lowest priority value.
@@ -176,12 +209,12 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["priority"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the roleScopeTagIds
     * Optional role scope tags for the enrollment restrictions.
     *
-    * @return string|null The roleScopeTagIds
+    * @return array|null The roleScopeTagIds
     */
     public function getRoleScopeTagIds()
     {
@@ -191,12 +224,12 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the roleScopeTagIds
     * Optional role scope tags for the enrollment restrictions.
     *
-    * @param string $val The roleScopeTagIds
+    * @param string[] $val The roleScopeTagIds
     *
     * @return DeviceEnrollmentConfiguration
     */
@@ -205,7 +238,7 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["roleScopeTagIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the version
     * The version of the device enrollment configuration
@@ -220,7 +253,7 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the version
     * The version of the device enrollment configuration
@@ -234,9 +267,9 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["version"] = intval($val);
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the assignments
     * The list of group assignments for the device configuration profile
      *
@@ -250,12 +283,12 @@ class DeviceEnrollmentConfiguration extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the assignments
     * The list of group assignments for the device configuration profile
     *
-    * @param EnrollmentConfigurationAssignment $val The assignments
+    * @param EnrollmentConfigurationAssignment[] $val The assignments
     *
     * @return DeviceEnrollmentConfiguration
     */
@@ -264,5 +297,5 @@ class DeviceEnrollmentConfiguration extends Entity
         $this->_propDict["assignments"] = $val;
         return $this;
     }
-    
+
 }

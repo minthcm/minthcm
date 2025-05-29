@@ -25,7 +25,6 @@ class LicenseAssignmentState extends Entity
 {
     /**
     * Gets the assignedByGroup
-    * The id of the group that assigns this license. If the assignment is a direct-assigned license, this field will be Null. Read-Only.
     *
     * @return string|null The assignedByGroup
     */
@@ -40,7 +39,6 @@ class LicenseAssignmentState extends Entity
 
     /**
     * Sets the assignedByGroup
-    * The id of the group that assigns this license. If the assignment is a direct-assigned license, this field will be Null. Read-Only.
     *
     * @param string $val The value of the assignedByGroup
     *
@@ -53,7 +51,6 @@ class LicenseAssignmentState extends Entity
     }
     /**
     * Gets the disabledPlans
-    * The service plans that are disabled in this assignment. Read-Only.
     *
     * @return string|null The disabledPlans
     */
@@ -68,7 +65,6 @@ class LicenseAssignmentState extends Entity
 
     /**
     * Sets the disabledPlans
-    * The service plans that are disabled in this assignment. Read-Only.
     *
     * @param string $val The value of the disabledPlans
     *
@@ -81,7 +77,6 @@ class LicenseAssignmentState extends Entity
     }
     /**
     * Gets the error
-    * License assignment failure error. If the license is assigned successfully, this field will be Null. Read-Only. Possible values: CountViolation, MutuallyExclusiveViolation, DependencyViolation, ProhibitedInUsageLocationViolation, UniquenessViolation, and Others. For more information on how to identify and resolve license assignment errors see here.
     *
     * @return string|null The error
     */
@@ -96,7 +91,6 @@ class LicenseAssignmentState extends Entity
 
     /**
     * Sets the error
-    * License assignment failure error. If the license is assigned successfully, this field will be Null. Read-Only. Possible values: CountViolation, MutuallyExclusiveViolation, DependencyViolation, ProhibitedInUsageLocationViolation, UniquenessViolation, and Others. For more information on how to identify and resolve license assignment errors see here.
     *
     * @param string $val The value of the error
     *
@@ -107,9 +101,39 @@ class LicenseAssignmentState extends Entity
         $this->_propDict["error"] = $val;
         return $this;
     }
+
+    /**
+    * Gets the lastUpdatedDateTime
+    *
+    * @return \DateTime|null The lastUpdatedDateTime
+    */
+    public function getLastUpdatedDateTime()
+    {
+        if (array_key_exists("lastUpdatedDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["lastUpdatedDateTime"], "\DateTime") || is_null($this->_propDict["lastUpdatedDateTime"])) {
+                return $this->_propDict["lastUpdatedDateTime"];
+            } else {
+                $this->_propDict["lastUpdatedDateTime"] = new \DateTime($this->_propDict["lastUpdatedDateTime"]);
+                return $this->_propDict["lastUpdatedDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the lastUpdatedDateTime
+    *
+    * @param \DateTime $val The value to assign to the lastUpdatedDateTime
+    *
+    * @return LicenseAssignmentState The LicenseAssignmentState
+    */
+    public function setLastUpdatedDateTime($val)
+    {
+        $this->_propDict["lastUpdatedDateTime"] = $val;
+         return $this;
+    }
     /**
     * Gets the skuId
-    * The unique identifier for the SKU. Read-Only.
     *
     * @return string|null The skuId
     */
@@ -124,7 +148,6 @@ class LicenseAssignmentState extends Entity
 
     /**
     * Sets the skuId
-    * The unique identifier for the SKU. Read-Only.
     *
     * @param string $val The value of the skuId
     *
@@ -137,7 +160,6 @@ class LicenseAssignmentState extends Entity
     }
     /**
     * Gets the state
-    * Indicate the current state of this assignment. Read-Only. Possible values: Active, ActiveWithError, Disabled and Error.
     *
     * @return string|null The state
     */
@@ -152,7 +174,6 @@ class LicenseAssignmentState extends Entity
 
     /**
     * Sets the state
-    * Indicate the current state of this assignment. Read-Only. Possible values: Active, ActiveWithError, Disabled and Error.
     *
     * @param string $val The value of the state
     *

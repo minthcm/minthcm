@@ -26,7 +26,6 @@ class ConnectionOperation extends Entity
 {
     /**
     * Gets the error
-    * If status is failed, provides more information about the error that caused the failure.
     *
     * @return PublicError|null The error
     */
@@ -42,10 +41,9 @@ class ConnectionOperation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the error
-    * If status is failed, provides more information about the error that caused the failure.
     *
     * @param PublicError $val The error
     *
@@ -56,10 +54,9 @@ class ConnectionOperation extends Entity
         $this->_propDict["error"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
-    * Indicates the status of the asynchronous operation. Possible values are: unspecified, inprogress, completed, failed.
     *
     * @return ConnectionOperationStatus|null The status
     */
@@ -75,10 +72,9 @@ class ConnectionOperation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
-    * Indicates the status of the asynchronous operation. Possible values are: unspecified, inprogress, completed, failed.
     *
     * @param ConnectionOperationStatus $val The status
     *
@@ -89,5 +85,5 @@ class ConnectionOperation extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
 }

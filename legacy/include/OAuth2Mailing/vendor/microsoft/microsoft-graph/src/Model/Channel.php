@@ -42,7 +42,7 @@ class Channel extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Read only. Timestamp at which the channel was created.
@@ -56,7 +56,7 @@ class Channel extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * Optional textual description for the channel.
@@ -71,7 +71,7 @@ class Channel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Optional textual description for the channel.
@@ -85,10 +85,10 @@ class Channel extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * Channel name as it will appear to the user in Microsoft Teams.
+    * Channel name as it will appear to the user in Microsoft Teams. The maximum length is 50 characters.
     *
     * @return string|null The displayName
     */
@@ -100,10 +100,10 @@ class Channel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * Channel name as it will appear to the user in Microsoft Teams.
+    * Channel name as it will appear to the user in Microsoft Teams. The maximum length is 50 characters.
     *
     * @param string $val The displayName
     *
@@ -114,7 +114,7 @@ class Channel extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the email
     * The email address for sending messages to the channel. Read-only.
@@ -129,7 +129,7 @@ class Channel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the email
     * The email address for sending messages to the channel. Read-only.
@@ -143,7 +143,7 @@ class Channel extends Entity
         $this->_propDict["email"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isFavoriteByDefault
     * Indicates whether the channel should automatically be marked 'favorite' for all members of the team. Can only be set programmatically with Create team. Default: false.
@@ -158,7 +158,7 @@ class Channel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the isFavoriteByDefault
     * Indicates whether the channel should automatically be marked 'favorite' for all members of the team. Can only be set programmatically with Create team. Default: false.
@@ -172,10 +172,10 @@ class Channel extends Entity
         $this->_propDict["isFavoriteByDefault"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the membershipType
-    * The type of the channel. Can be set during creation and cannot be changed. Default: standard.
+    * The type of the channel. Can be set during creation and can't be changed. The possible values are: standard, private, unknownFutureValue, shared. The default value is standard. Note that you must use the Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum: shared.
     *
     * @return ChannelMembershipType|null The membershipType
     */
@@ -191,10 +191,10 @@ class Channel extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the membershipType
-    * The type of the channel. Can be set during creation and cannot be changed. Default: standard.
+    * The type of the channel. Can be set during creation and can't be changed. The possible values are: standard, private, unknownFutureValue, shared. The default value is standard. Note that you must use the Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum: shared.
     *
     * @param ChannelMembershipType $val The membershipType
     *
@@ -205,7 +205,69 @@ class Channel extends Entity
         $this->_propDict["membershipType"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the summary
+    * Contains summary information about the channel, including number of owners, members, guests, and an indicator for members from other tenants. The summary property will only be returned if it is specified in the $select clause of the Get channel method.
+    *
+    * @return ChannelSummary|null The summary
+    */
+    public function getSummary()
+    {
+        if (array_key_exists("summary", $this->_propDict)) {
+            if (is_a($this->_propDict["summary"], "\Microsoft\Graph\Model\ChannelSummary") || is_null($this->_propDict["summary"])) {
+                return $this->_propDict["summary"];
+            } else {
+                $this->_propDict["summary"] = new ChannelSummary($this->_propDict["summary"]);
+                return $this->_propDict["summary"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the summary
+    * Contains summary information about the channel, including number of owners, members, guests, and an indicator for members from other tenants. The summary property will only be returned if it is specified in the $select clause of the Get channel method.
+    *
+    * @param ChannelSummary $val The summary
+    *
+    * @return Channel
+    */
+    public function setSummary($val)
+    {
+        $this->_propDict["summary"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the tenantId
+    * The ID of the Microsoft Entra tenant.
+    *
+    * @return string|null The tenantId
+    */
+    public function getTenantId()
+    {
+        if (array_key_exists("tenantId", $this->_propDict)) {
+            return $this->_propDict["tenantId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the tenantId
+    * The ID of the Microsoft Entra tenant.
+    *
+    * @param string $val The tenantId
+    *
+    * @return Channel
+    */
+    public function setTenantId($val)
+    {
+        $this->_propDict["tenantId"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the webUrl
     * A hyperlink that will go to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed. Read-only.
@@ -220,7 +282,7 @@ class Channel extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the webUrl
     * A hyperlink that will go to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed. Read-only.
@@ -234,7 +296,7 @@ class Channel extends Entity
         $this->_propDict["webUrl"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the filesFolder
     * Metadata for the location where the channel's files are stored.
@@ -253,7 +315,7 @@ class Channel extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the filesFolder
     * Metadata for the location where the channel's files are stored.
@@ -267,9 +329,9 @@ class Channel extends Entity
         $this->_propDict["filesFolder"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the members
     * A collection of membership records associated with the channel.
      *
@@ -283,12 +345,12 @@ class Channel extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the members
     * A collection of membership records associated with the channel.
     *
-    * @param ConversationMember $val The members
+    * @param ConversationMember[] $val The members
     *
     * @return Channel
     */
@@ -297,9 +359,9 @@ class Channel extends Entity
         $this->_propDict["members"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the messages
     * A collection of all the messages in the channel. A navigation property. Nullable.
      *
@@ -313,12 +375,12 @@ class Channel extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the messages
     * A collection of all the messages in the channel. A navigation property. Nullable.
     *
-    * @param ChatMessage $val The messages
+    * @param ChatMessage[] $val The messages
     *
     * @return Channel
     */
@@ -327,9 +389,39 @@ class Channel extends Entity
         $this->_propDict["messages"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
+     * Gets the sharedWithTeams
+    * A collection of teams with which a channel is shared.
+     *
+     * @return array|null The sharedWithTeams
+     */
+    public function getSharedWithTeams()
+    {
+        if (array_key_exists("sharedWithTeams", $this->_propDict)) {
+           return $this->_propDict["sharedWithTeams"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the sharedWithTeams
+    * A collection of teams with which a channel is shared.
+    *
+    * @param SharedWithChannelTeamInfo[] $val The sharedWithTeams
+    *
+    * @return Channel
+    */
+    public function setSharedWithTeams($val)
+    {
+        $this->_propDict["sharedWithTeams"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the tabs
     * A collection of all the tabs in the channel. A navigation property.
      *
@@ -343,12 +435,12 @@ class Channel extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tabs
     * A collection of all the tabs in the channel. A navigation property.
     *
-    * @param TeamsTab $val The tabs
+    * @param TeamsTab[] $val The tabs
     *
     * @return Channel
     */
@@ -357,5 +449,5 @@ class Channel extends Entity
         $this->_propDict["tabs"] = $val;
         return $this;
     }
-    
+
 }

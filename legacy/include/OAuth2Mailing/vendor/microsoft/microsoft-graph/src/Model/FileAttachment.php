@@ -36,13 +36,13 @@ class FileAttachment extends Attachment
             if (is_a($this->_propDict["contentBytes"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["contentBytes"])) {
                 return $this->_propDict["contentBytes"];
             } else {
-                $this->_propDict["contentBytes"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["contentBytes"]);
+                $this->_propDict["contentBytes"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["contentBytes"]);
                 return $this->_propDict["contentBytes"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the contentBytes
     * The base64-encoded contents of the file.
@@ -56,7 +56,7 @@ class FileAttachment extends Attachment
         $this->_propDict["contentBytes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentId
     * The ID of the attachment in the Exchange store.
@@ -71,7 +71,7 @@ class FileAttachment extends Attachment
             return null;
         }
     }
-    
+
     /**
     * Sets the contentId
     * The ID of the attachment in the Exchange store.
@@ -85,10 +85,10 @@ class FileAttachment extends Attachment
         $this->_propDict["contentId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentLocation
-    * Do not use this property as it is not supported.
+    * Don't use this property as it isn't supported.
     *
     * @return string|null The contentLocation
     */
@@ -100,10 +100,10 @@ class FileAttachment extends Attachment
             return null;
         }
     }
-    
+
     /**
     * Sets the contentLocation
-    * Do not use this property as it is not supported.
+    * Don't use this property as it isn't supported.
     *
     * @param string $val The contentLocation
     *
@@ -114,5 +114,5 @@ class FileAttachment extends Attachment
         $this->_propDict["contentLocation"] = $val;
         return $this;
     }
-    
+
 }

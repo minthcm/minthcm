@@ -26,6 +26,7 @@ class AuthenticationMethodsPolicy extends Entity
 {
     /**
     * Gets the description
+    * A description of the policy.
     *
     * @return string|null The description
     */
@@ -37,9 +38,10 @@ class AuthenticationMethodsPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
+    * A description of the policy.
     *
     * @param string $val The description
     *
@@ -50,9 +52,10 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
+    * The name of the policy.
     *
     * @return string|null The displayName
     */
@@ -64,9 +67,10 @@ class AuthenticationMethodsPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
+    * The name of the policy.
     *
     * @param string $val The displayName
     *
@@ -77,9 +81,10 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
+    * The date and time of the last update to the policy.
     *
     * @return \DateTime|null The lastModifiedDateTime
     */
@@ -95,9 +100,10 @@ class AuthenticationMethodsPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
+    * The date and time of the last update to the policy.
     *
     * @param \DateTime $val The lastModifiedDateTime
     *
@@ -108,9 +114,43 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the policyMigrationState
+    * The state of migration of the authentication methods policy from the legacy multifactor authentication and self-service password reset (SSPR) policies. The possible values are: premigration - means the authentication methods policy is used for authentication only, legacy policies are respected. migrationInProgress - means the authentication methods policy is used for both authentication and SSPR, legacy policies are respected. migrationComplete - means the authentication methods policy is used for authentication and SSPR, legacy policies are ignored. unknownFutureValue - Evolvable enumeration sentinel value. Don't use.
+    *
+    * @return AuthenticationMethodsPolicyMigrationState|null The policyMigrationState
+    */
+    public function getPolicyMigrationState()
+    {
+        if (array_key_exists("policyMigrationState", $this->_propDict)) {
+            if (is_a($this->_propDict["policyMigrationState"], "\Beta\Microsoft\Graph\Model\AuthenticationMethodsPolicyMigrationState") || is_null($this->_propDict["policyMigrationState"])) {
+                return $this->_propDict["policyMigrationState"];
+            } else {
+                $this->_propDict["policyMigrationState"] = new AuthenticationMethodsPolicyMigrationState($this->_propDict["policyMigrationState"]);
+                return $this->_propDict["policyMigrationState"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the policyMigrationState
+    * The state of migration of the authentication methods policy from the legacy multifactor authentication and self-service password reset (SSPR) policies. The possible values are: premigration - means the authentication methods policy is used for authentication only, legacy policies are respected. migrationInProgress - means the authentication methods policy is used for both authentication and SSPR, legacy policies are respected. migrationComplete - means the authentication methods policy is used for authentication and SSPR, legacy policies are ignored. unknownFutureValue - Evolvable enumeration sentinel value. Don't use.
+    *
+    * @param AuthenticationMethodsPolicyMigrationState $val The policyMigrationState
+    *
+    * @return AuthenticationMethodsPolicy
+    */
+    public function setPolicyMigrationState($val)
+    {
+        $this->_propDict["policyMigrationState"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the policyVersion
+    * The version of the policy in use.
     *
     * @return string|null The policyVersion
     */
@@ -122,9 +162,10 @@ class AuthenticationMethodsPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the policyVersion
+    * The version of the policy in use.
     *
     * @param string $val The policyVersion
     *
@@ -135,9 +176,10 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["policyVersion"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the reconfirmationInDays
+    * Days before the user will be asked to reconfirm their method.
     *
     * @return int|null The reconfirmationInDays
     */
@@ -149,9 +191,10 @@ class AuthenticationMethodsPolicy extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the reconfirmationInDays
+    * Days before the user will be asked to reconfirm their method.
     *
     * @param int $val The reconfirmationInDays
     *
@@ -162,9 +205,10 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["reconfirmationInDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the registrationEnforcement
+    * Enforce registration at sign-in time. This property can be used to remind users to set up targeted authentication methods.
     *
     * @return RegistrationEnforcement|null The registrationEnforcement
     */
@@ -180,9 +224,10 @@ class AuthenticationMethodsPolicy extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the registrationEnforcement
+    * Enforce registration at sign-in time. This property can be used to remind users to set up targeted authentication methods.
     *
     * @param RegistrationEnforcement $val The registrationEnforcement
     *
@@ -193,10 +238,77 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["registrationEnforcement"] = $val;
         return $this;
     }
-    
 
-     /** 
+    /**
+    * Gets the reportSuspiciousActivitySettings
+    * Enable users to report unexpected voice call or phone app notification multi-factor authentication prompts as suspicious.
+    *
+    * @return ReportSuspiciousActivitySettings|null The reportSuspiciousActivitySettings
+    */
+    public function getReportSuspiciousActivitySettings()
+    {
+        if (array_key_exists("reportSuspiciousActivitySettings", $this->_propDict)) {
+            if (is_a($this->_propDict["reportSuspiciousActivitySettings"], "\Beta\Microsoft\Graph\Model\ReportSuspiciousActivitySettings") || is_null($this->_propDict["reportSuspiciousActivitySettings"])) {
+                return $this->_propDict["reportSuspiciousActivitySettings"];
+            } else {
+                $this->_propDict["reportSuspiciousActivitySettings"] = new ReportSuspiciousActivitySettings($this->_propDict["reportSuspiciousActivitySettings"]);
+                return $this->_propDict["reportSuspiciousActivitySettings"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the reportSuspiciousActivitySettings
+    * Enable users to report unexpected voice call or phone app notification multi-factor authentication prompts as suspicious.
+    *
+    * @param ReportSuspiciousActivitySettings $val The reportSuspiciousActivitySettings
+    *
+    * @return AuthenticationMethodsPolicy
+    */
+    public function setReportSuspiciousActivitySettings($val)
+    {
+        $this->_propDict["reportSuspiciousActivitySettings"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the systemCredentialPreferences
+    * Prompt users with their most-preferred credential for multifactor authentication.
+    *
+    * @return SystemCredentialPreferences|null The systemCredentialPreferences
+    */
+    public function getSystemCredentialPreferences()
+    {
+        if (array_key_exists("systemCredentialPreferences", $this->_propDict)) {
+            if (is_a($this->_propDict["systemCredentialPreferences"], "\Beta\Microsoft\Graph\Model\SystemCredentialPreferences") || is_null($this->_propDict["systemCredentialPreferences"])) {
+                return $this->_propDict["systemCredentialPreferences"];
+            } else {
+                $this->_propDict["systemCredentialPreferences"] = new SystemCredentialPreferences($this->_propDict["systemCredentialPreferences"]);
+                return $this->_propDict["systemCredentialPreferences"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the systemCredentialPreferences
+    * Prompt users with their most-preferred credential for multifactor authentication.
+    *
+    * @param SystemCredentialPreferences $val The systemCredentialPreferences
+    *
+    * @return AuthenticationMethodsPolicy
+    */
+    public function setSystemCredentialPreferences($val)
+    {
+        $this->_propDict["systemCredentialPreferences"] = $val;
+        return $this;
+    }
+
+
+     /**
      * Gets the authenticationMethodConfigurations
+    * Represents the settings for each authentication method. Automatically expanded on GET /policies/authenticationMethodsPolicy.
      *
      * @return array|null The authenticationMethodConfigurations
      */
@@ -208,11 +320,12 @@ class AuthenticationMethodsPolicy extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the authenticationMethodConfigurations
+    * Represents the settings for each authentication method. Automatically expanded on GET /policies/authenticationMethodsPolicy.
     *
-    * @param AuthenticationMethodConfiguration $val The authenticationMethodConfigurations
+    * @param AuthenticationMethodConfiguration[] $val The authenticationMethodConfigurations
     *
     * @return AuthenticationMethodsPolicy
     */
@@ -221,5 +334,5 @@ class AuthenticationMethodsPolicy extends Entity
         $this->_propDict["authenticationMethodConfigurations"] = $val;
         return $this;
     }
-    
+
 }

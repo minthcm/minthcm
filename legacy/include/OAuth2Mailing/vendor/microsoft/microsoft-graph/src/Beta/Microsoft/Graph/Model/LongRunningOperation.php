@@ -26,6 +26,7 @@ class LongRunningOperation extends Entity
 {
     /**
     * Gets the createdDateTime
+    * The start time of the operation. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @return \DateTime|null The createdDateTime
     */
@@ -41,9 +42,10 @@ class LongRunningOperation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
+    * The start time of the operation. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @param \DateTime $val The createdDateTime
     *
@@ -54,9 +56,10 @@ class LongRunningOperation extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastActionDateTime
+    * The time of the last action in the operation. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @return \DateTime|null The lastActionDateTime
     */
@@ -72,9 +75,10 @@ class LongRunningOperation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastActionDateTime
+    * The time of the last action in the operation. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
     *
     * @param \DateTime $val The lastActionDateTime
     *
@@ -85,9 +89,10 @@ class LongRunningOperation extends Entity
         $this->_propDict["lastActionDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceLocation
+    * URI of the resource that the operation is performed on.
     *
     * @return string|null The resourceLocation
     */
@@ -99,9 +104,10 @@ class LongRunningOperation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceLocation
+    * URI of the resource that the operation is performed on.
     *
     * @param string $val The resourceLocation
     *
@@ -112,9 +118,10 @@ class LongRunningOperation extends Entity
         $this->_propDict["resourceLocation"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
+    * The status of the operation. The possible values are: notStarted, running, succeeded, failed, unknownFutureValue.
     *
     * @return LongRunningOperationStatus|null The status
     */
@@ -130,9 +137,10 @@ class LongRunningOperation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
+    * The status of the operation. The possible values are: notStarted, running, succeeded, failed, unknownFutureValue.
     *
     * @param LongRunningOperationStatus $val The status
     *
@@ -143,9 +151,10 @@ class LongRunningOperation extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the statusDetail
+    * Details about the status of the operation.
     *
     * @return string|null The statusDetail
     */
@@ -157,9 +166,10 @@ class LongRunningOperation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the statusDetail
+    * Details about the status of the operation.
     *
     * @param string $val The statusDetail
     *
@@ -170,5 +180,5 @@ class LongRunningOperation extends Entity
         $this->_propDict["statusDetail"] = $val;
         return $this;
     }
-    
+
 }

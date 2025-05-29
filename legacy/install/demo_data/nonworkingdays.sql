@@ -1,0 +1,1 @@
+REPLACE INTO nonworkingdays (id, name, date_entered, date_modified, date_indexed, modified_user_id, created_by, description, deleted, date, week_day) VALUES ('6d6bb276-7b3c-2b8d-8384-5cec13f47a89',' ','2025-03-15 15:43:35','2025-03-15 15:43:35','2025-03-18 15:36:47','1','1',NULL,'0','2019-07-15','4');

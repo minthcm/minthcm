@@ -23,7 +23,6 @@ use function db2_prepare;
 use function db2_rollback;
 use function db2_server_info;
 use function error_get_last;
-use function is_bool;
 
 use const DB2_AUTOCOMMIT_OFF;
 use const DB2_AUTOCOMMIT_ON;
@@ -44,7 +43,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getServerVersion()
     {
@@ -71,7 +70,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function quote($value, $type = ParameterType::STRING)
     {
@@ -96,7 +95,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function lastInsertId($name = null)
     {
@@ -104,7 +103,7 @@ final class Connection implements ServerInfoAwareConnection
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
                 'https://github.com/doctrine/dbal/issues/4687',
-                'The usage of Connection::lastInsertId() with a sequence name is deprecated.'
+                'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
             );
         }
 
@@ -113,10 +112,7 @@ final class Connection implements ServerInfoAwareConnection
 
     public function beginTransaction(): bool
     {
-        $result = db2_autocommit($this->connection, DB2_AUTOCOMMIT_OFF);
-        assert(is_bool($result));
-
-        return $result;
+        return db2_autocommit($this->connection, DB2_AUTOCOMMIT_OFF);
     }
 
     public function commit(): bool
@@ -125,10 +121,7 @@ final class Connection implements ServerInfoAwareConnection
             throw ConnectionError::new($this->connection);
         }
 
-        $result = db2_autocommit($this->connection, DB2_AUTOCOMMIT_ON);
-        assert(is_bool($result));
-
-        return $result;
+        return db2_autocommit($this->connection, DB2_AUTOCOMMIT_ON);
     }
 
     public function rollBack(): bool
@@ -137,15 +130,10 @@ final class Connection implements ServerInfoAwareConnection
             throw ConnectionError::new($this->connection);
         }
 
-        $result = db2_autocommit($this->connection, DB2_AUTOCOMMIT_ON);
-        assert(is_bool($result));
-
-        return $result;
+        return db2_autocommit($this->connection, DB2_AUTOCOMMIT_ON);
     }
 
-    /**
-     * @return resource
-     */
+    /** @return resource */
     public function getNativeConnection()
     {
         return $this->connection;

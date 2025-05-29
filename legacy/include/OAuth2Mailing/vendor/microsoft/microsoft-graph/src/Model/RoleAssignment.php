@@ -38,7 +38,7 @@ class RoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Description of the Role Assignment.
@@ -52,7 +52,7 @@ class RoleAssignment extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The display or friendly name of the role Assignment.
@@ -67,7 +67,7 @@ class RoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display or friendly name of the role Assignment.
@@ -81,12 +81,12 @@ class RoleAssignment extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resourceScopes
     * List of ids of role scope member security groups.  These are IDs from Azure Active Directory.
     *
-    * @return string|null The resourceScopes
+    * @return array|null The resourceScopes
     */
     public function getResourceScopes()
     {
@@ -96,12 +96,12 @@ class RoleAssignment extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the resourceScopes
     * List of ids of role scope member security groups.  These are IDs from Azure Active Directory.
     *
-    * @param string $val The resourceScopes
+    * @param string[] $val The resourceScopes
     *
     * @return RoleAssignment
     */
@@ -110,7 +110,7 @@ class RoleAssignment extends Entity
         $this->_propDict["resourceScopes"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the roleDefinition
     * Role definition this assignment is part of.
@@ -129,7 +129,7 @@ class RoleAssignment extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the roleDefinition
     * Role definition this assignment is part of.
@@ -143,5 +143,5 @@ class RoleAssignment extends Entity
         $this->_propDict["roleDefinition"] = $val;
         return $this;
     }
-    
+
 }

@@ -70,7 +70,7 @@ class SearchResults
     /** @var float The number of seconds it took to perform the search */
     private $searchTime;
     /** @var int The total number of hits (without pagination) */
-    private $total;
+    protected $total;
     /** @var bool Flag specifying if the (nested) hits are grouped by the modules */
     private $groupedByModule;
 
@@ -248,7 +248,10 @@ class SearchResults
     {
         global $sugar_config;
 
-        return "<a href=\"{$sugar_config['site_url']}/index.php?action={$action}&module={$module}&record={$record}&offset=1\"><span>{$label}</span></a>";
+        $slash = '';
+        substr($sugar_config['site_url'], -1) != '/' ? $slash ='/' : $slash = '';
+
+        return "<a href=\"{$sugar_config['site_url']}{$slash}legacy/index.php?action={$action}&module={$module}&record={$record}&offset=1\"><span>{$label}</span></a>";
     }
 
     /**

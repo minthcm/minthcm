@@ -25,6 +25,39 @@ namespace Beta\Microsoft\Graph\Model;
 class MacOSCustomConfiguration extends DeviceConfiguration
 {
     /**
+    * Gets the deploymentChannel
+    * Indicates the channel used to deploy the configuration profile. Available choices are DeviceChannel, UserChannel. Possible values are: deviceChannel, userChannel.
+    *
+    * @return AppleDeploymentChannel|null The deploymentChannel
+    */
+    public function getDeploymentChannel()
+    {
+        if (array_key_exists("deploymentChannel", $this->_propDict)) {
+            if (is_a($this->_propDict["deploymentChannel"], "\Beta\Microsoft\Graph\Model\AppleDeploymentChannel") || is_null($this->_propDict["deploymentChannel"])) {
+                return $this->_propDict["deploymentChannel"];
+            } else {
+                $this->_propDict["deploymentChannel"] = new AppleDeploymentChannel($this->_propDict["deploymentChannel"]);
+                return $this->_propDict["deploymentChannel"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the deploymentChannel
+    * Indicates the channel used to deploy the configuration profile. Available choices are DeviceChannel, UserChannel. Possible values are: deviceChannel, userChannel.
+    *
+    * @param AppleDeploymentChannel $val The deploymentChannel
+    *
+    * @return MacOSCustomConfiguration
+    */
+    public function setDeploymentChannel($val)
+    {
+        $this->_propDict["deploymentChannel"] = $val;
+        return $this;
+    }
+
+    /**
     * Gets the payload
     * Payload. (UTF8 encoded byte array)
     *
@@ -36,13 +69,13 @@ class MacOSCustomConfiguration extends DeviceConfiguration
             if (is_a($this->_propDict["payload"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["payload"])) {
                 return $this->_propDict["payload"];
             } else {
-                $this->_propDict["payload"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["payload"]);
+                $this->_propDict["payload"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["payload"]);
                 return $this->_propDict["payload"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the payload
     * Payload. (UTF8 encoded byte array)
@@ -56,7 +89,7 @@ class MacOSCustomConfiguration extends DeviceConfiguration
         $this->_propDict["payload"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the payloadFileName
     * Payload file name (.mobileconfig
@@ -71,7 +104,7 @@ class MacOSCustomConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the payloadFileName
     * Payload file name (.mobileconfig
@@ -85,7 +118,7 @@ class MacOSCustomConfiguration extends DeviceConfiguration
         $this->_propDict["payloadFileName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the payloadName
     * Name that is displayed to the user.
@@ -100,7 +133,7 @@ class MacOSCustomConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the payloadName
     * Name that is displayed to the user.
@@ -114,5 +147,5 @@ class MacOSCustomConfiguration extends DeviceConfiguration
         $this->_propDict["payloadName"] = $val;
         return $this;
     }
-    
+
 }

@@ -25,6 +25,64 @@ namespace Beta\Microsoft\Graph\Model;
 class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
 {
     /**
+    * Gets the allowedGoogleAccountDomains
+    * Determine domains allow-list for accounts that can be added to work profile.
+    *
+    * @return array|null The allowedGoogleAccountDomains
+    */
+    public function getAllowedGoogleAccountDomains()
+    {
+        if (array_key_exists("allowedGoogleAccountDomains", $this->_propDict)) {
+            return $this->_propDict["allowedGoogleAccountDomains"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the allowedGoogleAccountDomains
+    * Determine domains allow-list for accounts that can be added to work profile.
+    *
+    * @param string[] $val The allowedGoogleAccountDomains
+    *
+    * @return AndroidWorkProfileGeneralDeviceConfiguration
+    */
+    public function setAllowedGoogleAccountDomains($val)
+    {
+        $this->_propDict["allowedGoogleAccountDomains"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the blockUnifiedPasswordForWorkProfile
+    * Prevent using unified password for unlocking device and work profile.
+    *
+    * @return bool|null The blockUnifiedPasswordForWorkProfile
+    */
+    public function getBlockUnifiedPasswordForWorkProfile()
+    {
+        if (array_key_exists("blockUnifiedPasswordForWorkProfile", $this->_propDict)) {
+            return $this->_propDict["blockUnifiedPasswordForWorkProfile"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the blockUnifiedPasswordForWorkProfile
+    * Prevent using unified password for unlocking device and work profile.
+    *
+    * @param bool $val The blockUnifiedPasswordForWorkProfile
+    *
+    * @return AndroidWorkProfileGeneralDeviceConfiguration
+    */
+    public function setBlockUnifiedPasswordForWorkProfile($val)
+    {
+        $this->_propDict["blockUnifiedPasswordForWorkProfile"] = boolval($val);
+        return $this;
+    }
+
+    /**
     * Gets the passwordBlockFaceUnlock
     * Indicates whether or not to block face unlock.
     *
@@ -38,7 +96,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordBlockFaceUnlock
     * Indicates whether or not to block face unlock.
@@ -52,7 +110,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordBlockFaceUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordBlockFingerprintUnlock
     * Indicates whether or not to block fingerprint unlock.
@@ -67,7 +125,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordBlockFingerprintUnlock
     * Indicates whether or not to block fingerprint unlock.
@@ -81,7 +139,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordBlockFingerprintUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordBlockIrisUnlock
     * Indicates whether or not to block iris unlock.
@@ -96,7 +154,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordBlockIrisUnlock
     * Indicates whether or not to block iris unlock.
@@ -110,7 +168,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordBlockIrisUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordBlockTrustAgents
     * Indicates whether or not to block Smart Lock and other trust agents.
@@ -125,7 +183,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordBlockTrustAgents
     * Indicates whether or not to block Smart Lock and other trust agents.
@@ -139,7 +197,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordBlockTrustAgents"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordExpirationDays
     * Number of days before the password expires. Valid values 1 to 365
@@ -154,7 +212,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordExpirationDays
     * Number of days before the password expires. Valid values 1 to 365
@@ -168,7 +226,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordExpirationDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordMinimumLength
     * Minimum length of passwords. Valid values 4 to 16
@@ -183,7 +241,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordMinimumLength
     * Minimum length of passwords. Valid values 4 to 16
@@ -197,7 +255,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordMinimumLength"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordMinutesOfInactivityBeforeScreenTimeout
     * Minutes of inactivity before the screen times out.
@@ -212,7 +270,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordMinutesOfInactivityBeforeScreenTimeout
     * Minutes of inactivity before the screen times out.
@@ -226,7 +284,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordMinutesOfInactivityBeforeScreenTimeout"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordPreviousPasswordBlockCount
     * Number of previous passwords to block. Valid values 0 to 24
@@ -241,7 +299,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordPreviousPasswordBlockCount
     * Number of previous passwords to block. Valid values 0 to 24
@@ -255,7 +313,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordPreviousPasswordBlockCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the passwordRequiredType
     * Type of password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols.
@@ -274,7 +332,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the passwordRequiredType
     * Type of password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols.
@@ -288,7 +346,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordRequiredType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the passwordSignInFailureCountBeforeFactoryReset
     * Number of sign in failures allowed before factory reset. Valid values 1 to 16
@@ -303,7 +361,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the passwordSignInFailureCountBeforeFactoryReset
     * Number of sign in failures allowed before factory reset. Valid values 1 to 16
@@ -317,7 +375,40 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["passwordSignInFailureCountBeforeFactoryReset"] = intval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the requiredPasswordComplexity
+    * Indicates the required device password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: none, low, medium, high.
+    *
+    * @return AndroidRequiredPasswordComplexity|null The requiredPasswordComplexity
+    */
+    public function getRequiredPasswordComplexity()
+    {
+        if (array_key_exists("requiredPasswordComplexity", $this->_propDict)) {
+            if (is_a($this->_propDict["requiredPasswordComplexity"], "\Beta\Microsoft\Graph\Model\AndroidRequiredPasswordComplexity") || is_null($this->_propDict["requiredPasswordComplexity"])) {
+                return $this->_propDict["requiredPasswordComplexity"];
+            } else {
+                $this->_propDict["requiredPasswordComplexity"] = new AndroidRequiredPasswordComplexity($this->_propDict["requiredPasswordComplexity"]);
+                return $this->_propDict["requiredPasswordComplexity"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the requiredPasswordComplexity
+    * Indicates the required device password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: none, low, medium, high.
+    *
+    * @param AndroidRequiredPasswordComplexity $val The requiredPasswordComplexity
+    *
+    * @return AndroidWorkProfileGeneralDeviceConfiguration
+    */
+    public function setRequiredPasswordComplexity($val)
+    {
+        $this->_propDict["requiredPasswordComplexity"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the securityRequireVerifyApps
     * Require the Android Verify apps feature is turned on.
@@ -332,7 +423,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the securityRequireVerifyApps
     * Require the Android Verify apps feature is turned on.
@@ -346,7 +437,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["securityRequireVerifyApps"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the vpnAlwaysOnPackageIdentifier
     * Enable lockdown mode for always-on VPN.
@@ -361,7 +452,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the vpnAlwaysOnPackageIdentifier
     * Enable lockdown mode for always-on VPN.
@@ -375,7 +466,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["vpnAlwaysOnPackageIdentifier"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the vpnEnableAlwaysOnLockdownMode
     * Enable lockdown mode for always-on VPN.
@@ -390,7 +481,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the vpnEnableAlwaysOnLockdownMode
     * Enable lockdown mode for always-on VPN.
@@ -404,7 +495,40 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["vpnEnableAlwaysOnLockdownMode"] = boolval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the workProfileAccountUse
+    * Control user's ability to add accounts in work profile including Google accounts. Possible values are: allowAllExceptGoogleAccounts, blockAll, allowAll, unknownFutureValue.
+    *
+    * @return AndroidWorkProfileAccountUse|null The workProfileAccountUse
+    */
+    public function getWorkProfileAccountUse()
+    {
+        if (array_key_exists("workProfileAccountUse", $this->_propDict)) {
+            if (is_a($this->_propDict["workProfileAccountUse"], "\Beta\Microsoft\Graph\Model\AndroidWorkProfileAccountUse") || is_null($this->_propDict["workProfileAccountUse"])) {
+                return $this->_propDict["workProfileAccountUse"];
+            } else {
+                $this->_propDict["workProfileAccountUse"] = new AndroidWorkProfileAccountUse($this->_propDict["workProfileAccountUse"]);
+                return $this->_propDict["workProfileAccountUse"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the workProfileAccountUse
+    * Control user's ability to add accounts in work profile including Google accounts. Possible values are: allowAllExceptGoogleAccounts, blockAll, allowAll, unknownFutureValue.
+    *
+    * @param AndroidWorkProfileAccountUse $val The workProfileAccountUse
+    *
+    * @return AndroidWorkProfileGeneralDeviceConfiguration
+    */
+    public function setWorkProfileAccountUse($val)
+    {
+        $this->_propDict["workProfileAccountUse"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the workProfileAllowAppInstallsFromUnknownSources
     * Indicates whether to allow installation of apps from unknown sources.
@@ -419,7 +543,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileAllowAppInstallsFromUnknownSources
     * Indicates whether to allow installation of apps from unknown sources.
@@ -433,7 +557,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileAllowAppInstallsFromUnknownSources"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileAllowWidgets
     * Allow widgets from work profile apps.
@@ -448,7 +572,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileAllowWidgets
     * Allow widgets from work profile apps.
@@ -462,7 +586,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileAllowWidgets"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockAddingAccounts
     * Block users from adding/removing accounts in work profile.
@@ -477,7 +601,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockAddingAccounts
     * Block users from adding/removing accounts in work profile.
@@ -491,7 +615,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockAddingAccounts"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockCamera
     * Block work profile camera.
@@ -506,7 +630,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockCamera
     * Block work profile camera.
@@ -520,7 +644,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockCamera"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockCrossProfileCallerId
     * Block display work profile caller ID in personal profile.
@@ -535,7 +659,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockCrossProfileCallerId
     * Block display work profile caller ID in personal profile.
@@ -549,7 +673,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockCrossProfileCallerId"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockCrossProfileContactsSearch
     * Block work profile contacts availability in personal profile.
@@ -564,7 +688,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockCrossProfileContactsSearch
     * Block work profile contacts availability in personal profile.
@@ -578,7 +702,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockCrossProfileContactsSearch"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockCrossProfileCopyPaste
     * Boolean that indicates if the setting disallow cross profile copy/paste is enabled.
@@ -593,7 +717,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockCrossProfileCopyPaste
     * Boolean that indicates if the setting disallow cross profile copy/paste is enabled.
@@ -607,7 +731,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockCrossProfileCopyPaste"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockNotificationsWhileDeviceLocked
     * Indicates whether or not to block notifications while device locked.
@@ -622,7 +746,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockNotificationsWhileDeviceLocked
     * Indicates whether or not to block notifications while device locked.
@@ -636,7 +760,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockNotificationsWhileDeviceLocked"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockPersonalAppInstallsFromUnknownSources
     * Prevent app installations from unknown sources in the personal profile.
@@ -651,7 +775,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockPersonalAppInstallsFromUnknownSources
     * Prevent app installations from unknown sources in the personal profile.
@@ -665,7 +789,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockPersonalAppInstallsFromUnknownSources"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBlockScreenCapture
     * Block screen capture in work profile.
@@ -680,7 +804,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBlockScreenCapture
     * Block screen capture in work profile.
@@ -694,7 +818,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBlockScreenCapture"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileBluetoothEnableContactSharing
     * Allow bluetooth devices to access enterprise contacts.
@@ -709,7 +833,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileBluetoothEnableContactSharing
     * Allow bluetooth devices to access enterprise contacts.
@@ -723,7 +847,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileBluetoothEnableContactSharing"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfileDataSharingType
     * Type of data sharing that is allowed. Possible values are: deviceDefault, preventAny, allowPersonalToWork, noRestrictions.
@@ -742,7 +866,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the workProfileDataSharingType
     * Type of data sharing that is allowed. Possible values are: deviceDefault, preventAny, allowPersonalToWork, noRestrictions.
@@ -756,7 +880,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileDataSharingType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the workProfileDefaultAppPermissionPolicy
     * Type of password that is required. Possible values are: deviceDefault, prompt, autoGrant, autoDeny.
@@ -775,7 +899,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the workProfileDefaultAppPermissionPolicy
     * Type of password that is required. Possible values are: deviceDefault, prompt, autoGrant, autoDeny.
@@ -789,7 +913,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileDefaultAppPermissionPolicy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordBlockFaceUnlock
     * Indicates whether or not to block face unlock for work profile.
@@ -804,7 +928,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordBlockFaceUnlock
     * Indicates whether or not to block face unlock for work profile.
@@ -818,7 +942,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordBlockFaceUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordBlockFingerprintUnlock
     * Indicates whether or not to block fingerprint unlock for work profile.
@@ -833,7 +957,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordBlockFingerprintUnlock
     * Indicates whether or not to block fingerprint unlock for work profile.
@@ -847,7 +971,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordBlockFingerprintUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordBlockIrisUnlock
     * Indicates whether or not to block iris unlock for work profile.
@@ -862,7 +986,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordBlockIrisUnlock
     * Indicates whether or not to block iris unlock for work profile.
@@ -876,7 +1000,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordBlockIrisUnlock"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordBlockTrustAgents
     * Indicates whether or not to block Smart Lock and other trust agents for work profile.
@@ -891,7 +1015,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordBlockTrustAgents
     * Indicates whether or not to block Smart Lock and other trust agents for work profile.
@@ -905,7 +1029,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordBlockTrustAgents"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordExpirationDays
     * Number of days before the work profile password expires. Valid values 1 to 365
@@ -920,7 +1044,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordExpirationDays
     * Number of days before the work profile password expires. Valid values 1 to 365
@@ -934,7 +1058,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordExpirationDays"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinimumLength
     * Minimum length of work profile password. Valid values 4 to 16
@@ -949,7 +1073,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinimumLength
     * Minimum length of work profile password. Valid values 4 to 16
@@ -963,7 +1087,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinimumLength"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinLetterCharacters
     * Minimum # of letter characters required in work profile password. Valid values 1 to 10
@@ -978,7 +1102,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinLetterCharacters
     * Minimum # of letter characters required in work profile password. Valid values 1 to 10
@@ -992,7 +1116,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinLetterCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinLowerCaseCharacters
     * Minimum # of lower-case characters required in work profile password. Valid values 1 to 10
@@ -1007,7 +1131,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinLowerCaseCharacters
     * Minimum # of lower-case characters required in work profile password. Valid values 1 to 10
@@ -1021,7 +1145,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinLowerCaseCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinNonLetterCharacters
     * Minimum # of non-letter characters required in work profile password. Valid values 1 to 10
@@ -1036,7 +1160,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinNonLetterCharacters
     * Minimum # of non-letter characters required in work profile password. Valid values 1 to 10
@@ -1050,7 +1174,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinNonLetterCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinNumericCharacters
     * Minimum # of numeric characters required in work profile password. Valid values 1 to 10
@@ -1065,7 +1189,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinNumericCharacters
     * Minimum # of numeric characters required in work profile password. Valid values 1 to 10
@@ -1079,7 +1203,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinNumericCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinSymbolCharacters
     * Minimum # of symbols required in work profile password. Valid values 1 to 10
@@ -1094,7 +1218,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinSymbolCharacters
     * Minimum # of symbols required in work profile password. Valid values 1 to 10
@@ -1108,7 +1232,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinSymbolCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinUpperCaseCharacters
     * Minimum # of upper-case characters required in work profile password. Valid values 1 to 10
@@ -1123,7 +1247,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinUpperCaseCharacters
     * Minimum # of upper-case characters required in work profile password. Valid values 1 to 10
@@ -1137,7 +1261,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinUpperCaseCharacters"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordMinutesOfInactivityBeforeScreenTimeout
     * Minutes of inactivity before the screen times out.
@@ -1152,7 +1276,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordMinutesOfInactivityBeforeScreenTimeout
     * Minutes of inactivity before the screen times out.
@@ -1166,7 +1290,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordMinutesOfInactivityBeforeScreenTimeout"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordPreviousPasswordBlockCount
     * Number of previous work profile passwords to block. Valid values 0 to 24
@@ -1181,7 +1305,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordPreviousPasswordBlockCount
     * Number of previous work profile passwords to block. Valid values 0 to 24
@@ -1195,7 +1319,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordPreviousPasswordBlockCount"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordRequiredType
     * Type of work profile password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols.
@@ -1214,7 +1338,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         }
         return null;
     }
-    
+
     /**
     * Sets the workProfilePasswordRequiredType
     * Type of work profile password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols.
@@ -1228,7 +1352,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordRequiredType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the workProfilePasswordSignInFailureCountBeforeFactoryReset
     * Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 1 to 16
@@ -1243,7 +1367,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfilePasswordSignInFailureCountBeforeFactoryReset
     * Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 1 to 16
@@ -1257,7 +1381,40 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfilePasswordSignInFailureCountBeforeFactoryReset"] = intval($val);
         return $this;
     }
-    
+
+    /**
+    * Gets the workProfileRequiredPasswordComplexity
+    * Indicates the required work profile password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: none, low, medium, high.
+    *
+    * @return AndroidRequiredPasswordComplexity|null The workProfileRequiredPasswordComplexity
+    */
+    public function getWorkProfileRequiredPasswordComplexity()
+    {
+        if (array_key_exists("workProfileRequiredPasswordComplexity", $this->_propDict)) {
+            if (is_a($this->_propDict["workProfileRequiredPasswordComplexity"], "\Beta\Microsoft\Graph\Model\AndroidRequiredPasswordComplexity") || is_null($this->_propDict["workProfileRequiredPasswordComplexity"])) {
+                return $this->_propDict["workProfileRequiredPasswordComplexity"];
+            } else {
+                $this->_propDict["workProfileRequiredPasswordComplexity"] = new AndroidRequiredPasswordComplexity($this->_propDict["workProfileRequiredPasswordComplexity"]);
+                return $this->_propDict["workProfileRequiredPasswordComplexity"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the workProfileRequiredPasswordComplexity
+    * Indicates the required work profile password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: none, low, medium, high.
+    *
+    * @param AndroidRequiredPasswordComplexity $val The workProfileRequiredPasswordComplexity
+    *
+    * @return AndroidWorkProfileGeneralDeviceConfiguration
+    */
+    public function setWorkProfileRequiredPasswordComplexity($val)
+    {
+        $this->_propDict["workProfileRequiredPasswordComplexity"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the workProfileRequirePassword
     * Password is required or not for work profile
@@ -1272,7 +1429,7 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
             return null;
         }
     }
-    
+
     /**
     * Sets the workProfileRequirePassword
     * Password is required or not for work profile
@@ -1286,5 +1443,5 @@ class AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration
         $this->_propDict["workProfileRequirePassword"] = boolval($val);
         return $this;
     }
-    
+
 }

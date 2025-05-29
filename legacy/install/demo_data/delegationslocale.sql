@@ -1,0 +1,1 @@
+REPLACE INTO delegationslocale (id, name, date_entered, date_modified, date_indexed, modified_user_id, created_by, description, deleted, assigned_user_id, regimen_value, currency_id, accommodation_value, archival) VALUES ('ade4e2fd-a660-6a39-1174-5cebfbd5e796','USA','2025-03-15 15:43:35','2025-03-15 15:43:35','2025-03-18 15:36:42','1','1',NULL,'0',NULL,'50','-99','100','0');

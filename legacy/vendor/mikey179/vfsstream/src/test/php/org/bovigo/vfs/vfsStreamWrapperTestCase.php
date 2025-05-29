@@ -8,6 +8,8 @@
  * @package  org\bovigo\vfs
  */
 namespace org\bovigo\vfs;
+use PHPUnit\Framework\Error;
+
 require_once __DIR__ . '/vfsStreamWrapperBaseTestCase.php';
 /**
  * Test for org\bovigo\vfs\vfsStreamWrapper.
@@ -405,7 +407,7 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
         $baz3URL = vfsStream::url('foo/baz3');
         $this->assertTrue(rename($this->barURL, $baz3URL));
         $this->assertFileExists($baz3URL);
-        $this->assertFileNotExists($this->barURL);
+        $this->assertFileDoesNotExist($this->barURL);
     }
 
     /**
@@ -417,7 +419,7 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
         $baz3URL = vfsStream::url('foo/baz3');
         $this->assertTrue(rename($this->barURL . '/.', $baz3URL));
         $this->assertFileExists($baz3URL);
-        $this->assertFileNotExists($this->barURL);
+        $this->assertFileDoesNotExist($this->barURL);
     }
 
     /**
@@ -431,7 +433,7 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
         $baz3URL = vfsStream::url('foo/../baz3/.');
         $this->assertTrue(rename($this->barURL . '/.', $baz3URL));
         $this->assertFileExists($baz3URL);
-        $this->assertFileNotExists($this->barURL);
+        $this->assertFileDoesNotExist($this->barURL);
     }
 
     /**
@@ -443,20 +445,20 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
         // move foo/bar to foo/baz2
         $this->assertTrue(rename($this->barURL, $this->baz2URL));
         $this->assertFileExists(vfsStream::url('foo/baz2/baz1'));
-        $this->assertFileNotExists($this->barURL);
+        $this->assertFileDoesNotExist($this->barURL);
     }
 
     /**
      * @test
-     * @expectedException  PHPUnit_Framework_Error
      */
     public function renameFileIntoFile()
     {
+        $this->expectException(Error\Warning::class);
         // foo/baz2 is a file, so it can not be turned into a directory
         $baz3URL = vfsStream::url('foo/baz2/baz3');
         $this->assertTrue(rename($this->baz1URL, $baz3URL));
         $this->assertFileExists($baz3URL);
-        $this->assertFileNotExists($this->baz1URL);
+        $this->assertFileDoesNotExist($this->baz1URL);
     }
 
     /**
@@ -470,27 +472,27 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
         $this->assertTrue(rename($this->baz1URL, $baz3URL));
         $this->assertFileExists($this->barURL);
         $this->assertFileExists($baz3URL);
-        $this->assertFileNotExists($this->baz1URL);
+        $this->assertFileDoesNotExist($this->baz1URL);
     }
 
     /**
      * assert that trying to rename from a non existing file trigger a warning
      *
-     * @expectedException PHPUnit_Framework_Error
      * @test
      */
     public function renameOnSourceFileNotFound()
     {
+        $this->expectException(Error\Warning::class);
         rename(vfsStream::url('notfound'), $this->baz1URL);
     }
     /**
      * assert that trying to rename to a directory that is not found trigger a warning
 
-     * @expectedException PHPUnit_Framework_Error
      * @test
      */
     public function renameOnDestinationDirectoryFileNotFound()
     {
+        $this->expectException(Error\Warning::class);
         rename($this->baz1URL, vfsStream::url('foo/notfound/file2'));
     }
     /**
@@ -619,10 +621,10 @@ class vfsStreamWrapperTestCase extends vfsStreamWrapperBaseTestCase
 
     /**
      * @test
-     * @expectedException PHPUnit_Framework_Error
      */
     public function openFileWithoutDirectory()
     {
+        $this->expectException(Error\Warning::class);
         vfsStreamWrapper::register();
         $this->assertFalse(file_get_contents(vfsStream::url('file.txt')));
     }

@@ -146,8 +146,36 @@ class ParticipantInfo extends Entity
         return $this;
     }
     /**
+    * Gets the participantId
+    * The participant ID of the participant. Read-only.
+    *
+    * @return string|null The participantId
+    */
+    public function getParticipantId()
+    {
+        if (array_key_exists("participantId", $this->_propDict)) {
+            return $this->_propDict["participantId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the participantId
+    * The participant ID of the participant. Read-only.
+    *
+    * @param string $val The value of the participantId
+    *
+    * @return ParticipantInfo
+    */
+    public function setParticipantId($val)
+    {
+        $this->_propDict["participantId"] = $val;
+        return $this;
+    }
+    /**
     * Gets the region
-    * The home region of the participant. This can be a country, a continent, or a larger geographic region. This does not change based on the participant's current physical location, unlike countryCode. Read-only.
+    * The home region of the participant. This can be a country, a continent, or a larger geographic region. This doesn't change based on the participant's current physical location. Read-only.
     *
     * @return string|null The region
     */
@@ -162,7 +190,7 @@ class ParticipantInfo extends Entity
 
     /**
     * Sets the region
-    * The home region of the participant. This can be a country, a continent, or a larger geographic region. This does not change based on the participant's current physical location, unlike countryCode. Read-only.
+    * The home region of the participant. This can be a country, a continent, or a larger geographic region. This doesn't change based on the participant's current physical location. Read-only.
     *
     * @param string $val The value of the region
     *

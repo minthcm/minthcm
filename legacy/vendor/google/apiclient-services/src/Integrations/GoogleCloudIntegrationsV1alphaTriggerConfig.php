@@ -32,6 +32,8 @@ class GoogleCloudIntegrationsV1alphaTriggerConfig extends \Google\Collection
    * @var string
    */
   public $errorCatcherId;
+  protected $inputVariablesType = GoogleCloudIntegrationsV1alphaTriggerConfigVariables::class;
+  protected $inputVariablesDataType = '';
   /**
    * @var string
    */
@@ -40,6 +42,8 @@ class GoogleCloudIntegrationsV1alphaTriggerConfig extends \Google\Collection
    * @var string
    */
   public $nextTasksExecutionPolicy;
+  protected $outputVariablesType = GoogleCloudIntegrationsV1alphaTriggerConfigVariables::class;
+  protected $outputVariablesDataType = '';
   protected $positionType = GoogleCloudIntegrationsV1alphaCoordinate::class;
   protected $positionDataType = '';
   /**
@@ -122,6 +126,20 @@ class GoogleCloudIntegrationsV1alphaTriggerConfig extends \Google\Collection
     return $this->errorCatcherId;
   }
   /**
+   * @param GoogleCloudIntegrationsV1alphaTriggerConfigVariables
+   */
+  public function setInputVariables(GoogleCloudIntegrationsV1alphaTriggerConfigVariables $inputVariables)
+  {
+    $this->inputVariables = $inputVariables;
+  }
+  /**
+   * @return GoogleCloudIntegrationsV1alphaTriggerConfigVariables
+   */
+  public function getInputVariables()
+  {
+    return $this->inputVariables;
+  }
+  /**
    * @param string
    */
   public function setLabel($label)
@@ -148,6 +166,20 @@ class GoogleCloudIntegrationsV1alphaTriggerConfig extends \Google\Collection
   public function getNextTasksExecutionPolicy()
   {
     return $this->nextTasksExecutionPolicy;
+  }
+  /**
+   * @param GoogleCloudIntegrationsV1alphaTriggerConfigVariables
+   */
+  public function setOutputVariables(GoogleCloudIntegrationsV1alphaTriggerConfigVariables $outputVariables)
+  {
+    $this->outputVariables = $outputVariables;
+  }
+  /**
+   * @return GoogleCloudIntegrationsV1alphaTriggerConfigVariables
+   */
+  public function getOutputVariables()
+  {
+    return $this->outputVariables;
   }
   /**
    * @param GoogleCloudIntegrationsV1alphaCoordinate

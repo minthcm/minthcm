@@ -11,17 +11,16 @@ use function is_array;
 
 /**
  * Event Arguments used when SQL queries for creating tables are generated inside {@see AbstractPlatform}.
+ *
+ * @deprecated
  */
 class SchemaAlterTableEventArgs extends SchemaEventArgs
 {
-    /** @var TableDiff */
-    private $tableDiff;
-
-    /** @var AbstractPlatform */
-    private $platform;
+    private TableDiff $tableDiff;
+    private AbstractPlatform $platform;
 
     /** @var string[] */
-    private $sql = [];
+    private array $sql = [];
 
     public function __construct(TableDiff $tableDiff, AbstractPlatform $platform)
     {
@@ -29,17 +28,13 @@ class SchemaAlterTableEventArgs extends SchemaEventArgs
         $this->platform  = $platform;
     }
 
-    /**
-     * @return TableDiff
-     */
+    /** @return TableDiff */
     public function getTableDiff()
     {
         return $this->tableDiff;
     }
 
-    /**
-     * @return AbstractPlatform
-     */
+    /** @return AbstractPlatform */
     public function getPlatform()
     {
         return $this->platform;
@@ -59,9 +54,7 @@ class SchemaAlterTableEventArgs extends SchemaEventArgs
         return $this;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getSql()
     {
         return $this->sql;

@@ -26,7 +26,7 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
 {
     /**
     * Gets the appDisplayName
-    * The friendly name of the application for which the event occurred.
+    * The friendly name of the application for which the event occurred. Possible values are: outlook.exe, excel.exe. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The appDisplayName
     */
@@ -38,10 +38,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the appDisplayName
-    * The friendly name of the application for which the event occurred.
+    * The friendly name of the application for which the event occurred. Possible values are: outlook.exe, excel.exe. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The appDisplayName
     *
@@ -52,10 +52,68 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         $this->_propDict["appDisplayName"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the appPublisher
+    * The publisher of the application. Supports: $select, $OrderBy. Read-only.
+    *
+    * @return string|null The appPublisher
+    */
+    public function getAppPublisher()
+    {
+        if (array_key_exists("appPublisher", $this->_propDict)) {
+            return $this->_propDict["appPublisher"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the appPublisher
+    * The publisher of the application. Supports: $select, $OrderBy. Read-only.
+    *
+    * @param string $val The appPublisher
+    *
+    * @return UserExperienceAnalyticsAppHealthDevicePerformanceDetails
+    */
+    public function setAppPublisher($val)
+    {
+        $this->_propDict["appPublisher"] = $val;
+        return $this;
+    }
+
+    /**
+    * Gets the appVersion
+    * The version of the application. Possible values are: 1.0.0.1, 75.65.23.9. Supports: $select, $OrderBy. Read-only.
+    *
+    * @return string|null The appVersion
+    */
+    public function getAppVersion()
+    {
+        if (array_key_exists("appVersion", $this->_propDict)) {
+            return $this->_propDict["appVersion"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the appVersion
+    * The version of the application. Possible values are: 1.0.0.1, 75.65.23.9. Supports: $select, $OrderBy. Read-only.
+    *
+    * @param string $val The appVersion
+    *
+    * @return UserExperienceAnalyticsAppHealthDevicePerformanceDetails
+    */
+    public function setAppVersion($val)
+    {
+        $this->_propDict["appVersion"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the deviceDisplayName
-    * The name of the device.
+    * The name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceDisplayName
     */
@@ -67,10 +125,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceDisplayName
-    * The name of the device.
+    * The name of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceDisplayName
     *
@@ -81,10 +139,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         $this->_propDict["deviceDisplayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceId
-    * The id of the device.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The deviceId
     */
@@ -96,10 +154,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceId
-    * The id of the device.
+    * The Intune device id of the device. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The deviceId
     *
@@ -110,10 +168,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         $this->_propDict["deviceId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the eventDateTime
-    * The time the event occurred.
+    * The time the event occurred. The value cannot be modified and is automatically populated when the statistics are computed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
     *
     * @return \DateTime|null The eventDateTime
     */
@@ -129,10 +187,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the eventDateTime
-    * The time the event occurred.
+    * The time the event occurred. The value cannot be modified and is automatically populated when the statistics are computed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2022 would look like this: '2022-01-01T00:00:00Z'. Returned by default. Read-only.
     *
     * @param \DateTime $val The eventDateTime
     *
@@ -143,10 +201,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         $this->_propDict["eventDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the eventType
-    * The type of the event.
+    * The type of the event. Supports: $select, $OrderBy. Read-only.
     *
     * @return string|null The eventType
     */
@@ -158,10 +216,10 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the eventType
-    * The type of the event.
+    * The type of the event. Supports: $select, $OrderBy. Read-only.
     *
     * @param string $val The eventType
     *
@@ -172,5 +230,5 @@ class UserExperienceAnalyticsAppHealthDevicePerformanceDetails extends Entity
         $this->_propDict["eventType"] = $val;
         return $this;
     }
-    
+
 }

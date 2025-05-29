@@ -8,6 +8,8 @@
  * @package  org\bovigo\vfs
  */
 namespace org\bovigo\vfs;
+use PHPUnit\Framework\Error;
+
 /**
  * Test for permissions related functionality.
  *
@@ -23,7 +25,7 @@ class PermissionsTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setup()
+    public function setUp(): void
     {
         $structure = array('test_directory' => array('test.file' => ''));
         $this->root = vfsStream::setup('root', null, $structure);
@@ -92,13 +94,14 @@ class PermissionsTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * @test
      * @group  issue_107
-     * @expectedException  PHPUnit_Framework_Error
-     * @expectedExceptionMessage  Can not create new file in non-writable path root
      * @requires PHP 5.4
      * @since  1.5.0
      */
     public function touchOnNonWriteableDirectoryTriggersError()
     {
+        $this->expectException(Error\Warning::class);
+        $this->expectExceptionMessage('Can not create new file in non-writable path root');
+
         $this->root->chmod(0555);
         touch($this->root->url() . '/touch.txt');
     }

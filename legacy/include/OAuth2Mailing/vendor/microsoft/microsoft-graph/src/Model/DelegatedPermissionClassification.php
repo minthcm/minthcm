@@ -26,7 +26,7 @@ class DelegatedPermissionClassification extends Entity
 {
     /**
     * Gets the classification
-    * The classification value being given. Possible value: low. Does not support $filter.
+    * The classification value being given. Possible value: low. Doesn't support $filter.
     *
     * @return PermissionClassificationType|null The classification
     */
@@ -42,10 +42,10 @@ class DelegatedPermissionClassification extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the classification
-    * The classification value being given. Possible value: low. Does not support $filter.
+    * The classification value being given. Possible value: low. Doesn't support $filter.
     *
     * @param PermissionClassificationType $val The classification
     *
@@ -56,10 +56,10 @@ class DelegatedPermissionClassification extends Entity
         $this->_propDict["classification"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the permissionId
-    * The unique identifier (id) for the delegated permission listed in the publishedPermissionScopes collection of the servicePrincipal. Required on create. Does not support $filter.
+    * The unique identifier (id) for the delegated permission listed in the oauth2PermissionScopes collection of the servicePrincipal. Required on create. Doesn't support $filter.
     *
     * @return string|null The permissionId
     */
@@ -71,10 +71,10 @@ class DelegatedPermissionClassification extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the permissionId
-    * The unique identifier (id) for the delegated permission listed in the publishedPermissionScopes collection of the servicePrincipal. Required on create. Does not support $filter.
+    * The unique identifier (id) for the delegated permission listed in the oauth2PermissionScopes collection of the servicePrincipal. Required on create. Doesn't support $filter.
     *
     * @param string $val The permissionId
     *
@@ -85,10 +85,10 @@ class DelegatedPermissionClassification extends Entity
         $this->_propDict["permissionId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the permissionName
-    * The claim value (value) for the delegated permission listed in the publishedPermissionScopes collection of the servicePrincipal. Does not support $filter.
+    * The claim value (value) for the delegated permission listed in the oauth2PermissionScopes collection of the servicePrincipal. Doesn't support $filter.
     *
     * @return string|null The permissionName
     */
@@ -100,10 +100,10 @@ class DelegatedPermissionClassification extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the permissionName
-    * The claim value (value) for the delegated permission listed in the publishedPermissionScopes collection of the servicePrincipal. Does not support $filter.
+    * The claim value (value) for the delegated permission listed in the oauth2PermissionScopes collection of the servicePrincipal. Doesn't support $filter.
     *
     * @param string $val The permissionName
     *
@@ -114,5 +114,5 @@ class DelegatedPermissionClassification extends Entity
         $this->_propDict["permissionName"] = $val;
         return $this;
     }
-    
+
 }

@@ -25,9 +25,9 @@ namespace Beta\Microsoft\Graph\Model;
 class UserExperienceAnalyticsOverview extends Entity
 {
 
-     /** 
+     /**
      * Gets the insights
-    * The user experience analytics insights.
+    * The user experience analytics insights. Read-only.
      *
      * @return array|null The insights
      */
@@ -39,12 +39,12 @@ class UserExperienceAnalyticsOverview extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the insights
-    * The user experience analytics insights.
+    * The user experience analytics insights. Read-only.
     *
-    * @param UserExperienceAnalyticsInsight $val The insights
+    * @param UserExperienceAnalyticsInsight[] $val The insights
     *
     * @return UserExperienceAnalyticsOverview
     */
@@ -53,5 +53,5 @@ class UserExperienceAnalyticsOverview extends Entity
         $this->_propDict["insights"] = $val;
         return $this;
     }
-    
+
 }

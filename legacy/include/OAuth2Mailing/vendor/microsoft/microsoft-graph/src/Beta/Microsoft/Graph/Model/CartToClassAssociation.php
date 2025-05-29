@@ -28,7 +28,7 @@ class CartToClassAssociation extends Entity
     * Gets the classroomIds
     * Identifiers of classrooms to be associated with device carts.
     *
-    * @return string|null The classroomIds
+    * @return array|null The classroomIds
     */
     public function getClassroomIds()
     {
@@ -38,12 +38,12 @@ class CartToClassAssociation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the classroomIds
     * Identifiers of classrooms to be associated with device carts.
     *
-    * @param string $val The classroomIds
+    * @param string[] $val The classroomIds
     *
     * @return CartToClassAssociation
     */
@@ -52,7 +52,7 @@ class CartToClassAssociation extends Entity
         $this->_propDict["classroomIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * DateTime the object was created.
@@ -71,7 +71,7 @@ class CartToClassAssociation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * DateTime the object was created.
@@ -85,7 +85,7 @@ class CartToClassAssociation extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * Admin provided description of the CartToClassAssociation.
@@ -100,7 +100,7 @@ class CartToClassAssociation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * Admin provided description of the CartToClassAssociation.
@@ -114,12 +114,12 @@ class CartToClassAssociation extends Entity
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the deviceCartIds
     * Identifiers of device carts to be associated with classes.
     *
-    * @return string|null The deviceCartIds
+    * @return array|null The deviceCartIds
     */
     public function getDeviceCartIds()
     {
@@ -129,12 +129,12 @@ class CartToClassAssociation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the deviceCartIds
     * Identifiers of device carts to be associated with classes.
     *
-    * @param string $val The deviceCartIds
+    * @param string[] $val The deviceCartIds
     *
     * @return CartToClassAssociation
     */
@@ -143,7 +143,7 @@ class CartToClassAssociation extends Entity
         $this->_propDict["deviceCartIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * Admin provided name of the device configuration.
@@ -158,7 +158,7 @@ class CartToClassAssociation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * Admin provided name of the device configuration.
@@ -172,7 +172,7 @@ class CartToClassAssociation extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * DateTime the object was last modified.
@@ -191,7 +191,7 @@ class CartToClassAssociation extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * DateTime the object was last modified.
@@ -205,7 +205,7 @@ class CartToClassAssociation extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the version
     * Version of the CartToClassAssociation.
@@ -220,7 +220,7 @@ class CartToClassAssociation extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the version
     * Version of the CartToClassAssociation.
@@ -234,5 +234,5 @@ class CartToClassAssociation extends Entity
         $this->_propDict["version"] = intval($val);
         return $this;
     }
-    
+
 }

@@ -1,0 +1,1 @@
+REPLACE INTO responsibilityactivities (id, name, date_entered, date_modified, date_indexed, modified_user_id, created_by, description, deleted, assigned_user_id) VALUES ('4c6270d8-f1a4-c79f-0113-5e076793d5ad','Research for new MIS','2025-03-15 15:43:35','2025-03-15 15:43:35','2025-03-18 15:36:40','1','1',NULL,'0','7451ac0d-c4d1-04f6-4666-5ce3c54ff383');

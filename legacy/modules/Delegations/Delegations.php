@@ -101,25 +101,25 @@ class Delegations extends Delegations_sugar
         $related_costs   = $this->costs->getBeans();
         foreach ($related_costs as $cost) {
             if ($cost->currency_id != '-99') {
-                $this->costs_sum += $cost->cost_amount;
+                $this->costs_sum += (float) $cost->cost_amount;
             }
         }
     }
 
-    protected function getExchangeRate()
+    protected function getExchangeRate() :float
     {
         $exchange_rate = $this->exchange_rate;
         if (!is_int($exchange_rate) || $exchange_rate === 0) {
             $exchange_rate = 1;
         }
-        return $exchange_rate;
+        return (float) $exchange_rate;
     }
 
     public function convertCurrencyFields()
     {
         $exchange_rate                         = $this->getExchangeRate();
-        $this->regiments_usdollar              = $this->regiments * $exchange_rate;
-        $this->accommodation_lump_sum_usdollar = $this->accommodation_lump_sum * $exchange_rate;
+        $this->regiments_usdollar              = $this->getAmount('regiments') * $exchange_rate;
+        $this->accommodation_lump_sum_usdollar = $this->getAmount('accommodation_lump_sum') * $exchange_rate;
         $this->total_expenses_usdollar         = $this->total_expenses * $exchange_rate;
         $this->obtained_sum_usdollar           = $this->obtained_sum * $$exchange_rate;
         $this->payoff_sum_usdollar             = $this->payoff_sum * $exchange_rate;
@@ -224,8 +224,8 @@ class Delegations extends Delegations_sugar
 
     public function countRegiments()
     {
-        $date1  = getDateTimeObject($this->start_date, true);
-        $date2  = getDateTimeObject($this->end_date, true);
+        $date1  = getDateTimeObject($this->start_date);
+        $date2  = getDateTimeObject($this->end_date);
         $period = $date1->diff($date2);
 
         $regiment = 0;
@@ -359,23 +359,26 @@ class Delegations extends Delegations_sugar
 
     public function countTotalExpenses()
     {
-        $this->total_expenses = $this->other + $this->accommodation_lump_sum + $this->total_accommodation + $this->regiments
-            + $this->transport_cost;
+        $this->total_expenses = $this->getAmount('other') + $this->getAmount('accommodation_lump_sum') + $this->getAmount('total_accommodation') + $this->getAmount('regiments') + $this->getAmount('transport_cost');
     }
 
     public function countPayoffSum()
     {
-        $this->total_expenses = (int) $this->total_expenses;
-        $this->obtained_sum = (int) $this->obtained_sum;
+        $this->total_expenses = (float) $this->total_expenses;
+        $this->obtained_sum = (float) $this->obtained_sum;
         $this->payoff_sum = ($this->total_expenses - $this->obtained_sum) > 0 ? ($this->total_expenses - $this->obtained_sum)
                 : 0;
     }
 
     public function countReturnSum()
     {
-        $this->total_expenses = (int) $this->total_expenses;
-        $this->obtained_sum = (int) $this->obtained_sum;
+        $this->total_expenses = (float) $this->total_expenses;
+        $this->obtained_sum = (float) $this->obtained_sum;
         $this->return_sum = ($this->total_expenses - $this->obtained_sum) < 0 ? ($this->obtained_sum - $this->total_expenses)
                 : 0;
+    }
+
+    private function getAmount($field_name) : float{
+        return (float) $this->$field_name ?? 0;
     }
 }

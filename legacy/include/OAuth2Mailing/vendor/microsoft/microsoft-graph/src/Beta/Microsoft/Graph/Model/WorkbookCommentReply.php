@@ -38,7 +38,7 @@ class WorkbookCommentReply extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the content
     * The content of replied comment.
@@ -52,7 +52,7 @@ class WorkbookCommentReply extends Entity
         $this->_propDict["content"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the contentType
     * Indicates the type for the replied comment.
@@ -67,7 +67,7 @@ class WorkbookCommentReply extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the contentType
     * Indicates the type for the replied comment.
@@ -81,5 +81,38 @@ class WorkbookCommentReply extends Entity
         $this->_propDict["contentType"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the task
+    * The task associated with the comment thread.
+    *
+    * @return WorkbookDocumentTask|null The task
+    */
+    public function getTask()
+    {
+        if (array_key_exists("task", $this->_propDict)) {
+            if (is_a($this->_propDict["task"], "\Beta\Microsoft\Graph\Model\WorkbookDocumentTask") || is_null($this->_propDict["task"])) {
+                return $this->_propDict["task"];
+            } else {
+                $this->_propDict["task"] = new WorkbookDocumentTask($this->_propDict["task"]);
+                return $this->_propDict["task"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the task
+    * The task associated with the comment thread.
+    *
+    * @param WorkbookDocumentTask $val The task
+    *
+    * @return WorkbookCommentReply
+    */
+    public function setTask($val)
+    {
+        $this->_propDict["task"] = $val;
+        return $this;
+    }
+
 }

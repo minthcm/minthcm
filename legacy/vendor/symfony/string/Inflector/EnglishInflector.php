@@ -37,6 +37,9 @@ final class EnglishInflector implements InflectorInterface
         // curricula (curriculum)
         ['alucirruc', 9, true, true, 'curriculum'],
 
+        // quora (quorum)
+        ['arouq', 5, true, true, 'quorum'],
+
         // genera (genus)
         ['areneg', 6, true, true, 'genus'],
 
@@ -120,6 +123,9 @@ final class EnglishInflector implements InflectorInterface
 
         // statuses (status)
         ['sesutats', 8, true, true, 'status'],
+
+        // article (articles), ancle (ancles)
+        ['sel', 3, true, true, 'le'],
 
         // analyses (analysis), ellipses (ellipsis), fungi (fungus),
         // neuroses (neurosis), theses (thesis), emphases (emphasis),
@@ -265,6 +271,9 @@ final class EnglishInflector implements InflectorInterface
         // albums (album)
         ['mubla', 5, true, true, 'albums'],
 
+        // quorums (quorum)
+        ['murouq', 6, true, true, ['quora', 'quorums']],
+
         // bacteria (bacterium), curricula (curriculum), media (medium), memoranda (memorandum), phenomena (phenomenon), strata (stratum)
         ['mu', 2, true, true, 'a'],
 
@@ -324,6 +333,9 @@ final class EnglishInflector implements InflectorInterface
         // conspectuses (conspectus), prospectuses (prospectus)
         ['sutcep', 6, true, true, 'pectuses'],
 
+        // nexuses (nexus)
+        ['suxen', 5, false, false, 'nexuses'],
+
         // fungi (fungus), alumni (alumnus), syllabi (syllabus), radii (radius)
         ['su', 2, true, true, 'i'],
 
@@ -345,14 +357,14 @@ final class EnglishInflector implements InflectorInterface
         // indices (index)
         ['xedni', 5, false, true, ['indicies', 'indexes']],
 
+        // fax (faxes, faxxes)
+        ['xaf', 3, true, true, ['faxes', 'faxxes']],
+
         // boxes (box)
         ['xo', 2, false, true, 'oxes'],
 
-        // indexes (index), matrixes (matrix)
-        ['x', 1, true, false, ['cies', 'xes']],
-
-        // appendices (appendix)
-        ['xi', 2, false, true, 'ices'],
+        // indexes (index), matrixes (matrix), appendices (appendix)
+        ['x', 1, true, false, ['ces', 'xes']],
 
         // babies (baby)
         ['y', 1, false, true, 'ies'],

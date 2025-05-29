@@ -26,6 +26,7 @@ class AccessPackageSubject extends Entity
 {
     /**
     * Gets the altSecId
+    * Not Supported.
     *
     * @return string|null The altSecId
     */
@@ -37,9 +38,10 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the altSecId
+    * Not Supported.
     *
     * @param string $val The altSecId
     *
@@ -50,9 +52,43 @@ class AccessPackageSubject extends Entity
         $this->_propDict["altSecId"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the cleanupScheduledDateTime
+    * The date and time the subject is marked to be blocked from sign in or deleted. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time.
+    *
+    * @return \DateTime|null The cleanupScheduledDateTime
+    */
+    public function getCleanupScheduledDateTime()
+    {
+        if (array_key_exists("cleanupScheduledDateTime", $this->_propDict)) {
+            if (is_a($this->_propDict["cleanupScheduledDateTime"], "\DateTime") || is_null($this->_propDict["cleanupScheduledDateTime"])) {
+                return $this->_propDict["cleanupScheduledDateTime"];
+            } else {
+                $this->_propDict["cleanupScheduledDateTime"] = new \DateTime($this->_propDict["cleanupScheduledDateTime"]);
+                return $this->_propDict["cleanupScheduledDateTime"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the cleanupScheduledDateTime
+    * The date and time the subject is marked to be blocked from sign in or deleted. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time.
+    *
+    * @param \DateTime $val The cleanupScheduledDateTime
+    *
+    * @return AccessPackageSubject
+    */
+    public function setCleanupScheduledDateTime($val)
+    {
+        $this->_propDict["cleanupScheduledDateTime"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the connectedOrganizationId
+    * The identifier of the connected organization of the subject.
     *
     * @return string|null The connectedOrganizationId
     */
@@ -64,9 +100,10 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the connectedOrganizationId
+    * The identifier of the connected organization of the subject.
     *
     * @param string $val The connectedOrganizationId
     *
@@ -77,7 +114,7 @@ class AccessPackageSubject extends Entity
         $this->_propDict["connectedOrganizationId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The display name of the subject.
@@ -92,7 +129,7 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The display name of the subject.
@@ -106,7 +143,7 @@ class AccessPackageSubject extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the email
     * The email address of the subject.
@@ -121,7 +158,7 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the email
     * The email address of the subject.
@@ -135,10 +172,10 @@ class AccessPackageSubject extends Entity
         $this->_propDict["email"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the objectId
-    * The object ID of the subject.
+    * The object identifier of the subject. null if the subject isn't yet a user in the tenant. Alternate key.
     *
     * @return string|null The objectId
     */
@@ -150,10 +187,10 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the objectId
-    * The object ID of the subject.
+    * The object identifier of the subject. null if the subject isn't yet a user in the tenant. Alternate key.
     *
     * @param string $val The objectId
     *
@@ -164,7 +201,7 @@ class AccessPackageSubject extends Entity
         $this->_propDict["objectId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the onPremisesSecurityIdentifier
     *
@@ -178,7 +215,7 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the onPremisesSecurityIdentifier
     *
@@ -191,7 +228,7 @@ class AccessPackageSubject extends Entity
         $this->_propDict["onPremisesSecurityIdentifier"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the principalName
     * The principal name, if known, of the subject.
@@ -206,7 +243,7 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the principalName
     * The principal name, if known, of the subject.
@@ -220,7 +257,40 @@ class AccessPackageSubject extends Entity
         $this->_propDict["principalName"] = $val;
         return $this;
     }
-    
+
+    /**
+    * Gets the subjectLifecycle
+    * The lifecycle of the subject user, if a guest. The possible values are: notDefined, notGoverned, governed, unknownFutureValue.
+    *
+    * @return AccessPackageSubjectLifecycle|null The subjectLifecycle
+    */
+    public function getSubjectLifecycle()
+    {
+        if (array_key_exists("subjectLifecycle", $this->_propDict)) {
+            if (is_a($this->_propDict["subjectLifecycle"], "\Beta\Microsoft\Graph\Model\AccessPackageSubjectLifecycle") || is_null($this->_propDict["subjectLifecycle"])) {
+                return $this->_propDict["subjectLifecycle"];
+            } else {
+                $this->_propDict["subjectLifecycle"] = new AccessPackageSubjectLifecycle($this->_propDict["subjectLifecycle"]);
+                return $this->_propDict["subjectLifecycle"];
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Sets the subjectLifecycle
+    * The lifecycle of the subject user, if a guest. The possible values are: notDefined, notGoverned, governed, unknownFutureValue.
+    *
+    * @param AccessPackageSubjectLifecycle $val The subjectLifecycle
+    *
+    * @return AccessPackageSubject
+    */
+    public function setSubjectLifecycle($val)
+    {
+        $this->_propDict["subjectLifecycle"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the type
     * The resource type of the subject.
@@ -235,7 +305,7 @@ class AccessPackageSubject extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the type
     * The resource type of the subject.
@@ -249,9 +319,10 @@ class AccessPackageSubject extends Entity
         $this->_propDict["type"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the connectedOrganization
+    * The connected organization of the subject. Read-only. Nullable.
     *
     * @return ConnectedOrganization|null The connectedOrganization
     */
@@ -267,9 +338,10 @@ class AccessPackageSubject extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the connectedOrganization
+    * The connected organization of the subject. Read-only. Nullable.
     *
     * @param ConnectedOrganization $val The connectedOrganization
     *
@@ -280,5 +352,5 @@ class AccessPackageSubject extends Entity
         $this->_propDict["connectedOrganization"] = $val;
         return $this;
     }
-    
+
 }

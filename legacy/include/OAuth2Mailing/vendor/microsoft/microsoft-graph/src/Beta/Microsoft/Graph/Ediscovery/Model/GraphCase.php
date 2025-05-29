@@ -42,21 +42,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the closedBy
     * The user who closed the case.
     *
     * @param \Beta\Microsoft\Graph\Model\IdentitySet $val The closedBy
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setClosedBy($val)
     {
         $this->_propDict["closedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the closedDateTime
     * The date and time when the case was closed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -75,21 +75,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the closedDateTime
     * The date and time when the case was closed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @param \DateTime $val The closedDateTime
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setClosedDateTime($val)
     {
         $this->_propDict["closedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the createdDateTime
     * The date and time when the entity was created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -108,21 +108,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The date and time when the entity was created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @param \DateTime $val The createdDateTime
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setCreatedDateTime($val)
     {
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the description
     * The case description.
@@ -137,21 +137,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the description
     * The case description.
     *
     * @param string $val The description
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setDescription($val)
     {
         $this->_propDict["description"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * The case name.
@@ -166,21 +166,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * The case name.
     *
     * @param string $val The displayName
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setDisplayName($val)
     {
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the externalId
     * The external case number for customer reference.
@@ -195,21 +195,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the externalId
     * The external case number for customer reference.
     *
     * @param string $val The externalId
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setExternalId($val)
     {
         $this->_propDict["externalId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedBy
     * The last user who modified the entity.
@@ -228,21 +228,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedBy
     * The last user who modified the entity.
     *
     * @param \Beta\Microsoft\Graph\Model\IdentitySet $val The lastModifiedBy
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setLastModifiedBy($val)
     {
         $this->_propDict["lastModifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * The latest date and time when the case was modified. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -261,21 +261,21 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * The latest date and time when the case was modified. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     *
     * @param \DateTime $val The lastModifiedDateTime
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setLastModifiedDateTime($val)
     {
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
     * The case status. Possible values are unknown, active, pendingDelete, closing, closed, and closedWithError. For details, see the following table.
@@ -294,23 +294,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
     * The case status. Possible values are unknown, active, pendingDelete, closing, closed, and closedWithError. For details, see the following table.
     *
     * @param CaseStatus $val The status
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setStatus($val)
     {
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the custodians
     * Returns a list of case custodian objects for this case.  Nullable.
      *
@@ -324,23 +324,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the custodians
     * Returns a list of case custodian objects for this case.  Nullable.
     *
-    * @param Custodian $val The custodians
+    * @param Custodian[] $val The custodians
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setCustodians($val)
     {
         $this->_propDict["custodians"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the legalHolds
     * Returns a list of case legalHold objects for this case.  Nullable.
      *
@@ -354,23 +354,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the legalHolds
     * Returns a list of case legalHold objects for this case.  Nullable.
     *
-    * @param LegalHold $val The legalHolds
+    * @param LegalHold[] $val The legalHolds
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setLegalHolds($val)
     {
         $this->_propDict["legalHolds"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the noncustodialDataSources
     * Returns a list of case noncustodialDataSource objects for this case.  Nullable.
      *
@@ -384,23 +384,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the noncustodialDataSources
     * Returns a list of case noncustodialDataSource objects for this case.  Nullable.
     *
-    * @param NoncustodialDataSource $val The noncustodialDataSources
+    * @param NoncustodialDataSource[] $val The noncustodialDataSources
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setNoncustodialDataSources($val)
     {
         $this->_propDict["noncustodialDataSources"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the operations
     * Returns a list of case operation objects for this case. Nullable.
      *
@@ -414,23 +414,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the operations
     * Returns a list of case operation objects for this case. Nullable.
     *
-    * @param CaseOperation $val The operations
+    * @param CaseOperation[] $val The operations
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setOperations($val)
     {
         $this->_propDict["operations"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the reviewSets
     * Returns a list of reviewSet objects in the case. Read-only. Nullable.
      *
@@ -444,54 +444,54 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the reviewSets
     * Returns a list of reviewSet objects in the case. Read-only. Nullable.
     *
-    * @param ReviewSet $val The reviewSets
+    * @param ReviewSet[] $val The reviewSets
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setReviewSets($val)
     {
         $this->_propDict["reviewSets"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the settings
     *
-    * @return Settings|null The settings
+    * @return CaseSettings|null The settings
     */
     public function getSettings()
     {
         if (array_key_exists("settings", $this->_propDict)) {
-            if (is_a($this->_propDict["settings"], "\Beta\Microsoft\Graph\Ediscovery\Model\Settings") || is_null($this->_propDict["settings"])) {
+            if (is_a($this->_propDict["settings"], "\Beta\Microsoft\Graph\Ediscovery\Model\CaseSettings") || is_null($this->_propDict["settings"])) {
                 return $this->_propDict["settings"];
             } else {
-                $this->_propDict["settings"] = new Settings($this->_propDict["settings"]);
+                $this->_propDict["settings"] = new CaseSettings($this->_propDict["settings"]);
                 return $this->_propDict["settings"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the settings
     *
-    * @param Settings $val The settings
+    * @param CaseSettings $val The settings
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setSettings($val)
     {
         $this->_propDict["settings"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the sourceCollections
     * Returns a list of sourceCollection objects associated with this case.
      *
@@ -505,23 +505,23 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the sourceCollections
     * Returns a list of sourceCollection objects associated with this case.
     *
-    * @param SourceCollection $val The sourceCollections
+    * @param SourceCollection[] $val The sourceCollections
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setSourceCollections($val)
     {
         $this->_propDict["sourceCollections"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the tags
     * Returns a list of tag objects associated to this case.
      *
@@ -535,19 +535,19 @@ class GraphCase extends \Beta\Microsoft\Graph\Model\Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the tags
     * Returns a list of tag objects associated to this case.
     *
-    * @param Tag $val The tags
+    * @param Tag[] $val The tags
     *
-    * @return Case
+    * @return GraphCase
     */
     public function setTags($val)
     {
         $this->_propDict["tags"] = $val;
         return $this;
     }
-    
+
 }

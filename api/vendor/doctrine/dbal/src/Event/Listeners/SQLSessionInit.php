@@ -9,15 +9,15 @@ use Doctrine\DBAL\Exception;
 
 /**
  * Session init listener for executing a single SQL statement right after a connection is opened.
+ *
+ * @deprecated Implement a middleware instead.
  */
 class SQLSessionInit implements EventSubscriber
 {
     /** @var string */
     protected $sql;
 
-    /**
-     * @param string $sql
-     */
+    /** @param string $sql */
     public function __construct($sql)
     {
         $this->sql = $sql;
@@ -34,7 +34,7 @@ class SQLSessionInit implements EventSubscriber
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSubscribedEvents()
     {

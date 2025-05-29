@@ -20,6 +20,10 @@ namespace Google\Service\CloudAlloyDBAdmin;
 class StorageDatabasecenterPartnerapiV1mainRetentionSettings extends \Google\Model
 {
   /**
+   * @var string
+   */
+  public $durationBasedRetention;
+  /**
    * @var int
    */
   public $quantityBasedRetention;
@@ -31,7 +35,25 @@ class StorageDatabasecenterPartnerapiV1mainRetentionSettings extends \Google\Mod
    * @var string
    */
   public $timeBasedRetention;
+  /**
+   * @var string
+   */
+  public $timestampBasedRetentionTime;
 
+  /**
+   * @param string
+   */
+  public function setDurationBasedRetention($durationBasedRetention)
+  {
+    $this->durationBasedRetention = $durationBasedRetention;
+  }
+  /**
+   * @return string
+   */
+  public function getDurationBasedRetention()
+  {
+    return $this->durationBasedRetention;
+  }
   /**
    * @param int
    */
@@ -73,6 +95,20 @@ class StorageDatabasecenterPartnerapiV1mainRetentionSettings extends \Google\Mod
   public function getTimeBasedRetention()
   {
     return $this->timeBasedRetention;
+  }
+  /**
+   * @param string
+   */
+  public function setTimestampBasedRetentionTime($timestampBasedRetentionTime)
+  {
+    $this->timestampBasedRetentionTime = $timestampBasedRetentionTime;
+  }
+  /**
+   * @return string
+   */
+  public function getTimestampBasedRetentionTime()
+  {
+    return $this->timestampBasedRetentionTime;
   }
 }
 

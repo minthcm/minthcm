@@ -6,6 +6,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Sequence;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\Deprecations\Deprecation;
 
 /**
  * Removes assets from a schema that are not in the default namespace.
@@ -16,15 +17,26 @@ use Doctrine\DBAL\Schema\Table;
  * non default namespaces.
  *
  * This visitor filters all these non-default namespaced tables and sequences
- * and removes them from the SChema instance.
+ * and removes them from the Schema instance.
+ *
+ * @deprecated Do not use namespaces if the target database platform doesn't support them.
  */
 class RemoveNamespacedAssets extends AbstractVisitor
 {
-    /** @var Schema|null */
-    private $schema;
+    private ?Schema $schema = null;
+
+    public function __construct()
+    {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5432',
+            'RemoveNamespacedAssets is deprecated. Do not use namespaces'
+                . " if the target database platform doesn't support them.",
+        );
+    }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptSchema(Schema $schema)
     {
@@ -32,7 +44,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptTable(Table $table)
     {
@@ -48,7 +60,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptSequence(Sequence $sequence)
     {
@@ -64,7 +76,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {

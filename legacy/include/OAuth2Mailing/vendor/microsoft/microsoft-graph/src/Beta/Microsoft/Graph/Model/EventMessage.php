@@ -42,7 +42,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the endDateTime
     * The end time of the requested meeting.
@@ -56,7 +56,7 @@ class EventMessage extends Message
         $this->_propDict["endDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the isAllDay
     *
@@ -70,7 +70,7 @@ class EventMessage extends Message
             return null;
         }
     }
-    
+
     /**
     * Sets the isAllDay
     *
@@ -83,10 +83,9 @@ class EventMessage extends Message
         $this->_propDict["isAllDay"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isDelegated
-    * True if this meeting request is accessible to a delegate, false otherwise. Default is false.
     *
     * @return bool|null The isDelegated
     */
@@ -98,10 +97,9 @@ class EventMessage extends Message
             return null;
         }
     }
-    
+
     /**
     * Sets the isDelegated
-    * True if this meeting request is accessible to a delegate, false otherwise. Default is false.
     *
     * @param bool $val The isDelegated
     *
@@ -112,7 +110,7 @@ class EventMessage extends Message
         $this->_propDict["isDelegated"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the isOutOfDate
     *
@@ -126,7 +124,7 @@ class EventMessage extends Message
             return null;
         }
     }
-    
+
     /**
     * Sets the isOutOfDate
     *
@@ -139,7 +137,7 @@ class EventMessage extends Message
         $this->_propDict["isOutOfDate"] = boolval($val);
         return $this;
     }
-    
+
     /**
     * Gets the location
     *
@@ -157,7 +155,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the location
     *
@@ -170,10 +168,9 @@ class EventMessage extends Message
         $this->_propDict["location"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the meetingMessageType
-    * The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted, meetingDeclined.
     *
     * @return MeetingMessageType|null The meetingMessageType
     */
@@ -189,10 +186,9 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the meetingMessageType
-    * The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted, meetingDeclined.
     *
     * @param MeetingMessageType $val The meetingMessageType
     *
@@ -203,7 +199,7 @@ class EventMessage extends Message
         $this->_propDict["meetingMessageType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the recurrence
     *
@@ -221,7 +217,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the recurrence
     *
@@ -234,7 +230,7 @@ class EventMessage extends Message
         $this->_propDict["recurrence"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the startDateTime
     *
@@ -252,7 +248,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the startDateTime
     *
@@ -265,7 +261,7 @@ class EventMessage extends Message
         $this->_propDict["startDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the type
     *
@@ -283,7 +279,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the type
     *
@@ -296,7 +292,7 @@ class EventMessage extends Message
         $this->_propDict["type"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the event
     * The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property.  Read-only.
@@ -315,7 +311,7 @@ class EventMessage extends Message
         }
         return null;
     }
-    
+
     /**
     * Sets the event
     * The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property.  Read-only.
@@ -329,5 +325,5 @@ class EventMessage extends Message
         $this->_propDict["event"] = $val;
         return $this;
     }
-    
+
 }

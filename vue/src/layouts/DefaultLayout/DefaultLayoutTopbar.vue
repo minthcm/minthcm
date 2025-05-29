@@ -66,8 +66,8 @@ const quickCreateMenu = computed<MenuListItem[]>(() => {
     var quick_create = []
     for (let qc of backend.initData.quick_create) {
         if (
-            backend.initData.modules[qc.module].acl.access == 89 && 
-            backend.initData.modules[qc.module].acl.edit == 90
+            backend.initData.modules[qc.module].acl.access == 89 &&
+            [75, 80, 90, 99].includes(backend.initData.modules[qc.module].acl.edit)
         ) {
             quick_create.push(qc)
         }

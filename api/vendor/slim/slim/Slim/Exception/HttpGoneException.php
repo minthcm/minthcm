@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Slim\Exception;
 
+/** @api */
 class HttpGoneException extends HttpSpecializedException
 {
     /**
@@ -22,6 +23,6 @@ class HttpGoneException extends HttpSpecializedException
      */
     protected $message = 'Gone.';
 
-    protected $title = '410 Gone';
-    protected $description = 'The target resource is no longer available at the origin server.';
+    protected string $title = '410 Gone';
+    protected string $description = 'The target resource is no longer available at the origin server.';
 }

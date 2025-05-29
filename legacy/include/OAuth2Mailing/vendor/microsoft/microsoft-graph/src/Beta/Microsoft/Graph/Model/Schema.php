@@ -26,7 +26,6 @@ class Schema extends Entity
 {
     /**
     * Gets the baseType
-    * Must be set to microsoft.graph.externalItem. Required.
     *
     * @return string|null The baseType
     */
@@ -38,10 +37,9 @@ class Schema extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the baseType
-    * Must be set to microsoft.graph.externalItem. Required.
     *
     * @param string $val The baseType
     *
@@ -52,11 +50,10 @@ class Schema extends Entity
         $this->_propDict["baseType"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the schemaProperties
-    * The properties defined for the items in the connection. The minimum number of properties is one, the maximum is 128.
      *
      * @return array|null The schemaProperties
      */
@@ -68,12 +65,11 @@ class Schema extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the schemaProperties
-    * The properties defined for the items in the connection. The minimum number of properties is one, the maximum is 128.
     *
-    * @param Property $val The schemaProperties
+    * @param Property[] $val The schemaProperties
     *
     * @return Schema
     */
@@ -82,5 +78,5 @@ class Schema extends Entity
         $this->_propDict["properties"] = $val;
         return $this;
     }
-    
+
 }

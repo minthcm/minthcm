@@ -42,7 +42,7 @@ class PolicySetItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * Creation time of the PolicySetItem.
@@ -56,7 +56,7 @@ class PolicySetItem extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
     * DisplayName of the PolicySetItem.
@@ -71,7 +71,7 @@ class PolicySetItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
     * DisplayName of the PolicySetItem.
@@ -85,7 +85,7 @@ class PolicySetItem extends Entity
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the errorCode
     * Error code if any occured. Possible values are: noError, unauthorized, notFound, deleted.
@@ -104,7 +104,7 @@ class PolicySetItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the errorCode
     * Error code if any occured. Possible values are: noError, unauthorized, notFound, deleted.
@@ -118,12 +118,12 @@ class PolicySetItem extends Entity
         $this->_propDict["errorCode"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the guidedDeploymentTags
     * Tags of the guided deployment
     *
-    * @return string|null The guidedDeploymentTags
+    * @return array|null The guidedDeploymentTags
     */
     public function getGuidedDeploymentTags()
     {
@@ -133,12 +133,12 @@ class PolicySetItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the guidedDeploymentTags
     * Tags of the guided deployment
     *
-    * @param string $val The guidedDeploymentTags
+    * @param string[] $val The guidedDeploymentTags
     *
     * @return PolicySetItem
     */
@@ -147,7 +147,7 @@ class PolicySetItem extends Entity
         $this->_propDict["guidedDeploymentTags"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the itemType
     * policySetType of the PolicySetItem.
@@ -162,7 +162,7 @@ class PolicySetItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the itemType
     * policySetType of the PolicySetItem.
@@ -176,7 +176,7 @@ class PolicySetItem extends Entity
         $this->_propDict["itemType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
     * Last modified time of the PolicySetItem.
@@ -195,7 +195,7 @@ class PolicySetItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
     * Last modified time of the PolicySetItem.
@@ -209,7 +209,7 @@ class PolicySetItem extends Entity
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the payloadId
     * PayloadId of the PolicySetItem.
@@ -224,7 +224,7 @@ class PolicySetItem extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the payloadId
     * PayloadId of the PolicySetItem.
@@ -238,7 +238,7 @@ class PolicySetItem extends Entity
         $this->_propDict["payloadId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the status
     * Status of the PolicySetItem. Possible values are: unknown, validating, partialSuccess, success, error, notAssigned.
@@ -257,7 +257,7 @@ class PolicySetItem extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the status
     * Status of the PolicySetItem. Possible values are: unknown, validating, partialSuccess, success, error, notAssigned.
@@ -271,5 +271,5 @@ class PolicySetItem extends Entity
         $this->_propDict["status"] = $val;
         return $this;
     }
-    
+
 }

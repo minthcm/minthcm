@@ -40,10 +40,7 @@ class Dataform extends \Google\Service
       "https://www.googleapis.com/auth/cloud-platform";
 
   public $projects_locations;
-  public $projects_locations_collections;
   public $projects_locations_repositories;
-  public $projects_locations_repositories_commentThreads;
-  public $projects_locations_repositories_commentThreads_comments;
   public $projects_locations_repositories_compilationResults;
   public $projects_locations_repositories_releaseConfigs;
   public $projects_locations_repositories_workflowConfigs;
@@ -84,6 +81,16 @@ class Dataform extends \Google\Service
                   'required' => true,
                 ],
               ],
+            ],'getConfig' => [
+              'path' => 'v1beta1/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
             ],'list' => [
               'path' => 'v1beta1/{+name}/locations',
               'httpMethod' => 'GET',
@@ -106,48 +113,18 @@ class Dataform extends \Google\Service
                   'type' => 'string',
                 ],
               ],
-            ],
-          ]
-        ]
-    );
-    $this->projects_locations_collections = new Dataform\Resource\ProjectsLocationsCollections(
-        $this,
-        $this->serviceName,
-        'collections',
-        [
-          'methods' => [
-            'getIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:getIamPolicy',
-              'httpMethod' => 'GET',
+            ],'updateConfig' => [
+              'path' => 'v1beta1/{+name}',
+              'httpMethod' => 'PATCH',
               'parameters' => [
-                'resource' => [
+                'name' => [
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ],
-                'options.requestedPolicyVersion' => [
+                'updateMask' => [
                   'location' => 'query',
-                  'type' => 'integer',
-                ],
-              ],
-            ],'setIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:setIamPolicy',
-              'httpMethod' => 'POST',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
                   'type' => 'string',
-                  'required' => true,
-                ],
-              ],
-            ],'testIamPermissions' => [
-              'path' => 'v1beta1/{+resource}:testIamPermissions',
-              'httpMethod' => 'POST',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
                 ],
               ],
             ],
@@ -356,74 +333,6 @@ class Dataform extends \Google\Service
               ],
             ],'testIamPermissions' => [
               'path' => 'v1beta1/{+resource}:testIamPermissions',
-              'httpMethod' => 'POST',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ],
-              ],
-            ],
-          ]
-        ]
-    );
-    $this->projects_locations_repositories_commentThreads = new Dataform\Resource\ProjectsLocationsRepositoriesCommentThreads(
-        $this,
-        $this->serviceName,
-        'commentThreads',
-        [
-          'methods' => [
-            'getIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:getIamPolicy',
-              'httpMethod' => 'GET',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ],
-                'options.requestedPolicyVersion' => [
-                  'location' => 'query',
-                  'type' => 'integer',
-                ],
-              ],
-            ],'setIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:setIamPolicy',
-              'httpMethod' => 'POST',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ],
-              ],
-            ],
-          ]
-        ]
-    );
-    $this->projects_locations_repositories_commentThreads_comments = new Dataform\Resource\ProjectsLocationsRepositoriesCommentThreadsComments(
-        $this,
-        $this->serviceName,
-        'comments',
-        [
-          'methods' => [
-            'getIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:getIamPolicy',
-              'httpMethod' => 'GET',
-              'parameters' => [
-                'resource' => [
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ],
-                'options.requestedPolicyVersion' => [
-                  'location' => 'query',
-                  'type' => 'integer',
-                ],
-              ],
-            ],'setIamPolicy' => [
-              'path' => 'v1beta1/{+resource}:setIamPolicy',
               'httpMethod' => 'POST',
               'parameters' => [
                 'resource' => [

@@ -57,6 +57,34 @@ class AttachmentItem extends Entity
          return $this;
     }
     /**
+    * Gets the contentId
+    * The CID or Content-Id of the attachment for referencing for the in-line attachments using the &amp;lt;img src='cid:contentId'&amp;gt; tag in HTML messages. Optional.
+    *
+    * @return string|null The contentId
+    */
+    public function getContentId()
+    {
+        if (array_key_exists("contentId", $this->_propDict)) {
+            return $this->_propDict["contentId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the contentId
+    * The CID or Content-Id of the attachment for referencing for the in-line attachments using the &amp;lt;img src='cid:contentId'&amp;gt; tag in HTML messages. Optional.
+    *
+    * @param string $val The value of the contentId
+    *
+    * @return AttachmentItem
+    */
+    public function setContentId($val)
+    {
+        $this->_propDict["contentId"] = $val;
+        return $this;
+    }
+    /**
     * Gets the contentType
     * The nature of the data in the attachment. Optional.
     *
@@ -114,7 +142,7 @@ class AttachmentItem extends Entity
     }
     /**
     * Gets the name
-    * The display name of the attachment. This can be a descriptive string and does not have to be the actual file name. Required.
+    * The display name of the attachment. This can be a descriptive string and doesn't have to be the actual file name. Required.
     *
     * @return string|null The name
     */
@@ -129,7 +157,7 @@ class AttachmentItem extends Entity
 
     /**
     * Sets the name
-    * The display name of the attachment. This can be a descriptive string and does not have to be the actual file name. Required.
+    * The display name of the attachment. This can be a descriptive string and doesn't have to be the actual file name. Required.
     *
     * @param string $val The value of the name
     *

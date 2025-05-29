@@ -42,7 +42,7 @@ class ListItem extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the contentType
     * The content type of this list item
@@ -56,7 +56,7 @@ class ListItem extends BaseItem
         $this->_propDict["contentType"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -75,7 +75,7 @@ class ListItem extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the sharepointIds
     * Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -89,7 +89,7 @@ class ListItem extends BaseItem
         $this->_propDict["sharepointIds"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the analytics
     * Analytics about the view activities that took place on this item.
@@ -108,7 +108,7 @@ class ListItem extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the analytics
     * Analytics about the view activities that took place on this item.
@@ -122,7 +122,37 @@ class ListItem extends BaseItem
         $this->_propDict["analytics"] = $val;
         return $this;
     }
-    
+
+
+     /**
+     * Gets the documentSetVersions
+    * Version information for a document set version created by a user.
+     *
+     * @return array|null The documentSetVersions
+     */
+    public function getDocumentSetVersions()
+    {
+        if (array_key_exists("documentSetVersions", $this->_propDict)) {
+           return $this->_propDict["documentSetVersions"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the documentSetVersions
+    * Version information for a document set version created by a user.
+    *
+    * @param DocumentSetVersion[] $val The documentSetVersions
+    *
+    * @return ListItem
+    */
+    public function setDocumentSetVersions($val)
+    {
+        $this->_propDict["documentSetVersions"] = $val;
+        return $this;
+    }
+
     /**
     * Gets the driveItem
     * For document libraries, the driveItem relationship exposes the listItem as a [driveItem][]
@@ -141,7 +171,7 @@ class ListItem extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the driveItem
     * For document libraries, the driveItem relationship exposes the listItem as a [driveItem][]
@@ -155,7 +185,7 @@ class ListItem extends BaseItem
         $this->_propDict["driveItem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the fields
     * The values of the columns set on this list item.
@@ -174,7 +204,7 @@ class ListItem extends BaseItem
         }
         return null;
     }
-    
+
     /**
     * Sets the fields
     * The values of the columns set on this list item.
@@ -188,9 +218,9 @@ class ListItem extends BaseItem
         $this->_propDict["fields"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the versions
     * The list of previous versions of the list item.
      *
@@ -204,12 +234,12 @@ class ListItem extends BaseItem
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the versions
     * The list of previous versions of the list item.
     *
-    * @param ListItemVersion $val The versions
+    * @param ListItemVersion[] $val The versions
     *
     * @return ListItem
     */
@@ -218,5 +248,5 @@ class ListItem extends BaseItem
         $this->_propDict["versions"] = $val;
         return $this;
     }
-    
+
 }

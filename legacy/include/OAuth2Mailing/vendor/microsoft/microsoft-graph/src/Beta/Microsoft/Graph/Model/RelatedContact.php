@@ -109,7 +109,6 @@ class RelatedContact extends Entity
     }
     /**
     * Gets the id
-    * Identity of the contact within Azure Active Directory.
     *
     * @return string|null The id
     */
@@ -124,7 +123,6 @@ class RelatedContact extends Entity
 
     /**
     * Sets the id
-    * Identity of the contact within Azure Active Directory.
     *
     * @param string $val The value of the id
     *

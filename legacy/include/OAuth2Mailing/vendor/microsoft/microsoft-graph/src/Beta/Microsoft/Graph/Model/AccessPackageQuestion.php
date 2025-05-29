@@ -52,6 +52,34 @@ class AccessPackageQuestion extends Entity
         return $this;
     }
     /**
+    * Gets the isAnswerEditable
+    * Specifies whether the requestor is allowed to edit answers to questions.
+    *
+    * @return bool|null The isAnswerEditable
+    */
+    public function getIsAnswerEditable()
+    {
+        if (array_key_exists("isAnswerEditable", $this->_propDict)) {
+            return $this->_propDict["isAnswerEditable"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isAnswerEditable
+    * Specifies whether the requestor is allowed to edit answers to questions.
+    *
+    * @param bool $val The value of the isAnswerEditable
+    *
+    * @return AccessPackageQuestion
+    */
+    public function setIsAnswerEditable($val)
+    {
+        $this->_propDict["isAnswerEditable"] = $val;
+        return $this;
+    }
+    /**
     * Gets the isRequired
     * Whether the requestor is required to supply an answer or not.
     *

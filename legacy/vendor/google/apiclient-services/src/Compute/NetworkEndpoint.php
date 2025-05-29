@@ -24,6 +24,10 @@ class NetworkEndpoint extends \Google\Model
    */
   public $annotations;
   /**
+   * @var int
+   */
+  public $clientDestinationPort;
+  /**
    * @var string
    */
   public $fqdn;
@@ -35,6 +39,10 @@ class NetworkEndpoint extends \Google\Model
    * @var string
    */
   public $ipAddress;
+  /**
+   * @var string
+   */
+  public $ipv6Address;
   /**
    * @var int
    */
@@ -53,6 +61,20 @@ class NetworkEndpoint extends \Google\Model
   public function getAnnotations()
   {
     return $this->annotations;
+  }
+  /**
+   * @param int
+   */
+  public function setClientDestinationPort($clientDestinationPort)
+  {
+    $this->clientDestinationPort = $clientDestinationPort;
+  }
+  /**
+   * @return int
+   */
+  public function getClientDestinationPort()
+  {
+    return $this->clientDestinationPort;
   }
   /**
    * @param string
@@ -95,6 +117,20 @@ class NetworkEndpoint extends \Google\Model
   public function getIpAddress()
   {
     return $this->ipAddress;
+  }
+  /**
+   * @param string
+   */
+  public function setIpv6Address($ipv6Address)
+  {
+    $this->ipv6Address = $ipv6Address;
+  }
+  /**
+   * @return string
+   */
+  public function getIpv6Address()
+  {
+    return $this->ipv6Address;
   }
   /**
    * @param int

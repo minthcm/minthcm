@@ -60,7 +60,8 @@ $module_menu=Array();
 if( empty($_REQUEST['record']) ) { $employee_id = ''; }
 else { $employee_id = $_REQUEST['record']; }
 
-if( is_admin($current_user) || ACLController::checkAccess('Employees', 'edit', true) )
+$employee = BeanFactory::newBean('Employees');
+if( is_admin($current_user) || $employee->ACLAccess('edit') )
 {
 $module_menu[] = Array("index.php?module=Employees&action=EditView&return_module=Employees&return_action=DetailView", $mod_strings['LNK_NEW_EMPLOYEE'],"Create");
 }

@@ -105,10 +105,10 @@ viewTools.form.startViewToolsValidation = function () {
    }
 };
 viewTools.form.onValidationEnd = function () {
-   if ( viewTools.form.error_count > 0 ) {
-      viewTools.GUI.statusBox.showStatus( SUGAR.language.get( 'app_strings', 'LBL_FORM_WITH_ERRORS' ), 'error', 6000 );
-      $("#bootstrap-container .mask").remove();
-   }
+    if ( viewTools.form.error_count > 0 ) {
+        viewTools.GUI.statusBox.showStatus( SUGAR.language.get( 'app_strings', 'LBL_FORM_WITH_ERRORS' ), 'error', 6000 );
+    }
+    viewTools.GUI.mask.hide();
    setTimeout( function () {
       viewTools.form.validation_state = 0;
       viewTools.form.enableSaveButton();

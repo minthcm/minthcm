@@ -23,7 +23,7 @@ class FilenameTestCase extends \BC_PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         vfsStream::setup('root');
         $this->rootDir = vfsStream::url('root');
@@ -53,11 +53,11 @@ class FilenameTestCase extends \BC_PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  UnexpectedValueException
-     * @expectedExceptionMessage  ailed to open dir
      */
     public function doesNotWorkWithInvalidName()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('ailed to open dir');
         $results = array();
         $it = new \RecursiveDirectoryIterator($this->rootDir . '/lost found/');
         foreach ($it as $f) {

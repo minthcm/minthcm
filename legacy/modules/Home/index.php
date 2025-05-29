@@ -270,7 +270,7 @@ foreach ($pages[$activePage]['columns'] as $colNum => $column) {
 $i = 0;
 while ($i < count($pages)) {
     if ($i == 0) {
-        $pageTabs[$i]['pageTitle'] = $GLOBALS['app_strings']['LBL_SUITE_DASHBOARD'];
+        $pageTabs[$i]['pageTitle'] = $pages[$i]['pageTitle'] ? $pages[$i]['pageTitle'] : $GLOBALS['app_strings']['LBL_SUITE_DASHBOARD'];
 //            $pageTabs[$i]['active'] = 'current';
     } else {
         $pageTabs[$i]['pageTitle'] = $pages[$i]['pageTitle'];

@@ -26,6 +26,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Gets the attributeDestination
+    * Information about how to set the attribute, currently a accessPackageUserDirectoryAttributeStore object type.
     *
     * @return AccessPackageResourceAttributeDestination|null The attributeDestination
     */
@@ -44,6 +45,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Sets the attributeDestination
+    * Information about how to set the attribute, currently a accessPackageUserDirectoryAttributeStore object type.
     *
     * @param AccessPackageResourceAttributeDestination $val The value to assign to the attributeDestination
     *
@@ -56,6 +58,7 @@ class AccessPackageResourceAttribute extends Entity
     }
     /**
     * Gets the attributeName
+    * The name of the attribute in the end system. If the destination is accessPackageUserDirectoryAttributeStore, then a user property such as jobTitle or a directory schema extension for the user object type, such as extension2b676109c7c74ae2b41549205f1947edpersonalTitle.
     *
     * @return string|null The attributeName
     */
@@ -70,6 +73,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Sets the attributeName
+    * The name of the attribute in the end system. If the destination is accessPackageUserDirectoryAttributeStore, then a user property such as jobTitle or a directory schema extension for the user object type, such as extension2b676109c7c74ae2b41549205f1947edpersonalTitle.
     *
     * @param string $val The value of the attributeName
     *
@@ -83,6 +87,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Gets the attributeSource
+    * Information about how to populate the attribute value when an accessPackageAssignmentRequest is being fulfilled, currently a accessPackageResourceAttributeQuestion object type.
     *
     * @return AccessPackageResourceAttributeSource|null The attributeSource
     */
@@ -101,6 +106,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Sets the attributeSource
+    * Information about how to populate the attribute value when an accessPackageAssignmentRequest is being fulfilled, currently a accessPackageResourceAttributeQuestion object type.
     *
     * @param AccessPackageResourceAttributeSource $val The value to assign to the attributeSource
     *
@@ -113,6 +119,7 @@ class AccessPackageResourceAttribute extends Entity
     }
     /**
     * Gets the id
+    * Unique identifier for the attribute on the access package resource. Read-only.
     *
     * @return string|null The id
     */
@@ -127,6 +134,7 @@ class AccessPackageResourceAttribute extends Entity
 
     /**
     * Sets the id
+    * Unique identifier for the attribute on the access package resource. Read-only.
     *
     * @param string $val The value of the id
     *
@@ -135,6 +143,62 @@ class AccessPackageResourceAttribute extends Entity
     public function setId($val)
     {
         $this->_propDict["id"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the isEditable
+    * Specifies whether or not an existing attribute value can be edited by the requester.
+    *
+    * @return bool|null The isEditable
+    */
+    public function getIsEditable()
+    {
+        if (array_key_exists("isEditable", $this->_propDict)) {
+            return $this->_propDict["isEditable"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isEditable
+    * Specifies whether or not an existing attribute value can be edited by the requester.
+    *
+    * @param bool $val The value of the isEditable
+    *
+    * @return AccessPackageResourceAttribute
+    */
+    public function setIsEditable($val)
+    {
+        $this->_propDict["isEditable"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the isPersistedOnAssignmentRemoval
+    * Specifies whether the attribute will remain in the end system after an assignment ends.
+    *
+    * @return bool|null The isPersistedOnAssignmentRemoval
+    */
+    public function getIsPersistedOnAssignmentRemoval()
+    {
+        if (array_key_exists("isPersistedOnAssignmentRemoval", $this->_propDict)) {
+            return $this->_propDict["isPersistedOnAssignmentRemoval"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the isPersistedOnAssignmentRemoval
+    * Specifies whether the attribute will remain in the end system after an assignment ends.
+    *
+    * @param bool $val The value of the isPersistedOnAssignmentRemoval
+    *
+    * @return AccessPackageResourceAttribute
+    */
+    public function setIsPersistedOnAssignmentRemoval($val)
+    {
+        $this->_propDict["isPersistedOnAssignmentRemoval"] = $val;
         return $this;
     }
 }

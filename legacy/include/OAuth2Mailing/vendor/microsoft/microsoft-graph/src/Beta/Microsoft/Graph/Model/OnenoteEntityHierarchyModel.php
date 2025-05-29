@@ -26,7 +26,6 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
 {
     /**
     * Gets the createdBy
-    * Identity of the user, device, and application which created the item. Read-only.
     *
     * @return IdentitySet|null The createdBy
     */
@@ -42,10 +41,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         }
         return null;
     }
-    
+
     /**
     * Sets the createdBy
-    * Identity of the user, device, and application which created the item. Read-only.
     *
     * @param IdentitySet $val The createdBy
     *
@@ -56,10 +54,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         $this->_propDict["createdBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the displayName
-    * The name of the notebook.
     *
     * @return string|null The displayName
     */
@@ -71,10 +68,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
             return null;
         }
     }
-    
+
     /**
     * Sets the displayName
-    * The name of the notebook.
     *
     * @param string $val The displayName
     *
@@ -85,10 +81,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         $this->_propDict["displayName"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedBy
-    * Identity of the user, device, and application which created the item. Read-only.
     *
     * @return IdentitySet|null The lastModifiedBy
     */
@@ -104,10 +99,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedBy
-    * Identity of the user, device, and application which created the item. Read-only.
     *
     * @param IdentitySet $val The lastModifiedBy
     *
@@ -118,10 +112,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         $this->_propDict["lastModifiedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the lastModifiedDateTime
-    * The date and time when the notebook was last modified. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @return \DateTime|null The lastModifiedDateTime
     */
@@ -137,10 +130,9 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         }
         return null;
     }
-    
+
     /**
     * Sets the lastModifiedDateTime
-    * The date and time when the notebook was last modified. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
     *
     * @param \DateTime $val The lastModifiedDateTime
     *
@@ -151,5 +143,5 @@ class OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel
         $this->_propDict["lastModifiedDateTime"] = $val;
         return $this;
     }
-    
+
 }

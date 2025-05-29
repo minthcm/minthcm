@@ -7,11 +7,12 @@ use Doctrine\DBAL\Schema\Column;
 
 /**
  * Event Arguments used when the portable column definition is generated inside {@see AbstractPlatform}.
+ *
+ * @deprecated
  */
 class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
 {
-    /** @var Column|null */
-    private $column;
+    private ?Column $column = null;
 
     /**
      * Raw column data as fetched from the database.
@@ -26,8 +27,7 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
     /** @var string */
     private $database;
 
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /**
      * @param mixed[] $tableColumn
@@ -55,41 +55,31 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
         return $this;
     }
 
-    /**
-     * @return Column|null
-     */
+    /** @return Column|null */
     public function getColumn()
     {
         return $this->column;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getTableColumn()
     {
         return $this->tableColumn;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getTable()
     {
         return $this->table;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getDatabase()
     {
         return $this->database;
     }
 
-    /**
-     * @return Connection
-     */
+    /** @return Connection */
     public function getConnection()
     {
         return $this->connection;

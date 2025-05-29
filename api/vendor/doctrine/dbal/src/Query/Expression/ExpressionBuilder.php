@@ -25,10 +25,8 @@ class ExpressionBuilder
 
     /**
      * The DBAL Connection.
-     *
-     * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Initializes a new <tt>ExpressionBuilder</tt>.
@@ -75,7 +73,7 @@ class ExpressionBuilder
         Deprecation::trigger(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/3851',
-            'ExpressionBuilder::andX() is deprecated, use ExpressionBuilder::and() instead.'
+            'ExpressionBuilder::andX() is deprecated, use ExpressionBuilder::and() instead.',
         );
 
         return new CompositeExpression(CompositeExpression::TYPE_AND, func_get_args());
@@ -94,7 +92,7 @@ class ExpressionBuilder
         Deprecation::trigger(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/3851',
-            'ExpressionBuilder::orX() is deprecated, use ExpressionBuilder::or() instead.'
+            'ExpressionBuilder::orX() is deprecated, use ExpressionBuilder::or() instead.',
         );
 
         return new CompositeExpression(CompositeExpression::TYPE_OR, func_get_args());

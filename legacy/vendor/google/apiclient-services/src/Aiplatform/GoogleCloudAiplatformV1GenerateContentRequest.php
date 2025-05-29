@@ -20,10 +20,18 @@ namespace Google\Service\Aiplatform;
 class GoogleCloudAiplatformV1GenerateContentRequest extends \Google\Collection
 {
   protected $collection_key = 'tools';
+  /**
+   * @var string
+   */
+  public $cachedContent;
   protected $contentsType = GoogleCloudAiplatformV1Content::class;
   protected $contentsDataType = 'array';
   protected $generationConfigType = GoogleCloudAiplatformV1GenerationConfig::class;
   protected $generationConfigDataType = '';
+  /**
+   * @var string[]
+   */
+  public $labels;
   protected $safetySettingsType = GoogleCloudAiplatformV1SafetySetting::class;
   protected $safetySettingsDataType = 'array';
   protected $systemInstructionType = GoogleCloudAiplatformV1Content::class;
@@ -33,6 +41,20 @@ class GoogleCloudAiplatformV1GenerateContentRequest extends \Google\Collection
   protected $toolsType = GoogleCloudAiplatformV1Tool::class;
   protected $toolsDataType = 'array';
 
+  /**
+   * @param string
+   */
+  public function setCachedContent($cachedContent)
+  {
+    $this->cachedContent = $cachedContent;
+  }
+  /**
+   * @return string
+   */
+  public function getCachedContent()
+  {
+    return $this->cachedContent;
+  }
   /**
    * @param GoogleCloudAiplatformV1Content[]
    */
@@ -60,6 +82,20 @@ class GoogleCloudAiplatformV1GenerateContentRequest extends \Google\Collection
   public function getGenerationConfig()
   {
     return $this->generationConfig;
+  }
+  /**
+   * @param string[]
+   */
+  public function setLabels($labels)
+  {
+    $this->labels = $labels;
+  }
+  /**
+   * @return string[]
+   */
+  public function getLabels()
+  {
+    return $this->labels;
   }
   /**
    * @param GoogleCloudAiplatformV1SafetySetting[]

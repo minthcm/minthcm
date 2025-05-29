@@ -23,6 +23,34 @@ namespace Microsoft\Graph\Model;
 */
 class InvitationParticipantInfo extends Entity
 {
+    /**
+    * Gets the hidden
+    * Optional. Whether to hide the participant from the roster.
+    *
+    * @return bool|null The hidden
+    */
+    public function getHidden()
+    {
+        if (array_key_exists("hidden", $this->_propDict)) {
+            return $this->_propDict["hidden"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the hidden
+    * Optional. Whether to hide the participant from the roster.
+    *
+    * @param bool $val The value of the hidden
+    *
+    * @return InvitationParticipantInfo
+    */
+    public function setHidden($val)
+    {
+        $this->_propDict["hidden"] = $val;
+        return $this;
+    }
 
     /**
     * Gets the identity
@@ -57,8 +85,64 @@ class InvitationParticipantInfo extends Entity
          return $this;
     }
     /**
+    * Gets the participantId
+    * Optional. The ID of the target participant.
+    *
+    * @return string|null The participantId
+    */
+    public function getParticipantId()
+    {
+        if (array_key_exists("participantId", $this->_propDict)) {
+            return $this->_propDict["participantId"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the participantId
+    * Optional. The ID of the target participant.
+    *
+    * @param string $val The value of the participantId
+    *
+    * @return InvitationParticipantInfo
+    */
+    public function setParticipantId($val)
+    {
+        $this->_propDict["participantId"] = $val;
+        return $this;
+    }
+    /**
+    * Gets the removeFromDefaultAudioRoutingGroup
+    * Optional. Whether to remove them from the main mixer.
+    *
+    * @return bool|null The removeFromDefaultAudioRoutingGroup
+    */
+    public function getRemoveFromDefaultAudioRoutingGroup()
+    {
+        if (array_key_exists("removeFromDefaultAudioRoutingGroup", $this->_propDict)) {
+            return $this->_propDict["removeFromDefaultAudioRoutingGroup"];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Sets the removeFromDefaultAudioRoutingGroup
+    * Optional. Whether to remove them from the main mixer.
+    *
+    * @param bool $val The value of the removeFromDefaultAudioRoutingGroup
+    *
+    * @return InvitationParticipantInfo
+    */
+    public function setRemoveFromDefaultAudioRoutingGroup($val)
+    {
+        $this->_propDict["removeFromDefaultAudioRoutingGroup"] = $val;
+        return $this;
+    }
+    /**
     * Gets the replacesCallId
-    * Optional. The call which the target idenity is currently a part of. This call will be dropped once the participant is added.
+    * Optional. The call which the target identity is currently a part of. For peer-to-peer case, the call will be dropped once the participant is added successfully.
     *
     * @return string|null The replacesCallId
     */
@@ -73,7 +157,7 @@ class InvitationParticipantInfo extends Entity
 
     /**
     * Sets the replacesCallId
-    * Optional. The call which the target idenity is currently a part of. This call will be dropped once the participant is added.
+    * Optional. The call which the target identity is currently a part of. For peer-to-peer case, the call will be dropped once the participant is added successfully.
     *
     * @param string $val The value of the replacesCallId
     *

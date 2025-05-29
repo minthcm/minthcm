@@ -36,13 +36,13 @@ class AndroidOmaCpConfiguration extends DeviceConfiguration
             if (is_a($this->_propDict["configurationXml"], "\GuzzleHttp\Psr7\Stream") || is_null($this->_propDict["configurationXml"])) {
                 return $this->_propDict["configurationXml"];
             } else {
-                $this->_propDict["configurationXml"] = \GuzzleHttp\Psr7\stream_for($this->_propDict["configurationXml"]);
+                $this->_propDict["configurationXml"] = \GuzzleHttp\Psr7\Utils::streamFor($this->_propDict["configurationXml"]);
                 return $this->_propDict["configurationXml"];
             }
         }
         return null;
     }
-    
+
     /**
     * Sets the configurationXml
     * Configuration XML that will be applied to the device. When it is read, it only provides a placeholder string since the original data is encrypted and stored.
@@ -56,5 +56,5 @@ class AndroidOmaCpConfiguration extends DeviceConfiguration
         $this->_propDict["configurationXml"] = $val;
         return $this;
     }
-    
+
 }

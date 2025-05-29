@@ -37,7 +37,7 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the action
     *
@@ -50,10 +50,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["action"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the activityDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * Represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.  Supports $filter (eq, gt, lt) and orderby.
     *
     * @return \DateTime|null The activityDateTime
     */
@@ -69,10 +69,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the activityDateTime
-    * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+    * Represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.  Supports $filter (eq, gt, lt) and orderby.
     *
     * @param \DateTime $val The activityDateTime
     *
@@ -83,10 +83,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["activityDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the changeId
-    * Unique ID of this change in this cycle.
+    * Unique ID of this change in this cycle. Supports $filter (eq, contains).
     *
     * @return string|null The changeId
     */
@@ -98,10 +98,10 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the changeId
-    * Unique ID of this change in this cycle.
+    * Unique ID of this change in this cycle. Supports $filter (eq, contains).
     *
     * @param string $val The changeId
     *
@@ -112,10 +112,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["changeId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the cycleId
-    * Unique ID per job iteration.
+    * Unique ID per job iteration. Supports $filter (eq, contains).
     *
     * @return string|null The cycleId
     */
@@ -127,10 +127,10 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the cycleId
-    * Unique ID per job iteration.
+    * Unique ID per job iteration. Supports $filter (eq, contains).
     *
     * @param string $val The cycleId
     *
@@ -141,10 +141,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["cycleId"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the durationInMilliseconds
-    * Indicates how long this provisioning action took to finish. Measured in milliseconds.
+    * Indicates how long this provisioning action took to finish. Measured in milliseconds. Supports $filter (eq, gt, lt).
     *
     * @return int|null The durationInMilliseconds
     */
@@ -156,10 +156,10 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the durationInMilliseconds
-    * Indicates how long this provisioning action took to finish. Measured in milliseconds.
+    * Indicates how long this provisioning action took to finish. Measured in milliseconds. Supports $filter (eq, gt, lt).
     *
     * @param int $val The durationInMilliseconds
     *
@@ -170,10 +170,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["durationInMilliseconds"] = intval($val);
         return $this;
     }
-    
+
     /**
     * Gets the initiatedBy
-    * Details of who initiated this provisioning.
+    * Details of who initiated this provisioning. Supports $filter (eq, contains).
     *
     * @return Initiator|null The initiatedBy
     */
@@ -189,10 +189,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the initiatedBy
-    * Details of who initiated this provisioning.
+    * Details of who initiated this provisioning. Supports $filter (eq, contains).
     *
     * @param Initiator $val The initiatedBy
     *
@@ -203,10 +203,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["initiatedBy"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the jobId
-    * The unique ID for the whole provisioning job.
+    * The unique ID for the whole provisioning job. Supports $filter (eq, contains).
     *
     * @return string|null The jobId
     */
@@ -218,10 +218,10 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the jobId
-    * The unique ID for the whole provisioning job.
+    * The unique ID for the whole provisioning job. Supports $filter (eq, contains).
     *
     * @param string $val The jobId
     *
@@ -232,9 +232,9 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["jobId"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the modifiedProperties
     * Details of each property that was modified in this provisioning action on this object.
      *
@@ -248,12 +248,12 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the modifiedProperties
     * Details of each property that was modified in this provisioning action on this object.
     *
-    * @param ModifiedProperty $val The modifiedProperties
+    * @param ModifiedProperty[] $val The modifiedProperties
     *
     * @return ProvisioningObjectSummary
     */
@@ -262,10 +262,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["modifiedProperties"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the provisioningAction
-    * Indicates the activity name or the operation name. Possible values are: create, update, delete, stageddelete, disable, other and unknownFutureValue. For a list of activities logged, refer to Azure AD activity list.
+    * Indicates the activity name or the operation name. Possible values are: create, update, delete, stageddelete, disable, other and unknownFutureValue. For a list of activities logged, refer to Microsoft Entra activity list. Supports $filter (eq, contains).
     *
     * @return ProvisioningAction|null The provisioningAction
     */
@@ -281,10 +281,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the provisioningAction
-    * Indicates the activity name or the operation name. Possible values are: create, update, delete, stageddelete, disable, other and unknownFutureValue. For a list of activities logged, refer to Azure AD activity list.
+    * Indicates the activity name or the operation name. Possible values are: create, update, delete, stageddelete, disable, other and unknownFutureValue. For a list of activities logged, refer to Microsoft Entra activity list. Supports $filter (eq, contains).
     *
     * @param ProvisioningAction $val The provisioningAction
     *
@@ -295,10 +295,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["provisioningAction"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the provisioningStatusInfo
-    * Details of provisioning status.
+    * Details of provisioning status. Supports $filter (eq, contains) for status.
     *
     * @return ProvisioningStatusInfo|null The provisioningStatusInfo
     */
@@ -314,10 +314,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the provisioningStatusInfo
-    * Details of provisioning status.
+    * Details of provisioning status. Supports $filter (eq, contains) for status.
     *
     * @param ProvisioningStatusInfo $val The provisioningStatusInfo
     *
@@ -328,9 +328,9 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["provisioningStatusInfo"] = $val;
         return $this;
     }
-    
 
-     /** 
+
+     /**
      * Gets the provisioningSteps
     * Details of each step in provisioning.
      *
@@ -344,12 +344,12 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
-    /** 
+
+    /**
     * Sets the provisioningSteps
     * Details of each step in provisioning.
     *
-    * @param ProvisioningStep $val The provisioningSteps
+    * @param ProvisioningStep[] $val The provisioningSteps
     *
     * @return ProvisioningObjectSummary
     */
@@ -358,10 +358,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["provisioningSteps"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the servicePrincipal
-    * Represents the service principal used for provisioning.
+    * Represents the service principal used for provisioning. Supports $filter (eq) for id and name.
     *
     * @return ProvisioningServicePrincipal|null The servicePrincipal
     */
@@ -377,10 +377,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the servicePrincipal
-    * Represents the service principal used for provisioning.
+    * Represents the service principal used for provisioning. Supports $filter (eq) for id and name.
     *
     * @param ProvisioningServicePrincipal $val The servicePrincipal
     *
@@ -391,10 +391,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["servicePrincipal"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sourceIdentity
-    * Details of source object being provisioned.
+    * Details of source object being provisioned. Supports $filter (eq, contains) for identityType, id, and displayName.
     *
     * @return ProvisionedIdentity|null The sourceIdentity
     */
@@ -410,10 +410,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the sourceIdentity
-    * Details of source object being provisioned.
+    * Details of source object being provisioned. Supports $filter (eq, contains) for identityType, id, and displayName.
     *
     * @param ProvisionedIdentity $val The sourceIdentity
     *
@@ -424,10 +424,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["sourceIdentity"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the sourceSystem
-    * Details of source system of the object being provisioned.
+    * Details of source system of the object being provisioned. Supports $filter (eq, contains) for displayName.
     *
     * @return ProvisioningSystem|null The sourceSystem
     */
@@ -443,10 +443,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the sourceSystem
-    * Details of source system of the object being provisioned.
+    * Details of source system of the object being provisioned. Supports $filter (eq, contains) for displayName.
     *
     * @param ProvisioningSystem $val The sourceSystem
     *
@@ -457,7 +457,7 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["sourceSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the statusInfo
     *
@@ -475,7 +475,7 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the statusInfo
     *
@@ -488,10 +488,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["statusInfo"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the targetIdentity
-    * Details of target object being provisioned.
+    * Details of target object being provisioned. Supports $filter (eq, contains) for identityType, id, and displayName.
     *
     * @return ProvisionedIdentity|null The targetIdentity
     */
@@ -507,10 +507,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the targetIdentity
-    * Details of target object being provisioned.
+    * Details of target object being provisioned. Supports $filter (eq, contains) for identityType, id, and displayName.
     *
     * @param ProvisionedIdentity $val The targetIdentity
     *
@@ -521,10 +521,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["targetIdentity"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the targetSystem
-    * Details of target system of the object being provisioned.
+    * Details of target system of the object being provisioned. Supports $filter (eq, contains) for displayName.
     *
     * @return ProvisioningSystem|null The targetSystem
     */
@@ -540,10 +540,10 @@ class ProvisioningObjectSummary extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the targetSystem
-    * Details of target system of the object being provisioned.
+    * Details of target system of the object being provisioned. Supports $filter (eq, contains) for displayName.
     *
     * @param ProvisioningSystem $val The targetSystem
     *
@@ -554,10 +554,10 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["targetSystem"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the tenantId
-    * Unique Azure AD tenant ID.
+    * Unique Microsoft Entra tenant ID. Supports $filter (eq, contains).
     *
     * @return string|null The tenantId
     */
@@ -569,10 +569,10 @@ class ProvisioningObjectSummary extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the tenantId
-    * Unique Azure AD tenant ID.
+    * Unique Microsoft Entra tenant ID. Supports $filter (eq, contains).
     *
     * @param string $val The tenantId
     *
@@ -583,5 +583,5 @@ class ProvisioningObjectSummary extends Entity
         $this->_propDict["tenantId"] = $val;
         return $this;
     }
-    
+
 }

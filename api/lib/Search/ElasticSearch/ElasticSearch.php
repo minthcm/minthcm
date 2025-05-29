@@ -69,14 +69,17 @@ class ElasticSearch extends SearchManager
         $this->elastic_acl = $elastic_acl;
     }
     
-    public function search($handle_acl = false): SearchResult
+    public function search($handle_acl = false, $return_raw_result = false): SearchResult | array
     {
         if (empty($this->query)) {
             throw new InvalidArgumentException();
         }
         $result = $this->client->search($this->query);
-        $this->setResultManager($result, $handle_acl);
-        return $this->result_manager;
+        if(!$return_raw_result){
+            $this->setResultManager($result, $handle_acl);
+            return $this->result_manager;
+        }
+        return $result;
     }
 
     public function setQuery(array $params): void

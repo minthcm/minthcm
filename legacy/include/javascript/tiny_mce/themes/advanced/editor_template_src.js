@@ -11,25 +11,6 @@
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, Cookie = tinymce.util.Cookie, lastExtID, explode = tinymce.explode;
 
-	var applyDefaultFont = function (body, settings) {
-		var fontSize = settings.theme_advanced_default_font_size;
-		var fontFamily = settings.theme_advanced_default_font_family;
-
-		if (fontSize) {
-			body.style.fontSize = fontSize;
-		}
-
-		if (fontFamily) {
-			body.style.fontFamily = fontFamily;
-		}
-	};
-
-	var hasDefaultFontSizeOrFamily = function (settings) {
-		var fontSize = settings.theme_advanced_default_font_size;
-		var fontFamily = settings.theme_advanced_default_font_family;
-		return !!(fontSize || fontFamily);
-	};
-
 	// Generates a preview for a format
 	function getPreviewCss(ed, fmt) {
 		var name, previewElm, dom = ed.dom, previewCss = '', parentFontSize, previewStylesName;
@@ -169,7 +150,7 @@
 
 		init : function(ed, url) {
 			var t = this, s, v, o;
-
+	
 			t.editor = ed;
 			t.url = url;
 			t.onResolveName = new tinymce.util.Dispatcher(this);
@@ -186,7 +167,7 @@
 					theme_advanced_buttons3 : "hr,removeformat,visualaid,|,sub,sup,|,charmap"
 				}, s);
 			}
-
+	
 			// Default settings
 			t.settings = s = extend({
 				theme_advanced_path : true,
@@ -194,7 +175,7 @@
 				theme_advanced_blockformats : "p,address,pre,h1,h2,h3,h4,h5,h6",
 				theme_advanced_toolbar_align : "left",
 				theme_advanced_statusbar_location : "bottom",
-				theme_advanced_fonts : "Andale Mono=andale mono,monospace;Arial=arial,helvetica,sans-serif;Arial Black=arial black,sans-serif;Book Antiqua=book antiqua,palatino,serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,palatino,serif;Helvetica=helvetica,arial,sans-serif;Impact=impact,sans-serif;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco,monospace;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,geneva,sans-serif;Verdana=verdana,geneva,sans-serif;Webdings=webdings;Wingdings=wingdings,zapf dingbats",
+				theme_advanced_fonts : "Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats",
 				theme_advanced_more_colors : 1,
 				theme_advanced_row_height : 23,
 				theme_advanced_resize_horizontal : 1,
@@ -253,8 +234,6 @@
 						t._updateUndoStatus(ed);
 					});
 				}
-
-				applyDefaultFont(ed.getBody(), ed.settings);
 			});
 
 			ed.onSetProgressState.add(function(ed, b, ti) {
@@ -699,7 +678,7 @@
 			if (DOM.get(ed.id + '_path_row')) {
 				Event.add(ed.id + '_tbl', 'mouseover', function(e) {
 					var re;
-
+	
 					e = e.target;
 
 					if (e.nodeName == 'SPAN' && DOM.hasClass(e.parentNode, 'mceButton')) {
@@ -977,7 +956,7 @@
 			a = s.theme_advanced_toolbar_align.toLowerCase();
 			a = 'mce' + t._ufirst(a);
 
-			n = DOM.add(DOM.add(c, 'tr', {role: 'presentation'}), 'td', {'class' : 'mceToolbar ' + a, "role":"toolbar"});
+			n = DOM.add(DOM.add(c, 'tr', {role: 'presentation'}), 'td', {'class' : 'mceToolbar ' + a, "role":"presentation"});
 
 			// Create toolbar and add the controls
 			for (i=1; (v = s['theme_advanced_buttons' + i]); i++) {
@@ -1007,7 +986,7 @@
 			var n, t = this, ed = t.editor, s = t.settings, r, mf, me, td;
 
 			n = DOM.add(tb, 'tr');
-			n = td = DOM.add(n, 'td', {'class' : 'mceStatusbar'});
+			n = td = DOM.add(n, 'td', {'class' : 'mceStatusbar'}); 
 			n = DOM.add(n, 'div', {id : ed.id + '_path_row', 'role': 'group', 'aria-labelledby': ed.id + '_path_voice'});
 			if (s.theme_advanced_path) {
 				DOM.add(n, 'span', {id: ed.id + '_path_voice'}, ed.translate('advanced.path'));
@@ -1015,7 +994,7 @@
 			} else {
 				DOM.add(n, 'span', {}, '&#160;');
 			}
-
+			
 
 			if (s.theme_advanced_resizing) {
 				DOM.add(td, 'a', {id : ed.id + '_resize', href : 'javascript:;', onclick : "return false;", 'class' : 'mceResize', tabIndex:"-1"});
@@ -1100,8 +1079,8 @@
 				cm.setActive(c, ed.queryCommandState(t.controls[c][1]));
 			});
 
-			var getElement = function (elements, name) {
-				var i, elements, func = name;
+			function getParent(name) {
+				var i, parents = ob.parents, func = name;
 
 				if (typeof(name) == 'string') {
 					func = function(node) {
@@ -1109,18 +1088,10 @@
 					};
 				}
 
-				for (i = 0; i < elements.length; i++) {
-					if (func(elements[i]))
-						return elements[i];
+				for (i = 0; i < parents.length; i++) {
+					if (func(parents[i]))
+						return parents[i];
 				}
-			};
-
-			function getParent(name) {
-				return getElement(ob.parents, name);
-			};
-
-			function getParentIncBody(name) {
-				return getElement([].concat(ob.parents).concat([ed.getBody()]), name);
 			};
 
 			cm.setActive('visualaid', ed.hasVisual);
@@ -1171,22 +1142,19 @@
 			}
 
 			// Find out current fontSize, fontFamily and fontClass
-			getParentIncBody(function(n) {
-				var matchesSelector;
-
+			getParent(function(n) {
 				if (n.nodeName === 'SPAN') {
 					if (!cl && n.className)
 						cl = n.className;
 				}
 
-				matchesSelector = ed.dom.is(n, s.theme_advanced_font_selector);
-				if (matchesSelector || hasDefaultFontSizeOrFamily(ed.settings)) {
+				if (ed.dom.is(n, s.theme_advanced_font_selector)) {
 					if (!fz && n.style.fontSize)
 						fz = n.style.fontSize;
 
 					if (!fn && n.style.fontFamily)
 						fn = n.style.fontFamily.replace(/[\"\']+/g, '').replace(/^([^,]+).*/, '$1').toLowerCase();
-
+					
 					if (!fc && n.style.color)
 						fc = n.style.color;
 
@@ -1217,7 +1185,7 @@
 						return true;
 				});
 			}
-
+			
 			if (s.theme_advanced_show_current_color) {
 				function updateColor(controlId, color) {
 					if (c = cm.get(controlId)) {

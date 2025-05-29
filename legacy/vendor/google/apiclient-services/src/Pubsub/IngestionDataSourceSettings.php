@@ -21,6 +21,16 @@ class IngestionDataSourceSettings extends \Google\Model
 {
   protected $awsKinesisType = AwsKinesis::class;
   protected $awsKinesisDataType = '';
+  protected $awsMskType = AwsMsk::class;
+  protected $awsMskDataType = '';
+  protected $azureEventHubsType = AzureEventHubs::class;
+  protected $azureEventHubsDataType = '';
+  protected $cloudStorageType = CloudStorage::class;
+  protected $cloudStorageDataType = '';
+  protected $confluentCloudType = ConfluentCloud::class;
+  protected $confluentCloudDataType = '';
+  protected $platformLogsSettingsType = PlatformLogsSettings::class;
+  protected $platformLogsSettingsDataType = '';
 
   /**
    * @param AwsKinesis
@@ -35,6 +45,76 @@ class IngestionDataSourceSettings extends \Google\Model
   public function getAwsKinesis()
   {
     return $this->awsKinesis;
+  }
+  /**
+   * @param AwsMsk
+   */
+  public function setAwsMsk(AwsMsk $awsMsk)
+  {
+    $this->awsMsk = $awsMsk;
+  }
+  /**
+   * @return AwsMsk
+   */
+  public function getAwsMsk()
+  {
+    return $this->awsMsk;
+  }
+  /**
+   * @param AzureEventHubs
+   */
+  public function setAzureEventHubs(AzureEventHubs $azureEventHubs)
+  {
+    $this->azureEventHubs = $azureEventHubs;
+  }
+  /**
+   * @return AzureEventHubs
+   */
+  public function getAzureEventHubs()
+  {
+    return $this->azureEventHubs;
+  }
+  /**
+   * @param CloudStorage
+   */
+  public function setCloudStorage(CloudStorage $cloudStorage)
+  {
+    $this->cloudStorage = $cloudStorage;
+  }
+  /**
+   * @return CloudStorage
+   */
+  public function getCloudStorage()
+  {
+    return $this->cloudStorage;
+  }
+  /**
+   * @param ConfluentCloud
+   */
+  public function setConfluentCloud(ConfluentCloud $confluentCloud)
+  {
+    $this->confluentCloud = $confluentCloud;
+  }
+  /**
+   * @return ConfluentCloud
+   */
+  public function getConfluentCloud()
+  {
+    return $this->confluentCloud;
+  }
+  /**
+   * @param PlatformLogsSettings
+   */
+  public function setPlatformLogsSettings(PlatformLogsSettings $platformLogsSettings)
+  {
+    $this->platformLogsSettings = $platformLogsSettings;
+  }
+  /**
+   * @return PlatformLogsSettings
+   */
+  public function getPlatformLogsSettings()
+  {
+    return $this->platformLogsSettings;
   }
 }
 

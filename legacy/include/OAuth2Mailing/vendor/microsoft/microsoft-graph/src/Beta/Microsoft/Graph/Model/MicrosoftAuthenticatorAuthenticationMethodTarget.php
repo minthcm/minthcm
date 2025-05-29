@@ -26,7 +26,7 @@ class MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMet
 {
     /**
     * Gets the authenticationMode
-    * Determines which types of notifications can be used for sign-in. Possible values are: any, deviceBasedPush (passwordless only), push.
+    * Determines which types of notifications can be used for sign-in. The possible values are: deviceBasedPush (passwordless only), push, and any.
     *
     * @return MicrosoftAuthenticatorAuthenticationMode|null The authenticationMode
     */
@@ -42,10 +42,10 @@ class MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMet
         }
         return null;
     }
-    
+
     /**
     * Sets the authenticationMode
-    * Determines which types of notifications can be used for sign-in. Possible values are: any, deviceBasedPush (passwordless only), push.
+    * Determines which types of notifications can be used for sign-in. The possible values are: deviceBasedPush (passwordless only), push, and any.
     *
     * @param MicrosoftAuthenticatorAuthenticationMode $val The authenticationMode
     *
@@ -56,38 +56,5 @@ class MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMet
         $this->_propDict["authenticationMode"] = $val;
         return $this;
     }
-    
-    /**
-    * Gets the featureSettings
-    * Determines what additional settings should be applied to Microsoft Authenticator. Possible values are: null, requireNumberMatching (Requires number matching for MFA notifications. Value is ignored for phone sign-in notifications).
-    *
-    * @return AuthenticatorAppFeatureSettings|null The featureSettings
-    */
-    public function getFeatureSettings()
-    {
-        if (array_key_exists("featureSettings", $this->_propDict)) {
-            if (is_a($this->_propDict["featureSettings"], "\Beta\Microsoft\Graph\Model\AuthenticatorAppFeatureSettings") || is_null($this->_propDict["featureSettings"])) {
-                return $this->_propDict["featureSettings"];
-            } else {
-                $this->_propDict["featureSettings"] = new AuthenticatorAppFeatureSettings($this->_propDict["featureSettings"]);
-                return $this->_propDict["featureSettings"];
-            }
-        }
-        return null;
-    }
-    
-    /**
-    * Sets the featureSettings
-    * Determines what additional settings should be applied to Microsoft Authenticator. Possible values are: null, requireNumberMatching (Requires number matching for MFA notifications. Value is ignored for phone sign-in notifications).
-    *
-    * @param AuthenticatorAppFeatureSettings $val The featureSettings
-    *
-    * @return MicrosoftAuthenticatorAuthenticationMethodTarget
-    */
-    public function setFeatureSettings($val)
-    {
-        $this->_propDict["featureSettings"] = $val;
-        return $this;
-    }
-    
+
 }

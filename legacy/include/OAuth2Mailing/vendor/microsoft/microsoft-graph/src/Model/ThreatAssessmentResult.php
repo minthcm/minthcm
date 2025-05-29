@@ -42,7 +42,7 @@ class ThreatAssessmentResult extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the createdDateTime
     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
@@ -56,7 +56,7 @@ class ThreatAssessmentResult extends Entity
         $this->_propDict["createdDateTime"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the message
     * The result message for each threat assessment.
@@ -71,7 +71,7 @@ class ThreatAssessmentResult extends Entity
             return null;
         }
     }
-    
+
     /**
     * Sets the message
     * The result message for each threat assessment.
@@ -85,10 +85,10 @@ class ThreatAssessmentResult extends Entity
         $this->_propDict["message"] = $val;
         return $this;
     }
-    
+
     /**
     * Gets the resultType
-    * The threat assessment result type. Possible values are: checkPolicy (only for mail assessment), rescan.
+    * The threat assessment result type. Possible values are: checkPolicy, rescan.
     *
     * @return ThreatAssessmentResultType|null The resultType
     */
@@ -104,10 +104,10 @@ class ThreatAssessmentResult extends Entity
         }
         return null;
     }
-    
+
     /**
     * Sets the resultType
-    * The threat assessment result type. Possible values are: checkPolicy (only for mail assessment), rescan.
+    * The threat assessment result type. Possible values are: checkPolicy, rescan.
     *
     * @param ThreatAssessmentResultType $val The resultType
     *
@@ -118,5 +118,5 @@ class ThreatAssessmentResult extends Entity
         $this->_propDict["resultType"] = $val;
         return $this;
     }
-    
+
 }
