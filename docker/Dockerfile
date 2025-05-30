@@ -29,7 +29,7 @@ COPY docker/script/generate_config.php /var/www/script/
 #RUN SERVICES
 COPY docker/script/start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
-CMD bash -C '/usr/local/bin/start.sh';'bash'
+CMD ["bash", "-c", "/usr/local/bin/start.sh; exec bash"]
 
 EXPOSE 80
 
