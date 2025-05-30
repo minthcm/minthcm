@@ -32,6 +32,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_PASSWORD}'
       SYS_NICE: CAP_SYS_NICE
+      MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: caching_sha2_password
     healthcheck:
         test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
         timeout: 20s
