@@ -423,9 +423,9 @@ if (!$focus->is_group && !$focus->portal_only) {
         $focus->setPreference('subtheme', $_POST['subtheme'], 0, 'global');
     }
     if (isset($_POST['gsync_cal'])) {
-        $this->setPreference('syncGCal', 1, 0, 'GoogleSync');
+        $focus->setPreference('syncGCal', 1, 0, 'GoogleSync');
     } else {
-        $this->setPreference('syncGCal', 0, 0, 'GoogleSync');
+        $focus->setPreference('syncGCal', 0, 0, 'GoogleSync');
     }
 }
 
