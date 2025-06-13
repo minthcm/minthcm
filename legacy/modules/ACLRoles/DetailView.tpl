@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -61,25 +61,10 @@
 			<input type='hidden' name='return_module' value='{$RETURN.module}'>
 			<input type="hidden" name="action">
 
-{php}
-    $APP = $this->get_template_vars('APP');
-    $this->append('buttons',
-    <<<EOD
-    <input title="{$APP['LBL_EDIT_BUTTON_TITLE']}" accessKey="{$APP['LBL_EDIT_BUTTON_KEY']}" class="button primary" onclick="var _form = $('#form')[0]; _form.action.value='EditView'; _form.submit();" type="submit" name="button" value="{$APP['LBL_EDIT_BUTTON']}" />
-EOD
-    );
-    $this->append('buttons',
-    <<<EOD
-    <input title="{$APP['LBL_DUPLICATE_BUTTON_TITLE']}" accessKey="{$APP['LBL_DUPLICATE_BUTTON_KEY']}" class="button" onclick="this.form.isDuplicate.value='1'; this.form.action.value='EditView'" type="submit" name="button" value=" {$APP['LBL_DUPLICATE_BUTTON']} " />
-EOD
-    );
-    $this->append('buttons',
-    <<<EOD
-    <input title="{$APP['LBL_DELETE_BUTTON_TITLE']}" accessKey="{$APP['LBL_DELETE_BUTTON_KEY']}" class="button" onclick="this.form.return_module.value='ACLRoles'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP['NTC_DELETE_CONFIRMATION']}')" type="submit" name="button" value=" {$APP['LBL_DELETE_BUTTON']} " />
-EOD
-    );
-{/php}
-		{sugar_action_menu id="userEditActions" class="clickMenu fancymenu SugarActionMenu" buttons="$buttons" flat=true}
+{append var='buttons' value="<input title='{$APP.LBL_EDIT_BUTTON_TITLE}' accessKey='{$APP.LBL_EDIT_BUTTON_KEY}' class='button primary' onclick=\"var _form = $('#form')[0]; _form.action.value='EditView'; _form.submit();\" type='submit' name='button' value='{$APP.LBL_EDIT_BUTTON}' />"}
+{append var='buttons' value="<input title='{$APP.LBL_DUPLICATE_BUTTON_TITLE}' accessKey='{$APP.LBL_DUPLICATE_BUTTON_KEY}' class='button' onclick=\"this.form.isDuplicate.value='1'; this.form.action.value='EditView'\" type='submit' name='button' value=' {$APP.LBL_DUPLICATE_BUTTON} ' />"}
+{append var='buttons' value="<input title='{$APP.LBL_DELETE_BUTTON_TITLE}' accessKey='{$APP.LBL_DELETE_BUTTON_KEY}' class='button' onclick=\"this.form.return_module.value='ACLRoles'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')\" type='submit' name='button' value=' {$APP.LBL_DELETE_BUTTON} ' />"}
+{sugar_action_menu id="userEditActions" class="clickMenu fancymenu SugarActionMenu" buttons=$buttons flat=true}
 		</form>
 		</p>
 </div>
@@ -89,7 +74,7 @@ EOD
 <td valign='top' width='15%' align='right'><b>{$MOD.LBL_NAME}:</b></td><td width='85%' colspan='3'>{$ROLE.name}</td>
 </tr
 ><TR>
-<td valign='top'  width='15%' align='right'><b>{$MOD.LBL_DESCRIPTION}:</b></td><td colspan='3' valign='top'  width='85%' align='left'>{$ROLE.description | nl2br}</td>
+<td valign='top'  width='15%' align='right'><b>{$MOD.LBL_DESCRIPTION}:</b></td><td colspan='3' valign='top'  width='85%' align='left'>{$ROLE.description|nl2br}</td>
 </tr></table>
 </p>
 		<p>
