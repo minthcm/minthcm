@@ -54,6 +54,7 @@ use Slim\Exception\HttpBadRequestException;
 use MintHCM\Api\Controllers\Init\Preferences;
 use MintHCM\Api\Controllers\MetaController;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use MintHCM\Utils\ConstantsLoader;
 
 class Module
 {
@@ -71,8 +72,8 @@ class Module
         $this->module_meta_controller = new MetaController();
         $this->preferences_controller = new Preferences($entityManager);
         $this->sugar_view = new \SugarView();
-        $this->modules_icons = include "constants/module_icons.php";
-        $this->action_icons = include "constants/menu_icons.php";
+        $this->modules_icons = ConstantsLoader::getConstants('module_icons');
+        $this->action_icons = ConstantsLoader::getConstants('menu_icons');
     }
 
     public function __invoke(Request $request, Response $response, array $args): Response

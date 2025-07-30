@@ -48,6 +48,9 @@ $dictionary['Kudos'] = array(
     'audited' => true,
     'inline_edit' => true,
     'duplicate_merge' => true,
+    'doctrineEntity' => [
+        'repository' => 'KudosRepository',
+    ],
     'fields' => array(
         "announced" => array(
             'name' => 'announced',

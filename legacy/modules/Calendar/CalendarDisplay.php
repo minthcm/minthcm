@@ -494,6 +494,16 @@ class CalendarDisplay {
       return $str;
    }
 
+    public function get_week_info($datetime){
+        $week = intval($datetime->format("W"));
+        
+        if($datetime->format("D") === "Sun"){
+            $week++;
+        }
+
+        return translate('LBL_CALENDAR_WEEK_NUMBER','Calendar').": ".$week;
+    }
+
    /**
     * Get link to next date range
     * @return string
@@ -537,7 +547,7 @@ class CalendarDisplay {
     * @param boolean $controls display ui contol itmes
     */
    public function display_calendar_header($controls = true) {
-      global $cal_strings;
+      global $cal_strings, $sugar_config;
 
       $ss = new Sugar_Smarty();
       $ss->assign("MOD", $cal_strings);
@@ -569,12 +579,12 @@ class CalendarDisplay {
          $ss->assign('start_weekday', $GLOBALS['current_user']->get_first_day_of_week());
          $ss->assign('cal_img', '<span class="suitepicon suitepicon-module-calendar"></span>');
       }
-
       $ss->assign('previous', $this->get_previous_calendar());
       $ss->assign('next', $this->get_next_calendar());
 
       $ss->assign('date_info', $this->get_date_info($this->cal->view, $this->cal->date_time));
-
+      $ss->assign('config', $sugar_config);
+      $ss->assign('week_info', $this->get_week_info($this->cal->date_time));
       $header = get_custom_file_if_exists("modules/Calendar/tpls/header.tpl");
       echo $ss->fetch($header);
    }

@@ -5,6 +5,7 @@ $ESListViewDefs['Emails'] = [
     'columns' => [
         'from_addr_name' => [
             'default' => true,
+            'link' => true,
         ],
         'indicator' => [
             'default' => true,

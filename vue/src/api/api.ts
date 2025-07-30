@@ -6,7 +6,7 @@ export abstract class MintApi {
 
     constructor() {
         this.instance = axios.create({
-            baseURL: '/api',
+            baseURL: 'api',
             headers: {
                 'Content-Type': 'application/json',
             },

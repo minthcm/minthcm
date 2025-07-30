@@ -532,7 +532,7 @@ echo "<div>";
 print(getUITextForType($install_type) . " ". getUITextForMode($mode) . " ". $mod_strings['LBL_UW_SUCCESSFULLY']);
 echo "<br>";
 echo "<br>";
-print("<input type=submit value=\"{$mod_strings['LBL_UW_BTN_BACK_TO_MOD_LOADER']}\" /><br>");
+print("<input type=submit value=\"{$mod_strings['LBL_UW_BTN_BACK_TO_MOD_LOADER']}\" class=\"button\" /><br>");
 echo "</div>";
 echo "<br>";
 if (isset($lang_changed_string)) {

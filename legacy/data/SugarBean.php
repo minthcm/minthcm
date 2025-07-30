@@ -406,6 +406,11 @@ class SugarBean {
      * @var array $sentAssignmentNotifications
      */
     public $sentAssignmentNotifications = array();
+
+    /**
+     * ElasticSearch search boost for whole module
+     */
+    public $search_boost;
    /**
     * SugarBean constructor.
     * Performs following tasks:
@@ -455,6 +460,10 @@ class SugarBean {
                $this->field_defs = $dictionary[$this->object_name]['fields'];
             }
 
+            if(isset($dictionary[$this->object_name]['search_boost'])) {
+                $this->search_boost = $dictionary[$this->object_name]['search_boost'];
+            }
+
             if ( !empty($dictionary[$this->object_name]['optimistic_locking']) ) {
                $this->optimistic_lock = true;
             }
@@ -464,12 +473,14 @@ class SugarBean {
          $loaded_definitions[$this->object_name]['required_fields'] = & $this->required_fields;
          $loaded_definitions[$this->object_name]['field_name_map'] = & $this->field_name_map;
          $loaded_definitions[$this->object_name]['field_defs'] = & $this->field_defs;
+         $loaded_definitions[$this->object_name]['search_boost'] = & $this->search_boost;
       } else {
          $this->column_fields = & $loaded_definitions[$this->object_name]['column_fields'];
          $this->list_fields = & $loaded_definitions[$this->object_name]['list_fields'];
          $this->required_fields = & $loaded_definitions[$this->object_name]['required_fields'];
          $this->field_name_map = & $loaded_definitions[$this->object_name]['field_name_map'];
          $this->field_defs = & $loaded_definitions[$this->object_name]['field_defs'];
+         $this->search_boost = & $loaded_definitions[$this->object_name]['search_boost'];
          $this->added_custom_field_defs = true;
 
          if ( !isset($this->custom_fields) &&

@@ -1,17 +1,17 @@
 <template>
     <div class="parent-container">
-    <v-autocomplete
+        <v-autocomplete
             :items="languages.getList(props.defs?.options)"
             :label="languages.label('LBL_ASSIGNED_TO_MODULE')"
-        variant="outlined"
-        density="compact"
-        hide-details
+            variant="outlined"
+            density="compact"
+            hide-details
             v-model="parentModel"
             item-value="value"
             item-title="key"
-        @keyup.enter="$emit('inlineEditSave')"
-        @keyup.esc="$emit('inlineEditCancel')"
-    />
+            @keyup.enter="$emit('inlineEditSave')"
+            @keyup.esc="$emit('inlineEditCancel')"
+        />
         <v-menu v-model="menuOpen" :location="'bottom'">
             <template v-slot:activator="val">
                 <v-text-field
@@ -33,7 +33,7 @@
                             />
                             <v-icon v-else icon="mdi-magnify" />
                         </v-fab-transition>
-</template>
+                    </template>
                 </v-text-field>
             </template>
             <v-list>
@@ -77,6 +77,7 @@ import { useLanguagesStore } from '@/store/languages'
 import { usePopupsStore } from '@/store/popups'
 import MintPopupRelate from '@/components/MintPopups/MintPopupRelate.vue'
 import MintButton from '@/components/MintButtons/MintButton.vue'
+import { modulesApi } from '@/api/modules.api'
 import he from 'he'
 
 interface Props {
@@ -140,29 +141,28 @@ async function fetchRecordItems(e) {
         isLoading.value = true
         menuOpen.value = true
         const val = e?.target?.value ?? props.data.bean[props.defs.name] ?? ''
-        const filter = {
-            field: 'name',
-            type: 'wildcard',
-            value: val.toLowerCase() + '*',
-        }
         if (debounceTimeout) {
             clearTimeout(debounceTimeout)
         }
         debounceTimeout = window.setTimeout(async () => {
-    const response = await axios.post(`api/${props.data.bean.parent_type}`, {
-        offset: 0,
-                sortBy: 'name',
-                filters: [filter],
-    })
-    if (response.data?.results?.length) {
-        items.value = response.data.results.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
-    }
+            const response = await modulesApi.getListData(props.data.bean.parent_type, '', {
+                must: [
+                    {
+                        wildcard: {
+                            name: val + '*',
+                        },
+                    },
+                ],
+            })
+            if (response.data?.results?.length) {
+                items.value = response.data.results.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
+            }
             isLoading.value = false
         }, DEBOUNCE_TIME)
     } else {
         items.value = []
-}
     }
+}
 
 function openRelatePopup() {
     popupsStore.showPopup({
@@ -177,7 +177,7 @@ function openRelatePopup() {
                 recordModel.value = {
                     id: data.nameToValueArray[props.defs.id_name],
                     name: data.nameToValueArray[props.defs.name],
-    }
+                }
             },
             onClose: () => {},
         },
@@ -188,8 +188,8 @@ function clickOnMenuItem(item) {
     recordModel.value = {
         id: item.id,
         name: item.name,
-        }
     }
+}
 
 function getHighlightedText(text: string, query: string) {
     query = he.encode(query)

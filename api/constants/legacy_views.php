@@ -97,6 +97,10 @@ return [
         'list' => false,
         'record' => true,
     ],
+    'DocumentRevisions' => [
+        'list' => false,
+        'record' => true,
+    ],
     'Roles' => [
         'list' => false,
         'record' => true,

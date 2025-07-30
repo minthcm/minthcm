@@ -31,7 +31,9 @@
                 :target="store.mode === 'relate' ? '_blank' : null"
                 v-text="item[link.nameField]"
             />
-            <span v-else v-text="item[link.nameField]" />
+            <a v-else @click="store.handleNameClick(item)" class="list-table-name-link">
+                {{ item[link.nameField] }}
+            </a>
         </template>
         <template v-for="bool in store.customFields.booleans" v-slot:[`item.${bool}`]="{ item }" :key="bool">
             <v-icon

@@ -159,6 +159,7 @@ EditView_tabs.on('contentReady', function(e){
         <li><a id="tab5" href="#tab5" style='display:{$HIDE_FOR_GROUP_AND_PORTAL};'><em>{$MOD.LBL_EAPM_SUBPANEL_TITLE}</em></a></li>
         {/if}
 		<li><a id="tab6" href="#tab6" style='display:{$HIDE_FOR_GROUP_AND_PORTAL};'><em>{$MOD.LBL_LAYOUT_OPTIONS}</em></a></li>
+		<li><a id="tab7" href="#tab7"><em>{$MOD.LBL_MANAGE_NOTIFICATIONS}</em></a></li>
     </ul>
     <div class="yui-content user-tab-content">
         <div>

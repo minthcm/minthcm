@@ -7,7 +7,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,7 +44,8 @@ if(SUGAR.eapm[apiName]){var apiOpts=SUGAR.eapm[apiName];var urlObj=new SUGAR.for
 var userObj=new SUGAR.forms.VisibilityAction('name',((apiOpts.authMethod=='password')?'true':'false'),EAPMFormName);userObj.setContext(new SUGAR.forms.FormExpressionContext(this.form));if(EAPMFormName=='EditView'){EAPMSetFieldRequired('name',(apiOpts.authMethod=='password'));}
 var passObj=new SUGAR.forms.VisibilityAction('password',((apiOpts.authMethod=='password')?'true':'false'),EAPMFormName);passObj.setContext(new SUGAR.forms.FormExpressionContext(this.form));if(EAPMFormName=='EditView'){EAPMSetFieldRequired('password',(apiOpts.authMethod=='password'));var $el=$('#password');if($el.val()==passwordPlaceholder){var instructions=$(EAPMBClickToEdit);instructions.click(function(e){e.preventDefault();$el.val('');instructions.hide();$el.show();$el.focus();});$el.parent().append(instructions);$el.hide();$el.focusout(function(){if($el.val()==''){$el.val(passwordPlaceholder);instructions.show();$el.hide();}});}}
 urlObj.exec();userObj.exec();passObj.exec();var messageDiv=document.getElementById('eapm_notice_div');if(typeof messageDiv!='undefined'&&messageDiv!=null){if(apiOpts.authMethod){if(apiOpts.authMethod=="oauth"){messageDiv.innerHTML=EAPMOAuthNotice;}else{messageDiv.innerHTML=EAPMBAsicAuthNotice;}}else{messageDiv.innerHTML=EAPMBAsicAuthNotice;}}}}
-function EAPMSetFieldRequired(fieldName,isRequired){var formname='EditView';for(var i=0;i<validate[formname].length;i++){if(validate[formname][i][0]==fieldName){validate[formname][i][2]=isRequired;}}}
+function EAPMSetFieldRequired(fieldName,isRequired){var formname='EditView';for(var i=0;i<validate[formname].length;i++){if(validate[formname][i][0]==fieldName){validate[formname][i][2]=isRequired;}}
+if(!isRequired){const item=$('[data-field="'+fieldName+'"]');item.find('.bold_required_field').removeClass('bold_required_field');item.find(".required").hide();}}
 function EAPMEditStart(userIsAdmin){var apiElem=document.getElementById('application');EAPM_url_validate=null;EAPM_name_validate=null;EAPM_password_validate=null;apiElem.onchange=EAPMChange;setTimeout(EAPMChange,100);if(!userIsAdmin){document.getElementById('assigned_user_name').parentNode.innerHTML=document.getElementById('assigned_user_name').value;}
 if(apiElem.form.record.value!=''){apiElem.disabled=true;}}
 var EAPMPopupCheckCount=0;function EAPMPopupCheck(newWin,popup_url,redirect_url,popup_warning_message){if(newWin==false||newWin==null||typeof newWin.close!='function'||EAPMPopupCheckCount>35){alert(popup_warning_message);document.location=redirect_url;return;}

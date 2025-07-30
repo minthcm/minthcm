@@ -5,6 +5,9 @@ $dictionary['Comments'] = array(
     'audited' => false,
     'inline_edit' => false,
     'duplicate_merge' => false,
+    'doctrineEntity' => [
+        'repository' => 'CommentRepository',
+    ],
     'fields' => array(
         'reply_to' => array(
             'name' => 'reply_to',

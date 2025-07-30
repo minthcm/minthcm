@@ -1,4 +1,6 @@
+.vscode/*
 .vscode/settings.json
+.vscode/launch.json
 .htaccess
 legacy/.htaccess
 legacy/cache/**/*
@@ -6,6 +8,7 @@ legacy/custom/modules/*/logic_hooks.php
 legacy/custom/modules/*/Ext/Vardefs/vardefs.ext.php
 legacy/minthcm.log
 api/configs/mint/config_override.php
+api/lib/Search/ElasticSearch/defaultParams.json
 index.html
 install.log
 legacy/.htaccess
@@ -48,6 +51,7 @@ legacy/custom/modules/Positions/logic_hooks.php
 legacy/include/ViewTools/Expressions/VTExpression_getUploadMaxsize.php
 legacy/include/ViewTools/Expressions/documentation.html
 legacy/include/ViewTools/javascript/viewTools.cache.js
+legacy/include/SugarEmailAddress/SugarEmailAddress.js
 
 legacy/include/ViewTools/javascript/viewTools.cache.js
 legacy/include/ViewTools/Expressions/documentation.html
@@ -55,3 +59,16 @@ legacy/include/ViewTools/Expressions/documentation.html
 api/var/cache/*
 legacy/custom/include/language/en_us.lang.php
 legacy/custom/modules/Connectors/metadata/connectors.php
+
+legacy/include/**/*.lang.php
+!legacy/include/**/en_us.lang.php
+legacy/include/**/*.notify_template.html
+!legacy/include/**/en_us.notify_template.html
+legacy/install/**/*.lang.php
+!legacy/install/**/en_us.lang.php
+legacy/modules/**/*.lang.php
+!legacy/modules/**/en_us.lang.php
+
+legacy/lib/Search/ElasticSearch/defaultParams.yml
+legacy/modules/ACLRoles/ACLRoles.js
+legacy/modules/Meetings/jsclass_scheduler.js

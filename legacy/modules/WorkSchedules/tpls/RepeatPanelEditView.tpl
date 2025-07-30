@@ -18,7 +18,8 @@
 
             function editAllRecurrences() {
         {/literal}
-               location.href = 'index.php?module=WorkSchedules&action=EditView&record=&show_edit_all_recurrences=1';
+                var record = '{$fields.repeat_parent_id.value|default:$fields.id.value}';
+               location.href = 'index.php?module=WorkSchedules&action=EditView&record='+ record +'&show_edit_all_recurrences=1';
         {literal}
             }
         {/literal}

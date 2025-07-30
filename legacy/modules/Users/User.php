@@ -52,6 +52,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once 'include/SugarObjects/templates/person/Person.php';
 require_once __DIR__ . '/../../include/EmailInterface.php';
 require_once __DIR__ . '/../Emails/EmailUI.php';
+require_once 'include/Notifications/NotificationManager.php';
 
 // User is used to store customer information.
 class User extends Person implements EmailInterface
@@ -144,6 +145,7 @@ class User extends Person implements EmailInterface
      * @var bool|null
      */
     public $lastSaveErrorIsEmailAddressSaveError = null;
+    public $app_tokens; // MintHCM #122506
 
     public function __construct()
     {
@@ -2312,4 +2314,12 @@ EOQ;
     {
         return !empty($this->id) && !$this->new_with_id;
     }
+
+    // MintHCM #122506 start
+    public function getTokens()
+    {
+        return array_values(json_decode(html_entity_decode($this->app_tokens), 1) ?? []);
+    }
+    // MintHCM #122506 end
+
 }

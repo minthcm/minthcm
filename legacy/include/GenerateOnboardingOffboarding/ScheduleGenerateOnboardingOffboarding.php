@@ -55,7 +55,11 @@ class ScheduleGenerateOnboardingOffboarding
         $this->template_id = $template_id;
         $this->employees_ids = $employees_ids;
         if (!empty($date_start)) {
-            $this->date_start = (new SugarDateTime($date_start))->asDb();
+            $date_start = getDateTimeObject($date_start);
+            if (!$date_start instanceof SugarDateTime) {
+                throw new InvalidArgumentException("Invalid date format provided for date_start");
+            }
+            $this->date_start = $date_start->asDb();
         }
     }
 

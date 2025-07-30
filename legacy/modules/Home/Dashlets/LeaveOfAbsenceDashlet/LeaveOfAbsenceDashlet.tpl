@@ -19,6 +19,7 @@
         $( document ).ready( function () {
 
            var hiddenDays = [ ];
+           var showTypes = "";
     {/literal}
     {assign var="show_days_of_week_i" value=0}
     {foreach from=$show_days_of_week key=day item=showed}
@@ -26,6 +27,11 @@
             {literal}hiddenDays.push({/literal} {$show_days_of_week_i} {literal});{/literal}
         {/if}
         {assign var="show_days_of_week_i" value=$show_days_of_week_i+1}
+    {/foreach}
+    {foreach from=$show_type_of_absence key=type item=showed}
+        {if $showed == true}
+            {literal}showTypes += "&{/literal}{$type}{literal}={/literal}{$showed}{literal}";{/literal}
+        {/if}
     {/foreach}
     {literal}
            $( '#calendar' ).fullCalendar( {
@@ -41,7 +47,7 @@
               editable: false,
               eventLimit: false, // allow "more" link when too many events
               events: {
-                 url: 'index.php?module=Home&action=LeaveOfAbsence&sugar_body_only=1',
+                 url: 'index.php?module=Home&action=LeaveOfAbsence&sugar_body_only=1' + showTypes,
                  error: function () {
                     $( '#script-warning' ).show();
                  }

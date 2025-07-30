@@ -322,6 +322,16 @@ class TabController
         return array($display_tabs, $hide_tabs, $remove_tabs);
     }
 
+    public function get_admin_tabs($user) {
+        if(!$user->isAdmin()) {
+            return $this->get_tabs($user);
+        }
+        global $modInvisList;
+        $tabs = $this->get_tabs($user);
+        $display_tabs = $tabs[0];
+        return [array_merge($display_tabs, self::get_key_array($modInvisList))];
+    }
+
     public function restore_tabs($user)
     {
         global $moduleList;

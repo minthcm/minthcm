@@ -66,7 +66,6 @@ class KudosController
         $response = $response->withHeader('Content-type', 'application/json');
 
         chdir('../legacy');
-
         $db = \DBManagerFactory::getInstance();
         $sql = "SELECT id,
                 CONCAT_WS(' ', first_name, last_name) full_name,

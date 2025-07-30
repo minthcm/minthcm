@@ -76,7 +76,12 @@ function query_module_access_list(&$user)
 {
     require_once('modules/MySettings/TabController.php');
     $controller = new TabController();
-    $tabArray = $controller->get_tabs($user);
+    
+    if($user->isAdmin()) {
+        $tabArray = $controller->get_admin_tabs($user);
+    } else {
+        $tabArray = $controller->get_tabs($user);
+    }
 
     return $tabArray[0];
 }

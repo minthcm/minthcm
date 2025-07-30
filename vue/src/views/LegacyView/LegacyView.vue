@@ -1,9 +1,9 @@
 <template>
-    <iframe class="legacy-view" :src="legacyUrl" :key="iframeReload" />
+    <iframe class="legacy-view" :src="legacyUrl" :key="iframeReload" ref="legacyIframe" @load="onIframeLoad" />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUrlStore } from '@/store/url'
 import LegacyEvents from './LegacyEventManager'
@@ -56,8 +56,25 @@ const legacyUrl = computed(() => {
     const route = useRoute()
     if (route.meta?.legacyUrl) {
         const url = new URL(route.meta.legacyUrl, location.origin + location.pathname)
-        new URLSearchParams(location.hash).forEach((val, key) => {
+        const hashes = location.hash.split('#')
+        hashes.shift()
+
+        let locationHash = location.hash
+        const match = locationHash.match(/#(?!\/)/)
+        if (match) {
+            locationHash = locationHash.slice(0, match.index)
+        }
+
+        new URLSearchParams(locationHash).forEach((val, key) => {
             url.searchParams.set(key, val)
+        })
+        hashes.forEach((hash) => {
+            return hash.split('&').forEach((pair) => {
+                const [key, value] = pair.split('=')
+                if (key && value) {
+                    url.searchParams.set(key, value)
+                }
+            })
         })
         return url.href
     } else if (route.name === 'module-view') {
@@ -85,6 +102,33 @@ const legacyUrl = computed(() => {
 })
 
 const iframeReload = ref(0)
+const legacyIframe = ref<HTMLIFrameElement | null>(null)
+
+function onIframeLoad() {
+    const iframe = legacyIframe.value
+    if (!iframe) {
+        return
+    }
+    let currentIframeUrl = iframe.contentWindow?.location.href || iframe.src
+    if (route.meta?.legacyQueryToHash) {
+        const legacyUrlSearchParams = new URLSearchParams(currentIframeUrl.split('?')[1])
+        let hash = []
+        legacyUrlSearchParams.forEach((value, key) => {
+            if (route.meta?.legacyQueryToHash.includes(key)) {
+                hash.push(`${key}=${value}`)
+            }
+        })
+        if (hash.length) {
+            let locationHash = location.hash
+            const match = locationHash.match(/#(?!\/)/)
+            if (match) {
+                locationHash = locationHash.slice(0, match.index)
+            }
+            const fullHash = location.pathname + locationHash + `#${hash.join('&')}`
+            history.pushState(null, null, fullHash)
+        }
+    }
+}
 </script>
 
 <style scoped lang="scss">

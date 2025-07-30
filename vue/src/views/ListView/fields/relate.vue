@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import { modulesApi } from '@/api/modules.api'
 
 const DEBOUNCE_DELAY_MS = 500
 
@@ -38,13 +38,12 @@ const activeItem = computed(() => items.value.find((item) => item.id === value.v
 onMounted(async () => {
     if (props.input?.value) {
         isLoading.value = true
-        const response = await axios.post(`api/${props.fieldDefs.module}`, {
-            offset: 0,
-            filters: [
+        const response = await modulesApi.getListData(props.fieldDefs.module, '', {
+            filter: [
                 {
-                    field: '_id',
-                    type: 'equals',
-                    value: props.input.value,
+                    equals: {
+                        _id: props.input.value,
+                    },
                 },
             ],
         })
@@ -81,15 +80,12 @@ function fetchItems(query: string) {
             query += '*'
         }
         isLoading.value = true
-        const response = await axios.post(`api/${props.fieldDefs.module}`, {
-            offset: 0,
-            sortBy: 'name',
-            filters: [
+        const response = await modulesApi.getListData(props.fieldDefs.module, '', {
+            must: [
                 {
-                    field: 'name',
-                    type: filterType,
-                    value: query,
-                    operator: 'AND',
+                    [filterType]: {
+                        name: query,
+                    },
                 },
             ],
         })

@@ -67,3 +67,30 @@ document.getElementById( 'repeat_dow' ).value.split( '' ).forEach( function ( e 
    var f = document.getElementById( 'repeat_dow_' + e );
    f && (f.checked = true);
 } );
+
+function validateRepeatPanel() {
+    var result = true;
+    var type = $('select[name=repeat_type]').find(':selected').val();
+    if(type == 'Weekly') {
+        for(let i = 0; i < 7; i++) {
+            var dow = $('#repeat_dow_' + i).is(':checked');
+            if(dow) {
+                return true;
+            }
+        }
+        
+        result = false;
+        if($('#periodicity_error').length == 0) {
+            $('#cal-repeat-block').append('<p id="periodicity_error" style="color:red">' + viewTools.language.get('Meetings', 'LBL_PERIODICITY_ERROR') + '</p>');
+        }
+    }
+
+    if($('#periodicity_error').length != 0 && result) {
+        $('#periodicity_error').remove();
+    }
+    return result;
+}
+
+viewTools.form.beforeSave(function () {
+    return validateRepeatPanel();
+}, true);

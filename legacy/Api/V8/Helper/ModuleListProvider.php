@@ -87,8 +87,12 @@ class ModuleListProvider
     private function removeInvisibleModules($modules)
     {
         global $modInvisList;
+        global $modInvisListApiExceptions;
 
         foreach ($modInvisList as $invis) {
+            if (in_array($invis, $modInvisListApiExceptions)) {
+                continue;
+            }
             unset($modules[$invis]);
         }
 

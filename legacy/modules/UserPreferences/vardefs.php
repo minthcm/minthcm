@@ -10,7 +10,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -38,83 +38,77 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+$GLOBALS['dictionary']['UserPreference'] = array(
+    'table' => 'user_preferences',
+    'doctrineEntity' => array(
+        'repository' => 'UserPreferencesRepository',
+    ),
+    'fields' => array(
+        'id' => array(
+            'name' => 'id',
+            'vname' => 'LBL_NAME',
+            'type' => 'id',
+            'required' => true,
+            'reportable' => false,
+        ),
+        'category' => array(
+            'name' => 'category',
+            'type' => 'varchar',
+            'len' => 50,
+        ),
+        'deleted' => array(
+            'name' => 'deleted',
+            'type' => 'bool',
+            'default' => '0',
+            'required' => false,
+        ),
+        'date_entered' => array(
+            'name' => 'date_entered',
+            'type' => 'datetime',
+            'required' => true,
+        ),
+        'date_modified' => array(
+            'name' => 'date_modified',
+            'type' => 'datetime',
+            'required' => true,
+        ),
+        'assigned_user_id' => array(
+            'name' => 'assigned_user_id',
+            'rname' => 'user_name',
+            'id_name' => 'assigned_user_id',
+            'type' => 'assigned_user_name',
+            'table' => 'users',
+            'required' => true,
+            'dbType' => 'id',
+        ),
+        'assigned_user_name' => array(
+            'name' => 'assigned_user_name',
+            'vname' => 'LBL_ASSIGNED_TO_NAME',
+            'type' => 'varchar',
+            'reportable' => false,
+            'massupdate' => false,
+            'source' => 'non-db',
+            'table' => 'users',
+        ),
+        'contents' => array(
+            'name' => 'contents',
+            'type' => 'longtext',
+            'vname' => 'LBL_DESCRIPTION',
+            'isnull' => true,
+        ),
+    ),
 
-$GLOBALS['dictionary']['UserPreference'] = array('table' => 'user_preferences',
-'fields' => array (
-  'id' => 
-  array (
-    'name' => 'id',
-    'vname' => 'LBL_NAME',
-    'type' => 'id',
-    'required'=>true,
-    'reportable'=>false,
-  ),
-  'category' => 
-  array (
-    'name' => 'category',
-    'type' => 'varchar',
-    'len' => 50,
-  ),
-  'deleted' => 
-  array (
-    'name' => 'deleted',
-    'type' => 'bool',
-    'default' => '0',
-    'required'=>false,
-  ),
-  'date_entered' => 
-  array (
-    'name' => 'date_entered',
-    'type' => 'datetime',
-    'required' => true,
-  ),
-  'date_modified' => 
-  array (
-    'name' => 'date_modified',
-    'type' => 'datetime',
-    'required' => true,
-  ),
-  'assigned_user_id' => 
-  array (
-    'name' => 'assigned_user_id',
-    'rname' => 'user_name',
-    'id_name' => 'assigned_user_id',
-    'type' => 'assigned_user_name',
-    'table' => 'users',
-    'required' => true,
-    'dbType' => 'id',
-  ),
-  'assigned_user_name' => 
-  array (
-    'name' => 'assigned_user_name',
-    'vname' => 'LBL_ASSIGNED_TO_NAME',
-    'type' => 'varchar',
-    'reportable'=>false,
-    'massupdate' => false,
-    'source'=>'non-db',
-    'table' => 'users',
-  ),
-  'contents' => 
-  array (
-    'name' => 'contents',
-    'type' => 'longtext',
-    'vname' => 'LBL_DESCRIPTION',
-    'isnull' => true,
-  ),
-),
- 
-
-'indices' => array (
-       array('name' =>'userpreferencespk', 'type' =>'primary', 'fields'=>array('id')),
-       array('name' =>'idx_userprefnamecat', 'type'=>'index', 'fields'=>array('assigned_user_id','category')),
-      )
+    'indices' => array(
+        array('name' => 'userpreferencespk', 'type' => 'primary', 'fields' => array('id')),
+        array('name' => 'idx_userprefnamecat', 'type' => 'index', 'fields' => array('assigned_user_id', 'category')),
+    ),
 );
 
 // cn: bug 12036 - $dictionary['x'] for SugarBean::createRelationshipMeta() from upgrades

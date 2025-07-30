@@ -43,7 +43,7 @@
     "elasticsearch/elasticsearch": "^7.13",
     "ezyang/htmlpurifier": "^4.10",
     "firebase/php-jwt": "6.10.1",
-    "google/apiclient": "^2.7",
+    "google/apiclient": "^2.14.0",
     "google/recaptcha": "^1.1",
     "gymadarasz/ace": "^1.2",
     "gymadarasz/imagesloaded": "^4.1",

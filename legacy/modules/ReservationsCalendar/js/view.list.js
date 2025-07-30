@@ -20,16 +20,24 @@ function setCurrentCalendarDate() {
 
 function setCurrentCalendar() {
    if ( typeof calendarList !== "undefined" ) {
+      setCurrentCalendarDate();
       var calendar_id = $( 'select#resources' ).val();
-      calendarList.forEach( function ( cal ) {
-         if ( cal.id == calendar_id ) {
-            cal.checked = true;
-         } else {
-            cal.checked = false;
+      var calendar_date = typeof moment != 'undefined' ? moment(calendar.getDate().toDate()).format('YYYY-MM-DD') : null;
+      viewTools.api.callCustomApi( {
+         module: 'ReservationsCalendar',
+         action: 'getResourceReservations',
+         dataPOST: {
+            resource_id: calendar_id,
+            calendar_date: calendar_date,
+         },
+         callback: function ( data ) {
+            if ( data?.reservationsList ) {
+               calendar.clear();
+               calendar.createSchedules( data.reservationsList );
+               calendar.render( true );
+            }
          }
-         calendar.toggleSchedules( cal.id, !cal.checked, false );
       } );
-      calendar.render( true );
    }
 }
 
@@ -138,11 +146,8 @@ YAHOO.util.Event.onContentReady( 'calendar', function () {
       'beforeDeleteSchedule': scheduleDelete,
       'beforeCreateSchedule': createReservation
    } );
-   if ( typeof reservationList !== "undefined" ) {
-      calendar.createSchedules( reservationList );
-   }
-   $( 'input.tuiCalendar' ).click( setCurrentCalendarDate );
+   
+   $( 'input.tuiCalendar' ).click( setCurrentCalendar );
    $( 'select#resources' ).change( setCurrentCalendar );
-   setCurrentCalendarDate();
    setCurrentCalendar();
 } );

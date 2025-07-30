@@ -69,7 +69,7 @@ class RouteManager
         'app/Routes/modules/',
         'custom/app/Routes/modules/',
         'modules/{module_name}/api/routes/',
-        'custom/{module_name}/api/routes/',
+        'custom/modules/{module_name}/api/routes/',
     ];
 
     public function __construct()

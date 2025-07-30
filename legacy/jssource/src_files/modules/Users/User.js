@@ -122,6 +122,7 @@ function show_main() {
 	var address = document.getElementById('address'); address.style.display = "";
 	var calendar_options = document.getElementById('calendar_options'); calendar_options.style.display = "";
 	var edit_tabs = document.getElementById('edit_tabs'); edit_tabs.style.display = "";
+	var notifications_management = document.getElementById('notifications_management'); notifications_management.style.display = "";
 	
 	var email_options = document.getElementById('email_options'); email_options.style.display = 'none';
 	var email_inbound = document.getElementById('email_inbound'); email_inbound.style.display = 'none';

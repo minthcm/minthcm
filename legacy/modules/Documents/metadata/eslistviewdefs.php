@@ -8,7 +8,6 @@ $ESListViewDefs['Documents'] = [
             'default' => true,
         ],
         'filename' => [
-            'link' => true,
             'default' => true,
         ],
         'category_id' => [

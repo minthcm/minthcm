@@ -1,8 +1,6 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useUrlStore } from '@/store/url'
-import { useBackendStore } from '@/store/backend'
 import { useLanguagesStore } from '@/store/languages'
 import { FilterRow } from './ListViewFilterRow.vue'
 import { getAllTypesMatchingTo } from './operators'
@@ -10,6 +8,7 @@ import { useRouter } from 'vue-router'
 import { usePopupsStore } from '@/store/popups'
 import MintPopupRelate from '@/components/MintPopups/MintPopupRelate.vue'
 import MassActions from '@/business/MassActions'
+import { modulesApi } from '@/api/modules.api'
 
 interface Preferences {
     columns: string[]
@@ -60,63 +59,55 @@ export const useListViewStore = defineStore('listview', () => {
     const selected = ref([])
     const defaultAction = 'ESList'
     const defaultActionUrl = 'legacy/index.php?'
-    let requestCount = 0;
+    let requestCount = 0
 
     async function init() {
         initialLoading.value = true
-        const result = await axios.post(getListActionUrl(), {
-            module: module.value,
-            function_name: 'getInitialData',
-        })
-        if(module.value === result.data.module){
-        activeFilter.value = result.data?.preferences?.activeFilter
-        initialLoading.value = false
-        config.value = result.data?.config
-        defs.value = result.data?.defs
-        preferences.value = result.data?.preferences
-        module.value = result.data?.module
-        isInit.value = true
-    }
+        const result = await modulesApi.getListInit(getModule())
+        if (module.value === result.data.module) {
+            activeFilter.value = result.data?.preferences?.activeFilter ?? []
+            initialLoading.value = false
+            config.value = result.data?.config
+            defs.value = result.data?.defs
+            preferences.value = result.data?.preferences
+            module.value = result.data?.module
+            isInit.value = true
+        }
     }
 
     async function getData() {
-        requestCount++;
-        isLoading.value = requestCount > 0;
-        const result = await axios.post(getListActionUrl(), {
-            module: module.value,
-            function_name: 'getResults',
-            page: options.value.page,
-            itemsPerPage: options.value.itemsPerPage === -1 ? 100 : options.value.itemsPerPage,
-            myObjects: myObjects.value,
-            searchPhrase: searchPhrase.value,
-            filters: filters.value,
-            offset: pageOffsetMap.value[options.value.page - 1],
-            sortBy: defs.value?.columns[options.value.sortBy[0]?.key]?.key,
-            sortOrder: options.value.sortBy[0]?.order ?? 'asc',
-            activeFilter: activeFilter.value,
-        })
-        requestCount--;
-        if(module.value === result.data.module && requestCount <= 0){
+        requestCount++
+        isLoading.value = requestCount > 0
+
+        const result = await modulesApi.getListData(
+            getModule(),
+            searchPhrase.value,
+            filters.value,
+            options.value.page ?? 0,
+            options.value.itemsPerPage === -1 ? 100 : options.value.itemsPerPage,
+            myObjects.value,
+            defs.value?.columns[options.value.sortBy[0]?.key]?.key,
+            options.value.sortBy[0]?.order ?? 'asc',
+            activeFilter.value
+        )
+        requestCount--
+        if (module.value === result.data.module && requestCount <= 0) {
             requestCount = 0;
             isLoading.value = false;
-        results.value = result.data?.results
-        itemsLength.value = result.data?.total
-        if (options.value.page === 1) {
-            pageOffsetMap.value = {}
+            results.value = result.data?.results
+            itemsLength.value = result.data?.total
+            if (options.value.page === 1) {
+                pageOffsetMap.value = {}
+            }
+            pageOffsetMap.value[options.value.page] = result.data?.offset ?? 0
         }
-        pageOffsetMap.value[options.value.page] = result.data?.offset ?? 0
-    }
     }
 
     async function savePreferences() {
-        const response = await axios.post(getListActionUrl(), {
-            module: module.value,
-            preferences: preferences.value,
-            function_name: 'savePreferences',
-        })
+        await modulesApi.saveListPreferences(getModule(), preferences.value)
     }
 
-    function getListActionUrl(){
+    function getListActionUrl() {
         return defaultActionUrl + 'action=' + defaultAction
     }
 
@@ -157,13 +148,13 @@ export const useListViewStore = defineStore('listview', () => {
             class: col.name == 'name' ? 'stickyColumn' : '',
         }))
         if (mode.value === 'list') {
-        headers.push({
-            value: 'actions',
-            key: 'actions',
-            title: languages.label('LBL_ESLIST_ACTIONS'),
-            sortable: false,
-            align: 'end',
-        })
+            headers.push({
+                value: 'actions',
+                key: 'actions',
+                title: languages.label('LBL_ESLIST_ACTIONS'),
+                sortable: false,
+                align: 'end',
+            })
         }
         return headers
     })
@@ -282,7 +273,8 @@ export const useListViewStore = defineStore('listview', () => {
             const nameToValueArray: { [key: string]: string } = {}
             for (const key in relatePopup.value.data.fieldToNameArray) {
                 if (['full_name', 'name', 'last_name', 'first_name'].includes(key)) {
-                    nameToValueArray[relatePopup.value.data.fieldToNameArray[key]] = item.full_name || item.name || item.last_name || item.first_name || ''
+                    nameToValueArray[relatePopup.value.data.fieldToNameArray[key]] =
+                        item.full_name || item.name || item.last_name || item.first_name || ''
                 } else if (!nameToValueArray[relatePopup.value.data.fieldToNameArray[key]] && key === 'subpanel_id') {
                     nameToValueArray[relatePopup.value.data.fieldToNameArray[key]] = item.id
                 } else {
@@ -344,10 +336,16 @@ export const useListViewStore = defineStore('listview', () => {
 
     const itemsSelectable = computed(() => {
         return !!(
-            (mode.value === 'list' && massActions.value.length)
-            || (mode.value === 'relate' && relatePopup.value?.data?.popupMode && relatePopup.value.data.popupMode !== 'single')
+            (mode.value === 'list' && massActions.value.length) ||
+            (mode.value === 'relate' &&
+                relatePopup.value?.data?.popupMode &&
+                relatePopup.value.data.popupMode !== 'single')
         )
     })
+
+    function getModule(){
+        return Array.isArray(module.value) ? module.value[0] : module.value
+    }
 
     return {
         mode,

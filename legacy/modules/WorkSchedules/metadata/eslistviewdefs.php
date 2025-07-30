@@ -55,4 +55,10 @@ $ESListViewDefs['WorkSchedules'] = [
         'created_by_name' => [],
         'modified_by_name' => [],
     ],
+    'massActions' => [
+        'Delete',
+        'Export',
+        'Merge',
+        'MassConfirmation',
+    ],
 ];
