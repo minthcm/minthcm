@@ -24,17 +24,21 @@ export const useLanguagesStore = defineStore('languages', () => {
         app_list_strings: {},
         modules: {},
     })
+    const fetchedLanguages = ref<{ [key: string]: boolean | undefined }>({})
 
     const label = computed(() => {
         return (lbl: string, module?: string | null, placeholders?: Placeholders) => {
             let label = ''
             if (module) {
+                if (!languages.value.modules?.[module]) {
+                    fetchModuleLanguage(module)
+                }
                 label = languages.value.modules?.[module]?.[lbl]
             }
             if (!label) {
                 label = languages.value.app_strings?.[lbl]
             }
-            if (placeholders) {
+            if (placeholders && label) {
                 for (const [key, value] of Object.entries(placeholders)) {
                     label = label.replaceAll(`{${key}}`, value)
                 }
@@ -47,6 +51,10 @@ export const useLanguagesStore = defineStore('languages', () => {
         if (languages.value.modules[module] && Object.keys(languages.value.modules[module]).length) {
             return languages.value.modules[module]
         }
+        if (fetchedLanguages.value[module]) {
+            return null
+        }
+        fetchedLanguages.value[module] = true
         const response = await axios.get('api/languages', {
             params: {
                 modules: module,
@@ -56,6 +64,7 @@ export const useLanguagesStore = defineStore('languages', () => {
             languages.value.modules[module] = response.data[module]
             return languages.value.modules[module]
         }
+        fetchedLanguages.value[module] = false
         return null
     }
 

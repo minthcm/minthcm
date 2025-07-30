@@ -36,7 +36,7 @@ export const useMintWallStore = (key = 'mint') =>
         async function loadNews() {
             wallLoading.value = true
             newsList.value = []
-            const apiResponse = await axios.get('api/News')
+            const apiResponse = await axios.get('api/News/drawer/list')
             if (apiResponse.data) {
                 for (const newsItem of apiResponse.data) {
                     newsItem.liked = getReactionIndex(newsItem, 'like') !== -1

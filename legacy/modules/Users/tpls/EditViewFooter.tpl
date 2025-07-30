@@ -564,7 +564,29 @@
         </table>
     </div>
 </div>
+<div class="user-tab-content">
+    <div id="notifications_management" style="display:{$HIDE_FOR_GROUP_AND_PORTAL}">
+        <h4>{$MOD.LBL_ENABLE_NOTIFICATIONS}</h4>
+        <table class="edit view" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th width="60%" style="text-align:left">{$MOD.LBL_ENABLE_NOTIFICATION_TYPE}</th>
+                    <th width="40%" style="text-align:center">{$MOD.LBL_ENABLE_NOTIFICATION}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$notificationsPreferences key="notification_type" item="notification"}
+                    <tr>
+                        <td width="60%" align="left" style="padding-left:10px;">{$notification.name}</td>
+                        <td width="40%" align="center"><input type="checkbox" name="notification_{$notification_type}" value="1" {if $notification.notification}checked{/if}></td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
 </div>
+</div>
+
 
 <script type="text/javascript">
 

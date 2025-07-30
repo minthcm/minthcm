@@ -880,6 +880,10 @@ function handleSugarConfig($lock = false) {
    $sugar_config['http_referer']['list']  = array_unique($sugar_config['http_referer']['list']);
    // MintHCM #110041 END
 
+    if (!isset($sugar_config['elasticsearch_index_prefix'])) {
+        $sugar_config['elasticsearch_index_prefix'] = substr(str_shuffle(uniqid()), 0, 4);
+    }
+
    ksort($sugar_config);
    $sugar_config_string = "<?php\n" .
            '// created: ' . date('Y-m-d H:i:s') . "\n" .

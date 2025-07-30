@@ -59,6 +59,16 @@ class NotificationManager
         $this->scanDirectory('custom/' . self::PLUGINS_DIRECTORY);
     }
 
+    public function getPluginsCollection()
+    {
+        return $this->plugins_collection;
+    }
+    
+    protected function setPluginsCollection($plugins_collection)
+    {
+        $this->plugins_collection = $plugins_collection;
+    }
+
     public function run()
     {
         $this->clearOldWebPush();
@@ -79,11 +89,13 @@ class NotificationManager
                 continue;
             }
 
-            include $dir_path . '/' . $file;
+            include_once $dir_path . '/' . $file;
             $class_name = self::getClassFromFile($file);
             $plugin = new $class_name;
             if ($plugin instanceof NotificationPlugin) {
-                $this->plugins_collection[$plugin->getType()] = $class_name;
+                $plugins_collection = $this->getPluginsCollection();
+                $plugins_collection[$plugin->getType()] = $class_name;
+                $this->setPluginsCollection($plugins_collection);
             }
         }
     }
@@ -151,6 +163,39 @@ class NotificationManager
     {
         global $db;
         $db->query("DELETE FROM alerts WHERE type='webpush' AND is_read=1 AND DATE(date_entered) = DATE( DATE_SUB( NOW() , INTERVAL 30 DAY ) )");
+    }
+
+    public function getPluginsForManagement()
+    {
+        $plugins = [];
+        foreach($this->plugins_collection as $plugin_class) {
+            $plugin = new $plugin_class;
+            if ($plugin->canBeManagedByUser()) {
+                $plugins[$plugin->getType()] = translate($plugin->getLabel());
+            }
+        }
+
+        return $plugins;
+    }
+
+    public function getNotificationsPreferences($user): array
+    {
+        $preferences = [];
+        $notifications = $this->getPluginsForManagement();
+
+        foreach($notifications as $type => $name) {
+            $preference = $user->getPreference('notification_' . $type);
+            if($preference === null) {
+                $preference = '1';
+                $user->setPreference('notification_' . $type, '1', 0, 'global');
+            }
+            $preferences[$type] = [
+                'notification' => $preference,
+                'name' => $name
+            ];
+        }
+
+        return $preferences;
     }
 
 }

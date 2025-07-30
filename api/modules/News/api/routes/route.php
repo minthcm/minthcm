@@ -3,11 +3,9 @@
 use MintHCM\Modules\News\api\controllers\ListAction;
 
 $routes = array(
-    "detail" => array(),
-    "list_data" => array(),
-    "list" => array(
+    "drawer_list" => array(
         "method" => "GET",
-        "path" => "",
+        "path" => "/drawer/list",
         "class" => ListAction::class,
         "desc" => "Get modules list",
         "options" => array(

@@ -4892,3 +4892,7 @@ $app_list_strings['source_list'] = array(
 $app_strings['LBL_ACCEPT_INLINE'] = "Accept";
 $app_strings['LBL_NOTIFICATIONS_NONE'] = 'None';
 $app_strings['LBL_ES_ELASTIC_SEARCH_ENGINE'] = 'Elastic Search Engine';
+$app_strings['LBL_WORKSCHEDULE_LEAVE_CREATED'] = 'Get notified if Leave is created by your subordinate';
+$app_strings['LBL_WORKSCHEDULES_DAY_VALID'] = 'Get notified if not closed Work Schedule exists';
+$app_strings['LBL_WORKSCHEDULES_NOT_PLANNED_FOR_TWO_WEEKS'] = 'Get notified if Work Schedule is not planned for two weeks';
+$app_strings['LBL_WORKSCHEDULESACCEPTANCE'] = 'Get notified if the work schedule is approved by the supervisor';

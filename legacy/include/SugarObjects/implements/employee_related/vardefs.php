@@ -95,12 +95,12 @@ $vardefs = array(
     ),
     'relationships' => array(
         strtolower($module) . '_employee' => array(
-            'lhs_module' => $module,
-            'lhs_table' => $table_name,
-            'lhs_key' => 'employee_id',
-            'rhs_module' => 'Employees',
-            'rhs_table' => 'users',
-            'rhs_key' => 'id',
+            'lhs_module' => 'Employees',
+            'lhs_table' => 'users',
+            'lhs_key' => 'id',
+            'rhs_module' => $module,
+            'rhs_table' => $table_name,
+            'rhs_key' => 'employee_id',
             'relationship_type' => 'one-to-many',
         ),
     ),

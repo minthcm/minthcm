@@ -337,7 +337,7 @@ function smarty_function_sugar_button($params, &$smarty)
 
                 //Bug 1057 If the return action is not empty and the return action is detail view and the id (from both locations) are empty, go to the modules listview
                 $cancelButton .= '{elseif !empty($smarty.request.return_action) && ($smarty.request.return_action == "DetailView" && empty($fields.id.value)) && empty($smarty.request.return_id)}';
-                $cancelButton .= '<a href="index.php?module={$smarty.request.return_module|escape:"url"}&action=ESlistView" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="index.php?module={$smarty.request.return_module|escape:"url"}&action=ListView" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
 
                 //Bug 893 if the return action is not empty and the return module is not empty, go back to that page
@@ -357,7 +357,7 @@ function smarty_function_sugar_button($params, &$smarty)
 			break;
 
 			case "DELETE":
-                $output = '{if $bean->aclAccess("delete")}<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="'.$js_form.' _form.return_module.value=\'' . $module . '\'; _form.return_action.value=\'ESlistView\'; _form.action.value=\'Delete\'; if(confirm(\'{$APP.NTC_DELETE_CONFIRMATION}\')) SUGAR.ajaxUI.submitForm(_form); return false;" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}" id="delete_button">{/if} ';
+                $output = '{if $bean->aclAccess("delete")}<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="'.$js_form.' _form.return_module.value=\'' . $module . '\'; _form.return_action.value=\'ListView\'; _form.action.value=\'Delete\'; if(confirm(\'{$APP.NTC_DELETE_CONFIRMATION}\')) SUGAR.ajaxUI.submitForm(_form); return false;" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}" id="delete_button">{/if} ';
             break;
 
 			case "DUPLICATE":

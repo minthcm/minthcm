@@ -7,7 +7,7 @@
  * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -68,6 +68,7 @@ require_once 'lib/Search/ElasticSearch/ElasticSearchVardefsReader.php';
 /**
  * Class ElasticSearchIndexer takes care of creating a search index for the database.
  */
+#[\AllowDynamicProperties]
 class ElasticSearchIndexer extends AbstractIndexer
 {
     use IndexingStatisticsTrait;
@@ -81,9 +82,7 @@ class ElasticSearchIndexer extends AbstractIndexer
     private $batchSize = 1000;
     /** @var Carbon|false the timestamp of the last indexing. false if unknown */
 
-    // MintHCM #121632 START
-    protected $acl_helper;
-    // MintHCM #121632 END
+    private $mappings = [];
 
     /**
      * ElasticSearchIndexer constructor.
@@ -93,18 +92,13 @@ class ElasticSearchIndexer extends AbstractIndexer
     public function __construct(Client $client = null)
     {
         parent::__construct();
-        // MintHCM #121632 START
-        require_once 'include/ESListView/ESListACLHelper.php';
-        $this->acl_helper = new \ESListACLHelper;
-        // MintHCM #121632 END
-
         $this->client = !empty($client) ? $client : ElasticSearchClientBuilder::getClient();
     }
 
     /**
      * Returns whether the Elasticsearch is enabled by user configuration or not.
      *
-     * @return bool
+     * @return bool|null
      */
     public static function isEnabled(): ?bool
     {
@@ -144,7 +138,7 @@ class ElasticSearchIndexer extends AbstractIndexer
                     $index = $instance_id . '_' . $lowercaseModule;
                     $this->removeIndex($index);
                     // MintHCM #121632 START
-                    $this->createIndex($index, $this->getDefaultMapParams($module) ?? null);
+                    $this->createIndex($index, $this->getDefaultMapParams($module));
                     // MintHCM #121632 END
                 } catch (Exception $exception) {
                     $message = "Failed to create index $index! Exception details follow";
@@ -192,12 +186,12 @@ class ElasticSearchIndexer extends AbstractIndexer
      * @param string $index name of the index
      * @param array|null $body options of the index
      */
-    public function createIndex(string $index, array $body = null): void
+    public function createIndex(string $index, array $body = []): void
     {
         $params = ['index' => $index];
 
         if (!empty($body) && is_array($body)) {
-            $params['body'] = $body;
+            $params['body'] = ['mappings' => $body];
         }
 
         $this->client->indices()->create($params);
@@ -254,7 +248,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $indexedRecordsCount = $this->indexedRecordsCount - $oldIndexedRecordsCount;
         $type = $totalRecordsCount === $indexedRecordsCount ? Logger::DEBUG : Logger::WARNING;
         $this->logger->log($type, sprintf('Indexed %d/%d %s', $indexedRecordsCount, $totalRecordsCount, $module));
-        
+
         $this->putMeta($module, [
             'module_name' => $module,
         ]);
@@ -340,6 +334,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $this->fillAllNestedPropertyValues($bean, $args['body']);
 
         $this->removeErrorProneFields($bean->module_name, $args['body']);
+        $this->fixUpIndicesParams($args['body'], $this->getDefaultMapParams($bean->module_name), $bean->module_name);
         $this->client->index($args);
         $this->setBeanInstantIndexingDate($bean);
     }
@@ -519,24 +514,18 @@ class ElasticSearchIndexer extends AbstractIndexer
 
         $lowercaseModule = strtolower($module);
         $this->index = static::getIndexPrefix() . '_' . $lowercaseModule;
-
         foreach ($beans as $key => $bean) {
-            // MintHCM #122342 START
-            //$head = ['_index' => strtolower($module), '_id' => $bean->id];
-
             $head = ['_index' => $this->index, '_id' => $bean->id];
-            // MintHCM #122342 END
             if ($bean->deleted) {
                 $params['body'][] = ['delete' => $head];
                 $this->removedRecordsCount++;
             } else {
                 $body = $this->makeIndexParamsBodyFromBean($bean);
-
                 // TODO: optimize with single load from db before foreach
                 $this->fillAllNestedPropertyValues($bean, $body);
-                //$body['meta']['module_name'] = $bean->module_dir;
 
                 $this->removeErrorProneFields($module, $body);
+                $this->fixUpIndicesParams($body, $this->getDefaultMapParams($module), $module);
                 $params['body'][] = ['index' => $head];
                 $params['body'][] = $body;
                 $this->indexedRecordsCount++;
@@ -544,9 +533,7 @@ class ElasticSearchIndexer extends AbstractIndexer
             }
 
             // Send a batch of $this->batchSize elements to the server
-            // MintHCM START
             if ($key % $this->batchSize == $this->batchSize - 1) {
-                // MintHCM END
                 $this->sendBatch($params);
             }
         }
@@ -559,6 +546,29 @@ class ElasticSearchIndexer extends AbstractIndexer
         $this->setBeansDeferredIndexingDate($beans);
     }
 
+    /**
+     * Fixes up the indices in the params to match the ones in the defaultParams.yml.
+     *
+     * @param array $params
+     * @param array $mappings
+     */
+    private function fixUpIndicesParams(array &$params, array $mappings, string $module_name = ''): void
+    {
+        if (is_array($params)) {
+            foreach ($params as $key => $value) {
+                if (is_array($params[$key])) {
+                    $this->fixUpIndicesParams($params[$key], $mappings, $module_name);
+                }
+                $prefix = '__';
+                $new_key = $module_name . $prefix . $key;
+                if (isset($new_key, $mappings['properties']) && $new_key != $prefix . $key) {
+                    $params[$new_key] = $params[$key];
+                    unset($params[$key]);
+                }
+            }
+        }
+    }
+
     // MintHCM #121632 START
     /**
      * Retrieves the default params to set up an optimised default index for Elasticsearch.
@@ -567,14 +577,21 @@ class ElasticSearchIndexer extends AbstractIndexer
      */
     private function getDefaultMapParams($module)
     {
+        if (!empty($this->mappings)) {
+            return $this->mappings[$module] ?? [];
+        }
         $file = __DIR__ . '/defaultParams.yml';
 
         $this->logger->debug("Loading mapping file $file");
 
         $parse = new YamlParser();
         $parsed = $parse->parseFile($file);
-
-        return ['mappings' => $parsed['mappings'][$module]];
+        $this->mappings = $parsed['mappings'] ?? [];
+        if(isset($this->mappings[$module])){
+            return $this->mappings[$module] ?? [];
+        } else {
+            return [];
+        }
     }
     // MintHCM #121632 END
     /**
@@ -685,5 +702,5 @@ class ElasticSearchIndexer extends AbstractIndexer
     public static function getIndexPrefix() : string
     {
         return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
-    }
+}
 }

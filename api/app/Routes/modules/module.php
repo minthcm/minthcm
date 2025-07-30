@@ -52,6 +52,7 @@ use MintHCM\Api\Controllers\Module\ListMassActionsController;
 use MintHCM\Api\Middlewares\Params\ParamTypes\IntType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\ArrayType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
+use MintHCM\Api\Middlewares\Params\ParamTypes\BoolType;
 
 $routes = array(
     "detail" => array( //CR probably to delete
@@ -195,22 +196,26 @@ $routes = array(
         ),
         "queryParams" => array(),
         "bodyParams" => array(),
-    ), 
+    ),
     "list_data" => array(
         "method" => "POST",
         "path" => "",
         "class" => ListController::class,
+        "function" => 'getListData',
         "desc" => "Get list of module beans",
         "options" => array(
             'auth' => true,
         ),
         "bodyParams" => array(
-            "offset" => array(
+            "activeFilter" => array(
+                "type" => ArrayType::class,
+                "required" => false,
+            ),
+            "page" => array(
                 "type" => IntType::class,
-                "required" => true,
-                "desc" => "Offset to start searching - in response get info about it, first page default has -1.
-                     This number can be greater than items x page becouse user can not access to some rekords",
-                "example" => '22',
+                "required" => false,
+                "desc" => "Page number to retrieve",
+                "example" => '1',
             ),
             "items" => array(
                 "type" => IntType::class,
@@ -229,6 +234,18 @@ $routes = array(
                 "required" => false,
                 "desc" => "Sort order",
                 "example" => 'desc or asc',
+            ),
+            "myObjects" => array(
+                "type" => BoolType::class,
+                "required" => false,
+                "desc" => "if enable, shows only records that are created or assigned to current user",
+                "example" => '1',
+            ),
+            "searchPhrase" => array(
+                "type" => StringType::class,
+                "required" => false,
+                "desc" => "Search phrase",
+                "example" => 'John Doe',
             ),
             "filters" => array(
                 "type" => ArrayType::class,
@@ -254,6 +271,22 @@ $routes = array(
                     }
                     ]
                 ',
+            ),
+        ),
+    ),
+    "list_save_preferences" => array(
+        "method" => "POST",
+        "path" => "/list/preferences",
+        "class" => ListController::class,
+        "function" => 'savePreferences',
+        "desc" => "Save user list preferences",
+        "options" => array(
+            'auth' => true,
+        ),
+        "bodyParams" => array(
+            "preferences" => array(
+                "type" => ArrayType::class,
+                "required" => true,
             ),
         ),
     ),

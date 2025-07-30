@@ -65,4 +65,5 @@ $dashletStrings['LeaveOfAbsenceDashlet'] = array(
    'LBL_THURSDAY' => 'Thursday',
    'LBL_FRIDAY' => 'Friday',
    'LBL_SATURDAY' => 'Saturday',
+   'LBL_SHOW_TYPE_OF_ABSENCE' => 'Show Type of Absence',
 );

@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class ElasticSearchVardefsReader
 {
     public function getModuleNestedProperties(string $module_name): array

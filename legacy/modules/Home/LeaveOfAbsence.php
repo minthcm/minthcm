@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,6 +44,90 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+function buildIncludingWhere() {
+   $types_of_absence = [
+      'sick',
+      'holiday',
+      'sick_care',
+      'delegation',
+      'occasional_leave',
+      'leave_at_request',
+   ];
+   $where = "";
+
+   foreach($types_of_absence as $type) {
+      if(isset($_GET[$type]) && $_GET[$type] == '1') {
+         if(empty($where)) {
+            $where .= "(";
+         }
+         $where .= "A.type = '{$type}' OR ";
+      }
+   }
+
+   if(!empty($where)) {
+      $where = substr($where, 0, -3);
+      $where .= ")";
+   }
+
+   if(isset($_GET['home']) && $_GET['home'] == '1') {
+      if(!empty($where)) {
+         $where .= " OR ";
+      }
+
+      $where .= "(A.type = 'home' AND 11 BETWEEN HOUR(A.date_start) AND HOUR(A.date_end))";
+   }
+
+   foreach(['overtime', 'excused_absence'] as $type) {
+      if(isset($_GET[$type]) && $_GET[$type] == '1') {
+         if(!empty($where)) {
+            $where .= " OR ";
+         }
+
+         $where .= "(A.type = '{$type}' AND duration_hours >= 4)";
+      }
+   }
+
+   if(!empty($where)) {
+      $where = '(' . $where . ')';
+   }
+
+   return $where;
+}
+
+function buildExcludingWhere() {
+$types_of_absence = [
+      'sick',
+      'holiday',
+      'sick_care',
+      'delegation',
+      'occasional_leave',
+      'leave_at_request',
+      'home',
+      'overtime',
+      'excused_absence',
+   ];
+   $where = "";
+   $where_array = [];
+
+   foreach($types_of_absence as $type) {
+      if(empty($_GET[$type]) || $_GET[$type] != '1') {
+         $where_array[] = "A.type != '{$type}'";
+      }
+   }
+
+   $where = implode(' AND ', $where_array);
+
+   if(!empty($where)) {
+      $where = '(' . $where . ')';
+   }
+
+   return $where;
+}
+
+function buildWhere() {
+   return implode(' AND ', array_filter([buildIncludingWhere(), buildExcludingWhere()]));
+}
+
 global $db, $current_user;
 $tz = $current_user->getPreference('timezone');
 if ( empty($tz) ) {
@@ -65,26 +149,12 @@ $sql = "SELECT
 FROM 
    workschedules A 
    INNER JOIN users  B ON A.assigned_user_id = B.id
-WHERE (
-         (
-               A.type = 'holiday'     
-            OR A.type='sick'
-            OR A.type='sick_care'
-            OR A.type='delegation'
-            OR A.type='occasional_leave'
-            OR A.type='leave_at_request'
-         )
-         OR 
-         (
-            A.type='home'
-            AND 11 BETWEEN HOUR(A.date_start) AND HOUR(A.date_end)
-         )
-         OR ( A.type = 'overtime'        AND duration_hours >= 4 )
-         OR ( A.type = 'excused_absence' AND duration_hours >= 4 )
-      )
+WHERE 
+      ". buildWhere() ."
       AND A.deleted = 0
       AND B.deleted = 0
    AND A.date_start > DATE(SUBDATE(NOW(), INTERVAL 30 DAY))
+      AND A.type != 'office'
    ORDER BY
          B.id,
          start_date asc
@@ -100,6 +170,7 @@ $typeToColor = array(
    'overtime' => '#adebad', // '#2c97de',
    'leave_at_request' => '#ffb128',
    'excused_absence' => '#adff2f',
+   'child_care' => '#e66ec4',
 );
 $result = array();
 global $app_list_strings;

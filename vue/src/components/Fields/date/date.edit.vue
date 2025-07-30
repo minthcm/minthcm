@@ -1,5 +1,5 @@
 <template>
-    <div class="mint-date-field-detail" @keyup.enter="$emit('inlineEditSave')" @keyup.esc="$emit('inlineEditCancel')">
+    <div class="mint-date-field-detail">
         <v-text-field
             v-bind="props"
             :label="label"
@@ -23,6 +23,7 @@
 import { ref, computed, watch } from 'vue'
 import { DateTime } from 'luxon'
 import { FieldVardef } from '@/store/modules'
+import { usePreferencesStore } from '@/store/preferences';
 
 interface Props {
     defs: FieldVardef
@@ -30,7 +31,7 @@ interface Props {
     modelValue?: any
     data?: any
 }
-
+const preferences = usePreferencesStore()
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
@@ -41,7 +42,7 @@ const parsedValue = computed({
     get() {
         const dt = DateTime.fromSQL(model.value)
         if (dt.isValid) {
-            return dt.toFormat('dd.MM.yyyy') || ''
+            return dt.toFormat(preferences.user?.date_format || 'dd.MM.yyyy') || ''
         }
         return ''
     },
@@ -50,7 +51,7 @@ const parsedValue = computed({
         if (!newVal?.trim()) {
             model.value = ''
         }
-        const dt = DateTime.fromFormat(newVal, 'dd.MM.yyyy')
+        const dt = DateTime.fromFormat(newVal, preferences.user?.date_format || 'dd.MM.yyyy')
         if (dt.isValid) {
             model.value = dt.toSQLDate()
         }

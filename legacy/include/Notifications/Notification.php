@@ -93,11 +93,14 @@ class Notification  extends NotificationAbstractClass
 
     public function saveAsAlert($description = true,$override = array())
     {
-        if ($this->skip_uniq_validate || $this->isUnique()) {
-            $this->simpleAlert($description, $override);
-        } else {
-            $this->setActive();
+        if($this->isValid()) {
+            if ($this->skip_uniq_validate || $this->isUnique()) {
+                $this->simpleAlert($description, $override);
+            } else {
+                $this->setActive();
+            }
         }
+        
         return $this;
     }
     /*
@@ -122,6 +125,7 @@ class Notification  extends NotificationAbstractClass
 
             $webpush->setType($this->alert_bean->alert_type)->push();
         }
+        return $this;
     }
 
     public function simpleAlert($link = true,$override = array())
@@ -160,5 +164,23 @@ class Notification  extends NotificationAbstractClass
         $this->alert_bean = $bean;
         $this->alert_bean->save();
         return $this;
+    }
+
+    protected function isEnabledForNotification()
+    {
+        $user = BeanFactory::getBean('Users', $this->assigned_user_id);
+        if(!empty($user->id)) {
+            $preference = $user->getPreference('notification_' . $this->type);
+            if ($preference === '0') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function isValid()
+    {
+        return $this->isEnabledForNotification();
     }
 }

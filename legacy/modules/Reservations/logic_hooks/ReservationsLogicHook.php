@@ -51,7 +51,7 @@ class ReservationsLogicHook {
    protected $reservations_rel = "reservations";
 
    public function beforeActivityDelete($bean) {
-      if ( in_array($bean->module_name, array_keys($this->supported_modules)) ) {
+      if ( in_array($bean->module_name, $this->supported_modules) ) {
          $rel = $this->reservations_rel;
          if ( $bean->load_relationship($rel) ) {
             foreach ( $bean->$rel->get() as $reservation_id ) {
@@ -63,7 +63,7 @@ class ReservationsLogicHook {
    }
 
    public function afterActivitySave($bean) {
-      if ( in_array($bean->module_name, array_keys($this->supported_modules)) ) {
+      if ( in_array($bean->module_name, $this->supported_modules) ) {
          $rel = $this->resources_rel;
          if ( $bean->load_relationship($rel) ) {
             $resources_ids = $bean->$rel->get();

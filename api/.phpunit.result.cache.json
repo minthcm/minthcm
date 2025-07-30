@@ -1,0 +1,12 @@
+{
+    "version": 1,
+    "defects": {
+        "ApiLoginTest::testLoginWithValidCredentials": 7,
+        "ApiLoginTest::testLoginWithInvalidCredentials": 8
+    },
+    "times": {
+        "HelloWorldTest::testHelloWorld": 0,
+        "ApiLoginTest::testLoginWithValidCredentials": 7.132,
+        "ApiLoginTest::testLoginWithInvalidCredentials": 0.001
+    }
+}

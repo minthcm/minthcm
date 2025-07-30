@@ -46,30 +46,25 @@ require_once 'include/Notifications/NotificationPlugin.php';
 
 class WorkScheduleLeaveCreated extends NotificationPlugin
 {
-    protected $work_schedule;
-
-    public function __construct(WorkSchedules $work_schedule = null)
-    {
-        $this->work_schedule = $work_schedule;
-        $this->setType('WorkScheduleLeaveCreated');
-    }
+    const TYPE = 'WorkScheduleLeaveCreated';
+    const LABEL = 'LBL_WORKSCHEDULE_LEAVE_CREATED';
 
     public function run()
     {
-        if (!$this->work_schedule) {
+        if (!$this->bean) {
             return;
         }
-        if (empty($this->work_schedule->assigned_user_id)) {
+        if (empty($this->bean->assigned_user_id)) {
             return;
         }
         global $app_list_strings;
-        $user = BeanFactory::getBean('Users', $this->work_schedule->assigned_user_id);
+        $user = BeanFactory::getBean('Users', $this->bean->assigned_user_id);
         $superior_id = $user->reports_to_id;
         $message = vsprintf(
             translate('LBL_LEAVE_ALERT', 'WorkSchedules'), 
             [
                 $user->full_name,
-                $app_list_strings[$this->work_schedule->field_defs['type']['options']][$this->work_schedule->type],
+                $app_list_strings[$this->bean->field_defs['type']['options']][$this->bean->type],
                 $this->getWorkScheduleStartDate(), 
                 ]
             );
@@ -77,7 +72,7 @@ class WorkScheduleLeaveCreated extends NotificationPlugin
             $this->getNewNotification()
                 ->setDescription($message)
                 ->setAssignedUserId($superior_id)
-                ->setRelatedBean($this->work_schedule->id, 'WorkSchedules')
+                ->setRelatedBean($this->bean->id, 'WorkSchedules')
                 ->setType($this->getType())
                 ->saveAsAlert()->WebPush();
         }
@@ -90,7 +85,7 @@ class WorkScheduleLeaveCreated extends NotificationPlugin
 
     protected function getWorkScheduleStartDate()
     {
-        $datetime = explode(' ', NotificationManager::toDbDatetime($this->work_schedule->date_start));
+        $datetime = explode(' ', NotificationManager::toDbDatetime($this->bean->date_start));
         return $datetime[0];
     }
 

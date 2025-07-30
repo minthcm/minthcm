@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ use SugarBean;
 /**
  * This class facilitates pulling Sugarbeans from a module
  */
+#[\AllowDynamicProperties]
 class ElasticSearchModuleDataPuller
 {
     /** 
@@ -114,7 +115,7 @@ class ElasticSearchModuleDataPuller
     protected $recordsPulled = 0;
 
 
-    function __construct($module, $isDifferential, $logger)
+    public function __construct($module, $isDifferential, $logger)
     {
         $this->module = $module;
         $this->seed = BeanFactory::getBean($module);
@@ -171,7 +172,7 @@ class ElasticSearchModuleDataPuller
         $results = $this->seed->get_list('id', $this->generateWhere(), $this->offset, $this->batchSize, $this->batchSize, $this->showDeleted);
 
         $this->offset = $results['next_offset'];
-        $this->recordsPulled += count($results['list']);
+        $this->recordsPulled += is_countable($results['list']) ? count($results['list']) : 0;
 
         return $results['row_count'] ? $results['list'] : null;
     }
@@ -183,7 +184,7 @@ class ElasticSearchModuleDataPuller
      */
     protected function generateWhere()
     {
-        if($this->isDifferential AND empty($this->lastIndexTime)){
+        if($this->isDifferential && empty($this->lastIndexTime)){
             throw new RuntimeException("A differential search must have a lastIndexTime to filter off of");
         }
 

@@ -74,6 +74,7 @@ $dictionary['Email'] = array(
          'type' => 'varchar',
          'source' => 'non-db',
          'inline_edit' => false,
+         'vname' => 'LBL_FROM_ADDR_NAME',
       ),
       'reply_to_addr' => array(
          'name' => 'reply_to_addr',

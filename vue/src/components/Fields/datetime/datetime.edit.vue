@@ -27,6 +27,7 @@
 import { ref, computed, watch } from 'vue'
 import { DateTime } from 'luxon'
 import { FieldVardef } from '@/store/modules'
+import { usePreferencesStore } from '@/store/preferences';
 
 interface Props {
     defs: FieldVardef
@@ -40,12 +41,13 @@ const emit = defineEmits(['update:modelValue'])
 
 const datePickerMenu = ref(false)
 const model = ref(props.modelValue)
+const preferences = usePreferencesStore()
 
 const dateValue = computed({
     get() {
         const dt = DateTime.fromSQL(model.value)
         if (dt.isValid) {
-            return dt.toFormat('dd.MM.yyyy') || ''
+            return dt.toFormat(preferences.user?.date_format || 'yyyy-MM-dd') || ''
         }
         return ''
     },
@@ -54,7 +56,7 @@ const dateValue = computed({
         if (!newVal?.trim()) {
             model.value = ''
         }
-        const dt = DateTime.fromFormat(newVal, 'dd.MM.yyyy')
+        const dt = DateTime.fromFormat(newVal, preferences.user?.date_format || 'yyyy-MM-dd')
         if (dt.isValid) {
             model.value = dt.toSQLDate()
         }
