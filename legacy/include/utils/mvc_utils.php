@@ -131,7 +131,6 @@ function ajaxBannedModules()
 function ajaxBannedActions()
 {
     $bannedActions = [
-        'eslistview',
     ];
     if (!empty($GLOBALS['sugar_config']['addAjaxBannedActions'])) {
         $bannedActions = array_merge($bannedActions, $GLOBALS['sugar_config']['addAjaxBannedActions']);

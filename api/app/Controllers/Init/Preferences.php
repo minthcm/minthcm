@@ -51,6 +51,7 @@ use DBManager;
 use DBManagerFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Entities\UserPreferences;
+use MintHCM\Utils\LuxonMapper;
 use PDO;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
@@ -138,8 +139,8 @@ class Preferences
     public function getUserPreferences()
     {
         return array(
-            'date_format' => $this->user_preferences['global']['datef'] ?? '',
-            'time_format' => $this->user_preferences['global']['timef'] ?? '',
+            'date_format' => LuxonMapper::phpToLuxonFormat($this->user_preferences['global']['datef'] ?? ''),
+            'time_format' => LuxonMapper::phpToLuxonFormat($this->user_preferences['global']['timef'] ?? ''),
             'name_format' => $this->user_preferences["global"]["default_locale_name_format"] ?? '',
         );
     }
@@ -171,4 +172,5 @@ class Preferences
             throw ($e);
         }
     }
+
 }

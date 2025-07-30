@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,31 +47,35 @@
 namespace MintHCM\Lib\Search\ElasticSearch;
 
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
+use MintHCM\Utils\ConstantsLoader;
 
+use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
+
+#[\AllowDynamicProperties]
 abstract class ElasticOperator
 {
-    protected $field, $value, $not, $boost;
+    protected $field, $value, $not, $boost, $data;
 
     public function __construct(array $data)
     {
-        global $list_config;
-
-        $this->field = $data['field'] ?? null;
-        if (isset($list_config['fields_mappigs'][$this->field])) {
-            $this->field = $list_config['fields_mappigs'][$this->field];
+        $list_config = ConstantsLoader::getConstants('list_constants');
+        $field_name = array_key_first($data);
+        $this->field = $field_name ?? null;
+        $this->data = $data[$field_name] ?? null;
+        if (isset($list_config['fields_mappings'][$this->field])) {
+            $this->field = $list_config['fields_mappings'][$this->field];
         }
-        $this->value = $data['value'] ?? null;
-        $this->not = $data['not'] ?? false;
-        $this->boost = $data['boost'] ?? 1.0;
+        $this->not = $this->data['not'] ?? false;
+        $this->boost = $this->data['boost'] ?? 1.0;
     }
 
-    public function getData()
+    public function getData(ModulePrefixer $prefixer)
     {
         if (!$this->validateData()) {
             throw new BadRequest400Exception;
         }
 
-        return $this->getDataArray();
+        return $this->getDataArray($prefixer);
     }
 
     public function getArrayKey()
@@ -83,7 +87,7 @@ abstract class ElasticOperator
         return 'filter';
     }
 
-    abstract protected function getDataArray(): array;
+    abstract protected function getDataArray(ModulePrefixer $prefixer): array;
 
     abstract protected function validateData(): bool;
 

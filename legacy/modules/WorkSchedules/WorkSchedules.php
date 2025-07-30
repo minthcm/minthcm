@@ -193,7 +193,9 @@ class WorkSchedules extends Basic
                 $check_notify = false;
             }
 
+            $fetched_row_before_save = $this->fetched_row;
             $parent_result = parent::save($check_notify);
+
             $this->saveRepeatly();
             //prevents work schedule from being saved with spent_time_settlement equals to 0
             if ($this->spent_time_settlement == 0 || $this->spent_time_settlement == null) {
@@ -204,14 +206,22 @@ class WorkSchedules extends Basic
             }
         }
 
-        $this->addNotification($new_record);
+        $this->addNotifications($new_record, $fetched_row_before_save);
         return $parent_result;
     }
-    protected function addNotification($new_record)
+    
+    protected function addNotifications($new_record, $fetched_row_before_save = null)
     {
-        if ($new_record && in_array($this->type , ['holiday', 'sick', 'sick_care', 'occasional_leave', 'leave_at_request', 'overtime', 'excused_absence'])) {
-            require_once 'include/Notifications/plugins/WorkScheduleLeaveCreated.php';
-            (new WorkScheduleLeaveCreated($this))->run();
+        require_once 'include/Notifications/NotificationFactory.php';
+        
+        if ($fetched_row_before_save['supervisor_acceptance'] === 'wait' && $this->supervisor_acceptance === 'accepted') {
+            $notification = NotificationFactory::getNotification('WorkSchedulesAcceptance', $this);
+            $notification->run();
+        }
+        
+        if ($new_record && in_array($this->type, ['holiday', 'sick', 'sick_care', 'occasional_leave', 'leave_at_request', 'overtime', 'excused_absence'])) {
+            $notification = NotificationFactory::getNotification('WorkScheduleLeaveCreated', $this);
+            $notification->run();
         }
     }
     protected function checkUniqueTime()

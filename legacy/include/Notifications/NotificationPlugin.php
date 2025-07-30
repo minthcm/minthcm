@@ -46,15 +46,26 @@ require_once 'include/Notifications/Notification.php';
 
 abstract class NotificationPlugin
 {
-
+    protected $bean;
     protected $type;
+    protected $label;
+
+    const TYPE = 'notification';
+    const LABEL = '';
+
+    abstract public function run();
+
+    public function __construct(?SugarBean $bean = null)
+    {
+        $this->bean = $bean;
+        $this->setType(static::TYPE);
+        $this->setLabel(!empty(static::LABEL) ? static::LABEL : 'LBL_'.strtoupper(static::TYPE));
+    }
 
     public function getNewNotification()
     {
         return new Notification;
     }
-
-    abstract public function run();
 
     public function isWebPushableNotification()
     {
@@ -65,21 +76,40 @@ abstract class NotificationPlugin
     {
         return false;
     }
+
     public function getWebPushLinkConfig()
     {
         return false;
     }
+
     public function getWebPushOverrideConfig()
     {
         return array();
     }
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
+
     public function getType()
     {
         return $this->type;
+    }
+
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    public function canBeManagedByUser()
+    {
+        return true;
+    }
+
+    protected function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    protected function setType($type)
+    {
+        $this->type = $type;
     }
 
 }

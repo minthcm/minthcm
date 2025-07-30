@@ -16,6 +16,7 @@ import { computed } from 'vue'
 import { DateTime } from 'luxon'
 import { FieldVardef } from '@/store/modules'
 import Pencil from '../Pencil.vue'
+import { usePreferencesStore } from '@/store/preferences';
 
 interface Props {
     defs: FieldVardef
@@ -24,6 +25,7 @@ interface Props {
     data?: any
 }
 
+const preferences = usePreferencesStore()
 const props = defineProps<Props>()
 const parsedDate = computed(() => {
     const value = props.modelValue?.trim()
@@ -34,7 +36,7 @@ const parsedDate = computed(() => {
     if (!dt.isValid) {
         return ''
     }
-    return dt.toFormat('dd.MM.yyyy')
+    return dt.toFormat(preferences.user?.date_format || 'dd.MM.yyyy')
 })
 </script>
 

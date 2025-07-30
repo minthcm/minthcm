@@ -49,6 +49,7 @@ $dictionary['Problems'] = array(
    'audited' => true,
    'inline_edit' => true,
    'duplicate_merge' => true,
+   'doctrineEntity' => [],
    'fields' => array(
       "conclusions" => array(
          'name' => 'conclusions',

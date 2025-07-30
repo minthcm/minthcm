@@ -26,7 +26,7 @@ abstract class AbstractProcessingHandler extends AbstractHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record): bool // MintHCM #137532
+    public function handle(array $record)
     {
         if (!$this->isHandling($record)) {
             return false;

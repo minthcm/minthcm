@@ -107,11 +107,17 @@ export const useBackendStore = defineStore('backend', () => {
                 modules: {},
                 current_language: initData.value.languages?.current_language ?? 'en_us'
             }
-            Settings.defaultLocale = initData.value.user.preferences.language.split('_')[0] ?? 'en_us'
             languages.currentLanguage =
                 localStorage.getItem('currentLang') ?? initData.value.global?.default_language ?? 'en_us'
             modules.modulesDefs = initData.value?.modules ?? {}
+            preferences.user = initData.value.preferences
+            
             if (typeof caches !== "undefined") {
+            Settings.defaultLocale = languages.currentLanguage.split('_')[0] ?? 'en'
+            if (initData.value.user.preferences.timezone) {
+                Settings.defaultZone = initData.value.user.preferences.timezone
+            }
+
                 caches.open('mint-rebuild').then(function(cache) {
                     cache.put('api/init', new Response(JSON.stringify(initData.value)));
                 })

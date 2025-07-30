@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@
 namespace MintHCM\Lib\Search\ElasticSearch\Operators;
 
 use MintHCM\Lib\Search\ElasticSearch\ElasticOperator;
+use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
 
 class Range extends ElasticOperator
 {
@@ -57,30 +58,31 @@ class Range extends ElasticOperator
     public function __construct(array $data)
     {
         parent::__construct($data);
-        $this->format = $data['format'] ?? false;
+        $this->format = $this->data['format'] ?? false;
         $this->operators = array();
         foreach ($this::SIGNS as $sign) {
-            if (!empty($data[$sign])) {
-                $this->operators[$sign] = $data[$sign];
+            if (!empty($this->data[$sign])) {
+                $this->operators[$sign] = $this->data[$sign];
             }
         }
     }
 
-    protected function getDataArray(): array
+    protected function getDataArray(ModulePrefixer $prefixer): array
     {
+        $field = $prefixer->modify($this->field);
         $response = array(
             'range' => array(
-                $this->field => array(
+                $field => array(
                 ),
             ),
         );
 
         foreach ($this->operators as $sign => $value) {
-            $response['range'][$this->field][$sign] = $value;
+            $response['range'][$field][$sign] = $value;
         }
 
         if (!empty($this->format)) {
-            $response['range'][$this->field]['format'] = $this->format;
+            $response['range'][$field]['format'] = $this->format;
         }
 
         return $response;

@@ -15,7 +15,6 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults
     {
         $hits   = $this->getHits();
         $parsed = [];
-
         foreach ($hits as $module => $beans) {
             foreach ((array) $beans as $bean) {
                 $obj = BeanFactory::getBean($module, $bean);

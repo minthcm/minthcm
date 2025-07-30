@@ -6,6 +6,7 @@
 import { computed } from 'vue'
 import { FieldVardef } from '@/store/modules'
 import { DateTime } from 'luxon'
+import { usePreferencesStore } from '@/store/preferences';
 
 interface Props {
     defs: FieldVardef
@@ -13,18 +14,17 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
+const preferences = usePreferencesStore()
 const parsedDate = computed(() => {
     const dateString = props.data.bean[props.defs.name].trim()
     if (!dateString) {
         return ''
     }
-    //TODO: luxon date/time format
-    let dateTime = DateTime.fromFormat(dateString, 'dd.MM.yyyy')
+    let dateTime = DateTime.fromFormat(dateString, preferences.user?.date_format || 'dd.MM.yyyy')
     if (!dateTime.isValid) {
         dateTime = DateTime.fromSQL(dateString)
     }
-    return dateTime.isValid ? dateTime.toFormat('dd.MM.yyyy') : dateString
+    return dateTime.isValid ? dateTime.toFormat(preferences.user?.date_format || 'dd.MM.yyyy') : dateString
 })
 </script>
 

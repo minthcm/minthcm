@@ -1,4 +1,0 @@
-composer.phar
-vendor/**
-composer.lock
-local.log

@@ -2,10 +2,10 @@
     <v-menu v-model="menuOpen" :location="'bottom'">
         <template v-slot:activator="val">
             <v-text-field
-        :label="props.label"
-        variant="outlined"
-        density="compact"
-        hide-details
+                :label="props.label"
+                variant="outlined"
+                density="compact"
+                hide-details
                 v-model="model.name"
                 v-bind="val.props"
                 @input="(event) => fetchItems(event)"
@@ -31,8 +31,8 @@
                         ? languages.label('LBL_MINT4_GS_HELP_TIP')
                         : languages.label('LBL_MINT4_GS_NO_RECORDS_FOUND')
                 "
-        @input="(event) => fetchItems(event, index)"
-    />
+                @input="(event) => fetchItems(event, index)"
+            />
             <div v-if="!isLoading">
                 <v-list-item @click="clickOnMenuItem(item)" v-for="(item, index) in items" :key="index">
                     <span v-html="getHighlightedText(item.name, model.name)"></span>
@@ -54,12 +54,12 @@
 
 <script setup lang="ts">
 import { defineProps, computed, ref, defineEmits } from 'vue'
-import axios from 'axios'
 import { FieldVardef } from '@/store/modules'
 import { usePopupsStore } from '@/store/popups'
 import MintPopupRelate from '@/components/MintPopups/MintPopupRelate.vue'
 import { useLanguagesStore } from '@/store/languages'
 import MintButton from '@/components/MintButtons/MintButton.vue'
+import { modulesApi } from '@/api/modules.api'
 import he from 'he'
 
 interface Props {
@@ -108,29 +108,28 @@ async function fetchItems(e) {
         isLoading.value = true
         menuOpen.value = true
         const val = e?.target?.value ?? props.data.bean[props.defs.name] ?? ''
-        const filter = {
-            field: 'name',
-            type: 'wildcard',
-            value: val.toLowerCase() + '*',
-        }
         if (debounceTimeout) {
             clearTimeout(debounceTimeout)
         }
         debounceTimeout = window.setTimeout(async () => {
-    const response = await axios.post(`api/${props.defs.module}`, {
-        offset: 0,
-                sortBy: 'name',
-                filters: [filter],
-    })
-    if (response.data?.results?.length) {
-        items.value = response.data.results.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
-    }
+            const response = await modulesApi.getListData(props.defs.module, '', {
+                must: [
+                    {
+                        wildcard: {
+                            name: val + '*',
+                        },
+                    },
+                ],
+            })
+            if (response.data?.results?.length) {
+                items.value = response.data.results.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
+            }
             isLoading.value = false
         }, DEBOUNCE_TIME)
     } else {
         items.value = []
-}
     }
+}
 
 function openRelatePopup() {
     popupsStore.showPopup({
@@ -145,7 +144,7 @@ function openRelatePopup() {
                 model.value = {
                     id: data.nameToValueArray[props.defs.id_name],
                     name: data.nameToValueArray[props.defs.name],
-    }
+                }
             },
             onClose: () => {},
         },
@@ -156,8 +155,8 @@ function clickOnMenuItem(item) {
     model.value = {
         id: item.id,
         name: item.name,
-        }
     }
+}
 
 function getHighlightedText(text: string, query: string) {
     query = he.encode(query)

@@ -56,6 +56,7 @@ global $customBeanFiles;
 global $modInvisList;
 global $adminOnlyList;
 global $report_include_modules;
+global $modInvisListApiExceptions;
 
 $customBeanList = [];
 $customObjectList = [];
@@ -769,6 +770,10 @@ $moduleList[] = 'Files';
 $beanList['Requests'] = 'Requests';
 $beanFiles['Requests'] = 'modules/Requests/Requests.php';
 $moduleList[] = 'Requests';
+
+$modInvisListApiExceptions = [
+    'Employees',
+];
 
 if (file_exists('include/modules_override.php')) {
     include 'include/modules_override.php';

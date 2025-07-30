@@ -126,6 +126,7 @@ class RepairAndClear
                 $this->generateMappings();
                 $this->repairDatabase();
                 updateMintRebuildFile();
+                $this->createEntities();
                 break;
         }
         }
@@ -508,5 +509,11 @@ class RepairAndClear
             } //name of the module, plural.
             next($beanList);
         }
+    }
+
+    private function createEntities()
+    {
+        require_once 'include/EntityCreator/EntityCreatorManager.php';
+        EntityCreatorManager::createEntities();
     }
 }

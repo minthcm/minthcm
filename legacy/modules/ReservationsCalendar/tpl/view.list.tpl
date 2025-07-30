@@ -6,7 +6,6 @@
 
 <script type="text/javascript">
     calendarList = {$calendars};
-    reservationList = {$reservations};
     calendar_fdow = {if isset($CALENDAR_FDOW)}{$CALENDAR_FDOW|@intval}{else}1{/if};
 </script>
 

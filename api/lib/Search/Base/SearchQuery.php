@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
 
 namespace MintHCM\Lib\Search\Base;
 
+#[\AllowDynamicProperties]
 abstract class SearchQuery
 {
     protected $params, $query, $sort, $size, $from;
@@ -63,6 +64,7 @@ abstract class SearchQuery
         $this->setFrom();
         $this->setSort();
         $this->setQuery();
+        $this->setIndicesBoost();
         return $this->query;
     }
 
@@ -70,12 +72,13 @@ abstract class SearchQuery
 
     abstract protected function setQuery();
 
+    abstract protected function setIndicesBoost();
+
     protected function setSize()
     {
         global $mint_config;
 
         $this->size = $this->params['items'] ?? ($mint_config['search']['default_page_size'] ?? 25);
-        $this->size += 1; //Add one more to check exists next page
     }
 
     protected function setFrom()

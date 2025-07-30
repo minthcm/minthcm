@@ -1,0 +1,11 @@
+<phpunit testdox="true">
+    <php>
+        <ini name="error_reporting" value="0"/>
+    </php>
+    
+    <testsuites>
+        <testsuite name="My Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

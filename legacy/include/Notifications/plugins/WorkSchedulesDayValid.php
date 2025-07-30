@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,13 +44,11 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 require_once 'include/Notifications/NotificationPlugin.php';
+require_once 'include/Integrations/Firebase/autoload.php'; // MintHCM #122506
 
 class WorkSchedulesDayValid extends NotificationPlugin {
-
-    public function __construct()
-    {
-        $this->setType('WorkSchedulesDayValid');
-    }
+    const TYPE = 'WorkSchedulesDayValid';
+    const LABEL = 'LBL_WORKSCHEDULES_DAY_VALID';
 
    public function run() {
       global $app_strings;
@@ -73,6 +71,13 @@ class WorkSchedulesDayValid extends NotificationPlugin {
                  ->setRelatedBean($work_schedule['id'], 'WorkSchedules')
                  ->setType($this->getType())
                  ->saveAsAlert()->WebPush();
+         // MintHCM #136592 start
+         (new MintHCM\Firebase\PushNotifications\GeneralNotificationToUser())->execute([
+            'user_id' => $work_schedule['assigned_user_id'],
+            'title' => translate('LBL_LIST_TITLE', 'WorkSchedules'),
+            'body' => sprintf(translate('LBL_APPROVED_ALERT', 'WorkSchedules'), $this->getWorkScheduleStartDate($work_schedule['id']))
+         ]);
+         // MintHCM #136592 end
       }
 
       $this->removeIncorrectNotifications();

@@ -41,7 +41,7 @@ class LogoutController extends BaseController
                 ->validateAuthenticatedRequest($request)
                 ->getAttribute('oauth_access_token_id');
 
-            $logoutResponse = $this->logoutService->logout($accessToken);
+            $logoutResponse = $this->logoutService->logout($accessToken, $request); // MintHCM #136592
 
             return $this->generateResponse($response, $logoutResponse, 200);
         } catch (\Exception $exception) {

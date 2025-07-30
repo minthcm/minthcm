@@ -5,6 +5,9 @@ $dictionary['Reactions'] = array(
     'audited' => false,
     'inline_edit' => false,
     'duplicate_merge' => false,
+    'doctrineEntity' => [
+        'repository' => 'ReactionRepository',
+    ],
     'fields' => array(
         'reaction_type' => array(
             'name' => 'reaction_type',

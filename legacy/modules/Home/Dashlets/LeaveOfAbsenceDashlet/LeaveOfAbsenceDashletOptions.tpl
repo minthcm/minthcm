@@ -8,7 +8,7 @@
 * Copyright (C) 2011 - 2018 SalesAgility Ltd.
 *
 * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
-* Copyright (C) 2018-2023 MintHCM
+* Copyright (C) 2018-2024 MintHCM
 *
 * This program is free software; you can redistribute it and/or modify it under
 * the terms of the GNU Affero General Public License version 3 as published by the
@@ -82,6 +82,38 @@
                     <br/>
                     <input type="checkbox" id="show_saturday" name="show_saturday" value="true" {if $show_days_of_week.saturday == true}checked{/if}>
                     <label for="show_saturday">{$DASHLET_STRINGS.LBL_SATURDAY}</label>
+                </td>
+            </tr>
+            <tr>
+                <td valign='top' nowrap class='dataLabel'>{$DASHLET_STRINGS.LBL_SHOW_TYPE_OF_ABSENCE}</td>
+                <td valign='top' class='dataField'>
+                    <input type="checkbox" id="show_home" name="show_home" value="true" {if $show_type_of_absence.home == true}checked{/if}>
+                    <label for="show_home">{$types_of_absence.home}</label>
+                    <br/>
+                    <input type="checkbox" id="show_sick" name="show_sick" value="true" {if $show_type_of_absence.sick == true}checked{/if}>
+                    <label for="show_sick">{$types_of_absence.sick}</label>
+                    <br/>
+                    <input type="checkbox" id="show_holiday" name="show_holiday" value="true" {if $show_type_of_absence.holiday == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.holiday}</label>
+                    <br/>
+                    <input type="checkbox" id="show_sick_care" name="show_sick_care" value="true" {if $show_type_of_absence.sick_care == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.sick_care}</label>
+                    <br/>
+                    <input type="checkbox" id="show_delegation" name="show_delegation" value="true" {if $show_type_of_absence.delegation == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.delegation}</label>
+                    <br/>
+                    <input type="checkbox" id="show_occasional_leave" name="show_occasional_leave" value="true" {if $show_type_of_absence.occasional_leave == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.occasional_leave}</label>
+                    <br/>
+                    <input type="checkbox" id="show_leave_at_request" name="show_leave_at_request" value="true" {if $show_type_of_absence.leave_at_request == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.leave_at_request}</label>
+                    <br/>
+                    <input type="checkbox" id="show_overtime" name="show_overtime" value="true" {if $show_type_of_absence.overtime == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.overtime}</label>
+                    <br/>
+                    <input type="checkbox" id="show_excused_absence" name="show_excused_absence" value="true" {if $show_type_of_absence.excused_absence == true}checked{/if}>
+                    <label for="show_holiday">{$types_of_absence.excused_absence}</label>
+                    <br/>
                 </td>
             </tr>
             <tr>

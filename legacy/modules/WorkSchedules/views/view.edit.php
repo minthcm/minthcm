@@ -92,7 +92,7 @@ class WorkSchedulesViewEdit extends ViewEdit {
 
    private function assignShowEditAllRecurrences() {
       $edit = (isset($_REQUEST['show_edit_all_recurrences']) && $_REQUEST['show_edit_all_recurrences']);
-      $r = !$edit && $this->bean->repeat_type ? 1 : 0;
+      $r = !$edit && $this->bean->repeat_type && $_REQUEST['isDuplicate'] != 'true' ? 1 : 0;
       $this->ss->assign('show_edit_all_recurrences', $r);
    }
 
