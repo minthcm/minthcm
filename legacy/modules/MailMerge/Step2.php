@@ -129,11 +129,6 @@ if (isset($_SESSION['MAILMERGE_SKIP_REL']) && $_SESSION['MAILMERGE_SKIP_REL']) {
     if ($seed->load_relationship('contacts')) {
         $rel_options["Contacts"] = "Contacts";
     }
-    if ($_SESSION['MAILMERGE_MODULE'] == "Accounts") {
-        $rel_options["Opportunities"] = "Opportunities";
-    } elseif ($_SESSION['MAILMERGE_MODULE'] == "Opportunities") {
-        $rel_options["Accounts"] = "Accounts";
-    }
     $xtpl->assign("MAIL_MERGE_CONTAINS_CONTACT_INFO", '<table><tr><td>'.$mod_strings['LBL_CONTAINS_CONTACT_INFO'].'</td><td><select id="contains_contact_info" name="contains_contact_info">'.get_select_options_with_id($rel_options, $selected).'</select></td></tr></table>');
 }
 

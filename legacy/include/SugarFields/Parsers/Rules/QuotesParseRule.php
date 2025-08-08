@@ -87,8 +87,6 @@ function preParse($panels, $view) {
 		   	  	 	   $panels[$name][$rowCount][$key] = $column;
 		   	  	 	} else if($this->matches($column, '/^date_quote_closed$/')) {
 		   	  	 	   $panels[$name][$rowCount][$key] = 'date_quote_expected_closed';
-		   	  	 	} else if($this->matches($column, '/^tag\.opportunity$/')) {
-                       $panels[$name][$rowCount][$key] = 'opportunity_name';
 		   	  	 	}
 				} //foreach
 		   	  } //foreach

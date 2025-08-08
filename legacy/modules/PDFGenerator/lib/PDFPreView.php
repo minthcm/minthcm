@@ -103,6 +103,7 @@ class PDFPreView extends BasePDFGenerator {
 
     protected function getValueByType($field_name, $rel_module_long) {
         global $timedate;
+        $return = '';
         switch ($field_name['type']) {
             case 'varchar':
                 $return = $this->prepareVarchar($field_name, $rel_module_long);
@@ -174,7 +175,7 @@ class PDFPreView extends BasePDFGenerator {
 
     protected function prepareNumber($field_name) {
         global $sugar_config;
-        if ($field_name['disable_format_number'] == '1') {
+        if (isset($field_name['disable_format_number']) && $field_name['disable_format_number'] == '1') {
             $return = rand(1, 100);
         } else {
             $p = (isset($field_name['precision'])) ? $field_name['precision'] : 2;

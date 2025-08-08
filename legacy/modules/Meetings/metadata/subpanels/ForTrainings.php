@@ -88,5 +88,11 @@ $subpanel_layout = array(
         'recurring_source' => array(
             'usage' => 'query_only',
         ),
+        'close_button' => [
+            'widget_class' => 'SubPanelCloseButton',
+            'vname' => 'LBL_LIST_CLOSE',
+            'sortable' => false,
+            'width' => '6%',
+         ],
     ),
 );

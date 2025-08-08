@@ -105,9 +105,6 @@ class Lead extends Person implements EmailInterface
     public $contact_id;
     public $contact_name;
     public $account_id;
-    public $opportunity_id;
-    public $opportunity_name;
-    public $opportunity_amount;
     //used for vcard export only
     public $birthdate;
     public $status;
@@ -174,30 +171,6 @@ class Lead extends Person implements EmailInterface
                     $this->account_name_owner = null;
                 }
                 $this->account_name_mod = 'Accounts';
-            }
-        }
-    }
-    public function get_opportunity()
-    {
-        if (isset($this->opportunity_id) && !empty($this->opportunity_id)) {
-            $query = "SELECT name, assigned_user_id opportunity_name_owner FROM opportunities WHERE id='{$this->opportunity_id}'";
-
-            //requireSingleResult has beeen deprecated.
-            //$result = $this->db->requireSingleResult($query);
-            $result = $this->db->limitQuery($query, 0, 1, true, "Want only a single row");
-
-            if (!empty($result)) {
-                $row = $this->db->fetchByAssoc($result);
-
-                if (!is_null($row) && !is_bool($row)) {
-                    $this->opportunity_name = $row['name'];
-                    $this->opportunity_name_owner = $row['opportunity_name_owner'];
-                } else {
-                    $this->opportunity_name = null;
-                    $this->opportunity_name_owner = null;
-                }
-
-                $this->opportunity_name_mod = 'Opportunities';
             }
         }
     }
@@ -272,9 +245,9 @@ class Lead extends Person implements EmailInterface
         return $ret_array;
     }
 
-    public function converted_lead($leadid, $contactid, $accountid, $opportunityid)
+    public function converted_lead($leadid, $contactid, $accountid)
     {
-        $query = "UPDATE leads set converted='1', contact_id=$contactid, account_id=$accountid, opportunity_id=$opportunityid where  id=$leadid and deleted=0";
+        $query = "UPDATE leads set converted='1', contact_id=$contactid, account_id=$accountid where  id=$leadid and deleted=0";
         $this->db->query($query, true, "Error converting lead: ");
 
         //we must move the status out here in order to be able to capture workflow conditions
@@ -300,7 +273,6 @@ class Lead extends Person implements EmailInterface
         parent::fill_in_additional_detail_fields();
         $this->_create_proper_name_field();
         $this->get_contact();
-        $this->get_opportunity();
         $this->get_account();
 
         if (!empty($this->campaign_id)) {
@@ -447,33 +419,7 @@ class Lead extends Person implements EmailInterface
         }
         $is_owner = false;
         $in_group = false; //SECURITY GROUPS
-        if (!empty($this->opportunity_name)) {
-            if (!empty($this->opportunity_name_owner)) {
-                global $current_user;
-                $is_owner = $current_user->id == $this->opportunity_name_owner;
-            }
-            /* BEGIN - SECURITY GROUPS */
-            else {
-                global $current_user;
-                $parent_bean = BeanFactory::getBean('Opportunities', $this->opportunity_id);
-                if ($parent_bean !== false) {
-                    $is_owner = $current_user->id == $parent_bean->assigned_user_id;
-                }
-            }
-            require_once("modules/SecurityGroups/SecurityGroup.php");
-            $in_group = SecurityGroup::groupHasAccess('Opportunities', $this->opportunity_id, 'view');
-            /* END - SECURITY GROUPS */
-        }
         /* BEGIN - SECURITY GROUPS */
-        /**
-        if( ACLController::checkAccess('Opportunities', 'view', $is_owner)){
-        */
-        if (ACLController::checkAccess('Opportunities', 'view', $is_owner, 'module', $in_group)) {
-            /* END - SECURITY GROUPS */
-            $array_assign['OPPORTUNITY'] = 'a';
-        } else {
-            $array_assign['OPPORTUNITY'] = 'span';
-        }
 
 
         $is_owner = false;
@@ -510,7 +456,7 @@ class Lead extends Person implements EmailInterface
         return $array_assign;
     }
 
-    //carrys forward custom lead fields to contacts, accounts, opportunities during Lead Conversion
+    //carrys forward custom lead fields to contacts, accounts during Lead Conversion
     public function convertCustomFieldsForm(&$form, &$tempBean, &$prefix)
     {
         global $mod_strings, $app_list_strings, $app_strings, $lbl_required_symbol;

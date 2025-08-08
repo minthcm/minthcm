@@ -112,11 +112,6 @@ $dictionary['project_relation'] = array(
         'join_table'=> 'project_relation', 'join_key_lhs'=>'project_id', 'join_key_rhs'=>'relation_id',
         'relationship_role_column'=>'relation_type','relationship_role_column_value'=>'Contacts'),
 
-        'projects_opportunities' => array('lhs_module'=> 'Project', 'lhs_table'=> 'project', 'lhs_key' => 'id',
-        'rhs_module'=> 'Opportunities', 'rhs_table'=> 'opportunities', 'rhs_key' => 'id',
-        'relationship_type'=>'many-to-many',
-        'join_table'=> 'project_relation', 'join_key_lhs'=>'project_id', 'join_key_rhs'=>'relation_id',
-        'relationship_role_column'=>'relation_type','relationship_role_column_value'=>'Opportunities'),
 
         'projects_quotes' => array('lhs_module'=> 'Project', 'lhs_table'=> 'project', 'lhs_key' => 'id',
         'rhs_module'=> 'Quotes', 'rhs_table'=> 'quotes', 'rhs_key' => 'id',

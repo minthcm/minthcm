@@ -92,7 +92,7 @@ $viewdefs[$module_name] = array(
                             'call_back_function' => 'set_return_overload',
                         ),
                     ),
-                    '',
+                    'organizational_unit',
                 ),
                 array(
                     'spent_time',

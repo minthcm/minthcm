@@ -76,15 +76,6 @@ array(
         array(
           0 =>
           array(
-            'name' => 'aos_contracrtunities_name',
-            'label' => 'LBL_AOS_CONTRACTS_OPPORTUNITIES_FROM_OPPORTUNITIES_TITLE',
-          ),
-          1 => '',
-        ),
-        5 =>
-        array(
-          0 =>
-          array(
             'name' => 'customer_signed_date',
             'label' => 'LBL_CUSTOMER_SIGNED_DATE',
           ),
@@ -94,7 +85,7 @@ array(
             'label' => 'LBL_COMPANY_SIGNED_DATE',
           ),
         ),
-        6 =>
+        5 =>
         array(
           0 =>
           array(
@@ -108,7 +99,7 @@ array(
             'label' => 'LBL_RMINDER',
           ),
         ),
-        7 =>
+        6 =>
         array(
           0 =>
           array(

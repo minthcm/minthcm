@@ -53,7 +53,6 @@
 <input type="hidden" name="contact_name" value="{$REQUEST.contact_name}">
 <input type="hidden" name="email_id" value="{$REQUEST.email_id}">
 <input type="hidden" name="account_id" value="{$REQUEST.account_id}">
-<input type="hidden" name="opportunity_id" value="{$REQUEST.opportunity_id}">
 <input type="hidden" name="acase_id" value="{$REQUEST.acase_id}">
 <input type="hidden" name="return_action" value="{$REQUEST.return_action}">
 <input type="hidden" name="return_module" value="{$REQUEST.return_module}">

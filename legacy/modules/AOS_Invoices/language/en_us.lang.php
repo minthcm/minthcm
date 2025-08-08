@@ -141,7 +141,6 @@ $mod_strings = array(
     'LBL_BILLING_CONTACT' => 'Contact',
     'LBL_EXPIRATION' => 'Valid Until',
     'LBL_INVOICE_NUMBER' => 'Invoice Number',
-    'LBL_OPPORTUNITY' => 'Opportunity Name',
     'LBL_TEMPLATE_DDOWN_C' => 'Invoice Templates',
     'LBL_STAGE' => 'Quote Stage',
     'LBL_TERM' => 'Payment Terms',

@@ -50,9 +50,6 @@ class AOS_ContractsController extends SugarController
                 $_REQUEST['contact_id'] = $row['billing_contact_id'];
             }
 
-            if (isset($row['opportunity_id'])) {
-                $_REQUEST['opportunity_id'] = $row['opportunity_id'];
-            }
         }
 
         if (isset($_REQUEST['account_id'])) {
@@ -68,14 +65,6 @@ class AOS_ContractsController extends SugarController
             $contact->retrieve($_REQUEST['contact_id']);
             $this->bean->contact = $contact->name;
             $this->bean->contact_id = $contact->id;
-        }
-
-        if (isset($_REQUEST['opportunity_id'])) {
-            $query = "SELECT id,name FROM opportunities WHERE id = '?'";
-            $result = $this->bean->db->pquery($query, [$_REQUEST['opportunity_id']]);
-            $row = $this->bean->db->fetchByAssoc($result);
-            $this->bean->opportunity = $row['name'];
-            $this->bean->opportunity_id = $row['id'];
         }
     }
 }

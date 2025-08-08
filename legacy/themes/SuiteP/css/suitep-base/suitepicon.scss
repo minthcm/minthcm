@@ -46,9 +46,6 @@ button .suitepicon {
  * instead of creating mulitple icons in the font we can simply reuse the icons if the names are slightly different
  */
 
-.suitepicon-action-view-status {
-    @extend .suitepicon-module-opportunitiesbyleadsourcebyoutcomedashlet;
-}
 
 .suitepicon-action-view-news {
     @extend .suitepicon-dashlet-sugarnewsdashlet;
@@ -154,29 +151,6 @@ button .suitepicon {
 }
 
 // Charts
-.suitepicon-module-opportunitiesbyleadsourcebyoutcomedashlet {
-    @extend .suitepicon-dashlet-charts-horizontal;
-}
-
-.suitepicon-module-opportunitiesbyleadsourcedashlet {
-    @extend .suitepicon-dashlet-charts-pie;
-}
-
-.suitepicon-module-campaignroichartdashlet {
-    @extend .suitepicon-dashlet-charts-groupby;
-}
-
-.suitepicon-module-mypipelinebysalesstagedashlet {
-    @extend .suitepicon-dashlet-charts-funnel;
-}
-
-.suitepicon-module-outcomebymonthdashlet {
-    @extend .suitepicon-dashlet-charts-vertical;
-}
-
-.suitepicon-module-pipelinebysalesstagedashlet {
-    @extend .suitepicon-dashlet-charts-funnel;
-}
 
 .suitepicon-module-aos-products-quotes {
     @extend .suitepicon-module-products;

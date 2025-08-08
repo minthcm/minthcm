@@ -1,0 +1,3 @@
+Config/mcp_conifg.php
+*.log
+!.htaccess

@@ -63,14 +63,14 @@ class jjwg_Maps extends jjwg_Maps_sugar
          * @var array
          */
         'valid_geocode_modules' => array(
-            'Accounts', 'Contacts', 'Leads', 'Opportunities', 'Cases', 'Project', 'Meetings', 'Prospects'
+            'Accounts', 'Contacts', 'Leads', 'Cases', 'Project', 'Meetings', 'Prospects'
         ),
         /**
          * 'valid_geocode_tables' defines the valid table names used with geocoding.
          * @var array
          */
         'valid_geocode_tables' => array(
-            'accounts', 'contacts', 'leads', 'opportunities', 'cases', 'project', 'meetings', 'prospects'
+            'accounts', 'contacts', 'leads', 'cases', 'project', 'meetings', 'prospects'
         ),
         /**
          * 'geocode_modules_to_address_type' defines the modules address types to be used with geocoding.
@@ -81,7 +81,6 @@ class jjwg_Maps extends jjwg_Maps_sugar
             'Accounts' => 'billing',
             'Contacts' => 'primary',
             'Leads' => 'primary',
-            'Opportunities' => 'billing',
             'Cases' => 'billing',
             'Project' => 'billing',
             'Meetings' => 'flex_relate',
@@ -149,7 +148,6 @@ class jjwg_Maps extends jjwg_Maps_sugar
             'Accounts' => 'industry',
             'Contacts' => 'assigned_user_name',
             'Leads' => 'status',
-            'Opportunities' => 'sales_stage',
             'Cases' => 'priority',
             'Project' => 'assigned_user_name',
             'Meetings' => 'assigned_user_name',
@@ -1041,19 +1039,6 @@ class jjwg_Maps extends jjwg_Maps_sugar
             $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Prospects']);
         } elseif ($object_name == 'User') {
             $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Users']);
-        } elseif ($object_name == 'Opportunity') {
-
-            // Find Account - Assume only one related Account
-            $query = "SELECT accounts.*, accounts_cstm.* FROM accounts LEFT JOIN accounts_cstm ON accounts.id = accounts_cstm.id_c " .
-                    " LEFT JOIN accounts_opportunities ON accounts.id = accounts_opportunities.account_id AND accounts_opportunities.deleted = 0 " .
-                    " WHERE accounts.deleted = 0 AND accounts_opportunities.opportunity_id = '" . $display['id'] . "'";
-            $GLOBALS['log']->debug(__METHOD__.' Opportunity to Account');
-            $result = $this->db->limitQuery($query, 0, 1);
-            $fields = $this->db->fetchByAssoc($result);
-
-            if (!empty($fields)) {
-                $address = $this->defineMapsFormattedAddress($fields, $this->settings['geocode_modules_to_address_type']['Opportunities']);
-            }
         } elseif (in_array($object_name, array('aCase', 'Case'))) {
 
             // Find Account from Case (account_id field)
@@ -1093,28 +1078,6 @@ class jjwg_Maps extends jjwg_Maps_sugar
             $GLOBALS['log']->debug(__METHOD__.' Project to Account');
             $result = $this->db->limitQuery($query, 0, 1);
             $fields = $this->db->fetchByAssoc($result);
-
-            if (empty($fields)) {
-                // Find Opportunity - Assuming that the Project was created from an Opportunity (Closed Won) Detial View
-                $query = "SELECT opportunities.*, opportunities_cstm.* FROM opportunities LEFT JOIN opportunities_cstm ON opportunities.id = opportunities_cstm.id_c " .
-                        " LEFT JOIN projects_opportunities ON opportunities.id = projects_opportunities.opportunity_id AND projects_opportunities.deleted = 0 " .
-                        " WHERE opportunities.deleted = 0 AND projects_opportunities.project_id = '" . $display['id'] . "'";
-                $GLOBALS['log']->debug(__METHOD__.' Project to Opportunity');
-                $result = $this->db->limitQuery($query, 0, 1);
-                $opportunity = $this->db->fetchByAssoc($result);
-                if ($opportunity === false) {
-                    $result = null;
-                    $fields = null;
-                } else {
-                    // Find Account - Assume only one related Account for the Opportunity
-                    $query = "SELECT accounts.*, accounts_cstm.* FROM accounts LEFT JOIN accounts_cstm ON accounts.id = accounts_cstm.id_c " .
-                            " LEFT JOIN accounts_opportunities ON accounts.id = accounts_opportunities.account_id AND accounts_opportunities.deleted = 0 " .
-                            " WHERE accounts.deleted = 0 AND accounts_opportunities.opportunity_id = '" . $opportunity['id'] . "'";
-                    $GLOBALS['log']->debug(__METHOD__.' Opportunity to Account');
-                    $result = $this->db->limitQuery($query, 0, 1);
-                    $fields = $this->db->fetchByAssoc($result);
-                }
-            }
 
             if (!empty($fields)) {
                 $address = $this->defineMapsFormattedAddress($fields, $this->settings['geocode_modules_to_address_type']['Project']);

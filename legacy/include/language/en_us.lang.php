@@ -64,7 +64,6 @@ $app_list_strings = array(
         'Contacts' => 'Contacts',
         'Accounts' => 'Accounts',
         'Alerts' => 'Alerts',
-        'Opportunities' => 'Opportunities',
         'Cases' => 'Cases',
         'Notes' => 'Notes',
         'TemplateSectionLine' => 'Template Section Line',
@@ -185,7 +184,6 @@ $app_list_strings = array(
         'Dashboard' => 'Dashboard',
         'Contacts' => 'Contact',
         'Accounts' => 'Account',
-        'Opportunities' => 'Opportunity',
         'Cases' => 'Case',
         'Notes' => 'Note',
         'Emails' => 'Email',
@@ -298,30 +296,11 @@ $app_list_strings = array(
         'Campaign' => 'Campaign',
         'Other' => 'Other',
     ),
-    'opportunity_type_dom' => array(
-        '' => '',
-        'Existing Business' => 'Existing Business',
-        'New Business' => 'New Business',
-    ),
     'roi_type_dom' => array(
         'Revenue' => 'Revenue',
         'Investment' => 'Investment',
         'Expected_Revenue' => 'Expected Revenue',
         'Budget' => 'Budget',
-    ),
-    //Note:  do not translate opportunity_relationship_type_default_key
-    //       it is the key for the default opportunity_relationship_type_dom value
-    'opportunity_relationship_type_default_key' => 'Primary Decision Maker',
-    'opportunity_relationship_type_dom' => array(
-        '' => '',
-        'Primary Decision Maker' => 'Primary Decision Maker',
-        'Business Decision Maker' => 'Business Decision Maker',
-        'Business Evaluator' => 'Business Evaluator',
-        'Technical Decision Maker' => 'Technical Decision Maker',
-        'Technical Evaluator' => 'Technical Evaluator',
-        'Executive Sponsor' => 'Executive Sponsor',
-        'Influencer' => 'Influencer',
-        'Other' => 'Other',
     ),
     //Note:  do not translate case_relationship_type_default_key
     //       it is the key for the default case_relationship_type_dom value
@@ -646,7 +625,6 @@ $app_list_strings = array(
         'Leads' => 'Leads',
         'Meetings' => 'Meetings',
         'Notes' => 'Notes',
-        'Opportunities' => 'Opportunities',
         'Outlook Plugin' => 'Outlook Plugin',
         'Projects' => 'Projects',
         'Quotes' => 'Quotes',
@@ -1364,7 +1342,6 @@ $app_strings = array(
     'LBL_EMAIL_QC_CASES' => 'Case',
     'LBL_EMAIL_QC_LEADS' => 'Lead',
     'LBL_EMAIL_QC_CONTACTS' => 'Contact',
-    'LBL_EMAIL_QC_OPPORTUNITIES' => 'Opportunity',
     'LBL_EMAIL_QUICK_CREATE' => 'Quick Create',
     'LBL_EMAIL_REBUILDING_FOLDERS' => 'Rebuilding Folders',
     'LBL_EMAIL_RELATE_TO' => 'Relate',
@@ -1664,9 +1641,6 @@ $app_strings = array(
     'LBL_NONE' => '--None--',
     'LBL_NOTE' => 'Note',
     'LBL_NOTES' => 'Notes',
-    'LBL_OPPORTUNITIES' => 'Opportunities',
-    'LBL_OPPORTUNITY_NAME' => 'Opportunity Name',
-    'LBL_OPPORTUNITY' => 'Opportunity',
     'LBL_OR' => 'OR',
     'LBL_PANEL_OVERVIEW' => 'OVERVIEW',
     'LBL_PANEL_ASSIGNMENT' => 'OTHER',
@@ -1873,7 +1847,6 @@ $app_strings = array(
     'LBL_CREATE_CONTACT' => 'Create Contact',
     'LBL_CREATE_CASE' => 'Create Case',
     'LBL_CREATE_NOTE' => 'Create Note',
-    'LBL_CREATE_OPPORTUNITY' => 'Create Opportunity',
     'LBL_SCHEDULE_CALL' => 'Log Call',
     'LBL_SCHEDULE_MEETING' => 'Schedule Meeting',
     'LBL_SCHEDULER' => 'Scheduler',
@@ -3400,7 +3373,6 @@ $app_list_strings['map_module_type_list']['Contacts'] = 'Contacts';
 $app_list_strings['map_module_type_list']['Cases'] = 'Cases';
 $app_list_strings['map_module_type_list']['Leads'] = 'Leads';
 $app_list_strings['map_module_type_list']['Meetings'] = 'Meetings';
-$app_list_strings['map_module_type_list']['Opportunities'] = 'Opportunities';
 $app_list_strings['map_module_type_list']['Project'] = 'Projects';
 $app_list_strings['map_module_type_list']['Prospects'] = 'Targets';
 
@@ -3409,7 +3381,6 @@ $app_list_strings['map_relate_type_list']['Contacts'] = 'Contact';
 $app_list_strings['map_relate_type_list']['Cases'] = 'Case';
 $app_list_strings['map_relate_type_list']['Leads'] = 'Lead';
 $app_list_strings['map_relate_type_list']['Meetings'] = 'Meeting';
-$app_list_strings['map_relate_type_list']['Opportunities'] = 'Opportunity';
 $app_list_strings['map_relate_type_list']['Project'] = 'Project';
 $app_list_strings['map_relate_type_list']['Prospects'] = 'Target';
 
@@ -3707,14 +3678,11 @@ $app_strings['LBL_LOADING_ERROR_INLINE_EDITING'] = "There was an error loading t
 
 //SuiteSpots
 $app_list_strings['spots_areas'] = array(
-    'getSalesSpotsData' => 'Sales',
     'getAccountsSpotsData' => 'Accounts',
     'getLeadsSpotsData' => 'Leads',
     'getServiceSpotsData' => 'Service',
-    'getMarketingSpotsData' => 'Marketing',
     'getMarketingActivitySpotsData' => 'Marketing Activity',
     'getActivitiesSpotsData' => 'Activities',
-    'getQuotesSpotsData' => 'Quotes',
 );
 
 $app_list_strings['moduleList']['Spots'] = 'Spots';
@@ -4032,6 +4000,7 @@ $app_list_strings['appraisals_status_list'] = array(
 $app_list_strings['group_type_list'] = array(
     'standard' => 'Standard',
     'private' => 'Private',
+    'company' => 'Company',
     'business_unit' => 'Business Unit',
     'department' => 'Department',
     'team' => 'Team',

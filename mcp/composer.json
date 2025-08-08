@@ -1,0 +1,11 @@
+{
+  "autoload": {
+    "psr-4": {
+      "MintMCP\\": "./"
+    }
+  },
+  "require": {
+    "logiscape/mcp-sdk-php": "^1.2",
+    "psr/log": "^2.0 || ^3.0"
+  }
+}

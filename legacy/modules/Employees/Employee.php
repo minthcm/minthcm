@@ -479,7 +479,7 @@ class Employee extends Person implements EmailInterface
     }
     // MintHCM #123323 Users|Employees ACLAccess END
 
-    public function isOwner($user_id)
+    public function isOwner(?string $user_id) : bool
     {
         global $current_user; /** @var User */
         if ($this->id == $current_user->id) {

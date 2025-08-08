@@ -102,11 +102,6 @@ array(
             'label' => 'LBL_RENEWAL_REMINDER_DATE',
             'type' => 'datetimecombo',
           ),
-          1 =>
-          array(
-            'name' => 'opportunity',
-            'label' => 'LBL_OPPORTUNITY',
-          ),
         ),
         5 =>
         array(

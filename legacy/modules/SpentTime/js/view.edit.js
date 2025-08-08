@@ -1,11 +1,10 @@
 $(document).ready(function () {
    checkComboDateStart();
    if ($('#EditView').parent().prop('className') == 'MintHCMPopup-body') {
-      $('div .buttons #SAVE').hide();
-      $('div .buttons #CANCEL').hide();
+       $('div .buttons #SAVE').hide();
+       $('div .buttons #CANCEL').hide();
    }
 });
-
 function checkComboDateStart() {
 
    if (typeof combo_date_start !== 'undefined' && $("#date_start_hours").length > 0) {
@@ -53,42 +52,55 @@ function setEvent() {
       $(this).select();
    });
 }
-
 if (!window.spentTimeSaveHandlerAlreadyInitialized) {
-   viewTools.form.beforeSave(function (form_name) {
+   viewTools.form.beforeSave( function (form_name) {
       var result_1 = validateWorkSchedule(form_name);
       var result_2 = validateDates(form_name);
-      var result_6 = validateDescription(form_name);
-
-      return result_1 && result_2 && result_6;
+      var result_3 = validateDescription(form_name);
+      var result_4 = validateCompanies(form_name);
+      return result_1 && result_2 && result_3 && result_4;
    });
-   window.spentTimeSaveHandlerAlreadyInitialized = true;
+   window.spentTimeSaveHandlerAlreadyInitialized = false;
 }
+function validateCompanies(form_name) {
+   var result = true;
+   var current_company = $('#' + form_name + ' #organizational_unit').val();
+   var companies_length = $('#' + form_name + ' #organizational_unit option').length;
+   console.log(current_company,companies_length);
+   if (current_company == '' && companies_length > 1) 
+   {
+      result = false;
+      viewTools.GUI.fieldErrorMark($("#" + form_name + " #organizational_unit"), viewTools.language.get('SpentTime', 'LBL_ERR_COMPANY_NOT_SELECTED'));
+   }
 
+   return result;
+   
+}
 
 function validateWorkSchedule(form_name) {
-   var result = false;
-   viewTools.api.callCustomApi({
-      module: 'SpentTime',
-      action: 'canLogTimeToPast',
-      format: 'JSON',
-      async: false,
-      dataPOST: {
-         workschedule_id: $("#" + form_name + " #workschedule_id").val(),
-      },
-      callback: function (data) {
-         result = data.result;
-         if (!result) {
-            $.each(data.errors, function (i, v) {
-               if ($.inArray(v, ['ERR_METHOD_ERROR_ISMYWORKSCHEDULEINCURRENTMONTH']) > -1) {
-                  viewTools.GUI.fieldErrorMark($("#" + form_name + " #workschedule_name"), viewTools.language.get('SpentTime', 'LBL_ERR_CANNOT_ADD_SPENT_TIME_TO_THE_PAST_WORK_SCHEDULE'));
-               }
-            });
-         }
+var result = false;
+viewTools.api.callCustomApi({
+   module: 'SpentTime',
+   action: 'canLogTimeToPast',
+   format: 'JSON',
+   async: false,
+   dataPOST: {
+      workschedule_id: $("#" + form_name + " #workschedule_id").val(),
+   },
+   callback: function (data) {
+      result = data.result;
+      if (!result) {
+         $.each(data.errors, function (i, v) {
+            if ($.inArray(v, ['ERR_METHOD_ERROR_ISMYWORKSCHEDULEINCURRENTMONTH']) > -1) {
+               viewTools.GUI.fieldErrorMark($("#" + form_name + " #workschedule_name"), viewTools.language.get('SpentTime', 'LBL_ERR_COMPANY_NOT_SELECTED'));
+            }
+         });
       }
-   });
-   return result;
+   }
+});
+return result;
 }
+
 
 function validateDates(form_name) {
    var result_1 = true;
@@ -107,6 +119,7 @@ function validateDates(form_name) {
    }
 
    return result_1 && result_2 && result_3 && result_4;
+
 }
 
 function validateDescription(form_name) {

@@ -93,8 +93,14 @@ $searchdefs[$module_name] = array(
                     'additional_params' => 'SpentTime-category',
                     'include' => 'include/utils/getDictionary.php'],
             ),
-            array
-            (
+            array(
+                'name' => 'organizational_unit',
+                'label' => 'LBL_SPENT_TIME_ORGANIZATIONAL_UNIT',
+                'type' => 'enum',
+                'function' => ['name' => 'getCompanies', 
+                'include' => 'include/utils/getCompanies.php'],
+            ),
+            array(
                 'name' => 'assigned_user_id',
                 'label' => 'LBL_ASSIGNED_TO',
                 'type' => 'enum',

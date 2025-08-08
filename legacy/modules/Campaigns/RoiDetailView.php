@@ -125,33 +125,7 @@ if(!$focus->campaign_type == "NewsLetter"){
    $roi_vals['actual_cost']= $focus->actual_cost;
    $roi_vals['Expected_Revenue']= $focus->expected_revenue;
    $roi_vals['Expected_Cost']= $focus->expected_cost;
-   
-//Query for opportunities won, clickthroughs
-$campaign_id = $focus->id;
-            $opp_query1  = "select camp.name, count(*) opp_count,SUM(opp.amount) as Revenue, SUM(camp.actual_cost) as Investment, 
-                            ROUND((SUM(opp.amount) - SUM(camp.actual_cost))/(SUM(camp.actual_cost)), 2)*100 as ROI";
-            $opp_query1 .= " from opportunities opp";
-            $opp_query1 .= " right join campaigns camp on camp.id = opp.campaign_id";
-            $opp_query1 .= " where opp.sales_stage = 'Closed Won' and camp.id='$campaign_id'";
-            $opp_query1 .= " and opp.deleted=0";
-            $opp_query1 .= " group by camp.name";
-            $opp_result1=$focus->db->query($opp_query1);
-            $opp_data1=$focus->db->fetchByAssoc($opp_result1);
-      if (empty($opp_data1['opp_count'])) {
-          $opp_data1['opp_count']=0;
-      }
-
-     $smarty->assign("OPPORTUNITIES_WON", $opp_data1['opp_count']);
-          
-            $camp_query1  = "select camp.name, count(*) click_thru_link";
-            $camp_query1 .= " from campaign_log camp_log";
-            $camp_query1 .= " right join campaigns camp on camp.id = camp_log.campaign_id";
-            $camp_query1 .= " where camp_log.activity_type = 'link' and camp.id='$campaign_id'";
-            $camp_query1 .= " group by camp.name";
-            $opp_query1 .= " and deleted=0";
-            $camp_result1=$focus->db->query($camp_query1);
-            $camp_data1=$focus->db->fetchByAssoc($camp_result1);
-            
+               
    if (unformat_number($focus->impressions) > 0) {
        $cost_per_impression= unformat_number($focus->actual_cost)/unformat_number($focus->impressions);
    } else {

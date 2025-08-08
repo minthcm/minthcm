@@ -55,8 +55,5 @@ $mapping = array(
     'Leads' =>
     array(
     ),
-    'Opportunities' =>
-    array(
-    ),
   ),
 );

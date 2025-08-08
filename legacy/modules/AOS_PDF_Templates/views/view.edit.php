@@ -16,7 +16,7 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
     {
         global $app_list_strings, $mod_strings, $beanList;
         $mint_disabled_modules = getMintDisabledModulesList();
-        $disabled_options = ['LBL_CONTRACT_ACCOUNT', 'LBL_OPPORTUNITY', 'LBL_CONTACT'];
+        $disabled_options = ['LBL_CONTRACT_ACCOUNT', 'LBL_CONTACT'];
 
         //Loading Sample Files
         $json = getJSONobj();

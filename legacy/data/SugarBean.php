@@ -1615,7 +1615,7 @@ class SugarBean {
     * @param string $user_id GUID
     * @return bool
     */
-   public function isOwner($user_id) {
+   public function isOwner(?string $user_id) {
       // MintHCM Begin #70311 - whole isOwner function redesigned
       $controller = ControllerFactory::getController('Users');
       $subordinates_ids = $controller::getIDOfSubordinates(array($user_id));
@@ -3649,7 +3649,6 @@ class SugarBean {
 
          //ignore fields that are a part of the collection and a field has been removed as a result of
          //layout customization.. this happens in subpanel customizations, use case, from the contacts subpanel
-         //in opportunities module remove the contact_role/opportunity_role field.
          if ( isset($data['relationship_fields']) && !empty($data['relationship_fields']) ) {
             $process_field = false;
             foreach ( $data['relationship_fields'] as $field_name ) {

@@ -101,14 +101,12 @@ $mod_strings = array(
    'LBL_TIME_AGO' => 'ago',
    // Activity stream
    'CREATED_CONTACT' => 'created a <b>NEW</b> {0}',
-   'CREATED_OPPORTUNITY' => 'created a <b>NEW</b> {0}',
    'CREATED_CASE' => 'created a <b>NEW</b> {0}',
    'CREATED_LEAD' => 'created a <b>NEW</b> {0}',
    'FOR' => 'for', // Activity stream for cases
    'FOR_AMOUNT' => 'for amount', // Activity stream for cases
    'CLOSED_CASE' => '<b>CLOSED</b> a {0} ',
    'CONVERTED_LEAD' => '<b>CONVERTED</b> a {0}',
-   'WON_OPPORTUNITY' => 'has <b>WON</b> an {0}',
    'WITH' => 'with',
    'LBL_SELECT' => 'Select',
    'LBL_POST' => 'Post',

@@ -250,13 +250,6 @@ $dictionary['Document'] = array('table' => 'documents',
             'source' => 'non-db',
             'vname' => 'LBL_CONTACTS_SUBPANEL_TITLE',
         ),
-        'opportunities' => array(
-            'name' => 'opportunities',
-            'type' => 'link',
-            'relationship' => 'documents_opportunities',
-            'source' => 'non-db',
-            'vname' => 'LBL_OPPORTUNITIES_SUBPANEL_TITLE',
-        ),
         'cases' => array(
             'name' => 'cases',
             'type' => 'link',

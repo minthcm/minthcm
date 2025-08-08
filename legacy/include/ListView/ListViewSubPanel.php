@@ -769,7 +769,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     }
                     $export_link = "&nbsp;";
                     $merge_link = "&nbsp;";
-                } elseif ($_REQUEST['module'] != "Accounts" && $_REQUEST['module'] != "Cases" && $_REQUEST['module'] != "Contacts" && $_REQUEST['module'] != "Leads" && $_REQUEST['module'] != "Opportunities") {
+                } elseif ($_REQUEST['module'] != "Accounts" && $_REQUEST['module'] != "Cases" && $_REQUEST['module'] != "Contacts" && $_REQUEST['module'] != "Leads") {
                     $merge_link = "&nbsp;";
                 }
 

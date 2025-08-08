@@ -169,7 +169,6 @@ class StudioModule
             'Contacts' => 'person',
             'Documents' => 'file',
             'Leads' => 'person',
-            'Opportunities' => 'sale'
         );
         if (isset($types [$this->module])) {
             return $types [$this->module];

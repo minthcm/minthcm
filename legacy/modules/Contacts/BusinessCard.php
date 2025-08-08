@@ -83,8 +83,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 	require_once('modules/Accounts/AccountFormBase.php');
 	$accountForm = new AccountFormBase();
 	
-	require_once('modules/Opportunities/OpportunityFormBase.php');
-	$oppForm = new OpportunityFormBase();
 	if(!isset($_POST['selectedContact']) && !isset($_POST['ContinueContact'])){
 		$duplicateContacts = $contactForm->checkForDuplicates('Contacts');
 		if(isset($duplicateContacts)){
@@ -110,17 +108,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		
 	}
 
-	if(isset($_POST['newopportunity']) && $_POST['newopportunity']=='on' &&!isset($_POST['selectedOpportunity']) && !isset($_POST['ContinueOpportunity'])){
-
-		$duplicateOpps = $oppForm->checkForDuplicates('Opportunities');
-		if(isset($duplicateOpps)){
-			$xtpl->assign('FORMBODY', $oppForm->buildTableForm($duplicateOpps));
-			$xtpl->parse('main.formnoborder');
-			$xtpl->parse('main');
-			$xtpl->out('main');
-			return;
-		}
-	}
 	if(!empty($_POST['selectedContact'])){
 		$contact = new Contact();
 		$contact->retrieve($_POST['selectedContact']);	
@@ -133,23 +120,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 	}else if(isset($_POST['newaccount']) && $_POST['newaccount']=='on' ){
 		$account= $accountForm->handleSave('Accounts',false, false);
 	}
-	if(isset($_POST['newopportunity']) && $_POST['newopportunity']=='on' ){
-		if(!empty($_POST['selectedOpportunity'])){
-			$opportunity = new Opportunity();
-			$opportunity->retrieve($_POST['selectedOpportunity']);
-		}else{
-			if(isset($account)){
-				$_POST['Opportunitiesaccount_id'] = $account->id;
-				$_POST['Opportunitiesaccount_name'] = $account->name;
-				
-			}
-			if(isset($_POST['Contactslead_source']) && !empty($_POST['Contactslead_source'])){
-				$_POST['Opportunitieslead_source'] = $_POST['Contactslead_source'];
-			} 
-			$opportunity= $oppForm->handleSave('Opportunities',false, false);
-			
-		}
-	}
 	require_once('modules/Notes/NoteFormBase.php');
 
 	$noteForm = new NoteFormBase();
@@ -160,11 +130,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		$_POST['ContactNotesparent_type'] = "Contacts";
 		$_POST['ContactNotesparent_id'] = $contact->id;
 		$contactnote= $noteForm->handleSave('ContactNotes',false, false);
-	if(isset($opportunity)){
-		$_POST['OpportunityNotesparent_type'] = "Opportunities";
-		$_POST['OpportunityNotesparent_id'] = $opportunity->id;
-		$opportunitynote= $noteForm->handleSave('OpportunityNotes',false, false);
-		}
 	if(isset($_POST['newappointment']) && $_POST['newappointment']=='on' ){	
 	if(isset($_POST['appointment']) && $_POST['appointment'] == 'Meeting'){
 		require_once('modules/Meetings/MeetingFormBase.php');
@@ -184,9 +149,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		} else if(isset($account)){
 			$call->load_relationship('account');
 			$call->account->add($account->id);
-		}else if(isset($opportunity)){
-			$call->load_relationship('opportunity');
-			$call->opportunity->add($opportunity->id);			
 		}
 	}
 	if(isset($meeting)){
@@ -196,9 +158,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		} else if(isset($account)){
 			$meeting->load_relationship('account');
 			$meeting->account->add($account->id);
-		}else if(isset($opportunity)){
-			$meeting->load_relationship('opportunity');
-			$meeting->opportunity->add($opportunity->id);			
 		}
 	}
 	if(isset($account)){
@@ -208,19 +167,7 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		} else if(isset($accountnote)){
 			$account->load_relationship('notes');
 			$account->notes->add($accountnote->id);
-		}else if(isset($opportunity)){
-			$account->load_relationship('opportunities');
-			$account->opportunities->add($opportunity->id);			
 		}
-	}
-	if(isset($opportunity)){
-		if(isset($contact)) {
-			$opportunity->load_relationship('contacts');
-			$opportunity->contacts->add($contact->id);
-		} else if(isset($accountnote)){
-			$opportunity->load_relationship('notes');
-			$opportunity->notes->add($accountnote->id);
-		}		
 	}
 	if(isset($contact)){
 		if(isset($contactnote)){
@@ -251,17 +198,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		}
 		
 	}
-	if(isset($opportunity)){
-		$opportunity->track_view($current_user->id, 'Opportunities');
-		if(isset($_POST['selectedOpportunity']) && $_POST['selectedOpportunity'] == $opportunity->id){
-			$xtpl->assign('ROWVALUE', "<LI>".$mod_strings['LBL_EXISTING_OPPORTUNITY']. " - <a href='index.php?action=DetailView&module=Opportunities&record=".$opportunity->id."'>".$opportunity->name."</a>");
-			$xtpl->parse('main.row');
-		}else{
-			$xtpl->assign('ROWVALUE', "<LI>".$mod_strings['LBL_CREATED_OPPORTUNITY']. " - <a href='index.php?action=DetailView&module=Opportunities&record=".$opportunity->id."'>".$opportunity->name."</a>");
-			$xtpl->parse('main.row');
-		}
-
-	}
 
 	if(isset($call)){
 		$call->track_view($current_user->id, 'Calls');
@@ -288,13 +224,6 @@ $xtpl->assign('FORMHEADER',$mod_strings['LNK_NEW_CONTACT']);
 $xtpl->parse("main.startform");
 $xtpl->parse("main.savebegin");
 require_once('modules/Contacts/ContactFormBase.php');
-$xtpl->assign('OPPNEEDSACCOUNT',$mod_strings['NTC_OPPORTUNITY_REQUIRES_ACCOUNT']);
-if ($sugar_config['require_accounts']) {
-	$xtpl->assign('CHECKOPPORTUNITY', "&& checkOpportunity()");
-}
-else {
-	$xtpl->assign('CHECKOPPORTUNITY', "");
-}
 $contactForm = new ContactFormBase();
 $xtpl->assign('FORMBODY',$contactForm->getWideFormBody('Contacts', 'Contacts', 'BusinessCard', '', false));
 $xtpl->assign('TABLECLASS', 'edit view');
@@ -344,19 +273,6 @@ require_once('modules/Notes/NoteFormBase.php');
 $noteForm = new NoteFormBase();
 $postform = "<div id='accountnotelink'><p><a href='javascript:toggleDisplay(\"accountnote\");'>${mod_strings['LNK_NEW_NOTE']}</a></p></div>";
 $postform .= '<div id="accountnote" style="display:none">'.$noteForm->getFormBody('AccountNotes', 'Notes', 'BusinessCard', 85).'</div>';
-$xtpl->assign('POSTFORM',$postform);
-$xtpl->parse("main.headlessform");
-
-//OPPORTUNITTY
-$xtpl->assign('FORMHEADER',get_form_header($mod_strings['LNK_NEW_OPPORTUNITY'], '', ''));
-require_once('modules/Opportunities/OpportunityFormBase.php');
-$oppForm = new OpportunityFormBase();
-$xtpl->assign('CLASS', 'evenListRow');
-$xtpl->assign('FORMBODY',"<slot class='dataLabel'><input class='checkbox' type='checkbox' name='newopportunity' onclick='toggleDisplay(\"newoppdiv\");'>&nbsp;".$mod_strings['LNK_NEW_OPPORTUNITY']."</span><div id='newoppdiv' style='display:none'>".$oppForm->getWideFormBody('Opportunities', 'Opportunities','BusinessCard', '' , false));
-require_once('modules/Notes/NoteFormBase.php');
-$noteForm = new NoteFormBase();
-$postform = "<div id='oppnotelink'><a href='javascript:toggleDisplay(\"oppnote\");'>${mod_strings['LNK_NEW_NOTE']}</a></div>";
-$postform .= '<div id="oppnote" style="display:none">'.$noteForm->getFormBody('OpportunityNotes', 'Notes','BusinessCard', 85).'</div><br>';
 $xtpl->assign('POSTFORM',$postform);
 $xtpl->parse("main.headlessform");
 

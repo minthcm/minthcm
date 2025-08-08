@@ -253,7 +253,7 @@ class AOD_Index extends AOD_Index_sugar
     private function getBoost($module, $field)
     {
         $fieldBoosts = array('name' =>0.5, 'first_name' => 0.5, 'last_name' => 0.5);
-        $moduleBoosts = array('Accounts' => 0.5, 'Contacts' => 0.5, 'Leads' => 0.5, 'Opportunities' => 0.5);
+        $moduleBoosts = array('Accounts' => 0.5, 'Contacts' => 0.5, 'Leads' => 0.5);
         $boost = 1;
         if (!empty($fieldBoosts[$field])) {
             $boost += $fieldBoosts[$field];

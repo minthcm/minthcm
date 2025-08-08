@@ -50,7 +50,6 @@ $viewdefs['Contacts']['ConvertLead'] = array(
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',
@@ -115,7 +114,6 @@ $viewdefs['Accounts']['ConvertLead'] = array(
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',
@@ -143,47 +141,12 @@ $viewdefs['Accounts']['ConvertLead'] = array(
         )
     ),
 );
-$viewdefs['Opportunities']['ConvertLead'] = array(
-    'copyData' => true,
-    'required' => false,
-    'templateMeta' => array(
-        'form'=>array(
-            'hidden'=>array(
-            )
-        ),
-        'maxColumns' => '2',
-        'widths' => array(
-            array('label' => '10', 'field' => '30'),
-            array('label' => '10', 'field' => '30'),
-        ),
-    ),
-    'panels' =>array(
-        'LNK_NEW_OPPORTUNITY' => array(
-            array(
-                'name',
-                'currency_id'
-            ),
-            array(
-                'sales_stage',
-                'amount'
-            ),
-            array(
-                'date_closed',
-                ''
-            ),
-            array(
-                'description'
-            ),
-        )
-    ),
-);
 $viewdefs['Notes']['ConvertLead'] = array(
     'copyData' => false,
     'required' => false,
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',
@@ -214,7 +177,6 @@ $viewdefs['Calls']['ConvertLead'] = array(
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',
@@ -273,7 +235,6 @@ $viewdefs['Meetings']['ConvertLead'] = array(
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',
@@ -331,7 +292,6 @@ $viewdefs['Tasks']['ConvertLead'] = array(
     'templateMeta' => array(
         'form'=>array(
             'hidden'=>array(
-                '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
                 '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
                 '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
                 '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',

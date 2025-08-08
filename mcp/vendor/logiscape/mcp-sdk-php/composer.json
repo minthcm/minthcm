@@ -1,0 +1,24 @@
+{
+    "name": "logiscape/mcp-sdk-php",
+    "description": "Model Context Protocol SDK for PHP",
+    "type": "library",
+	"license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mcp\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "psr/log": "^2.0 ||^3.0",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "ext-pcntl": "For better process handling in CLI environments",
+        "monolog/monolog": "^3.0 - For debugging and logging capabilities"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    }
+}

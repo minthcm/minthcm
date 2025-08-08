@@ -66,6 +66,11 @@ $listViewDefs[$module_name] = array(
         'label' => 'LBL_SPENT_TIME_CATEGORY',
         'default' => false,
     ),
+    'ORGANIZATION_UNIT' => array(
+        'width' => '20%',
+        'label' => 'LBL_SPENT_TIME_ORGANIZATIONAL_UNIT',
+        'default' => false,
+    ), 
     'DESCRIPTION' => array(
         'width' => '23%',
         'label' => 'LBL_DESCRIPTION',

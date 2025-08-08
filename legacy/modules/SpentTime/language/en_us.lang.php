@@ -68,6 +68,7 @@ $mod_strings = array(
    'LBL_ERR_DATE_ARE_NOT_BETWEEN_WORK_SCHEDULES_DATES' => 'This date is not between start and end dates of choosen work schedule',
    'LBL_ERR_WORK_DATE_NOT_EQUALS_TO_DATE_START' => 'Work date must be equal to start date',
    'LBL_ERR_INVALID_CHAR_IN_DESCRIPTION' => 'There are invalid chars in description: &, \' or ".',
+   'LBL_ERR_COMPANY_NOT_SELECTED' => 'Please select a company',
    'LBL_ESTIMATED_TASK_TIME' => 'Estimated Task Time',
    'LBL_WORKSCHEDULE_NAME' => 'Work Schedule',
    'LBL_WORKSCHEDULE_ID' => 'Work Schedule (ID)',
@@ -92,5 +93,8 @@ $mod_strings = array(
    'LBL_ERR_CANT_LOG_TO_WORK_OFF_SCHEDULE' => 'You cannot log this Spent time to work off schedule',
    'LBL_NEW_FORM_TITLE' => 'Log Spent Time',
    'LBL_SPENT_TIME_CATEGORY' => 'Category',
-    'LBL_HOMEPAGE_TITLE' => 'My Spent Time',
+   'LBL_SPENT_TIME_ORGANIZATIONAL_UNIT' => 'Company',
+   'LBL_HOMEPAGE_TITLE' => 'My Spent Time',
+   'LBL_ORGANIZATIONAL_UNIT_ID' => 'Organizational unit id',
 );
+ 

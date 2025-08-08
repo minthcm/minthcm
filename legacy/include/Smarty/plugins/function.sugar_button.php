@@ -131,7 +131,6 @@ Touched:
 - modules/Meetings/MeetingFormBase.php
 - modules/DocumentRevisions/Save.php
 - modules/Prospects/ProspectFormBase.php
-- modules/Opportunities/OpportunityFormBase.php
 - modules/Notes/NoteFormBase.php
 - modules/Calls/CallFormBase.php
 - modules/Holidays/Save.php

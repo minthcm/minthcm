@@ -47,7 +47,6 @@ $module_name = 'AOS_Contracts';
                         'advanced_search' => array(
                             'name',
                             'contract_account',
-                            'opportunity',
                             'start_date',
                             'end_date',
                             'total_contract_value',

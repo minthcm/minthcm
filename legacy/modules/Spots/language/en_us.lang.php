@@ -104,9 +104,7 @@ $mod_strings = array(
 
     //Analytics labels for sales pivot
     'LBL_AN_SALES_ACCOUNT_NAME' => 'Account Name',
-    'LBL_AN_SALES_OPPORTUNITY_NAME' => 'Opportunity Name',
     'LBL_AN_SALES_ASSIGNED_USER' => 'Assigned User',
-    'LBL_AN_SALES_OPPORTUNITY_TYPE' => 'OpportunityType',
     'LBL_AN_SALES_LEAD_SOURCE' => 'Lead Source',
     'LBL_AN_SALES_AMOUNT' => 'Amount',
     'LBL_AN_SALES_STAGE' => 'Sales Stage',
@@ -144,10 +142,6 @@ $mod_strings = array(
     'LBL_AN_MARKETING_BUDGET' => 'Budget',
     'LBL_AN_MARKETING_EXPECTED_COST' => 'Expected Cost',
     'LBL_AN_MARKETING_EXPECTED_REVENUE' => 'Expected Revenue',
-    'LBL_AN_MARKETING_OPPORTUNITY_NAME' => 'Opportunity Name',
-    'LBL_AN_MARKETING_OPPORTUNITY_AMOUNT' => 'Opportunity Amount',
-    'LBL_AN_MARKETING_OPPORTUNITY_SALES_STAGE' => 'Opportunity Sales Stage',
-    'LBL_AN_MARKETING_OPPORTUNITY_ASSIGNED_TO' => 'Opportunity Assigned To',
     'LBL_AN_MARKETING_ACCOUNT_NAME' => 'Account Name',
 
     //Analytics labels for the marketing activities pivot
@@ -158,10 +152,6 @@ $mod_strings = array(
     'LBL_AN_MARKETINGACTIVITY_RELATED_ID' => 'Related ID',
 
     //Analytics labels for the quotes pivot
-    'LBL_AN_QUOTES_OPPORTUNITY_NAME' => 'Opportunity Name',
-    'LBL_AN_QUOTES_OPPORTUNITY_TYPE' => 'Opportunity Type',
-    'LBL_AN_QUOTES_OPPORTUNITY_LEAD_SOURCE' => 'Opportunity Lead Source',
-    'LBL_AN_QUOTES_OPPORTUNITY_SALES_STAGE' => 'Opportunity Sales Stage',
     'LBL_AN_QUOTES_ACCOUNT_NAME' => 'Account Name',
     'LBL_AN_QUOTES_CONTACT_NAME' => 'Contact Name',
     'LBL_AN_QUOTES_ITEM_NAME' => 'Item Name',

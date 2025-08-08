@@ -275,16 +275,6 @@ $layout_defs['Campaigns'] = array(
             'title_key' => 'LBL_CAMPAIGN_LEAD_SUBPANEL_TITLE',
             'top_buttons' => array(),
         ),
-        'opportunities' => array(
-            'order' => 200,
-            'sort_order' => 'desc',
-            'sort_by' => 'name',
-            'module' => 'Opportunities',
-            'get_subpanel_data' => 'opportunities',
-            'subpanel_name' => 'default',
-            'title_key' => 'LBL_OPPORTUNITY_SUBPANEL_TITLE',
-            'top_buttons' => array(),
-        ),
         'surveyresponses_campaigns' => array(
           'order' => 100,
           'module' => 'SurveyResponses',

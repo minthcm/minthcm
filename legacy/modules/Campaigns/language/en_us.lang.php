@@ -83,7 +83,6 @@ $mod_strings = array(
     'LBL_CAMPAIGN_IMPRESSIONS' => 'Impressions:',
     'LBL_CAMPAIGN_COST_PER_IMPRESSION' => 'Cost Per Impression:',
     'LBL_CAMPAIGN_COST_PER_CLICK_THROUGH' => 'Cost Per Click Through:',
-    'LBL_CAMPAIGN_OPPORTUNITIES_WON' => 'Opportunities Won:',
     'LBL_CAMPAIGN_TYPE' => 'Type:',
     'LBL_CAMPAIGN_OBJECTIVE' => 'Objective:',
     'LBL_CAMPAIGN_CONTENT' => 'Description:',
@@ -137,7 +136,6 @@ $mod_strings = array(
     'LBL_LOG_ENTRIES_REMOVED_TITLE' => 'Opted Out',
     'LBL_LOG_ENTRIES_LEAD_TITLE' => 'Leads Created',
     'LBL_CAMPAIGN_LEAD_SUBPANEL_TITLE' => 'Leads',
-    'LBL_OPPORTUNITY_SUBPANEL_TITLE' => 'Opportunities',
     'LBL_LOG_ENTRIES_CONTACT_TITLE' => 'Contacts Created',
 
     //error messages.
@@ -363,13 +361,11 @@ $mod_strings = array(
     'LBL_LEADS' => 'Leads',
     'LBL_CONTACTS' => 'Contacts',
     'LBL_ACCOUNTS' => 'Accounts',
-    'LBL_OPPORTUNITIES' => 'Opportunities',
     'LBL_CREATED_USER' => 'Created User',
     'LBL_MODIFIED_USER' => 'Modified User',
     'LBL_LOG_ENTRIES' => 'Log Entries',
     'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_LEADS_SUBPANEL_TITLE' => 'Leads',
-    'LBL_OPPORTUNITIES_SUBPANEL_TITLE' => 'Opportunities',
 
     'LBL_LEAD_FORM_WIZARD' => 'Lead Form Wizard',
     'LBL_CAMPAIGN_INFORMATION' => 'OVERVIEW',

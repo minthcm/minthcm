@@ -131,19 +131,6 @@ class ImportMapOther
                 "Web Page"=>"website",
                 );
             break;
-        case 'Opportunities':
-            return array(
-                "Opportunity Name"=>"name" ,
-                "Type"=>"opportunity_type",
-                "Lead Source"=>"lead_source",
-                "Amount"=>"amount",
-                "Created Date"=>"date_entered",
-                "Close Date"=>"date_closed",
-                "Next Step"=>"next_step",
-                "Stage"=>"sales_stage",
-                "Probability (%)"=>"probability",
-                "Account Name"=>"account_name");
-            break;
         default:
             return array();
         }

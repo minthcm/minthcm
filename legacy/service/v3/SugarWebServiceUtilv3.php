@@ -345,7 +345,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         $activityModules = array('Meetings' => array('date_field' => 'date_start','status' => 'Planned','status_field' => 'status', 'status_opp' => '='),
                                  'Calls' => array('date_field' => 'date_start','status' => 'Planned','status_field' => 'status', 'status_opp' => '='),
                                  'Tasks' => array('date_field' =>'date_due','status' => 'Not Started','status_field' => 'status','status_opp' => '='),
-                                 'Opportunities' => array('date_field' => 'date_closed','status' => array('Closed Won','Closed Lost'), 'status_field' => 'sales_stage', 'status_opp' => '!=') );
+                                );
         $results = array();
         foreach ($activityModules as $module => $meta) {
             if (!self::check_modules_access($GLOBALS['current_user'], $module, 'read')) {
