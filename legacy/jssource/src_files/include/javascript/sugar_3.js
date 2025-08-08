@@ -4440,18 +4440,7 @@ SUGAR.contextMenu.actions = function () {
          document.location = loc;
       },
       /**
-       * redirects to a new opportunity with the clicked on object as the target
-       **/
-      createOpportunity: function ( itemClicked, metaData ) {
-         loc = 'index.php?module=Opportunities&action=EditView';
-         for ( i in metaData ) {
-            if ( i != 'module' )
-               loc += '&' + i + '=' + metaData[i];
-         }
-         document.location = loc;
-      },
-      /**
-       * redirects to a new opportunity with the clicked on object as the target
+       * redirects to a new case with the clicked on object as the target
        **/
       createCase: function ( itemClicked, metaData ) {
          loc = 'index.php?module=Cases&action=EditView';

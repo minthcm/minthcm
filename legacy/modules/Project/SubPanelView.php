@@ -75,10 +75,6 @@ $button .= "<input type='hidden' name='return_module' value='".$currentModule."'
 $button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
 $button .= "<input type='hidden' name='return_id' value='".$focus->id."'>\n";
 $button .= "<input type='hidden' name='action'>\n";
-if (!empty($focus->object_name) && $focus->object_name == 'Opportunity') {
-    $button .= "<input type='hidden' name='account_id' value='$focus->account_id'>\n";
-    $button .= "<input type='hidden' name='opportunity_name' value='$focus->name'>\n";
-}
 $button .= "<input title='"
     . $app_strings['LBL_NEW_BUTTON_TITLE']
     . "' accessyKey='".$app_strings['LBL_NEW_BUTTON_KEY']

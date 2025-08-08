@@ -49,7 +49,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $mod_strings = array(
     'LBL_ASSIGNED_TO_NAME' => 'Contract Manager',
     'LBL_CONTRACT_ACCOUNT' => 'Account',
-    'LBL_OPPORTUNITY' => 'Opportunity',
     'LBL_ID' => 'ID',
     'LBL_DATE_ENTERED' => 'Date Created',
     'LBL_DATE_MODIFIED' => 'Date Modified',

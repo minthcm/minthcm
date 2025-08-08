@@ -1753,10 +1753,6 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
             ),
             'fields' => "contacts.id, contacts.first_name, contacts.last_name"
         ),
-        'Opportunities' => array(
-            'where' => array('Opportunities' => array(0 => "opportunities.name like '{0}%'")),
-            'fields' => "opportunities.id, opportunities.name"
-        ),
         'Users' => array(
             'where' => array('EmailAddresses' => array(0 => "ea.email_address like '{0}%'")),
             'fields' => "users.id, users.user_name, users.first_name, ea.email_address"

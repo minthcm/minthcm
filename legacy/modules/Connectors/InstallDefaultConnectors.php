@@ -63,10 +63,6 @@ $default_modules_sources = array(
   array(
 
   ),
-  'Opportunities' =>
-  array(
-    'ext_rest_insideview' => 'ext_rest_insideview',
-  ),
 );
 
 $previous_connectors = array();

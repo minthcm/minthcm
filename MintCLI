@@ -10,7 +10,10 @@ $application = new Application();
 $application->add(new MintHCM\MintCLI\Commands\Install());
 $application->add(new MintHCM\MintCLI\Commands\DemoDataDumpCommand());
 $application->add(new MintHCM\MintCLI\Commands\DemoDataInstallCommand());
-$application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindex());
-$application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindexModule());
+
+if (file_exists('legacy/config.php')) {
+    $application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindex());
+    $application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindexModule());
+}
 
 $application->run();

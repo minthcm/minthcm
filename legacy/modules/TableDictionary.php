@@ -47,7 +47,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 include "metadata/accounts_bugsMetaData.php";
 include "metadata/accounts_casesMetaData.php";
 include "metadata/accounts_contactsMetaData.php";
-include "metadata/accounts_opportunitiesMetaData.php";
 include "metadata/calls_contactsMetaData.php";
 include "metadata/calls_usersMetaData.php";
 include "metadata/calls_leadsMetaData.php";
@@ -63,7 +62,6 @@ include "metadata/import_mapsMetaData.php";
 include "metadata/meetings_contactsMetaData.php";
 include "metadata/meetings_usersMetaData.php";
 include "metadata/meetings_leadsMetaData.php";
-include "metadata/opportunities_contactsMetaData.php";
 include "metadata/users_passwordLinkMetaData.php";
 include "metadata/prospect_list_campaignsMetaData.php";
 include "metadata/prospect_lists_prospectsMetaData.php";
@@ -84,7 +82,6 @@ include "metadata/project_casesMetaData.php";
 include "metadata/project_productsMetaData.php";
 include "metadata/projects_accountsMetaData.php";
 include "metadata/projects_contactsMetaData.php";
-include "metadata/projects_opportunitiesMetaData.php";
 
 //ACL RELATIONSHIPS
 include "metadata/acl_roles_actionsMetaData.php";
@@ -101,7 +98,6 @@ include "metadata/linked_documentsMetaData.php";
 // Documents, so we can start replacing Notes as the primary way to attach something to something else.
 include "metadata/documents_accountsMetaData.php";
 include "metadata/documents_contactsMetaData.php";
-include "metadata/documents_opportunitiesMetaData.php";
 include "metadata/documents_casesMetaData.php";
 include "metadata/documents_bugsMetaData.php";
 include "metadata/oauth_nonce.php";

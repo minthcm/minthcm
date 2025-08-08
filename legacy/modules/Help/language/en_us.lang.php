@@ -54,7 +54,6 @@ $mod_strings = array(
     'LBL_NEW_FORM_TITLE' => 'Create Account',
     'LNK_NEW_CONTACT' => 'Create Contact',
     'LNK_NEW_ACCOUNT' => 'Create Account',
-    'LNK_NEW_OPPORTUNITY' => 'Create Opportunity',
     'LNK_NEW_CASE' => 'Create Case',
     'LNK_NEW_NOTE' => 'Create Note or Attachment',
     'LNK_NEW_CALL' => 'Log Call',

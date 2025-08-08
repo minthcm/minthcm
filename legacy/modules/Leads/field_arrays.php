@@ -92,16 +92,13 @@ $fields_array['Lead'] = array ('column_fields' => array("id"
 		,"account_name"
 		,"account_description"
 		,"account_id"
-		,"opportunity_id"
 		,"contact_id"
-		,"opportunity_amount"
-		,"opportunity_name"
 		,"portal_name"
 		,"portal_app"
 		,"invalid_email"
 		,"campaign_id"
 		),
-        'list_fields' =>  array('id', 'first_name', 'last_name', 'account_name', 'title', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id', 'lead_source', 'lead_source_description', 'refered_by', 'opportunity_name', 'opportunity_amount', 'date_entered', 'status'
+        'list_fields' =>  array('id', 'first_name', 'last_name', 'account_name', 'title', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id', 'lead_source', 'lead_source_description', 'refered_by', 'date_entered', 'status'
 		,'invalid_email'
 		, "campaign_id"
 		),

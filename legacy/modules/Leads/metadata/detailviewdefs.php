@@ -226,7 +226,7 @@ array (
         ),
         2 => 
         array (
-          0 => 'opportunity_amount',
+          0 => '',
           1 => 'refered_by',
         ),
         3 => 

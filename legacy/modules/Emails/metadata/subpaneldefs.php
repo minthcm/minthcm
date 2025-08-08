@@ -87,20 +87,6 @@ $layout_defs['Emails'] = array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')
             ),
         ),
-        'opportunities' => array(
-            'order' => 25,
-            'module' => 'Opportunities',
-            'sort_order' => 'asc',
-            'sort_by' => 'name',
-            'subpanel_name' => 'ForEmails',
-            'get_subpanel_data' => 'opportunities',
-            'add_subpanel_data' => 'opportunity_id',
-            'title_key' => 'LBL_OPPORTUNITY_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')
-            ),
-        ),
         'leads' => array(
             'order' => 30,
             'module' => 'Leads',

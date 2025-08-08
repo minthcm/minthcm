@@ -13,12 +13,6 @@ function generateFieldDefsJS2()
         'account_description',
         'contact_id',
         'lead_id',
-        'opportunity_amount',
-        'opportunity_id',
-        'opportunity_name',
-        'opportunity_role_id',
-        'opportunity_role_fields',
-        'opportunity_role',
         'campaign_id',
         // User objects
         'id',

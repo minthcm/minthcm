@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -84,6 +85,8 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     private $mappings = [];
 
+    private $nested_properties = [];
+
     /**
      * ElasticSearchIndexer constructor.
      *
@@ -146,7 +149,6 @@ class ElasticSearchIndexer extends AbstractIndexer
                     $this->logger->error($exception);
                 }
             }
-
         }
 
         foreach ($modules as $module) {
@@ -200,7 +202,8 @@ class ElasticSearchIndexer extends AbstractIndexer
     }
 
     /** @inheritdoc */
-   public function indexModule($module) {
+    public function indexModule($module)
+    {
         global $sugar_config;
         $seed = \BeanFactory::getBean($module);
         if (empty($seed->table_name)) {
@@ -225,6 +228,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $maxBatchSize = $sugar_config['search']['ElasticSearch']['max_batch_size'] ?? 50000;
         $totalRecordsCount = 0;
         $oldIndexedRecordsCount = $this->indexedRecordsCount;
+        $this->nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($seed->object_name);
         try {
             do {
                 $batch = $seed->get_list("$tableName.date_entered", $where, $batchOffset, $maxBatchSize, $maxBatchSize, $showDeleted);
@@ -313,8 +317,9 @@ class ElasticSearchIndexer extends AbstractIndexer
         $this->logger->debug("Deleting all indices");
         try {
             $this->client->indices()->delete(['index' => '_all']);
-        }/** @noinspection PhpRedundantCatchClauseInspection */
-         catch (Missing404Exception $ignore) {
+        }
+        /** @noinspection PhpRedundantCatchClauseInspection */
+        catch (Missing404Exception $ignore) {
             // Index not there, not big deal since we meant to delete it anyway.
             $this->logger->warn('Index not found, no index has been deleted.');
         }
@@ -331,6 +336,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         }
         // minthcm end
         $args = $this->makeIndexParamsFromBean($bean);
+        $this->nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->object_name);
         $this->fillAllNestedPropertyValues($bean, $args['body']);
 
         $this->removeErrorProneFields($bean->module_name, $args['body']);
@@ -341,8 +347,7 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     protected function fillAllNestedPropertyValues(SugarBean $bean, array &$args): void
     {
-      $nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($bean->object_name);
-        foreach ($nested_properties as $property_name => $nested_config) {
+        foreach ($this->nested_properties as $property_name => $nested_config) {
             $args[$property_name] = $this->getNestedPropertyValues($bean, $property_name, $nested_config);
         }
     }
@@ -388,7 +393,9 @@ class ElasticSearchIndexer extends AbstractIndexer
             return;
         }
 
-        $ids = implode(',', array_map(function ($bean) {return "'{$bean->id}'";}, $beans));
+        $ids = implode(',', array_map(function ($bean) {
+            return "'{$bean->id}'";
+        }, $beans));
 
         $db = \DBManagerFactory::getInstance();
         $now_datetime = (new \SugarDateTime)->asDb();
@@ -556,14 +563,16 @@ class ElasticSearchIndexer extends AbstractIndexer
     {
         if (is_array($params)) {
             foreach ($params as $key => $value) {
-                if (is_array($params[$key])) {
-                    $this->fixUpIndicesParams($params[$key], $mappings, $module_name);
-                }
-                $prefix = '__';
-                $new_key = $module_name . $prefix . $key;
-                if (isset($new_key, $mappings['properties']) && $new_key != $prefix . $key) {
-                    $params[$new_key] = $params[$key];
-                    unset($params[$key]);
+                if (!in_array($key, array_keys($this->nested_properties))) {
+                    if (is_array($params[$key])) {
+                        $this->fixUpIndicesParams($params[$key], $mappings, $module_name);
+                    }
+                    $prefix = '__';
+                    $new_key = $module_name . $prefix . $key;
+                    if (isset($new_key, $mappings['properties']) && $new_key != $prefix . $key) {
+                        $params[$new_key] = $params[$key];
+                        unset($params[$key]);
+                    }
                 }
             }
         }
@@ -587,7 +596,7 @@ class ElasticSearchIndexer extends AbstractIndexer
         $parse = new YamlParser();
         $parsed = $parse->parseFile($file);
         $this->mappings = $parsed['mappings'] ?? [];
-        if(isset($this->mappings[$module])){
+        if (isset($this->mappings[$module])) {
             return $this->mappings[$module] ?? [];
         } else {
             return [];
@@ -699,8 +708,8 @@ class ElasticSearchIndexer extends AbstractIndexer
         $indexer->index();
     }
 
-    public static function getIndexPrefix() : string
+    public static function getIndexPrefix(): string
     {
         return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
-}
+    }
 }

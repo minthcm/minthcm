@@ -32,7 +32,6 @@ Touched:
 - modules/Campaigns/WebToLeadCapture.php
 - modules/Campaigns/utils.php
 - modules/Campaigns/RoiDetailView.php
-- modules/Campaigns/PopupCampaignRoi.php
 - modules/Campaigns/TrackDetailView.php
 - modules/Activities/OpenListView.php
 - modules/UpgradeWizard/uw_utils.php
@@ -48,8 +47,6 @@ Touched:
 - modules/Charts/Dashlets/MyForecastingChartDashlet/MyForecastingChartDashlet.php
 - modules/Charts/Dashlets/MyModulesUsedChartDashlet/MyModulesUsedChartDashlet.php
 - modules/Charts/Dashlets/MyTeamModulesUsedChartDashlet/MyTeamModulesUsedChartDashlet.php
-- modules/Charts/code/Chart_lead_source_by_outcome.php
-- modules/Charts/code/Chart_pipeline_by_lead_source.php
 - modules/Charts/PredefinedChart.php
 - modules/ProjectTask/ProjectTask.php
 - modules/ProjectTask/MyProjectTasks.php

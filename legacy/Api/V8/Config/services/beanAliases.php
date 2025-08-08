@@ -40,7 +40,6 @@ return [
             Note::class => 'Notes',
             OAuthKey::class => 'OAuthKeys',
             OAuthToken::class => 'OAuthTokens',
-            Opportunity::class => 'Opportunities',
             ProspectList::class => 'ProspectLists',
             Prospect::class => 'Prospects',
             Relationship::class => 'Relationships',

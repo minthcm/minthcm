@@ -77,18 +77,6 @@ if ( $current_user->is_admin ) {
    if ( isset($_REQUEST['merge']) && $_REQUEST['merge'] == 'true' ) {
       $isMerge = true;
    }
-   if ( isset($_REQUEST['domerge']) ) {
-      $currencies = $_REQUEST['mergecur'];
-
-
-      $opp = BeanFactory::newBean('Opportunities');
-      $opp->update_currency_id($currencies, $_REQUEST['mergeTo']);
-      foreach ( $currencies as $cur ) {
-         if ( $cur != $_REQUEST['mergeTo'] ) {
-            $focus->mark_deleted($cur);
-         }
-      }
-   }
    $lc->lookupCurrencies();
    if ( isset($focus->id) ) {
       $focus_id = $focus->id;

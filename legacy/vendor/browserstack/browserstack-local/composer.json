@@ -1,0 +1,31 @@
+{
+  "name": "browserstack/browserstack-local",
+  "description": "PHP bindings for BrowserStack Local",
+  "keywords": ["browserstacklocal", "selenium", "php", "browserstack", "local"],
+  "homepage": "https://github.com/browserstack/browserstack-local-php",
+  "type": "library",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/browserstack/browserstack-local-php/issues",
+    "source": "https://github.com/browserstack/browserstack-local-php"
+  },
+  "require": {
+    "php": ">=5.3.19"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.6.*"
+  },
+  "suggest": {
+    "phpdocumentor/phpdocumentor": "2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "BrowserStack\\": "lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BrowserStack\\": "tests/"
+    }
+  }
+}

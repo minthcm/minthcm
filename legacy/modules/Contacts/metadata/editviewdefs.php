@@ -52,7 +52,6 @@ array(
       array(
         'hidden' =>
         array(
-          0 => '<input type="hidden" name="opportunity_id" value="{$smarty.request.opportunity_id}">',
           1 => '<input type="hidden" name="case_id" value="{$smarty.request.case_id}">',
           2 => '<input type="hidden" name="bug_id" value="{$smarty.request.bug_id}">',
           3 => '<input type="hidden" name="email_id" value="{$smarty.request.email_id}">',

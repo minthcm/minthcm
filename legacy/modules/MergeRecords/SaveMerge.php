@@ -145,10 +145,6 @@ if (is_array($_POST['merged_ids'])) {
             ) {
                 continue;
             }
-            if ($name == 'accounts' && $focus->merge_bean->module_dir == 'Opportunities') {
-                continue;
-            }
-
             if ($mergeSource->load_relationship($name)) {
                 //check to see if loaded relationship is with email address
                 $relName = $mergeSource->$name->getRelatedModuleName();

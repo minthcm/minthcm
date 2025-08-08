@@ -78,8 +78,6 @@ class AOS_Quotes_sugar extends Basic
     public $billing_contact;
     public $expiration;
     public $number;
-    public $opportunity_id;
-    public $opportunity;
     public $shipping_account_id;
     public $shipping_account;
     public $template_ddown_c;

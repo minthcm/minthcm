@@ -104,38 +104,6 @@ $dictionary['Contact'] = array('table' => 'contacts', 'audited' => true,
                     'duplicate_merge' => 'disabled',
                     'hideacl' => true,
                 ),
-            'opportunity_role_fields' =>
-                array(
-                    'name' => 'opportunity_role_fields',
-                    'rname' => 'id',
-                    'relationship_fields' => array('id' => 'opportunity_role_id', 'contact_role' => 'opportunity_role'),
-                    'vname' => 'LBL_ACCOUNT_NAME',
-                    'type' => 'relate',
-                    'link' => 'opportunities',
-                    'link_type' => 'relationship_info',
-                    'join_link_name' => 'opportunities_contacts',
-                    'source' => 'non-db',
-                    'importable' => 'false',
-                    'duplicate_merge' => 'disabled',
-                    'studio' => false,
-                    'join_primary' => false,
-                ),
-            'opportunity_role_id' =>
-                array(
-                    'name' => 'opportunity_role_id',
-                    'type' => 'varchar',
-                    'source' => 'non-db',
-                    'vname' => 'LBL_OPPORTUNITY_ROLE_ID',
-                    'studio' => array('listview' => false),
-                ),
-            'opportunity_role' =>
-                array(
-                    'name' => 'opportunity_role',
-                    'type' => 'enum',
-                    'source' => 'non-db',
-                    'vname' => 'LBL_OPPORTUNITY_ROLE',
-                    'options' => 'opportunity_relationship_type_dom',
-                ),
             'reports_to_id' =>
                 array(
                     'name' => 'reports_to_id',
@@ -188,16 +156,6 @@ $dictionary['Contact'] = array('table' => 'contacts', 'audited' => true,
                     'side' => 'right',
                     'source' => 'non-db',
                     'vname' => 'LBL_REPORTS_TO',
-                ),
-            'opportunities' =>
-                array(
-                    'name' => 'opportunities',
-                    'type' => 'link',
-                    'relationship' => 'opportunities_contacts',
-                    'source' => 'non-db',
-                    'module' => 'Opportunities',
-                    'bean_name' => 'Opportunity',
-                    'vname' => 'LBL_OPPORTUNITIES',
                 ),
             'email_addresses' =>
                 array(

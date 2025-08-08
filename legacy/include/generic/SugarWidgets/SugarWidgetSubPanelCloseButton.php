@@ -78,6 +78,18 @@ class SugarWidgetSubPanelCloseButton extends SugarWidgetField
                 }
                 break;
             /* MintHCM #114934 END */
+            case 'Meetings':
+                $meeting = BeanFactory::getBean("Meetings", $record_id);
+                if(strtolower($meeting->status) === "held"){
+                    return '';
+                }
+                break;
+            case 'Calls':
+                $call = BeanFactory::getBean("Calls", $record_id);
+                if(strtolower($call->status) === "held"){
+                    return '';
+                }
+                break;
         }
         
         if ($layout_def['EditView']) {

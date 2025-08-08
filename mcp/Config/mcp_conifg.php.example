@@ -1,0 +1,6 @@
+<?php
+
+$mcp_config['use_whitelist'] = false;
+$mcp_config['use_blacklist'] = true;
+$mcp_config['module_whitelist'] = 'Meetings,Calls,Candidates,Candidatures,Contacts,Notes,Tasks,Recruitments';
+$mcp_config['module_blacklist'] = 'ACLActions,OAuth2Clients,OAuth2Tokens,KReports';

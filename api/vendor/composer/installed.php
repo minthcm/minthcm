@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => '2b1c3bd7da8dfa5419044f933d89bedbb64367e2',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => 'e9ccc9456bab80bf67703d492b6b6e986a33217c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => '2b1c3bd7da8dfa5419044f933d89bedbb64367e2',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'e9ccc9456bab80bf67703d492b6b6e986a33217c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -359,9 +359,9 @@
             'dev_requirement' => false,
         ),
         'psr/log' => array(
-            'pretty_version' => '1.1.4',
-            'version' => '1.1.4.0',
-            'reference' => 'd49695b909c3b7628b6289db5479a1c204601f11',
+            'pretty_version' => '3.0.2',
+            'version' => '3.0.2.0',
+            'reference' => 'f16e1d5863e37f8d8c2a01719f5b34baa2b714d3',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/log',
             'aliases' => array(),

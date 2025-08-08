@@ -281,15 +281,6 @@ $dictionary['Call'] = array(
          'source' => 'non-db',
          'audited' => true,
       ),
-      'opportunities' =>
-      array(
-         'name' => 'opportunities',
-         'type' => 'link',
-         'relationship' => 'opportunity_calls',
-         'source' => 'non-db',
-         'link_type' => 'one',
-         'vname' => 'LBL_OPPORTUNITY',
-      ),
       'leads' =>
       array(
          'name' => 'leads',

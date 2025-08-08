@@ -81,21 +81,7 @@ if (!$hasUserPreferences) {
 
     //list of preferences to move over and to where
     $prefstomove = array(
-        'mypbss_date_start' => 'MyPipelineBySalesStageDashlet',
-        'mypbss_date_end' => 'MyPipelineBySalesStageDashlet',
-        'mypbss_sales_stages' => 'MyPipelineBySalesStageDashlet',
-        'mypbss_chart_type' => 'MyPipelineBySalesStageDashlet',
-        'lsbo_lead_sources' => 'OpportunitiesByLeadSourceByOutcomeDashlet',
-        'lsbo_ids' => 'OpportunitiesByLeadSourceByOutcomeDashlet',
-        'pbls_lead_sources' => 'OpportunitiesByLeadSourceDashlet',
-        'pbls_ids' => 'OpportunitiesByLeadSourceDashlet',
-        'pbss_date_start' => 'PipelineBySalesStageDashlet',
-        'pbss_date_end' => 'PipelineBySalesStageDashlet',
-        'pbss_sales_stages' => 'PipelineBySalesStageDashlet',
-        'pbss_chart_type' => 'PipelineBySalesStageDashlet',
-        'obm_date_start' => 'OutcomeByMonthDashlet',
-        'obm_date_end' => 'OutcomeByMonthDashlet',
-        'obm_ids' => 'OutcomeByMonthDashlet');
+    );
 
     //upgrading from pre-5.0 homepage
     $old_columns = $current_user->getPreference('columns', 'home');

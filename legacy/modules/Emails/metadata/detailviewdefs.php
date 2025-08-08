@@ -79,10 +79,6 @@
                      'customCode' => '<input type=button onclick="openQuickCreateModal(\'Leads\',\'&last_name={$bean->name}\',\'{$bean->from_addr_name}\');" value="{$MOD.LBL_CREATE} {$APP.LBL_EMAIL_QC_LEADS}">'
                          . '<input type="hidden" id="parentEmailId" name="parentEmailId" value="{$bean->id}">'
                  ),
-                 array(
-                     'customCode' => '<input type=button onclick="openQuickCreateModal(\'Opportunities\',\'&name={$bean->name}\',\'{$bean->from_addr_name}\');" value="{$MOD.LBL_CREATE} {$APP.LBL_EMAIL_QC_OPPORTUNITIES}">'
-                         . '<input type="hidden" id="parentEmailId" name="parentEmailId" value="{$bean->id}">'
-                 ),
              )
          ),
          'includes' => array(

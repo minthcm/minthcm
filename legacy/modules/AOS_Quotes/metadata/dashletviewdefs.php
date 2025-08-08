@@ -74,11 +74,6 @@ array(
         'width' => '15',
         'label'   => 'LBL_BILLING_CONTACT'
         ),
-'opportunity' =>
-    array(
-        'width' => '25',
-        'label'   => 'LBL_OPPORTUNITY'
-        ),
 'stage' =>
     array(
         'width'   => '15',

@@ -131,19 +131,6 @@ class SugarWidgetSubPanelTopCreateLeadNameButton extends SugarWidgetSubPanelTopB
             }
         }
         
-        //from opportunities
-        if ($defines['focus']->object_name == 'Opportunity') {
-            if (isset($defines['focus']->id)) {
-                $additionalFormFields['opportunity_id'] = $defines['focus']->id;
-            }
-            if (isset($defines['focus']->account_name)) {
-                $additionalFormFields['account_name'] = $defines['focus']->account_name;
-            }
-            if (isset($defines['focus']->account_id)) {
-                $additionalFormFields['account_id'] = $defines['focus']->account_id;
-            }
-        }
-        
         $button = $this->_get_form($defines, $additionalFormFields);
         $button .= "<input title='$title' class='button' type='submit' name='{$this->getWidgetId()}_button' id='{$this->getWidgetId()}' value='  $value  '/>\n";
         $button .= "</form>";

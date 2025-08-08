@@ -204,12 +204,6 @@ $server->register(
     $NAMESPACE
 );
 
-$server->register(
-    'create_opportunity',
-    array('user_name' => 'xsd:string', 'password' => 'xsd:string', 'name' => 'xsd:string', 'amount' => 'xsd:string'),
-    array('return' => 'xsd:string'),
-    $NAMESPACE
-);
 
 $server->register(
     'create_case',
@@ -335,10 +329,6 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
             $output_list[] = get_account_array($account, $msi_id);
         }
 
-        $opps = $contact->get_linked_beans('opportunities', 'Opportunity');
-        foreach ($opps as $opp) {
-            $output_list[] = get_opportunity_array($opp, $msi_id);
-        }
 
         $cases = $contact->get_linked_beans('cases', 'aCase');
         foreach ($cases as $case) {
@@ -436,10 +426,6 @@ function get_contact_relationships($user_name, $password, $id)
         $output_list[] = get_account_array($account, $msi_id);
     }
 
-    $opps = $seed_contact->get_linked_beans('opportunities', 'Opportunity');
-    foreach ($opps as $opp) {
-        $output_list[] = get_opportunity_array($opp, $msi_id);
-    }
 
     $cases = $seed_contact->get_linked_beans('cases', 'aCase');
     foreach ($cases as $case) {
@@ -709,47 +695,7 @@ function account_by_search($name, $where = '', $msi_id = '0')
     return $output_list;
 }
 
-/**
- * Internal: convert a bean into an array
- *
- * @param Bean $bean -- The bean to convert
- * @param int $msi_id -- Russult array index
- * @return An associated array containing the detail fields.
- */
-function get_opportunity_array($value, $msi_id = '0')
-{
-    return array(
-        "name1" => '',
-        "name2" => $value->name,
-        "association" => $value->account_name,
-        "type" => 'Opportunity',
-        "id" => $value->id,
-        "msi_id" => $msi_id,
-        "email_address" => ''
-    );
-}
 
-function opportunity_by_search($name, $where = '', $msi_id = '0')
-{
-    $seed = BeanFactory::newBean('Opportunities');
-    if (!$seed->ACLAccess('ListView')) {
-        return array();
-    }
-    if ($where == '') {
-        $where = $seed->build_generic_where_clause($name);
-    }
-    $response = $seed->get_list("name", $where, 0);
-    $list = $response['list'];
-
-    $output_list = array();
-
-    // create a return array of names and email addresses.
-    foreach ($list as $value) {
-        $output_list[] = get_opportunity_array($value, $msi_id);
-    }
-
-    return $output_list;
-}
 
 /**
  * Internal: convert a bean into an array
@@ -1004,26 +950,6 @@ function create_case($user_name, $password, $name)
     return $case->save();
 }
 
-function create_opportunity($user_name, $password, $name, $amount)
-{
-    if (!validate_user($user_name, $password)) {
-        return 0;
-    }
-
-
-    $seed_user = BeanFactory::newBean('Users');
-    $user_id = $seed_user->retrieve_user_id($user_name);
-    $opp = BeanFactory::newBean('Opportunities');
-    if (!$opp->ACLAccess('Save')) {
-        return -1;
-    }
-    $opp->name = $name;
-    $opp->amount = $amount;
-    $opp->assigned_user_id = $user_id;
-    $opp->assigned_user_name = $user_name;
-
-    return $opp->save();
-}
 
 function search($user_name, $password, $name)
 {
@@ -1037,7 +963,6 @@ function search($user_name, $password, $name)
         $list = array_merge($list, lead_by_search($single_name));
         $list = array_merge($list, account_by_search($single_name));
         $list = array_merge($list, case_by_search($single_name));
-        $list = array_merge($list, opportunity_by_search($single_name));
         $list = array_merge($list, bug_by_search($single_name));
     }
 

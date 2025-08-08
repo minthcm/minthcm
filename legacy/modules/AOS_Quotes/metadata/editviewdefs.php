@@ -64,11 +64,6 @@ array(
             ),
             'label' => 'LBL_NAME',
           ),
-          1 =>
-          array(
-            'name' => 'opportunity',
-            'label' => 'LBL_OPPORTUNITY',
-          ),
         ),
         1 =>
         array(

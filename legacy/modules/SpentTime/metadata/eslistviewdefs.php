@@ -17,6 +17,8 @@ $ESListViewDefs['SpentTime'] = [
         ],
         'category' => [
         ],
+        'organizational_unit' => [
+        ],
         'description' => [
             'default' => true,
         ],
@@ -33,6 +35,8 @@ $ESListViewDefs['SpentTime'] = [
         'type' => [
         ],
         'category' => [
+        ],
+        'organizational_unit' => [
         ],
         'assigned_user_id' => [
         ],

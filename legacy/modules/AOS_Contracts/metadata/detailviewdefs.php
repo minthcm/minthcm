@@ -120,11 +120,6 @@ array(
             'name' => 'renewal_reminder_date',
             'label' => 'LBL_RENEWAL_REMINDER_DATE',
           ),
-          1 =>
-          array(
-            'name' => 'opportunity',
-            'label' => 'LBL_OPPORTUNITY',
-          ),
         ),
         5 =>
         array(

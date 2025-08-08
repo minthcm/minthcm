@@ -212,19 +212,6 @@ $layout_defs['Project'] = array(
             'add_subpanel_data' => 'account_id',
             'title_key' => 'LBL_ACCOUNTS_SUBPANEL_TITLE',
         ),
-        'opportunities' => array(
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Opportunities'),
-            ),
-            'order' => 80,
-            'module' => 'Opportunities',
-            'sort_order' => 'desc',
-            'sort_by' => 'date_closed',
-            'subpanel_name' => 'default',
-            'get_subpanel_data' => 'opportunities',
-            'add_subpanel_data' => 'opportunity_id',
-            'title_key' => 'LBL_OPPORTUNITIES_SUBPANEL_TITLE',
-        ),
         'cases' => array(
             'top_buttons' => array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Cases'),

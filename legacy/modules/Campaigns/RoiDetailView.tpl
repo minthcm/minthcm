@@ -113,8 +113,6 @@
 	</tr><tr>
 	<td width="20%" nowrap><span>{$MOD.LBL_CAMPAIGN_EXPECTED_COST} ({$CURRENCY})</span></td>
 	<td width="30%"><span>{$EXPECTED_COST}</span></td>
-		<td width="20%" nowrap><span>{$MOD.LBL_CAMPAIGN_OPPORTUNITIES_WON}</span></td>
-	<td width="30%"><span>{$OPPORTUNITIES_WON}</span></td>
 	</tr><tr>
 	</tr><tr>
 	<td width="20%" nowrap><span>{$MOD.LBL_CAMPAIGN_ACTUAL_COST} ({$CURRENCY})</span></td>

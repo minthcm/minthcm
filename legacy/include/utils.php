@@ -1794,7 +1794,6 @@ function get_workflow_admin_modules_for_user($user)
     $workflow_mod_list['Notes'] = 'Notes';
     $workflow_mod_list['ProjectTask'] = 'Project Tasks';
     $workflow_mod_list['Leads'] = 'Leads';
-    $workflow_mod_list['Opportunities'] = 'Opportunities';
     // End of list
 
     $workflow_admin_modules = array();
@@ -6262,7 +6261,6 @@ if (!function_exists('getMintDisabledModulesList')) {
     {
         return [
             'Accounts',
-            'Opportunities',
             'Leads',
             'Contacts',
             'Prospects',

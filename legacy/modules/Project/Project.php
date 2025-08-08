@@ -67,7 +67,6 @@ class Project extends SugarBean
 
     public $account_id;
     public $contact_id;
-    public $opportunity_id;
     public $email_id;
     public $estimated_start_date;
 
@@ -86,13 +85,11 @@ class Project extends SugarBean
     public $additional_column_fields = array(
         'account_id',
         'contact_id',
-        'opportunity_id',
     );
 
     public $relationship_fields = array(
         'account_id' => 'accounts',
         'contact_id'=>'contacts',
-        'opportunity_id'=>'opportunities',
         'email_id' => 'emails',
     );
 

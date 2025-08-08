@@ -316,6 +316,17 @@ $dictionary['SpentTime'] = array(
                 'additional_params' => 'SpentTime-category',
                 'include' => 'include/utils/getDictionary.php'],
         ),
+        'organizational_unit' => array(
+            'name' => 'organizational_unit',
+            'vname' => 'LBL_SPENT_TIME_ORGANIZATIONAL_UNIT',
+            'type' => 'enum',
+            'importable' => true,
+            'massupdate' => true,
+            'reportable' => true,
+            'audited' => true,
+            'function' => ['name' => 'getCompanies', 
+            'include' => 'include/utils/getCompanies.php'],
+        ),
         'workschedule_name' => array(
             'name' => 'workschedule_name',
             'type' => 'relate',
@@ -379,6 +390,7 @@ if (!class_exists('VardefManager')) {
 }
 
 VardefManager::createVardef('SpentTime', 'SpentTime', array('basic', 'assignable', 'security_groups'));
+
 
 $dictionary['SpentTime']['fields']['description']['required'] = true;
 $dictionary['SpentTime']['fields']['description']['rows'] = '3';

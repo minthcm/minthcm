@@ -277,23 +277,14 @@ class Spots extends Basic
             case 'getLeadsSpotsData':
                 $labelPrefix = 'LBL_AN_LEADS_';
                 break;
-            case 'getSalesSpotsData':
-                $labelPrefix = 'LBL_AN_SALES_';
-                break;
             case 'getServiceSpotsData':
                 $labelPrefix = 'LBL_AN_SERVICE_';
                 break;
             case 'getActivitiesSpotsData':
                 $labelPrefix = 'LBL_AN_ACTIVITIES_';
                 break;
-            case 'getMarketingSpotsData':
-                $labelPrefix = 'LBL_AN_MARKETING_';
-                break;
             case 'getMarketingActivitySpotsData':
                 $labelPrefix = 'LBL_AN_MARKETINGACTIVITY';
-                break;
-            case 'getQuotesSpotsData':
-                $labelPrefix = 'LBL_AN_QUOTES_';
                 break;
         }
         $allMatchingLabels = array_keys($mod_strings, $label);

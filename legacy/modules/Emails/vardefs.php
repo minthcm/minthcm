@@ -453,15 +453,6 @@ $dictionary['Email'] = array(
          'bean_name' => 'Lead',
          'source' => 'non-db',
       ),
-      'opportunities' => array(
-         'name' => 'opportunities',
-         'vname' => 'LBL_EMAILS_OPPORTUNITIES_REL',
-         'type' => 'link',
-         'relationship' => 'emails_opportunities_rel',
-         'module' => 'Opportunities',
-         'bean_name' => 'Opportunity',
-         'source' => 'non-db',
-      ),
       'project' => array(
          'name' => 'project',
          'vname' => 'LBL_EMAILS_PROJECT_REL',

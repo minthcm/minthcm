@@ -79,7 +79,6 @@ class SpentTimeApi
         }
         return 0;
     }
-
     public function canLogToWorkOffSchedule($workschedule_id)
     {
         global $db;

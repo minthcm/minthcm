@@ -395,14 +395,6 @@ $dictionary['Meeting'] = array(
          'source' => 'non-db',
          'vname' => 'LBL_LEADS',
       ),
-      'opportunity' =>
-     array(
-         'name' => 'opportunity',
-         'type' => 'link',
-         'relationship' => 'opportunity_meetings',
-         'source' => 'non-db',
-         'vname' => 'LBL_OPPORTUNITY',
-      ),
       'case' =>
      array(
          'name' => 'case',

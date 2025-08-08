@@ -263,15 +263,6 @@ $dictionary['Project'] = array(
                 'ignore_role' => true,
                 'vname' => 'LBL_CONTACTS',
             ),
-        'opportunities' =>
-            array(
-                'name' => 'opportunities',
-                'type' => 'link',
-                'relationship' => 'projects_opportunities',
-                'source' => 'non-db',
-                'ignore_role' => true,
-                'vname' => 'LBL_OPPORTUNITIES',
-            ),
         'notes' =>
             array(
                 'name' => 'notes',

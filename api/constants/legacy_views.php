@@ -246,11 +246,11 @@ return [
         'record' => true,
     ],
     'OAuth2Tokens' => [
-        'list' => false,
+        'list' => true,
         'record' => true,
     ],
     'OAuth2Clients' => [
-        'list' => false,
+        'list' => true,
         'record' => true,
     ],
     'SurveyResponses' => [

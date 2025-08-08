@@ -224,39 +224,6 @@ $dictionary['Lead'] = array('table' => 'leads', 'audited' => true, 'unified_sear
                 'vname' => 'LBL_ACCOUNT_ID',
                 'comment' => 'If converted, Account ID resulting from the conversion'
             ),
-        'opportunity_id' =>
-            array(
-                'name' => 'opportunity_id',
-                'type' => 'id',
-                'reportable' => false,
-                'vname' => 'LBL_OPPORTUNITY_ID',
-                'comment' => 'If converted, Opportunity ID resulting from the conversion'
-            ),
-        'opportunity' => array(
-            'name' => 'opportunity',
-            'type' => 'link',
-            'link_type' => 'one',
-            'relationship' => 'opportunity_leads',
-            'source' => 'non-db',
-            'vname' => 'LBL_OPPORTUNITIES',
-        ),
-        'opportunity_name' =>
-            array(
-                'name' => 'opportunity_name',
-                'vname' => 'LBL_OPPORTUNITY_NAME',
-                'type' => 'varchar',
-                'len' => '255',
-                'comment' => 'Opportunity name associated with lead'
-            ),
-        'opportunity_amount' =>
-            array(
-                'name' => 'opportunity_amount',
-                'vname' => 'LBL_OPPORTUNITY_AMOUNT',
-                'type' => 'varchar',
-                'group' => 'opportunity_name',
-                'len' => '50',
-                'comment' => 'Amount of the opportunity'
-            ),
         'campaign_id' =>
             array(
                 'name' => 'campaign_id',
@@ -611,7 +578,6 @@ $dictionary['Lead'] = array('table' => 'leads', 'audited' => true, 'unified_sear
         array('name' => 'idx_lead_acct_name_first', 'type' => 'index', 'fields' => array('account_name', 'deleted')),
         array('name' => 'idx_lead_last_first', 'type' => 'index', 'fields' => array('last_name', 'first_name', 'deleted')),
         array('name' => 'idx_lead_del_stat', 'type' => 'index', 'fields' => array('last_name', 'status', 'deleted', 'first_name')),
-        array('name' => 'idx_lead_opp_del', 'type' => 'index', 'fields' => array('opportunity_id', 'deleted',)),
         array('name' => 'idx_leads_acct_del', 'type' => 'index', 'fields' => array('account_id', 'deleted',)),
         array('name' => 'idx_del_user', 'type' => 'index', 'fields' => array('deleted', 'assigned_user_id')),
         array('name' => 'idx_lead_assigned', 'type' => 'index', 'fields' => array('assigned_user_id')),

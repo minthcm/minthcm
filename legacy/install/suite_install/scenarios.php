@@ -14,18 +14,15 @@ $installation_scenarios = array(
             'groupedTabs'=> 'LBL_TABGROUP_SALES',
             'modules' =>
                 array(
-                    0 => 'Opportunities',
-                    1 => 'Leads'
+                    0 => 'Leads'
                 ),
             'modulesScenarioDisplayName' =>
                 array(
-                    0 => $app_strings['LBL_OPPORTUNITIES'],
-                    1 => $app_strings['LBL_LEADS']
+                    0 => $app_strings['LBL_LEADS']
                 ),
             'dashlets'=>
                 array(
-                    0 => 'MyOpportunitiesDashlet',
-                    1 => 'MyLeadsDashlet'
+                    0 => 'MyLeadsDashlet'
                 )
         ),
     1 =>

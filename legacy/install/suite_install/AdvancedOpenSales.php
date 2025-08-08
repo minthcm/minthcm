@@ -30,8 +30,6 @@ function upgrade_aos(){
             'custom/Extension/modules/Accounts/Ext/Vardefs/Account.php',
             'custom/Extension/modules/Contacts/Ext/Layoutdefs/Contact.php',
             'custom/Extension/modules/Contacts/Ext/Vardefs/Contact.php',
-            'custom/Extension/modules/Opportunities/Ext/Layoutdefs/Opportunity.php',
-            'custom/Extension/modules/Opportunities/Ext/Vardefs/Opportunity.php',
             'custom/Extension/modules/Project/Ext/Layoutdefs/Project.php',
             'custom/Extension/modules/Project/Ext/Vardefs/Project.php',
             'modules/AOS_Quotes/js/Quote.js',

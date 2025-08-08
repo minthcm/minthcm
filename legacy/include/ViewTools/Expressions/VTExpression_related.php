@@ -5,9 +5,8 @@
  * Part of funcions (like "count") can be used in select_definition clause (see second example below). You can find them by calculated filter
  * If <i>use_middle_table</i> param is set to <i>true</i> then returns <i>select_definition</i> from middle table of <i>relationship</i> at the assumed conditions in <i>additional_conditions</i>
  * EOU:
- * "related(@name,#opportunities)" will give us name of related opportunity
+ * "related(@last_name,#candidate)" will give us last_name of related candidate
  * "related(count(@name),#contacts,equals(@name,$name))" will give us number of related contacts, which have name equal to module field $name
- * "related(@account_id,#accounts_opportunities,equals(@opportunity_id,$opportunity_id),<b>true</b>)" will give us account_id from accounts_opportunities relationship table where opportunity_id field in table equals opportunity_id field on View.
  */
 class VTExpression_related extends VTExpression {
 

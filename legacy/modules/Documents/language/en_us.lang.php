@@ -157,7 +157,6 @@ $mod_strings = array(
     // Links around the world
     'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_CONTACTS_SUBPANEL_TITLE' => 'Contacts',
-    'LBL_OPPORTUNITIES_SUBPANEL_TITLE' => 'Opportunities',
     'LBL_CASES_SUBPANEL_TITLE' => 'Cases',
     'LBL_BUGS_SUBPANEL_TITLE' => 'Bugs',
     'LBL_AOS_CONTRACTS' => 'Contracts',

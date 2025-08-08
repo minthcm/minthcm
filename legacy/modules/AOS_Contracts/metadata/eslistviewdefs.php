@@ -35,8 +35,6 @@ $ESListViewDefs['AOS_Contracts'] = [
         ],
         'contract_account' => [
         ],
-        'opportunity' => [
-        ],
         'start_date' => [
         ],
         'end_date' => [

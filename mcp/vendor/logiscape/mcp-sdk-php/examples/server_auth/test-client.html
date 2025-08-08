@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Authentication Test Client</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .control-panel {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #4a9eff;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: #4a9eff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #357abd;
+        }
+        
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        
+        button.secondary {
+            background: #666;
+        }
+        
+        button.secondary:hover {
+            background: #555;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .result-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .result-section h2 {
+            color: #4a9eff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+        }
+        
+        .status-indicator.success {
+            background: #4ade80;
+        }
+        
+        .status-indicator.error {
+            background: #ef4444;
+        }
+        
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+        
+        .code-block h3 {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        pre {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .header-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #222;
+        }
+        
+        .header-item:last-child {
+            border-bottom: none;
+        }
+        
+        .header-name {
+            color: #4a9eff;
+            font-weight: 600;
+        }
+        
+        .header-value {
+            color: #4ade80;
+            margin-left: 10px;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        .metadata-url {
+            color: #fbbf24;
+            word-break: break-all;
+        }
+        
+        @media (max-width: 768px) {
+            .results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MCP Authentication Test Client</h1>
+        
+        <div class="control-panel">
+            <div class="form-group">
+                <label for="serverUrl">MCP Server URL</label>
+                <input type="text" id="serverUrl" placeholder="https://example.com/server_auth.php">
+            </div>
+            
+            <div class="form-group">
+                <label for="authToken">Bearer Token (Optional)</label>
+                <input type="text" id="authToken" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            </div>
+            
+            <div class="form-group">
+                <label for="sessionId">Session ID (Optional - will be auto-generated if empty)</label>
+                <input type="text" id="sessionId" placeholder="Leave empty for new session">
+            </div>
+            
+            <div class="button-group">
+                <button onclick="fetchMetadata()">Fetch Resource Metadata</button>
+                <button onclick="testInitialize()">Test Initialize</button>
+                <button onclick="testRequest('tools/list')">Test Tools List</button>
+                <button onclick="clearResults()" class="secondary">Clear Results</button>
+            </div>
+        </div>
+        
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        let currentSessionId = null;
+
+        async function makeRequest(url, options = {}) {
+            const result = {
+                url: url,
+                method: options.method || 'GET',
+                requestHeaders: {},
+                responseHeaders: {},
+                status: null,
+                statusText: null,
+                body: null,
+                error: null
+            };
+
+            // Add auth header if token provided
+            const authToken = document.getElementById('authToken').value.trim();
+            if (authToken) {
+                options.headers = options.headers || {};
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            // Add session ID if available
+            const sessionId = document.getElementById('sessionId').value.trim() || currentSessionId;
+            if (sessionId && options.method !== 'GET') {
+                options.headers = options.headers || {};
+                options.headers['Mcp-Session-Id'] = sessionId;
+            }
+
+            // Store request headers
+            result.requestHeaders = options.headers || {};
+
+            try {
+                const response = await fetch(url, options);
+                
+                result.status = response.status;
+                result.statusText = response.statusText;
+
+                // Capture all response headers
+                for (const [key, value] of response.headers.entries()) {
+                    result.responseHeaders[key] = value;
+                }
+
+                // Store session ID if returned
+                if (response.headers.get('mcp-session-id')) {
+                    currentSessionId = response.headers.get('mcp-session-id');
+                    document.getElementById('sessionId').value = currentSessionId;
+                }
+
+                // Get response body
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    result.body = await response.json();
+                } else {
+                    result.body = await response.text();
+                }
+
+            } catch (error) {
+                result.error = error.message;
+            }
+
+            return result;
+        }
+
+        async function fetchMetadata() {
+            const serverUrl = document.getElementById('serverUrl').value.trim();
+            if (!serverUrl) {
+                alert('Please enter a server URL');
+                return;
+            }
+
+            // Construct metadata URL
+            const metadataUrl = new URL('/.well-known/oauth-protected-resource', serverUrl).toString();
+            
+            showLoading('Fetching resource metadata...');
+            
+            const result = await makeRequest(metadataUrl);
+            
+            displayResult('Resource Metadata', result, true);
+        }
+
+        async function testInitialize() {
+            const serverUrl = document.getElementById('serverUrl').value.trim();
+            if (!serverUrl) {
+                alert('Please enter a server URL');
+                return;
+            }
+
+            showLoading('Sending initialize request...');
+
+            const initRequest = {
+                jsonrpc: "2.0",
+                id: 1,
+                method: "initialize",
+                params: {
+                    protocolVersion: "2025-03-26",
+                    capabilities: {},
+                    clientInfo: {
+                        name: "MCP Test Client",
+                        version: "1.0.0"
+                    }
+                }
+            };
+
+            const result = await makeRequest(serverUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(initRequest)
+            });
+
+            displayResult('Initialize Request', result);
+        }
+
+        async function testRequest(method) {
+            const serverUrl = document.getElementById('serverUrl').value.trim();
+            if (!serverUrl) {
+                alert('Please enter a server URL');
+                return;
+            }
+
+            if (!currentSessionId && !document.getElementById('sessionId').value.trim()) {
+                alert('Please initialize a session first');
+                return;
+            }
+
+            showLoading(`Sending ${method} request...`);
+
+            const request = {
+                jsonrpc: "2.0",
+                id: Date.now(),
+                method: method,
+                params: {}
+            };
+
+            const result = await makeRequest(serverUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(request)
+            });
+
+            displayResult(`${method} Request`, result);
+        }
+
+        function displayResult(title, result, isMetadata = false) {
+            const resultsDiv = document.getElementById('results');
+            
+            const isSuccess = result.status >= 200 && result.status < 300;
+            
+            const resultHtml = `
+                <div class="result-section">
+                    <h2>
+                        <span class="status-indicator ${isSuccess ? 'success' : 'error'}"></span>
+                        ${title}
+                    </h2>
+                    
+                    <div class="code-block">
+                        <h3>Request</h3>
+                        <pre>${result.method} ${result.url}${formatHeaders(result.requestHeaders)}</pre>
+                    </div>
+                    
+                    <div class="code-block">
+                        <h3>Response Status</h3>
+                        <pre>${result.status} ${result.statusText}</pre>
+                    </div>
+                    
+                    <div class="code-block">
+                        <h3>Response Headers</h3>
+                        <div>${formatHeadersHtml(result.responseHeaders)}</div>
+                    </div>
+                    
+                    ${isMetadata && result.responseHeaders['www-authenticate'] ? `
+                        <div class="code-block">
+                            <h3>OAuth Resource Metadata URL</h3>
+                            <pre class="metadata-url">${extractResourceUrl(result.responseHeaders['www-authenticate'])}</pre>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="code-block">
+                        <h3>Response Body</h3>
+                        <pre>${result.body ? JSON.stringify(result.body, null, 2) : 'No body'}</pre>
+                    </div>
+                    
+                    ${result.error ? `<div class="error-message">Error: ${result.error}</div>` : ''}
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = resultHtml + resultsDiv.innerHTML;
+        }
+
+        function formatHeaders(headers) {
+            if (!headers || Object.keys(headers).length === 0) return '';
+            
+            return '\n\nHeaders:\n' + Object.entries(headers)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join('\n');
+        }
+
+        function formatHeadersHtml(headers) {
+            if (!headers || Object.keys(headers).length === 0) {
+                return '<pre>No headers</pre>';
+            }
+            
+            return Object.entries(headers)
+                .map(([key, value]) => `
+                    <div class="header-item">
+                        <span class="header-name">${key}:</span>
+                        <span class="header-value">${value}</span>
+                    </div>
+                `)
+                .join('');
+        }
+
+        function extractResourceUrl(wwwAuth) {
+            const match = wwwAuth.match(/resource="([^"]+)"/);
+            return match ? match[1] : 'Not found in WWW-Authenticate header';
+        }
+
+        function showLoading(message) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<div class="loading">${message}</div>` + resultsDiv.innerHTML;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            currentSessionId = null;
+            document.getElementById('sessionId').value = '';
+        }
+    </script>
+</body>
+</html>

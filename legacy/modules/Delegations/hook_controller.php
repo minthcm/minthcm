@@ -47,7 +47,7 @@
 class DelegationsLogicHooks {
 
    public function reformat_number(&$number) {
-      $number = number_format($number, 2, '.', ' ');
+      $number = number_format(intval($number), 2, '.', ' ');
    }
 
    public function delegations_before_pdf(&$bean, $event, $arguments) {
@@ -78,7 +78,7 @@ class DelegationsLogicHooks {
       $cities = array_unique($cities);
       $tmeans = array_unique($tmeans);
 
-      // UzupeÅ‚nienie pÃ³l
+      // Uzupe³nienie pól
 
       $bean->from_city = array_shift($cities);
       $bean->destinations = implode(",<br/>", $cities);
@@ -90,7 +90,7 @@ class DelegationsLogicHooks {
       $bean->hour_start = $timedate->swap_formats($bean->start_date, $timedate->get_date_time_format($current_user), $timedate->get_time_format($current_user));
       $bean->hour_end = $timedate->swap_formats($bean->end_date, $timedate->get_date_time_format($current_user), $timedate->get_time_format($current_user));
 
-      ///////// CaÅ‚kowity koszt transportu z zÅ‚
+      ///////// Ca³kowity koszt transportu z z³
       //transport_cost //pln
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -102,7 +102,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->transport_cost = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //CaÅ‚kowity koszt transportu w euro
+      //Ca³kowity koszt transportu w euro
       //transport_cost_eur
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -114,7 +114,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->transport_cost_eur = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //CaÅ‚kowity koszt transportu w dolarach
+      //Ca³kowity koszt transportu w dolarach
       //transport_cost_usd
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -126,7 +126,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->transport_cost_usd = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //Suma kosztow noclegow w zÅ‚
+      //Suma kosztow noclegow w z³
       //accommodation (pln)
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -138,7 +138,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->total_accommodation = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //Suma kosztÃ³w noclegÃ³w w euro	
+      //Suma kosztów noclegów w euro	
       //accommodation_eur
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -151,7 +151,7 @@ class DelegationsLogicHooks {
       $bean->total_accommodation_eur = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
 
-      //Suma kosztÃ³w noclegÃ³w w dolarach
+      //Suma kosztów noclegów w dolarach
       //accommodation_usd
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -164,7 +164,7 @@ class DelegationsLogicHooks {
       $bean->total_accommodation_usd = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
 
-      //Suma innych kosztÃ³w w zÅ‚
+      //Suma innych kosztów w z³
       //other (pln)
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -176,7 +176,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->other = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //Suma innych kosztÃ³w w euro	
+      //Suma innych kosztów w euro	
       //other_eur
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -188,7 +188,7 @@ class DelegationsLogicHooks {
       $row = $bean->db->fetchByAssoc($result);
       $bean->other_eur = ($row['sum'] > 0) ? $row['sum'] : "0.00";
 
-      //Suma innych kosztÃ³w w dolarach
+      //Suma innych kosztów w dolarach
       //other_usd
       $query = "SELECT SUM(costs.cost_amount) as sum
          FROM costs
@@ -222,14 +222,15 @@ class DelegationsLogicHooks {
 
       $row = $bean->db->fetchByAssoc($bean->db->query($query));
       $bean->restaurant_bills_usd = $row['c'];
-
       // Konwersja dat i dlugosci pobytu
       $date1 = new DateTime($bean->start_date);
       $date2 = new DateTime($bean->end_date);
+      if ($date1 && $date2) {
       $period = $date1->diff($date2);
 
       $bean->regiments_eur = (($period->d + 1) - $bean->restaurant_bills_eur / 3) * $bean->regimen_value;
       $bean->regiments_usd = (($period->d + 1) - $bean->restaurant_bills_usd / 3) * $bean->regimen_value;
+      }
 
       //depending on delegation default currency	
       if ( $currency->iso4217 == 'PLN' ) {
@@ -262,7 +263,7 @@ class DelegationsLogicHooks {
          $bean->obtained_sum_eur = "0.00";
          $bean->obtained_sum = "0.00";
       }
-      //Wyliczenie caÅ‚kowitych kosztÃ³w
+      //Wyliczenie ca³kowitych kosztów
       ///////////
       $bean->total_expenses = $bean->other + $bean->accommodation_lump_sum + $bean->total_accommodation + $bean->regiments + $bean->transport_cost;
       $bean->total_expenses_eur = $bean->other_eur + $bean->accommodation_lump_sum_eur + $bean->total_accommodation_eur + $bean->regiments_eur + $bean->transport_cost_eur;
@@ -290,7 +291,7 @@ class DelegationsLogicHooks {
          'obtained_sum_eur',
       );
       foreach ( $values as $key => &$number ) {
-         $this->reformat_number($bean->$values[$key]);
+         $this->reformat_number($bean->$number);
       }
       $bean->end_date_plus_one = date($timedate->get_date_format($current_user), strtotime("+1 days", strtotime($bean->end_date)));
    }

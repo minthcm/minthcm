@@ -198,16 +198,6 @@ $dictionary['jjwg_Maps'] = array(
                 'source' => 'non-db',
                 'vname' => 'LBL_LEADS',
             ),
-        'opportunities' =>
-            array(
-                'name' => 'opportunities',
-                'type' => 'link',
-                'relationship' => 'jjwg_Maps_opportunities',
-                'module' => 'Leads',
-                'bean_name' => 'Opportunity',
-                'source' => 'non-db',
-                'vname' => 'LBL_OPPORTUNITIES',
-            ),
         'cases' =>
             array(
                 'name' => 'cases',
@@ -311,18 +301,6 @@ $dictionary['jjwg_Maps'] = array(
                 'relationship_type' => 'one-to-many',
                 'relationship_role_column' => 'parent_type',
                 'relationship_role_column_value' => 'Leads',
-            ),
-        'jjwg_Maps_opportunities' =>
-            array(
-                'lhs_module' => 'jjwg_Maps',
-                'lhs_table' => 'jjwg_Maps',
-                'lhs_key' => 'parent_id',
-                'rhs_module' => 'Opportunities',
-                'rhs_table' => 'opportunities',
-                'rhs_key' => 'id',
-                'relationship_type' => 'one-to-many',
-                'relationship_role_column' => 'parent_type',
-                'relationship_role_column_value' => 'Opportunities',
             ),
         'jjwg_Maps_cases' =>
             array(
