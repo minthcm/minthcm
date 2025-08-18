@@ -13,7 +13,7 @@
     </a>
 </p>
 
-[minthcm.org](https://minthcm.org/) is a free and open-source tool for Human Capital Management. 
+[minthcm.org](https://minthcm.org/) is first AI‑enabled open source & free Human Capital Management system for organizations that care about their most valuable asset – people
 
 ## Main features:
 
@@ -33,6 +33,7 @@
 * competences & skills
 * employment history
 * employee evaluations
+* Model Context Protocol for LLM integration
 * [iOS](https://apps.apple.com/pl/app/minthcm/id1622342256) & [Android](https://play.google.com/store/apps/details?id=com.minthcm.mobile&hl=en&gl=US) mobile apps
 
 Mint based on two popular, well-known business applications: SugarCRM Community Edition and SuiteCRM. This is why we often say that **MintHCM is CRM reinvented**. You all know how much goes into technological development of this type of business software… 
