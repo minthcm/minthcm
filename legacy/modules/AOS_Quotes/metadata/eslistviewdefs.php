@@ -17,10 +17,6 @@ $ESListViewDefs['AOS_Quotes'] = [
             'link' => true,
             'default' => true,
         ],
-        'billing_account' => [
-            'link' => true,
-            'default' => true,
-        ],
         'total_amount' => [
             'default' => true,
         ],
@@ -70,8 +66,6 @@ $ESListViewDefs['AOS_Quotes'] = [
         'name' => [
         ],
         'billing_contact' => [
-        ],
-        'billing_account' => [
         ],
         'number' => [
         ],

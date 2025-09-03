@@ -68,15 +68,6 @@ if (!empty($_REQUEST['user_id'])) {
         sugar_cleanup();
         die("The contact id doesn't exist");
     }
-} elseif (! empty($_REQUEST['lead_id'])) {
-    $current_entity = BeanFactory::newBean('Leads');
-    $current_entity->disable_row_level_security = true;
-    $result = $current_entity->retrieve($_REQUEST['lead_id']);
-    if ($result == null) {
-        session_destroy();
-        sugar_cleanup();
-        die("The lead id doesn't exist");
-    }
 }
 
 $bean = $beanList[clean_string($_REQUEST['module'])];

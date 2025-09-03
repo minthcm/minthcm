@@ -58,23 +58,6 @@ array(
           2 => 'DELETE',
           3 =>
           array(
-            'customCode' => '<input title="{$MOD.LBL_CONVERT_BUTTON_TITLE}" class="button" onclick="this.form.return_module.value=\'Prospects\'; this.form.return_action.value=\'DetailView\'; this.form.return_id.value=\'{$fields.id.value}\';this.form.module.value=\'Leads\';this.form.action.value=\'EditView\';" type="submit" name="CONVERT_LEAD_BTN" value="{$MOD.LBL_CONVERT_BUTTON_LABEL}"/>',
-            'sugar_html' =>
-            array(
-              'type' => 'submit',
-              'value' => '{$MOD.LBL_CONVERT_BUTTON_LABEL}',
-              'htmlOptions' =>
-              array(
-                'class' => 'button',
-                'name' => 'CONVERT_LEAD_BTN',
-                'id' => 'convert_target_button',
-                'title' => '{$MOD.LBL_CONVERT_BUTTON_TITLE}',
-                'onclick' => 'this.form.return_module.value=\'Prospects\'; this.form.return_action.value=\'DetailView\'; this.form.return_id.value=\'{$fields.id.value}\';this.form.module.value=\'Leads\';this.form.action.value=\'EditView\';',
-              ),
-            ),
-          ),
-          4 =>
-          array(
             'customCode' => '<input title="{$APP.LBL_MANAGE_SUBSCRIPTIONS}" class="button" onclick="this.form.return_module.value=\'Prospects\'; this.form.return_action.value=\'DetailView\'; this.form.return_id.value=\'{$fields.id.value}\'; this.form.action.value=\'Subscriptions\'; this.form.module.value=\'Campaigns\';" type="submit" name="Manage Subscriptions" value="{$APP.LBL_MANAGE_SUBSCRIPTIONS}"/>',
             'sugar_html' =>
             array(
@@ -158,11 +141,7 @@ array(
         ),
         3 =>
         array(
-          0 =>
-          array(
-            'name' => 'account_name',
-          ),
-          1 => 'phone_fax',
+          0 => 'phone_fax',
         ),
         4 =>
         array(

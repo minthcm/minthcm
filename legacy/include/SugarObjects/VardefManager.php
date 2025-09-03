@@ -393,25 +393,6 @@ class VardefManager {
    }
 
    /**
-    * applyGlobalAccountRequirements
-    *
-    * This method ensures that the account_name relationships are set to always be required if the configuration file specifies
-    * so.  For more information on this require_accounts parameter, please see the administrators guide or go to the
-    * developers.sugarcrm.com website to find articles relating to the use of this field.
-    *
-    * @param Array $vardef The vardefs of the module to apply the account_name field requirement to
-    * @return Array $vardef The vardefs of the module with the updated required setting based on the system configuration
-    */
-   public static function applyGlobalAccountRequirements($vardef) {
-      if ( isset($GLOBALS['sugar_config']['require_accounts']) ) {
-         if ( isset($vardef['fields']) && isset($vardef['fields']['account_name']) && isset($vardef['fields']['account_name']['type']) && $vardef['fields']['account_name']['type'] == 'relate' && isset($vardef['fields']['account_name']['required']) ) {
-            $vardef['fields']['account_name']['required'] = $GLOBALS['sugar_config']['require_accounts'];
-         }
-      }
-      return $vardef;
-   }
-
-   /**
     * load the vardefs for a given module and object
     * @param string $module the given module we want to load the vardefs for
     * @param string $object the given object we wish to load the vardefs for
@@ -429,7 +410,6 @@ class VardefManager {
 
       if ( !$refresh ) {
          $return_result = sugar_cache_retrieve($key);
-         $return_result = self::applyGlobalAccountRequirements($return_result);
 
          if ( !empty($return_result) ) {
             $GLOBALS['dictionary'][$object] = $return_result;
@@ -456,7 +436,6 @@ class VardefManager {
             }
             // now that we hae loaded the data from disk, put it in the cache.
             if ( !empty($GLOBALS['dictionary'][$object]) ) {
-               $GLOBALS['dictionary'][$object] = self::applyGlobalAccountRequirements($GLOBALS['dictionary'][$object]);
                sugar_cache_put($key, $GLOBALS['dictionary'][$object]);
             }
          }

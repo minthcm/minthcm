@@ -897,11 +897,6 @@ function button_change_onclick(obj) {
 	var filter = '';
 	var acct_name = '';
 
-	if(document.EditView.parent_type.value  == 'Accounts' && typeof(document.EditView.parent_name.value) != 'undefined' && document.EditView.parent_name.value != '') {
-		filter = "&form_submit=false&query=true&html=Email_picker&account_name=" + escape(document.EditView.parent_name.value) + "&account_id=" + escape(document.EditView.parent_id.value);
-		acct_name = document.EditView.parent_name.value;
-	}
-
 	var popup_request_data =
 	{
 		"call_back_function" : "set_email_return",
@@ -941,9 +936,6 @@ function quick_create_overlib(id, theme, el) {
 		var $dialog = $('<div></div>')
 		.html('<a style=\'width: 150px\' class=\'menuItem\' onmouseover=\'hiliteItem(this,"yes");\' onmouseout=\'unhiliteItem(this);\' href=\'index.php?module=Cases&action=EditView&inbound_email_id=' + id + '\'>' +
             "<img border='0' src='index.php?entryPoint=getImage&themeName="+SUGAR.themes.theme_name+"&imageName=Cases.gif' style='margin-right:5px'>" + SUGAR.language.get('Emails', 'LBL_LIST_CASE') + '</a>' +
-            "<a style='width: 150px' class='menuItem' onmouseover='hiliteItem(this,\"yes\");' onmouseout='unhiliteItem(this);' href='index.php?module=Leads&action=EditView&inbound_email_id=" + id + "'>" +
-                    "<img border='0' src='index.php?entryPoint=getImage&themeName="+SUGAR.themes.theme_name+"&imageName=Leads.gif' style='margin-right:5px'>"
-                    + SUGAR.language.get('Emails', 'LBL_LIST_LEAD') + "</a>" +
              "<a style='width: 150px' class='menuItem' onmouseover='hiliteItem(this,\"yes\");' onmouseout='unhiliteItem(this);' href='index.php?module=Contacts&action=EditView&inbound_email_id=" + id + "'>" +
                     "<img border='0' src='index.php?entryPoint=getImage&themeName="+SUGAR.themes.theme_name+"&imageName=Contacts.gif' style='margin-right:5px'>"
                     + SUGAR.language.get('Emails', 'LBL_LIST_CONTACT') + "</a>" +

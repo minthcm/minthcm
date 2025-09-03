@@ -350,10 +350,6 @@ function saveField($field, $id, $module, $value)
             } else {
                 $bean->$field = $value;
             }
-        } elseif ($module === 'Leads' && $field === 'account_name') {
-            require_once('modules/Leads/LeadFormBase.php');
-            $bean->$field = $value;
-            $bean->account_id = LeadFormBase::handleLeadAccountName($bean);
         // Fix #9408 Allow deleting an email address from inline Edit
         } else if($bean->field_defs[$field]['function']['name']=='getEmailAddressWidget'){
             $bean->$field = empty($value) ? ' ' : $value;
@@ -397,12 +393,6 @@ function saveField($field, $id, $module, $value)
 function getDisplayValue($bean, $field, $method = "save")
 {
     global $log;
-
-    if (file_exists("custom/modules/Accounts/metadata/listviewdefs.php")) {
-        $metadata = require("custom/modules/Accounts/metadata/listviewdefs.php");
-    } else {
-        $metadata = require("modules/Accounts/metadata/listviewdefs.php");
-    }
 
     if (!$bean->ACLAccess('view')) {
         $log->security("getDisplayValue - trying to access unauthorized view/module");

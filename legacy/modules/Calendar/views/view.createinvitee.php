@@ -55,7 +55,7 @@ class CalendarViewCreateInvitee extends SugarView
 
         $module = empty($_REQUEST['inviteeModule']) ? '' : $_REQUEST['inviteeModule'];
 
-        if (!in_array($module, array('Leads', 'Contacts')) || empty($beanList[$module])) {
+        if (!in_array($module, array('Contacts')) || empty($beanList[$module])) {
             $this->returnNoAccess($module);
         }
 

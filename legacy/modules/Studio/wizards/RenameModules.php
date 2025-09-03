@@ -78,13 +78,6 @@ class RenameModules
      * An array containing the modules and their labels to be changed when module is renamed.
      */
     private static $labelMap = array(
-        'Accounts' => array(
-            array('name' => 'LBL_CAMPAIGNS', 'type' => 'plural', 'source' => 'Campaigns'),
-            array('name' => 'LBL_CAMPAIGN_ID', 'type' => 'singular', 'source' => 'Campaigns'),
-            array('name' => 'LBL_PARENT_ACCOUNT_ID', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_PROSPECT_LIST', 'type' => 'singular', 'source' => 'Prospects'),
-            array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Accounts'),
-        ),
         'Bugs' => array(
             array('name' => 'LBL_LIST_FORM_TITLE', 'type' => 'singular', 'source' => 'Bugs'),
             array('name' => 'LBL_LIST_MY_BUGS', 'type' => 'plural', 'source' => 'Bugs'),
@@ -100,25 +93,20 @@ class RenameModules
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Calls'),
         ),
         'Campaigns' => array(
-            array('name' => 'LBL_ACCOUNTS', 'type' => 'plural', 'source' => 'Accounts'),
             array('name' => 'LBL_CONTACTS', 'type' => 'plural', 'source' => 'Contacts'),
             array('name' => 'LBL_LIST_CAMPAIGN_NAME', 'type' => 'singular', 'source' => 'Campaigns'),
             array('name' => 'LBL_LOG_ENTRIES_CONTACT_TITLE', 'type' => 'plural', 'source' => 'Contacts'),
-            array('name' => 'LBL_LOG_ENTRIES_LEAD_TITLE', 'type' => 'plural', 'source' => 'Leads'),
             array('name' => 'LBL_PROSPECT_LIST_SUBPANEL_TITLE', 'type' => 'singular', 'source' => 'Targets'),
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Campaigns'),
         ),
         'Cases' => array(
             array('name' => 'LBL_BUGS_SUBPANEL_TITLE', 'type' => 'plural', 'source' => 'Bugs'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Cases'),
         ),
         'Contacts' => array(
             array('name' => 'LBL_BUGS_SUBPANEL_TITLE', 'type' => 'plural', 'source' => 'Bugs'),
             array('name' => 'LBL_CAMPAIGN_LIST_SUBPANEL_TITLE', 'type' => 'plural', 'source' => 'Campaigns'),
             array('name' => 'LBL_CONTRACTS', 'type' => 'plural', 'source' => 'Contracts'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_LEAD_SOURCE', 'type' => 'singular', 'source' => 'Leads'),
             array('name' => 'LBL_PRODUCTS_TITLE', 'type' => 'plural', 'source' => 'Products'),
             array('name' => 'LBL_PROSPECT_LIST', 'type' => 'singular', 'source' => 'Prospects'),
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Contacts'),
@@ -127,7 +115,6 @@ class RenameModules
             array('name' => 'LBL_CONTRACT_NAME', 'type' => 'singular', 'source' => 'Contracts'),
             array('name' => 'LBL_CONTRACT_TERM', 'type' => 'singular', 'source' => 'Contracts'),
             array('name' => 'LBL_DOCUMENTS', 'type' => 'plural', 'source' => 'Documents'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_LIST_CONTRACT_NAME', 'type' => 'singular', 'source' => 'Contracts'),
             array('name' => 'LBL_SEARCH_FORM_TITLE', 'type' => 'singular', 'source' => 'Contracts'),
             array('name' => 'LBL_TOTAL_CONTRACT_VALUE', 'type' => 'singular', 'source' => 'Contracts'),
@@ -156,25 +143,6 @@ class RenameModules
             array('name' => 'LBL_CONTRACT_NAME', 'type' => 'plural', 'source' => 'Contracts'),
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'KBDocuments'),
         ),
-        'Leads' => array(
-            array('name' => 'LNK_SELECT_###MODULE_PLURAL###', 'type' => 'singular', 'source' => 'Leads'),
-            array('name' => 'LNK_SELECT_###MODULE_SINGULAR###', 'type' => 'singular', 'source' => 'Leads'),
-            array('name' => 'LBL_ACCOUNT_DESCRIPTION', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_ACCOUNT_ID', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_CAMPAIGN_ID', 'type' => 'singular', 'source' => 'Campaigns'),
-            array('name' => 'LBL_CAMPAIGN_LEAD', 'type' => 'plural', 'source' => 'Campaigns'),
-            array('name' => 'LBL_CAMPAIGN_LIST_SUBPANEL_TITLE', 'type' => 'plural', 'source' => 'Campaigns'),
-            array('name' => 'LBL_CONTACT_ID', 'type' => 'singular', 'source' => 'Contacts'),
-            array('name' => 'LBL_LEAD_SOURCE', 'type' => 'singular', 'source' => 'Leads'),
-            array('name' => 'LBL_LEAD_SOURCE_DESCRIPTION', 'type' => 'singular', 'source' => 'Leads'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_CONVERTED_ACCOUNT', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LNK_SELECT_ACCOUNTS', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LNK_NEW_ACCOUNT', 'type' => 'singular', 'source' => 'Accounts'),
-            array('name' => 'LBL_CONVERTED_CONTACT', 'type' => 'singular', 'source' => 'Contacts'),
-            array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Leads'),
-        ),
         'Meetings' => array(
             array('name' => 'LBL_LIST_CONTACT', 'type' => 'singular', 'source' => 'Contacts'),
             array('name' => 'LBL_LIST_JOIN_MEETING', 'type' => 'singular', 'source' => 'Meetings'),
@@ -184,7 +152,6 @@ class RenameModules
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Meetings'),
         ),
         'Notes' => array(
-            array('name' => 'LBL_ACCOUNT_ID', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_CASE_ID', 'type' => 'singular', 'source' => 'Cases'),
             array('name' => 'LBL_CONTACT_ID', 'type' => 'singular', 'source' => 'Contacts'),
             array('name' => 'LBL_LIST_CONTACT', 'type' => 'singular', 'source' => 'Contacts'),
@@ -199,11 +166,9 @@ class RenameModules
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'ProductTemplates'),
         ),
         'Products' => array(
-            array('name' => 'LBL_ACCOUNT_ID', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_CONTACT', 'type' => 'singular', 'source' => 'Contacts'),
             array('name' => 'LBL_CONTACT_ID', 'type' => 'singular', 'source' => 'Contacts'),
             array('name' => 'LBL_CONTRACTS', 'type' => 'plural', 'source' => 'Contacts'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_LIST_NAME', 'type' => 'singular', 'source' => 'Products'),
             array('name' => 'LBL_NAME', 'type' => 'singular', 'source' => 'Products'),
             array('name' => 'LBL_QUOTE_ID', 'type' => 'singular', 'source' => 'Quotes'),
@@ -230,14 +195,11 @@ class RenameModules
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Projects'),
         ),
         'Quotes' => array(
-            array('name' => 'LBL_ACCOUNT_ID', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_CONTRACTS', 'type' => 'plural', 'source' => 'Contracts'),
-            array('name' => 'LBL_LIST_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_QUOTE_NUM', 'type' => 'singular', 'source' => 'Quotes'),
             array('name' => 'LBL_MODULE_NAME', 'type' => 'plural', 'source' => 'Quotes'),
         ),
         'Targets' => array(
-            array('name' => 'LBL_ACCOUNT_NAME', 'type' => 'singular', 'source' => 'Accounts'),
             array('name' => 'LBL_CAMPAIGN_ID', 'type' => 'plural', 'source' => 'Campaigns'),
             array('name' => 'LBL_CAMPAIGN_LIST_SUBPANEL_TITLE', 'type' => 'singular', 'source' => 'Campaigns'),
             array('name' => 'LBL_PROSPECT_LIST', 'type' => 'singular', 'source' => 'Prospects'),

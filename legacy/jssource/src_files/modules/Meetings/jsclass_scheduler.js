@@ -407,8 +407,6 @@ SugarWidgetScheduler.fill_invitees = function ( form ) {
          form.user_invitees.value += GLOBAL_REGISTRY.focus.users_arr[i].fields.id + ",";
       } else if ( GLOBAL_REGISTRY.focus.users_arr[i].module == 'Contact' ) {
          form.contact_invitees.value += GLOBAL_REGISTRY.focus.users_arr[i].fields.id + ",";
-      } else if ( GLOBAL_REGISTRY.focus.users_arr[i].module == 'Lead' ) {
-         form.lead_invitees.value += GLOBAL_REGISTRY.focus.users_arr[i].fields.id + ",";
       }
       // MintHCM #54195 #59793 Start 
       else if ( GLOBAL_REGISTRY.focus.users_arr[i].module == 'Candidates' ) {

@@ -47,7 +47,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 $mod_strings = array(
-    'ERR_DELETE_RECORD' => 'You must specify a record number to delete the account.',
     'LBL_TOOL_TIP_BOX_TITLE' => 'KnowledgeBase Suggestions',
     'LBL_TOOL_TIP_TITLE' => 'Title:',
     'LBL_TOOL_TIP_BODY' => 'Body:',
@@ -60,9 +59,6 @@ $mod_strings = array(
     'LBL_SUGGESTION_BOX_TITLE' => 'Title',
     'LBL_SUGGESTION_BOX_REL' => 'Relevance',
 
-    'LBL_ACCOUNT_ID' => 'Account ID',
-    'LBL_ACCOUNT_NAME' => 'Account Name:',
-    'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_BUGS_SUBPANEL_TITLE' => 'Bugs',
     'LBL_CASE_NUMBER' => 'Case Number:',
@@ -74,7 +70,6 @@ $mod_strings = array(
     'LBL_DESCRIPTION' => 'Description:',
     'LBL_HISTORY_SUBPANEL_TITLE' => 'History',
     'LBL_INVITEE' => 'Contacts',
-    'LBL_MEMBER_OF' => 'Account',
     'LBL_MODULE_NAME' => 'Cases',
     'LBL_MODULE_TITLE' => 'Cases: Home',
     'LBL_NEW_FORM_TITLE' => 'New Case',
@@ -87,7 +82,6 @@ $mod_strings = array(
     'LBL_STATUS' => 'Status:',
     'LBL_SUBJECT' => 'Subject:',
     'LBL_LIST_ASSIGNED_TO_NAME' => 'Assigned User',
-    'LBL_LIST_ACCOUNT_NAME' => 'Account Name',
     'LBL_LIST_ASSIGNED' => 'Assigned To',
     'LBL_LIST_CLOSE' => 'Close',
     'LBL_LIST_FORM_TITLE' => 'Case List',

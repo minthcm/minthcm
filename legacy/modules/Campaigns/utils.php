@@ -1100,23 +1100,19 @@ function filterFieldsFromBeans($beans)
     $formattedBeans = array();
     foreach ($beans as $b) {
         $formattedFields = array();
-        //bug: 47574 - make sure, that webtolead_email1 field has same required attribute as email1 field
-        if (isset($b->field_defs['webtolead_email1']) && isset($b->field_defs['email1']) && isset($b->field_defs['email1']['required'])) {
-            $b->field_defs['webtolead_email1']['required'] = $b->field_defs['email1']['required'];
-        }
 
         foreach ($b->field_defs as $field_def) {
             $email_fields = false;
             if ($field_def['name']== 'email1' || $field_def['name']== 'email2') {
                 $email_fields = true;
             }
-            if ($field_def['name']!= 'account_name') {
-                if (($field_def['type'] == 'relate' && empty($field_def['custom_type']))
-                    || $field_def['type'] == 'assigned_user_name' || $field_def['type'] =='link' || $field_def['type'] =='function'
-                    || (isset($field_def['source'])  && $field_def['source']=='non-db' && !$email_fields) || $field_def['type'] == 'id') {
-                    continue;
-                }
+
+            if (($field_def['type'] == 'relate' && empty($field_def['custom_type']))
+                || $field_def['type'] == 'assigned_user_name' || $field_def['type'] =='link' || $field_def['type'] =='function'
+                || (isset($field_def['source'])  && $field_def['source']=='non-db' && !$email_fields) || $field_def['type'] == 'id') {
+                continue;
             }
+
             if ($field_def['name']== 'deleted' || $field_def['name']=='converted' || $field_def['name']=='date_entered'
                 || $field_def['name']== 'date_modified' || $field_def['name']=='modified_user_id'
                 || $field_def['name']=='assigned_user_id' || $field_def['name']=='created_by'

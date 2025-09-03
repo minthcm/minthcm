@@ -347,24 +347,14 @@ class jjwg_MapsController extends SugarController
         }
 
         if (!empty($list) && $list_id == $list->id && !empty($selected_ids) && !empty($this->display_object) &&
-                in_array($this->display_object->module_name, array('Accounts', 'Contacts', 'Leads', 'Prospects', 'Users'))) {
+                in_array($this->display_object->module_name, array('Contacts', 'Prospects', 'Users'))) {
             $object_name = $this->display_object->object_name;
             $result['object_name'] = $object_name;
 
-            if ($object_name == 'Account') {
-                $list->load_relationship('accounts');
-                foreach ($selected_ids as $sel_id) {
-                    $list->accounts->add($sel_id);
-                }
-            } elseif ($object_name == 'Contact') {
+            if ($object_name == 'Contact') {
                 $list->load_relationship('contacts');
                 foreach ($selected_ids as $sel_id) {
                     $list->contacts->add($sel_id);
-                }
-            } elseif ($object_name == 'Lead') {
-                $list->load_relationship('leads');
-                foreach ($selected_ids as $sel_id) {
-                    $list->leads->add($sel_id);
                 }
             } elseif ($object_name == 'Prospect') {
                 $list->load_relationship('prospects');
@@ -693,7 +683,7 @@ class jjwg_MapsController extends SugarController
             }
 
             // Define display object, note - 'Accounts_Members' is a special display type
-            $this->display_object = ($map_module_type == 'Accounts_Members') ? get_module_info('Accounts') : get_module_info($map_module_type);
+            $this->display_object = get_module_info($map_module_type);
             $mod_strings_display = return_module_language($GLOBALS['current_language'], $this->display_object->module_name);
             $mod_strings_display = array_merge($mod_strings_display, $GLOBALS['mod_strings']);
 
@@ -731,7 +721,7 @@ class jjwg_MapsController extends SugarController
                 // Define Marker Data
                 $aInfo['name'] = $_REQUEST['quick_address'];
                 $aInfo['id'] = 0;
-                $aInfo['module'] = ($map_module_type == 'Accounts_Members') ? 'Accounts' : $map_module_type;
+                $aInfo['module'] = $map_module_type;
                 $aInfo['address'] = $_REQUEST['quick_address'];
                 $aInfo['jjwg_maps_address_c'] = $_REQUEST['quick_address'];
                 $aInfo['jjwg_maps_lat_c'] = $aInfo['lat'];
@@ -761,17 +751,11 @@ class jjwg_MapsController extends SugarController
             $query = $this->display_object->create_new_list_query('display_object_distance', $where_conds, array(), array(), 0, '', false, $this->display_object, false);
             // Add the disply_object_distance into SELECT list
             $query = str_replace('SELECT ', 'SELECT (' . $calc_distance_expression . ') AS display_object_distance, ', $query);
-            if ($map_module_type == 'Contacts') { // Contacts - Account Name
-                $query = str_replace(' FROM contacts ', ' ,accounts.name AS account_name, accounts.id AS account_id  FROM contacts  ', $query);
-                $query = str_replace(' FROM contacts ', ' FROM contacts LEFT JOIN accounts_contacts ON contacts.id=accounts_contacts.contact_id and accounts_contacts.deleted = 0 LEFT JOIN accounts ON accounts_contacts.account_id=accounts.id AND accounts.deleted=0 ', $query);
-            } elseif ($map_module_type == 'Accounts_Members') { // 'Accounts_Members' is a special display type
-                $query = str_replace(' AND accounts.deleted=0', ' AND accounts.deleted=0 AND accounts.parent_id = \''.$this->bean->db->quote($map_parent_id).'\'', $query);
-            }
             //var_dump($query);
             $display_result = $this->bean->db->limitQuery($query, 0, $this->settings['map_markers_limit']);
             while ($display = $this->bean->db->fetchByAssoc($display_result)) {
                 if (!empty($map_distance) && !empty($display['id'])) {
-                    $marker_data_module_type = ($map_module_type == 'Accounts_Members') ? 'Accounts' : $map_module_type;
+                    $marker_data_module_type = $map_module_type;
                     $marker_data = $this->getMarkerData($marker_data_module_type, $display, false, $mod_strings_display);
                     if (!empty($marker_data)) {
                         $this->bean->map_markers[] = $marker_data;
@@ -826,7 +810,7 @@ class jjwg_MapsController extends SugarController
             }
 
             if (!empty($list_id)) {
-                $list_modules = array('Accounts', 'Contacts', 'Leads', 'Users', 'Prospects');
+                $list_modules = array('Contacts', 'Users', 'Prospects');
                 $temp_marker_groups = array();
 
                 foreach ($list_modules as $display_module) {
@@ -841,10 +825,6 @@ class jjwg_MapsController extends SugarController
                             " AND " .
                             "(" . $this->display_object->table_name . "_cstm.jjwg_maps_geocode_status_c = 'OK')";
                     $query = $this->display_object->create_new_list_query('', $where_conds, array(), array(), 0, '', false, $this->display_object, false);
-                    if ($display_module == 'Contacts') { // Contacts - Account Name
-                        $query = str_replace(' FROM contacts ', ' ,accounts.name AS account_name, accounts.id AS account_id  FROM contacts  ', $query);
-                        $query = str_replace(' FROM contacts ', ' FROM contacts LEFT JOIN accounts_contacts ON contacts.id=accounts_contacts.contact_id and accounts_contacts.deleted = 0 LEFT JOIN accounts ON accounts_contacts.account_id=accounts.id AND accounts.deleted=0 ', $query);
-                    }
                     // Add List JOIN
                     $query = str_replace(
                         ' FROM '.$this->display_object->table_name.' ',
@@ -882,8 +862,6 @@ class jjwg_MapsController extends SugarController
         } elseif (!empty($_REQUEST['uid']) || !empty($_REQUEST['current_post'])) {
             if (in_array($_REQUEST['display_module'], $this->settings['valid_geocode_modules'])) {
                 $display_module = $_REQUEST['display_module'];
-            } else {
-                $display_module = 'Accounts';
             }
             if ($_REQUEST['current_post'] == 'session') {
                 $current_post = $_SESSION['jjwg_Maps']['current_post'];
@@ -934,10 +912,6 @@ class jjwg_MapsController extends SugarController
                     " AND " .
                     "(" . $this->display_object->table_name . "_cstm.jjwg_maps_geocode_status_c = 'OK')";
             $query = $this->display_object->create_new_list_query('', $where_conds, array(), array(), 0, '', false, $this->display_object, false);
-            if ($display_module == 'Contacts') { // Contacts - Account Name
-                $query = str_replace(' FROM contacts ', ' ,accounts.name AS account_name, accounts.id AS account_id  FROM contacts  ', $query);
-                $query = str_replace(' FROM contacts ', ' FROM contacts LEFT JOIN accounts_contacts ON contacts.id=accounts_contacts.contact_id and accounts_contacts.deleted = 0 LEFT JOIN accounts ON accounts_contacts.account_id=accounts.id AND accounts.deleted=0 ', $query);
-            }
             //var_dump($query);
 
             $display_result = $this->bean->db->limitQuery($query, 0, $this->settings['map_markers_limit']);
@@ -1037,13 +1011,6 @@ class jjwg_MapsController extends SugarController
             }
             // Set Marker Point as Used (true)
             $this->map_marker_data_points[(string) $marker['lat']][(string) $marker['lng']] = true;
-
-            if (isset($display['account_name'])) {
-                $marker['account_name'] = $display['account_name'];
-            }
-            if (isset($display['account_id'])) {
-                $marker['account_id'] = $display['account_id'];
-            }
             $marker['assigned_user_name'] = (isset($display['assigned_user_name'])) ? $display['assigned_user_name'] : '';
             $marker['image'] = (isset($display['marker_image'])) ? $display['marker_image'] : '';
 

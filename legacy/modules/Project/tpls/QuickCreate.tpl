@@ -54,7 +54,6 @@
 <input type="hidden" name="quote_id" value="{$REQUEST.quote_id}">
 <input type="hidden" name="contact_id" value="{$REQUEST.contact_id}">
 <input type="hidden" name="email_id" value="{$REQUEST.email_id}">
-<input type="hidden" name="account_id" value="{$REQUEST.account_id}">
 <input type="hidden" name="return_action" value="{$REQUEST.return_action}">
 <input type="hidden" name="return_module" value="{$REQUEST.return_module}">
 <input type="hidden" name="return_id" value="{$REQUEST.return_id}">

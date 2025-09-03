@@ -95,7 +95,6 @@ class Prospect extends Person implements EmailInterface
     public $alt_address_country;
     public $tracker_key;
     public $lead_id;
-    public $account_name;
     public $assigned_real_user_name;
     // These are for related fields
     public $assigned_user_name;

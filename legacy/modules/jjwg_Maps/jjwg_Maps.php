@@ -63,14 +63,14 @@ class jjwg_Maps extends jjwg_Maps_sugar
          * @var array
          */
         'valid_geocode_modules' => array(
-            'Accounts', 'Contacts', 'Leads', 'Cases', 'Project', 'Meetings', 'Prospects'
+            'Contacts', 'Cases', 'Project', 'Meetings', 'Prospects'
         ),
         /**
          * 'valid_geocode_tables' defines the valid table names used with geocoding.
          * @var array
          */
         'valid_geocode_tables' => array(
-            'accounts', 'contacts', 'leads', 'cases', 'project', 'meetings', 'prospects'
+            'contacts', 'cases', 'project', 'meetings', 'prospects'
         ),
         /**
          * 'geocode_modules_to_address_type' defines the modules address types to be used with geocoding.
@@ -78,9 +78,7 @@ class jjwg_Maps extends jjwg_Maps_sugar
          * @var array
          */
         'geocode_modules_to_address_type' => array(
-            'Accounts' => 'billing',
             'Contacts' => 'primary',
-            'Leads' => 'primary',
             'Cases' => 'billing',
             'Project' => 'billing',
             'Meetings' => 'flex_relate',
@@ -145,9 +143,7 @@ class jjwg_Maps extends jjwg_Maps_sugar
          * Examples: assigned_user_name, industry, status, sales_stage, priority
          */
         'map_markers_grouping_field' => array(
-            'Accounts' => 'industry',
             'Contacts' => 'assigned_user_name',
-            'Leads' => 'status',
             'Cases' => 'priority',
             'Project' => 'assigned_user_name',
             'Meetings' => 'assigned_user_name',
@@ -591,7 +587,7 @@ class jjwg_Maps extends jjwg_Maps_sugar
      *
      * This is done typically after the $bean is already saved.
      * See after_save logic hooks
-     * Meetings related to: accounts, cases, contacts, leads
+     * Meetings related to: accounts, cases, contacts
      *      opportunities, projects and prospects (targets)
      *
      * This method updates the meeting's address info based on
@@ -1002,7 +998,6 @@ class jjwg_Maps extends jjwg_Maps_sugar
      * Address Relationship Notes:
      * Account(address)
      * Contact(address)
-     * Lead(address)
      * Taget/Prospect(address)
      * Opportunity to Account(address)
      * Case 'account_id' to Account(address)
@@ -1029,59 +1024,12 @@ class jjwg_Maps extends jjwg_Maps_sugar
         // Field naming is different in some modules.
         // Some modules do not have an address, so a related account needs to be found first.
 
-        if ($object_name == 'Account') {
-            $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Accounts']);
-        } elseif ($object_name == 'Contact') {
+        if ($object_name == 'Contact') {
             $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Contacts']);
-        } elseif ($object_name == 'Lead') {
-            $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Leads']);
         } elseif ($object_name == 'Prospect') {
             $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Prospects']);
         } elseif ($object_name == 'User') {
             $address = $this->defineMapsFormattedAddress($display, $this->settings['geocode_modules_to_address_type']['Users']);
-        } elseif (in_array($object_name, array('aCase', 'Case'))) {
-
-            // Find Account from Case (account_id field)
-
-            if (!isset($display['account_id'])) {
-                LoggerManager::getLogger()->warn('jjwg_Maps defineMapsAddress: Undefined index: account_id  ');
-                $displayAccountId = null;
-            } else {
-                $displayAccountId = $display['account_id'];
-            }
-
-            $query = "SELECT accounts.*, accounts_cstm.* FROM accounts LEFT JOIN accounts_cstm ON accounts.id = accounts_cstm.id_c " .
-                    " WHERE accounts.deleted = 0 AND id = '" . $displayAccountId . "'";
-            $GLOBALS['log']->debug(__METHOD__.' Case to Account');
-            $result = $this->db->limitQuery($query, 0, 1);
-            $fields = $this->db->fetchByAssoc($result);
-
-            // If Account is not found; Find many to many Account - Assume only one related Account
-            if (empty($fields)) {
-                $query = "SELECT accounts.*, accounts_cstm.* FROM accounts LEFT JOIN accounts_cstm ON accounts.id = accounts_cstm.id_c " .
-                        " LEFT JOIN accounts_cases ON accounts.id = accounts_cases.account_id AND accounts_cases.deleted = 0 " .
-                        " WHERE accounts.deleted = 0 AND accounts_cases.case_id = '" . $display['id'] . "'";
-                $GLOBALS['log']->debug(__METHOD__.' Case to Accounts');
-                $result = $this->db->limitQuery($query, 0, 1);
-                $fields = $this->db->fetchByAssoc($result);
-            }
-
-            if (!empty($fields)) {
-                $address = $this->defineMapsFormattedAddress($fields, $this->settings['geocode_modules_to_address_type']['Cases']);
-            }
-        } elseif ($object_name == 'Project') {
-
-            // Check relationship from Project to Account - Assume only one related Account
-            $query = "SELECT accounts.*, accounts_cstm.* FROM accounts LEFT JOIN accounts_cstm ON accounts.id = accounts_cstm.id_c " .
-                    " LEFT JOIN projects_accounts ON accounts.id = projects_accounts.account_id AND projects_accounts.deleted = 0 " .
-                    " WHERE accounts.deleted = 0 AND projects_accounts.project_id = '" . $display['id'] . "'";
-            $GLOBALS['log']->debug(__METHOD__.' Project to Account');
-            $result = $this->db->limitQuery($query, 0, 1);
-            $fields = $this->db->fetchByAssoc($result);
-
-            if (!empty($fields)) {
-                $address = $this->defineMapsFormattedAddress($fields, $this->settings['geocode_modules_to_address_type']['Project']);
-            }
         } elseif ($object_name == 'Meeting') {
 
             // Find Meeting - Flex Relate Fields: meetings.parent_type and meetings.parent_id

@@ -83,7 +83,6 @@ class ImportMapOther
     {
         switch ($module) {
         case 'Contacts':
-        case 'Leads':
             return array(
                 "Salutation"=>"salutation",
                 "Full Name"=>"full_name",
@@ -116,19 +115,6 @@ class ImportMapOther
                 "Home State"=>"alt_address_state",
                 "Home Postal Code"=>"alt_address_postalcode",
                 "Home Country/Region"=>"alt_address_country",
-                );
-            break;
-        case 'Accounts':
-            return array(
-                "Company"=>"name",
-                "Business Street"=>"billing_address_street",
-                "Business City"=>"billing_address_city",
-                "Business State"=>"billing_address_state",
-                "Business Country"=>"billing_address_country",
-                "Business Postal Code"=>"billing_address_postalcode",
-                "Business Fax"=>"phone_fax",
-                "Company Main Phone"=>"phone_office",
-                "Web Page"=>"website",
                 );
             break;
         default:

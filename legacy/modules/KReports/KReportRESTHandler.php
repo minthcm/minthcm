@@ -1772,8 +1772,6 @@ class KReporterRESTHandler
                         'username' => $thisEntry->user_name,
                         'email1' => (is_array($thisEntry->email1) ? implode(", ", $thisEntry->email1)
                             : $thisEntry->email1),
-                        'accountname' => $thisEntry->account_name,
-                        'accountid' => $thisEntry->account_id,
                     );
                 }
             }

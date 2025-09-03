@@ -14,12 +14,6 @@ mappings:
   created_by_name: meta.created.user_name
   assigned_user_name: meta.assigned.user_name
   assigned_user_name_owner: meta.assigned.owner_name
-  # Account
-  account_id: account.id
-  account_name: account.name
-  account_description: account.description
-  title: account.title
-  department: account.department
   # Reports to
   reports_to_id: reports_to.id
   report_to_name: reports_to.name

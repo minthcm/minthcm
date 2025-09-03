@@ -91,12 +91,6 @@ $layout_defs['AOS_Quotes'] = array(
             array(
                 'widget_class' => 'SubPanelTopCreateButton',
             ),
-            1 =>
-            array(
-                'widget_class' => 'SubPanelTopSelectButton',
-                'popup_module' => 'Accounts',
-                'mode' => 'MultiSelect',
-                ),
         ),
     ),
 ),

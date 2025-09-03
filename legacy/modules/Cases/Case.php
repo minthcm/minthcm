@@ -78,8 +78,6 @@ class aCase extends Basic
 
     // These are related
     public $bug_id;
-    public $account_name;
-    public $account_id;
     public $contact_id;
     public $task_id;
     public $note_id;
@@ -87,10 +85,8 @@ class aCase extends Basic
     public $call_id;
     public $email_id;
     public $assigned_user_name;
-    public $account_name1;
 
     public $table_name = 'cases';
-    public $rel_account_table = 'accounts_cases';
     public $rel_contact_table = 'contacts_cases';
     public $module_dir = 'Cases';
     public $object_name = 'Case';
@@ -115,7 +111,6 @@ class aCase extends Basic
     );
 
     public $relationship_fields = array(
-        'account_id' => 'accounts',
         'bug_id'     => 'bugs',
         'task_id'    => 'tasks',
         'note_id'    => 'notes',
@@ -131,9 +126,6 @@ class aCase extends Basic
     {
         parent::__construct();
         global $sugar_config;
-        if (!$sugar_config['require_accounts']) {
-            unset($this->required_fields['account_name']);
-        }
 
         $this->setupCustomFields('Cases');
         foreach ($this->field_defs as $name => $field) {
@@ -155,30 +147,6 @@ class aCase extends Basic
     public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
-        $is_owner = false;
-        $in_group = false; //SECURITY GROUPS
-        if (!empty($this->account_id)) {
-            if (!empty($this->account_id_owner)) {
-                global $current_user;
-                $is_owner = $current_user->id === $this->account_id_owner;
-            } else {
-                global $current_user;
-                $parent_bean = BeanFactory::getBean('Accounts', $this->account_id);
-                if ($parent_bean !== false) {
-                    $is_owner = $current_user->id === $parent_bean->assigned_user_id;
-                }
-            }
-            require_once 'modules/SecurityGroups/SecurityGroup.php';
-            $in_group = SecurityGroup::groupHasAccess('Accounts', $this->account_id, 'view');
-        }
-        if (!ACLController::moduleSupportsACL('Accounts') ||
-            ACLController::checkAccess('Accounts', 'view', $is_owner, 'module', $in_group)
-        ) {
-            $array_assign['ACCOUNT'] = 'a';
-        } else {
-            $array_assign['ACCOUNT'] = 'span';
-        }
-
         return $array_assign;
     }
 
@@ -214,14 +182,6 @@ class aCase extends Basic
 
         $this->created_by_name = get_assigned_user_name($this->created_by);
         $this->modified_by_name = get_assigned_user_name($this->modified_user_id);
-
-        if (!empty($this->id)) {
-            $account_info = $this->getAccount($this->id);
-            if (!empty($account_info)) {
-                $this->account_name = $account_info['account_name'];
-                $this->account_id = $account_info['account_id'];
-            }
-        }
     }
 
     /** Returns a list of the associated contacts
@@ -285,7 +245,6 @@ class aCase extends Basic
             ) .
             '</a>';
 
-        //$temp_array['ACCOUNT_NAME'] = $this->account_name; //overwrites the account_name value returned from the cases table.
         return $temp_array;
     }
 
@@ -302,7 +261,6 @@ class aCase extends Basic
         $where_clauses = array();
         $the_query_string = $this->db->quote($the_query_string);
         $where_clauses[] = "cases.name like '$the_query_string%'";
-        $where_clauses[] = "accounts.name like '$the_query_string%'";
 
         if (is_numeric($the_query_string)) {
             $where_clauses[] = "cases.case_number like '$the_query_string%'";
@@ -376,36 +334,5 @@ class aCase extends Basic
         return (isset($sugar_config['inbound_email_case_subject_macro']) &&
                 !empty($sugar_config['inbound_email_case_subject_macro'])) ?
             $sugar_config['inbound_email_case_subject_macro'] : $this->emailSubjectMacro;
-    }
-
-    /**
-     * @param $case_id
-     *
-     * @return array
-     */
-    public function getAccount($case_id)
-    {
-        if (empty($case_id)) {
-            return array();
-        }
-        $ret_array = array();
-        $query =
-            "SELECT acc.id, acc.name FROM accounts  acc, cases  WHERE acc.id = cases.account_id AND cases.id = '" .
-            $case_id .
-            "' AND cases.deleted=0 AND acc.deleted=0";
-        $result = $this->db->query($query, true, ' Error filling in additional detail fields: ');
-
-        // Get the id and the name.
-        $row = $this->db->fetchByAssoc($result);
-
-        if ($row !== null && $row !== false) {
-            $ret_array['account_name'] = stripslashes($row['name']);
-            $ret_array['account_id'] = $row['id'];
-        } else {
-            $ret_array['account_name'] = '';
-            $ret_array['account_id'] = '';
-        }
-
-        return $ret_array;
     }
 }

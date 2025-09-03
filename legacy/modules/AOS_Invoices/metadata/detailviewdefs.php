@@ -139,21 +139,12 @@ array(
         array(
           0 =>
           array(
-            'name' => 'billing_account',
-            'label' => 'LBL_BILLING_ACCOUNT',
-          ),
-          1 => '',
-        ),
-        1 =>
-        array(
-          0 =>
-          array(
             'name' => 'billing_contact',
             'label' => 'LBL_BILLING_CONTACT',
           ),
           1 => '',
         ),
-        2 =>
+        1 =>
         array(
           0 =>
           array(

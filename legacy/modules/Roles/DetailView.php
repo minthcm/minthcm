@@ -73,8 +73,6 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
     }
     $focus=$result;
-} else {
-    header("Location: index.php?module=Accounts&action=index");
 }
 echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->get_summary_text()), true);
 

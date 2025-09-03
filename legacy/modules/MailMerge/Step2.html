@@ -200,7 +200,7 @@ function ajaxSuccess(data)
 	var displayObjs = document.getElementById("display_objs");
 	displayObjs.options.length = 0;
 	var isLeadOrContact = false;
-	if(module == 'Contacts' || module == 'Leads' || module == 'CampaignProspects')
+	if(module == 'Contacts' || module == 'CampaignProspects')
 	{
 		isLeadOrContact = true;
 	}
@@ -382,7 +382,7 @@ function getOrderBy()
         tmpModule = document.getElementById("campaign_prospect_type").value.toLowerCase();
     }
 
-	if(tmpModule == 'contacts' || tmpModule == 'leads' || tmpModule == 'prospects')
+	if(tmpModule == 'contacts' || tmpModule == 'prospects')
 	{
 		order = tmpModule+".last_name";
 	}

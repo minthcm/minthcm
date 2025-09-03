@@ -14,6 +14,7 @@
         v-model="store.selected"
         @update:options="store.options = $event"
         :no-data-text="languages.label('LBL_ESLIST_NO_DATA_AVAILABLE')"
+        hover
     >
         <template v-slot:item.name="{ item }">
             <a @click="store.handleNameClick(item)" class="list-table-name-link">

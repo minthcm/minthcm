@@ -393,7 +393,7 @@ class OAuth2Server
 
         // Create new tokens
         $userId = $clientBean->assigned_user_id;
-        $scope = $tokenBean->scopes;
+        $scope = $tokenBean->scope;
 
         $tokenData = $this->tokenService->createTokens($clientBean, $scope, $userId);
 

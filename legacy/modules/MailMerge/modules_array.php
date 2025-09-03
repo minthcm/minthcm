@@ -46,8 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
-$modules_array = array('Accounts' => 'Accounts',
+$modules_array = array(
                        'Cases' => 'Cases',
                        'Contacts' => 'Contacts',
-                       'Leads' => 'Leads',
                        );

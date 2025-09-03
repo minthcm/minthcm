@@ -105,10 +105,6 @@ $viewdefs = array(
           array(
             0 =>
             array(
-              'name' => 'account_name',
-            ),
-            1 =>
-            array(
               'name' => 'phone_fax',
             ),
           ),

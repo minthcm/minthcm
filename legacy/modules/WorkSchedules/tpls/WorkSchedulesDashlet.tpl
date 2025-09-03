@@ -47,6 +47,7 @@
 {* MintHCM #94842 START *}
 <link rel="stylesheet" type="text/css" href="include/Dashlets/DashletGenericDisplayStyle.css" />
 {* MintHCM #94842 END *}
+<script type="text/javascript" src="modules/WorkSchedules/tpls/Button.js"></script>
 <script type="text/javascript" src="modules/WorkSchedules/tpls/AcceptWorkPlanButton.js"></script>
 
 {assign var="alt_start" value=$navStrings.start}

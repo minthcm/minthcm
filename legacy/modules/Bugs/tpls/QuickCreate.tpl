@@ -51,8 +51,7 @@
 
 <form name="bugsQuickCreate" id="bugsQuickCreate" method="POST" action="index.php">
 <input type="hidden" name="module" value="Bugs">
-<input type="hidden" name="email_id" value="{$REQUEST.email_id}">
-<input type="hidden" name="account_id" value="{$REQUEST.account_id}">			
+<input type="hidden" name="email_id" value="{$REQUEST.email_id}">		
 <input type="hidden" name="case_id" value="{$REQUEST.acase_id}">
 <input type="hidden" name="contact_id" value="{$REQUEST.contact_id}">
 <input type="hidden" name="return_action" value="{$REQUEST.return_action}">

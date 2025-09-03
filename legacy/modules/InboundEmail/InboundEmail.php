@@ -3690,16 +3690,6 @@ class InboundEmail extends SugarBean
                 isValidEmailAddress($contactAddr);
             }
 
-            $GLOBALS['log']->debug('finding related accounts with address ' . $contactAddr);
-            if ($accountIds = $this->getRelatedId($contactAddr, 'accounts')) {
-                if (count($accountIds) == 1) {
-                    $c->account_id = $accountIds[0];
-
-                    $acct = BeanFactory::newBean('Accounts');
-                    $acct->retrieve($c->account_id);
-                    $c->account_name = $acct->name;
-                } // if
-            } // if
             $c->save(true);
             $c->retrieve($c->id);
             if ($c->load_relationship('emails')) {
@@ -3707,15 +3697,6 @@ class InboundEmail extends SugarBean
             } // if
             if ($contactIds = $this->getRelatedId($contactAddr, 'contacts')) {
                 if (!empty($contactIds) && $c->load_relationship('contacts')) {
-                    if (!$accountIds && count($contactIds) == 1) {
-                        $contact = BeanFactory::getBean('Contacts', $contactIds[0]);
-                        if ($contact->load_relationship('accounts')) {
-                            $acct = $contact->accounts->get();
-                            if ($c->load_relationship('accounts') && !empty($acct[0])) {
-                                $c->accounts->add($acct[0]);
-                            }
-                        }
-                    }
                     $c->contacts->add($contactIds);
                 } // if
             } // if
@@ -3857,31 +3838,12 @@ class InboundEmail extends SugarBean
         } else {
             $relationShipAddress = $relationShipAddress . "," . $email->to_addrs;
         }
-        if ($leadIds = $this->getRelatedId($relationShipAddress, 'leads')) {
-            $GLOBALS['log']->debug('I-E linking email to Lead');
-            $email->load_relationship('leads');
-            $email->leads->add($leadIds);
-
-            foreach ($leadIds as $leadId) {
-                $lead = BeanFactory::newBean('Leads');
-                $lead->retrieve($leadId);
-                $lead->load_relationship('emails');
-                $lead->emails->add($email->id);
-            }
-        }
 
         if ($contactIds = $this->getRelatedId($relationShipAddress, 'contacts')) {
             $GLOBALS['log']->debug('I-E linking email to Contact');
             // link the contact to the email
             $email->load_relationship('contacts');
             $email->contacts->add($contactIds);
-        }
-
-        if ($accountIds = $this->getRelatedId($relationShipAddress, 'accounts')) {
-            $GLOBALS['log']->debug('I-E linking email to Account');
-            // link the account to the email
-            $email->load_relationship('accounts');
-            $email->accounts->add($accountIds);
         }
 
         return $contactAddr;

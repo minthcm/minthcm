@@ -64,7 +64,6 @@ array(
   
   array(
     'status',
-    array('name'=>'account_name'),
   ),
   
   array(

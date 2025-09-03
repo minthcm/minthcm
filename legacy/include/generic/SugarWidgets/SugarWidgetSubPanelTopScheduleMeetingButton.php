@@ -103,27 +103,13 @@ class SugarWidgetSubPanelTopScheduleMeetingButton extends SugarWidgetSubPanelTop
 
         // TODO: move this out and get $additionalFormFields working properly
         if (empty($additionalFormFields['parent_type'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_type'] = 'Accounts';
-            } else {
-                $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
-            }
+            $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
         }
         if (empty($additionalFormFields['parent_name'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_name'] = $defines['focus']->account_name;
-                $additionalFormFields['account_name'] = $defines['focus']->account_name;
-            } else {
-                $additionalFormFields['parent_name'] = $defines['focus']->name;
-            }
+            $additionalFormFields['parent_name'] = $defines['focus']->name;
         }
         if (empty($additionalFormFields['parent_id'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_id'] = $defines['focus']->account_id;
-                $additionalFormFields['account_id'] = $defines['focus']->account_id;
-            } else {
-                $additionalFormFields['parent_id'] = $defines['focus']->id;
-            }
+            $additionalFormFields['parent_id'] = $defines['focus']->id;
         }
 
         $button .= '<input type="hidden" name="action" value="SubpanelCreates" />' . "\n";

@@ -79,13 +79,12 @@ while ($list = $campaign->db->fetchByAssoc($listresult)) {
     
     $focus->retrieve($prospect_list);
 
-    $query = "SELECT prospect_id,contact_id,lead_id FROM prospect_lists_prospects WHERE prospect_list_id='$focus->id' AND deleted=0";
+    $query = "SELECT prospect_id,contact_id FROM prospect_lists_prospects WHERE prospect_list_id='$focus->id' AND deleted=0";
     $result = $focus->db->query($query);
 
     while ($row = $focus->db->fetchByAssoc($result)) {
         $prospect_id = $row['prospect_id'];
         $contact_id = $row['contact_id'];
-        $lead_id = $row['lead_id'];
         
         if ($prospect_id <> '') {
             $moduleName = "Prospects";
@@ -94,10 +93,6 @@ while ($list = $campaign->db->fetchByAssoc($listresult)) {
         if ($contact_id <> '') {
             $moduleName = "Contacts";
             $moduleID = $row['contact_id'];
-        }
-        if ($lead_id <> '') {
-            $moduleName = "Leads";
-            $moduleID = $row['lead_id'];
         }
         
         $mailer = BeanFactory::newBean('EmailMan');

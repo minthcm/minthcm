@@ -184,43 +184,6 @@ class CaseUpdatesHook
     }
 
     /**
-     * @param $case_id
-     * @param $account_id
-     */
-    private function linkAccountAndCase($case_id, $account_id)
-    {
-        if (!$account_id || !$case_id) {
-            return;
-        }
-        $case = BeanFactory::getBean('Cases', $case_id);
-        if (!$case->account_id) {
-            $case->account_id = $account_id;
-            $case->save();
-        }
-    }
-
-    /**
-     * @param aCase $case
-     * @param $event
-     * @param $arguments
-     */
-    public function assignAccount($case, $event, $arguments)
-    {
-        if ($arguments['module'] !== 'Cases' || $arguments['related_module'] !== 'Contacts') {
-            return;
-        }
-        if (!isAOPEnabled()) {
-            return;
-        }
-        $contact = BeanFactory::getBean('Contacts', $arguments['related_id']);
-        $contact->load_relationship('accounts');
-        if (!$contact || !$contact->account_id) {
-            return;
-        }
-        $this->linkAccountAndCase($case->id, $contact->account_id);
-    }
-
-    /**
      * Called when saving a new email and adds the case update to the case.
      *
      * @param Email $email
@@ -258,7 +221,6 @@ class CaseUpdatesHook
         foreach ($beans as $emailBean) {
             if ($emailBean->module_name === 'Contacts' && !empty($emailBean->id)) {
                 $contact_id = $emailBean->id;
-                $this->linkAccountAndCase($email->parent_id, $emailBean->account_id);
             }
         }
         $caseUpdate = BeanFactory::newBean('AOP_Case_Updates');

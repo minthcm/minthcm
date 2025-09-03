@@ -87,7 +87,6 @@ $mod_strings = array(
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_HISTORY_SUBPANEL_TITLE' => 'History',
     'LBL_CONTACTS_SUBPANEL_TITLE' => 'Contacts',
-    'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_CASES_SUBPANEL_TITLE' => 'Cases',
     'LBL_BUGS_SUBPANEL_TITLE' => 'Bugs',
     'LBL_TASK_ID' => 'ID',

@@ -83,7 +83,7 @@ class QuickSearchDefaults
         $this->form_name = $name;
     }
 
-    public function getQSParent($parent = 'Accounts')
+    public function getQSParent($parent = '')
     {
         global $app_strings;
 
@@ -96,51 +96,6 @@ class QuickSearchDefaults
                     'populate_list' => array('parent_name', 'parent_id'),
                     'required_list' => array('parent_id'),
                     'conditions' => array(array('name'=>'name','op'=>'like_custom','end'=>'%','value'=>'')),
-                    'order' => 'name',
-                    'limit' => '30',
-                    'no_match_text' => $app_strings['ERR_SQS_NO_MATCH']
-                    );
-
-        return $qsParent;
-    }
-
-    public function getQSAccount($nameKey, $idKey, $billingKey = null, $shippingKey = null, $additionalFields = null)
-    {
-        global $app_strings;
-
-
-        $field_list = array('name', 'id');
-        $populate_list = array($nameKey, $idKey);
-        if ($billingKey != null) {
-            $field_list = array_merge($field_list, array('billing_address_street', 'billing_address_city',
-                                                           'billing_address_state', 'billing_address_postalcode', 'billing_address_country'));
-
-            $populate_list = array_merge($populate_list, array($billingKey . "_address_street", $billingKey . "_address_city",
-                                                                $billingKey . "_address_state", $billingKey . "_address_postalcode", $billingKey . "_address_country"));
-        } //if
-
-        if ($shippingKey != null) {
-            $field_list = array_merge($field_list, array('shipping_address_street', 'shipping_address_city',
-                                                           'shipping_address_state', 'shipping_address_postalcode', 'shipping_address_country'));
-
-            $populate_list = array_merge($populate_list, array($shippingKey . "_address_street", $shippingKey . "_address_city",
-                                                                $shippingKey . "_address_state", $shippingKey . "_address_postalcode", $shippingKey . "_address_country"));
-        }
-
-        if (!empty($additionalFields) && is_array($additionalFields)) {
-            $field_list = array_merge($field_list, array_keys($additionalFields));
-            $populate_list = array_merge($populate_list, array_values($additionalFields));
-        }
-
-        $qsParent = array(
-                    'form' => $this->form_name,
-                    'method' => 'query',
-                    'modules' => array('Accounts'),
-                    'group' => 'or',
-                    'field_list' => $field_list,
-                    'populate_list' => $populate_list,
-                    'conditions' => array(array('name'=>'name','op'=>'like_custom','end'=>'%','value'=>'')),
-                    'required_list' => array($idKey),
                     'order' => 'name',
                     'limit' => '30',
                     'no_match_text' => $app_strings['ERR_SQS_NO_MATCH']

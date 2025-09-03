@@ -39,6 +39,7 @@
                     <img class="logTimeButton" src="themes/SuiteP/images/twsdashlet_add_time_24.png" alt="{$APP.twsdashlet_add_time}" title="{$APP.twsdashlet_add_time}">
                     {if $fields.status.value != 'closed'}
                         <img id="CloseButton" src="themes/SuiteP/images/twsdashlet_close_24.png" alt="{$MOD.LBL_CLOSE_PLAN}" title="{$MOD.LBL_CLOSE_PLAN}">
+                        <script type="text/javascript" src="{sugar_getjspath file='modules/WorkSchedules/tpls/Button.js'}"></script>
                         <script type="text/javascript" src="{sugar_getjspath file='modules/WorkSchedules/tpls/CloseButton.js'}"></script>
                     {/if}
                 </div>

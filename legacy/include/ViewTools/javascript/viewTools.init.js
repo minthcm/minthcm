@@ -239,30 +239,6 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
       }
       formFields.each( function () {
          window.viewTools.cache.AEM = [ ];
-         /*
-          * Check if validation is set
-          */
-         if ( $( this ).data( 'validation' ) !== undefined ) {
-            //if it is lead conversion, and field is not visible system does not should validate it
-            if ( !($( '#ConvertLead' ).length > 0 && $( this ).closest( 'div[id^="create"]:hidden' ).length > 0) ) {
-               var validation_array = $( this ).data( 'validation' ).split( ';' );
-               for ( var validation_idx in validation_array ) {
-                  formula = viewTools.formula._parseFormula( validation_array[validation_idx], $( this ), 'validation', validation_idx );
-                  if ( eval( formula ) == false ) {
-                     ret = false;
-                     viewTools.form.error_count++;
-                     if ( window.viewTools.cache.AEM.length > 0 ) {
-                        for ( key in window.viewTools.cache.AEM ) {
-                           window.viewTools.GUI.fieldErrorMark( $( this ), window.viewTools.cache.AEM[key] );
-                        }
-                        window.viewTools.cache.AEM = [ ];
-                     } else {
-                        viewTools.GUI.fieldErrorFormulaMark( $( this ), 'validation' );
-                     }
-                  }
-               }
-            }
-         }
          if ( $( this ).data( 'required' ) !== undefined ) {
             formula = viewTools.formula._parseFormula( $( this ).data( 'required' ), $( this ), 'required' );
             if ( eval( formula ) == true ) {

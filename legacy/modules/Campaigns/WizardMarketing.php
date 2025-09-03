@@ -706,11 +706,10 @@ if ($has_campaign || $inboundEmail) {
         }
     }
 }
-// create option of "Contact/Lead/Task" from corresponding module
+// create option of "Contact/Task" from corresponding module
 // translations
 $lblContactAndOthers = implode('/', array(
     isset($app_list_strings['moduleListSingular']['Contacts']) ? $app_list_strings['moduleListSingular']['Contacts'] : 'Contact',
-    isset($app_list_strings['moduleListSingular']['Leads']) ? $app_list_strings['moduleListSingular']['Leads'] : 'Lead',
     isset($app_list_strings['moduleListSingular']['Prospects']) ? $app_list_strings['moduleListSingular']['Prospects'] : 'Target',
 ));
 
@@ -728,7 +727,6 @@ if ($has_campaign) {
 //$xtpl->assign("CAMPAIGN_POPUP_JS", '<script type="text/javascript" src="include/javascript/sugar_3.js"></script>');
 } else {
     $ss->assign("DROPDOWN", genDropDownJS2());
-    $ss->assign("DEFAULT_MODULE", 'Accounts');
 }
 
 $ss->assign("INSERT_VARIABLE_ONCLICK", "insert_variable(document.wizform.variable_text.value, \"email_template_editor\")");

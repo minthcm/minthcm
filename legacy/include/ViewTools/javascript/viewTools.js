@@ -723,11 +723,7 @@
        } );
     },
     _rowItemVisibility: function ( handler, method ) {
-       if ( handler.closest( 'form' ).get( 0 ).id === "ConvertLead" ) {
-          var edit_elements = handler.closest( '.edit-view-field' ).parent();
-       } else {
-          var edit_elements = handler.closest( '.edit-view-row-item' );
-       }
+        let edit_elements = handler.closest( '.edit-view-row-item' );
        if ( method === 'hide' ) {
           edit_elements.hide();
           handler.closest( '.detail-view-row-item' ).hide();
@@ -1013,12 +1009,6 @@
        var form_id = handler.closest( 'form' ).attr( 'id' );
  
        var module_name_based_on_section = '';
-       if ( form_id === "ConvertLead" ) {
-          var div_section = handler.closest( 'div[id^="create"]' ).get( 0 );
-          if ( div_section !== undefined ) {
-             var module_name_based_on_section = div_section.id.replace( /create/g, '' );
-          }
-       }
  
        return formula.replace( /\s+(?=([^']*'[^']*')*[^']*$)/g, '' ) //replace white chars but white chars in quote
                .replace( /(\w+)\(/g, 'viewTools.formula.$1(' )

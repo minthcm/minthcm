@@ -89,9 +89,8 @@ $fields_array['Prospect'] = array('column_fields' => array("id"
         ,"tracker_key"
         ,'invalid_email'
         ,'lead_id'
-        ,'account_name'
         ),
-        'list_fields' =>  array('full_name','id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'email1','email2', 'phone_work', 'assigned_user_name', 'assigned_user_id','email_and_name1','email_and_name2'
+        'list_fields' =>  array('full_name','id', 'first_name', 'last_name', 'title', 'email1','email2', 'phone_work', 'assigned_user_name', 'assigned_user_id','email_and_name1','email_and_name2'
 ,'invalid_email'
 ,'lead_id'
         ),

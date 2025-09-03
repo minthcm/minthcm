@@ -88,23 +88,18 @@ class CampaignLog extends SugarBean
 
         $table = strtolower($temp_array['TARGET_TYPE']);
 
-        if ($temp_array['TARGET_TYPE']=='Accounts') {
-            $query = "select name from $table where id = ".$this->db->quoted($temp_array['TARGET_ID']);
-        } else {
-            $query = "select first_name, last_name, ".$this->db->concat($table, array('first_name', 'last_name'))." name from $table" .
-                " where id = ".$this->db->quoted($temp_array['TARGET_ID']);
-        }
+        
+        $query = "select first_name, last_name, ".$this->db->concat($table, array('first_name', 'last_name'))." name from $table" .
+            " where id = ".$this->db->quoted($temp_array['TARGET_ID']);
+        
         $result=$this->db->query($query);
         $row=$this->db->fetchByAssoc($result);
 
         if ($row) {
-            if ($temp_array['TARGET_TYPE']=='Accounts') {
-                $temp_array['RECIPIENT_NAME']=$row['name'];
-            } else {
-                $full_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name'], '');
-                $temp_array['RECIPIENT_NAME']=$full_name;
-            }
+            $full_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name'], '');
+            $temp_array['RECIPIENT_NAME']=$full_name; 
         }
+
         $temp_array['RECIPIENT_EMAIL']=$this->retrieve_email_address($temp_array['TARGET_ID']);
 
         $query = 'select name from email_marketing where id = \'' . $temp_array['MARKETING_ID'] . '\'';
@@ -164,14 +159,6 @@ class CampaignLog extends SugarBean
                 return $full_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name']);
             }
         }
-        if ($related_type == 'Leads') {
-            $query="SELECT first_name, last_name from leads where id='$related_id'";
-            $result=$db->query($query);
-            $row=$db->fetchByAssoc($result);
-            if ($row != null) {
-                return $full_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name']);
-            }
-        }
         if ($related_type == 'Prospects') {
             $query="SELECT first_name, last_name from prospects where id='$related_id'";
             $result=$db->query($query);
@@ -186,14 +173,6 @@ class CampaignLog extends SugarBean
             $row=$db->fetchByAssoc($result);
             if ($row != null) {
                 return $row['tracker_url'] ;
-            }
-        }
-        if ($related_type == 'Accounts') {
-            $query="SELECT name from accounts where id='$related_id'";
-            $result=$db->query($query);
-            $row=$db->fetchByAssoc($result);
-            if ($row != null) {
-                return $row['name'];
             }
         }
         return $related_id.$related_type;

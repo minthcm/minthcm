@@ -26,8 +26,6 @@ function upgrade_aos(){
         require_once('include/utils/file_utils.php');
 
         $old_files = array(
-            'custom/Extension/modules/Accounts/Ext/Layoutdefs/Account.php',
-            'custom/Extension/modules/Accounts/Ext/Vardefs/Account.php',
             'custom/Extension/modules/Contacts/Ext/Layoutdefs/Contact.php',
             'custom/Extension/modules/Contacts/Ext/Vardefs/Contact.php',
             'custom/Extension/modules/Project/Ext/Layoutdefs/Project.php',

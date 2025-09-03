@@ -46,21 +46,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 $moduleFilters = array(
-	'Accounts' => array(
-		'display_default' => false,
-		'fields' => array(
-			'account_type' => array(
-				'display_name' => 'Account Type',
-				'name' => 'account_type',
-				'vname' => 'LBL_TYPE',
-				'dbname' => 'account_type',
-				'custom_table' => false,
-				'type' => 'multiselect',
-				'size' => '4',
-				'dropdown' => $app_list_strings['account_type_dom'],
-			),
-		),
-	),
 	'Bugs' => array(
 		'display_default' => false,
 		'fields' => array(

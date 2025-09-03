@@ -29,13 +29,7 @@ $viewdefs [$module_name] =
                                         'field' => '30',
                                     ),
                             ),
-                        'includes' =>
-                            array(
-                                0 =>
-                                    array(
-                                        'file' => 'modules/Accounts/Account.js',
-                                    ),
-                            ),
+                        
                         'useTabs' => false,
                         'tabDefs' =>
                             array(

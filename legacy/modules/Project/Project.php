@@ -65,7 +65,6 @@ class Project extends SugarBean
     public $modified_by_name;
     public $created_by_name;
 
-    public $account_id;
     public $contact_id;
     public $email_id;
     public $estimated_start_date;
@@ -83,12 +82,10 @@ class Project extends SugarBean
 
     // This is used to retrieve related fields from form posts.
     public $additional_column_fields = array(
-        'account_id',
         'contact_id',
     );
 
     public $relationship_fields = array(
-        'account_id' => 'accounts',
         'contact_id'=>'contacts',
         'email_id' => 'emails',
     );
@@ -156,14 +153,6 @@ class Project extends SugarBean
                 if (isset($def['type']) && $def['type'] == 'link'
                 && isset($def['relationship']) && $def['relationship'] == $new_rel_relname) {
                     $new_rel_link = $key;
-                }
-            }
-            if ($new_rel_link == 'contacts') {
-                $accountId = $this->db->getOne('SELECT account_id FROM accounts_contacts WHERE contact_id=' . $this->db->quoted($new_rel_id));
-                if ($accountId !== false) {
-                    if ($this->load_relationship('accounts')) {
-                        $this->accounts->add($accountId);
-                    }
                 }
             }
         }

@@ -51,36 +51,30 @@ modals[0] = {
 	placement: "bottom"
 };
 modals[1] = {
-	target: "#moduleTab_AllAccounts", 
-	title: SUGAR.language.get('Home', 'LBL_TOUR_MODULES'),
-	content: SUGAR.language.get('Home', 'LBL_TOUR_MODULES_DESCRIPTION'),
-	placement: "bottom"
-};
-modals[2] = {
 	target: "#moduleTabExtraMenuAll", 
 	title: SUGAR.language.get('Home', 'LBL_TOUR_MORE'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_MORE_DESCRIPTION'),
 	placement: "bottom"
 };
-modals[3] = {
+modals[2] = {
 	target: "#dcmenuSearchDiv", 
 	title: SUGAR.language.get('Home', 'LBL_TOUR_SEARCH'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_SEARCH_DESCRIPTION'),
 	placement: "bottom"
 };
-modals[4] = {
+modals[3] = {
 	target: $("#dcmenuSugarCube").length == 0 ? "#dcmenuSugarCubeEmpty" : "#dcmenuSugarCube",
 	title: SUGAR.language.get('Home', 'LBL_TOUR_NOTIFICATIONS'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_NOTIFICATIONS_DESCRIPTION'),
 	placement: "bottom"
 };
-modals[5] = {
+modals[4] = {
 	target: "#globalLinksModule", 
 	title: SUGAR.language.get('Home', 'LBL_TOUR_PROFILE'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_PROFILE_DESCRIPTION'),
 	placement: "bottom"
 };
-modals[6] = {
+modals[5] = {
 	target: "#quickCreate",
 	title: SUGAR.language.get('Home', 'LBL_TOUR_QUICKCREATE'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_QUICKCREATE_DESCRIPTION'),
@@ -88,7 +82,7 @@ modals[6] = {
     leftOffset: rtl ? -40 : 40,
     topOffset: -10
 };
-modals[7] = {
+modals[6] = {
 	target: "#arrow",
 	title: SUGAR.language.get('Home', 'LBL_TOUR_FOOTER'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_FOOTER_DESCRIPTION'),
@@ -96,14 +90,14 @@ modals[7] = {
     leftOffset: rtl ? -90 : 80,
     topOffset: -40
 };
-modals[8] = {
+modals[7] = {
 	target: "#integrations", 
 	title: SUGAR.language.get('Home', 'LBL_TOUR_CUSTOM'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_CUSTOM_DESCRIPTION'),
 	placement: "top",
     leftOffset: rtl ? 30 : -30
 };
-modals[9] = {
+modals[8] = {
 	target: "#logo", 
 	title: SUGAR.language.get('Home', 'LBL_TOUR_BRAND'),
 	content: SUGAR.language.get('Home', 'LBL_TOUR_BRAND_DESCRIPTION'),

@@ -68,16 +68,6 @@ $layout_defs['Calls'] = array(
          'get_subpanel_data' => 'users',
          'title_key' => 'LBL_USERS_SUBPANEL_TITLE',
       ),
-      'leads' => array(
-         'order' => 30,
-         'module' => 'Leads',
-         'sort_order' => 'asc',
-         'sort_by' => 'last_name, first_name',
-         'subpanel_name' => 'ForCalls',
-         'get_subpanel_data' => 'leads',
-         'title_key' => 'LBL_LEADS_SUBPANEL_TITLE',
-         'top_buttons' => array(),
-      ),
       'history' => array(
          'order' => 40,
          'title_key' => 'LBL_HISTORY_SUBPANEL_TITLE',

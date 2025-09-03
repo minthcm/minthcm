@@ -86,11 +86,9 @@ class ImportMapSalesforce extends ImportMapOther
         $return_array = parent::getMapping($module);
         switch ($module) {
         case 'Contacts':
-        case 'Leads':
             return $return_array + array(
                 "Description"=>"description",
                 "Birthdate"=>"birthdate",
-                "Lead Source"=>"lead_source",
                 "Assistant"=>"assistant",
                 "Asst. Phone"=>"assistant_phone",
                 "Mailing Street"=>"primary_address_street",
@@ -117,40 +115,6 @@ class ImportMapSalesforce extends ImportMapOther
                 "Email"=>"email1",
                 "Email Opt Out"=>"email_opt_out",
                 "Do Not Call"=>"do_not_call",
-                "Account Name"=>"account_name",
-                );
-            break;
-        case 'Accounts':
-            return array(
-                "Account Name"=>"name",
-                "Annual Revenue"=>"annual_revenue",
-                "Type"=>"account_type",
-                "Ticker Symbol"=>"ticker_symbol",
-                "Rating"=>"rating",
-                "Industry"=>"industry",
-                "SIC Code"=>"sic_code",
-                "Ownership"=>"ownership",
-                "Employees"=>"employees",
-                "Description"=>"description",
-                "Billing Street"=>"billing_address_street",
-                "Billing Address Line1"=>"billing_address_street_2",
-                "Billing Address Line2"=>"billing_address_street_3",
-                "Billing City"=>"billing_address_city",
-                "Billing State"=>"billing_address_state",
-                "Billing State/Province"=>"billing_address_state",
-                "Billing Zip/Postal Code"=>"billing_address_postalcode",
-                "Billing Country"=>"billing_address_country",
-                "Shipping Street"=>"shipping_address_street",
-                "Shipping Address Line1"=>"shipping_address_street_2",
-                "Shipping Address Line2"=>"shipping_address_street_3",
-                "Shipping City"=>"shipping_address_city",
-                "Shipping State"=>"shipping_address_state",
-                "Shipping Zip/Postal Code"=>"shipping_address_postalcode",
-                "Shipping Country"=>"shipping_address_country",
-                "Phone"=>"phone_office",
-                "Fax"=>"phone_fax",
-                "Website"=>"website",
-                "Created Date"=>"date_entered",
                 );
             break;
         default:

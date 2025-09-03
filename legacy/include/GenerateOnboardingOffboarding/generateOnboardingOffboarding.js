@@ -237,7 +237,6 @@ generateOnboardingOffboarding = {
       let relate_field_name = this.relate_field_name + "_name";
       let relate_field_id = this.relate_field_name + "_id";
       sqs_objects[this.form_name + "_" + this.relate_field_name + "_name"] = { form: this.form_name, method: "query", modules: [this.relate_field_target_module], group: "and", field_list: ["name", "id"], populate_list: [relate_field_name, relate_field_id], conditions: [{ "name": "name", "op": "like_custom", "end": "%", "value": "" }], required_list: [relate_field_id], order: "name", limit: "30", no_match_text: "Nie pasuje" };
-      sqs_objects[this.form_name + "_parent_name"] = { form: this.form_name, method: "query", modules: ["Accounts"], group: "or", field_list: ["name", "id"], populate_list: ["parent_name", "parent_id"], required_list: ["parent_id"], conditions: [{ "name": "name", "op": "like_custom", "end": "%", "value": "" }], order: "name", limit: "30", no_match_text: "Nie pasuje" };
       enableQS();
       if (typeof (changeParentQS) == 'undefined') {
          let disabledModules = [];

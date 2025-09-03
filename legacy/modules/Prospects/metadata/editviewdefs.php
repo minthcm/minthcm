@@ -80,10 +80,6 @@ $viewdefs['Prospects']['EditView'] = array(
     ),
     
     array(
-      'account_name',
-    ),
-    
-    array(
       array(
           'name' => 'primary_address_street',
           'hideLabel' => true,

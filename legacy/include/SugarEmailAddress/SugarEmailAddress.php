@@ -680,7 +680,7 @@ class SugarEmailAddress extends SugarBean
             $current_links[$row2['email_address_id']] = $row2;
         }
 
-        $isConversion = (isset($_REQUEST) && isset($_REQUEST['action']) && $_REQUEST['action'] == 'ConvertLead') ? true : false;
+        $isConversion = false;
 
         if (!empty($this->addresses)) {
             // insert new relationships and create email address record, if they don't exist
@@ -887,8 +887,6 @@ class SugarEmailAddress extends SugarBean
             );
         }
         $module = $this->getCorrectedModule($module);
-        //One last check for the ConvertLead action in which case we need to change $module to 'Leads'
-        $module = (isset($_REQUEST) && isset($_REQUEST['action']) && $_REQUEST['action'] === 'ConvertLead') ? 'Leads' : $module;
 
         $post_from_email_address_widget = (isset($_REQUEST[$module . '_email_widget_id']));
         $primaryValue = $primary;
@@ -1555,10 +1553,6 @@ class SugarEmailAddress extends SugarBean
         $prefillDataArr = array();
         if (!empty($id)) {
             $prefillDataArr = $this->getAddressesByGUID($id, $module);
-            //When coming from convert leads, sometimes module is Contacts while the id is for a lead.
-            if (empty($prefillDataArr) && $module == "Contacts") {
-                $prefillDataArr = $this->getAddressesByGUID($id, "Leads");
-            }
         } elseif (isset($_REQUEST['full_form']) && !empty($_REQUEST['emailAddressWidget'])) {
             $widget_id = isset($_REQUEST[$module . '_email_widget_id']) ? $_REQUEST[$module . '_email_widget_id'] : '0';
             $count = 0;
@@ -2023,7 +2017,7 @@ class SugarEmailAddress extends SugarBean
     }
 
     /**
-     * It returns a ViewDefs for Confirm Opt In action link on DetailViews, specially for Accounts/Contacts/Leads/Prospects
+     * It returns a ViewDefs for Confirm Opt In action link on DetailViews, specially for Contacts/Prospects
      *
      * @param string $module module name
      * @param string $returnModule optional, using module name if null

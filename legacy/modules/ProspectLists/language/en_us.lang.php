@@ -78,9 +78,7 @@ $mod_strings = array(
     'LNK_PROSPECT_LIST' => 'Targets',
 
     'LBL_CONTACTS_SUBPANEL_TITLE' => 'Contacts',
-    'LBL_LEADS_SUBPANEL_TITLE' => 'Leads',
     'LBL_PROSPECTS_SUBPANEL_TITLE' => 'Targets',
-    'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_COPY_PREFIX' => 'Copy of',
     'LBL_USERS_SUBPANEL_TITLE' => 'Users',
     'LBL_TYPE' => 'Type',

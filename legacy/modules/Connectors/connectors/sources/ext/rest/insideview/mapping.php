@@ -46,14 +46,8 @@
 $mapping = array(
   'beans' =>
   array(
-    'Accounts' =>
-    array(
-    ),
     'Contacts' =>
     array(
+    )
     ),
-    'Leads' =>
-    array(
-    ),
-  ),
 );

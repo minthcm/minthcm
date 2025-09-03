@@ -90,17 +90,6 @@
 	<td scope="row"><span>{$MOD.LBL_STATUS}</span></td>
 	<td><span><select tabindex='2' name='status'>{$STATUS_OPTIONS}</select></span></td>
 	</tr>
-	<tr>
-	{if $REQUEST.account_id != ''}
-	<td scope="row"><span>{$MOD.LBL_ACCOUNT_NAME} <span class="required">{$APP.LBL_REQUIRED_SYMBOL}</span></span></td>
-	<td ><span>{$REQUEST.parent_name}<input id='account_name' name='account_name' type="hidden" value='{$REQUEST.parent_name}'><input id='account_id' name='account_id' type="hidden" value='{$REQUEST.parent_id}'>&nbsp;</span></td>
-	{else}
-	<td scope="row"><span>{$MOD.LBL_ACCOUNT_NAME} <span class="required">{$APP.LBL_REQUIRED_SYMBOL}</span></span></td>
-	<td ><span><input class="sqsEnabled" tabindex="1" autocomplete="off" id="account_name" name='account_name' type="text" value="{$ACCOUNT_NAME}">
-	<input name='account_id' id="account_id" type="hidden" value='{$ACCOUNT_ID}' />&nbsp;<input tabindex='1' title="{$APP.LBL_SELECT_BUTTON_TITLE}" type="button" class="button" value='{$APP.LBL_SELECT_BUTTON_LABEL}' name="btn1"
-			onclick='open_popup("Accounts", 600, 400, "", true, false, {$encoded_popup_request_data}, "", true);' /></span></td>
-	{/if}
-	</tr>
 	</table>
 	</form>
 <script>

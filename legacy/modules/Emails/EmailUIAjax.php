@@ -382,7 +382,7 @@ if (isset($_REQUEST['emailUIAction'])) {
                     echo trim($json->encode(array('html' => translate('LBL_NO_ACCESS', 'ACL')), true));
                     break;
                 }
-                $people = array("Users", "Contacts", "Leads", "Prospects");
+                $people = array("Users", "Contacts", "Prospects");
                 $showSaveToAddressBookButton = false;//(in_array($_REQUEST['qc_module'], $people)) ? true : false;
 
                 if (isset($_REQUEST['sugarEmail']) && !empty($_REQUEST['sugarEmail'])) {

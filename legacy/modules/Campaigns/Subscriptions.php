@@ -52,9 +52,6 @@ if (isset($_REQUEST['return_module'])) {
     if ($_REQUEST['return_module'] == 'Contacts') {
         $focus = BeanFactory::newBean('Contacts');
     }
-    if ($_REQUEST['return_module'] == 'Leads') {
-        $focus = BeanFactory::newBean('Leads');
-    }
     if ($_REQUEST['return_module'] == 'Prospects') {
         $focus = BeanFactory::newBean('Prospects');
     }

@@ -56,7 +56,6 @@ $searchFields['Contacts'] =
             'db_field' => array('first_name', 'last_name'),
             'force_unifiedsearch' => true
         ),
-        'account_name' => array('query_type' => 'default', 'db_field' => array('accounts.name')),
         'lead_source' => array(
             'query_type' => 'default',
             'operator' => '=',
@@ -128,7 +127,6 @@ $searchFields['Contacts'] =
             'type' => 'bool'
         ),
         'assigned_user_id' => array('query_type' => 'default'),
-        'account_id' => array('query_type' => 'default', 'db_field' => array('accounts.id')),
         'campaign_name' => array('query_type' => 'default'),
         //Range Search Support
         'range_date_entered' => array(

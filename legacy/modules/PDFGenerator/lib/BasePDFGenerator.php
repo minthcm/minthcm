@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -119,7 +119,7 @@ class BasePDFGenerator
     protected function prepareFileName($bean, $regex)
     {
         $parts = explode('/', $regex);
-        $filename_index = count($parts) - 1;
+        $filename_index = is_countable($parts) ? count($parts) - 1 : 0;
         $filename = $parts[$filename_index];
         $file_name_tmp = !empty($filename) ? $filename : '$name';
         foreach ($bean->field_defs as $field_def) {
@@ -168,6 +168,7 @@ class BasePDFGenerator
         if ($tpl_str != '') {
             $field_defs = $bean->field_defs;
             usort($field_defs, 'BasePDFGenerator::sortByNameLength');
+            $tpl_str = $this->parseSmarty($field_defs, $tpl_str, $bean);
             $rel = $this->getRelationshipForParse($relationship);
             $tpl_str = $this->parseRepeatTags($tpl_str, $bean, $depth, $rel);
             if ($tpl_str != '') {
@@ -184,7 +185,6 @@ class BasePDFGenerator
                 }
                 $tpl_str = $this->replaceCountAndCurrency($tpl_str, $relationship, $counter, $currency);
             }
-            $tpl_str = $this->parseSmarty($field_defs, $tpl_str, $bean);
         }
         return $tpl_str;
     }
@@ -349,10 +349,10 @@ class BasePDFGenerator
     protected function getFieldValue($name, $bean)
     {
         $r = explode('__', $name);
-        if (count($r) == 1) {
+        if (is_countable($r) ? count($r) == 1 : 0) {
             $value = $this->getFieldValueForOne($name, $bean, $r);
         }
-        if (count($r) > 1) {
+        if (is_countable($r) ? count($r) > 1 : 0) {
             $value = $this->getFieldValueForRelated($name, $bean, $r);
         }
         return $value;

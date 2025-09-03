@@ -127,7 +127,6 @@ class Reminder_Invitee extends Basic
         switch ($module) {
             case 'Users':
             case 'Contacts':
-            case 'Leads':
             default:
                 if (isset($bean->first_name) && isset($bean->last_name)) {
                     $retValue = "{$bean->first_name} {$bean->last_name}";

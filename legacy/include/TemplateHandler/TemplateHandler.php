@@ -175,7 +175,7 @@ class TemplateHandler
         );
         $contents = $this->ss->fetch($tpl);
         // Insert validation and quick search stuff here
-        if ($view === 'EditView' || $ajaxSave || $view === 'ConvertLead' || $view === 'ComposeView' || strpos($view, 'QuickCreate')) {
+        if ($view === 'EditView' || $ajaxSave || $view === 'ComposeView' || strpos($view, 'QuickCreate')) {
             global $dictionary, $beanList, $app_strings, $mod_strings;
             $mod = $beanList[$module];
 
@@ -242,9 +242,6 @@ class TemplateHandler
             $javascript->setFormName($view);
 
             $javascript->setSugarBean($sugarBean);
-            if ($view !== "ConvertLead") {
-                $javascript->addAllFields('', null, true);
-            }
 
             $validatedFields = array();
             $javascript->addToValidateBinaryDependency(
@@ -447,7 +444,7 @@ class TemplateHandler
                         preg_match('/_name$|_c$/si', $name)) ||
                     !empty($field['quicksearch'])
                 ) {
-                    if (preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)) {
+                    if (preg_match('/^(Campaigns|Teams|Users|Contacts)$/si', $field['module'], $matches)) {
                         if ($matches[0] === 'Campaigns') {
                             $sqs_objects[$name . '_' . $parsedView] = $qsd->loadQSObject(
                                 'Campaigns',
@@ -476,32 +473,11 @@ class TemplateHandler
                                         $field['id_name']
                                     );
                                 } else {
-                                    if ($matches[0] === 'Accounts') {
-                                        $nameKey = $name;
-                                        $idKey = isset($field['id_name']) ? $field['id_name'] : 'account_id';
-
-                                        //There are billingKey, shippingKey and additionalFields entries you can define in editviewdefs.php
-                                        //entry to allow quick search to autocomplete fields with a suffix value of the
-                                        //billing/shippingKey value (i.e. 'billingKey' => 'primary' in Contacts will populate
-                                        //primary_XXX fields with the Account's billing address values).
-                                        //addtionalFields are key/value pair of fields to fill from Accounts(key) to Contacts(value)
-                                        $billingKey = isset($f['displayParams']['billingKey']) ? $f['displayParams']['billingKey'] : null;
-                                        $shippingKey = isset($f['displayParams']['shippingKey']) ? $f['displayParams']['shippingKey'] : null;
-                                        $additionalFields = isset($f['displayParams']['additionalFields']) ? $f['displayParams']['additionalFields'] : null;
-                                        $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSAccount(
-                                            $nameKey,
-                                            $idKey,
-                                            $billingKey,
-                                            $shippingKey,
-                                            $additionalFields
+                                    if ($matches[0] === 'Contacts') {
+                                        $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSContact(
+                                            $field['name'],
+                                            $field['id_name']
                                         );
-                                    } else {
-                                        if ($matches[0] === 'Contacts') {
-                                            $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSContact(
-                                                $field['name'],
-                                                $field['id_name']
-                                            );
-                                        }
                                     }
                                 }
                             }
@@ -539,25 +515,6 @@ class TemplateHandler
                 }
 
                 $field = $defs[$f['name']];
-                if ($view === 'ConvertLead') {
-                    $field['name'] = $module . $field['name'];
-                    if (isset($field['module']) &&
-                        isset($field['id_name']) &&
-                        substr($field['id_name'], -4) === '_ida'
-                    ) {
-                        $lc_module = strtolower($field['module']);
-                        $ida_suffix = '_' . $lc_module . $lc_module . '_ida';
-                        if (preg_match('/' . $ida_suffix . '$/', $field['id_name']) > 0) {
-                            $field['id_name'] = $module . $field['id_name'];
-                        } else {
-                            $field['id_name'] = $field['name'] . '_' . $field['id_name'];
-                        }
-                    } else {
-                        if (!empty($field['id_name'])) {
-                            $field['id_name'] = $module . $field['id_name'];
-                        }
-                    }
-                }
                 $name = $qsd->form_name . '_' . $field['name'];
 
 
@@ -568,7 +525,7 @@ class TemplateHandler
                 ) {
                     if (!preg_match('/_c$/si', $name)
                         && (!isset($field['id_name']) || !preg_match('/_c$/si', $field['id_name']))
-                        && preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)
+                        && preg_match('/^(Campaigns|Teams|Users|Contacts)$/si', $field['module'], $matches)
                     ) {
                         if ($matches[0] === 'Campaigns') {
                             $sqs_objects[$name] = $qsd->loadQSObject(
@@ -598,36 +555,15 @@ class TemplateHandler
                                         $field['id_name']
                                     );
                                 } else {
-                                    if ($matches[0] === 'Accounts') {
-                                        $nameKey = $name;
-                                        $idKey = isset($field['id_name']) ? $field['id_name'] : 'account_id';
-
-                                        //There are billingKey, shippingKey and additionalFields entries you can define in editviewdefs.php
-                                        //entry to allow quick search to autocomplete fields with a suffix value of the
-                                        //billing/shippingKey value (i.e. 'billingKey' => 'primary' in Contacts will populate
-                                        //primary_XXX fields with the Account's billing address values).
-                                        //addtionalFields are key/value pair of fields to fill from Accounts(key) to Contacts(value)
-                                        $billingKey = SugarArray::staticGet($f, 'displayParams.billingKey');
-                                        $shippingKey = SugarArray::staticGet($f, 'displayParams.shippingKey');
-                                        $additionalFields = SugarArray::staticGet($f, 'displayParams.additionalFields');
-                                        $sqs_objects[$name] = $qsd->getQSAccount(
-                                            $nameKey,
-                                            $idKey,
-                                            $billingKey,
-                                            $shippingKey,
-                                            $additionalFields
-                                        );
-                                    } else {
-                                        if ($matches[0] === 'Contacts') {
-                                            $sqs_objects[$name] = $qsd->getQSContact($field['name'], $field['id_name']);
-                                            if (preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
-                                                $sqs_objects[$name]['field_list'] = array(
-                                                    'salutation',
-                                                    'first_name',
-                                                    'last_name',
-                                                    'id'
-                                                );
-                                            }
+                                    if ($matches[0] === 'Contacts') {
+                                        $sqs_objects[$name] = $qsd->getQSContact($field['name'], $field['id_name']);
+                                        if (preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
+                                            $sqs_objects[$name]['field_list'] = array(
+                                                'salutation',
+                                                'first_name',
+                                                'last_name',
+                                                'id'
+                                            );
                                         }
                                     }
                                 }

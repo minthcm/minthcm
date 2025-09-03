@@ -86,8 +86,6 @@ class CasesQuickCreate extends QuickCreate
             'call_back_function' => 'set_return',
             'form_name' => 'casesQuickCreate',
             'field_to_name_array' => array(
-                'id' => 'account_id',
-                'name' => 'account_name',
             ),
         );
     

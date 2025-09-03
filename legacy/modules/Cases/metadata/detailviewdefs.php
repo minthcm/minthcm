@@ -113,7 +113,6 @@ array(
         2 =>
         array(
           0 => 'type',
-          1 => 'account_name',
         ),
         3 =>
         array(

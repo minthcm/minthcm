@@ -75,19 +75,6 @@ $layout_defs['ProspectLists'] = array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
             ),
         ),
-        'leads' => array(
-            'order' => 30,
-            'module' => 'Leads',
-            'sort_by' => 'last_name, first_name',
-            'sort_order' => 'asc',
-            'subpanel_name' => 'default',
-            'get_subpanel_data' => 'leads',
-            'title_key' => 'LBL_LEADS_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
-            ),
-        ),
         'employees' => array(
             'order' => 40,
             'module' => 'Employees',
@@ -109,20 +96,6 @@ $layout_defs['ProspectLists'] = array(
             'get_subpanel_data' => 'candidates',
             'title_key' => 'LBL_CANDIDATES',
             'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
-            ),
-        ),
-        'accounts' => array(
-            'order' => 40,
-            'module' => 'Accounts',
-            'sort_order' => 'asc',
-            'sort_by' => 'name',
-            'subpanel_name' => 'ForProspectLists',
-            'get_subpanel_data' => 'accounts',
-            'add_subpanel_data' => 'account_id',
-            'title_key' => 'LBL_ACCOUNTS_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect'),
             ),
         ),

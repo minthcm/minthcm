@@ -37,10 +37,6 @@ class LastNextContacts extends LastNextContactsDeadCode
                 $bean->contacts_arr = $bean->contacts->get();
             }
             $this->addRelatedBeans($bean->contacts_arr, 'Contacts');
-            if (property_exists($bean, 'leads_arr') && empty($bean->leads_arr) && $bean->load_relationship('leads')) {
-                $bean->leads_arr = $bean->leads->get();
-            }
-            $this->addRelatedBeans($bean->leads_arr, 'Leads');
 
         } else if ('Emails' == $bean->module_name) {
             $this->tmp_beans = $this->getLNCEmail()->getEmailRelatedBeans($bean, $this->tmp_beans);
@@ -65,18 +61,6 @@ class LastNextContacts extends LastNextContactsDeadCode
             }
             $bean_to_update->retrieve($bean_to_update->id);
             $this->updateLastNextDatesInBean($bean_to_update);
-            if ('Contacts' == $bean_to_update->module_name && strlen($bean_to_update->account_id) > 0) {
-                $this->updateCandidate($bean_to_update->account_id);
-            }
-        }
-    }
-
-    protected function updateCandidate($id)
-    {
-        $account_bean = $this->getBean('Candidates', $id);
-        $account_bean->retrieve($id);
-        if (null !== $account_bean) {
-            $this->updateLastNextDatesInBean($account_bean);
         }
     }
 
@@ -138,13 +122,6 @@ class LastNextContacts extends LastNextContactsDeadCode
                 $bean = $this->getBean($module_name, $id);
                 $bean->retrieve($bean->id);
                 $this->setTmpBean($bean);
-                if (strlen($bean->account_id) > 0) {
-                    $account_bean = $this->getBean('Candidates', $bean->account_id);
-                    $account_bean->retrieve($account_bean->id);
-                    if (null !== $account_bean) {
-                        $this->setTmpBean($account_bean);
-                    }
-                }
             }
         }
     }

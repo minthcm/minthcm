@@ -60,8 +60,6 @@ class Popup_Picker
             $where_clauses = array();
             append_where_clause($where_clauses, "first_name", "contacts.first_name");
             append_where_clause($where_clauses, "last_name", "contacts.last_name");
-            append_where_clause($where_clauses, "account_name", "accounts.name");
-            append_where_clause($where_clauses, "account_id", "accounts.id");
             $where = generate_where_statement($where_clauses);
         }
         return $where;
@@ -91,7 +89,6 @@ class Popup_Picker
 
         $first_name = empty($_REQUEST['first_name']) ? '' : $_REQUEST['first_name'];
         $last_name = empty($_REQUEST['last_name']) ? '' : $_REQUEST['last_name'];
-        $account_name = empty($_REQUEST['account_name']) ? '' : $_REQUEST['account_name'];
         $request_data = empty($_REQUEST['request_data']) ? '' : $_REQUEST['request_data'];
         $hide_clear_button = empty($_REQUEST['hide_clear_button']) ? false : true;
         $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
@@ -133,7 +130,6 @@ EOQ;
         $form->assign('MODULE_NAME', $currentModule);
         $form->assign('FIRST_NAME', $first_name);
         $form->assign('LAST_NAME', $last_name);
-        $form->assign('ACCOUNT_NAME', $account_name);
         $form->assign('request_data', $request_data);
 
         // fill in for mass update
@@ -154,7 +150,6 @@ EOQ;
         $button .= "<input type='hidden' name='saved_associated_data' value=''>";
         $button .= "<input type='hidden' name='close_window' value='true'>";
         $button .= "<input type='hidden' name='html' value='change_address'>";
-        $button .= "<input type='hidden' name='account_name' value='$account_name'>";
         // Added ID attribute to each element to use getElementById. To give ID attribute to an element is a good practice.
         $button .= "<span style='display: none'><textarea name='primary_address_street' id='primary_address_street'>" . str_replace("&lt;br&gt;", "\n", $_REQUEST["primary_address_street"]) . "</textarea></span>";
         $button .= "<input type='hidden' name='primary_address_city' id='primary_address_city' value='". $_REQUEST["primary_address_city"] ."'>";
@@ -254,7 +249,6 @@ EOJS;
 
         $first_name = empty($_REQUEST['first_name']) ? '' : $_REQUEST['first_name'];
         $last_name = empty($_REQUEST['last_name']) ? '' : $_REQUEST['last_name'];
-        $account_name = empty($_REQUEST['account_name']) ? '' : $_REQUEST['account_name'];
         $hide_clear_button = empty($_REQUEST['hide_clear_button']) ? false : true;
         $button  = "<form action='index.php' method='post' name='form' id='form'>\n";
         //START:FOR MULTI-SELECT
@@ -285,7 +279,6 @@ EOJS;
         $form->assign('MODULE_NAME', $currentModule);
         $form->assign('FIRST_NAME', $first_name);
         $form->assign('LAST_NAME', $last_name);
-        $form->assign('ACCOUNT_NAME', $account_name);
         $request_data = empty($_REQUEST['request_data']) ? '' : $_REQUEST['request_data'];
         $form->assign('request_data', $request_data);
 

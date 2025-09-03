@@ -74,7 +74,7 @@ class MailMergeController extends SugarController
             $using_cp = false;
 
             if (!empty($term)) {
-                if ($module == 'Contacts' || $module == 'Leads') {
+                if ($module == 'Contacts') {
                     $where = $lmodule.".first_name like '%".$term."%' OR ".$lmodule.".last_name like '%".$term."%'";
                     $order_by = $lmodule.".last_name";
                 } else {

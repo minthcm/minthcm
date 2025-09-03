@@ -53,11 +53,9 @@ $popupMeta = array('moduleMain' => 'Contact',
                         'orderBy' => 'contacts.first_name, contacts.last_name',
                         'whereClauses' =>
                             array('first_name' => 'contacts.first_name',
-                                    'last_name' => 'contacts.last_name',
-                                    'account_name' => 'accounts.name',
-                                    'account_id' => 'accounts.id'),
+                                    'last_name' => 'contacts.last_name'),
                         'searchInputs' =>
-                            array('first_name', 'last_name', 'account_name'),
+                            array('first_name', 'last_name'),
                         'create' =>
                             array('formBase' => 'ContactFormBase.php',
                                     'formBaseClass' => 'ContactFormBase',

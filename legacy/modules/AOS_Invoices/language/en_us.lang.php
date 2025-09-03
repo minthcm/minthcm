@@ -137,7 +137,6 @@ $mod_strings = array(
     'LBL_TERMS_C' => 'Terms',
     'LBL_APPROVAL_ISSUE' => 'Approval Issues',
     'LBL_APPROVAL_STATUS' => 'Approval Status',
-    'LBL_BILLING_ACCOUNT' => 'Account',
     'LBL_BILLING_CONTACT' => 'Contact',
     'LBL_EXPIRATION' => 'Valid Until',
     'LBL_INVOICE_NUMBER' => 'Invoice Number',

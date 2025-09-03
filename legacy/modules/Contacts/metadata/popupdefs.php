@@ -54,11 +54,9 @@ $popupMeta = array(
     'orderBy' => 'contacts.first_name, contacts.last_name',
     'whereClauses' =>
         array('first_name' => 'contacts.first_name',
-                'last_name' => 'contacts.last_name',
-                'account_name' => 'accounts.name',
-                'account_id' => 'accounts.id'),
+                'last_name' => 'contacts.last_name',),
     'searchInputs' =>
-        array('first_name', 'last_name', 'account_name', 'email'),
+        array('first_name', 'last_name', 'email'),
     'create' =>
         array('formBase' => 'ContactFormBase.php',
                 'formBaseClass' => 'ContactFormBase',
@@ -71,16 +69,7 @@ $popupMeta = array(
             'label' => 'LBL_LIST_NAME',
             'link' => true,
             'default' => true,
-            'related_fields' => array('first_name', 'last_name', 'salutation', 'account_name', 'account_id')),
-        'ACCOUNT_NAME' => array(
-            'width' => '25',
-            'label' => 'LBL_LIST_ACCOUNT_NAME',
-            'module' => 'Accounts',
-            'id' => 'ACCOUNT_ID',
-            'default' => true,
-            'sortable'=> true,
-            'ACLTag' => 'ACCOUNT',
-            'related_fields' => array('account_id')),
+            'related_fields' => array('first_name', 'last_name', 'salutation')),
         'TITLE' => array(
             'width' => '15%',
             'label' => 'LBL_LIST_TITLE',
@@ -93,7 +82,6 @@ $popupMeta = array(
     'searchdefs'   => array(
         'first_name',
         'last_name',
-        array('name' => 'account_name', 'type' => 'varchar',),
         'title',
         'lead_source',
         'email',

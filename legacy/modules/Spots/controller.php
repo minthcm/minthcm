@@ -55,10 +55,8 @@ class SpotsController extends SugarController {
    protected $action_remap = array( 'DetailView' => 'editview', 'index' => 'listview' );
    //These are the file paths for the cached results of the spot data sets
    protected $spotFilePath = 'cache/modules/Spots/';
-   protected $accountsFileName = 'accounts.json';
    protected $servicesFileName = 'service.json';
    protected $salesFileName = 'sales.json';
-   protected $leadsFileName = 'leads.json';
    protected $marketingsFileName = 'marketing.json';
    protected $marketingActivitiesFileName = 'marketingActivity.json';
    protected $activitiesFileName = 'activities.json';
@@ -121,171 +119,6 @@ class SpotsController extends SugarController {
     }
 
    /**
-    * Returns the cached account file, will create it first if it is out of date / does not exist.
-    *
-    * @return string returns a string representation of the accounts file
-    */
-   public function action_getAccountsSpotsData() {
-      $userId = $_SESSION['authenticated_user_id'];
-      $fileLocation = $this->spotFilePath . $userId . '_' . $this->accountsFileName;
-      if ( file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime) ) {
-         echo file_get_contents($fileLocation);
-      } else {
-         $this->action_createAccountsSpotsData($fileLocation);
-         echo file_get_contents($fileLocation);
-      }
-   }
-
-   /**
-    * This creates the cached file for accounts.
-    *
-    * @param string $filepath the filepath to save the cached file
-    */
-   public function action_createAccountsSpotsData($filepath) {
-      global $mod_strings;
-      $returnArray = array();
-      $db = DBManagerFactory::getInstance();
-
-      $query = <<<EOF
-        SELECT
-            COALESCE(name,'$this->nullSqlPlaceholder') as accountName,
-            COALESCE(account_type,'$this->nullSqlPlaceholder') as account_type,
-            COALESCE(industry,'$this->nullSqlPlaceholder') as industry,
-            COALESCE(billing_address_country,'$this->nullSqlPlaceholder') as billing_address_country
-        FROM accounts
-        WHERE accounts.deleted = 0
-EOF;
-
-      $accounts = BeanFactory::getBean('Accounts');
-      $aclWhere = $this->buildSpotsAccessQuery($accounts, $accounts->table_name);
-
-      $queryString = $query . $aclWhere;
-
-      $result = $db->query($queryString);
-
-      while ( $row = $db->fetchByAssoc($result) ) {
-         $x = new stdClass();
-         $x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_NAME']} = $row['accountName'];
-         // View Tools start
-         //$x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_TYPE']} = $row['account_type'];
-         //$x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_INDUSTRY']} = $row['industry'];
-         $x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_TYPE']} = $this->translateAppString('account_type_dom', $row['account_type']);
-         $x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_INDUSTRY']} = $this->translateAppString('industry_dom', $row['industry']);
-         // View Tools end
-         $x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_BILLING_COUNTRY']} = $row['billing_address_country'];
-         $returnArray[] = $x;
-      }
-      file_put_contents($filepath, json_encode($returnArray));
-   }
-
-   /**
-    * Returns the cached leads file, will create it first if it is out of date / does not exist.
-    *
-    * @return string returns a string representation of the leads file
-    */
-   public function action_getLeadsSpotsData() {
-      $userId = $_SESSION['authenticated_user_id'];
-      $fileLocation = $this->spotFilePath . $userId . '_' . $this->leadsFileName;
-      if ( file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime) ) {
-         echo file_get_contents($fileLocation);
-      } else {
-         $this->action_createLeadsSpotsData($fileLocation);
-         echo file_get_contents($fileLocation);
-      }
-   }
-
-   /**
-    * This creates the cached file for leads.
-    *
-    * @param string $filepath the filepath to save the cached file
-    */
-   public function action_createLeadsSpotsData($filepath) {
-      global $mod_strings;
-      $returnArray = array();
-      $db = DBManagerFactory::getInstance();
-
-      $mysqlSelect = <<<EOF
-        SELECT
-            RTRIM(LTRIM(CONCAT(COALESCE(users.first_name,''),' ',COALESCE(users.last_name,'')))) as assignedUser,
-            leads.status,
-            COALESCE(lead_source, '$this->nullSqlPlaceholder') as leadSource,
-			COALESCE(campaigns.name, '$this->nullSqlPlaceholder') as campaignName,
-			CAST(YEAR(leads.date_entered) as CHAR(10)) as year,
-            COALESCE(QUARTER(leads.date_entered),'$this->nullSqlPlaceholder') as quarter,
-			concat('(',MONTH(leads.date_entered),') ',MONTHNAME(leads.date_entered)) as month,
-			CAST(WEEK(leads.date_entered) as CHAR(5)) as week,
-			DAYNAME(leads.date_entered) as day
-EOF;
-
-      $mssqlSelect = <<<EOF
-        SELECT
-            RTRIM(LTRIM(COALESCE(users.first_name,'')+' '+COALESCE(users.last_name,''))) as assignedUser,
-            leads.status,
-            COALESCE(lead_source, '$this->nullSqlPlaceholder') as leadSource,
-			COALESCE(campaigns.name, '$this->nullSqlPlaceholder') as campaignName,
-			CAST(YEAR(leads.date_entered) as CHAR(10)) as year,
-            COALESCE(DATEPART(qq,leads.date_entered),'$this->nullSqlPlaceholder') as quarter,
-			'(' + CAST(DATEPART(mm,leads.date_entered)as CHAR(12)) + ') ' + DATENAME(month,DATEPART(mm,leads.date_entered)) as month,
-			CAST(DATEPART(wk,leads.date_entered) as CHAR(5)) as week,
-			DATENAME(weekday,leads.date_entered) as day
-EOF;
-
-      $fromClause = <<<EOF
-        FROM leads
-        INNER JOIN users
-            ON leads.assigned_user_id = users.id
-		LEFT JOIN campaigns
-			ON leads.campaign_id = campaigns.id
-			AND campaigns.deleted = 0
-EOF;
-      $whereClause = <<<EOF
-        WHERE leads.deleted = 0
-        AND users.deleted = 0
-EOF;
-
-      $query = '';
-      if ( $this->getDatabaseType() === 'mssql' ) {
-         $query = $mssqlSelect . ' ' . $fromClause . ' ' . $whereClause;
-      } elseif ( $this->getDatabaseType() === 'mysql' ) {
-         $query = $mysqlSelect . ' ' . $fromClause . ' ' . $whereClause;
-      } else {
-         $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
-
-         return;
-      }
-
-      $leads = BeanFactory::getBean('Leads');
-      $users = BeanFactory::getBean('Users');
-      $campaigns = BeanFactory::getBean('Campaigns');
-      $aclWhereLeads = $this->buildSpotsAccessQuery($leads, $leads->table_name);
-      $aclWhereUsers = $this->buildSpotsAccessQuery($users, $users->table_name);
-      $aclWhereCampaigns = $this->buildSpotsAccessQuery($campaigns, $campaigns->table_name);
-
-      $queryString = $query . $aclWhereLeads . $aclWhereUsers . $aclWhereCampaigns;
-      $result = $db->query($queryString);
-
-      while ( $row = $db->fetchByAssoc($result) ) {
-         $x = new stdClass();
-         $x->{$mod_strings['LBL_AN_LEADS_ASSIGNED_USER']} = $row['assignedUser'];
-         // View Tools start
-         //$x->{$mod_strings['LBL_AN_LEADS_STATUS']} = $row['status'];
-         //$x->{$mod_strings['LBL_AN_LEADS_LEAD_SOURCE']} = $row['leadSource'];
-         $x->{$mod_strings['LBL_AN_LEADS_STATUS']} = $this->translateAppString('lead_status_dom', $row['status']);
-         $x->{$mod_strings['LBL_AN_LEADS_LEAD_SOURCE']} = $this->translateAppString('lead_source_dom', $row['leadSource']);
-         // View Tools end
-         $x->{$mod_strings['LBL_AN_LEADS_CAMPAIGN_NAME']} = $row['campaignName'];
-         $x->{$mod_strings['LBL_AN_LEADS_YEAR']} = $row['year'];
-         $x->{$mod_strings['LBL_AN_LEADS_QUARTER']} = $row['quarter'];
-         $x->{$mod_strings['LBL_AN_LEADS_MONTH']} = $row['month'];
-         $x->{$mod_strings['LBL_AN_LEADS_WEEK']} = $row['week'];
-         $x->{$mod_strings['LBL_AN_LEADS_DAY']} = $row['day'];
-
-         $returnArray[] = $x;
-      }
-      file_put_contents($filepath, json_encode($returnArray));
-   }
-
-   /**
     * Returns the cached service file, will create it first if it is out of date / does not exist.
     *
     * @return string returns a string representation of the service file
@@ -313,7 +146,6 @@ EOF;
 
       $mysqlSelect = <<<EOF
         SELECT
-            accounts.name,
             cases.state,
             cases.status,
             cases.priority,
@@ -327,7 +159,6 @@ EOF;
 EOF;
       $mssqlSelect = <<<EOF
         SELECT
-            accounts.name,
             cases.state,
             cases.status,
             cases.priority,
@@ -344,8 +175,6 @@ EOF;
         FROM cases
         INNER JOIN users
             ON cases.assigned_user_id = users.id
-        INNER JOIN accounts
-            ON cases.account_id = accounts.id
         LEFT JOIN users u2
             ON cases.contact_created_by_id = u2.id
             AND u2.deleted = 0
@@ -353,7 +182,6 @@ EOF;
       $whereClause = <<<EOF
         WHERE cases.deleted = 0
         AND users.deleted = 0
-        AND accounts.deleted = 0
 EOF;
 
       $query = '';
@@ -368,18 +196,15 @@ EOF;
       }
 
       $cases = BeanFactory::getBean('Cases');
-      $accounts = BeanFactory::getBean('Accounts');
       $users = BeanFactory::getBean('Users');
       $aclWhereCases = $this->buildSpotsAccessQuery($cases, $cases->table_name);
-      $aclWhereAccounts = $this->buildSpotsAccessQuery($accounts, $accounts->table_name);
       $aclWhereUsers = $this->buildSpotsAccessQuery($users, $users->table_name);
 
-      $queryString = $query . $aclWhereCases . $aclWhereAccounts . $aclWhereUsers;
+      $queryString = $query . $aclWhereCases . $aclWhereUsers;
       $result = $db->query($queryString);
 
       while ( $row = $db->fetchByAssoc($result) ) {
          $x = new stdClass();
-         $x->{$mod_strings['LBL_AN_SERVICE_ACCOUNT_NAME']} = $row['name'];
          // View Tools start
          //$x->{$mod_strings['LBL_AN_SERVICE_STATE']} = $row['state'];
          //$x->{$mod_strings['LBL_AN_SERVICE_STATUS']} = $row['status'];

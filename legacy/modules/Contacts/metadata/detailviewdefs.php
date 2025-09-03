@@ -225,11 +225,6 @@ array(
         array(
           0 =>
           array(
-            'name' => 'account_name',
-            'label' => 'LBL_ACCOUNT_NAME',
-          ),
-          1 =>
-          array(
             'name' => 'phone_fax',
             'label' => 'LBL_FAX_PHONE',
           ),

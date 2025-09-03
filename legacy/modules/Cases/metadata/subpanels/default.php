@@ -68,14 +68,6 @@ $subpanel_layout = array(
             'widget_class' => 'SubPanelDetailViewLink',
             'width' => '40%',
         ),
-        'account_name'=>array(
-            'vname' => 'LBL_LIST_ACCOUNT_NAME',
-            'widget_class' => 'SubPanelDetailViewLink',
-            'module' => 'Accounts',
-            'width' => '31%',
-            'target_record_key' => 'account_id',
-            'target_module' => 'Accounts',
-        ),
         'status'=>array(
             'vname' => 'LBL_LIST_STATUS',
             'width' => '10%',

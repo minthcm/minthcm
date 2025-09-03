@@ -175,13 +175,6 @@ $dictionary['Task'] = array(
             'source' => 'non-db',
             'vname' => 'LBL_USER',
         ),
-        'accounts' => array(
-            'name' => 'accounts',
-            'type' => 'link',
-            'relationship' => 'account_tasks',
-            'source' => 'non-db',
-            'vname' => 'LBL_ACCOUNT',
-        ),
         'cases' => array(
             'name' => 'cases',
             'type' => 'link',
@@ -195,13 +188,6 @@ $dictionary['Task'] = array(
             'relationship' => 'bug_tasks',
             'source' => 'non-db',
             'vname' => 'LBL_BUGS',
-        ),
-        'leads' => array(
-            'name' => 'leads',
-            'type' => 'link',
-            'relationship' => 'lead_tasks',
-            'source' => 'non-db',
-            'vname' => 'LBL_LEADS',
         ),
         'projects' => array(
             'name' => 'projects',

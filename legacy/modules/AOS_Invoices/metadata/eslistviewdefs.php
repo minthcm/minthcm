@@ -17,10 +17,6 @@ $ESListViewDefs['AOS_Invoices'] = [
             'link' => true,
             'default' => true,
         ],
-        'billing_account' => [
-            'link' => true,
-            'default' => true,
-        ],
         'total_amount' => [
             'default' => true,
         ],
@@ -70,8 +66,6 @@ $ESListViewDefs['AOS_Invoices'] = [
         'name' => [
         ],
         'billing_contact' => [
-        ],
-        'billing_account' => [
         ],
         'number' => [
         ],

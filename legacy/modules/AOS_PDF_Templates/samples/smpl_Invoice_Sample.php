@@ -41,7 +41,7 @@ class smpl_Invoice_Sample
 </tr>
 <tr style="text-align: left;">
 <td style="padding: 2px 6px; border-style: solid solid solid solid;  border-width: 0.5px; width: 50%; vertical-align: top; text-align: left;">
-<div>$aos_invoices_billing_account<br /> $aos_invoices_billing_address_street<br /> $aos_invoices_billing_address_city <br /> $aos_invoices_billing_address_state $aos_invoices_billing_address_postalcode</div>
+<div>$aos_invoices_billing_address_street<br /> $aos_invoices_billing_address_city <br /> $aos_invoices_billing_address_state $aos_invoices_billing_address_postalcode</div>
 <br /></td>
 <td style="padding: 2px 6px; border-style: solid solid solid solid;  border-width: 0.5px; width: 50%; vertical-align: top; text-align: left;"><div>$aos_invoices_modified_by_name</div></td>
 </tr>

@@ -277,27 +277,6 @@ class ElasticSearchIndexer extends AbstractIndexer
         $this->client->indices()->putMapping($params);
     }
 
-    /**
-     * For differential runs, attempt to pull the Last Index time and set on dataPuller
-     *
-     * @param ElasticSearchModuleDataPuller $dataPuller
-     * @param bool $isDifferential
-     * @param string $module
-     * @return void
-     */
-    protected function buildWhereClause($dataPuller, $isDifferential, $module): void
-    {
-        if ($isDifferential) {
-            try {
-                $datetime = $this->getModuleLastIndexed($module);
-                $dataPuller->setLastIndexTime($datetime)->setShowDeleted(-1);
-            } catch (Exception $exception) {
-                $this->logger->notice("Time metadata not found for $module, performing full index for this module");
-                $dataPuller->setDifferential(false);
-            }
-        }
-    }
-
     /** @inheritdoc */
     public function indexBeans($module, array $beans)
     {

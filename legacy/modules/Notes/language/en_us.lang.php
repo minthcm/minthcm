@@ -47,8 +47,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 $mod_strings = array(
-    'ERR_DELETE_RECORD' => 'You must specify a record number to delete the account.',
-    'LBL_ACCOUNT_ID' => 'Account ID:',
     'LBL_CASE_ID' => 'Case ID:',
     'LBL_CLOSE' => 'Close:',
     'LBL_CONTACT_ID' => 'Contact ID:',
@@ -60,7 +58,6 @@ $mod_strings = array(
     'LBL_FILE_MIME_TYPE' => 'Mime Type',
     'LBL_FILE_URL' => 'File URL',
     'LBL_FILENAME' => 'Attachment:',
-    'LBL_LEAD_ID' => 'Lead ID:',
     'LBL_LIST_CONTACT_NAME' => 'Contact',
     'LBL_LIST_DATE_MODIFIED' => 'Last Modified',
     'LBL_LIST_FILENAME' => 'Attachment',

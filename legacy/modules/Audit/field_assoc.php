@@ -54,11 +54,6 @@ $genericAssocFieldsArray = array('assigned_user_id' =>
                                     'select_field_name' => 'user_name',
                                     'select_field_join'  => 'id',
                                 ),
-                                  'account_id' =>
-                                  array('table_name' => 'accounts',
-                                    'select_field_name' => 'name',
-                                    'select_field_join'  => 'id',
-                                  ),
                                   'contact_id' =>
                                   array('table_name' => 'contacts',
                                     'select_field_name' =>
@@ -77,12 +72,4 @@ $genericAssocFieldsArray = array('assigned_user_id' =>
                                     'select_field_name' => 'name',
                                     'select_field_join'  => 'id',
                                   ),
-                            );
-$moduleAssocFieldsArray = array('Account' =>
-                                array('parent_id' =>
-                                    array('table_name' => 'accounts',
-                                        'select_field_name' => 'name',
-                                        'select_field_join'  => 'id',
-                                    )
-                                ),
                             );

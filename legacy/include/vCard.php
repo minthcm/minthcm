@@ -86,11 +86,7 @@ class vCard
         $this->setPhoneNumber(from_html($contact->phone_work), 'WORK');
         $this->setEmail(from_html($contact->email1));
         $this->setAddress(from_html($contact->primary_address_street), from_html($contact->primary_address_city), from_html($contact->primary_address_state), from_html($contact->primary_address_postalcode), from_html($contact->primary_address_country), 'WORK', $encoding);
-        if (isset($contact->account_name)) {
-            $this->setORG(from_html($contact->account_name), from_html($contact->department));
-        } else {
-            $this->setORG('', from_html($contact->department));
-        }
+        $this->setORG('', from_html($contact->department));
         $this->setTitle($contact->title);
     }
 
@@ -329,45 +325,7 @@ class vCard
                     $GLOBALS['log']->debug('I found a company name');
                     if (!empty($value)) {
                         $GLOBALS['log']->debug('I found a company name (fer real)');
-                        if (is_a($bean, "Contact") || is_a($bean, "Lead")) {
-                            $GLOBALS['log']->debug('And Im dealing with a person!');
-                            $accountBean = BeanFactory::getBean('Accounts');
-                            // It's a contact, we better try and match up an account
-                            $full_company_name = trim($values[0]);
-                            // Do we have a full company name match?
-                            $result = $accountBean->retrieve_by_string_fields(array('name' => $full_company_name, 'deleted' => 0));
-                            if (! isset($result->id)) {
-                                // Try to trim the full company name down, see if we get some other matches
-                                $vCardTrimStrings = array('/ltd\.*/i'=>'',
-                                                            '/llc\.*/i'=>'',
-                                                            '/gmbh\.*/i'=>'',
-                                                            '/inc\.*/i'=>'',
-                                                            '/\.com/i'=>'',
-                                                    );
-                                // Allow users to override the trimming strings
-                                if (file_exists('custom/include/vCardTrimStrings.php')) {
-                                    require_once('custom/include/vCardTrimStrings.php');
-                                }
-                                $short_company_name = trim(preg_replace(array_keys($vCardTrimStrings), $vCardTrimStrings, $full_company_name), " ,.");
-
-                                $GLOBALS['log']->debug('Trying an extended search for: ' . $short_company_name);
-                                $result = $accountBean->retrieve_by_string_fields(array('name' => $short_company_name, 'deleted' => 0));
-                            }
-
-                            if (is_a($bean, "Lead") || ! isset($result->id)) {
-                                // We could not find a parent account, or this is a lead so only copy the name, no linking
-                                $GLOBALS['log']->debug("Did not find a matching company ($full_company_name)");
-                                $bean->account_id = '';
-                                $bean->account_name = $full_company_name;
-                            } else {
-                                $GLOBALS['log']->debug("Found a matching company: " . $result->name);
-                                $bean->account_id = $result->id;
-                                $bean->account_name = $result->name;
-                            }
-                            $bean->department = $values[1];
-                        } else {
-                            $bean->department = $value;
-                        }
+                        $bean->department = $value;
                     }
                 }
             }
@@ -383,21 +341,6 @@ class vCard
                 $GLOBALS['log']->error("Cannot import vCard, required field is not set: $key");
                 return;
             }
-        }
-
-        if (is_a($bean, "Contact") && empty($bean->account_id) && !empty($bean->account_name)) {
-            $GLOBALS['log']->debug("Look ma! I'm creating a new account: " . $bean->account_name);
-            // We need to create a new account
-            $accountBean = BeanFactory::getBean('Accounts');
-            // Populate the newly created account with all of the contact information
-            foreach ($bean->field_defs as $field_name => $field_def) {
-                if (!empty($bean->$field_name)) {
-                    $accountBean->$field_name = $bean->$field_name;
-                }
-            }
-            $accountBean->name = $bean->account_name;
-            $accountBean->save();
-            $bean->account_id = $accountBean->id;
         }
 
         $beanId = $bean->save();

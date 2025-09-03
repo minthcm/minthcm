@@ -79,12 +79,6 @@ array(
         'default' => true,
         'width' => '10%',
       ),
-      'account_name' =>
-      array(
-        'name' => 'account_name',
-        'default' => true,
-        'width' => '10%',
-      ),
       'type' =>
       array(
         'type' => 'enum',

@@ -50,7 +50,6 @@ require_once("modules/Meetings/Meeting.php");
 require_once("modules/Calls/Call.php");
 require_once("modules/Users/User.php");
 require_once("modules/Contacts/Contact.php");
-require_once("modules/Leads/Lead.php");
 require_once("include/utils.php");
 
 /**
@@ -325,21 +324,6 @@ class EmailReminder
                     'type' => 'Contacts',
                     'name' => $contact->full_name,
                     'email' => $contact->email1,
-                );
-                $emails[] = $arr;
-            }
-        }
-        // fetch leads
-        $query = "SELECT lead_id FROM {$field_part}s_leads WHERE {$field_part}_id = '{$id}' AND accept_status != 'decline' AND deleted = 0";
-        $re = $db->query($query);
-        while ($row = $db->fetchByAssoc($re)) {
-            $lead = BeanFactory::newBean('Leads');
-            $lead->retrieve($row['lead_id']);
-            if (!empty($lead->email1)) {
-                $arr = array(
-                    'type' => 'Leads',
-                    'name' => $lead->full_name,
-                    'email' => $lead->email1,
                 );
                 $emails[] = $arr;
             }

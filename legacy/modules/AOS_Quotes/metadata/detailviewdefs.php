@@ -173,11 +173,6 @@ array(
         array(
           0 =>
           array(
-            'name' => 'billing_account',
-            'label' => 'LBL_BILLING_ACCOUNT',
-          ),
-          1 =>
-          array(
             'name' => 'billing_contact',
             'label' => 'LBL_BILLING_CONTACT',
           ),

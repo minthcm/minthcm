@@ -132,20 +132,6 @@ array(
         array(
           0 =>
           array(
-            'name' => 'account_name',
-            'displayParams' =>
-            array(
-              'key' => 'billing',
-              'copy' => 'primary',
-              'billingKey' => 'primary',
-              'additionalFields' =>
-              array(
-                'phone_office' => 'phone_work',
-              ),
-            ),
-          ),
-          1 =>
-          array(
             'name' => 'phone_fax',
             'comment' => 'Contact fax number',
             'label' => 'LBL_FAX_PHONE',

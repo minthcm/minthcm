@@ -881,10 +881,7 @@ class SoapHelperWebServices
             }
             $count++;
 
-            //Add the account to a contact
             if ($module_name == 'Contacts') {
-                $GLOBALS['log']->debug('Creating Contact Account');
-                $this->add_create_account($seed);
                 $duplicate_id = $this->check_for_duplicate_contacts($seed);
                 if ($duplicate_id == null) {
                     if ($seed->ACLAccess('Save') && ($seed->deleted != 1 || $seed->ACLAccess('Delete'))) {
@@ -1054,83 +1051,6 @@ class SoapHelperWebServices
         return $notifyonsave;
     }
 
-    /*
-     *	Given an account_name, either create the account or assign to a contact.
-     */
-    public function add_create_account($seed)
-    {
-        $GLOBALS['log']->info('Begin: SoapHelperWebServices->add_create_account');
-        global $current_user;
-        $account_name = $seed->account_name;
-        $account_id = $seed->account_id;
-        $assigned_user_id = $current_user->id;
-
-        // check if it already exists
-        $focus = BeanFactory::newBean('Accounts');
-        if ($focus->ACLAccess('Save')) {
-            $class = get_class($seed);
-            $temp = new $class();
-            $temp->retrieve($seed->id);
-            if (empty($account_name) && empty($account_id)) {
-                return;
-            } // if
-            if (!isset($seed->accounts)) {
-                $seed->load_relationship('accounts');
-            } // if
-
-            if ($seed->account_name == '' && isset($temp->account_id)) {
-                $seed->accounts->delete($seed->id, $temp->account_id);
-                $GLOBALS['log']->info('End: SoapHelperWebServices->add_create_account');
-
-                return;
-            }
-            $arr = array();
-
-            if (!empty($account_id)) {  // bug # 44280
-                $query = "select id, deleted from {$focus->table_name} WHERE id='" . $seed->db->quote($account_id) . "'";
-            } else {
-                $query = "select id, deleted from {$focus->table_name} WHERE name='" . $seed->db->quote($account_name) . "'";
-            }
-            $result = $seed->db->query($query, true);
-
-            $row = $seed->db->fetchByAssoc($result, false);
-
-            // we found a row with that id
-            if (isset($row['id']) && $row['id'] != -1) {
-                // if it exists but was deleted, just remove it entirely
-                if (isset($row['deleted']) && $row['deleted'] == 1) {
-                    $query2 = "delete from {$focus->table_name} WHERE id='" . $seed->db->quote($row['id']) . "'";
-                    $result2 = $seed->db->query($query2, true);
-                } // else just use this id to link the contact to the account
-                else {
-                    $focus->id = $row['id'];
-                }
-            }
-
-            // if we didnt find the account, so create it
-            if (!isset($focus->id) || $focus->id == '') {
-                $focus->name = $account_name;
-
-                if (isset($assigned_user_id)) {
-                    $focus->assigned_user_id = $assigned_user_id;
-                    $focus->modified_user_id = $assigned_user_id;
-                }
-                $focus->save();
-            }
-
-            if ($seed->accounts != null && $temp->account_id != null && $temp->account_id != $focus->id) {
-                $seed->accounts->delete($seed->id, $temp->account_id);
-            }
-
-            if (isset($focus->id) && $focus->id != '') {
-                $seed->account_id = $focus->id;
-            } // if
-            $GLOBALS['log']->info('End: SoapHelperWebServices->add_create_account');
-        } else {
-            $GLOBALS['log']->info('End: SoapHelperWebServices->add_create_account - Insufficient ACLAccess');
-        } // else
-    } // fn
-
     public function check_for_duplicate_contacts($seed)
     {
         $GLOBALS['log']->info('Begin: SoapHelperWebServices->check_for_duplicate_contacts');
@@ -1158,32 +1078,6 @@ class SoapHelperWebServices
                 $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - no duplicte found');
 
                 return null;
-            }
-            foreach ($contacts as $contact) {
-                if (!empty($trimmed_last) && strcmp($trimmed_last, $contact->last_name) == 0) {
-                    if ((!empty($trimmed_email) || !empty($trimmed_email2)) && (strcmp(
-                        $trimmed_email,
-                        $contact->email1
-                        ) == 0 || strcmp(
-                            $trimmed_email,
-                            $contact->email2
-                                    ) == 0 || strcmp(
-                                        $trimmed_email2,
-                                        $contact->email
-                                    ) == 0 || strcmp($trimmed_email2, $contact->email2) == 0)
-                        ) {
-                        $contact->load_relationship('accounts');
-                        if (empty($seed->account_name) || strcmp(
-                            $seed->account_name,
-                            $contact->account_name
-                            ) == 0
-                            ) {
-                            $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - duplicte found ' . $contact->id);
-
-                            return $contact->id;
-                        }
-                    }
-                }
             }
             $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - no duplicte found');
 

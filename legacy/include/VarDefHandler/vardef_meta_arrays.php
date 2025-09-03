@@ -115,7 +115,7 @@ $vardef_meta_array = array(
         //end inc_override
         ),
         'ex_override' => array(
-            'name' => array('team_name', 'account_name'),
+            'name' => array('team_name'),
         //end ex_override
         )
 
@@ -164,7 +164,7 @@ $vardef_meta_array = array(
         //end inc_override
         ),
         'ex_override' => array(
-            'name' => array('team_name', 'account_name'),
+            'name' => array('team_name'),
         //end ex_override
         )
 
@@ -182,7 +182,7 @@ $vardef_meta_array = array(
         ),
 
         'inc_override' => array(
-            'name' => array('accounts', 'account', 'member_of'),
+            'name' => array('member_of'),
         //end inc_override
         ),
         'ex_override' => array(
@@ -288,7 +288,7 @@ $vardef_meta_array = array(
         //end inc_override
         ),
         'ex_override' => array(
-            'name' => array('team_name', 'account_name'),
+            'name' => array('team_name'),
         //end ex_override
         )
 

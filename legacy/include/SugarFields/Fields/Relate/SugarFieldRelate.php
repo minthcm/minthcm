@@ -95,60 +95,8 @@ class SugarFieldRelate extends SugarFieldBase {
          $rpos = strrpos($displayParams['idName'], $vardef['name']);
          $displayParams['idNameHidden'] = substr($displayParams['idName'], 0, $rpos);
       }
-      //Special Case for accounts; use the displayParams array and retrieve
-      //the key and copy indexes.  'key' is the suffix of the field we are searching
-      //the Account's address with.  'copy' is the suffix we are copying the addresses
-      //form fields into.
-      if ( isset($vardef['module']) && preg_match('/Accounts/si', $vardef['module']) && isset($displayParams['key']) && isset($displayParams['copy'])
-      ) {
-
-         if ( isset($displayParams['key']) && is_array($displayParams['key']) ) {
-            $database_key = $displayParams['key'];
-         } else {
-            $database_key[] = $displayParams['key'];
-         }
-
-         if ( isset($displayParams['copy']) && is_array($displayParams['copy']) ) {
-            $form = $displayParams['copy'];
-         } else {
-            $form[] = $displayParams['copy'];
-         }
-
-         if ( count($database_key) != count($form) ) {
-            global $app_list_strings;
-            $this->ss->trigger_error($app_list_strings['ERR_SMARTY_UNEQUAL_RELATED_FIELD_PARAMETERS']);
-         } //if
-
-         $copy_phone = isset($displayParams['copyPhone']) ? $displayParams['copyPhone'] : true;
-
-         $field_to_name = array();
-         $field_to_name['id'] = $vardef['id_name'];
-         $field_to_name['name'] = $vardef['name'];
-         $address_fields = isset($displayParams['field_to_name_array']) ? $displayParams['field_to_name_array'] : array(
-            '_address_street',
-            '_address_city',
-            '_address_state',
-            '_address_postalcode',
-            '_address_country'
-         );
-         $count = 0;
-         foreach ( $form as $f ) {
-            foreach ( $address_fields as $afield ) {
-               $field_to_name[$database_key[$count] . $afield] = $f . $afield;
-            }
-            $count++;
-         }
-
-         $popup_request_data = array(
-            'call_back_function' => $call_back_function,
-            'form_name' => $form_name,
-            'field_to_name_array' => $field_to_name,
-         );
-
-         if ( $copy_phone ) {
-            $popup_request_data['field_to_name_array']['phone_office'] = 'phone_work';
-         }
-      } elseif ( isset($displayParams['field_to_name_array']) ) {
+      
+      if ( isset($displayParams['field_to_name_array']) ) {
          $popup_request_data = array(
             'call_back_function' => $call_back_function,
             'form_name' => $form_name,
@@ -236,60 +184,7 @@ class SugarFieldRelate extends SugarFieldBase {
          $displayParams['useIdSearch'] = true;
       }
 
-      //Special Case for accounts; use the displayParams array and retrieve
-      //the key and copy indexes.  'key' is the suffix of the field we are searching
-      //the Account's address with.  'copy' is the suffix we are copying the addresses
-      //form fields into.
-      if ( isset($vardef['module']) && preg_match('/Accounts/si', $vardef['module']) && isset($displayParams['key']) && isset($displayParams['copy'])
-      ) {
-
-         if ( isset($displayParams['key']) && is_array($displayParams['key']) ) {
-            $database_key = $displayParams['key'];
-         } else {
-            $database_key[] = $displayParams['key'];
-         }
-
-         if ( isset($displayParams['copy']) && is_array($displayParams['copy']) ) {
-            $form = $displayParams['copy'];
-         } else {
-            $form[] = $displayParams['copy'];
-         }
-
-         if ( count($database_key) != count($form) ) {
-            global $app_list_strings;
-            $this->ss->trigger_error($app_list_strings['ERR_SMARTY_UNEQUAL_RELATED_FIELD_PARAMETERS']);
-         } //if
-
-         $copy_phone = isset($displayParams['copyPhone']) ? $displayParams['copyPhone'] : true;
-
-         $field_to_name = array();
-         $field_to_name['id'] = $vardef['id_name'];
-         $field_to_name['name'] = $vardef['name'];
-         $address_fields = array(
-            '_address_street',
-            '_address_city',
-            '_address_state',
-            '_address_postalcode',
-            '_address_country'
-         );
-         $count = 0;
-         foreach ( $form as $f ) {
-            foreach ( $address_fields as $afield ) {
-               $field_to_name[$database_key[$count] . $afield] = $f . $afield;
-            }
-            $count++;
-         }
-
-         $popup_request_data = array(
-            'call_back_function' => $call_back_function,
-            'form_name' => $form_name,
-            'field_to_name_array' => $field_to_name,
-         );
-
-         if ( $copy_phone ) {
-            $popup_request_data['field_to_name_array']['phone_office'] = 'phone_work';
-         }
-      } elseif ( isset($displayParams['field_to_name_array']) ) {
+      if ( isset($displayParams['field_to_name_array']) ) {
          $popup_request_data = array(
             'call_back_function' => $call_back_function,
             'form_name' => $form_name,

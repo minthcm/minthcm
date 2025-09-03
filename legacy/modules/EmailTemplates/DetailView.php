@@ -68,8 +68,6 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
     }
     $focus=$result;
-} else {
-    header("Location: index.php?module=Accounts&action=index");
 }
 if (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     $focus->id = "";
@@ -81,12 +79,6 @@ if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
 }
 if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
     $focus->contact_id = $_REQUEST['contact_id'];
-}
-if (isset($_REQUEST['account_name']) && is_null($focus->parent_name)) {
-    $focus->parent_name = $_REQUEST['account_name'];
-}
-if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
-    $focus->parent_id = $_REQUEST['account_id'];
 }
 
 $params = array();

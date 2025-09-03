@@ -212,7 +212,7 @@
                                 this.oldValue = "";
                             }
                         });
-                        if (/^(billing_|shipping_)?account_name$/.exec(qsFields[qsField].name)) {
+                        if (/^(billing_|shipping_)$/.exec(qsFields[qsField].name)) {
                             search.clearFields = function() {
                                 for (var i in {
                                     name: 0,
@@ -249,16 +249,8 @@
                                 if (label_str != current_label_data_str && current_label_data_str != label_data_str) {
                                     module_key = (typeof document.forms[form_id].elements['module'] != 'undefined') ? document.forms[form_id].elements['module'].value : 'app_strings';
                                     warning_label = SUGAR.language.translate(module_key, 'NTC_OVERWRITE_ADDRESS_PHONE_CONFIRM') + '\n\n' + label_data_str;
-                                    if (!confirm(warning_label)) {
-                                        this.updateFields(data, /account_id/);
-                                    } else {
-                                        if (Dom.get('shipping_checkbox')) {
-                                            if (this.inputElement.id == 'shipping_account_name') {
-                                                filter = Dom.get('shipping_checkbox').checked ? /(account_id|office_phone)/ : filter;
-                                            } else if (this.inputElement.id == 'billing_account_name') {
-                                                filter = Dom.get('shipping_checkbox').checked ? filter : /(account_id|office_phone|billing)/;
-                                            }
-                                        } else if (Dom.get('alt_checkbox')) {
+                                    if (confirm(warning_label)) {
+                                        if (Dom.get('alt_checkbox')) {
                                             filter = Dom.get('alt_checkbox').checked ? filter : /^(?!alt)/;
                                         }
                                         this.updateFields(data, filter);

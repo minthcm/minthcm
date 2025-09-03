@@ -1,7 +1,7 @@
 <template>
     <div class="auth-view">
         <div class="auth-view-container">
-            <img src="../../assets/mint_logo.png" height="32" />
+            <img :src="logoSrc" @error="handleLogoError" height="32" />
             <router-view v-slot="{ Component }" class="form-content">
                 <v-slide-x-transition hide-on-leave>
                     <component :is="Component" />
@@ -35,25 +35,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useAuthViewStore } from './AuthViewStore'
 import { useLanguagesStore } from '@/store/languages'
-import { useBackendStore } from '@/store/backend'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
-import axios from 'axios'
 import { usePreferencesStore } from '@/store/preferences'
-import { onMounted } from 'vue'
+import mintLogo from '@/assets/mint_logo.png'
 
 const languages = useLanguagesStore()
-const backend = useBackendStore()
 const store = useAuthViewStore()
 const preferences = usePreferencesStore()
+
+const logoSrc = ref('legacy/custom/themes/default/images/company_logo.png');
+
+function handleLogoError() {
+    logoSrc.value = mintLogo;
+}
 
 const languagesList = computed<MenuListItem[]>(() => {
     const getFlagCode = (code: string) => {
         let [lang, country] = code.split('_')
-        if (['ar','fa','he','ur','yi'].includes(lang.toLowerCase())){
+        if (['ar', 'fa', 'he', 'ur', 'yi'].includes(lang.toLowerCase())) {
             country = 'arab'
         }
         return `fi-${country.toLowerCase()}`

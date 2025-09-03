@@ -198,20 +198,6 @@ $layout_defs['Project'] = array(
             'add_subpanel_data' => 'contact_id',
             'title_key' => 'LBL_CONTACTS_SUBPANEL_TITLE',
         ),
-
-        'accounts' => array(
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Accounts'),
-            ),
-            'order' => 70,
-            'module' => 'Accounts',
-            'sort_order' => 'asc',
-            'sort_by' => 'name',
-            'subpanel_name' => 'default',
-            'get_subpanel_data' => 'accounts',
-            'add_subpanel_data' => 'account_id',
-            'title_key' => 'LBL_ACCOUNTS_SUBPANEL_TITLE',
-        ),
         'cases' => array(
             'top_buttons' => array(
                 array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => 'Cases'),

@@ -71,7 +71,7 @@ class ListAction
         chdir('../api/');
 
         $response = array();
-        if (!is_array($alerts)) {
+        if (!is_array($alerts) || empty($alerts)) {
             return $response;
         }
         foreach ($alerts as $alert) {

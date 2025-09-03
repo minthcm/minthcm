@@ -56,9 +56,6 @@ function additionalDetailsProspect($fields)
         
     $overlib_string = '';
     
-    if (!empty($fields['ACCOUNT_NAME'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_EDIT_ACCOUNT_NAME'] . '</b> ' . $fields['ACCOUNT_NAME'] . '<br>';
-    }
     if (!empty($fields['PRIMARY_ADDRESS_STREET']) || !empty($fields['PRIMARY_ADDRESS_CITY']) ||
         !empty($fields['PRIMARY_ADDRESS_STATE']) || !empty($fields['PRIMARY_ADDRESS_POSTALCODE']) ||
         !empty($fields['PRIMARY_ADDRESS_COUNTRY'])) {

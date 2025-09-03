@@ -754,9 +754,7 @@ HTML;
       $peopleTables = array(
          "users",
          "contacts",
-         "leads",
          "prospects",
-         "accounts"
       );
       $filterPeopleTables = array();
       global $app_list_strings, $app_strings;
@@ -1545,16 +1543,12 @@ HTML;
 
       $people = array(
          'Contact'
-         ,
-         'Lead'
       );
       $emailAddress = array();
 
       // people
       if ( in_array($bean, $people) ) {
          // lead specific
-         $focus->lead_source = 'Email';
-         $focus->lead_source_description = trim($email->name);
 
          $from = (isset($email->from_name) && !empty($email->from_name)) ? $email->from_name : $email->from_addr;
 
@@ -2407,7 +2401,7 @@ eoq;
    ////	PRIVATE HELPERS
 
    /**
-    * Generates a UNION query to get one list of users, contacts, leads, and
+    * Generates a UNION query to get one list of users, contacts and
     * prospects; used specifically for the addressBook
     */
     public function _getPeopleUnionQuery($whereArr, $person)
@@ -2418,9 +2412,7 @@ eoq;
             $peopleTables = array(
                 "users",
                 "contacts",
-                "leads",
                 "prospects",
-                "accounts"
             );
         } else {
             $peopleTables = array($person);
@@ -2492,9 +2484,7 @@ eoq;
          $searchBeans = array(
             "users",
             "contacts",
-            "leads",
-            "prospects",
-            "accounts"
+            "prospects"
          );
       }
 

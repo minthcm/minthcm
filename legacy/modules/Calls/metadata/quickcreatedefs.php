@@ -50,7 +50,6 @@ $viewdefs ['Calls'] = array(
                '<input type="hidden" name="isSaveAndNew" value="false">',
                '<input type="hidden" name="send_invites">',
                '<input type="hidden" name="user_invitees">',
-               '<input type="hidden" name="lead_invitees">',
                '<input type="hidden" name="contact_invitees">',
                '<input type="hidden" name="candidate_invitees">',
                '<input type="hidden" name="resource_invitees">',

@@ -133,21 +133,6 @@ function checkLoggerSettings()
     }
 }
 
-function checkLeadConversionSettings()
-{
-    if (file_exists(getcwd() . '/config.php')) {
-        require getcwd() . '/config.php';
-    }
-    global $sugar_config;
-    if (!isset($sugar_config['lead_conv_activity_opt'])) {
-        $sugar_config['lead_conv_activity_opt'] = 'copy';
-        ksort($sugar_config);
-        if (is_writable('config.php')) {
-            write_array_to_file('sugar_config', $sugar_config, 'config.php');
-        }
-    }
-}
-
 function checkResourceSettings()
 {
     if (file_exists(getcwd() . '/config.php')) {
@@ -178,7 +163,7 @@ function checkResourceSettings()
 
 function createMissingRels()
 {
-    $relForObjects = ['leads' => 'Leads', 'campaigns' => 'Campaigns', 'prospects' => 'Prospects'];
+    $relForObjects = ['campaigns' => 'Campaigns', 'prospects' => 'Prospects'];
     foreach ($relForObjects as $relObjName => $relModName) {
         //assigned_user
         $guid = create_guid();
@@ -788,10 +773,6 @@ if ($upgradeType !== constant('DCE_INSTANCE')) {
             logThis('begin check logger settings .', $path);
             checkLoggerSettings();
             logThis('begin check logger settings .', $path);
-
-            logThis('begin check lead conversion settings .', $path);
-            checkLeadConversionSettings();
-            logThis('end check lead conversion settings .', $path);
 
             logThis('begin check resource settings .', $path);
             checkResourceSettings();

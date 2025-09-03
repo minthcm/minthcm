@@ -61,7 +61,7 @@ function getExternalOAuthProviderConnectors(
 
     $externalOAuthProvidersConnectors =$oAuth->getExternalOauthProvidersConnectors() ?? [];
 
-    if ($view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate' || $view === 'ConvertLead') {
+    if ($view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate') {
 
         $selectHtml = "<select id='{$field}' name='{$field}'>";
         if (!empty($externalOAuthProvidersConnectors)) {

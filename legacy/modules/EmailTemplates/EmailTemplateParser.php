@@ -182,7 +182,7 @@ class EmailTemplateParser
         /* Leads/Prospects/Users have a special variable naming scheme.
         $contact_xxx for leads/prospects and $contact_user_xxx for users */
         if (strtolower($moduleName) === 'contact') {
-            if (in_array($this->module->object_name, ['Lead', 'Prospect'], true)) {
+            if (in_array($this->module->object_name, ['Prospect'], true)) {
                 $moduleName = strtolower($this->module->object_name);
             } else if ($this->module->object_name == 'User' && str_begin(strtolower($attribute), 'user_')) {
                 $attribute = explode('_', $attribute, 2)[1];

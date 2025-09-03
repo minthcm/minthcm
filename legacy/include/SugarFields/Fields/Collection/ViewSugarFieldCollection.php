@@ -390,7 +390,7 @@ FRA;
         $qsd->setFormName($this->form_name);
         for($i=0; $i<$this->numFields; $i++){
             $name1 = "{$this->form_name}_{$this->name}_collection_{$i}";
-            if(!$this->skipModuleQuickSearch && preg_match('/(Campaigns|Teams|Users|Accounts)/si', $this->related_module, $matches)) {
+            if(!$this->skipModuleQuickSearch && preg_match('/(Campaigns|Teams|Users)/si', $this->related_module, $matches)) {
                 if($matches[0] == 'Users'){
                     $sqs_objects[$name1] = $qsd->getQSUser();
                 } else if($matches[0] == 'Campaigns') {
@@ -399,19 +399,6 @@ FRA;
                 } else if($matches[0] == 'Users'){
                     $sqs_objects[$name1] = $qsd->getQSUser();
 
-                } else if($matches[0] == 'Accounts') {
-                    $nameKey = "{$this->name}_collection_{$i}";
-                    $idKey = "id_{$this->name}_collection_{$i}";
-
-                 //There are billingKey, shippingKey and additionalFields entries you can define in editviewdefs.php
-                 //entry to allow quick search to autocomplete fields with a suffix value of the
-                 //billing/shippingKey value (i.e. 'billingKey' => 'primary' in Contacts will populate
-                 //primary_XXX fields with the Account's billing address values).
-                 //addtionalFields are key/value pair of fields to fill from Accounts(key) to Contacts(value)
-                    $billingKey = isset($this->displayParams['billingKey']) ? $this->displayParams['billingKey'] : null;
-                    $shippingKey = isset($this->displayParams['shippingKey']) ? $this->displayParams['shippingKey'] : null;
-                    $additionalFields = isset($this->displayParams['additionalFields']) ? $this->displayParams['additionalFields'] : null;
-                    $sqs_objects[$name1] = $qsd->getQSAccount($nameKey, $idKey, $billingKey, $shippingKey, $additionalFields);
                 } else if($matches[0] == 'Contacts'){
                     $sqs_objects[$name1] = $qsd->getQSContact($name1, "id_".$name1);
                 }

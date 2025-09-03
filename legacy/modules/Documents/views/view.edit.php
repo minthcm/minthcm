@@ -134,11 +134,6 @@ class DocumentsViewEdit extends ViewEdit
                     case "contracts":
                         $this->ss->assign("LBL_PARENT_NAME", $mod_strings['LBL_CONTRACT_NAME']);
                         break;
-
-                    //todo remove leads case.
-                    case "leads":
-                        $this->ss->assign("LBL_PARENT_NAME", $mod_strings['LBL_CONTRACT_NAME']);
-                        break;
                 } //switch
             } //if
         } //if

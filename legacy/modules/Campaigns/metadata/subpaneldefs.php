@@ -193,18 +193,6 @@ $layout_defs['Campaigns'] = array(
             'sort_order' => 'desc',
             'sort_by' => 'campaign_log.id'
         ),
-        'lead' => array(
-            'order' => 140,
-            'module' => 'CampaignLog',
-            'get_subpanel_data' => "function:track_log_leads",
-            'subpanel_name' => 'default',
-            'title_key' => 'LBL_LOG_ENTRIES_LEAD_TITLE',
-            'sort_order' => 'desc',
-            'sort_by' => 'campaign_log.id',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelAddToProspectListButton', 'create' => true),
-            )
-        ),
         'contact' => array(
             'order' => 150,
             'module' => 'CampaignLog',
@@ -254,26 +242,6 @@ $layout_defs['Campaigns'] = array(
             'title_key' => 'LBL_LOG_ENTRIES_BLOCKEDD_TITLE',
             'sort_order' => 'desc',
             'sort_by' => 'campaign_log.id'
-        ),
-        'accounts' => array(
-            'order' => 190,
-            'sort_order' => 'desc',
-            'sort_by' => 'name',
-            'module' => 'Accounts',
-            'get_subpanel_data' => 'accounts',
-            'subpanel_name' => 'default',
-            'title_key' => 'LBL_CAMPAIGN_ACCOUNTS_SUBPANEL_TITLE',
-            'top_buttons' => array(),
-        ),
-        'leads' => array(
-            'order' => 195,
-            'sort_order' => 'desc',
-            'sort_by' => 'name',
-            'module' => 'Leads',
-            'get_subpanel_data' => 'leads',
-            'subpanel_name' => 'default',
-            'title_key' => 'LBL_CAMPAIGN_LEAD_SUBPANEL_TITLE',
-            'top_buttons' => array(),
         ),
         'surveyresponses_campaigns' => array(
           'order' => 100,

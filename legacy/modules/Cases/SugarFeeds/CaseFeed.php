@@ -55,15 +55,10 @@ class CaseFeed extends FeedLogicBase
     {
         $text = '';
         if (empty($bean->fetched_row) && $bean->in_save) {
-            $accountName = $bean->account_name;
-            if (empty($accountName) && $bean->account_id) {
-                $acc = BeanFactory::getBean('Accounts', $bean->account_id);
-                $accountName = $acc->name;
-            }
-            $text =  '{SugarFeed.CREATED_CASE} [' . $bean->module_dir . ':' . $bean->id . ':' . $bean->name.'] {SugarFeed.FOR} [Accounts:' . $bean->account_id . ':' . $accountName . ']: '. $bean->description;
+            $text =  '{SugarFeed.CREATED_CASE} [' . $bean->module_dir . ':' . $bean->id . ':' . $bean->name.']: '. $bean->description;
         } else {
             if (!empty($bean->fetched_row['status']) && $bean->fetched_row['status'] != $bean->status && strpos($bean->status, 'Closed') !== false) {
-                $text =  '{SugarFeed.CLOSED_CASE} [' . $bean->module_dir . ':' . $bean->id . ':' . $bean->name. '] {SugarFeed.FOR} [Accounts:' . $bean->account_id . ':' . $bean->account_name . ']';
+                $text =  '{SugarFeed.CLOSED_CASE} [' . $bean->module_dir . ':' . $bean->id . ':' . $bean->name. ']';
             }
         }
 

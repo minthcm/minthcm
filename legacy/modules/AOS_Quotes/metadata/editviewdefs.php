@@ -125,40 +125,12 @@ array(
         array(
           0 =>
           array(
-            'name' => 'billing_account',
-            'label' => 'LBL_BILLING_ACCOUNT',
-            'displayParams' =>
-            array(
-              'key' =>
-              array(
-                0 => 'billing',
-                1 => 'shipping',
-              ),
-              'copy' =>
-              array(
-                0 => 'billing',
-                1 => 'shipping',
-              ),
-              'billingKey' => 'billing',
-              'shippingKey' => 'shipping',
-            ),
+            'name' => 'billing_contact',
+            'label' => 'LBL_BILLING_CONTACT',
           ),
           1 => '',
         ),
         1 =>
-        array(
-          0 =>
-          array(
-            'name' => 'billing_contact',
-            'label' => 'LBL_BILLING_CONTACT',
-            'displayParams' =>
-            array(
-              'initial_filter' => '&account_name="+this.form.{$fields.billing_account.name}.value+"',
-            ),
-          ),
-          1 => '',
-        ),
-        2 =>
         array(
           0 =>
           array(

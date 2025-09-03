@@ -47,44 +47,6 @@ $dictionary['AOS_Invoices'] = array(
     'table' => 'aos_invoices',
     'audited' => true,
     'fields' => array(
-        'billing_account_id' =>
-            array(
-                'required' => false,
-                'name' => 'billing_account_id',
-                'vname' => '',
-                'type' => 'id',
-                'massupdate' => 0,
-                'comments' => '',
-                'help' => '',
-                'importable' => 'true',
-                'duplicate_merge' => 'disabled',
-                'duplicate_merge_dom_value' => 0,
-                'audited' => 0,
-                'reportable' => 0,
-                'len' => 36,
-            ),
-        'billing_account' =>
-            array(
-                'required' => false,
-                'source' => 'non-db',
-                'name' => 'billing_account',
-                'vname' => 'LBL_BILLING_ACCOUNT',
-                'type' => 'relate',
-                'massupdate' => 0,
-                'comments' => '',
-                'help' => '',
-                'importable' => 'true',
-                'duplicate_merge' => 'disabled',
-                'duplicate_merge_dom_value' => '0',
-                'audited' => 1,
-                'reportable' => 1,
-                'len' => '255',
-                'id_name' => 'billing_account_id',
-                'ext2' => 'Accounts',
-                'module' => 'Accounts',
-                'quicksearch' => 'enabled',
-                'studio' => 'visible',
-            ),
         'billing_contact_id' =>
             array(
                 'required' => false,
@@ -684,16 +646,6 @@ $dictionary['AOS_Invoices'] = array(
                 'len' => '26,6',
             ),
 
-        'accounts' =>
-            array(
-                'name' => 'accounts',
-                'vname' => 'LBL_ACCOUNTS',
-                'type' => 'link',
-                'relationship' => 'account_aos_invoices',
-                'module' => 'Accounts',
-                'bean_name' => 'Account',
-                'source' => 'non-db',
-            ),
         'contacts' =>
             array(
                 'name' => 'contacts',

@@ -50,7 +50,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  {
      public function action_getInviteesPersonName()
      {
-         $personModules = array('Users', 'Contacts', 'Leads');
+         $personModules = array('Users', 'Contacts');
          $ret = array();
          $invitees = $_REQUEST['invitees'];
          foreach ($invitees as $invitee) {

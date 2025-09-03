@@ -24,7 +24,7 @@ class smpl_Contact_Sample
 </table>
 <div><br /></div>
 <div>$contacts_name<br /></div>
-<div>$accounts_name<br /> $contacts_primary_address_street<br /> $contacts_primary_address_city<br /> $contacts_primary_address_state<br /> $contacts_primary_address_postalcode</div>
+<div>$contacts_primary_address_street<br /> $contacts_primary_address_city<br /> $contacts_primary_address_state<br /> $contacts_primary_address_postalcode</div>
 <div><br /></div>
 <div>{DATE '.$locale->getPrecedentPreference('default_date_format').'}</div>
 <div><br /></div>

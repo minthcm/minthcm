@@ -61,19 +61,6 @@ array(
               'billing_contact_id',
           ),
   ),
-  'BILLING_ACCOUNT' =>
-  array(
-    'width' => '15%',
-    'label' => 'LBL_BILLING_ACCOUNT',
-    'default' => true,
-    'module' => 'Accounts',
-    'id' => 'BILLING_ACCOUNT_ID',
-    'link' => true,
-      'related_fields' =>
-          array(
-              'billing_account_id',
-          ),
-  ),
   'TOTAL_AMOUNT' =>
   array(
     'width' => '10%',

@@ -81,13 +81,6 @@ $dictionary['Prospect'] = array(
                 'reportable' => false,
                 'vname' => 'LBL_LEAD_ID',
             ),
-        'account_name' =>
-            array(
-                'name' => 'account_name',
-                'vname' => 'LBL_ACCOUNT_NAME',
-                'type' => 'varchar',
-                'len' => '150',
-            ),
         'campaign_id' =>
             array(
                 'name' => 'campaign_id',

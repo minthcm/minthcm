@@ -81,11 +81,6 @@ $layout_defs['FP_events'] = array(
                     'subpanel_name' => 'FP_events_subpanel_fp_events_prospects_1',
                     'get_subpanel_data' => 'fp_events_prospects_1',
                 ),
-                'leads' => array(
-                    'module' => 'Leads',
-                    'subpanel_name' => 'FP_events_subpanel_fp_events_leads_1',
-                    'get_subpanel_data' => 'fp_events_leads_1',
-                ),
             ),
             'searchdefs' => array(
                 'first_name' =>

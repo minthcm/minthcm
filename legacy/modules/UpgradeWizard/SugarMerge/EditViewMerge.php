@@ -199,7 +199,6 @@ class EditViewMerge
             'Campaigns' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),
             'Cases' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),
             'Contracts' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),
-            'Leads' => array('created_by'=>'date_entered'),
             'Meetings' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),
             'ProspectLists' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),
             'Prospects' => array('created_by_name'=>'date_entered', 'modified_by_name'=>'date_modified'),

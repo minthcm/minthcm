@@ -563,14 +563,6 @@ eoq;
                             $even = !$even;
                             $newhtml .= $this->addAssignedUserID($displayname, $field["name"]);
                             break;
-                        case "account_id":
-                            $even = !$even;
-                            $newhtml .= $this->addAccountID($displayname, $field["name"]);
-                            break;
-                        case "account_name":
-                            $even = !$even;
-                            $newhtml .= $this->addAccountID($displayname, $field["id_name"]);
-                            break;
                         case "bool":
                             $even = !$even;
                             $newhtml .= $this->addBool($displayname, $field["name"]);
@@ -639,8 +631,6 @@ eoq;
 
 
         if ($this->sugarbean->object_name == 'Contact' ||
-            $this->sugarbean->object_name == 'Account' ||
-            $this->sugarbean->object_name == 'Lead' ||
             $this->sugarbean->object_name == 'Prospect'
         ) {
             $optOutPrimaryEmail =
@@ -763,9 +753,6 @@ EOJS;
             }
 
             switch ($field['module']) {
-                case 'Accounts':
-                    $ret_val = $this->addAccountID($displayname, $field['name'], $field['id_name']);
-                    break;
                 case 'Contacts':
                     $ret_val = $this->addGenericModuleID($displayname, $field['name'], $field['id_name'], "Contacts");
                     break;
@@ -822,7 +809,7 @@ EOJS;
         $qsName = array(
             'form' => 'MassUpdate',
             'method' => 'query',
-            'modules' => array("Accounts"),
+            'modules' => array(),
             'group' => 'or',
             'field_list' => array('name', 'id'),
             'populate_list' => array("mass_parent_name", "mass_parent_id"),
@@ -1066,66 +1053,6 @@ addToValidateBinaryDependency('MassUpdate', '{$varname}', 'alpha', false, '{$app
 -->
 </script>
 EOHTML;
-    }
-
-    /**
-     * Add Account selection popup window HTML code
-     * @param displayname Name to display in the popup window
-     * @param varname name of the variable
-     * @param id_name name of the id in vardef
-     */
-    public function addAccountID($displayname, $varname, $id_name = '')
-    {
-        global $app_strings;
-
-        $json = getJSONobj();
-
-        if (empty($id_name)) {
-            $id_name = "account_id";
-        }
-
-        ///////////////////////////////////////
-        ///
-        /// SETUP POPUP
-
-        $popup_request_data = array(
-            'call_back_function' => 'set_return',
-            'form_name' => 'MassUpdate',
-            'field_to_name_array' => array(
-                'id' => (string)($id_name),
-                'name' => (string)($varname),
-            ),
-        );
-
-        $encoded_popup_request_data = $json->encode($popup_request_data);
-
-        //
-        ///////////////////////////////////////
-
-        $qsParent = array(
-            'form' => 'MassUpdate',
-            'method' => 'query',
-            'modules' => array('Accounts'),
-            'group' => 'or',
-            'field_list' => array('name', 'id'),
-            'populate_list' => array('parent_name', 'parent_id'),
-            'conditions' => array(array('name' => 'name', 'op' => 'like_custom', 'end' => '%', 'value' => '')),
-            'order' => 'name',
-            'limit' => '30',
-            'no_match_text' => $app_strings['ERR_SQS_NO_MATCH']
-        );
-        $qsParent['populate_list'] = array('mass_' . $varname, 'mass_' . $id_name);
-        $html = '<td scope="row">' . $displayname . " </td>\n"
-            . '<td><input class="sqsEnabled" type="text" autocomplete="off" id="mass_' . $varname . '" name="' . $varname . '" value="" /><input id="mass_' . $id_name . '" type="hidden" name="'
-            . $id_name . '" value="" />&nbsp;<span class="id-ff multiple"><button type="button" name="btn1" class="button" title="'
-            . $app_strings['LBL_SELECT_BUTTON_LABEL'] . '"  value="' . $app_strings['LBL_SELECT_BUTTON_LABEL'] . '" onclick='
-            . "'open_popup(\"Accounts\",600,400,\"\",true,false,{$encoded_popup_request_data});' /><span class=\"suitepicon suitepicon-action-select\"></span></button></span></td>\n";
-        $html .= '<script type="text/javascript" language="javascript">if(typeof sqs_objects == \'undefined\'){var sqs_objects = new Array;}sqs_objects[\'MassUpdate_' . $varname . '\'] = ' .
-            $json->encode($qsParent) . '; registerSingleSmartInputListener(document.getElementById(\'mass_' . $varname . '\'));
-					addToValidateBinaryDependency(\'MassUpdate\', \'' . $varname . '\', \'alpha\', false, \'' . $app_strings['ERR_SQS_NO_MATCH_FIELD'] . $app_strings['LBL_ACCOUNT'] . '\',\'' . $id_name . '\');
-					</script>';
-
-        return $html;
     }
 
     /**
@@ -1534,8 +1461,6 @@ EOQ;
                         case "int":
                         case "contact_id":
                         case "assigned_user_name":
-                        case "account_id":
-                        case "account_name":
                         case "bool":
                         case "enum":
                         case "dynamicenum":

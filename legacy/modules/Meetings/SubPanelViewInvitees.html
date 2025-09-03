@@ -84,14 +84,12 @@
 	</tr>
 	<tr height="20">
 	<td scope="col" width="25%" ><span>{APP.LBL_LIST_CONTACT_NAME}</span></td>
-	<td scope="col" width="20%" ><span>{APP.LBL_LIST_ACCOUNT_NAME}</span></td>
 	<td scope="col" width="30%" ><span>{APP.LBL_LIST_EMAIL}</span></td>
 	<td scope="col" width="15%" ><span>{APP.LBL_LIST_PHONE}</span></td>
 	</tr>
 <!-- BEGIN: row -->
 <tr height="20"  class="{ROW_COLOR}S1">
 		<td scope="row" valign=TOP><span><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={CONTACT.ID}" >{CONTACT.FIRST_NAME}&nbsp;{CONTACT.LAST_NAME}</a></span></td>
-    	<td valign=TOP><span>{CONTACT.ACCOUNT_NAME}</span></td>
     	<td valign=TOP><span><A HREF="mailto:{CONTACT.EMAIL1}" >{CONTACT.EMAIL1}</A></span></td>
     	<td valign=TOP  nowrap><span>{CONTACT.PHONE_WORK}</span></td>
 

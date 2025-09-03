@@ -59,12 +59,10 @@ $layout_defs['Cases'] = array(
             'add_subpanel_data' => 'contact_id',
             'title_key' => 'LBL_CONTACTS_SUBPANEL_TITLE',
             'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopCreateAccountNameButton'),
                 array(
                     'widget_class' => 'SubPanelTopSelectButton',
                     'popup_module' => 'Cases',
                     'mode' => 'MultiSelect',
-                    'initial_filter_fields' => array('account_id' => 'account_id', 'account_name' => 'account_name'),
                 ),
             ),
         ),

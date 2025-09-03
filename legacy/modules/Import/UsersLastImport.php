@@ -99,15 +99,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
       */
      public function listviewACLHelper()
      {
-         $array_assign = parent::listviewACLHelper();
-         $is_owner = false;
-         if (!ACLController::moduleSupportsACL('Accounts')
-                 || ACLController::checkAccess('Accounts', 'view', $is_owner)) {
-             $array_assign['ACCOUNT'] = 'a';
-         } else {
-             $array_assign['ACCOUNT'] = 'span';
-         }
-         return $array_assign;
+        return parent::listviewACLHelper();
      }
  
      /**

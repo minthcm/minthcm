@@ -87,7 +87,6 @@ $mod_strings = array(
     'LBL_CAMPAIGN_TYPE' => 'Type: ',
     'LBL_CAMPAIGN_OBJECTIVE' => 'Objective: ',
     'LBL_CAMPAIGN_CONTENT' => 'Description: ',
-    'LBL_CREATED_LEAD' => 'Created Lead',
     'LBL_CREATED_CONTACT' => 'Created Contact',
     'LBL_TARGETED_USER' => 'Targeted User',
     'LBL_SENT_EMAIL' => 'Sent Email',

@@ -8,25 +8,6 @@ if($app_strings === NULL)
 $installation_scenarios = array(
     0 =>
         array(
-            'key' => 'Sales',
-            'title' => $app_strings['LBL_SCENARIO_SALES'],
-            'description' => $app_strings['LBL_SCENARIO_SALES_DESCRIPTION'],
-            'groupedTabs'=> 'LBL_TABGROUP_SALES',
-            'modules' =>
-                array(
-                    0 => 'Leads'
-                ),
-            'modulesScenarioDisplayName' =>
-                array(
-                    0 => $app_strings['LBL_LEADS']
-                ),
-            'dashlets'=>
-                array(
-                    0 => 'MyLeadsDashlet'
-                )
-        ),
-    1 =>
-        array(
             'key' => 'Marketing',
             'title' => $app_strings['LBL_SCENARIO_MARKETING'],
             'description' => $app_strings['LBL_SCENARIO_MAKETING_DESCRIPTION'],
@@ -49,7 +30,7 @@ $installation_scenarios = array(
                 ),
             'dashlets'=>array()
         ),
-    2 =>
+    1 =>
         array(
             'key' => 'Finance',
             'title' => $app_strings['LBL_SCENARIO_FINANCE'],
@@ -73,7 +54,7 @@ $installation_scenarios = array(
                 ),
             'dashlets'=>array()
         ),
-    3 =>
+    2 =>
         array(
             'key' => 'ServiceManagement',
             'title' => $app_strings['LBL_SCENARIO_SERVICE'],
@@ -93,7 +74,7 @@ $installation_scenarios = array(
                 ),
             'dashlets'=>array()
         ),
-    4 =>
+    3 =>
         array(
             'key' => 'ProjectManagement',
             'title' => $app_strings['LBL_SCENARIO_PROJECT'],

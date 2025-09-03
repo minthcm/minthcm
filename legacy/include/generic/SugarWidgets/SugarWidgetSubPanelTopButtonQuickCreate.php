@@ -113,55 +113,13 @@ class SugarWidgetSubPanelTopButtonQuickCreate extends SugarWidgetSubPanelTopButt
 
         // TODO: move this out and get $additionalFormFields working properly
         if (empty($additionalFormFields['parent_type'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_type'] = 'Accounts';
-            } else {
-                $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
-            }
+            $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
         }
         if (empty($additionalFormFields['parent_name'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_name'] = $defines['focus']->account_name;
-                $additionalFormFields['account_name'] = $defines['focus']->account_name;
-            } else {
-                $additionalFormFields['parent_name'] = $defines['focus']->name;
-            }
+            $additionalFormFields['parent_name'] = $defines['focus']->name;
         }
         if (empty($additionalFormFields['parent_id'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_id'] = $defines['focus']->account_id;
-                $additionalFormFields['account_id'] = $defines['focus']->account_id;
-            } else {
-                $additionalFormFields['parent_id'] = $defines['focus']->id;
-            }
-        }
-
-        if (strtolower($defines['child_module_name']) =='contracts') {
-            //set variables to account name, or parent account name
-            if (strtolower($defines['parent_bean_name']) == 'account') {
-                //if account is parent bean, then get focus id/focus name
-                if (isset($defines['focus']->id)) {
-                    $additionalFormFields['account_id'] = $defines['focus']->id;
-                }
-                if (isset($defines['focus']->name)) {
-                    $additionalFormFields['account_name'] = $defines['focus']->name;
-                }
-            } elseif (strtolower($defines['parent_bean_name']) == 'quote') {
-                //if quote is parent bean, then get billing_account_id/billing_account_name
-                if (isset($defines['focus']->billing_account_id)) {
-                    $additionalFormFields['account_id'] = $defines['focus']->billing_account_id;
-                }
-                if (isset($defines['focus']->billing_account_name)) {
-                    $additionalFormFields['account_name'] = $defines['focus']->billing_account_name;
-                }
-            } else {
-                if (isset($defines['focus']->account_id)) {
-                    $additionalFormFields['account_id'] = $defines['focus']->account_id;
-                }
-                if (isset($defines['focus']->account_name)) {
-                    $additionalFormFields['account_name'] = $defines['focus']->account_name;
-                }
-            }
+            $additionalFormFields['parent_id'] = $defines['focus']->id;
         }
 
         $button .= '<input type="hidden" name="action" value="SubpanelCreates" />' . "\n";

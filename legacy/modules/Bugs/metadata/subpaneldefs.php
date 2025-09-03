@@ -161,20 +161,6 @@ $layout_defs['Bugs'] = array(
                         ),
                 ),
         ),
-        'accounts' => array(
-            'order' => 40,
-            'module' => 'Accounts',
-            'sort_order' => 'asc',
-            'sort_by' => 'name',
-            'subpanel_name' => 'default',
-            'get_subpanel_data' => 'accounts',
-            'add_subpanel_data' => 'account_id',
-            'title_key' => 'LBL_ACCOUNTS_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')
-            ),
-        ),
         'cases' => array(
             'order' => 50,
             'module' => 'Cases',

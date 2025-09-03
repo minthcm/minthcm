@@ -94,8 +94,6 @@ function parsePanels($panels, $view) {
 	    													);
 				} else if($this->matches($column, '/^parent_type$/si')) {
 				   $panels[$name][$rowCount][$key] = 'parent_name';
-				} else if($this->matches($column, '/^account_id$/')) {
-				   $panels[$name][$rowCount][$key] = 'account_name';
 				} else if($this->matches($column, '/^contact_id$/')) {
 				   $panels[$name][$rowCount][$key] = 'contact_name';
 				} else if($this->matches($column, '/^reports_to_id$/')) {
@@ -130,8 +128,6 @@ function parsePanels($panels, $view) {
 				   $panels[$name][$rowCount][$key] = 'currency_id';
 				} else if($this->matches($column, '/^quote_id$/')) {
 				   $panels[$name][$rowCount][$key] = 'quote_name';
-				} else if($this->matches($column, '/^account_id$/')) {
-				   $panels[$name][$rowCount][$key] = 'account_name';
 				} else if($this->matches($column, '/^contact_id$/')) {
 				   $panels[$name][$rowCount][$key] = 'contact_name';
 				}

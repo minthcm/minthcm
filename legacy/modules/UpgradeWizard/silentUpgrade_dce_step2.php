@@ -143,7 +143,7 @@ function checkResourceSettings()
 
 function createMissingRels()
 {
-    $relForObjects = array('leads'=>'Leads','campaigns'=>'Campaigns','prospects'=>'Prospects');
+    $relForObjects = array('campaigns'=>'Campaigns','prospects'=>'Prospects');
     foreach ($relForObjects as $relObjName=>$relModName) {
         //assigned_user
         $guid = create_guid();

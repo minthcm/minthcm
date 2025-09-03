@@ -241,7 +241,7 @@ class Reminder extends Basic
                 $inviteeModule = $invitee->related_invitee_module;
                 $inviteeModuleId = $invitee->related_invitee_module_id;
                 $personBean = BeanFactory::getBean($inviteeModule, $inviteeModuleId);
-                // The original email reminders check the accept_status field in related users/leads/contacts etc. and filtered these users who not decline this event.
+                // The original email reminders check the accept_status field in related users/contacts etc. and filtered these users who not decline this event.
                 if ($checkDecline && !self::isDecline($event, $personBean)) {
                     if (!empty($personBean->email1)) {
                         $arr = array(
@@ -382,7 +382,7 @@ class Reminder extends Basic
                     continue;
                 }
 
-                // The original popup/alert reminders check the accept_status field in related users/leads/contacts etc. and filtered these users who not decline this event.
+                // The original popup/alert reminders check the accept_status field in related users/contacts etc. and filtered these users who not decline this event.
                 $invitees = BeanFactory::getBean('Reminders_Invitees')->get_full_list(
                     '',
                     "reminders_invitees.reminder_id = '{$popupReminder->id}' AND reminders_invitees.related_invitee_module_id = '{$current_user->id}'"
@@ -681,7 +681,7 @@ class Reminder extends Basic
     {
         $db = DBManagerFactory::getInstance();
         $ret = array();
-        $persons = array('users', 'contacts', 'leads');
+        $persons = array('users', 'contacts');
         foreach ($persons as $person) {
             $query = self::upgradeEventPersonQuery($event, $person);
             $re = $db->query($query);
@@ -735,9 +735,6 @@ class Reminder extends Basic
     {
         if (array_key_exists('user_id', $invitee)) {
             return 'Users';
-        }
-        if (array_key_exists('lead_id', $invitee)) {
-            return 'Leads';
         }
         if (array_key_exists('contact_id', $invitee)) {
             return 'Contacts';

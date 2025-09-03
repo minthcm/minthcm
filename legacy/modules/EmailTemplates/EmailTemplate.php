@@ -76,9 +76,7 @@ class EmailTemplate extends SugarBean
     public $additional_column_fields = array();
     // add fields here that would not make sense in an email template
     public $badFields = array(
-        'account_description',
         'contact_id',
-        'lead_id',
         'campaign_id',
         // User objects
         'id',
@@ -126,19 +124,13 @@ class EmailTemplate extends SugarBean
 
 
         $contact = BeanFactory::newBean('Contacts');
-        $account = BeanFactory::newBean('Accounts');
-        $lead = BeanFactory::newBean('Leads');
         $prospect = BeanFactory::newBean('Prospects');
 
 
         $loopControl = array(
             'Contacts' => array(
                 'Contacts' => $contact,
-                'Leads' => $lead,
                 'Prospects' => $prospect,
-            ),
-            'Accounts' => array(
-                'Accounts' => $account,
             ),
             'Users' => array(
                 'Users' => $current_user,
@@ -147,7 +139,6 @@ class EmailTemplate extends SugarBean
 
         $prefixes = array(
             'Contacts' => 'contact_',
-            'Accounts' => 'account_',
             'Users' => 'contact_user_',
         );
 
@@ -198,8 +189,6 @@ class EmailTemplate extends SugarBean
         global $current_user;
 
         $contact = BeanFactory::newBean('Contacts');
-        $account = BeanFactory::newBean('Accounts');
-        $lead = BeanFactory::newBean('Leads');
         $prospect = BeanFactory::newBean('Prospects');
         $event = BeanFactory::newBean('FP_events');
 
@@ -207,11 +196,7 @@ class EmailTemplate extends SugarBean
         $loopControl = array(
             'Contacts' => array(
                 'Contacts' => $contact,
-                'Leads' => $lead,
                 'Prospects' => $prospect,
-            ),
-            'Accounts' => array(
-                'Accounts' => $account,
             ),
             'Users' => array(
                 'Users' => $current_user,
@@ -223,7 +208,6 @@ class EmailTemplate extends SugarBean
 
         $prefixes = array(
             'Contacts' => 'contact_',
-            'Accounts' => 'account_',
             'Users' => 'contact_user_',
             'Events' => 'event_',
         );
@@ -551,27 +535,15 @@ class EmailTemplate extends SugarBean
         $repl_arr = array();
 
         // cn: bug 9277 - create a replace array with empty strings to blank-out invalid vars
-        $acct = BeanFactory::newBean('Accounts');
         $contact = BeanFactory::newBean('Contacts');
-        $lead = BeanFactory::newBean('Leads');
         $prospect = BeanFactory::newBean('Prospects');
 
-        foreach ($lead->field_defs as $field_def) {
-            if (($field_def['type'] == 'relate' && empty($field_def['custom_type'])) || $field_def['type'] == 'assigned_user_name') {
-                continue;
-            }
-            $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                'contact_' . $field_def['name'] => '',
-                'contact_account_' . $field_def['name'] => '',
-            ));
-        }
         foreach ($prospect->field_defs as $field_def) {
             if (($field_def['type'] == 'relate' && empty($field_def['custom_type'])) || $field_def['type'] == 'assigned_user_name') {
                 continue;
             }
             $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
                 'contact_' . $field_def['name'] => '',
-                'contact_account_' . $field_def['name'] => '',
             ));
         }
         foreach ($contact->field_defs as $field_def) {
@@ -580,59 +552,13 @@ class EmailTemplate extends SugarBean
             }
             $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
                 'contact_' . $field_def['name'] => '',
-                'contact_account_' . $field_def['name'] => '',
-            ));
-        }
-        foreach ($acct->field_defs as $field_def) {
-            if (($field_def['type'] == 'relate' && empty($field_def['custom_type'])) || $field_def['type'] == 'assigned_user_name') {
-                continue;
-            }
-            $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                'account_' . $field_def['name'] => '',
-                'account_contact_' . $field_def['name'] => '',
             ));
         }
         // cn: end bug 9277 fix
 
 
-        // feel for Parent account, only for Contacts traditionally, but written for future expansion
-        if (isset($focus->account_id) && !empty($focus->account_id)) {
-            $acct->retrieve($focus->account_id);
-        }
-
         if ($bean_name == 'Contacts') {
             // cn: bug 9277 - email templates not loading account/opp info for templates
-            if (!empty($acct->id)) {
-                foreach ($acct->field_defs as $field_def) {
-                    if (($field_def['type'] == 'relate' && empty($field_def['custom_type'])) || $field_def['type'] == 'assigned_user_name') {
-                        continue;
-                    }
-
-                    $fieldName = $field_def['name'];
-                    if ($field_def['type'] == 'enum') {
-                        $translated = translate($field_def['options'], 'Accounts', $acct->$fieldName);
-
-                        if (isset($translated) && !is_array($translated)) {
-                            $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                                'account_' . $fieldName => $translated,
-                                'contact_account_' . $fieldName => $translated,
-                            ));
-                        } else { // unset enum field, make sure we have a match string to replace with ""
-                            $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                                'account_' . $fieldName => '',
-                                'contact_account_' . $fieldName => '',
-                            ));
-                        }
-                    } else {
-                        // bug 47647 - allow for fields to translate before adding to template
-                        $translated = self::_convertToType($field_def['type'], $acct->$fieldName);
-                        $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                            'account_' . $fieldName => $translated,
-                            'contact_account_' . $fieldName => $translated,
-                        ));
-                    }
-                }
-            }
 
             if (!empty($focus->assigned_user_id)) {
                 $user = BeanFactory::newBean('Users');
@@ -641,7 +567,7 @@ class EmailTemplate extends SugarBean
             }
         } elseif ($bean_name == 'Users') {
             /**
-             * This section of code will on do work when a blank Contact, Lead,
+             * This section of code will on do work when a blank Contact 
              * etc. is passed in to parse the contact_* vars.  At this point,
              * $current_user will be used to fill in the blanks.
              */
@@ -661,27 +587,12 @@ class EmailTemplate extends SugarBean
                     } else {
                         $contactFieldName = $contact->$fieldName;
                     }
-
-                    $translated = translate($field_def['options'], 'Accounts', $contactFieldName);
-
-                    if (isset($translated) && !is_array($translated)) {
-                        $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                            'contact_' . $fieldName => $translated,
-                            'contact_account_' . $fieldName => $translated,
-                        ));
-                    } else { // unset enum field, make sure we have a match string to replace with ""
-                        $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
-                            'contact_' . $fieldName => '',
-                            'contact_account_' . $fieldName => '',
-                        ));
-                    }
                 } else {
                     if (isset($contact->$fieldName)) {
                         // bug 47647 - allow for fields to translate before adding to template
                         $translated = self::_convertToType($field_def['type'], $contact->$fieldName);
                         $repl_arr = EmailTemplate::add_replacement($repl_arr, $field_def, array(
                             'contact_' . $fieldName => $translated,
-                            'contact_account_' . $fieldName => $translated,
                         ));
                     } // if
                 }
@@ -797,7 +708,7 @@ class EmailTemplate extends SugarBean
                 $focus = BeanFactory::getBean($bean_name, $bean_id);
             }
 
-            if ($bean_name == 'Leads' || $bean_name == 'Prospects') {
+            if ($bean_name == 'Prospects') {
                 $bean_name = 'Contacts';
             }
 

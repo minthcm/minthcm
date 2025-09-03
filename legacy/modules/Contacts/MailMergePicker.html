@@ -81,23 +81,6 @@
 							<input type="hidden" name="mode" value="{MULTI_SELECT}" />
 						</td>
 					</tr>
-					<tr>
-						<td scope="row" nowrap="nowrap">
-							{MOD.LBL_ACCOUNT_NAME}
-						</td>
-						<td >
-							<input type="text" id="account_name" name="account_name"  size="20" value="{ACCOUNT_NAME}" />
-						</td>
-						<td>
-							&nbsp;
-						</td>
-						<td>
-							&nbsp;
-						</td>
-						<td>
-							&nbsp;
-						</td>
-					</tr>
 				</table>
 			</form>
 		</td>
@@ -113,8 +96,6 @@ if(window.document.forms['popup_query_form'].request_data.value == "") {
 }
 
 // cn: bug 8104 - escaped unicode sequence printing out escaped values
-var account_name = document.getElementById('account_name').value;
-document.getElementById('account_name').value = unescape(account_name);
 -->
 </script>
 <p>
@@ -162,9 +143,6 @@ document.getElementById('account_name').value = unescape(account_name);
 			<a href="{ORDER_BY}title" class="listViewThLinkS1">
 				{MOD.LBL_LIST_TITLE}{arrow_start}{title_arrow}{arrow_end}</a>
 		</td>
-		<td scope="col" width="40%"  nowrap="nowrap">
-			{MOD.LBL_LIST_ACCOUNT_NAME}
-		</td>
 	</tr>
 <!-- BEGIN: row -->
 	<tr height="20" class="{ROW_COLOR}S1">
@@ -177,9 +155,6 @@ document.getElementById('account_name').value = unescape(account_name);
 		</td>
 		<td valign="top">
 			{CONTACT.TITLE}
-		</td>
-		<td valign="top">
-			{CONTACT.ACCOUNT_NAME}
 		</td>
 	</tr>
 	<tr>

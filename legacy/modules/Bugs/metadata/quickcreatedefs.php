@@ -63,8 +63,7 @@ $viewdefs = array(
         array(
           'hidden' =>
           array(
-            0 => '<input type="hidden" name="account_id" value="{$smarty.request.account_id}">',
-            1 => '<input type="hidden" name="contact_id" value="{$smarty.request.contact_id}">',
+            0 => '<input type="hidden" name="contact_id" value="{$smarty.request.contact_id}">',
           ),
         ),
         'maxColumns' => '2',

@@ -84,40 +84,6 @@ class InsideViewLogicHook
         return $outStr;
     }
 
-    protected function getAccountFrameUrl($bean, $extraUrl)
-    {
-        $url = self::URL_BASE.'analyseAccount.do?crm_context=account&';
-        $fieldMap = array('crm_account_name'=>'name',
-                          'crm_account_id'=>'id',
-                          'crm_account_website'=>'website',
-                          'crm_account_ticker'=>'ticker_symbol',
-                          'crm_account_city'=>array('primary_address_city', 'secondary_address_city', 'billing_address_city', 'shipping_address_city'),
-                          'crm_account_state'=>array('primary_address_state', 'secondary_address_state', 'billing_address_state', 'shipping_address_state'),
-                          'crm_account_country'=>array('primary_address_country', 'secondary_address_country', 'billing_address_country', 'shipping_address_country'),
-                          'crm_account_postalcode'=>array('primary_address_postalcode', 'secondary_address_postalcode', 'billing_address_postalcode', 'shipping_address_postalcode')
-        );
-        
-        $url .= $this->handleFieldMap($bean, $fieldMap).'&'.$extraUrl;
-        
-        return $url;
-    }
-
-    protected function getLeadFrameUrl($bean, $extraUrl)
-    {
-        $url = self::URL_BASE.'analyseAccount.do?crm_context=lead&';
-        $fieldMap = array('crm_lead_id'=>'id',
-                          'crm_lead_firstname'=>'first_name',
-                          'crm_lead_lastname'=>'last_name',
-                          'crm_lead_title'=>'title',
-                          'crm_account_id'=>'id',
-                          'crm_account_name'=>'account_name',
-                          'crm_account_website'=>'website',
-        );
-        
-        $url .= $this->handleFieldMap($bean, $fieldMap).'&'.$extraUrl;
-        
-        return $url;
-    }
     protected function getContactFrameUrl($bean, $extraUrl)
     {
         $url = self::URL_BASE.'analyseExecutive.do?crm_context=contact&';
@@ -125,8 +91,6 @@ class InsideViewLogicHook
                           'crm_fn'=>'first_name',
                           'crm_ln'=>'last_name',
                           'crm_email'=>'email',
-                          'crm_account_id'=>'account_id',
-                          'crm_account_name'=>'account_name',
         );
         
         $url .= $this->handleFieldMap($bean, $fieldMap).'&'.$extraUrl;
@@ -166,19 +130,12 @@ class InsideViewLogicHook
             .'&crm_session_id=&crm_version=v62&crm_deploy_id=3&crm_size=400&is_embed_version=true';
         
         // Use the per-module functions to build the frame
-        if (is_a($bean, 'Account')) {
-            $url = $this->getAccountFrameUrl($bean, $extraUrl);
-        } else {
             if (is_a($bean, 'Contact')) {
                 $url = $this->getContactFrameUrl($bean, $extraUrl);
             } else {
-                if (is_a($bean, 'Lead')) {
-                    $url = $this->getLeadFrameUrl($bean, $extraUrl);
-                } else {
-                    $url = '';
-                }
-            }
+            $url = '';
         }
+
 
         if ($url != '') {
             // Check if the user should be shown the frame or not

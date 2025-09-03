@@ -95,7 +95,7 @@ $dictionary['jjwg_Maps'] = array(
                 'vname' => 'LBL_MODULE_TYPE',
                 'type' => 'enum',
                 'massupdate' => 0,
-                'default' => 'Accounts',
+                'default' => 'Contacts',
                 'comments' => '',
                 'help' => 'Module Type to Display',
                 'importable' => 'true',
@@ -168,16 +168,6 @@ $dictionary['jjwg_Maps'] = array(
                 'len' => 36,
                 'size' => '20',
             ),
-        'accounts' =>
-            array(
-                'name' => 'accounts',
-                'type' => 'link',
-                'relationship' => 'jjwg_Maps_accounts',
-                'module' => 'Accounts',
-                'bean_name' => 'Account',
-                'source' => 'non-db',
-                'vname' => 'LBL_ACCOUNTS',
-            ),
         'contacts' =>
             array(
                 'name' => 'contacts',
@@ -187,16 +177,6 @@ $dictionary['jjwg_Maps'] = array(
                 'bean_name' => 'Contact',
                 'source' => 'non-db',
                 'vname' => 'LBL_CONTACTS',
-            ),
-        'leads' =>
-            array(
-                'name' => 'leads',
-                'type' => 'link',
-                'relationship' => 'jjwg_Maps_leads',
-                'module' => 'Leads',
-                'bean_name' => 'Lead',
-                'source' => 'non-db',
-                'vname' => 'LBL_LEADS',
             ),
         'cases' =>
             array(
@@ -266,18 +246,6 @@ $dictionary['jjwg_Maps'] = array(
             ),
     ),
     'relationships' => array(
-        'jjwg_Maps_accounts' =>
-            array(
-                'lhs_module' => 'jjwg_Maps',
-                'lhs_table' => 'jjwg_Maps',
-                'lhs_key' => 'parent_id',
-                'rhs_module' => 'Accounts',
-                'rhs_table' => 'accounts',
-                'rhs_key' => 'id',
-                'relationship_type' => 'one-to-many',
-                'relationship_role_column' => 'parent_type',
-                'relationship_role_column_value' => 'Accounts',
-            ),
         'jjwg_Maps_contacts' =>
             array(
                 'lhs_module' => 'jjwg_Maps',
@@ -289,18 +257,6 @@ $dictionary['jjwg_Maps'] = array(
                 'relationship_type' => 'one-to-many',
                 'relationship_role_column' => 'parent_type',
                 'relationship_role_column_value' => 'Contacts',
-            ),
-        'jjwg_Maps_leads' =>
-            array(
-                'lhs_module' => 'jjwg_Maps',
-                'lhs_table' => 'jjwg_Maps',
-                'lhs_key' => 'parent_id',
-                'rhs_module' => 'Leads',
-                'rhs_table' => 'leads',
-                'rhs_key' => 'id',
-                'relationship_type' => 'one-to-many',
-                'relationship_role_column' => 'parent_type',
-                'relationship_role_column_value' => 'Leads',
             ),
         'jjwg_Maps_cases' =>
             array(

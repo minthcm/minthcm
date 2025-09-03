@@ -81,10 +81,8 @@
      */
     self.qtipBar =
       '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Contacts" data-open-popup-email-address-field="email1" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_CONTACT_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Contacts.svg"></span></button>' +
-      '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Accounts" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_ACCOUNT_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Accounts.svg"></span></button>' +
       '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Prospects" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_TARGET_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Prospects.svg"></span></button>' +
-      '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Users" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_USER_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Users.svg"></span></button>' +
-      '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Leads" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_LEAD_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Leads.svg"></span></button>';
+      '<button class="btn btn-default btn-sm btn-qtip-bar" data-open-popup-module="Users" title="' + SUGAR.language.translate('Emails', 'LBL_INSERT_USER_EMAIL') + '"><span class="glyphicon"><img src="themes/' + SUGAR.themes.theme_name + '/images/sidebar/modules/Users.svg"></span></button>';
 
     /**
      * opens a popup when a btn-qtip-bar is clicked

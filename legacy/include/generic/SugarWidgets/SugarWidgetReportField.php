@@ -261,7 +261,7 @@ class SugarWidgetReportField extends SugarWidgetField
 
         // unable to retrieve the vardef here, exclude columns of type clob/text from being sortable
 
-        if (!in_array($layout_def['name'], array('description', 'account_description', 'lead_source_description', 'status_description', 'to_addrs', 'cc_addrs', 'bcc_addrs', 'work_log', 'objective', 'resolution'))) {
+        if (!in_array($layout_def['name'], array('description', 'lead_source_description', 'status_description', 'to_addrs', 'cc_addrs', 'bcc_addrs', 'work_log', 'objective', 'resolution'))) {
             $header_cell = "<a class=\"listViewThLinkS1\" href=\"".$start.$sort_by.$end."\">";
             $header_cell .= $this->displayHeaderCellPlain($layout_def);
             $objListView = new ListView();

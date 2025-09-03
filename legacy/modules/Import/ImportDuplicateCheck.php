@@ -321,7 +321,7 @@ class ImportDuplicateCheck
 
         $index_array = array();
         $fields_used = array();
-        $mstr_exclude_array = array('all'=>array('team_set_id','id','deleted'),'contacts'=>array('email2'), array('leads'=>'reports_to_id'), array('prospects'=>'tracker_key'));
+        $mstr_exclude_array = array('all'=>array('team_set_id','id','deleted'),'contacts'=>array('email2'), array('prospects'=>'tracker_key'));
 
         //create exclude array from subset of applicable mstr_exclude_array elements
         $exclude_array =  isset($mstr_exclude_array[strtolower($this->_focus->module_dir)])?array_merge($mstr_exclude_array[strtolower($this->_focus->module_dir)], $mstr_exclude_array['all']) : $mstr_exclude_array['all'];

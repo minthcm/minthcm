@@ -80,7 +80,7 @@ if (isset($_POST['mailmerge_module'])) {
     if ($_SESSION['MAILMERGE_MODULE'] == 'Campaigns') {
         $_SESSION['MAILMERGE_MODULE'] = 'CampaignProspects';
     }
-    if ($_SESSION['MAILMERGE_MODULE'] == 'Contacts' || $_SESSION['MAILMERGE_MODULE'] == 'Leads'|| $_SESSION['MAILMERGE_MODULE'] == 'CampaignProspects') {
+    if ($_SESSION['MAILMERGE_MODULE'] == 'Contacts'|| $_SESSION['MAILMERGE_MODULE'] == 'CampaignProspects') {
         $_SESSION['MAILMERGE_SKIP_REL'] = true;
     }
 }
@@ -139,7 +139,7 @@ $xtpl->assign("MAILMERGE_RIGHT_TO_LEFT", SugarThemeRegistry::current()->getImage
 $xtpl->assign("MAILMERGE_LEFT_TO_RIGHT", SugarThemeRegistry::current()->getImage('rightarrow_big', 'border="0" style="margin-left: 1px;" onClick="moveRight();"', null, null, '.gif', $mod_strings['LBL_ADD']));
 $xtpl->assign("MAIL_MERGE_HEADER_STEP_2", $step_txt);
 if ($_SESSION['MAILMERGE_MODULE'] == 'CampaignProspects') {
-    $rel_options = array("Contacts"=>"Contacts", "Leads" => "Leads", "Prospects" => "Prospects", "Users"=>"Users");
+    $rel_options = array("Contacts"=>"Contacts", "Prospects" => "Prospects", "Users"=>"Users");
     $xtpl->assign("MAIL_MERGE_CAMPAIGN_PROSPECT_SELECTOR", '<select id="campaign_prospect_type" name="campaign_prospect_type">'.get_select_options_with_id($rel_options, 'Prospects').'</select>');
 }
 

@@ -87,15 +87,7 @@ function portal_login($portal_auth, $user_name, $application_name)
     }
     global $current_user;
 
-    if ($user_name == 'lead') {
-        session_start();
-        $_SESSION['is_valid_session']= true;
-        $_SESSION['ip_address'] = query_client_ip();
-        $_SESSION['portal_id'] = $current_user->id;
-        $_SESSION['type'] = 'lead';
-        login_success();
-        return array('id'=>session_id(), 'error'=>$error->get_soap_array());
-    } elseif ($user_name == 'portal') {
+    if ($user_name == 'portal') {
         session_start();
         $_SESSION['is_valid_session']= true;
         $_SESSION['ip_address'] = query_client_ip();
@@ -137,7 +129,7 @@ function portal_validate_authenticated($session_id)
     if (session_start()) {
         $valid_session = true;
 
-        if (!empty($_SESSION['is_valid_session']) && $_SESSION['ip_address'] == query_client_ip() && $valid_session != null && ($_SESSION['type'] == 'contact' || $_SESSION['type'] == 'lead' || $_SESSION['type'] == 'portal')) {
+        if (!empty($_SESSION['is_valid_session']) && $_SESSION['ip_address'] == query_client_ip() && $valid_session != null && ($_SESSION['type'] == 'contact' || $_SESSION['type'] == 'portal')) {
             global $current_user;
             $current_user = BeanFactory::newBean('Users');
             $current_user->retrieve($_SESSION['portal_id']);
@@ -233,10 +225,6 @@ function portal_get_entry_list_filter($session, $module_name, $order_by, $select
         $error->set_error('invalid_session');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
     }
-    if ($_SESSION['type'] == 'lead') {
-        $error->set_error('no_access');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
     if (empty($beanList[$module_name])) {
         $error->set_error('no_module');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
@@ -249,8 +237,6 @@ function portal_get_entry_list_filter($session, $module_name, $order_by, $select
         $sugar = BeanFactory::newBean('Cases');
     } elseif ($module_name == 'Contacts') {
         $sugar = BeanFactory::newBean('Contacts');
-    } elseif ($module_name == 'Accounts') {
-        $sugar = BeanFactory::newBean('Accounts');
     } elseif ($module_name == 'Bugs') {
         $sugar = BeanFactory::newBean('Bugs');
     } elseif ($module_name == 'KBDocuments' || $module_name == 'FAQ') {
@@ -321,11 +307,6 @@ function portal_get_entry($session, $module_name, $id, $select_fields)
 
     //set the working module
     set_module_in(array('list'=>array($id=>$id), 'in'=>'('.$id.')'), $module_name);
-
-    if ($_SESSION['type'] == 'lead') {
-        $error->set_error('no_access');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
     if (empty($beanList[$module_name])) {
         $error->set_error('no_module');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
@@ -381,10 +362,6 @@ function portal_set_entry($session, $module_name, $name_value_list)
         $error->set_error('no_module');
         return array('id'=>-1, 'error'=>$error->get_soap_array());
     }
-    if ($_SESSION['type'] == 'lead' && $module_name != 'Leads') {
-        $error->set_error('no_access');
-        return array('id'=>-1, 'error'=>$error->get_soap_array());
-    }
 
     if ($_SESSION['type'] == 'contact' && !array_key_exists($module_name, $valid_modules_for_contact)) {
         $error->set_error('no_access');
@@ -424,9 +401,6 @@ function portal_set_entry($session, $module_name, $name_value_list)
         if (isset($_SESSION['assigned_user_id']) && (!array_key_exists('assigned_user_id', $values_set) || empty($values_set['assigned_user_id']))) {
             $seed->assigned_user_id = $_SESSION['assigned_user_id'];
         }
-        if (isset($_SESSION['account_id']) && (!array_key_exists('account_id', $values_set) || empty($values_set['account_id']))) {
-            $seed->account_id = $_SESSION['account_id'];
-        }
         $seed->portal_flag = 1;
         $seed->portal_viewable = true;
     }
@@ -435,20 +409,12 @@ function portal_set_entry($session, $module_name, $name_value_list)
     if ($_SESSION['type'] == 'contact' && $module_name != 'Contacts' && !$is_update) {
         if ($module_name == 'Notes') {
             $seed->contact_id = $_SESSION['user_id'];
-            if (isset($_SESSION['account_id'])) {
-                $seed->parent_type = 'Accounts';
-                $seed->parent_id = $_SESSION['account_id'];
-            }
             $id = $seed->save();
         } else {
             $contact = BeanFactory::newBean('Contacts');
             $contact->disable_row_level_security = true;
             $contact->retrieve($_SESSION['user_id']);
             $seed->contact_id = $contact;
-
-            if (isset($_SESSION['account_id'])) {
-                $seed->account_id = $_SESSION['account_id'];
-            }
             $seed->save_relationship_changes(false);
         }
     }
@@ -475,10 +441,6 @@ function portal_set_note_attachment($session, $note)
         $error->set_error('invalid_session');
         return array('id'=>'-1', 'error'=>$error->get_soap_array());
     }
-    if ($_SESSION['type'] == 'lead' || !isset($_SESSION['viewable']['Notes'][$note['id']])) {
-        $error->set_error('no_access');
-        return array('id'=>-1, 'error'=>$error->get_soap_array());
-    }
     require_once('modules/Notes/NoteSoap.php');
     $ns = new NoteSoap();
     $id = $ns->saveFile($note, true);
@@ -497,10 +459,6 @@ function portal_remove_note_attachment($session, $id)
     $error = new SoapError();
     if (! portal_validate_authenticated($session)) {
         $error->set_error('invalid_session');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
-    if ($_SESSION['type'] == 'lead' || !isset($_SESSION['viewable']['Notes'][$id])) {
-        $error->set_error('no_access');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
     }
 
@@ -523,10 +481,6 @@ function portal_get_note_attachment($session, $id)
     $error = new SoapError();
     if (! portal_validate_authenticated($session)) {
         $error->set_error('invalid_session');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
-    if ($_SESSION['type'] == 'lead' || !isset($_SESSION['viewable']['Notes'][$id])) {
-        $error->set_error('no_access');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
     }
     $current_user = $seed_user;
@@ -561,7 +515,7 @@ function portal_relate_note_to_module($session, $note_id, $module_name, $module_
         $error->set_error('invalid_session');
         return $error->get_soap_array();
     }
-    if ($_SESSION['type'] == 'lead' || !isset($_SESSION['viewable']['Notes'][$note_id]) || !isset($_SESSION['viewable'][$module_name][$module_id])) {
+    if (!isset($_SESSION['viewable']['Notes'][$note_id]) || !isset($_SESSION['viewable'][$module_name][$module_id])) {
         $error->set_error('no_access');
         return $error->get_soap_array();
     }
@@ -597,10 +551,6 @@ function portal_get_related_notes($session, $module_name, $module_id, $select_fi
     $error = new SoapError();
     if (! portal_validate_authenticated($session)) {
         $error->set_error('invalid_session');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
-    if ($_SESSION['type'] == 'lead') {
-        $error->set_error('no_access');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
     }
     if (empty($beanList[$module_name])) {
@@ -655,10 +605,6 @@ function portal_get_related_list($session, $module_name, $rel_module, $module_id
         $error->set_error('invalid_session');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
     }
-    if ($_SESSION['type'] == 'lead') {
-        $error->set_error('no_access');
-        return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
-    }
     if (empty($beanList[$module_name])) {
         $error->set_error('no_module');
         return array('result_count'=>-1, 'entry_list'=>array(), 'error'=>$error->get_soap_array());
@@ -701,10 +647,6 @@ function portal_get_module_fields($session, $module_name)
     if (! portal_validate_authenticated($session)) {
         $error->set_error('invalid_session');
         $error->description .=$session;
-        return array('module_name'=>$module_name, 'module_fields'=>$module_fields, 'error'=>$error->get_soap_array());
-    }
-    if ($_SESSION['type'] == 'lead' && $module_name != 'Leads') {
-        $error->set_error('no_access');
         return array('module_name'=>$module_name, 'module_fields'=>$module_fields, 'error'=>$error->get_soap_array());
     }
 

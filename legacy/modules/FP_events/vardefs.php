@@ -260,14 +260,6 @@ $dictionary['FP_events'] = array(
                 'source' => 'non-db',
                 'vname' => 'LBL_FP_EVENTS_PROSPECTS_1_FROM_PROSPECTS_TITLE',
             ),
-        'fp_events_leads_1' =>
-            array(
-                'name' => 'fp_events_leads_1',
-                'type' => 'link',
-                'relationship' => 'fp_events_leads_1',
-                'source' => 'non-db',
-                'vname' => 'LBL_FP_EVENTS_LEADS_1_FROM_LEADS_TITLE',
-            ),
         'fp_event_locations_fp_events_1' =>
             array(
                 'name' => 'fp_event_locations_fp_events_1',

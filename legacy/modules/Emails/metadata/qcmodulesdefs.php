@@ -50,6 +50,5 @@ $QCModules = array(
     'Bugs',
     'Cases',
     'Contacts',
-    'Leads',
     'Tasks',
 );

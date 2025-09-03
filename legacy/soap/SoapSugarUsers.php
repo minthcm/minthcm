@@ -1602,16 +1602,6 @@ function handle_set_relationship($set_relationship_value, $session = '')
     } elseif ($module1 == 'Contacts' && ($module2 == 'Notes' || $module2 == 'Calls' || $module2 == 'Meetings' || $module2 == 'Tasks') && !empty($session)) {
         $mod->$key = $module2_id;
         $mod->save_relationship_changes(false);
-        if (!empty($mod->account_id)) {
-            // when setting a relationship from a Contact to these activities, if the Contacts is related to an Account,
-            // we want to associate that Account to the activity as well
-            $ret = set_relationship($session, array(
-                'module1' => 'Accounts',
-                'module1_id' => $mod->account_id,
-                'module2' => $module2,
-                'module2_id' => $module2_id
-            ));
-        }
     } else {
         $mod->$key = $module2_id;
         $mod->save_relationship_changes(false);
@@ -1705,13 +1695,6 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
     }
     //  MRF - BUG:19552 - added a join for accounts' emails below
     $query_array = array(
-        'Accounts' => array(
-            'where' => array(
-                'Accounts' => array(0 => "accounts.name like '{0}%'"),
-                'EmailAddresses' => array(0 => "ea.email_address like '{0}%'")
-            ),
-            'fields' => "accounts.id, accounts.name"
-        ),
         'Bugs' => array(
             'where' => array('Bugs' => array(0 => "bugs.name like '{0}%'", 1 => "bugs.bug_number = {0}")),
             'fields' => "bugs.id, bugs.name, bugs.bug_number"
@@ -1724,16 +1707,6 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
                 )
             ),
             'fields' => "cases.id, cases.name, cases.case_number"
-        ),
-        'Leads' => array(
-            'where' => array(
-                'Leads' => array(
-                    0 => "leads.first_name like '{0}%'",
-                    1 => "leads.last_name like '{0}%'"
-                ),
-                'EmailAddresses' => array(0 => "ea.email_address like '{0}%'")
-            ),
-            'fields' => "leads.id, leads.first_name, leads.last_name, leads.status"
         ),
         'Project' => array(
             'where' => array('Project' => array(0 => "project.name like '{0}%'")),
@@ -2488,8 +2461,6 @@ function handle_set_entries($module_name, $name_value_lists, $select_fields = fa
 
         //Add the account to a contact
         if ($module_name == 'Contacts') {
-            $GLOBALS['log']->debug('Creating Contact Account');
-            add_create_account($seed);
             $duplicate_id = check_for_duplicate_contacts($seed);
             if ($duplicate_id == null) {
                 if ($seed->ACLAccess('Save') && ($seed->deleted != 1 || $seed->ACLAccess('Delete'))) {

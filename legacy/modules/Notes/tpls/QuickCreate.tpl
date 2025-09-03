@@ -48,12 +48,9 @@
 <form name="notesQuickCreate" id="notesQuickCreate" method="POST" action="index.php">
 <input type="hidden" name="module" value="Notes">
 <input type="hidden" name="record" value="">
-<input type="hidden" name="lead_id" value="{$REQUEST.lead_id}">
 <input type="hidden" name="contact_id" value="{$REQUEST.contact_id}">
 <input type="hidden" name="contact_name" value="{$REQUEST.contact_name}">
 <input type="hidden" name="email_id" value="{$REQUEST.email_id}">
-<input type="hidden" name="account_id" value="{$REQUEST.account_id}">
-<input type="hidden" name="account_name" value="{$REQUEST.account_name}">
 <input type="hidden" name="acase_id" value="{$REQUEST.acase_id}">
 <input type="hidden" name="return_action" value="{$REQUEST.return_action}">
 <input type="hidden" name="return_module" value="{$REQUEST.return_module}">

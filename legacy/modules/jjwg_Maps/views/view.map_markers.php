@@ -998,7 +998,7 @@ $(document).ready(function(){
   } ?>
 
 <?php
-  if (in_array($this->bean->display_object->module_name, array('Accounts', 'Contacts', 'Leads', 'Prospects', 'Users')) &&
+  if (in_array($this->bean->display_object->module_name, array('Contacts', 'Prospects', 'Users')) &&
           ($GLOBALS['current_user']->isAdmin() || $this->bean->ACLAccess('list')) &&
           empty($_REQUEST['list_id']) && !empty($this->bean->list_array)) {
       ?>

@@ -69,11 +69,6 @@
         </td>
         {{/if}}
         <td class='dataField' width='1%'>
-            {{*
-            This is custom code that you may set to show on the second column of the address
-            table.  An example would be the "Copy" button present from the Accounts detailview.
-            See modules/Accounts/views/view.detail.php to see the value being set
-            *}}
             {$custom_code_{{$displayParams.key}}}
         </td>
     </tr>

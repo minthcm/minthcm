@@ -56,9 +56,6 @@ $viewdefs[$module_name]['EditView'] = array(
             array('label' => '10', 'field' => '30'),
             array('label' => '10', 'field' => '30'),
         ),
-        'includes' => array(
-            array('file' => 'modules/Accounts/Account.js'),
-        ),
     ),
 
     'panels' => array(

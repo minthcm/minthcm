@@ -39,7 +39,6 @@
     $contract->name = $quote->name;
     $contract->assigned_user_id = $quote->assigned_user_id;
     $contract->total_contract_value = format_number($quote->total_amount);
-    $contract->contract_account_id = $quote->billing_account_id;
     $contract->contact_id = $quote->billing_contact_id;
 
     $contract->total_amt = $quote->total_amt;

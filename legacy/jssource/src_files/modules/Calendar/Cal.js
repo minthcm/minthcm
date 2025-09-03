@@ -238,15 +238,12 @@ CAL.toggle_settings = function () {
 CAL.fill_invitees = function () {
    CAL.get("user_invitees").value = "";
    CAL.get("contact_invitees").value = "";
-   CAL.get("lead_invitees").value = "";
    CAL.each(GLOBAL_REGISTRY['focus'].users_arr, function (i, v) {
       var field_name = "";
       if (v.module == "User")
          field_name = "user_invitees";
       if (v.module == "Contact")
          field_name = "contact_invitees";
-      if (v.module == "Lead")
-         field_name = "lead_invitees";
       var str = CAL.get(field_name).value;
       CAL.get(field_name).value = str + v.fields.id + ",";
    });

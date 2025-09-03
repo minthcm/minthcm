@@ -36,7 +36,6 @@
 $searchFields['AOS_Invoices'] =
     array(
         'name' => array( 'query_type'=>'default'),
-        'account_type'=> array('query_type'=>'default', 'options' => 'account_type_dom', 'template_var' => 'ACCOUNT_TYPE_OPTIONS'),
         'industry'=> array('query_type'=>'default', 'options' => 'industry_dom', 'template_var' => 'INDUSTRY_OPTIONS'),
         'annual_revenue'=> array('query_type'=>'default'),
         'address_street'=> array('query_type'=>'default','db_field'=>array('billing_address_street','shipping_address_street')),

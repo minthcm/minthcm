@@ -117,10 +117,6 @@ foreach ($recordIds as $recordId) {
     $object_arr = array();
     $object_arr[$bean->module_dir] = $bean->id;
 
-    if ($bean->module_dir === 'Contacts') {
-        $object_arr['Accounts'] = $bean->account_id;
-    }
-
     $search = array(
         '@<script[^>]*?>.*?</script>@si',        // Strip out javascript
         '@<[\/\!]*?[^<>]*?>@si',        // Strip out HTML tags
@@ -175,8 +171,6 @@ foreach ($recordIds as $recordId) {
         $note->filename = $file_name;
         if ($bean->module_dir == 'Contacts') {
             $note->contact_id = $bean->id;
-            $note->parent_type = 'Accounts';
-            $note->parent_id = $bean->account_id;
         }
         $note->save();
 

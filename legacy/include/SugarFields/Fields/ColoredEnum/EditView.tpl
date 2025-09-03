@@ -132,23 +132,6 @@
 			});
 		})();
 		{/literal}
-	{{else}}
-		{literal}
-		// Create a new YUI instance and populate it with the required modules.
-		YUI().use('datasource', 'datasource-jsonschema',function (Y) {
-			// DataSource is available and ready for use.
-			SUGAR.AutoComplete.{/literal}{$ac_key}{literal}.ds = new Y.DataSource.Get({
-				source: 'index.php?module=Accounts&action=ajaxautocomplete&to_pdf=1'
-			});
-			SUGAR.AutoComplete.{/literal}{$ac_key}{literal}.ds.plug(Y.Plugin.DataSourceJSONSchema, {
-				schema: {
-					resultListLocator: "option_items",
-					resultFields: ["text", "key"],
-					matchKey: "text",
-				}
-			});
-		});
-		{/literal}
 	{{/if}}
 
 	{literal}

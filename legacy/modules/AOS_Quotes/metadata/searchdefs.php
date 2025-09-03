@@ -52,7 +52,6 @@
                         'advanced_search' => array(
                             'name',
                             'billing_contact',
-                            'billing_account',
                             'number',
                             'total_amount',
                             'expiration',

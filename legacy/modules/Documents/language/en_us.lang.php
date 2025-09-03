@@ -155,7 +155,6 @@ $mod_strings = array(
     'ERR_INVALID_EXTERNAL_API_ACCESS' => 'The user attempted to access an invalid external API ({0})',
     'ERR_INVALID_EXTERNAL_API_LOGIN' => 'The login check failed for external API ({0})',
     // Links around the world
-    'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_CONTACTS_SUBPANEL_TITLE' => 'Contacts',
     'LBL_CASES_SUBPANEL_TITLE' => 'Cases',
     'LBL_BUGS_SUBPANEL_TITLE' => 'Bugs',

@@ -59,11 +59,5 @@ $subpanel_layout = array(
             'target_record_key' => 'aos_quote_id',
             'target_module' => 'AOS_Quotes',
         ),
-        'account_name'=>array(
-            'vname' => 'LBL_ACCOUNT_NAME',
-            'widget_class' => 'SubPanelDetailViewLink',
-            'target_record_key' => 'account_id',
-            'target_module' => 'Accounts',
-        ),
     ),
 );

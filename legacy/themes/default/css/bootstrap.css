@@ -4322,17 +4322,6 @@ a.thumbnail:hover {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e57417', endColorstr='#b75d12', GradientType=0);
 }
-.progress-leads .bar {
-  background-color: #389f00;
-  background-image: -moz-linear-gradient(top, #3fb300, #2d8000);
-  background-image: -ms-linear-gradient(top, #3fb300, #2d8000);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#3fb300), to(#2d8000));
-  background-image: -webkit-linear-gradient(top, #3fb300, #2d8000);
-  background-image: -o-linear-gradient(top, #3fb300, #2d8000);
-  background-image: linear-gradient(top, #3fb300, #2d8000);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3fb300', endColorstr='#2d8000', GradientType=0);
-}
 .progress-notes .bar {
   background-color: #e0de25;
   background-image: -moz-linear-gradient(top, #eae82f, #d1cf15);

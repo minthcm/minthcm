@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -8,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,15 +48,18 @@ if (!defined('sugarEntry')) {
 
 SugarAutoLoader::requireWithCustom('include/Notifications/Notification.php');
 
+
 class GenerateOnboardingOffboarding
 {
     protected $module_name;
     protected $template_id;
     protected $employee_id;
+    protected $employees_ids;
     protected $date_start;
     protected $record_id;
     protected $process;
     protected $user_scheduled_onboarding;
+    protected $cache_for_elements = [];
 
     public function __construct($data)
     {
@@ -64,12 +68,14 @@ class GenerateOnboardingOffboarding
         $this->template_id = (isset($data['template_id'])) ? $data['template_id']
         : null;
         $this->employees_ids = (isset($data['employees_ids'])) ? $data['employees_ids']
-        : null;
+            : [];
         $this->date_start = (isset($data['date_start'])) ? $data['date_start'] : null;
         $this->record_id = (isset($data['record_id'])) ? $data['record_id'] : null;
         if (isset($data['user_scheduled_onboarding_id'])) {
-            $this->user_scheduled_onboarding = BeanFactory::getBean('Users',
-                $data['user_scheduled_onboarding_id']);
+            $this->user_scheduled_onboarding = BeanFactory::getBean(
+                'Users',
+                $data['user_scheduled_onboarding_id']
+            );
         } else {
             $this->user_scheduled_onboarding = BeanFactory::newBean('Users');
         }
@@ -78,26 +84,37 @@ class GenerateOnboardingOffboarding
     public function generate()
     {
         $template = BeanFactory::getBean($this->module_name, $this->template_id);
+        if (!$template->load_relationship('elements')) {
+            throw new \Exception("Unable to load relationship elements for {$template->object_name}");
+        }
+        $elements = $template->elements->getBeans();
         foreach ($this->employees_ids as $employee_id) {
             $this->employee_id = $employee_id;
             if ('OnboardingTemplates' == $this->module_name) {
-                $this->createProcess('Onboardings', 'onboardingtemplate_id', 
-                    $template->assigned_user_id);
+                $this->createProcess(
+                    'Onboardings',
+                    'onboardingtemplate_id',
+                    $template->assigned_user_id
+                );
             } else {
-                $this->createProcess('Offboardings', 'offboardingtemplate_id', 
-                    $template->assigned_user_id);
+                $this->createProcess(
+                    'Offboardings',
+                    'offboardingtemplate_id',
+                    $template->assigned_user_id
+                );
             }
-            if ($template->load_relationship('elements')) {
-                foreach ($template->elements->getBeans() as $element) {
+            foreach ($elements as $element) {
                     $this->createRecordOfElementType($element);
                 }
-            }
             $this->addNotification();
         }
     }
 
-    protected function createProcess($process_name, $relate_id_field_name, 
-        $assigned_user_id) {
+    protected function createProcess(
+        $process_name,
+        $relate_id_field_name,
+        $assigned_user_id
+    ) {
         $bean = BeanFactory::newBean($process_name);
         $db_date = date('Y-m-d H:i:s', strtotime($this->date_start . ' -2 hours'));
         $bean->date_start = $db_date;
@@ -105,8 +122,10 @@ class GenerateOnboardingOffboarding
         $bean->$relate_id_field_name = $this->template_id;
         $bean->assigned_user_id = $assigned_user_id;
         $bean->save();
-        $this->addSecurityGroupToRecord($bean,
-            $this->user_scheduled_onboarding->getUserPrivateGroup());
+        $this->addSecurityGroupToRecord(
+            $bean,
+            $this->user_scheduled_onboarding->getUserPrivateGroup()
+        );
         $this->addSecurityGroupToEmployee($bean);
         $this->process = $bean;
     }
@@ -153,8 +172,10 @@ class GenerateOnboardingOffboarding
             default:
                 return false;
         }
-        return $this->addSecurityGroupToRecord($bean,
-            $this->user_scheduled_onboarding->getUserPrivateGroup());
+        return $this->addSecurityGroupToRecord(
+            $bean,
+            $this->user_scheduled_onboarding->getUserPrivateGroup()
+        );
     }
 
     protected function createTask($element)
@@ -199,17 +220,20 @@ class GenerateOnboardingOffboarding
         $bean->parent_id = $this->process->id;
         $bean->element_id = $element->id;
         $bean->save();
-        $this->addSecurityGroupToRecord($bean,
-            $this->user_scheduled_onboarding->getUserPrivateGroup());
+        $this->addSecurityGroupToRecord(
+            $bean,
+            $this->user_scheduled_onboarding->getUserPrivateGroup()
+        );
         return $bean;
     }
 
-    protected function handleMeeting($element, $training_bean)
+    protected function handleMeeting($element, Trainings $training_bean)
     {
-        if (!empty($this->meeting_bean) && $this->module_name == 'OnboardingTemplates') {
-            $meeting_bean = $this->meeting_bean;
+        $meeting_bean = null;
+        if ($this->module_name == 'OnboardingTemplates' && isset($this->cache_for_elements[$element->id])) {
+            $meeting_bean = BeanFactory::getBean('Meetings', $this->cache_for_elements[$element->id]);
         }
-        else {
+        if (!$meeting_bean) {
             $meeting_bean = $this->createMeeting($element, $training_bean);
         }
         if (!empty($meeting_bean->id) && !empty($training_bean->id) && $meeting_bean->load_relationship('trainings') && $meeting_bean->load_relationship('users')) {
@@ -217,8 +241,10 @@ class GenerateOnboardingOffboarding
             $meeting_bean->users->add($this->process->employee_id);
             $meeting_bean->users->add($element->user_id);
         }
-        $this->addSecurityGroupToRecord($meeting_bean,
-            $this->user_scheduled_onboarding->getUserPrivateGroup());
+        $this->addSecurityGroupToRecord(
+            $meeting_bean,
+            $this->user_scheduled_onboarding->getUserPrivateGroup()
+        );
     }
 
     protected function createMeeting($element, $training_bean)
@@ -241,9 +267,7 @@ class GenerateOnboardingOffboarding
         $meeting_bean->parent_type = $this->process->module_name;
         $meeting_bean->parent_id = $this->process->id;
         $meeting_bean->save();
-        if (!empty($meeting_bean->id)) {
-            $this->meeting_bean = $meeting_bean;
-        }
+        $this->cache_for_elements[$element->id] = $meeting_bean->id;
         return $meeting_bean;
     }
 

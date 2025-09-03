@@ -43,7 +43,7 @@
  */
 
 $viewdefs['Bugs']['EditView'] = array(
-    'templateMeta' => array('form'=>array('hidden'=>array('<input type="hidden" name="account_id" value="{$smarty.request.account_id}">',
+    'templateMeta' => array('form'=>array('hidden'=>array(
                                                           '<input type="hidden" name="contact_id" value="{$smarty.request.contact_id}">')
                                                           ),
                             'maxColumns' => '2',

@@ -29,12 +29,6 @@ $subpanel_layout = array(
       'width' => '25%',
       'default' => true,
     ),
-    'billing_account' =>
-    array(
-      'width' => '20%',
-      'vname' => 'LBL_BILLING_ACCOUNT',
-      'default' => true,
-    ),
     'total_amount' =>
     array(
       'type' => 'currency',

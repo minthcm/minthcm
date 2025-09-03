@@ -157,22 +157,13 @@ $dictionary['SurveyResponses'] = array(
             'lhs_key' => 'id',
             'relationship_type' => 'one-to-many',
         ),
-        // Fix Issue 8897 - Adding missing relationships to SurveyResponses and Contacts/Accounts
+        // Fix Issue 8897 - Adding missing relationships to SurveyResponses and Contacts
         'surveyresponses_contacts' => array(
             'rhs_module'        => 'SurveyResponses',
             'rhs_table'         => 'surveyresponses',
             'rhs_key'           => 'contact_id',
             'lhs_module'        => 'Contacts',
             'lhs_table'         => 'contacts',
-            'lhs_key'           => 'id',
-            'relationship_type' => 'one-to-many',
-        ),
-        'surveyresponses_accounts' => array (
-            'rhs_module'        => 'SurveyResponses',
-            'rhs_table'         => 'surveyresponses',
-            'rhs_key'           => 'account_id',
-            'lhs_module'        => 'Accounts',
-            'lhs_table'         => 'accounts',
             'lhs_key'           => 'id',
             'relationship_type' => 'one-to-many',
         ),

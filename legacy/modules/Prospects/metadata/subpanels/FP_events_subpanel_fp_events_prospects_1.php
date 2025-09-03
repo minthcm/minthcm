@@ -22,13 +22,6 @@ $subpanel_layout['list_fields'] = array(
     'width' => '23%',
     'default' => true,
   ),
-  'account_name' =>
-  array(
-    'type' => 'varchar',
-    'vname' => 'LBL_ACCOUNT_NAME',
-    'width' => '10%',
-    'default' => true,
-  ),
   'phone_work' =>
   array(
     'vname' => 'LBL_LIST_PHONE',

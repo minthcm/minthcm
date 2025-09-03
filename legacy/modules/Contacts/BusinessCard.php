@@ -80,8 +80,6 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 	
 	require_once('modules/Contacts/ContactFormBase.php');
 	$contactForm = new ContactFormBase();
-	require_once('modules/Accounts/AccountFormBase.php');
-	$accountForm = new AccountFormBase();
 	
 	if(!isset($_POST['selectedContact']) && !isset($_POST['ContinueContact'])){
 		$duplicateContacts = $contactForm->checkForDuplicates('Contacts');
@@ -95,37 +93,16 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		}
 	}
 	
-	if(empty($_POST['selectedAccount']) && empty($_POST['ContinueAccount'])){
-		$duplicateAccounts = $accountForm->checkForDuplicates('Accounts');
-		
-		if(isset($duplicateAccounts)){
-			$xtpl->assign('FORMBODY', $accountForm->buildTableForm($duplicateAccounts));
-			$xtpl->parse('main.formnoborder');
-			$xtpl->parse('main');
-			$xtpl->out('main');
-			return;
-		}
-		
-	}
-
 	if(!empty($_POST['selectedContact'])){
 		$contact = new Contact();
 		$contact->retrieve($_POST['selectedContact']);	
 	}else{
 		$contact= $contactForm->handleSave('Contacts',false, false);
 	}
-	if(!empty($_POST['selectedAccount'])){
-		$account = new Account();
-		$account->retrieve($_POST['selectedAccount']);	
-	}else if(isset($_POST['newaccount']) && $_POST['newaccount']=='on' ){
-		$account= $accountForm->handleSave('Accounts',false, false);
-	}
+
 	require_once('modules/Notes/NoteFormBase.php');
 
 	$noteForm = new NoteFormBase();
-	if(isset($account))
-		$_POST['AccountNotesparent_id'] = $account->id;
-		$accountnote= $noteForm->handleSave('AccountNotes',false, false);
 	if(isset($contact))
 		$_POST['ContactNotesparent_type'] = "Contacts";
 		$_POST['ContactNotesparent_id'] = $contact->id;
@@ -146,30 +123,15 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 		if(isset($contact)) {
 			$call->load_relationship('contacts');
 			$call->contacts->add($contact->id);
-		} else if(isset($account)){
-			$call->load_relationship('account');
-			$call->account->add($account->id);
 		}
 	}
 	if(isset($meeting)){
 		if(isset($contact)) {
 			$meeting->load_relationship('contacts');
 			$meeting->contacts->add($contact->id);
-		} else if(isset($account)){
-			$meeting->load_relationship('account');
-			$meeting->account->add($account->id);
 		}
 	}
-	if(isset($account)){
 		if(isset($contact)) {
-			$account->load_relationship('contacts');
-			$account->contacts->add($contact->id);
-		} else if(isset($accountnote)){
-			$account->load_relationship('notes');
-			$account->notes->add($accountnote->id);
-		}
-	}
-	if(isset($contact)){
 		if(isset($contactnote)){
 			$contact->load_relationship('notes');
 			$contact->notes->add($contactnote->id);
@@ -187,18 +149,7 @@ if(isset($_POST['handle']) && $_POST['handle'] == 'Save'){
 			$xtpl->parse('main.row');
 		}
 	}
-	if(isset($account)){
-		$account->track_view($current_user->id, 'Accounts');
-		if(isset($_POST['selectedAccount']) && $_POST['selectedAccount'] == $account->id){
-			$xtpl->assign('ROWVALUE', "<LI>".$mod_strings['LBL_EXISTING_ACCOUNT']. " - <a href='index.php?action=DetailView&module=Accounts&record=".$account->id."'>".$account->name."</a>");
-			$xtpl->parse('main.row');
-		}else{
-			$xtpl->assign('ROWVALUE', "<LI>".$mod_strings['LBL_CREATED_ACCOUNT']. " - <a href='index.php?action=DetailView&module=Accounts&record=".$account->id."'>".$account->name."</a>");		
-			$xtpl->parse('main.row');
-		}
 		
-	}
-
 	if(isset($call)){
 		$call->track_view($current_user->id, 'Calls');
 		$xtpl->assign('ROWVALUE', "<LI>".$mod_strings['LBL_CREATED_CALL']. " - <a href='index.php?action=DetailView&module=Calls&record=".$call->id."'>".$call->name."</a>");	
@@ -243,38 +194,11 @@ $popup_request_data = array(
 	'call_back_function' => 'set_return',
 	'form_name' => 'BusinessCard',
 	'field_to_name_array' => array(
-		'id' => 'selectedAccount',
-		'name' => 'display_account_name',
 		),
 	);
 	
 $json = getJSONobj();
 $encoded_contact_popup_request_data = $json->encode($popup_request_data);
-
-//Account
-require_once('include/QuickSearchDefaults.php');
-$qsd = QuickSearchDefaults::getQuickSearchDefaults();
-$qsd->setFormName('BusinessCard');
-$sqs_objects = array('BusinessCard_display_account_name' => $qsd->getQSParent());
-$sqs_objects['BusinessCard_display_account_name']['populate_list'] = array('display_account_name', 'selectedAccount');
-$quicksearch_js = '<script type="text/javascript" language="javascript">
-                       sqs_objects = ' . $json->encode($sqs_objects) . ';
-				       addToValidateBinaryDependency(\'BusinessCard\', \'display_account_name\', \'alpha\', false, \'' . $app_strings['ERR_SQS_NO_MATCH_FIELD'] . $app_strings['LBL_ACCOUNT'] . '\', \'selectedAccount\' );
-				   </script>';
-
-$selectAccountButton = $quicksearch_js;
-$selectAccountButton .= "<div id='newaccountdivlink' style='display:inline' class='dataLabel'>{$mod_strings['LNK_SELECT_ACCOUNT']}:&nbsp;<input class='sqsEnabled' name='display_account_name' id='display_account_name' type=\"text\" value=\"\"><input name='selectedAccount' id='selectedAccount' type=\"hidden\" value=''>&nbsp;<input type='button' title=\"{$app_strings['LBL_SELECT_BUTTON_TITLE']}\"  type=\"button\"  class=\"button\" value='{$app_strings['LBL_SELECT_BUTTON_LABEL']}' name=btn1 LANGUAGE=javascript onclick='open_popup(\"Accounts\", 600, 400, \"\", true, false, $encoded_contact_popup_request_data);'/> <input type='button' title=\"{$app_strings['LBL_CLEAR_BUTTON_TITLE']}\" accessKey=\"{$app_strings['LBL_CLEAR_BUTTON_KEY']}\" type=\"button\"  class=\"button\" value='{$app_strings['LBL_CLEAR_BUTTON_LABEL']}' name=btn1 LANGUAGE=javascript onclick='document.forms[\"BusinessCard\"].selectedAccount.value=\"\";document.forms[\"BusinessCard\"].display_account_name.value=\"\"; '><br><b>{$app_strings['LBL_OR']}</b></div><br><br>";
-$xtpl->assign('FORMHEADER',get_form_header($mod_strings['LNK_NEW_ACCOUNT'], '', ''));
-require_once('modules/Accounts/AccountFormBase.php');
-$accountForm = new AccountFormBase();
-$xtpl->assign('CLASS', 'evenListRow');
-$xtpl->assign('FORMBODY',$selectAccountButton."<slot class='dataLabel'><input class='checkbox' type='checkbox' name='newaccount' onclick='document.forms[\"BusinessCard\"].selectedAccount.value=\"\";document.forms[\"BusinessCard\"].display_account_name.value=\"\";toggleDisplay(\"newaccountdiv\");'>&nbsp;".$mod_strings['LNK_NEW_ACCOUNT']."</span>&nbsp;<div id='newaccountdiv' style='display:none'>".$accountForm->getWideFormBody('Accounts', 'Accounts','BusinessCard', '' ));
-require_once('modules/Notes/NoteFormBase.php');
-$noteForm = new NoteFormBase();
-$postform = "<div id='accountnotelink'><p><a href='javascript:toggleDisplay(\"accountnote\");'>${mod_strings['LNK_NEW_NOTE']}</a></p></div>";
-$postform .= '<div id="accountnote" style="display:none">'.$noteForm->getFormBody('AccountNotes', 'Notes', 'BusinessCard', 85).'</div>';
-$xtpl->assign('POSTFORM',$postform);
-$xtpl->parse("main.headlessform");
 
 //Appointment
 $xtpl->assign('FORMHEADER',$mod_strings['LNK_NEW_APPOINTMENT']);

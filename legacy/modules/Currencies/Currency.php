@@ -604,7 +604,7 @@ function toString($echo = true) {
 
 function getCurrencyDropDown($focus, $field = 'currency_id', $value = '', $view = 'DetailView') {
    $view = ucfirst($view);
-   if ( $view == 'EditView' || $view == 'MassUpdate' || $view == 'QuickCreate' || $view == 'ConvertLead' ) {
+   if ( $view == 'EditView' || $view == 'MassUpdate' || $view == 'QuickCreate') {
       if ( isset($_REQUEST[$field]) && !empty($_REQUEST[$field]) ) {
          $value = $_REQUEST[$field];
       } elseif ( empty($focus->id) ) {
@@ -645,10 +645,6 @@ function getCurrencyDropDown($focus, $field = 'currency_id', $value = '', $view 
 //      $html = '<select name="';
       $html = '<select class="vt_formulaSelector" name="';
 // View Tools #41331 END
-      // If it's a lead conversion (ConvertLead view), add the module_name before the $field
-      if ( $view == "ConvertLead" ) {
-         $html .= $focus->module_name;
-      }
       $html .= $field . '" id="' . $field . '_select" ';
       if ( $view != 'MassUpdate' ) {
          $html .= 'onchange="CurrencyConvertAll(this.form);"';

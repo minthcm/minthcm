@@ -183,23 +183,6 @@ window.viewTools.formula.' . $functionName . '=function(){
       var values = viewTools.form.getFormValues();
       values['eval_formula'] = arguments[0];
       values['formula_name'] = '{$functionName}';
-      if($('#ConvertLead').length > 0){
-         var submodule = '';
-         var elem = $('[data-validation*="'+arguments[0]+'"], [data-required*="'+arguments[0]+'"], [data-readonly*="'+arguments[0]+'"], [data-calculated*="'+arguments[0]+'"], [data-dependency*="'+arguments[0]+'"]');
-         var module_elem = elem.closest('div[id^="create"]');
-         if(!module_elem.length) {
-            module_elem = elem.parent();
-            var elem_id = module_elem.attr('id');
-            if(typeof elem_id === 'string' && elem_id.indexOf('select') === 0) {
-               submodule = elem_id.replace('select', '');
-            }
-         } else {
-            submodule = module_elem.attr('id').replace('create', '');
-         }
-
-         values['convert_lead'] = true;
-         values['convert_lead_module'] = submodule;
-      }
       var ret = false;
       viewTools.api.callCustomApi({
          module:'Home',
@@ -524,14 +507,9 @@ $sql_formula=array(' . implode(",", $sqlformulas) . ');
         }
     }
 
-    require_once 'modules/Administration/LeadConversionViewToolsRebuild/ViewToolsLeadConverRebuild.php';
-
-    $viewTools_lead_converter_rebuild = new ViewToolsLeadConverRebuild();
-    $parsedInitArray = $viewTools_lead_converter_rebuild->addLeadConversionDependency($initArray);
-
     fwrite($jscache,
         ';
-window.viewTools.cache.initMappings = ' . json_encode($parsedInitArray) . ';');
+window.viewTools.cache.initMappings = ' . json_encode($initArray) . ';');
 
     /*
      * Get all field requirements
@@ -548,11 +526,9 @@ window.viewTools.cache.initMappings = ' . json_encode($parsedInitArray) . ';');
         }
     }
 
-    $parsed_field_requirements = $viewTools_lead_converter_rebuild->addLeadConversionRequirements($field_requirements);
-
     fwrite($jscache,
         '
-window.viewTools.cache.formulaRequirements = ' . json_encode($parsed_field_requirements) . ';');
+window.viewTools.cache.formulaRequirements = ' . json_encode($field_requirements) . ';');
 
     /*
      * Get duplicate fields from duplicate definitions

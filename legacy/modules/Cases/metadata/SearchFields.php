@@ -49,14 +49,6 @@ $searchFields['Cases'] = array(
   array(
     'query_type' => 'default',
   ),
-  'account_name' =>
-  array(
-    'query_type' => 'default',
-    'db_field' =>
-    array(
-      0 => 'accounts.name',
-    ),
-  ),
   'status' =>
   array(
     'query_type' => 'default',

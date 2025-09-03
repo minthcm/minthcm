@@ -59,20 +59,6 @@ $layout_defs['Emails'] = array(
             'module' => 'Notes',
             'top_buttons' => array(),
         ),
-        'accounts' => array(
-            'order' => 10,
-            'module' => 'Accounts',
-            'sort_order' => 'asc',
-            'sort_by' => 'name',
-            'subpanel_name' => 'ForEmails',
-            'get_subpanel_data' => 'accounts',
-            'add_subpanel_data' => 'account_id',
-            'title_key' => 'LBL_ACCOUNTS_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')
-            ),
-        ),
         'contacts' => array(
             'order' => 20,
             'module' => 'Contacts',
@@ -82,20 +68,6 @@ $layout_defs['Emails'] = array(
             'get_subpanel_data' => 'contacts',
             'add_subpanel_data' => 'contact_id',
             'title_key' => 'LBL_CONTACTS_SUBPANEL_TITLE',
-            'top_buttons' => array(
-                array('widget_class' => 'SubPanelTopButtonQuickCreate'),
-                array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')
-            ),
-        ),
-        'leads' => array(
-            'order' => 30,
-            'module' => 'Leads',
-            'sort_order' => 'asc',
-            'sort_by' => 'last_name, first_name',
-            'subpanel_name' => 'ForEmails',
-            'get_subpanel_data' => 'leads',
-            'add_subpanel_data' => 'lead_id',
-            'title_key' => 'LBL_LEADS_SUBPANEL_TITLE',
             'top_buttons' => array(
                 array('widget_class' => 'SubPanelTopButtonQuickCreate'),
                 array('widget_class' => 'SubPanelTopSelectButton', 'mode' => 'MultiSelect')

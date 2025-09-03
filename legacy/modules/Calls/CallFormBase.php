@@ -373,40 +373,7 @@ EOQ;
                $sql = "UPDATE calls_contacts set deleted = 1 where contact_id in ($sql) AND call_id = '" . $focus->id . "'";
                $focus->db->query($sql);
             }
-            if ( !empty($_POST['lead_invitees']) ) {
-               $leadInvitees = explode(',', trim($_POST['lead_invitees'], ','));
-            } else {
-               $leadInvitees = array();
-            }
 
-            // Calculate which leads to flag as deleted and which to add
-            $deleteLeads = array();
-            $focus->load_relationship('leads');
-            // Get all leads for the call
-            $q = 'SELECT mu.lead_id, mu.accept_status FROM calls_leads mu WHERE mu.call_id = \'' . $focus->id . '\'';
-            $r = $focus->db->query($q);
-            $acceptStatusLeads = array();
-            while ( $a = $focus->db->fetchByAssoc($r) ) {
-               if ( !in_array($a['lead_id'], $leadInvitees) ) {
-                  $deleteLeads[$a['lead_id']] = $a['lead_id'];
-               } else {
-                  $acceptStatusLeads[$a['user_id']] = $a['accept_status'];
-               }
-            }
-
-            if ( count($deleteLeads) > 0 ) {
-               $sql = '';
-               foreach ( $deleteLeads as $u ) {
-                  // make sure we don't delete the assigned user
-                  if ( $u != $focus->assigned_user_id ) {
-                     $sql .= ",'" . $u . "'";
-                  }
-               }
-               $sql = substr($sql, 1);
-               // We could run a delete SQL statement here, but will just mark as deleted instead
-               $sql = "UPDATE calls_leads set deleted = 1 where lead_id in ($sql) AND call_id = '" . $focus->id . "'";
-               $focus->db->query($sql);
-            }
 
             // MintHCM #54195 Start
             // Get all candidates for the call
@@ -470,8 +437,6 @@ EOQ;
             $focus->users_arr = $userInvitees;
             $focus->contacts_arr = array();
             $focus->contacts_arr = $contactInvitees;
-            $focus->leads_arr = array();
-            $focus->leads_arr = $leadInvitees;
             // MintHCM #54195 Start
             $focus->candidates_arr = array();
             $focus->candidates_arr = $candidateInvitees;
@@ -483,9 +448,6 @@ EOQ;
 
             if ( !empty($_POST['parent_id']) && $_POST['parent_type'] == 'Contacts' ) {
                $focus->contacts_arr[] = $_POST['parent_id'];
-            }
-            if ( !empty($_POST['parent_id']) && $_POST['parent_type'] == 'Leads' ) {
-               $focus->leads_arr[] = $_POST['parent_id'];
             }
             // MintHCM #54195 Start
             if ( !empty($_POST['parent_id']) && $_POST['parent_type'] == 'Candidates' ) {
@@ -543,28 +505,6 @@ EOQ;
                   $focus->db->query($qU);
                }
             }
-            // Process leads
-            $existing_leads = array();
-            if ( !empty($_POST['existing_lead_invitees']) ) {
-               $existing_leads = explode(",", trim($_POST['existing_lead_invitees'], ','));
-            }
-
-            foreach ( $focus->leads_arr as $lead_id ) {
-               if ( empty($lead_id) || isset($existing_leads[$lead_id]) || (isset($deleteLeads[$lead_id]) && $lead_id != $_POST['parent_id']) ) {
-                  continue;
-               }
-
-               if ( !isset($acceptStatusLeads[$lead_id]) ) {
-                  $focus->load_relationship('leads');
-                  $focus->leads->add($lead_id);
-               } else {
-                  // update query to preserve accept_status
-                  $qU = 'UPDATE calls_leads SET deleted = 0, accept_status = \'' . $acceptStatusLeads[$lead_id] . '\' ';
-                  $qU .= 'WHERE call_id = \'' . $focus->id . '\' ';
-                  $qU .= 'AND lead_id = \'' . $lead_id . '\'';
-                  $focus->db->query($qU);
-               }
-            }
 
             // MintHCM #54195 Start
             // Process Candidates
@@ -582,9 +522,9 @@ EOQ;
                   $focus->candidates->add($candidate_id);
                } else if ( !$focus->date_changed ) {
                   // update query to preserve accept_status
-                  $qU = 'UPDATE calls_candidates SET deleted = 0, accept_status = \'' . $acceptStatusLeads[$candidate_id] . '\' ';
+                  $qU = 'UPDATE calls_candidates SET deleted = 0, accept_status = \'' . $acceptStatusCandidates[$candidate_id] . '\' ';
                   $qU .= 'WHERE call_id = \'' . $focus->id . '\' ';
-                  $qU .= 'AND candidate_id = \'' . $lead_id . '\'';
+                  $qU .= 'AND candidate_id = \'' . $candidate_id . '\'';
                   $focus->db->query($qU);
                }
             }

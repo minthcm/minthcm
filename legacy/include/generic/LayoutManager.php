@@ -107,13 +107,6 @@ class LayoutManager
                 'form_value'=>'LBL_NEW_BUTTON_LABEL',
                 'ACL'=>'edit',
             ),
-            'SugarWidgetSubPanelTopCreateLeadNameButton' => array(
-                'widget_class'=>'SugarWidgetSubPanelTopCreateLeadNameButton',
-                'title'=>'LBL_NEW_BUTTON_TITLE',
-                'access_key'=>'LBL_NEW_BUTTON_KEY',
-                'form_value'=>'LBL_NEW_BUTTON_LABEL',
-                'ACL'=>'edit',
-            ),
             'SugarWidgetSubPanelTopScheduleMeetingButton' => array(
                 'widget_class'=>'SugarWidgetSubPanelTopScheduleMeetingButton',
                 'module'=>'Meetings',
@@ -146,32 +139,12 @@ class LayoutManager
                 'form_value'=>'LNK_NEW_NOTE',
                 'ACL'=>'edit',
             ),
-            'SugarWidgetSubPanelTopCreateContactAccountButton' => array(
-                'widget_class'=>'SugarWidgetSubPanelTopButton',
-                'module'=>'Contacts',
-                'title'=>'LBL_NEW_BUTTON_TITLE',
-                'access_key'=>'LBL_NEW_BUTTON_KEY',
-                'form_value'=>'LBL_NEW_BUTTON_LABEL',
-                'additional_form_fields' => array(
-                    'primary_address_street' => 'shipping_address_street',
-                    'primary_address_city' => 'shipping_address_city',
-                    'primary_address_state' => 'shipping_address_state',
-                    'primary_address_country' => 'shipping_address_country',
-                    'primary_address_postalcode' => 'shipping_address_postalcode',
-                    'to_email_addrs' => 'email1'
-                    ),
-                'ACL'=>'edit',
-            ),
             'SugarWidgetSubPanelTopCreateContact' => array(
                 'widget_class'=>'SugarWidgetSubPanelTopButton',
                 'module'=>'Contacts',
                 'title'=>'LBL_NEW_BUTTON_TITLE',
                 'access_key'=>'LBL_NEW_BUTTON_KEY',
                 'form_value'=>'LBL_NEW_BUTTON_LABEL',
-                'additional_form_fields' => array(
-                    'account_id' => 'account_id',
-                    'account_name' => 'account_name',
-                ),
                 'ACL'=>'edit',
             ),
             'SugarWidgetSubPanelTopCreateRevisionButton'=> array(
@@ -212,14 +185,6 @@ class LayoutManager
                 'add_to_passthru_data'=>array(
                     'return_type'=>'report',
                 )
-            ),
-             'SugarWidgetSubPanelTopCreateAccountNameButton' => array(
-                'widget_class'=>'SugarWidgetSubPanelTopCreateAccountNameButton',
-                'module'=>'Contacts',
-                'title'=>'LBL_NEW_BUTTON_TITLE',
-                'access_key'=>'LBL_NEW_BUTTON_KEY',
-                'form_value'=>'LBL_NEW_BUTTON_LABEL',
-                'ACL'=>'edit',
             ),
             'SugarWidgetSubPanelAddToProspectListButton' => array(
                 'widget_class'=>'SugarWidgetSubPanelTopSelectButton',

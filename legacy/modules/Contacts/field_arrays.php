@@ -93,7 +93,7 @@ $fields_array['Contact'] = array('column_fields' => array("id"
         ,'invalid_email'
         ,"campaign_id"
         ),
-        'list_fields' => array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'phone_work', 'assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'invalid_email'
+        'list_fields' => array('id', 'first_name', 'last_name', 'title', 'phone_work', 'assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'invalid_email'
         ),
         'required_fields' => array("last_name"=>1),
 );

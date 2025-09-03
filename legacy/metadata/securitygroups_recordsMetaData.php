@@ -17,13 +17,6 @@ $dictionary['securitygroups_records'] = array(
         array('name' =>'idx_securitygroups_records_del', 'type' =>'index', 'fields'=>array( 'deleted', 'record_id', 'module', 'securitygroup_id')),
     ),
     'relationships' => array(
-    
-        'securitygroups_accounts' => array(
-            'lhs_module'=> 'SecurityGroups', 'lhs_table'=> 'securitygroups', 'lhs_key' => 'id',
-            'rhs_module'=> 'Accounts', 'rhs_table'=> 'accounts', 'rhs_key' => 'id',
-            'relationship_type'=>'many-to-many',
-            'join_table'=> 'securitygroups_records', 'join_key_lhs'=>'securitygroup_id', 'join_key_rhs'=>'record_id',
-            'relationship_role_column'=>'module','relationship_role_column_value'=>'Accounts'),
         'securitygroups_bugs' => array(
             'lhs_module'=> 'SecurityGroups', 'lhs_table'=> 'securitygroups', 'lhs_key' => 'id',
             'rhs_module'=> 'Bugs', 'rhs_table'=> 'bugs', 'rhs_key' => 'id',
@@ -72,12 +65,6 @@ $dictionary['securitygroups_records'] = array(
             'relationship_type'=>'many-to-many',
             'join_table'=> 'securitygroups_records', 'join_key_lhs'=>'securitygroup_id', 'join_key_rhs'=>'record_id',
             'relationship_role_column'=>'module','relationship_role_column_value'=>'EmailTemplates'),
-        'securitygroups_leads' => array(
-            'lhs_module'=> 'SecurityGroups', 'lhs_table'=> 'securitygroups', 'lhs_key' => 'id',
-            'rhs_module'=> 'Leads', 'rhs_table'=> 'leads', 'rhs_key' => 'id',
-            'relationship_type'=>'many-to-many',
-            'join_table'=> 'securitygroups_records', 'join_key_lhs'=>'securitygroup_id', 'join_key_rhs'=>'record_id',
-            'relationship_role_column'=>'module','relationship_role_column_value'=>'Leads'),
         'securitygroups_meetings' => array(
             'lhs_module'=> 'SecurityGroups', 'lhs_table'=> 'securitygroups', 'lhs_key' => 'id',
             'rhs_module'=> 'Meetings', 'rhs_table'=> 'meetings', 'rhs_key' => 'id',

@@ -74,15 +74,6 @@ $dashletData['MyCasesDashlet']['columns'] = array(
         'link' => true,
         'default' => true
     ),
-    'account_name' => array(
-        'width' => '29',
-        'link' => true,
-        'module' => 'Accounts',
-        'id' => 'ACCOUNT_ID',
-        'ACLTag' => 'ACCOUNT',
-        'label' => 'LBL_ACCOUNT_NAME',
-        'related_fields' => array('account_id')
-    ),
     'priority' => array(
         'width' => '15',
         'label' => 'LBL_PRIORITY',

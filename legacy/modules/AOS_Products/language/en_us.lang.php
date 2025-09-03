@@ -90,5 +90,4 @@ $mod_strings = array(
     'LBL_CUSTOMERS_PURCHASED_PRODUCTS_SUBPANEL_TITLE' => 'Purchases',
     'LBL_PRODUCTS_PURCHASES' => 'Purchases',
     'LBL_AOS_QUOTE_NAME' => 'Quote',
-    'LBL_ACCOUNT_NAME' => 'Account',
 );

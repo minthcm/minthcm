@@ -174,16 +174,12 @@ class SugarWidgetSubPanelTopButton_c extends SugarWidget
         $formValues['return_id'] = $defines['focus']->id;
         $formValues['return_relationship'] = $relationship_name;
         switch (strtolower($currentModule)) {
-            case 'prospects':
-                $name = $defines['focus']->account_name ;
-                break ;
             case 'documents':
                 $name = $defines['focus']->document_name ;
                 break ;
             case 'kbdocuments':
                 $name = $defines['focus']->kbdocument_name ;
                 break ;
-            case 'leads':
             case 'contacts':
                 $name = $defines['focus']->first_name . " " .$defines['focus']->last_name ;
                 break ;
@@ -194,30 +190,16 @@ class SugarWidgetSubPanelTopButton_c extends SugarWidget
 
         // TODO: move this out and get $additionalFormFields working properly
         if (empty($additionalFormFields['parent_type'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_type'] = 'Accounts';
-            } else {
-                $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
-            }
+            $additionalFormFields['parent_type'] = $defines['focus']->module_dir;
         }
         if (empty($additionalFormFields['parent_name'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_name'] = $defines['focus']->account_name;
-                $additionalFormFields['account_name'] = $defines['focus']->account_name;
-            } else {
-                $additionalFormFields['parent_name'] = $defines['focus']->name;
-            }
+            $additionalFormFields['parent_name'] = $defines['focus']->name;
         }
         if (empty($additionalFormFields['parent_id'])) {
-            if ($defines['focus']->object_name=='Contact') {
-                $additionalFormFields['parent_id'] = $defines['focus']->account_id;
-                $additionalFormFields['account_id'] = $defines['focus']->account_id;
+            if ($defines['focus']->object_name=='Contract') {
+                $additionalFormFields['contract_id'] = $defines['focus']->id;
             } else {
-                if ($defines['focus']->object_name=='Contract') {
-                    $additionalFormFields['contract_id'] = $defines['focus']->id;
-                } else {
-                    $additionalFormFields['parent_id'] = $defines['focus']->id;
-                }
+                $additionalFormFields['parent_id'] = $defines['focus']->id;
             }
         }
 

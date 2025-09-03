@@ -163,12 +163,10 @@ class StudioModule
 
         // If a standard module then just look up its type - type is implicit for standard modules. Perhaps one day we will make it explicit, just as we have done for custom modules...
         $types = array(
-            'Accounts' => 'company',
             'Bugs' => 'issue',
             'Cases' => 'issue',
             'Contacts' => 'person',
             'Documents' => 'file',
-            'Leads' => 'person',
         );
         if (isset($types [$this->module])) {
             return $types [$this->module];

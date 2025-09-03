@@ -85,9 +85,6 @@ class CampaignsViewClassic extends SugarView
                         }
                         $params[] = $GLOBALS['mod_strings']['LBL_CAMPAIGN_WIZARD'];
                         break;
-                    case 'WebToLeadCreation':
-                        $params[] = $GLOBALS['mod_strings']['LBL_LEAD_FORM_WIZARD'];
-                        break;
                     case 'WizardNewsletter':
                         if (!empty($this->bean->id)) {
                             $params[] = "<a href='index.php?module={$this->module}&action=DetailView&record={$this->bean->id}'>".$GLOBALS['mod_strings']['LBL_NEWSLETTER_TITLE']."</a>";

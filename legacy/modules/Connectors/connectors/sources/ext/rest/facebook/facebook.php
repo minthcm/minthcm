@@ -66,9 +66,9 @@ class ext_rest_facebook extends ext_rest
         //Used to enable hover for the formatter
         $this->_enable_in_hover = false;
 
-        $this->allowedModuleList = array('Accounts' => $app_list_strings['moduleList']['Accounts'],
-            'Contacts' => $app_list_strings['moduleList']['Contacts'],
-            'Leads' => $app_list_strings['moduleList']['Leads']);
+        $this->allowedModuleList = array(
+            'Contacts' => $app_list_strings['moduleList']['Contacts']
+        );
     }
 
     /**

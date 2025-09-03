@@ -743,8 +743,6 @@ function new_handle_set_entries($module_name, $name_value_lists, $select_fields 
 
         //Add the account to a contact
         if ($module_name == 'Contacts') {
-            $GLOBALS['log']->debug('Creating Contact Account');
-            add_create_account($seed);
             $duplicate_id = check_for_duplicate_contacts($seed);
             if ($duplicate_id == null) {
                 if ($seed->ACLAccess('Save') && ($seed->deleted != 1 || $seed->ACLAccess('Delete'))) {
@@ -953,80 +951,6 @@ function login_success()
     $app_list_strings = return_app_list_strings_language($current_language);
 }
 
-
-/*
- *	Given an account_name, either create the account or assign to a contact.
- */
-function add_create_account($seed)
-{
-    global $current_user;
-    $account_name = $seed->account_name;
-    $account_id = $seed->account_id;
-    $assigned_user_id = $current_user->id;
-
-    // check if it already exists
-    $focus = BeanFactory::newBean('Accounts');
-    if ($focus->ACLAccess('Save')) {
-        $class = get_class($seed);
-        $temp = new $class();
-        $temp->retrieve($seed->id);
-        if ((!isset($account_name) || $account_name == '')) {
-            return;
-        }
-        if (!isset($seed->accounts)) {
-            $seed->load_relationship('accounts');
-        }
-
-        if ($seed->account_name == '' && isset($temp->account_id)) {
-            $seed->accounts->delete($seed->id, $temp->account_id);
-
-            return;
-        }
-
-        // attempt to find by id first
-        $ret = $focus->retrieve($account_id, true, false);
-
-        // if it doesn't exist by id, attempt to find by name (non-deleted)
-        if (empty($ret)) {
-            $query = "select {$focus->table_name}.id, {$focus->table_name}.deleted from {$focus->table_name} ";
-            $query .= " WHERE name='" . $seed->db->quote($account_name) . "'";
-            $query .= " ORDER BY deleted ASC";
-            $result = $seed->db->query($query, true);
-
-            $row = $seed->db->fetchByAssoc($result, false);
-
-            if (!empty($row['id'])) {
-                $focus->retrieve($row['id']);
-            }
-        } // if it exists by id but was deleted, just remove it entirely
-        elseif ($focus->deleted) {
-            $query2 = "delete from {$focus->table_name} WHERE id='" . $seed->db->quote($focus->id) . "'";
-            $seed->db->query($query2, true);
-            // it was deleted, create new
-            $focus = BeanFactory::newBean('Accounts');
-        }
-
-        // if we didnt find the account, so create it
-        if (empty($focus->id)) {
-            $focus->name = $account_name;
-
-            if (isset($assigned_user_id)) {
-                $focus->assigned_user_id = $assigned_user_id;
-                $focus->modified_user_id = $assigned_user_id;
-            }
-            $focus->save();
-        }
-
-        if ($seed->accounts != null && $temp->account_id != null && $temp->account_id != $focus->id) {
-            $seed->accounts->delete($seed->id, $temp->account_id);
-        }
-
-        if (isset($focus->id) && $focus->id != '') {
-            $seed->account_id = $focus->id;
-        }
-    }
-}
-
 function check_for_duplicate_contacts($seed)
 {
     if (isset($seed->id)) {
@@ -1059,15 +983,9 @@ function check_for_duplicate_contacts($seed)
                                     $contact->email
                                 ) == 0 || strcmp($trimmed_email2, $contact->email2) == 0)
                     ) {
-                    //bug: 39234 - check if the account names are the same
-                    //if the incoming contact's account_name is empty OR it is not empty and is the same
-                    //as an existing contact's account name, then find the match.
-                    $contact->load_relationship('accounts');
-                    if (empty($seed->account_name) || strcmp($seed->account_name, $contact->account_name) == 0) {
-                        $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - duplicate found ' . $contact->id);
+                    $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - duplicate found ' . $contact->id);
 
-                        return $contact->id;
-                    }
+                    return $contact->id;  
                 }
             }
         }

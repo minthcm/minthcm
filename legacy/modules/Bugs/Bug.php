@@ -85,7 +85,6 @@ class Bug extends SugarBean
     public $created_by;
     public $created_by_name;
     public $modified_by_name;
-    public $account_id;
     public $contact_id;
     public $case_id;
     public $task_id;
@@ -106,16 +105,15 @@ class Bug extends SugarBean
 
     public $module_dir = 'Bugs';
     public $table_name = "bugs";
-    public $rel_account_table = "accounts_bugs";
     public $rel_contact_table = "contacts_bugs";
     public $rel_case_table = "cases_bugs";
     public $importable = true;
     public $object_name = "Bug";
 
     // This is used to retrieve related fields from form posts.
-    public $additional_column_fields = array('assigned_user_name', 'assigned_user_id', 'case_id', 'account_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');
+    public $additional_column_fields = array('assigned_user_name', 'assigned_user_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');
 
-    public $relationship_fields = array('case_id'=>'cases', 'account_id' => 'accounts', 'contact_id'=>'contacts',
+    public $relationship_fields = array('case_id'=>'cases', 'contact_id'=>'contacts',
                                     'task_id'=>'tasks', 'note_id'=>'notes', 'meeting_id'=>'meetings',
                                     'call_id'=>'calls', 'email_id'=>'emails');
 

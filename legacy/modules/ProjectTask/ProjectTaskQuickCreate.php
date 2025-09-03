@@ -99,8 +99,6 @@ class ProjectTaskQuickCreate extends QuickCreate
             'call_back_function' => 'set_return',
             'form_name' => 'projectTaskQuickCreate',
             'field_to_name_array' => array(
-                'id' => 'account_id',
-                'name' => 'account_name',
             ),
         );
     

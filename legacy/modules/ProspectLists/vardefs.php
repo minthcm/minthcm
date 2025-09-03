@@ -177,22 +177,6 @@ $dictionary['ProspectList'] = array(
                 'relationship' => 'prospect_list_contacts',
                 'source' => 'non-db',
             ),
-        'leads' =>
-            array(
-                'name' => 'leads',
-                'vname' => 'LBL_LEADS',
-                'type' => 'link',
-                'relationship' => 'prospect_list_leads',
-                'source' => 'non-db',
-            ),
-        'accounts' =>
-            array(
-                'name' => 'accounts',
-                'vname' => 'LBL_ACCOUNTS',
-                'type' => 'link',
-                'relationship' => 'prospect_list_accounts',
-                'source' => 'non-db',
-            ),
         'campaigns' => array(
             'name' => 'campaigns',
             'vname' => 'LBL_CAMPAIGNS',

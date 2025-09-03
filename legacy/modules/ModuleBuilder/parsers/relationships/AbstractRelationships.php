@@ -70,7 +70,7 @@ class AbstractRelationships
     // bug33522 - the following relationship names that you would find in $dictionary[ <relationshipName> ]
     // have different actual relationship names other than <relationshipName>
     // e.g $dictionary[ 'quotes_accounts' ] has two relationships: quotes_billto_accounts, quotes_shipto_accounts
-    protected $specialCaseBaseNames = array( 'quotes_accounts',
+    protected $specialCaseBaseNames = array(
                                              'quotes_contacts',
                                              'emails_beans',
                                              'linked_documents',

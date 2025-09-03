@@ -81,25 +81,6 @@ if (!empty($sugar_demodata['quotes_seed_data']['quotes'])) {
         $focus->team_id = $current_user->team_id;
         $focus->team_set_id = $current_user->team_set_id;
 
-        //Set random account and contact ids
-        $sql = 'SELECT * FROM accounts WHERE deleted = 0';
-        $result = DBManagerFactory::getInstance()->limitQuery($sql, 0, 10, true, "Error retrieving Accounts");
-        while ($row = DBManagerFactory::getInstance()->fetchByAssoc($result)) {
-            $focus->billing_account_id = $row['id'];
-            $focus->name = str_replace('[account name]', $row['name'], $focus->name);
-            $focus->billing_address_street = $row['billing_address_street'];
-            $focus->billing_address_city = $row['billing_address_city'];
-            $focus->billing_address_state = $row['billing_address_state'];
-            $focus->billing_address_country = $row['billing_address_country'];
-            $focus->billing_address_postalcode = $row['billing_address_postalcode'];
-            $focus->shipping_address_street = $row['shipping_address_street'];
-            $focus->shipping_address_city = $row['shipping_address_city'];
-            $focus->shipping_address_state = $row['shipping_address_state'];
-            $focus->shipping_address_country = $row['shipping_address_country'];
-            $focus->shipping_address_postalcode = $row['shipping_address_postalcode'];
-            break;
-        }
-
 		foreach($quote['bundle_data'] as $bundle_key=>$bundle) {
 			$pb = new ProductBundle();
 	        $pb->team_id = $focus->team_set_id;
@@ -131,7 +112,6 @@ if (!empty($sugar_demodata['quotes_seed_data']['quotes'])) {
                     $product->team_id = $focus->team_id;
                     $product->team_set_id = $focus->team_set_id;
                     $product->quote_id = $focus->id;
-                    $product->account_id = $focus->billing_account_id;
                     $product->status = 'Quotes';
 
                     if ($focus->quote_stage == 'Closed Accepted') {

@@ -146,7 +146,7 @@ $dictionary['Bug'] = array(
             'type' => 'enum',
             'options' => 'product_category_dom',
             'len' => 255,
-            'comment' => 'Where the bug was discovered (ex: Accounts, Contacts, Leads)'
+            'comment' => 'Where the bug was discovered (ex: Accounts, Contacts)'
         ),
 
         'tasks' => array(
@@ -197,13 +197,6 @@ $dictionary['Bug'] = array(
             'relationship' => 'contacts_bugs',
             'source' => 'non-db',
             'vname' => 'LBL_CONTACTS'
-        ),
-        'accounts' => array(
-            'name' => 'accounts',
-            'type' => 'link',
-            'relationship' => 'accounts_bugs',
-            'source' => 'non-db',
-            'vname' => 'LBL_ACCOUNTS'
         ),
         'cases' => array(
             'name' => 'cases',

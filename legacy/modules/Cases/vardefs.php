@@ -71,47 +71,6 @@ $dictionary['Case'] = array(
             'cols' => 80,
         ),
 
-        'account_name' => array(
-            'name' => 'account_name',
-            'rname' => 'name',
-            'id_name' => 'account_id',
-            'vname' => 'LBL_ACCOUNT_NAME',
-            'type' => 'relate',
-            'link' => 'accounts',
-            'table' => 'accounts',
-            'join_name' => 'accounts',
-            'isnull' => 'true',
-            'module' => 'Accounts',
-            'dbType' => 'varchar',
-            'len' => 100,
-            'source' => 'non-db',
-            'unified_search' => true,
-            'comment' => 'The name of the account represented by the account_id field',
-            'required' => true,
-            'importable' => 'required',
-        ),
-        'account_name1' => array(
-            'name' => 'account_name1',
-            'source' => 'non-db',
-            'type' => 'text',
-            'len' => 100,
-            'importable' => 'false',
-            'studio' => array("formula" => false),
-        ),
-        'account_id' => array(
-            'name' => 'account_id',
-            'type' => 'relate',
-            'dbType' => 'id',
-            'rname' => 'id',
-            'module' => 'Accounts',
-            'id_name' => 'account_id',
-            'reportable' => false,
-            'vname' => 'LBL_ACCOUNT_ID',
-            'audited' => true,
-            'massupdate' => false,
-            'comment' => 'The account to which the case is associated'
-        ),
-
         'state' => array(
             'name' => 'state',
             'vname' => 'LBL_STATE',
@@ -279,15 +238,6 @@ $dictionary['Case'] = array(
             'source' => 'non-db',
             'vname' => 'LBL_CONTACTS',
         ),
-        'accounts' => array(
-            'name' => 'accounts',
-            'type' => 'link',
-            'relationship' => 'account_cases',
-            'link_type' => 'one',
-            'side' => 'right',
-            'source' => 'non-db',
-            'vname' => 'LBL_ACCOUNT',
-        ),
         'project' => array(
             'name' => 'project',
             'type' => 'link',
@@ -367,7 +317,6 @@ $dictionary['Case'] = array(
     'indices' => array(
         array('name' => 'case_number', 'type' => 'index', 'fields' => array('case_number')),
         array('name' => 'idx_case_name', 'type' => 'index', 'fields' => array('name')),
-        array('name' => 'idx_account_id', 'type' => 'index', 'fields' => array('account_id')),
         array(
             'name' => 'idx_cases_stat_del',
             'type' => 'index',

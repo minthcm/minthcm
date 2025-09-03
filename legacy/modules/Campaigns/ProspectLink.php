@@ -55,7 +55,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once 'data/Link2.php';
 
 /**
- * @brief Bug #40166. Campaign Log Report will not display Contact/Account Names
+ * @brief Bug #40166. Campaign Log Report will not display Contact Names
  */
 class ProspectLink extends Link2
 {

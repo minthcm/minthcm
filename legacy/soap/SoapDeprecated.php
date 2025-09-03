@@ -179,30 +179,6 @@ $server->register(
     array('return' => 'xsd:string'),
     $NAMESPACE
 );
-$server->register(
-    'create_lead',
-    array(
-        'user_name' => 'xsd:string',
-        'password' => 'xsd:string',
-        'first_name' => 'xsd:string',
-        'last_name' => 'xsd:string',
-        'email_address' => 'xsd:string'
-    ),
-    array('return' => 'xsd:string'),
-    $NAMESPACE
-);
-$server->register(
-    'create_account',
-    array(
-        'user_name' => 'xsd:string',
-        'password' => 'xsd:string',
-        'name' => 'xsd:string',
-        'phone' => 'xsd:string',
-        'website' => 'xsd:string'
-    ),
-    array('return' => 'xsd:string'),
-    $NAMESPACE
-);
 
 
 $server->register(
@@ -317,17 +293,11 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
         $output_list[] = array(
             "name1" => $contact->first_name,
             "name2" => $contact->last_name,
-            "association" => $contact->account_name,
             "type" => 'Contact',
             "id" => $contact->id,
             "msi_id" => $msi_id,
             "email_address" => $contact->email1
         );
-
-        $accounts = $contact->get_linked_beans('accounts', 'Account');
-        foreach ($accounts as $account) {
-            $output_list[] = get_account_array($account, $msi_id);
-        }
 
 
         $cases = $contact->get_linked_beans('cases', 'aCase');
@@ -344,43 +314,6 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
         foreach ($projects as $project) {
             $output_list[] = get_bean_array($project, $msi_id, 'Project');
         }
-
-        $msi_id = $msi_id + 1;
-    }
-}
-
-/**
- * Internal: Add Leads that match the specified email address to the result array
- *
- * @param Array $output_list -- List of matching detail records
- * @param String $email_address -- Email address
- * @param Bean $seed_lead -- Seed Lead Bean
- * @param int $msi_id -- output array offset.
- */
-function add_leads_matching_email_address(&$output_list, $email_address, &$seed_lead, &$msi_id)
-{
-    $safe_email_address = DBManagerFactory::getInstance()->quote($email_address);
-    if (!$seed_lead->ACLAccess('ListView')) {
-        return;
-    }
-
-    $leadList = $seed_lead->emailAddress->getBeansByEmailAddress($safe_email_address);
-
-    // create a return array of names and email addresses.
-    foreach ($leadList as $lead) {
-        if (!is_a($lead, 'Lead')) {
-            continue;
-        }
-
-        $output_list[] = array(
-            "name1" => $lead->first_name,
-            "name2" => $lead->last_name,
-            "association" => $lead->account_name,
-            "type" => 'Lead',
-            "id" => $lead->id,
-            "msi_id" => $msi_id,
-            "email_address" => $lead->email1
-        );
 
         $msi_id = $msi_id + 1;
     }
@@ -414,17 +347,11 @@ function get_contact_relationships($user_name, $password, $id)
     $output_list[] = array(
         "name1" => $seed_contact->first_name,
         "name2" => $seed_contact->last_name,
-        "association" => $seed_contact->account_name,
         "type" => 'Contact',
         "id" => $seed_contact->id,
         "msi_id" => $msi_id,
         "email_address" => $seed_contact->email1
     );
-
-    $accounts = $seed_contact->get_linked_beans('accounts', 'Account');
-    foreach ($accounts as $account) {
-        $output_list[] = get_account_array($account, $msi_id);
-    }
 
 
     $cases = $seed_contact->get_linked_beans('cases', 'aCase');
@@ -466,7 +393,6 @@ function contact_by_email($user_name, $password, $email_address)
     }
 
     $seed_contact = BeanFactory::newBean('Contacts');
-    $seed_lead = BeanFactory::newBean('Leads');
     $output_list = array();
     $email_address_list = explode("; ", $email_address);
 
@@ -498,11 +424,7 @@ function contact_by_email($user_name, $password, $email_address)
         if ($seed_contact->ACLAccess('ListView')) {
             add_contacts_matching_email_address($output_list, $single_address, $seed_contact, $msi_id);
         }
-        // verify that leads can be listed
-        if ($seed_lead->ACLAccess('ListView')) {
-            add_leads_matching_email_address($output_list, $single_address, $seed_lead, $msi_id);
         }
-    }
 
     return $output_list;
 }
@@ -521,7 +443,6 @@ function get_contact_array($contact, $msi_id = '0')
     return array(
         "name1" => $contact->first_name,
         "name2" => $contact->last_name,
-        "association" => $contact->account_name,
         "type" => 'Contact',
         "id" => $contact->id,
         "msi_id" => $msi_id,
@@ -609,92 +530,6 @@ function contact_by_search($name, $where = '', $msi_id = '0')
     return $output_list;
 }
 
-/**
- * Internal: convert a bean into an array
- *
- * @param Bean $bean -- The bean to convert
- * @param int $msi_id -- Russult array index
- * @return An associated array containing the detail fields.
- */
-function get_lead_array($lead, $msi_id = '0')
-{
-    $lead->emailAddress->handleLegacyRetrieve($lead);
-
-    return array(
-        "name1" => $lead->first_name,
-        "name2" => $lead->last_name,
-        "association" => $lead->account_name,
-        "type" => 'Lead',
-        "id" => $lead->id,
-        "msi_id" => $msi_id,
-        "email_address" => $lead->email1
-    );
-}
-
-function lead_by_search($name, $where = '', $msi_id = '0')
-{
-    $seed_lead = BeanFactory::newBean('Leads');
-    if ($where == '') {
-        $where = $seed_lead->build_generic_where_clause($name);
-    }
-    if (!$seed_lead->ACLAccess('ListView')) {
-        return array();
-    }
-    $response = $seed_lead->get_list("last_name, first_name", $where, 0);
-    $lead_list = $response['list'];
-
-    $output_list = array();
-
-    // create a return array of names and email addresses.
-    foreach ($lead_list as $lead) {
-        $output_list[] = get_lead_array($lead, $msi_id);
-    }
-
-    return $output_list;
-}
-
-/**
- * Internal: convert a bean into an array
- *
- * @param Bean $bean -- The bean to convert
- * @param int $msi_id -- Russult array index
- * @return An associated array containing the detail fields.
- */
-function get_account_array($account, $msi_id)
-{
-    return array(
-        "name1" => '',
-        "name2" => $account->name,
-        "association" => $account->billing_address_city,
-        "type" => 'Account',
-        "id" => $account->id,
-        "msi_id" => $msi_id,
-        "email_address" => $account->email1
-    );
-}
-
-function account_by_search($name, $where = '', $msi_id = '0')
-{
-    $seed_account = BeanFactory::newBean('Accounts');
-    if (!$seed_account->ACLAccess('ListView')) {
-        return array();
-    }
-    if ($where == '') {
-        $where = $seed_account->build_generic_where_clause($name);
-    }
-    $response = $seed_account->get_list("name", $where, 0);
-    $accountList = $response['list'];
-
-    $output_list = array();
-
-    // create a return array of names and email addresses.
-    foreach ($accountList as $account) {
-        $output_list[] = get_account_array($account, $msi_id);
-    }
-
-    return $output_list;
-}
-
 
 
 /**
@@ -729,7 +564,6 @@ function get_case_array($value, $msi_id)
     return array(
         "name1" => '',
         "name2" => $value->get_summary_text(),
-        "association" => $value->account_name,
         "type" => 'Case',
         "id" => $value->id,
         "msi_id" => $msi_id,
@@ -877,57 +711,6 @@ function create_contact($user_name, $password, $first_name, $last_name, $email_a
     return $contact->save();
 }
 
-function create_lead($user_name, $password, $first_name, $last_name, $email_address)
-{
-    if (!validate_user($user_name, $password)) {
-        return 0;
-    }
-
-    //todo make the activity body not be html encoded
-
-
-    $seed_user = BeanFactory::newBean('Users');
-    $user_id = $seed_user->retrieve_user_id($user_name);
-
-
-    $lead = BeanFactory::newBean('Leads');
-    if (!$lead->ACLAccess('Save')) {
-        return -1;
-    }
-    $lead->first_name = $first_name;
-    $lead->last_name = $last_name;
-    $lead->email1 = $email_address;
-    $lead->assigned_user_id = $user_id;
-    $lead->assigned_user_name = $user_name;
-
-    return $lead->save();
-}
-
-function create_account($user_name, $password, $name, $phone, $website)
-{
-    if (!validate_user($user_name, $password)) {
-        return 0;
-    }
-
-    //todo make the activity body not be html encoded
-
-
-    $seed_user = BeanFactory::newBean('Users');
-    $user_id = $seed_user->retrieve_user_id($user_name);
-    $account = BeanFactory::newBean('Accounts');
-    if (!$account->ACLAccess('Save')) {
-        return -1;
-    }
-    $account->name = $name;
-    $account->phone_office = $phone;
-    $account->website = $website;
-    $account->assigned_user_id = $user_id;
-    $account->assigned_user_name = $user_name;
-    $account->save();
-
-    return $account->id;
-}
-
 function create_case($user_name, $password, $name)
 {
     if (!validate_user($user_name, $password)) {
@@ -960,8 +743,6 @@ function search($user_name, $password, $name)
     $list = array();
     foreach ($name_list as $single_name) {
         $list = array_merge($list, contact_by_search($single_name));
-        $list = array_merge($list, lead_by_search($single_name));
-        $list = array_merge($list, account_by_search($single_name));
         $list = array_merge($list, case_by_search($single_name));
         $list = array_merge($list, bug_by_search($single_name));
     }

@@ -72,13 +72,9 @@ class AOS_Invoices_sugar extends Basic
     public $shipping_address_country;
     public $email1;
     public $email_addresses_primary;
-    public $billing_account_id;
-    public $billing_account;
     public $billing_contact_id;
     public $billing_contact;
     public $number;
-    public $shipping_account_id;
-    public $shipping_account;
     public $shipping_contact_id;
     public $shipping_contact;
     public $subtotal_amount;

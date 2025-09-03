@@ -328,14 +328,6 @@ SugarWidgetSchedulerSearch.prototype.display = function () {
   button1.innerHTML = GLOBAL_REGISTRY['meeting_strings']['LBL_CREATE_CONTACT'];
   create_invitees_buttons.appendChild(button1);
 
-  /*
-   var button2 = document.createElement("button");
-   button2.setAttribute('id', 'create_invitee_as_lead');
-   button2.setAttribute('type', 'button');
-   button2.setAttribute('onclick', 'SugarWidgetSchedulerSearch.showCreateForm(\'Leads\');');
-   button2.innerHTML = GLOBAL_REGISTRY['meeting_strings']['LBL_CREATE_LEAD'];
-   create_invitees_buttons.appendChild(button2);
-   */
   create_invitees.appendChild(create_invitees_buttons);
 
 
@@ -542,11 +534,6 @@ SugarWidgetScheduler.fill_invitees = function (form) {
     } else if (GLOBAL_REGISTRY.focus.users_arr[i].module == 'Contact') {
       form.contact_invitees.value += GLOBAL_REGISTRY.focus.users_arr[i].fields.id + ",";
     }
-    /*else if (GLOBAL_REGISTRY.focus.users_arr[i].module == 'Lead') {
-     form.lead_invitees.value += GLOBAL_REGISTRY.focus.users_arr[i].fields.id + ",";
-     }*/
-    //console.log(form.user_invitees.value);
-    //console.log(form.contact_invitees.value);
   }
 };
 

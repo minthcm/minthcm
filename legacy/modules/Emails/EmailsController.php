@@ -335,9 +335,6 @@ class EmailsController extends SugarController
 
             $focusName = $request['parent_type'];
             $focus = BeanFactory::getBean($focusName, $request['parent_id']);
-            if ($email->module_dir == 'Accounts') {
-                $focusName = 'Accounts';
-            }
 
             /**
              * @var EmailTemplate $emailTemplate

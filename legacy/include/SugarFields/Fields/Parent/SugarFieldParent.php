@@ -220,7 +220,7 @@ class SugarFieldParent extends SugarFieldRelate {
       $json = getJSONobj();
 
       $dynamicParentTypePlaceHolder = "**@**"; //Placeholder for dynamic parent so smarty tags are not escaped in json encoding.
-      $dynamicParentType = '{/literal}{if !empty($fields.parent_type.value)}{$fields.parent_type.value}{else}Accounts{/if}{literal}';
+      $dynamicParentType = '{/literal}{if !empty($fields.parent_type.value)}{$fields.parent_type.value}{/if}{literal}';
 
       //Get the parent sqs definition
       $qsd = QuickSearchDefaults::getQuickSearchDefaults();

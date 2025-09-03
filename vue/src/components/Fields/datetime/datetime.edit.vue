@@ -3,23 +3,31 @@
         <v-text-field :label="label" variant="outlined" density="compact" hide-details v-model="dateValue">
             <template #append-inner>
                 <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
-                    <template v-slot:activator="{ props, isActive }">
+                    <template v-slot:activator="{ props }">
                         <v-icon class="mint-date-field-btn" v-bind="props">mdi-calendar</v-icon>
                     </template>
-                    <v-date-picker v-model="pickerValue" hide-actions>
+                    <v-date-picker v-model="datePickerValue" hide-actions>
                         <template #header></template>
                     </v-date-picker>
                 </v-menu>
             </template>
         </v-text-field>
-        <v-text-field
-            :disabled="!dateValue"
-            variant="outlined"
-            density="compact"
-            type="time"
-            hide-details
-            v-model="timeValue"
-        />
+        <v-text-field :disabled="!dateValue" variant="outlined" density="compact" hide-details v-model="timeValue">
+            <template #append-inner>
+                <v-menu v-model="timePickerMenu" offset="16" :close-on-content-click="false">
+                    <template v-slot:activator="{ props }">
+                        <v-icon class="mint-date-field-btn" v-bind="props">mdi-clock-time-eight-outline</v-icon>
+                    </template>
+                    <v-time-picker
+                        v-model="timePickerValue"
+                        :format="timeFormat"
+                        :ampm-in-title="timeFormat === 'ampm'"
+                    >
+                        <template #header></template>
+                    </v-time-picker>
+                </v-menu>
+            </template>
+        </v-text-field>
     </div>
 </template>
 
@@ -28,6 +36,7 @@ import { ref, computed, watch } from 'vue'
 import { DateTime } from 'luxon'
 import { FieldVardef } from '@/store/modules'
 import { usePreferencesStore } from '@/store/preferences';
+import DateUtils from '@/utils/dates'
 
 interface Props {
     defs: FieldVardef
@@ -40,8 +49,13 @@ const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
 const datePickerMenu = ref(false)
+const timePickerMenu = ref(false)
 const model = ref(props.modelValue)
 const preferences = usePreferencesStore()
+
+const timeFormat = computed(() => {
+    return DateUtils.getTimeFormatGeneralized()
+})
 
 const dateValue = computed({
     get() {
@@ -72,6 +86,7 @@ const timeValue = computed({
         return '00:00'
     },
     set(newVal) {
+        timePickerMenu.value = false
         newVal = DateTime.fromSQL(newVal).setZone('UTC').toFormat('HH:mm')
         const modelDt = DateTime.fromSQL(model.value, { zone: 'UTC' })
         if (modelDt.isValid) {
@@ -82,7 +97,7 @@ const timeValue = computed({
     },
 })
 
-const pickerValue = computed({
+const datePickerValue = computed({
     get() {
         if (!model.value?.trim()) {
             return new Date()
@@ -102,8 +117,28 @@ const pickerValue = computed({
     },
 })
 
+const timePickerValue = computed({
+    get() {
+        const dt = DateTime.fromSQL(model.value, { zone: 'UTC' })
+        if (dt.isValid) {
+            return dt.toLocal().toFormat('HH:mm') || '00:00'
+        }
+        return '00:00'
+    },
+    set(newVal) {
+        newVal = DateTime.fromFormat(newVal, 'HH:mm').setZone('UTC').toFormat('HH:mm')
+        const modelDt = DateTime.fromSQL(model.value, { zone: 'UTC' })
+        if (modelDt.isValid) {
+            model.value = `${modelDt.toFormat('yyyy-MM-dd')} ${newVal}:00`
+        } else {
+            model.value = ''
+        }
+    },
+})
+
 watch(model, (newVal) => {
     datePickerMenu.value = false
+    timePickerMenu.value = false
     const dt = DateTime.fromSQL(newVal?.toString())
     if (dt.isValid) {
         console.log('new val', model.value)

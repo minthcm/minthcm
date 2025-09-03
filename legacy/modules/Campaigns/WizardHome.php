@@ -283,7 +283,6 @@ function create_campaign_summary($focus)
     $cmp_input .=  " <input id='wiz_status_button' name='SUBMIT'  ";
     $cmp_input.= "onclick=\"this.form.return_module.value='Campaigns';";
     $cmp_input.= "this.form.module.value='Campaigns';";
-    $cmp_input.= "this.form.action.value='RoiDetailView';";
     $cmp_input.= "this.form.return_action.value='WizardHome';";
     $cmp_input.= "this.form.record.value='".$focus->id."';";
     $cmp_input.= "this.form.return_id.value='".$focus->id."';\" ";

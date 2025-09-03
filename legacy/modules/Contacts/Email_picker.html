@@ -77,20 +77,6 @@
 							<input type="submit" name="button" class="button" id="search_form_submit" title="{APP.LBL_SEARCH_BUTTON_TITLE}" value="{APP.LBL_SEARCH_BUTTON_LABEL}" />
 						</td>
 					</tr>
-					<tr>
-						<td scope="row" nowrap="nowrap">
-							{MOD.LBL_ACCOUNT_NAME}
-						</td>
-						<td >
-							<input type="text" size="20" name="account_name"  value="{LAST_SEARCH.ACCOUNT_NAME}{ACCOUNT_NAME}" />
-						</td>
-						<td>
-							&nbsp;
-						</td>
-						<td>
-							&nbsp;
-						</td>
-					</tr>
 				</table>
 			</td>
 		</tr>
@@ -144,9 +130,6 @@
 				{MOD.LBL_LIST_EMAIL_ADDRESS}{arrow_start}{email1_arrow}{arrow_end}
 			</a>
 		</td>
-		<td scope="col" width="40%"  nowrap="nowrap">
-			{MOD.LBL_LIST_ACCOUNT_NAME}
-		</td>
 	</tr>
 <!-- BEGIN: row -->
 	<tr height="20" class="{ROW_COLOR}S1">
@@ -166,9 +149,6 @@
 			<a href="#"  onclick="send_back('Contacts','{CONTACT.ID}');">
 				{CONTACT.EMAIL2}
 			</a>
-		</td>
-		<td valign="top">
-			{CONTACT.ACCOUNT_NAME}
 		</td>
 	</tr>
 	<tr>

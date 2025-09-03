@@ -38,10 +38,6 @@ array(
     array(
         'default' => ''
         ),
-'billing_account' =>
-    array(
-        'default' => ''
-        ),
 'assigned_user_id' =>
     array(
         'type' => 'assigned_user_name',
@@ -62,12 +58,6 @@ array(
         'label'   => 'LBL_LIST_NAME',
         'link'    => true,
         'default' => true
-        ),
-        
-'billing_account' =>
-    array(
-        'width' => '20',
-        'label'   => 'LBL_BILLING_ACCOUNT'
         ),
 'billing_contact' =>
     array(

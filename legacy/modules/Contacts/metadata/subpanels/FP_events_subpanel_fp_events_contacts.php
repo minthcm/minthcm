@@ -23,18 +23,6 @@ $subpanel_layout['list_fields'] = array(
     'width' => '23%',
     'default' => true,
   ),
-  'account_name' =>
-  array(
-    'name' => 'account_name',
-    'module' => 'Accounts',
-    'target_record_key' => 'account_id',
-    'target_module' => 'Accounts',
-    'widget_class' => 'SubPanelDetailViewLink',
-    'vname' => 'LBL_LIST_ACCOUNT_NAME',
-    'width' => '22%',
-    'sortable' => false,
-    'default' => true,
-  ),
   'phone_work' =>
   array(
     'name' => 'phone_work',
@@ -110,10 +98,6 @@ $subpanel_layout['list_fields'] = array(
   'salutation' =>
   array(
     'name' => 'salutation',
-    'usage' => 'query_only',
-  ),
-  'account_id' =>
-  array(
     'usage' => 'query_only',
   ),
 );

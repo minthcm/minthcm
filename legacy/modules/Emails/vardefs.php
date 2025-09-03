@@ -408,15 +408,6 @@ $dictionary['Email'] = array(
       ),
       /* relationship collection attributes */
       /* added to support InboundEmail */
-      'accounts' => array(
-         'name' => 'accounts',
-         'vname' => 'LBL_EMAILS_ACCOUNTS_REL',
-         'type' => 'link',
-         'relationship' => 'emails_accounts_rel',
-         'module' => 'Accounts',
-         'bean_name' => 'Account',
-         'source' => 'non-db',
-      ),
       'bugs' => array(
          'name' => 'bugs',
          'vname' => 'LBL_EMAILS_BUGS_REL',
@@ -442,15 +433,6 @@ $dictionary['Email'] = array(
          'relationship' => 'emails_contacts_rel',
          'module' => 'Contacts',
          'bean_name' => 'Contact',
-         'source' => 'non-db',
-      ),
-      'leads' => array(
-         'name' => 'leads',
-         'vname' => 'LBL_EMAILS_LEADS_REL',
-         'type' => 'link',
-         'relationship' => 'emails_leads_rel',
-         'module' => 'Leads',
-         'bean_name' => 'Lead',
          'source' => 'non-db',
       ),
       'project' => array(
@@ -672,20 +654,6 @@ $dictionary['Email'] = array(
          'relationship_role_column' => 'bean_module',
          'relationship_role_column_value' => 'Contacts',
       ),
-      'emails_accounts_rel' => array(
-         'lhs_module' => 'Emails',
-         'lhs_table' => 'emails',
-         'lhs_key' => 'id',
-         'rhs_module' => 'Accounts',
-         'rhs_table' => 'accounts',
-         'rhs_key' => 'id',
-         'relationship_type' => 'many-to-many',
-         'join_table' => 'emails_beans',
-         'join_key_lhs' => 'email_id',
-         'join_key_rhs' => 'bean_id',
-         'relationship_role_column' => 'bean_module',
-         'relationship_role_column_value' => 'Accounts',
-      ),
       'emails_employees_rel' => array(
          'lhs_module' => 'Emails',
          'lhs_table' => 'emails',
@@ -713,20 +681,6 @@ $dictionary['Email'] = array(
          'join_key_rhs' => 'bean_id',
          'relationship_role_column' => 'bean_module',
          'relationship_role_column_value' => 'Candidates',
-      ),
-      'emails_leads_rel' => array(
-         'lhs_module' => 'Emails',
-         'lhs_table' => 'emails',
-         'lhs_key' => 'id',
-         'rhs_module' => 'Leads',
-         'rhs_table' => 'leads',
-         'rhs_key' => 'id',
-         'relationship_type' => 'many-to-many',
-         'join_table' => 'emails_beans',
-         'join_key_lhs' => 'email_id',
-         'join_key_rhs' => 'bean_id',
-         'relationship_role_column' => 'bean_module',
-         'relationship_role_column_value' => 'Leads',
       ),
       'emails_aos_contracts_rel' => array(
          'lhs_module' => 'Emails',

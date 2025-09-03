@@ -56,7 +56,7 @@ class TokenService
         // Return token data
         return [
             'active' => true,
-            'scope' => $tokenBean->scopes ?? 'mcp:read mcp:write',
+            'scope' => $tokenBean->scope ?? 'mcp:read mcp:write',
             'client_id' => $tokenBean->client,
             'user_id' => $tokenBean->assigned_user_id,
             'exp' => strtotime($tokenBean->access_token_expires),
@@ -99,7 +99,7 @@ class TokenService
         $tokenBean->refresh_token = $refreshToken;
         $tokenBean->access_token_expires = $this->getExpiryDate($expiresIn);
         $tokenBean->refresh_token_expires = $this->getExpiryDate($expiresIn * 24 * 30); // 30 days
-        $tokenBean->scopes = $scope;
+        $tokenBean->scope = $scope;
         $tokenBean->assigned_user_id = $userId;
 
         $result = $tokenBean->save();

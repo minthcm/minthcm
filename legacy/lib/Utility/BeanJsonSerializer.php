@@ -259,28 +259,6 @@ class BeanJsonSerializer
             }
             //endregion
 
-            //region account
-            if ($key === 'account_id') {
-                $prettyBean['account']['id'] = $value;
-                continue;
-            }
-
-            if ($key === 'account_name') {
-                $prettyBean['account']['name'] = $value;
-                continue;
-            }
-
-            if ($key === 'title') {
-                $prettyBean['account']['title'] = $value;
-                continue;
-            }
-
-            if ($key === 'department') {
-                $prettyBean['account']['department'] = $value;
-                continue;
-            }
-            //endregion
-
             //region parent
             if ($key === 'parent_id') {
                 $prettyBean['parent']['id'] = $value;

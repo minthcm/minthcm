@@ -979,7 +979,7 @@ class Email extends Basic
 
             if (isset($request['parent_type']) && !empty($request['parent_type']) &&
                 isset($request['parent_id']) && !empty($request['parent_id']) &&
-                in_array($request['parent_type'], ['Accounts', 'Cases', 'Contacts', 'Leads', 'Users', 'Prospects'])) {
+                in_array($request['parent_type'], ['Cases', 'Contacts', 'Users', 'Prospects'])) {
                     if (isset($beanList[$request['parent_type']]) && !empty($beanList[$request['parent_type']])) {
                     $className = $beanList[$request['parent_type']];
                     if (isset($beanFiles[$className]) && !empty($beanFiles[$className])) {
@@ -1441,7 +1441,7 @@ class Email extends Basic
 
     /**
      * Generates a config-specified separated name and addresses to be used in compose email screen for
-     * contacts or leads from listview
+     * contacts from listview
      * By default, use comma, but allow for non-standard delimiters as specified in email_address_separator
      *
      * @param $module string module name
@@ -3543,17 +3543,6 @@ class Email extends Basic
                     ) . $mod_strings['LBL_CREATE_CASE'] . '</a>';
                     break;
 
-                case 'sales':
-                    $email_fields['CREATE_RELATED'] = '<a href="index.php?module=Leads&action=EditView&inbound_email_id=' . $this->id . '" >' . SugarThemeRegistry::current()->getImage(
-                        'CreateLeads',
-                        'border="0"',
-                        null,
-                        null,
-                        ".gif",
-                        $mod_strings['LBL_CREATE_LEADS']
-                    ) . $mod_strings['LBL_CREATE_LEAD'] . '</a>';
-                    break;
-
                 case 'contact':
                     $email_fields['CREATE_RELATED'] = '<a href="index.php?module=Contacts&action=EditView&inbound_email_id=' . $this->id . '" >' . SugarThemeRegistry::current()->getImage(
                         'CreateContacts',
@@ -4213,37 +4202,6 @@ eoq;
     }
 
     /**
-     * Guesses Primary Parent id from From: email address.  Cascades guesses from Accounts to Contacts to Leads to
-     * Users.  This will not affect the many-to-many relationships already constructed as this is, at best,
-     * informational linking.
-     */
-    public function fillPrimaryParentFields()
-    {
-        if (empty($this->from_addr)) {
-            return;
-        }
-
-        $GLOBALS['log']->debug("*** Email trying to guess Primary Parent from address [ {$this->from_addr} ]");
-
-        $tables = array('accounts');
-        $ret = array();
-        // loop through types to get hits
-        foreach ($tables as $table) {
-            $q = "SELECT name, id FROM {$table} WHERE email1 = '{$this->from_addr}' OR email2 = '{$this->from_addr}' AND deleted = 0";
-            $r = $this->db->query($q);
-            while ($a = $this->db->fetchByAssoc($r)) {
-                if (!empty($a['name']) && !empty($a['id'])) {
-                    $this->parent_type = ucwords($table);
-                    $this->parent_id = $a['id'];
-                    $this->parent_name = $a['name'];
-
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
      * Convert reference to inline image (stored as Note) to URL link
      * Enter description here ...
      * @param string $noteId of the note
@@ -4755,7 +4713,7 @@ eoq;
         );
 
 
-        // Get Related Contact | Lead | Target etc.
+        // Get Related Contact | Target etc.
         $query = ' SELECT * FROM email_addresses' .
             ' JOIN email_addr_bean_rel ON email_addresses.id = email_addr_bean_rel.email_address_id' .
             ' WHERE email_address_id LIKE \'' . $db->quote($emailAddress->id) . '\'' .

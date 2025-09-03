@@ -57,7 +57,7 @@ function getInboundEmailDistributionOptions(
     $value = '',
     string $view = 'DetailView'
 ) {
-    if ($view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate' || $view === 'ConvertLead') {
+    if ($view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate') {
         $html = getAOPAssignField('distribution_options', [$value]);
 
         return $html;
@@ -92,7 +92,7 @@ function getUserSignature(
 
     $defaultSignatureId = $owner->getPreference('signature_default') ?? '';
 
-    $isEditView = $view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate' || $view === 'ConvertLead';
+    $isEditView = $view === 'EditView' || $view === 'MassUpdate' || $view === 'QuickCreate';
 
     $inboundEmailId = $focus->id ?? '';
 

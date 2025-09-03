@@ -56,7 +56,6 @@
 		<td scope="row" noWrap><span>{MOD.LBL_NUMBER}</span>&nbsp;&nbsp;<span><input type=text size="15" name="case_number" class=dataField  value="{CASE_NUMBER}" /></span>
 		</td>
 		<td scope="row" noWrap><span>{MOD.LBL_SUBJECT}</span>&nbsp;&nbsp;<span><input type=text size="20" name="name" class=dataField  value="{NAME}" /></span></td>
-		<td scope="row" noWrap><span>{MOD.LBL_ACCOUNT_NAME}</span>&nbsp;&nbsp;<span><input type=text size="20" name="account_name" class=dataField  value="{ACCOUNT_NAME}" /></span></td>
 		<td scope="row">{APP.LBL_CURRENT_USER_FILTER}&nbsp;&nbsp;<input name='current_user_only' onchange='this.form.submit();' class="checkbox" type="checkbox" {CURRENT_USER_ONLY}></td>
 		<td align="right"><input type="hidden" name="action" value="index"/>
 			<input type="hidden" name="query" value="true"/>
@@ -95,8 +94,6 @@
 		<br><a href='index.php?module=Cases&action=index&query=true' class="tabFormAdvLink">{BASIC_SEARCH_PNG}</a>&nbsp;<a href='index.php?module=Cases&action=index&query=true' class="tabFormAdvLink">{APP.LNK_BASIC_FILTER}</a>
 		</span></td>
 	</tr><tr>
-	<td scope="row"><span>{MOD.LBL_ACCOUNT_NAME}</span></td>
-	<td ><span><input name='account_name' tabindex='1' type='text' value="{ACCOUNT_NAME}"></span></td>
 	<td scope="row"><span>{MOD.LBL_STATUS}</span></td>
 	<td ><span><select tabindex='2' size="3" name='status[]' multiple="true">{STATUS_OPTIONS}</select></span></td>
 	</tr><tr>

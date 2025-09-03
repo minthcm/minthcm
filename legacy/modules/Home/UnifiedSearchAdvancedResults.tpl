@@ -45,7 +45,7 @@
 *}
 
     	var SubpanelInit = function() {
-    		SubpanelInitTabNames(["quotes","activities","history","leads","campaigns","cases","contacts"]);
+    		SubpanelInitTabNames(["quotes","activities","history","campaigns","cases","contacts"]);
     	}
         var SubpanelInitTabNames = function(tabNames) {
     		subpanel_dd = new Array();

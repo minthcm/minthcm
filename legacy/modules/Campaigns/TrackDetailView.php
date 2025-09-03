@@ -71,9 +71,6 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
     }
     $focus=$result;
-} else {
-    $header_URL = "Location: index.php?module=Accounts&action=index";
-    SugarApplication::headerRedirect($header_URL);
 }
 
 // if campaign type is set to newsletter, then include newsletter detail view..
@@ -270,14 +267,6 @@ $subpanel = new SubPanelTiles($focus, 'Campaigns');
             }//end foreach($subpanels as $subpane_key => $subpane){
         }
     }//end else
-
-$deletedCampaignLogLeadsCount = $focus->getDeletedCampaignLogLeadsCount();
-if ($deletedCampaignLogLeadsCount > 0) {
-    $subpanel->subpanel_definitions->layout_defs['subpanel_setup']['lead']['top_buttons'][] = array(
-        'widget_class' => 'SubPanelTopMessage',
-        'message' => string_format($mod_strings['LBL_LEADS_DELETED_SINCE_CREATED'], array($deletedCampaignLogLeadsCount)),
-    );
-}
 
 $alltabs=$subpanel->subpanel_definitions->get_available_tabs();
 if (!empty($alltabs)) {

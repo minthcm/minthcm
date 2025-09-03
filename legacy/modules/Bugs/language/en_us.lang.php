@@ -88,7 +88,6 @@ $mod_strings = array(
 
     'LBL_LIST_EMAIL_ADDRESS' => 'Email Address',
     'LBL_LIST_CONTACT_NAME' => 'Contact Name',
-    'LBL_LIST_ACCOUNT_NAME' => 'Account Name',
     'LBL_LIST_PHONE' => 'Phone',
     'NTC_DELETE_CONFIRMATION' => 'Are you sure you want to remove this contact from this bug?',
 
@@ -96,7 +95,6 @@ $mod_strings = array(
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_HISTORY_SUBPANEL_TITLE' => 'History',
     'LBL_CONTACTS_SUBPANEL_TITLE' => 'Contacts',
-    'LBL_ACCOUNTS_SUBPANEL_TITLE' => 'Accounts',
     'LBL_CASES_SUBPANEL_TITLE' => 'Cases',
     'LBL_PROJECTS_SUBPANEL_TITLE' => 'Projects',
     'LBL_DOCUMENTS_SUBPANEL_TITLE' => 'Documents',

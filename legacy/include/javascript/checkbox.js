@@ -237,7 +237,6 @@ function select_targets() {
   htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><b><a href='#' onclick='handle_targetlists();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_TARGET_LIST') + "</a></b><td></tr>";
   htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_targets();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_TARGETS') + "</a></strong><td></tr>";
   htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_contacts();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_CONTACTS') + "</a></strong><td></tr>";
-  htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_leads();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_LEADS') + "</a></strong><td></tr>";
 
   htmltext += "</table>";
   //initialise dialog
@@ -315,23 +314,6 @@ function handle_contacts() {
       "module_name": "delegates",
       "refresh_page": 0,
       "pop_up_type": "contacts"
-    }
-  }, "MultiSelect", true);
-}
-//open leads pop-up window
-function handle_leads() {
-  dialog.cancel();
-  open_popup("Leads", 600, 400, "", true, true, {
-    "call_back_function": "set_return_and_save_background2",
-    "form_name": "DetailView",
-    "field_to_name_array": {"id": "subpanel_id"},
-    "passthru_data": {
-      "child_field": "delegates",
-      "return_url": "index.php%3Fmodule%3DFP_events%26action%3DSubPanelViewer%26subpanel%3Ddelegates%26sugar_body_only%3D1",
-      "link_field_name": null,
-      "module_name": "delegates",
-      "refresh_page": 0,
-      "pop_up_type": "leads"
     }
   }, "MultiSelect", true);
 }

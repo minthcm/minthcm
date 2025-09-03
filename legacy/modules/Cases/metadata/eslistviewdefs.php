@@ -10,10 +10,6 @@ $ESListViewDefs['Cases'] = [
             'link' => true,
             'default' => true,
         ],
-        'account_name' => [
-            'link' => true,
-            'default' => true,
-        ],
         'priority' => [
             'default' => true,
         ],
@@ -31,8 +27,6 @@ $ESListViewDefs['Cases'] = [
         'case_number' => [
         ],
         'name' => [
-        ],
-        'account_name' => [
         ],
         'type' => [
         ],

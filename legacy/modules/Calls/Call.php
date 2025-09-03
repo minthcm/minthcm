@@ -74,7 +74,6 @@ class Call extends SugarBean {
    public $parent_id;
    public $contact_id;
    public $user_id;
-   public $lead_id;
    public $direction;
    public $reminder_time;
    public $reminder_time_options;
@@ -91,7 +90,6 @@ class Call extends SugarBean {
    public $contact_name;
    public $contact_phone;
    public $contact_email;
-   public $account_id;
    public $case_id;
    public $assigned_user_name;
    public $note_id;
@@ -99,14 +97,12 @@ class Call extends SugarBean {
    public $update_vcal = true;
    public $contacts_arr;
    public $users_arr;
-   public $leads_arr;
    public $default_call_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
    public $minutes_value_default = 15;
    public $minutes_values = array('0' => '00', '15' => '15', '30' => '30', '45' => '45');
    public $table_name = "calls";
    public $rel_users_table = "calls_users";
    public $rel_contacts_table = "calls_contacts";
-   public $rel_leads_table = "calls_leads";
    // MintHCM #54195 Start
    public $rel_candidates_table = "calls_candidates";
    // MintHCM #54195 End
@@ -280,14 +276,6 @@ class Call extends SugarBean {
                      // add to uninvited
                      $uninvited[] = $reminderData[$r]['invitees'][$i];
                      // remove contact
-                     unset($reminderData[$r]['invitees'][$i]);
-                  }
-                  break;
-               case "Leads":
-                  if ( in_array($invitee['module_id'], $this->leads_arr) === false ) {
-                     // add to uninvited
-                     $uninvited[] = $reminderData[$r]['invitees'][$i];
-                     // remove lead
                      unset($reminderData[$r]['invitees'][$i]);
                   }
                   break;
@@ -559,9 +547,6 @@ class Call extends SugarBean {
       if ( strtolower(get_class($call->current_notify_user)) == 'contact' ) {
          $xtpl->assign("ACCEPT_URL", $sugar_config['site_url'] .
             '/index.php?entryPoint=acceptDecline&module=Calls&contact_id=' . $call->current_notify_user->id . '&record=' . $call->id);
-      } elseif ( strtolower(get_class($call->current_notify_user)) == 'lead' ) {
-         $xtpl->assign("ACCEPT_URL", $sugar_config['site_url'] .
-            '/index.php?entryPoint=acceptDecline&module=Calls&lead_id=' . $call->current_notify_user->id . '&record=' . $call->id);
       }
       // MintHCM #54195 Start
       elseif ( strtolower(get_class($call->current_notify_user)) == 'candidates' ) {
@@ -648,10 +633,6 @@ class Call extends SugarBean {
          $relate_values = array('contact_id' => $user->id, 'call_id' => $this->id);
          $data_values = array('accept_status' => $status);
          $this->set_relationship($this->rel_contacts_table, $relate_values, true, true, $data_values);
-      } else if ( $user->object_name == 'Lead' ) {
-         $relate_values = array('lead_id' => $user->id, 'call_id' => $this->id);
-         $data_values = array('accept_status' => $status);
-         $this->set_relationship($this->rel_leads_table, $relate_values, true, true, $data_values);
       }
       // MintHCM #54195 Start
       else if ( $user->object_name == 'Candidates' ) {
@@ -675,10 +656,6 @@ class Call extends SugarBean {
 
       if ( !is_array($this->users_arr) ) {
          $this->users_arr = array();
-      }
-
-      if ( !is_array($this->leads_arr) ) {
-         $this->leads_arr = array();
       }
 
       // MintHCM #54195 Start
@@ -710,13 +687,6 @@ class Call extends SugarBean {
          $list[$notify_user->id] = $notify_user;
       }
 
-      foreach ( $this->leads_arr as $lead_id ) {
-         $notify_user = BeanFactory::newBean('Leads');
-         $notify_user->retrieve($lead_id);
-         $notify_user->new_assigned_user_name = $notify_user->full_name;
-         $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
-         $list[$notify_user->id] = $notify_user;
-      }
       global $sugar_config;
       if ( isset($sugar_config['disable_notify_current_user']) && $sugar_config['disable_notify_current_user'] ) {
          global $current_user;
@@ -810,9 +780,9 @@ class Call extends SugarBean {
             //if the global soap_server_object variable is not empty (as in from a soap/OPI call), then process the assigned_user_id relationship, otherwise
             //add assigned_user_id to exclude list and let the logic from MeetingFormBase determine whether assigned user id gets added to the relationship
             if ( !empty($GLOBALS['soap_server_object']) ) {
-               $exclude = array('lead_id', 'contact_id', 'user_id');
+               $exclude = array('contact_id', 'user_id');
             } else {
-               $exclude = array('lead_id', 'contact_id', 'user_id', 'assigned_user_id');
+               $exclude = array('contact_id', 'user_id', 'assigned_user_id');
             }
          } else {
             $exclude = array('user_id');

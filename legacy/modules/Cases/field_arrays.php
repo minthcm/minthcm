@@ -55,8 +55,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $fields_array['Case'] = array('column_fields' => array("id"
         , "name"
         , "case_number"
-        , "account_name"
-        , "account_id"
         , "date_entered"
         , "date_modified"
         , "modified_user_id"
@@ -67,7 +65,7 @@ $fields_array['Case'] = array('column_fields' => array("id"
         , "description"
         , "resolution"
         ),
-        'list_fields' => array('id', 'priority', 'status', 'name', 'account_name', 'case_number', 'account_id', 'assigned_user_name', 'assigned_user_id'
+        'list_fields' => array('id', 'priority', 'status', 'name', 'case_number', 'assigned_user_name', 'assigned_user_id'
         ),
-        'required_fields' => array('name'=>1, 'account_name'=>2),
+        'required_fields' => array('name'=>1,),
 );

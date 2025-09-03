@@ -89,7 +89,7 @@ $contactForm = new ContactFormBase();
 $GLOBALS['check_notify'] = false;
 
 
-$query = 'select contacts.id, first_name, last_name, title, accounts.name, primary_address_city from contacts LEFT JOIN accounts_contacts ON contacts.id=accounts_contacts.contact_id and accounts_contacts.deleted = 0 LEFT JOIN accounts ON accounts_contacts.account_id=accounts.id AND accounts_contacts.deleted=0 AND accounts.deleted=0 where contacts.deleted=0 ';
+$query = 'select contacts.id, first_name, last_name, title, primary_address_city from contacts where contacts.deleted=0 ';
 $duplicates = $_POST['duplicate'];
 $count = count($duplicates);
 $db = DBManagerFactory::getInstance();

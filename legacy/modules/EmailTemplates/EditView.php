@@ -129,7 +129,6 @@ if ($has_campaign || $inboundEmail) {
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
-$xtpl->assign("LBL_ACCOUNT", $app_list_strings['moduleList']['Accounts']);
 $xtpl->parse("main.variable_option");
 
 $returnAction = 'index';
@@ -260,13 +259,9 @@ window.open(\"index.php?module=\"+ document.EditView.parent_type.value +
 \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
     $xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
-if ($focus->parent_type == "Account") {
-    $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=" . urlencode($focus->parent_name));
-}
 
 $xtpl->assign("DESCRIPTION", $focus->description);
 $xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
-//$xtpl->assign("DEFAULT_MODULE","Accounts");
 
 if (isset($focus->body)) {
     $xtpl->assign("BODY", $focus->body);
@@ -330,11 +325,10 @@ if (true) {
         }
     }
 
-    // create option of "Contact/Lead/Task" from corresponding module
+    // create option of "Contact/Task" from corresponding module
     // translations
     $lblContactAndOthers = implode('/', array(
         isset($app_list_strings['moduleListSingular']['Contacts']) ? $app_list_strings['moduleListSingular']['Contacts'] : 'Contact',
-        isset($app_list_strings['moduleListSingular']['Leads']) ? $app_list_strings['moduleListSingular']['Leads'] : 'Lead',
         isset($app_list_strings['moduleListSingular']['Prospects']) ? $app_list_strings['moduleListSingular']['Prospects'] : 'Target',
     ));
 
@@ -349,7 +343,6 @@ if (true) {
     //$xtpl->assign("CAMPAIGN_POPUP_JS", '<script type="text/javascript" src="include/javascript/sugar_3.js"></script>');
     } else {
         $xtpl->assign("DROPDOWN", genDropDownJS2());
-        $xtpl->assign("DEFAULT_MODULE", 'Accounts');
     }
     ////	END CAMPAIGNS
     ///////////////////////////////////////

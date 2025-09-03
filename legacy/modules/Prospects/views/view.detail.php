@@ -57,13 +57,6 @@ class ProspectsViewDetail extends ViewDetail
 
     public function display()
     {
-        if (isset($this->bean->lead_id) && !empty($this->bean->lead_id)) {
-
-            //get lead name
-            $lead = BeanFactory::newBean('Leads');
-            $lead->retrieve($this->bean->lead_id);
-            $this->ss->assign('lead', $lead);
-        }
         parent::display();
     }
 }

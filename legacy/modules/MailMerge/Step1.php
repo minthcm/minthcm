@@ -157,7 +157,7 @@ if (isset($_SESSION['MAILMERGE_RECORD'])) {
         foreach ($_SESSION['MAILMERGE_RECORD'] as $record_id) {
             if ($rModule == 'Campaigns') {
                 $prospect = BeanFactory::newBean('Prospects');
-                $prospect_module_list = array('leads', 'contacts', 'prospects', 'users');
+                $prospect_module_list = array('contacts', 'prospects', 'users');
                 foreach ($prospect_module_list as $mname) {
                     $pList = $prospect->retrieveTargetList("campaigns.id = '$record_id' AND related_type = #$mname#", array('id', 'first_name', 'last_name'));
 
@@ -172,8 +172,7 @@ if (isset($_SESSION['MAILMERGE_RECORD'])) {
         }
 
 
-        if ($rModule != 'Contacts'
-           && $rModule != 'Leads' && $rModule != 'Products' && $rModule != 'Campaigns' && $rModule != 'Projects'
+        if ($rModule != 'Contacts' && $rModule != 'Products' && $rModule != 'Campaigns' && $rModule != 'Projects'
            ) {
             $_SESSION['MAILMERGE_SKIP_REL'] = false;
             $xtpl->assign("STEP", "2");

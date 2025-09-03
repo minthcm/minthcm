@@ -91,7 +91,6 @@ $mod_strings = array(
     'LBL_SELECT_DELEGATES_TARGET_LIST' => 'Target List',
     'LBL_SELECT_DELEGATES_TARGETS' => 'Targets',
     'LBL_SELECT_DELEGATES_CONTACTS' => 'Contacts',
-    'LBL_SELECT_DELEGATES_LEADS' => 'Leads',
     'LBL_MANAGE_DELEGATES' => 'Manage Delegates',
     'LBL_MANAGE_DELEGATES_TITLE' => 'Manage Delegates:-',
     'LBL_MANAGE_ACCEPTANCES' => 'Manage Acceptances',
@@ -113,7 +112,6 @@ $mod_strings = array(
 
     'LBL_FP_EVENTS_CONTACTS_FROM_CONTACTS_TITLE' => 'Contacts',
     'LBL_FP_EVENT_LOCATIONS_FP_EVENTS_1_FROM_FP_EVENT_LOCATIONS_TITLE' => 'Locations',
-    'LBL_FP_EVENTS_LEADS_1_FROM_LEADS_TITLE' => 'Leads',
     'LBL_FP_EVENTS_PROSPECTS_1_FROM_PROSPECTS_TITLE' => 'Targets',
 
     'LBL_HOURS_ABBREV' => 'h',
@@ -123,7 +121,7 @@ $mod_strings = array(
     'LBL_CONTACT_NAME' => 'Name',
     'LBL_ACCOUNT_NAME' => 'Company',
     'LBL_SIGNATURE' => 'Signature',
-    // contacts/leads/targets subpanels
+    // contacts/targets subpanels
     'LBL_LIST_INVITE_STATUS_EVENT' => 'Invited',
     'LBL_LIST_ACCEPT_STATUS_EVENT' => 'Status',
 
