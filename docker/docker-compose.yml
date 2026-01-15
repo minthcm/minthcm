@@ -24,7 +24,7 @@ services:
       minthcm:
 
   minthcm-db:
-    image: percona/percona-server:latest
+    image: percona/percona-server:8
     container_name: minthcm-db
     restart: always
     networks:
