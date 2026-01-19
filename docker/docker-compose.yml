@@ -24,7 +24,7 @@ services:
       minthcm:
 
   minthcm-db:
-    image: percona:8
+    image: percona/percona-server:8
     container_name: minthcm-db
     restart: always
     networks:
@@ -42,7 +42,7 @@ services:
   
   minthcm-es:
       container_name: minthcm-es
-      image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.3"
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
       networks:
               minthcm:
       volumes:
