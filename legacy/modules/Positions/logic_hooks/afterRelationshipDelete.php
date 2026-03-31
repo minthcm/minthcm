@@ -4,6 +4,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
    die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class afterRelationshipDelete {
     public function after_relationship_delete($bean, $event, $arguments)
     {

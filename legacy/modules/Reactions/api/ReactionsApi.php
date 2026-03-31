@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class ReactionsApi
 {
     public function getReactions($args)

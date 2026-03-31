@@ -11,7 +11,7 @@
                 <img v-if="user.photo" :src="`legacy/index.php?entryPoint=download&type=Users&id=${user.id}_photo`" />
                 <v-icon v-else icon="mdi-account" />
             </div>
-            <div>{{ user.name }}</div>
+            <div>{{ user.full_name }}</div>
         </div>
         <div
             v-if="!usersList?.length"
@@ -57,8 +57,8 @@ const usersList = computed(() => {
         .filter(
             (user) =>
                 !standardizedQuery.value ||
-                [user.user_name, user.name, ...user.name.split(' '), user.name.split(' ').reverse().join(' ')].some(
-                    (name) => name.trim().toLowerCase().startsWith(standardizedQuery.value),
+                [user.user_name, user.full_name, ...user.full_name.split(' '), user.full_name.split(' ').reverse().join(' ')].some(
+                    (full_name) => full_name.trim().toLowerCase().startsWith(standardizedQuery.value),
                 ),
         )
         .slice(0, 6)

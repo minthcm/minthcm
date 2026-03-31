@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 /**
  * PHP wrapper class for Javascript driven TinyMCE WYSIWYG HTML editor
  */
+#[\AllowDynamicProperties]
 class SugarTinyMCE
 {
     public $jsroot = "include/javascript/tiny_mce/";
@@ -124,7 +125,7 @@ class SugarTinyMCE
 
         $config = $this->defaultConfig;
         //include tinymce lang file
-        $lang = substr($GLOBALS['current_language'], 0, 2);
+        $lang = substr((string) $GLOBALS['current_language'], 0, 2);
         if (file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
             $config['language'] = $lang;
         }
@@ -194,7 +195,7 @@ eoq;
 
         $config = $this->defaultConfig;
         //include tinymce lang file
-        $lang = substr($GLOBALS['current_language'], 0, 2);
+        $lang = substr((string) $GLOBALS['current_language'], 0, 2);
         if (file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
             $config['language'] = $lang;
         }
@@ -219,7 +220,7 @@ eoq;
      */
     public function cleanEncodedMCEHtml($html)
     {
-        $html = str_replace("mce:script", "script", $html);
+        $html = str_replace("mce:script", "script", (string) $html);
         $html = str_replace("mce_src=", "src=", $html);
         $html = str_replace("mce_href=", "href=", $html);
         return $html;

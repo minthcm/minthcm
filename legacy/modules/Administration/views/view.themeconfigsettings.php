@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ require_once('modules/Administration/Forms.php');
 require_once('modules/Configurator/Configurator.php');
 require_once('include/MVC/View/SugarView.php');
         
+#[\AllowDynamicProperties]
 class AdministrationViewThemeConfigSettings extends SugarView
 {
     /**
@@ -75,7 +76,7 @@ class AdministrationViewThemeConfigSettings extends SugarView
         }
 
         // Check if the theme is valid
-        if (!isset($_REQUEST['theme']) || !in_array($_REQUEST['theme'], array_keys(SugarThemeRegistry::allThemes()))) {
+        if (!isset($_REQUEST['theme']) || !array_key_exists($_REQUEST['theme'], SugarThemeRegistry::allThemes())) {
             sugar_die("theme is invalid.");
         }
 

@@ -6,10 +6,11 @@ import { useAlertsStore } from './alerts'
 import { useFavoritesStore } from './favorites'
 import { useRecentsStore } from './recents'
 import { useLanguagesStore, Languages } from './languages'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useModulesStore, ModulesDefs } from './modules'
 import { usePreferencesStore } from './preferences'
 import { Settings } from 'luxon'
+import { mintApi } from '@/api/api'
 
 interface QuickCreate {
     module: string
@@ -33,6 +34,8 @@ interface InitResponse {
     mintRebuildID: string
     responseType: string
     systemName: string
+    upload_maxsize: string
+    field_variables: string[]
 }
 export const useBackendStore = defineStore('backend', () => {
     const router = useRouter()
@@ -55,45 +58,50 @@ export const useBackendStore = defineStore('backend', () => {
             if (typeof caches === "undefined") {
                 console.warn('Cache API not supported.')
             } else {
-                await caches.match('api/init').then(function(response) {
+                await caches.match('init').then(function (response) {
                     if (!response) {
                         return;
                     }
                     return response.json()
-                }).then(function(response) {
-                    if(cachedConfig){
+                }).then(function (response) {
+                    if (cachedConfig) {
                         cachedConfig.value = response;
                     }
                 })
             }
             let mintRebuildID = cachedConfig.value?.mintRebuildID ?? '';
             const current_language = cachedConfig.value?.languages?.current_language ?? '';
-            if(mintRebuildID === false){
+            if (mintRebuildID === false) {
                 mintRebuildID = '';
             }
-            const initResponse = await axios.post<InitResponse>('api/init', {
+            const initResponse = await mintApi.post<InitResponse>('init', {
                 mintRebuildID: mintRebuildID,
                 current_language: current_language,
                 user_id: cachedConfig.value?.user?.id ?? ''
-            })
+            }, { rawError: true })
             auth.user = initResponse.data?.user ?? {}
-            if(initResponse.data.responseType === 'minified'){
+            if (initResponse.data.responseType === 'minified') {
                 cachedConfig.value.user = initResponse.data.user
                 cachedConfig.value.global = initResponse.data.global
                 cachedConfig.value.preferences = initResponse.data.preferences
                 cachedConfig.value.responseType = initResponse.data.responseType
                 cachedConfig.value.systemName = initResponse.data.system_name
-                if(initResponse.data.languages && current_language !== initResponse.data.languages?.current_language){
+                cachedConfig.value.upload_maxsize = initResponse.data.upload_maxsize
+                cachedConfig.value.field_variables = initResponse.data.field_variables
+                if (initResponse.data.languages && current_language !== initResponse.data.languages?.current_language) {
                     cachedConfig.value.languages = initResponse.data.languages
                 }
-                if(initResponse.data.menu_modules){
+                if (initResponse.data.menu_modules) {
                     cachedConfig.value.menu_modules = initResponse.data.menu_modules
                     cachedConfig.value.modules = initResponse.data.modules
                     cachedConfig.value.quick_create = initResponse.data.quick_create
                     cachedConfig.value.legacy_views = initResponse.data.legacy_views
                 }
-                if(initResponse.data?.acls){
-                    for(let module_name in initResponse.data.acls){
+                if (initResponse.data?.acls) {
+                    for (let module_name in initResponse.data.acls) {
+                        if (!cachedConfig.value.modules[module_name]) {
+                            continue
+                        }
                         cachedConfig.value.modules[module_name].acl = initResponse.data.acls[module_name]
                     }
                 }
@@ -114,25 +122,28 @@ export const useBackendStore = defineStore('backend', () => {
             
             if (typeof caches !== "undefined") {
             Settings.defaultLocale = languages.currentLanguage.split('_')[0] ?? 'en'
-            if (initData.value.user.preferences.timezone) {
-                Settings.defaultZone = initData.value.user.preferences.timezone
+            if (initData.value.preferences.timezone) {
+                Settings.defaultZone = initData.value.preferences.timezone
             }
 
-                caches.open('mint-rebuild').then(function(cache) {
-                    cache.put('api/init', new Response(JSON.stringify(initData.value)));
+
+                caches.open('mint-rebuild').then(function (cache) {
+                    cache.put('init', new Response(JSON.stringify(initData.value)));
                 })
             }
+            preferences.global = initData.value.global ?? null
             alerts.init()
             favorites.fetch()
             recents.fetch()
-            
+
         } catch (err) {
             if ((err as AxiosError).response?.status === 401) {
                 const loginData = (
-                    await axios.get('api/login', {
+                    await mintApi.get('login', {
                         params: {
                             lang: localStorage.getItem('currentLang') ?? 'en_us',
                         },
+                        rawError: true,
                     })
                 ).data
                 languages.languages = {
@@ -145,14 +156,14 @@ export const useBackendStore = defineStore('backend', () => {
                 preferences.global = loginData.global
                 languages.currentLanguage =
                     localStorage.getItem('currentLang') ?? loginData.global?.default_language ?? 'en_us'
-                if(window.location.href.search('/auth/reset') !== -1){
+                if (window.location.href.search('/auth/reset') !== -1) {
                     const token = window.location.hash.substring(1).split('?').reduce(function (previousValue, currentParam) {
-                            const parts = currentParam.split('=');
-                            previousValue[parts[0]] = parts[1];
-                            return previousValue;
-                        }, {} as any
+                        const parts = currentParam.split('=');
+                        previousValue[parts[0]] = parts[1];
+                        return previousValue;
+                    }, {} as any
                     )?.token;
-                    router.push({ name: 'auth-reset', query: { token: token} })
+                    router.push({ name: 'auth-reset', query: { token: token } })
                 } else if (router.currentRoute.value.meta?.auth !== false) {
                     router.push({ name: 'auth-login' })
                 }

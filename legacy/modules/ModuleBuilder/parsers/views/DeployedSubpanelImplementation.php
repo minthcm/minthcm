@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -58,10 +58,11 @@ require_once 'modules/ModuleBuilder/parsers/constants.php';
  * For subpanels we must make use of the SubPanelDefinitions class to do this; this also means that the history mechanism,
  * which tracks files, not objects, needs us to create an intermediate file representation of the definition that it can manage and restore
  */
+#[\AllowDynamicProperties]
 class DeployedSubpanelImplementation extends AbstractMetaDataImplementation implements MetaDataImplementationInterface
 {
-    const HISTORYFILENAME = 'restored.php';
-    const HISTORYVARIABLENAME = 'layout_defs';
+    public const HISTORYFILENAME = 'restored.php';
+    public const HISTORYVARIABLENAME = 'layout_defs';
 
     /**
      * @var string $_subpanelName
@@ -237,7 +238,7 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
         $sm = StudioModuleFactory::getStudioModule($moduleName);
         foreach ($sm->sources as $file => $def) {
             if (!empty($def['view'])) {
-                $filenames[$def['view']] = substr($file, 0, strlen($file) - 4);
+                $filenames[$def['view']] = substr((string) $file, 0, strlen((string) $file) - 4);
             }
         }
 

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -70,6 +70,7 @@ $dictionary['Note'] = array(
             'comment' => 'Date record created',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'readonly' => true,
         ],
 
         'date_modified' =>
@@ -80,6 +81,7 @@ $dictionary['Note'] = array(
             'comment' => 'Date record last modified',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'readonly' => true,
         ],
         'date_indexed' => [
             'name' => 'date_indexed',
@@ -89,6 +91,7 @@ $dictionary['Note'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
+            'readonly' => true,
         ],
         'modified_user_id' =>
         [
@@ -103,6 +106,7 @@ $dictionary['Note'] = array(
             'dbType' => 'id',
             'reportable' => true,
             'comment' => 'User who last modified record',
+            'readonly' => true,
         ],
 
         'modified_by_name' =>
@@ -118,6 +122,7 @@ $dictionary['Note'] = array(
             'module' => 'Users',
             'link' => 'modified_user_link',
             'duplicate_merge' => 'disabled',
+            'readonly' => true,
         ],
 
         'created_by' =>
@@ -131,6 +136,7 @@ $dictionary['Note'] = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'comment' => 'User who created record',
+            'readonly' => true,
         ],
 
         'created_by_name' =>
@@ -147,6 +153,7 @@ $dictionary['Note'] = array(
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
             'importable' => 'false',
+            'readonly' => true,
         ],
 
         'name' =>
@@ -284,6 +291,7 @@ $dictionary['Note'] = array(
             'type' => 'bool',
             'source' => 'non-db',
             'reportable' => false,
+            'mass_update' => false,
         ],
 
         'campaign_id' =>
@@ -294,7 +302,6 @@ $dictionary['Note'] = array(
             'reportable' => false,
             'source' => 'non-db',
         ],
-
         'acase_id' =>
         [
             'name' => 'acase_id',
@@ -448,3 +455,31 @@ $dictionary['Note'] = array(
 
 VardefManager::createVardef('Notes', 'Note', array('assignable', 'security_groups',
 ));
+
+foreach ([
+    'id' => 'LBL_ID_COMMENT',
+    'date_entered' => 'LBL_DATE_ENTERED_COMMENT',
+    'date_modified' => 'LBL_DATE_MODIFIED_COMMENT',
+    'date_indexed' => 'LBL_DATE_INDEXED_COMMENT',
+    'modified_user_id' => 'LBL_MODIFIED_COMMENT',
+    'created_by' => 'LBL_CREATED_BY_COMMENT',
+    'name' => 'LBL_NOTE_SUBJECT_COMMENT',
+    'file_mime_type' => 'LBL_FILE_MIME_TYPE_COMMENT',
+    'file_url' => 'LBL_FILE_URL_COMMENT',
+    'filename' => 'LBL_FILENAME_COMMENT',
+    'filecontents' => 'LBL_FILE_CONTENTS_COMMENT',
+    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
+    'parent_id' => 'LBL_PARENT_ID_COMMENT',
+    'portal_flag' => 'LBL_PORTAL_FLAG_COMMENT',
+    'embed_flag' => 'LBL_EMBED_FLAG_COMMENT',
+    'description' => 'LBL_DESCRIPTION_COMMENT',
+    'deleted' => 'LBL_DELETED_COMMENT',
+    'parent_name' => 'LBL_RELATED_TO_COMMENT',
+    'show_preview' => 'LBL_SHOW_PREVIEW_COMMENT',
+    'campaign_id' => 'LBL_CAMPAIGN_ID_COMMENT',
+    'acase_id' => 'LBL_CASE_ID_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Note']['fields'][$field])) {
+        $dictionary['Note']['fields'][$field]['comment'] = $commentLabel;
+    }
+}

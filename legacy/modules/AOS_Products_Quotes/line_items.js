@@ -7,7 +7,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -347,7 +347,7 @@ function insertServiceLine(tableid, groupid) {
   }
 
   var a2 = x.insertCell(2);
-  a2.innerHTML = "<input type='text' name='service_product_discount[" + servln + "]' id='service_product_discount" + servln + "'  maxlength='50' value='' title='' tabindex='116' onblur='calculateLine(" + servln + ",\"service_\");' onblur='calculateLine(" + servln + ",\"service_\");' class='service_discount_text'><input type='hidden' name='service_product_discount_amount[" + servln + "]' id='service_product_discount_amount" + servln + "' value=''/>";
+  a2.innerHTML = "<input type='text' name='service_product_discount[" + servln + "]' id='service_product_discount" + servln + "'  maxlength='50' value='' title='' tabindex='116' onblur='calculateLine(" + servln + ",\"service_\");' class='service_discount_text'><input type='hidden' name='service_product_discount_amount[" + servln + "]' id='service_product_discount_amount" + servln + "' value=''/>";
   a2.innerHTML += "<select tabindex='116' name='service_discount[" + servln + "]' id='service_discount" + servln + "' onchange='calculateLine(" + servln + ",\"service_\");' class='service_discount_select'>" + discount_hidden + "</select>";
 
   var b = x.insertCell(3);
@@ -759,7 +759,7 @@ function calculateTotal(key)
 {
   if (typeof key === 'undefined') {  key = 'lineItems'; }
   var row = document.getElementById(key).getElementsByTagName('tbody');
-  if(key == 'lineItems') key = '';
+  if(key === 'lineItems') key = '';
   var length = row.length;
   var head = {};
   var tot_amt = 0;
@@ -843,6 +843,10 @@ function calculateTotal(key)
   set_value(key+'shipping_tax_amt',shippingtax_amt);
 
   tax += shippingtax_amt;
+
+  if (typeof tax === 'string'){
+    tax = Number(tax);
+  }
 
   set_value(key+'tax_amount',tax);
 

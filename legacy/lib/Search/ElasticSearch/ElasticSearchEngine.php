@@ -48,8 +48,8 @@
 
 namespace SuiteCRM\Search\ElasticSearch;
 
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
+if ( !defined('sugarEntry') || !sugarEntry ) {
+   die('Not A Valid Entry Point');
 }
 
 use Elasticsearch\Client;
@@ -68,105 +68,105 @@ use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
 class ElasticSearchEngine extends SearchEngine
 {
 
-    /** @var Client */
-    private $client;
-    /** @var string */
-    private $index = 'main';
+   /** @var Client */
+   private $client;
+   /** @var string */
+   private $index = 'main';
 
-    /**
-     * ElasticSearchEngine constructor.
-     *
-     * @param Client|null $client
-     */
-    public function __construct(Client $client = null)
-    {
-        $this->client = $client ?? ElasticSearchClientBuilder::getClient();
-    }
+   /**
+    * ElasticSearchEngine constructor.
+    *
+    * @param Client|null $client
+    */
+   public function __construct(Client $client = null)
+   {
+      $this->client = $client ?? ElasticSearchClientBuilder::getClient();
+   }
 
     public function globalSearch(SearchQuery $query): SearchResults
     {
         return $this->search($query);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @inheritdoc
-     */
-    public function search(SearchQuery $query): SearchResults
-    {
-        $this->validateQuery($query);
-        $params = $this->createSearchParams($query);
-        $start = microtime(true);
-        $hits = $this->runElasticSearch($params);
-        $results = $this->parseHits($hits);
-        $end = microtime(true);
-        $searchTime = ($end - $start);
-        return new SearchResults($results, true, $searchTime, $hits['hits']['total']);
-    }
+   /**
+    * @throws InvalidArgumentException
+    * @inheritdoc
+    */
+   public function search(SearchQuery $query): SearchResults
+   {
+      $this->validateQuery($query);
+      $params = $this->createSearchParams($query);
+      $start = microtime(true);
+      $hits = $this->runElasticSearch($params);
+      $results = $this->parseHits($hits);
+      $end = microtime(true);
+      $searchTime = ($end - $start);
+      return new SearchResults($results, true, $searchTime, $hits['hits']['total']);
+   }
 
-    /**
-     * @return string
-     */
-    public function getIndex()
-    {
-        return $this->index;
-    }
+   /**
+    * @return string
+    */
+   public function getIndex()
+   {
+      return $this->index;
+   }
 
-    /**
-     * @param string $index
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-    }
+   /**
+    * @param string $index
+    */
+   public function setIndex($index)
+   {
+      $this->index = $index;
+   }
 
-    /**
-     * @param SearchQuery $query
-     */
-    protected function validateQuery(SearchQuery $query): void
-    {
-        $query->trim();
-        $query->convertEncoding();
-    }
+   /**
+    * @param SearchQuery $query
+    */
+   protected function validateQuery(SearchQuery $query): void
+   {
+      $query->trim();
+      $query->convertEncoding();
+   }
 
-    /**
-     * Generates the parameter array for the Elasticsearch API from a SearchQuery.
-     *
-     * @param SearchQuery $query
-     *
-     * @return array
-     */
+   /**
+    * Generates the parameter array for the Elasticsearch API from a SearchQuery.
+    *
+    * @param SearchQuery $query
+    *
+    * @return array
+    */
     protected function createSearchParams(SearchQuery $query): array  //MintHCM
     {
-        $options = $query->getOptions();
-        if ($options['filter_by_module']) {
-            $params = [
-                'index' => ElasticSearchIndexer::getIndexPrefix() . '_' . strtolower($options['module']),
-                'body' => [
-                    'query' => [
-                        'bool' => [
-                            'filter' => [
-                                //
-                            ],
+       $options = $query->getOptions();
+       if ($options['filter_by_module']) {
+         $params = [
+            'index' => ElasticSearchIndexer::getIndexPrefix().'_'.strtolower($options['module']),
+            'body' => [
+               'query' => [
+                  'bool' => [
+                     'filter' => [
+                        //
+                     ],
                             'must' => [
                                 //
                             ],
-                            'must_not' => [
-                                //
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-            $params = $this->addBasicSearch($params, $options['searchPhrase']);
-            $params = $this->addPagination($params, $query->getFrom(), $query->getSize());
-            $params = $this->addSorting($params, $query->getOptions()['sorting']);
-            $params = $this->addFilters($params, $query->getOptions()['filters']);
-        } else {
+                     'must_not' => [
+                        //
+                     ]
+                  ]
+               ]
+            ]
+         ];
+          $params = $this->addBasicSearch($params, $options['searchPhrase']);
+          $params = $this->addPagination($params, $query->getFrom(), $query->getSize());
+          $params = $this->addSorting($params, $query->getOptions()['sorting']);
+          $params = $this->addFilters($params, $query->getOptions()['filters']);
+       } else {
             $searchStr = $query->getSearchString();
             $searchModules = SearchWrapper::getModules();
             $searchModules = array_map('strtolower', $searchModules);
-            $searchModules = substr_replace($searchModules, ElasticSearchIndexer::getIndexPrefix() . '_', 0, 0);
+            $searchModules = substr_replace($searchModules, ElasticSearchIndexer::getIndexPrefix().'_', 0, 0);
 
             $indexes = implode(',', $searchModules);
 
@@ -175,10 +175,10 @@ class ElasticSearchEngine extends SearchEngine
 
             // Override frontend wildcard character
             if (isset($GLOBALS['sugar_config']['search_wildcard_char'])) {
-                $wildcardFe = $GLOBALS['sugar_config']['search_wildcard_char'];
+               $wildcardFe = $GLOBALS['sugar_config']['search_wildcard_char'];
                 if ($wildcardFe !== $wildcardBe && strlen((string) $wildcardFe) === 1) {
-                    $searchStr = str_replace($wildcardFe, $wildcardBe, $searchStr);
-                }
+                  $searchStr = str_replace($wildcardFe, $wildcardBe, $searchStr);
+               }
             }
 
             // Add wildcard at the beginning of the search string
@@ -216,92 +216,92 @@ class ElasticSearchEngine extends SearchEngine
                     ],
                 ],
             ];
-        }
+       }
 
-        return $params;
+       return $params;
     }
 
     protected function addBasicSearch($params, $query_string) //MintHCM
     {
-        if (!empty($query_string)) {
-            $query_string = str_replace('+', '', strtolower($query_string));
-            $params['body']['query']['bool']['must'] = [
-                'simple_query_string' => [
-                    "query" => $query_string . '*',
+       if(!empty($query_string)){
+         $query_string = str_replace('+', '', strtolower($query_string));
+         $params['body']['query']['bool']['must'] = [
+            'simple_query_string' =>[
+            "query" => $query_string.'*',
                     "fields" => [
                         "*__last^5",
                         "*__first^4",
                         "*__name.*^3",
                         "*"
                     ]
-                ],
-            ];
-        }
-        return $params;
+            ],  
+         ];
+      }
+       return $params;
     }
+ 
 
+   protected function addPagination($params, $from, $size) //MintHCM
+   {
+      if (isset($from) && isset($size)) {
+         $from = (($from - 1)<0)? 1 :$from;
+         $params['body']['from'] = ($from - 1) * $size;
+         $params['body']['size'] = $size;
+      }
 
-    protected function addPagination($params, $from, $size) //MintHCM
-    {
-        if (isset($from) && isset($size)) {
-            $from = (($from - 1) < 0) ? 1 : $from;
-            $params['body']['from'] = ($from - 1) * $size;
-            $params['body']['size'] = $size;
-        }
+      return $params;
+   }
 
-        return $params;
-    }
-
-    protected function addSorting($params, $data)
-    {
-        if (isset($data)) {
-            $column = $data['column'];
+   protected function addSorting($params, $data)
+   {
+      if (isset($data)) {
+         $column = $data['column'];
             $direction = $column ? $data['direction'] : 'desc';
-            $parsedData = [
-                $column ? $column : '_score' => [
+         $parsedData = [
+            $column ? $column : '_score' => [
                     'order' => $direction
-                ]
-            ];
-            $params['body']['sort'] = $parsedData;
-        }
+            ]
+      ];
+         $params['body']['sort'] = $parsedData;
+      }
 
-        return $params;
-    }
+      return $params;
+   }
 
-    protected function addFilters($params, $data)
-    {
+   protected function addFilters($params, $data)
+   {
         if (!isset($data['must'])) {
             $data['must'] = [];
         }
-        if (isset($data)) {
-            $params['body']['query']['bool']['filter'] = is_array($params['body']['query']['bool']['filter']) ? array_merge($params['body']['query']['bool']['filter'], $data['filter']) : $data['filter'];
+         if (isset($data)) {
+         $params['body']['query']['bool']['filter'] = is_array($params['body']['query']['bool']['filter'])? array_merge($params['body']['query']['bool']['filter'],$data['filter']):$data['filter'];
             $params['body']['query']['bool']['must'] = is_array($params['body']['query']['bool']['must']) ? array_merge($params['body']['query']['bool']['must'], $data['must']) : $data['must'];
-            $params['body']['query']['bool']['must_not'] = is_array($params['body']['query']['bool']['must_not']) ? array_merge($params['body']['query']['bool']['must_not'], $data['must_not']) : $data['must_not'];
-        }
+         $params['body']['query']['bool']['must_not'] = is_array($params['body']['query']['bool']['must_not'])? array_merge($params['body']['query']['bool']['must_not'],$data['must_not']):$data['must_not'];
+      }
 
-        return $params;
-    }
+      return $params;
+   }
 
-    /**
-     * Calls the Elasticsearch API.
-     *
-     * @param array $params
-     *
-     * @return array
-     */
-    protected function runElasticSearch(array $params): array //MintHCM
-    {
+   /**
+    * Calls the Elasticsearch API.
+    *
+    * @param array $params
+    *
+    * @return array
+    */
+   protected function runElasticSearch(array $params): array //MintHCM
+   {
         return $this->client->search($params);
-    }
+   }
 
-    /**
-     * Reads the array returned from the Elasticsearch API
-     * and converts it into an associative array of ids, grouped by Module.
-     *
-     * @param array $hits
-     *
-     * @return array
-     */
+   /**
+    * Reads the array returned from the Elasticsearch API
+    * and converts it into an associative array of ids, grouped by Module.
+    *
+    * @param array $hits
+    *
+    * @return array
+    */
     protected function parseHits(array $hits): array //MintHCM
     {
         $hitsArray = $hits['hits']['hits'];

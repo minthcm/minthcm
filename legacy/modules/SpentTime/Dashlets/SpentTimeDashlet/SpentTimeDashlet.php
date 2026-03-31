@@ -41,6 +41,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/SpentTime/SpentTime.php');
 
+#[\AllowDynamicProperties]
 class SpentTimeDashlet extends DashletGeneric {
 
    public function __construct($id, $def = null) {

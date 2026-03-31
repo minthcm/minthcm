@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
+ #[\AllowDynamicProperties]
 class MailMerge
 {
     public $mm_data_dir;
@@ -70,8 +71,8 @@ class MailMerge
     public function Execute()
     {
         $this->Initialize();
-        if (count($this->list) > 0) {
-            if (isset($this->template)) {
+        if ((is_countable($this->list) ? count($this->list) : 0) > 0) {
+            if ($this->template !== null) {
                 $this->CreateHeaderFile();
                 $this->CreateDataSource();
                 $file = $this->CreateDocument($this->template);
@@ -147,9 +148,9 @@ class MailMerge
 
     public function Initialize()
     {
-        $this->rowcnt = count($this->list);
-        $this->fieldcnt = count($this->fieldList);
-        $this->obj = new COM("word.application") or die("Unable to instanciate Word");
+        $this->rowcnt = is_countable($this->list) ? count($this->list) : 0;
+        $this->fieldcnt = is_countable($this->fieldList) ? count($this->fieldList) : 0;
+        ($this->obj = new COM("word.application")) || die("Unable to instanciate Word");
         $this->obj->Visible = $this->visible;
 
         //try to make the temp dir

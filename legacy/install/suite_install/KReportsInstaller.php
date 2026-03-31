@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class KReportsInstaller
 {
     public function run()

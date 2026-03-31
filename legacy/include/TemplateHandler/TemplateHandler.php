@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -176,12 +176,9 @@ class TemplateHandler
         $contents = $this->ss->fetch($tpl);
         // Insert validation and quick search stuff here
         if ($view === 'EditView' || $ajaxSave || $view === 'ComposeView' || strpos($view, 'QuickCreate')) {
-            global $dictionary, $beanList, $app_strings, $mod_strings;
-            $mod = $beanList[$module];
+            global $dictionary, $app_strings, $mod_strings;
 
-            if ($mod === 'aCase') {
-                $mod = 'Case';
-            }
+            $mod = BeanFactory::getObjectName($module);
 
             $defs = isset($dictionary[$mod]['fields']) ? $dictionary[$mod]['fields'] : [];
             $defs2 = array();
@@ -474,15 +471,15 @@ class TemplateHandler
                                         $field['id_name']
                                     );
                                 } else {
-                                    if ($matches[0] === 'Contacts') {
-                                        $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSContact(
-                                            $field['name'],
-                                            $field['id_name']
-                                        );
+                                        if ($matches[0] === 'Contacts') {
+                                            $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSContact(
+                                                $field['name'],
+                                                $field['id_name']
+                                            );
+                                        }
                                     }
                                 }
                             }
-                        }
                     } else {
                         $sqs_objects[$name . '_' . $parsedView] = $qsd->getQSParent($field['module']);
                         if (!isset($field['field_list']) && !isset($field['populate_list'])) {
@@ -556,20 +553,20 @@ class TemplateHandler
                                         $field['id_name']
                                     );
                                 } else {
-                                    if ($matches[0] === 'Contacts') {
-                                        $sqs_objects[$name] = $qsd->getQSContact($field['name'], $field['id_name']);
-                                        if (preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
-                                            $sqs_objects[$name]['field_list'] = array(
-                                                'salutation',
-                                                'first_name',
-                                                'last_name',
-                                                'id'
-                                            );
+                                        if ($matches[0] === 'Contacts') {
+                                            $sqs_objects[$name] = $qsd->getQSContact($field['name'], $field['id_name']);
+                                            if (preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
+                                                $sqs_objects[$name]['field_list'] = array(
+                                                    'salutation',
+                                                    'first_name',
+                                                    'last_name',
+                                                    'id'
+                                                );
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
                     } else {
                         $sqs_objects[$name] = $qsd->getQSParent($field['module']);
                         if (!isset($field['field_list']) && !isset($field['populate_list'])) {

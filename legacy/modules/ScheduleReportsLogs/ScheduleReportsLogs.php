@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,56 +36,61 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-require_once('modules/ScheduleReportsLogs/ScheduleReportsLogsTrait.php');
+require_once 'modules/ScheduleReportsLogs/ScheduleReportsLogsTrait.php';
 
-class ScheduleReportsLogs extends Basic {
+#[\AllowDynamicProperties]
+class ScheduleReportsLogs extends Basic
+{
 
-   use ScheduleReportsLogsTrait;
+    use ScheduleReportsLogsTrait;
 
-   public $new_schema = true;
-   public $module_dir = 'ScheduleReportsLogs';
-   public $object_name = 'ScheduleReportsLogs';
-   public $table_name = 'schedulereportslogs';
-   public $importable = false;
-   public $disable_row_level_security = true; // to ensure that modules created and deployed under CE will continue to function under team security if the instance is upgraded to PRO
-   public $id;
-   public $name;
-   public $date_entered;
-   public $date_modified;
-   public $modified_user_id;
-   public $modified_by_name;
-   public $created_by;
-   public $created_by_name;
-   public $description;
-   public $deleted;
-   public $created_by_link;
-   public $modified_user_link;
-   public $assigned_user_id;
-   public $assigned_user_name;
-   public $assigned_user_link;
-   public $status;
-   public $execute_data;
+    public $new_schema = true;
+    public $module_dir = 'ScheduleReportsLogs';
+    public $object_name = 'ScheduleReportsLogs';
+    public $table_name = 'schedulereportslogs';
+    public $importable = false;
+    public $disable_row_level_security = true; // to ensure that modules created and deployed under CE will continue to function under team security if the instance is upgraded to PRO
+    public $id;
+    public $name;
+    public $date_entered;
+    public $date_modified;
+    public $modified_user_id;
+    public $modified_by_name;
+    public $created_by;
+    public $created_by_name;
+    public $description;
+    public $deleted;
+    public $created_by_link;
+    public $modified_user_link;
+    public $assigned_user_id;
+    public $assigned_user_name;
+    public $assigned_user_link;
+    public $status;
+    public $execute_data;
 
-   public function __construct() {
-      parent::__construct();
-   }
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-   public function bean_implements($interface) {
-      switch ( $interface ) {
-         case 'ACL': return true;
-      }
-      return false;
-   }
+    public function bean_implements($interface)
+    {
+        switch ($interface) {
+            case 'ACL':return true;
+        }
+        return false;
+    }
 
-   public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
-      return $this->ACLAccessOverride($view, parent::ACLAccess($view, $is_owner, $in_group));
-   }
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
+    {
+        return $this->ACLAccessOverride($view, parent::ACLAccess($view, $is_owner, $in_group));
+    }
 
 }

@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class EmailsViewDeleteDraftEmail extends ViewAjax
 {
     /**
@@ -60,7 +61,7 @@ class EmailsViewDeleteDraftEmail extends ViewAjax
 
     public function display()
     {
-        global $app_strings;
+        global $app_strings, $mod_strings;
         $response = array();
 
         if (empty($this->bean->status)) {
@@ -74,14 +75,14 @@ class EmailsViewDeleteDraftEmail extends ViewAjax
                     'id' => $this->bean->id,
                     'attributes' => array(),
                     'relationships' => array(),
-                    'title' => $app_strings['LBL_EMAIL_DRAFT_DELETED']
+                    'title' => $mod_strings['LBL_EMAIL_DRAFT_DELETED']
                 );
                 break;
             case 'save_error':
                 $response['errors'] = array(
                     'type' => get_class($this->bean),
                     'id' => $this->bean->id,
-                    'title' => $app_strings['LBL_EMAIL_DRAFT_ERROR_DELETING']
+                    'title' => $mod_strings['LBL_EMAIL_DRAFT_ERROR_DELETING']
                 );
                 break;
             default:

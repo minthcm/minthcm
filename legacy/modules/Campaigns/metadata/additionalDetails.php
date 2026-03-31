@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -68,15 +68,15 @@ function additionalDetailsCampaign($fields)
     }
     
     if (!empty($fields['OBJECTIVE'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_CAMPAIGN_OBJECTIVE'] . '</b> ' . substr($fields['OBJECTIVE'], 0, 300);
-        if (strlen($fields['OBJECTIVE']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_CAMPAIGN_OBJECTIVE'] . '</b> ' . substr((string) $fields['OBJECTIVE'], 0, 300);
+        if (strlen((string) $fields['OBJECTIVE']) > 300) {
             $overlib_string .= '...';
         }
         $overlib_string .= '<br>';
     }
     if (!empty($fields['CONTENT'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_CAMPAIGN_CONTENT'] . '</b> ' . substr($fields['CONTENT'], 0, 300);
-        if (strlen($fields['CONTENT']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_CAMPAIGN_CONTENT'] . '</b> ' . substr((string) $fields['CONTENT'], 0, 300);
+        if (strlen((string) $fields['CONTENT']) > 300) {
             $overlib_string .= '...';
         }
     }

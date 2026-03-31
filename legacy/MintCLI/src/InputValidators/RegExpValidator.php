@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\InputValidators;
 
+#[\AllowDynamicProperties]
 abstract class RegExpValidator extends Validator
 {
     protected $pattern = "/./";

@@ -41,6 +41,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  * ****************************************************************************** */
 
+#[\AllowDynamicProperties]
 class CalendarUtils
 {
 
@@ -288,7 +289,7 @@ class CalendarUtils
      */
     public static function build_repeat_sequence($date_start, $params)
     {
-
+        $dow = '';
         $arr = array();
 
         $type = $params['type'];
@@ -354,7 +355,7 @@ class CalendarUtils
                     $day_index = $last_dow;
                     for ($d = $last_dow + 1; $d <= $last_dow + 7; $d++) {
                         $day_index = $d % 7;
-                        if (strpos($dow, (string) ($day_index)) !== false) {
+                        if (strpos((string) $dow, (string)($day_index)) !== false) {
                             break;
                         }
                     }

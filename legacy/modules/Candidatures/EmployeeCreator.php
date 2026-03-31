@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@
 
 SugarAutoLoader::requireWithCustom('CompetencyRatingCreator.php');
 
+#[\AllowDynamicProperties]
 class EmployeeCreator
 {
 
@@ -122,7 +123,7 @@ class EmployeeCreator
     protected function updateExistingEmployeeRecord(): Employee
     {
         global $db;
-        $sql = "SELECT employee_id FROM candidates_employees WHERE parent_id ='{$this->candidate_bean->id}' AND deleted=0 LIMIT 1;";
+        $sql = "SELECT employee_id FROM candidates_employees WHERE candidate_id ='{$this->candidate_bean->id}' AND deleted=0 LIMIT 1;";
         $result_employee_id = $db->getOne($sql);
         $related_employee_bean = BeanFactory::getBean(self::EMPLOYEES_MODULE_NAME, $result_employee_id);
 
@@ -166,7 +167,7 @@ class EmployeeCreator
     protected function isCandidateAlreadyRelatedWithEmployee(): bool
     {
         global $db;
-        $sql = "SELECT employee_id FROM candidates_employees WHERE parent_id ='{$this->candidate_bean->id}' AND deleted=0 LIMIT 1;";
+        $sql = "SELECT employee_id FROM candidates_employees WHERE candidate_id ='{$this->candidate_bean->id}' AND deleted=0 LIMIT 1;";
         $result_employee_id = $db->getOne($sql);
         $related_employee_bean = BeanFactory::getBean(self::EMPLOYEES_MODULE_NAME, $result_employee_id);
         return isset($related_employee_bean->id);

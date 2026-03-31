@@ -1,8 +1,8 @@
-import { MintApi } from './api'
+import { mintApi } from './api' 
 
-class ModulesApi extends MintApi {
+class ModulesApi {
     public async getListInit(module_name: string) {
-        return await this.instance.get(module_name)
+        return await mintApi.get(`${module_name}`, { rawError: true })
     }
 
     public async getListData(
@@ -15,8 +15,9 @@ class ModulesApi extends MintApi {
         sortBy: string | null = null,
         sortOrder = 'asc',
         activeFilter = null,
+        onlyFavorites = false,
     ) {
-        return await this.instance.post(module_name, {
+        return await mintApi.post(module_name, {
             page: page,
             items: itemsPerPage,
             myObjects: myObjects,
@@ -25,11 +26,12 @@ class ModulesApi extends MintApi {
             sortBy: sortBy,
             sortOrder: sortOrder,
             activeFilter: activeFilter,
-        })
+            onlyFavorites: onlyFavorites,
+        }, { rawError: true })
     }
 
     public async forgetPassword(username: string, email: string) {
-        return await this.instance.post('api/forget_password', {
+        return await mintApi.post('forget_password', {
             data: {
                 username,
                 email,
@@ -38,9 +40,13 @@ class ModulesApi extends MintApi {
     }
 
     public async saveListPreferences(module_name: string, preferences: any) {
-        return await this.instance.post(module_name + '/list/preferences', {
+        return await mintApi.post(module_name + '/list/preferences', {
             preferences: preferences,
         })
+    }
+
+    public async getChecklistItems(module: string, recordId: string) {
+        return await mintApi.get(`${module}/checklist/${recordId}`)
     }
 }
 

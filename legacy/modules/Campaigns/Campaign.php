@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Description:
  */
 
+ #[\AllowDynamicProperties]
  class Campaign extends SugarBean
  {
      public $field_name_map;
@@ -332,7 +333,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
              //perform the inner join with the group by if a marketing id is defined, which means we need to filter out duplicates.
              //if no marketing id is specified then we are displaying results from multiple marketing emails and it is understood there might be duplicate target entries
              if (!empty($mkt_id)) {
-                 $group_by = str_replace("campaign_log", "cl", $query_array['group_by']);
+                 $group_by = str_replace("campaign_log", "cl", (string) $query_array['group_by']);
                  $join_where = str_replace("campaign_log", "cl", $query_array['where']);
                  $query_array['from'] .= " INNER JOIN (select min(id) as id from campaign_log cl $join_where GROUP BY $group_by  ) secondary
                      on campaign_log.id = secondary.id	";
@@ -350,10 +351,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
      }
  
  
-     public function get_queue_items()
+     public function get_queue_items(...$args)
      {
-         //get arguments being passed in
-         $args = func_get_args();
          $mkt_id ='';
  
          $this->load_relationship('queueitems');
@@ -377,7 +376,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          //get select query from email man
          $man = BeanFactory::newBean('EmailMan');
-         $listquery= $man->create_queue_items_query('', str_replace(array("WHERE","where"), "", $query_array['where']), null, $query_array);
+         $listquery= $man->create_queue_items_query('', str_replace(array("WHERE","where"), "", (string) $query_array['where']), null, $query_array);
          return $listquery;
      }
      //	function get_prospect_list_entries() {

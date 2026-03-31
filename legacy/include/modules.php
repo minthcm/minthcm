@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -88,6 +88,7 @@ $moduleList[] = 'AOBH_BusinessHours';
 $moduleList[] = 'Employees';
 
 // $moduleList[] = 'Spots';
+$moduleList[] = 'SpentTime';
 
 // this list defines all of the module names and bean names in the app
 // to create a new module's bean class, add the bean definition here
@@ -763,6 +764,12 @@ $moduleList[] = 'Files';
 $beanList['Requests'] = 'Requests';
 $beanFiles['Requests'] = 'modules/Requests/Requests.php';
 $moduleList[] = 'Requests';
+
+$beanList['MCPSettings'] = 'MCPSettings';
+$beanFiles['MCPSettings'] = 'modules/MCPSettings/MCPSettings.php';
+$modules_exempt_from_availability_check['MCPSettings'] = 'MCPSettings';
+$report_include_modules['MCPSettings'] = 'MCPSettings';
+$modInvisList[] = 'MCPSettings';
 
 $modInvisListApiExceptions = [
     'Employees',

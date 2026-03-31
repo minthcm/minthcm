@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -163,7 +163,7 @@ $uh = new UpgradeHistory();
 //check dependencies first
 if (!empty($dependencies)) {
     $not_found = $uh->checkDependencies($dependencies);
-    if (!empty($not_found) && count($not_found) > 0) {
+    if (!empty($not_found) && (is_countable($not_found) ? count($not_found) : 0) > 0) {
         die($mod_strings['ERR_UW_NO_DEPENDENCY']."[".implode(',', $not_found)."]");
     }//fi
 }
@@ -252,7 +252,7 @@ if (empty($new_studio_mod_files)) {
     }
 } else {
     echo $mod_strings['LBL_UW_PATCH_READY2'];
-    echo '<input type="checkbox" onclick="toggle_these(0, ' . count($new_studio_mod_files) . ', this)"> '.$mod_strings['LBL_UW_CHECK_ALL'];
+    echo '<input type="checkbox" onclick="toggle_these(0, ' . (is_countable($new_studio_mod_files) ? count($new_studio_mod_files) : 0) . ', this)"> '.$mod_strings['LBL_UW_CHECK_ALL'];
     foreach ($new_studio_mod_files as $the_file) {
         $new_file   = clean_path("$zip_to_dir/$the_file");
         print("<li><input id=\"copy_$count\" name=\"copy_$count\" type=\"checkbox\" value=\"" . $the_file . "\"> " . $new_file . "</li>");
@@ -409,7 +409,7 @@ if ($show_files == true) {
         '.SugarThemeRegistry::current()->getImage('advanced_search', '', null, null, ".gif", $mod_strings['LBL_ADVANCED_SEARCH']).$mod_strings['LBL_UW_SHOW_DETAILS'].'</div><div id=\'more\' style=\'display: none\'>
               <div style="text-align: left; cursor: hand; cursor: pointer; text-decoration: underline;" onclick=\'document.getElementById("all_text").style.display=""; toggleDisplay("more");\'>'
          .SugarThemeRegistry::current()->getImage('basic_search', '', null, null, ".gif", $mod_strings['LBL_BASIC_SEARCH']).$mod_strings['LBL_UW_HIDE_DETAILS'].'</div><br>';
-    echo '<input type="checkbox" checked onclick="toggle_these(' . count($new_studio_mod_files) . ',' . count($new_files) . ', this)"> '.$mod_strings['LBL_UW_CHECK_ALL'];
+    echo '<input type="checkbox" checked onclick="toggle_these(' . count($new_studio_mod_files) . ',' . (is_countable($new_files) ? count($new_files) : 0) . ', this)"> '.$mod_strings['LBL_UW_CHECK_ALL'];
     echo '<ul>';
     foreach ($new_sugar_mod_files as $the_file) {
         $highlight_start = "";
@@ -434,7 +434,7 @@ if ($show_files == true) {
                     $forced_copy = true;
                 }
             }
-            if (!$forced_copy && is_file($new_file) && (md5_file($unzip_file) == md5_file($new_file))) {
+            if (!$forced_copy && is_file($new_file) && (md5_file($unzip_file) === md5_file($new_file))) {
                 $disabled = "disabled=\"true\"";
             }
             if ($checked != "" && $disabled != "") {    // need to put a hidden field
@@ -447,7 +447,7 @@ if ($show_files == true) {
             print("<br>\n");
         } else {
             if ($mode == "Uninstall" && file_exists($new_file)) {
-                if (md5_file($unzip_file) == md5_file($new_file)) {
+                if (md5_file($unzip_file) === md5_file($new_file)) {
                     $checked = "checked=\"true\"";
                 } else {
                     $highlight_start = "<font color=red>";
@@ -464,11 +464,11 @@ if ($show_files == true) {
 if ($mode == "Disable" || $mode == "Enable") {
     //check to see if any files have been modified
     $modified_files = getDiffFiles($unzip_dir, $install_file, ($mode == 'Enable'), $previous_version);
-    if (count($modified_files) > 0) {
+    if ((is_countable($modified_files) ? count($modified_files) : 0) > 0) {
         //we need to tell the user that some files have been modified since they last did an install
         echo '<script>' .
                 'function handleFileChange(){';
-        if (count($modified_files) > 0) {
+        if ((is_countable($modified_files) ? count($modified_files) : 0) > 0) {
             echo 'if(document.getElementById("radio_overwrite_files") != null && document.getElementById("radio_do_not_overwrite_files") != null){
                 			var overwrite = false;
                 			if(document.getElementById("radio_overwrite_files").checked){
@@ -551,7 +551,7 @@ echo '<script>' .
     <input type="hidden" name="copy_count" value="<?php print($count);?>"/>
     <input type="hidden" name="run" value="commit" />
     <input type="hidden" name="install_file"  value="<?php echo $fileHash; ?>" />
-    <input type="hidden" name="unzip_dir"     value="<?php echo basename($unzip_dir); ?>" />
+    <input type="hidden" name="unzip_dir"     value="<?php echo basename((string) $unzip_dir); ?>" />
     <input type="hidden" name="zip_from_dir"  value="<?php echo $zip_from_dir; ?>" />
     <input type="hidden" name="zip_to_dir"    value="<?php echo $zip_to_dir; ?>" />
 </form>

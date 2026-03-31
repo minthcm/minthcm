@@ -1,7 +1,7 @@
 <?php
 
-class ESSearchResults extends \SuiteCRM\Search\SearchResults
-{
+#[\AllowDynamicProperties]
+class ESSearchResults extends \SuiteCRM\Search\SearchResults {
 
     protected $hits_after_acl = [];
 
@@ -101,7 +101,7 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults
 
     protected function handleSG($beans, $module)
     {
-        if (count($beans) > 0) {
+        if (is_countable($beans) ? count($beans) : 0 > 0) {
             $obj = BeanFactory::newBean($module);
             if ($obj->bean_implements('ACL') && ACLController::requireSecurityGroup($obj->module_dir, 'list')) {
                 require_once 'modules/SecurityGroups/SecurityGroup.php';

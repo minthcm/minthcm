@@ -21,8 +21,8 @@ class VTExpression_divide extends VTExpression
 
     /**
      * Warning! if backend is not set, return false
-     * @param Array
-     * @return float or false
+     * @param array
+     * @return string|bool
      * Please set input params as Array
      */
     public function backend($arguments = array())
@@ -37,7 +37,7 @@ class VTExpression_divide extends VTExpression
 
     /**
      * Warning! if frontend is not set, return false
-     * @return float or false
+     * @return string
      */
     public function frontend()
     {

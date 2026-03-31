@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -194,7 +194,7 @@ function getFullTableDump($tableName)
     $returnString .= array_as_table("{$db->dbName} $tableName Keys:", $indexes);
     $returnString .= "<BR><BR>";
 
-    $def_count = count($cols);
+    $def_count = is_countable($cols) ? count($cols) : 0;
 
     $td_result = $db->query("select * from ".$tableName);
     if (!$td_result) {
@@ -250,7 +250,7 @@ function getFullTableDump($tableName)
 // Deletes the directory recursively
 function deleteDir($dir)
 {
-    if (substr($dir, strlen($dir)-1, 1) != '/') {
+    if (substr((string) $dir, strlen((string) $dir)-1, 1) != '/') {
         $dir .= '/';
     }
 
@@ -649,7 +649,7 @@ function executevardefs()
     foreach ($beanList as $beanz) {
 
         if(!empty($beanFiles[ $beanz ])) {
-            $path_parts = pathinfo($beanFiles[$beanz]);
+            $path_parts = pathinfo((string) $beanFiles[$beanz]);
             $vardefFileName = $path_parts['dirname'] . "/vardefs.php";
             if (file_exists($vardefFileName)) {
                 include_once($vardefFileName);

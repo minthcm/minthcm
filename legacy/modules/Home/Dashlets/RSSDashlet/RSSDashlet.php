@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@
 require_once('include/Dashlets/Dashlet.php');
 require_once('include/Sugar_Smarty.php');
 
+#[\AllowDynamicProperties]
 class RSSDashlet extends Dashlet
 {
     protected $url = 'https://salesagility.com/component/easyblog/tags/suitecrm?format=feed&type=rss';
@@ -161,7 +162,7 @@ class RSSDashlet extends Dashlet
         // suppress XML errors
         libxml_use_internal_errors(true);
         $data = file_get_contents($url);
-        $urlparse = parse_url($url);
+        $urlparse = parse_url((string) $url);
         if (empty($urlparse['scheme']) || empty($urlparse['host'])) {
             return $this->dashletStrings['ERR_LOADING_FEED'];
         }
@@ -203,7 +204,7 @@ EOHTML;
                 if (empty($link)) {
                     $link = $entry->link[0]['href'];
                 }
-                $link = htmlspecialchars($link, ENT_QUOTES, 'UTF-8');
+                $link = htmlspecialchars((string) $link, ENT_QUOTES, 'UTF-8');
                 $title = htmlspecialchars($entry->title, ENT_QUOTES, 'UTF-8');
                 $summary = htmlspecialchars($entry->summary, ENT_QUOTES, 'UTF-8');
                 $output .= <<<EOHTML

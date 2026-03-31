@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,13 +42,14 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
- if (!defined('sugarEntry') || !sugarEntry) {
+if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 require_once('include/templates/TemplateGroupChooser.php');
 
 
+#[\AllowDynamicProperties]
 class SavedSearch extends SugarBean
 {
     public $db;
@@ -105,9 +106,10 @@ class SavedSearch extends SugarBean
 				  ORDER BY name';
         $result = $db->query($query, true, "Error filling in saved search list: ");
 
+        $savedSearchArray = [];
         $savedSearchArray['_none'] = $app_strings['LBL_NONE'];
         while ($row = $db->fetchByAssoc($result, -1, false)) {
-            $savedSearchArray[$row['id']] = htmlspecialchars($row['name'], ENT_QUOTES);
+            $savedSearchArray[$row['id']] = htmlspecialchars((string) $row['name'], ENT_QUOTES);
         }
         $sugarSmarty = new Sugar_Smarty();
         $sugarSmarty->assign('SEARCH_MODULE', $module);
@@ -224,11 +226,12 @@ class SavedSearch extends SugarBean
                   ORDER BY name';
         $result = $db->query($query, true, "Error filling in saved search list: ");
 
+        $savedSearchArray = [];
         $savedSearchArray['_none'] = $app_strings['LBL_NONE'];
         $savedSearchData['hasOptions'] = false;
         while ($row = $db->fetchByAssoc($result, -1, false)) {
             $savedSearchData['hasOptions'] = true;
-            $savedSearchData['options'][$row['id']] = $savedSearchArray[$row['id']] = htmlspecialchars($row['name'], ENT_QUOTES);
+            $savedSearchData['options'][$row['id']] = $savedSearchArray[$row['id']] = htmlspecialchars((string) $row['name'], ENT_QUOTES);
         }
 
         $sugarSmarty = new Sugar_Smarty();
@@ -245,7 +248,7 @@ class SavedSearch extends SugarBean
         $sugarSmarty->assign('SAVED_SEARCHES_OPTIONS', get_select_options_with_id($savedSearchArray, $selectedSearch));
 
         $savedSearchData['module'] = $module;
-        
+
         return $sugarSmarty->fetch('modules/SavedSearch/SavedSearchSelects.tpl');
     }
 
@@ -326,7 +329,7 @@ class SavedSearch extends SugarBean
                 $_SESSION['LastSavedView'] = array();
             }
             $_SESSION['LastSavedView'][$row['search_module']] = $row['id'];
-            $contents = unserialize(base64_decode($row['contents']));
+            $contents = unserialize(base64_decode($row['contents']), ['allowed_classes' => false]);
             $saved_search_id = $row['id'];
             $saved_search_name = $row['name'];
         }
@@ -345,7 +348,9 @@ class SavedSearch extends SugarBean
             LoggerManager::getLogger()->warn('SavedSearch::handleDelete() - Requested search module is not set');
         }
 
-        SugarApplication::headerRedirect("Location: index.php?action=index&module={$requestSearchModule}&advanced={$_REQUEST['advanced']}&query=true&clear_query=true");
+        $advanced = $_REQUEST['advanced'] ?? 'false';
+        $query = $_REQUEST['query'] ?? 'false';
+        SugarApplication::headerRedirect("Location: index.php?action=index&module={$requestSearchModule}&advanced={$advanced}&query={$query}&clear_query=true");
     }
 
     public function handleSave($prefix, $redirect = true, $useRequired = false, $id = null, $searchModuleBean = null)
@@ -387,18 +392,18 @@ class SavedSearch extends SugarBean
                     $type = $searchModuleBean->field_defs[$field]['type'];
 
                     //Avoid macro values for the date types
-                    if (($type == 'date' || $type == 'datetime' || $type == 'datetimecombo') && !preg_match('/^\[.*?\]$/', $value)) {
+                    if (($type == 'date' || $type == 'datetime' || $type == 'datetimecombo') && !preg_match('/^\[.*?\]$/', (string) $value)) {
                         $db_format = $timedate->to_db_date($value, false);
                         $contents[$input] = $db_format;
                     } else {
                         if ($type == 'int' || $type == 'currency' || $type == 'decimal' || $type == 'float') {
-                            if (preg_match('/[^\d]/', $value)) {
+                            if (preg_match('/[^\d]/', (string) $value)) {
                                 require_once('modules/Currencies/Currency.php');
                                 $contents[$input] = unformat_number($value);
                                 //Flag this value as having been unformatted
                                 $contents[$input . '_unformatted_number'] = true;
                                 //If the type is of currency and there was a currency symbol (non-digit), save the symbol
-                                if ($type == 'currency' && preg_match('/^([^\d])/', $value, $match)) {
+                                if ($type == 'currency' && preg_match('/^([^\d])/', (string) $value, $match)) {
                                     $contents[$input . '_currency_symbol'] = $match[1];
                                 }
                             } else {
@@ -492,7 +497,7 @@ class SavedSearch extends SugarBean
     public function retrieveSavedSearch($id)
     {
         parent::retrieve($id);
-        $this->contents = unserialize(base64_decode($this->contents));
+        $this->contents = unserialize(base64_decode($this->contents), ['allowed_classes' => false]);
     }
 
     public function populateRequest()
@@ -504,17 +509,17 @@ class SavedSearch extends SugarBean
         }
 
         foreach ($this->contents as $key => $val) {
-            if ($key != 'advanced' && $key != 'module' && !strpos($key, '_ORDER_BY') && $key != 'lvso') {
-                if (isset($searchModuleBean) && !empty($val) && preg_match('/^(start_range_|end_range_|range_)?(.*?)(_advanced|_basic)$/', $key, $match)) {
+            if ($key != 'advanced' && $key != 'module' && !strpos((string) $key, '_ORDER_BY') && $key != 'lvso') {
+                if (isset($searchModuleBean) && !empty($val) && preg_match('/^(start_range_|end_range_|range_)?(.*?)(_advanced|_basic)$/', (string) $key, $match)) {
                     $field = $match[2];
                     if (isset($searchModuleBean->field_defs[$field]['type']) && empty($searchModuleBean->field_defs[$field]['disable_num_format'])) {
                         $type = $searchModuleBean->field_defs[$field]['type'];
 
                         //Avoid macro values for the date types
-                        if (($type == 'date' || $type == 'datetime' || $type == 'datetimecombo') && preg_match('/^\d{4}-\d{2}-\d{2}$/', $val) && !preg_match('/^\[.*?\]$/', $val)) {
+                        if (($type == 'date' || $type == 'datetime' || $type == 'datetimecombo') && preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $val) && !preg_match('/^\[.*?\]$/', (string) $val)) {
                             $val = $timedate->to_display_date($val, false);
                         } else {
-                            if (($type == 'int' || $type == 'currency' || $type == 'decimal' || $type == 'float') && isset($this->contents[$key . '_unformatted_number']) && preg_match('/^\d+$/', $val)) {
+                            if (($type == 'int' || $type == 'currency' || $type == 'decimal' || $type == 'float') && isset($this->contents[$key . '_unformatted_number']) && preg_match('/^\d+$/', (string) $val)) {
                                 require_once('modules/Currencies/Currency.php');
                                 $val = format_number($val);
                                 if ($type == 'currency' && isset($this->contents[$key . '_currency_symbol'])) {

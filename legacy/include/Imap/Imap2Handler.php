@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2022 SalesAgility Ltd.
- * 
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ *
+* MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -58,6 +58,7 @@ require_once __DIR__ . '/ImapHandlerInterface.php';
  * ImapHandler
  * Wrapper class for functions of imap2 lib
  */
+#[\AllowDynamicProperties]
 class Imap2Handler implements ImapHandlerInterface
 {
 
@@ -162,7 +163,7 @@ class Imap2Handler implements ImapHandlerInterface
     protected function logCall($func, $args)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper called: ' . __CLASS__ . "::$func(" . json_encode($args) . ')');
+            $this->logger->debug('IMAP wrapper called: ' . self::class . "::$func(" . json_encode($args) . ')');
         }
     }
 
@@ -174,7 +175,7 @@ class Imap2Handler implements ImapHandlerInterface
     protected function logReturn($func, $ret)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper return: ' . __CLASS__ . "::$func(...) => " . json_encode($ret));
+            $this->logger->debug('IMAP wrapper return: ' . self::class . "::$func(...) => " . json_encode($ret));
         }
     }
 
@@ -390,7 +391,7 @@ class Imap2Handler implements ImapHandlerInterface
             // catch if we have BADCHARSET as exception is not thrown
             if (empty($ret) || $ret === false) {
                 $err = imap2_last_error();
-                if (strpos($err, 'BADCHARSET')) {
+                if (strpos((string) $err, 'BADCHARSET')) {
                     imap2_errors();
                     throw new Exception($err);
                 }
@@ -1110,6 +1111,8 @@ class Imap2Handler implements ImapHandlerInterface
         $messageSet = null,
         bool $returnUid = true
     ) {
+        global $sugar_config;
+
         if (!$this->isValidStream($this->getStream())) {
             return [];
         }
@@ -1130,7 +1133,7 @@ class Imap2Handler implements ImapHandlerInterface
 
             if (!empty($ids)) {
 
-                $ids = array_slice($ids, $start - 1, $end);
+                $ids = array_slice($ids, $start - 1, $sugar_config['list_max_entries_per_page'] ?? 10);
             }
         }
 
@@ -1147,7 +1150,8 @@ class Imap2Handler implements ImapHandlerInterface
         int $offset,
         int $pageSize,
         array &$mailboxInfo,
-        array $columns
+        array $columns,
+        string $auth_type
     ): array {
 
         $uids = null;
@@ -1164,7 +1168,7 @@ class Imap2Handler implements ImapHandlerInterface
                 return [];
             }
 
-            $lastSequenceNumber = $mailboxInfo['Nmsgs'] = count($emailSortedHeaders);
+            $lastSequenceNumber = $mailboxInfo['Nmsgs'] = is_countable($emailSortedHeaders) ? count($emailSortedHeaders) : 0;
 
             // paginate
             if ($offset === "end") {
@@ -1208,7 +1212,12 @@ class Imap2Handler implements ImapHandlerInterface
             $pageLast = $pageOffSet + $pageSize;
             $sequence = "$pageOffSet:$pageLast";
 
-            $sorteUids = $this->getSortedMessageIds('ARRIVAL', $pageOffSet, $pageLast, '');
+            if ($auth_type === 'basic'){
+                $sorteUids = $this->getSortedMessageIds('ARRIVAL', $pageOffSet, $pageLast, '');
+            } else {
+                $sorteUids = $this->getSortedMessageIds('ARRIVAL', $pageOffSet, $pageLast);
+            }
+
             $sequence = implode(',', $sorteUids);
 
             $mailList = $this->$fetchMethod($sequence, FT_UID);

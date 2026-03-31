@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -79,6 +79,7 @@ $viewdefs[$module_name]['EditView'] = array(
             ),
             array(
                 'reason_for_rejection',
+                'original_candidature_name',
             ),
             array(
                 'parent_name',
@@ -91,7 +92,7 @@ $viewdefs[$module_name]['EditView'] = array(
             ),
             array(
                 'start_date',
-                'recruitment_end_name',
+                'route_of_acquisition',
             ),
             array(
                 'status_information',

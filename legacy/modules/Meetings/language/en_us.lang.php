@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -183,4 +183,36 @@ $mod_strings = array(
    'LBL_REPEAT_END' => 'End',
    'LBL_PERIODICITY_ERROR' => 'Please select days on which the Meeting should be repeated.',
    'LBL_RESERVATIONS_MEETINGS' => 'Reservations',
+   'LBL_SUBJECT_COMMENT' => 'Meeting name.',
+   'LBL_ACCEPT_STATUS_COMMENT' => 'Acceptance status of the meeting invitation.',
+   'LBL_ACCEPT_LINK_COMMENT' => 'Link to accept the meeting invitation.',
+   'LBL_LOCATION_COMMENT' => 'Meeting location.',
+   'LBL_PASSWORD_COMMENT' => 'Meeting password.',
+   'LBL_DURATION_HOURS_COMMENT' => 'Duration of meeting in hours.',
+   'LBL_DURATION_MINUTES_COMMENT' => 'Duration of meeting in minutes.',
+   'LBL_DATE_COMMENT' => 'Date and time when the meeting starts.',
+   'LBL_DATE_END_COMMENT' => 'Date and time when the meeting ends.',
+   'LBL_PARENT_TYPE_COMMENT' => 'Module the meeting is associated with.',
+   'LBL_STATUS_COMMENT' => 'Meeting status (ex: Planned, Held, Not Held).',
+   'LBL_DIRECTION_COMMENT' => 'Indicates whether the related call is inbound or outbound.',
+   'LBL_PARENT_ID_COMMENT' => 'ID of item indicated by parent_type.',
+   'LBL_REMINDER_COMMENT' => 'Checkbox indicating whether or not the reminder value is set (Meta-data only).',
+   'LBL_REMINDER_TIME_COMMENT' => 'Specifies when a reminder alert should be issued; -1 means no alert; otherwise the number of seconds prior to the start.',
+   'LBL_EMAIL_REMINDER_COMMENT' => 'Checkbox indicating whether or not the email reminder value is set (Meta-data only).',
+   'LBL_EMAIL_REMINDER_TIME_COMMENT' => 'Specifies when an email reminder alert should be issued; -1 means no alert; otherwise the number of seconds prior to the start.',
+   'LBL_EMAIL_REMINDER_SENT_COMMENT' => 'Whether email reminder is already sent.',
+   'LBL_REMINDERS_COMMENT' => 'Returns list of reminders for the meeting (Meta-data only).',
+   'LBL_OUTLOOK_ID_COMMENT' => 'When the Sugar Plug-in for Microsoft Outlook syncs an appointment, this is the Outlook appointment item ID.',
+   'LBL_SEQUENCE_COMMENT' => 'Meeting update sequence according to iCalendar standards.',
+   'LBL_RECURRING_SOURCE_COMMENT' => 'Source of recurring meeting.',
+   'LBL_DURATION_COMMENT' => 'Dropdown for selecting meeting duration.',
+   'LBL_GSYNC_ID_COMMENT' => 'Internal Google ID of the event record.',
+   'LBL_GSYNC_LASTSYNC_COMMENT' => 'Last time this record was synced with Google Account as Unix time.',
+   'LBL_TYPE_COMMENT' => 'Meeting type.',
+   'LBL_REPEAT_TYPE_COMMENT' => 'Type of recurrence.',
+   'LBL_REPEAT_INTERVAL_COMMENT' => 'Interval of recurrence.',
+   'LBL_REPEAT_DOW_COMMENT' => 'Days of the week in recurrence.',
+   'LBL_REPEAT_UNTIL_COMMENT' => 'Repeat until specified date.',
+   'LBL_REPEAT_COUNT_COMMENT' => 'Number of recurrence.',
+   'LBL_REPEAT_PARENT_ID_COMMENT' => 'ID of the first element of recurring records.',
 );

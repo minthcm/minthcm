@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+*
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -120,16 +120,16 @@ class ListViewSmarty extends ListViewDisplay
         }
         global $odd_bg, $even_bg, $hilite_bg, $app_strings, $sugar_config;
         if (is_object($this->seed) || class_exists($this->seed)) {
-            $seedClass = get_parent_class($this->seed);
-            if (in_array($seedClass, array('Company', 'Person'), true)) {
-                $configurator = new Configurator();
-                if ($configurator->isConfirmOptInEnabled()) {
-                    $sendConfirmOptInEmailToPersonAndCompany = $this->buildSendConfirmOptInEmailToPersonAndCompany();
-                    if (!in_array($sendConfirmOptInEmailToPersonAndCompany, $this->actionsMenuExtraItems, true)) {
-                        $this->actionsMenuExtraItems[] = $this->buildSendConfirmOptInEmailToPersonAndCompany();
-                    }
+        $seedClass = get_parent_class($this->seed);
+        if (in_array($seedClass, array('Company', 'Person'), true)) {
+            $configurator = new Configurator();
+            if ($configurator->isConfirmOptInEnabled()) {
+                $sendConfirmOptInEmailToPersonAndCompany = $this->buildSendConfirmOptInEmailToPersonAndCompany();
+                if (!in_array($sendConfirmOptInEmailToPersonAndCompany, $this->actionsMenuExtraItems, true)) {
+                    $this->actionsMenuExtraItems[] = $this->buildSendConfirmOptInEmailToPersonAndCompany();
                 }
             }
+        }
         }
 
         parent::process($file, $data, $htmlpublic);
@@ -138,17 +138,17 @@ class ListViewSmarty extends ListViewDisplay
         $this->data = $data;
 
         $totalWidth = 0;
-        foreach ((array) $this->displayColumns as $name => $params) {
-            $totalWidth += isset($params['width']) ? (int) $params['width'] : 0;
+        foreach ((array)$this->displayColumns as $name => $params) {
+            $totalWidth += isset($params['width'])? (int)$params['width'] : 0;
         }
         $adjustment = $totalWidth / 100;
 
         $contextMenuObjectsTypes = array();
-        foreach ((array) $this->displayColumns as $name => $params) {
+        foreach ((array)$this->displayColumns as $name => $params) {
             if (!isset($this->displayColumns[$name]['width']) || 0 === $adjustment) {
                 $this->displayColumns[$name]['width'] = 0;
             } else {
-                $this->displayColumns[$name]['width'] = floor(((int) $this->displayColumns[$name]['width']) / $adjustment);
+                $this->displayColumns[$name]['width'] = floor(((int)$this->displayColumns[$name]['width']) / $adjustment);
             }
 
             // figure out which contextMenu objectsTypes are required
@@ -176,7 +176,7 @@ class ListViewSmarty extends ListViewDisplay
         $this->ss->assign('MOD', $mod_strings);
 
         $this->ss->assign('bgHilite', $hilite_bg);
-        $this->ss->assign('colCount', count((array) $this->displayColumns) + 10);
+        $this->ss->assign('colCount', count((array)$this->displayColumns) + 10);
         $this->ss->assign('htmlpublic', strtoupper($htmlpublic));
         $this->ss->assign('moduleString', $this->moduleString);
         $this->ss->assign('editLinkString', $app_strings['LBL_EDIT_BUTTON']);
@@ -224,7 +224,7 @@ class ListViewSmarty extends ListViewDisplay
         // include button for Adding to Target List if in one of four applicable modules
         if (isset($_REQUEST['module']) && in_array($_REQUEST['module'], array('Contacts', 'Prospects'))
             && ACLController::checkAccess('ProspectLists', 'edit', true)) {
-            $this->ss->assign('targetLink', $this->buildTargetList());
+            $this->ss->assign('targetLink', $this->buildTargetList()) ;
         }
 
         if (!isset($data['pageData']['ordering'])) {
@@ -271,7 +271,7 @@ class ListViewSmarty extends ListViewDisplay
     {
         $pathParts = pathinfo(SugarThemeRegistry::current()->getImageURL('arrow.gif', false));
 
-        list($width, $height) = getimagesize($pathParts['dirname'] . '/' . $pathParts['basename']);
+        list($width, $height) = getimagesize($pathParts['dirname'].'/'.$pathParts['basename']);
 
         $this->ss->assign('arrowExt', $pathParts['extension']);
         $this->ss->assign('arrowWidth', $width);
@@ -288,13 +288,13 @@ class ListViewSmarty extends ListViewDisplay
     public function display($end = true)
     {
         if (!$this->should_process) {
-            return $this->getSearchIcon() . $GLOBALS['app_strings']['LBL_SEARCH_POPULATE_ONLY'];
+            return $this->getSearchIcon().$GLOBALS['app_strings']['LBL_SEARCH_POPULATE_ONLY'];
         }
         global $app_strings, $sugar_version, $sugar_flavor, $currentModule, $app_list_strings;
         $this->ss->assign('moduleListSingular', $app_list_strings["moduleListSingular"]);
         $this->ss->assign('moduleList', $app_list_strings['moduleList']);
-        $this->ss->assign('data', $this->data['data']);
-        $this->ss->assign('query', $this->data['query']);
+        $this->ss->assign('data', $this->data['data'] ?? []);
+        $this->ss->assign('query', $this->data['query'] ?? '');
         $this->ss->assign('sugar_info', array("sugar_version" => $sugar_version,
             "sugar_flavor" => $sugar_flavor));
 
@@ -307,10 +307,10 @@ class ListViewSmarty extends ListViewDisplay
             } elseif (!is_array($this->data['data'])) {
                 LoggerManager::getLogger()->warn('List view smarty data must be an array, ' . gettype($this->data['data']) . ' given and converting to an array.');
             }
-            $this->data['pageData']['offsets']['lastOffsetOnPage'] = $this->data['pageData']['offsets']['current'] + count((array) $this->data['data']);
+            $this->data['pageData']['offsets']['lastOffsetOnPage'] = $this->data['pageData']['offsets']['current'] + count((array)$this->data['data']);
         }
 
-        $this->ss->assign('pageData', $this->data['pageData']);
+        $this->ss->assign('pageData', $this->data['pageData'] ?? []);
 
         $navStrings = array('next' => $app_strings['LNK_LIST_NEXT'],
             'previous' => $app_strings['LNK_LIST_PREVIOUS'],
@@ -325,7 +325,7 @@ class ListViewSmarty extends ListViewDisplay
             $displayEmptyDataMessages = $this->displayEmptyDataMessages;
         }
         //TODO: Cleanup, better logic for which modules are exempt from the new messaging.
-        $modulesExemptFromEmptyDataMessages = array('WorkFlow', 'ContractTypes', 'OAuthKeys', 'TimePeriods');
+        $modulesExemptFromEmptyDataMessages = array('WorkFlow','ContractTypes', 'OAuthKeys', 'TimePeriods');
         if ((isset($GLOBALS['moduleTabMap'][$currentModule]) && 'Administration' == $GLOBALS['moduleTabMap'][$currentModule])
             || isset($GLOBALS['adminOnlyList'][$currentModule]) || in_array($currentModule, $modulesExemptFromEmptyDataMessages)) {
             $displayEmptyDataMessages = false;
@@ -344,7 +344,7 @@ class ListViewSmarty extends ListViewDisplay
 
         $searchFormInPopup = !in_array($_REQUEST['module'], isset($sugar_config['enable_legacy_search']) ? $sugar_config['enable_legacy_search'] : array());
         if ('populate_only' == $sugar_config['save_query'] && !$searchFormInPopup) {
-            return;
+            return ;
         }
         $ss = new Sugar_Smarty();
         $ss->assign('currentModule', $_REQUEST['module']);

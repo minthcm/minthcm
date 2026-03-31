@@ -1,8 +1,10 @@
 <?php
+
 namespace Api\V8\OAuth2\Repository;
 
 use Api\V8\BeanDecorator\BeanManager;
 use Api\V8\OAuth2\Entity\AccessTokenEntity;
+use BeanFactory;
 use DateTime;
 use InvalidArgumentException;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
@@ -11,6 +13,7 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use OAuth2Tokens;
 use User;
 
+#[\AllowDynamicProperties]
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
     /**
@@ -75,10 +78,19 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
             throw new InvalidArgumentException('No user found');
         }
 
+        $user = BeanFactory::getBean('Users', $userId);
+
+        if (!$user || !($user instanceof User) || !$user->isEnabled()) {
+            throw new InvalidArgumentException('Not Authorized');
+        }
+
         /** @var OAuth2Tokens $token */
         $token = $this->beanManager->newBeanSafe(OAuth2Tokens::class);
+
         $token->access_token = $accessTokenEntity->getIdentifier();
+
         $token->access_token_expires = $accessTokenEntity->getExpiryDateTime()->format('Y-m-d H:i:s');
+
         $token->client = $clientId;
 
         $token->assigned_user_id = $userId;

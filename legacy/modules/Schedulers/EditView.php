@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -145,10 +145,10 @@ $time_start_hour = (int)substr($time_start, 0, 2);
 $time_start_minutes = substr($time_start, 3, 5);
 $time_end_hour = (int)substr($time_end, 0, 2);
 $time_end_minutes = substr($time_end, 3, 5);
-$time_from_hour = (int)substr($focus->time_from, 0, 2);
-$time_from_min = substr($focus->time_from, 3, 5);
-$time_to_hour = (int)substr($focus->time_to, 0, 2);
-$time_to_min = substr($focus->time_to, 3, 5);
+$time_from_hour = (int)substr((string) $focus->time_from, 0, 2);
+$time_from_min = substr((string) $focus->time_from, 3, 5);
+$time_to_hour = (int)substr((string) $focus->time_to, 0, 2);
+$time_to_min = substr((string) $focus->time_to, 3, 5);
 $hours_arr = array();
 $mins_arr = array();
 $num_of_hours = 13;
@@ -300,7 +300,7 @@ $xtpl->assign('TIME_MERIDIEM_START', $time_meridiem_start);
 $xtpl->assign('TIME_MERIDIEM_END', $time_meridiem_end);
 $xtpl->assign('TIME_MERIDIEM_FROM', $time_meridiem_from);
 $xtpl->assign('TIME_MERIDIEM_TO', $time_meridiem_to);
-if (preg_match('/\d([^\d])\d/', $time_format, $match)) {
+if (preg_match('/\d([^\d])\d/', (string) $time_format, $match)) {
     $xtpl->assign('TIME_SEPARATOR', $match[1]);
 } else {
     $xtpl->assign('TIME_SEPARATOR', ':');
@@ -329,8 +329,8 @@ if ($focus->catch_up == 1) {
     $xtpl->assign('CATCH_UP_CHECKED', 'CHECKED');
 }
 // job
-if (strstr($focus->job, 'url::')) {
-    $job_url = str_replace('url::', '', $focus->job);
+if (strstr((string) $focus->job, 'url::')) {
+    $job_url = str_replace('url::', '', (string) $focus->job);
 } else {
     $job_url = 'http://';
 }

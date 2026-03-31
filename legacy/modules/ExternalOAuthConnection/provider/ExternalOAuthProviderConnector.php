@@ -49,6 +49,7 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 
 require_once __DIR__ . '/ExternalOAuthProviderConnectorInterface.php';
 
+#[\AllowDynamicProperties]
 abstract class ExternalOAuthProviderConnector implements ExternalOAuthProviderConnectorInterface
 {
     /**

@@ -7,9 +7,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('modules/Contacts/Contact.php');
  * TODO: Move to emails module. This class violates single responsibility principle. In that the emails
  * module should handle the email
  */
+#[\AllowDynamicProperties]
 class sendEmail
 {
     /**
@@ -66,7 +67,7 @@ class sendEmail
     {
         global $current_user, $mod_strings, $sugar_config;
         // First Create e-mail draft
-        $email = new Email();
+        $email = BeanFactory::newBean('Emails');
         // set the id for relationships
         $email->id = create_guid();
         $email->new_with_id = true;
@@ -78,6 +79,8 @@ class sendEmail
         // type is draft
         $email->type = "draft";
         $email->status = "draft";
+
+        $contact_id = '';
 
         if (!empty($module->billing_contact_id)) {
             $contact_id = $module->billing_contact_id;
@@ -106,7 +109,7 @@ class sendEmail
 
 
         // team id
-        $email->team_id = $current_user->default_team;
+        $email->team_id = $current_user->default_team ?? '';
         // assigned_user_id
         $email->assigned_user_id = $current_user->id;
         // Save the email object
@@ -116,7 +119,7 @@ class sendEmail
         $email_id = $email->id;
 
         if ($attach) {
-            $note = new Note();
+            $note = BeanFactory::newBean('Notes');
             $note->modified_user_id = $current_user->id;
             $note->created_by = $current_user->id;
             $note->name = $file_name;
@@ -126,11 +129,11 @@ class sendEmail
             $note->filename = $file_name;
             $noteId = $note->save();
 
-            if($noteID !== false && !empty($noteId)) {
+            if (!empty($noteId)) {
                 rename($sugar_config['upload_dir'] . 'attachfile.pdf', $sugar_config['upload_dir'] . $note->id);
                 $email->attachNote($note);
             } else {
-               $GLOBALS['log']->error('AOS_PDF_Templates: Unable to save note');
+                $GLOBALS['log']->error('AOS_PDF_Templates: Unable to save note');
             }
         }
 
@@ -143,4 +146,3 @@ class sendEmail
         }
     }
 }
-

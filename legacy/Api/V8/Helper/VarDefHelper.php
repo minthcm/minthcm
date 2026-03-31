@@ -1,6 +1,6 @@
 <?php
 namespace Api\V8\Helper;
-
+#[\AllowDynamicProperties]
 class VarDefHelper
 {
     /**
@@ -21,6 +21,7 @@ class VarDefHelper
 
         return $relations;
     }
+    
     /**
      * @param $bean
      *

@@ -1,23 +1,30 @@
 <template>
-    <router-link :to="recordUrl" class="relate-field">
-        {{ props.data.bean[defs.name] }}
+    <router-link :name="props.defs.name" v-if="hasViewAccess" :to="recordUrl" :target="store.mode === 'relate' ? '_blank' : null"
+        class="relate-field">
+        {{ props.modelValue }}
     </router-link>
+    <span :name="props.defs.name"v-else>
+        {{ props.modelValue }}
+    </span>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
+import { FieldProps } from '../Field.model';
+import { useACL } from '@/composables/useACL';
+import { useListViewStore } from '@/views/ListView/ListViewStore';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
+const props = defineProps<FieldProps>()
+const store = useListViewStore()
 
-const props = defineProps<Props>()
+const hasViewAccess = computed<boolean>(() => {
+    return useACL().hasAccess(props.data.bean.attributes.parent_type, 'view', true, true)
+})
 
 const recordUrl = computed(() => {
-    const module = props.data.bean.parent_type
-    const id = props.data.bean[props.defs.id_name]
+    const module = props.data.bean.attributes.parent_type
+    const id = props.data?.bean?.attributes?.[props.defs?.id_name]
+    if (!module || !id) return ''
     return `/modules/${module}/DetailView/${id}`
 })
 </script>

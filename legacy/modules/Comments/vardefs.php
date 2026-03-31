@@ -121,6 +121,16 @@ $dictionary['Comments'] = array(
             'audited' => false,
             'importable' => 'false',
         ),
+        'reactions' => array(
+            'name' => 'reactions',
+            'type' => 'link',
+            'relationship' => 'comments_reactions',
+            'source' => 'non-db',
+            'module' => 'Reactions',
+            'bean_name' => 'Reactions',
+            'vname' => 'LBL_REACTIONS',
+            'label' => 'LBL_REACTIONS',
+        ),
     ),
     'relationships' => array(
         'comments_replies' => array(
@@ -132,6 +142,18 @@ $dictionary['Comments'] = array(
             'rhs_key' => 'reply_to_id',
             'relationship_type' => 'one-to-many',
         ),
+        'comments_reactions' => array(
+            'lhs_module' => 'Comments',
+            'lhs_table' => 'comments',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Reactions',
+            'rhs_table' => 'reactions',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Comments',
+        ),
+
     ),
     'optimistic_locking' => true,
     'unified_search' => true,

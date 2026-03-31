@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use MintHCM\MintCLI\Services\ElasticsearchService;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Monolog\Logger;
 
 class ElasticSearchReindexModule extends Command
 {
@@ -55,9 +56,12 @@ class ElasticSearchReindexModule extends Command
 
         try {
             chdir('legacy/');
-            $indexer = new ElasticSearchIndexer();
+            $default_max_loaded = \BeanFactory::getMaxLoaded();
+            \BeanFactory::setMaxLoaded(2000);
+            $indexer = new ElasticSearchIndexer(null, Logger::DEBUG);
             $indexer->setModulesToIndex([$module_name]);
             $indexer->index();
+            \BeanFactory::setMaxLoaded($default_max_loaded);
             chdir('../');
         } catch (\Exception $e) {
             $io->error("There was an error during execution: " . $e . "\n");

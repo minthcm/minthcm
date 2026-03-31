@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2019 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,15 +36,15 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /*
  * Your installation or use of this SugarCRM file is subject to the applicable
@@ -57,23 +56,25 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  *
  * Copyright (C) SugarCRM Inc. All rights reserved.
  */
-require_once('include/Dashlets/DashletGeneric.php');
-require_once('modules/Requests/Requests.php');
+require_once 'include/Dashlets/DashletGeneric.php';
+require_once 'modules/Requests/Requests.php';
 
-class RequestsDashlet extends DashletGeneric {
+#[\AllowDynamicProperties]
+class RequestsDashlet extends DashletGeneric
+{
 
-   function RequestsDashlet($id, $def = null) {
-      require('modules/Requests/metadata/dashletviewdefs.php');
+    public function __construct($id, $def = null)
+    {
+        require 'modules/Requests/metadata/dashletviewdefs.php';
 
-      parent::DashletGeneric($id, $def);
+        parent::__construct($id, $def);
 
-      if ( empty($def['title']) )
-         $this->title = translate('LBL_HOMEPAGE_TITLE', 'Requests');
+        if (empty($def['title'])) {
+            $this->title = translate('LBL_HOMEPAGE_TITLE', 'Requests');
+        }
 
-      $this->searchFields = $dashletData['RequestsDashlet']['searchFields'];
-      $this->columns = $dashletData['RequestsDashlet']['columns'];
-
-      $this->seedBean = new Requests();
-   }
-
+        $this->searchFields = $dashletData['RequestsDashlet']['searchFields'];
+        $this->columns = $dashletData['RequestsDashlet']['columns'];
+        $this->seedBean = BeanFactory::newBean('Requests');
+    }
 }

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -120,15 +120,15 @@ if (isset($_REQUEST['wiz_new_mbox']) && ($_REQUEST['wiz_new_mbox']=='1')) {
 function clean_up_post($prefix)
 {
     foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((strstr($key, (string) $prefix)) && (strpos($key, (string) $prefix)== 0)) {
+            $newkey  =substr($key, strlen((string) $prefix)) ;
             $_REQUEST[$newkey] = $val;
         }
     }
 
     foreach ($_POST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((strstr($key, (string) $prefix)) && (strpos($key, (string) $prefix)== 0)) {
+            $newkey  =substr($key, strlen((string) $prefix)) ;
             $_POST[$newkey] = $val;
         }
     }

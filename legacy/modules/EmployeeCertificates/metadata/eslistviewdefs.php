@@ -58,5 +58,6 @@ $ESListViewDefs['EmployeeCertificates'] = [
         'modified_by_name' => [],
         'attempts_number' => [],
         'points_scored' => [],
+        'certificate_name' => [],
     ],
 ];

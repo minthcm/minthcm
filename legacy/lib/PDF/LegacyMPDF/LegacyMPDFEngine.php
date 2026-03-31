@@ -5,9 +5,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2021 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -57,6 +57,7 @@ require_once __DIR__ . '/../../../modules/AOS_PDF_Templates/PDF_Lib/mpdf.php';
  * Class LegacyMPDFEngine
  * @package SuiteCRM\PDF\LegacyMPDF
  */
+#[\AllowDynamicProperties]
 class LegacyMPDFEngine extends PDFEngine
 {
     /**
@@ -153,7 +154,7 @@ class LegacyMPDFEngine extends PDFEngine
 
         @$this->pdf = new mPDF(
             $configOptions['mode'],
-            $configOptions['page_size'],
+            $configOptions['page_size'].'-'.$configOptions['orientation'],
             $configOptions['default_font_size'],
             $configOptions['default_font'],
             $configOptions['margin_left'],

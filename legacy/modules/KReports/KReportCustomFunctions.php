@@ -12,39 +12,42 @@
  * You can contact us at info@kreporter.org
  * ****************************************************************************** */
 
-if ( !defined('sugarEntry') || !sugarEntry )
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
 $kreportCustomFunctions = array(
-   'getcurrentuserid' => 'current User ID',
-   'interval1630' => 'Interval 16:30'
+    'getcurrentuserid' => 'current User ID',
+    'interval1630' => 'Interval 16:30',
 );
 
-if ( !function_exists('getcurrentuserid') ) {
+if (!function_exists('getcurrentuserid')) {
 
-   function getcurrentuserid($whereConditionRecord) {
-      global $current_user;
+    function getcurrentuserid($whereConditionRecord)
+    {
+        global $current_user;
 
-      return array(
-         'operator' => 'oneof',
-         'value' => $current_user->id
-      );
-   }
+        return array(
+            'operator' => 'oneof',
+            'value' => $current_user->id,
+        );
+    }
 
 }
 
-if ( !function_exists('interval1630') ) {
+if (!function_exists('interval1630')) {
 
-   function interval1630($whereConditionRecord) {
-      global $current_user;
+    function interval1630($whereConditionRecord)
+    {
+        global $current_user;
 
-      return array(
-         'operator' => 'between',
-         'value' => '',
-         'valuekey' => date('Y-m-d', time() - 86400) . ' 16:30:01',
-         'valueto' => '',
-         'valuetokey' => date('Y-m-d') . ' 16:30:00',
-      );
-   }
+        return array(
+            'operator' => 'between',
+            'value' => '',
+            'valuekey' => date('Y-m-d', time() - 86400) . ' 16:30:01',
+            'valueto' => '',
+            'valuetokey' => date('Y-m-d') . ' 16:30:00',
+        );
+    }
 
 }

@@ -22,8 +22,8 @@ class VTExpression_getTranslatedLabelsForEnum extends VTExpression {
 
    /**
     * Warning! if backend is not set, return false
-    * @param Array 
-    * @return boolean
+    * @param array 
+    * @return string
     * Please set input params as Array
     */
    public function backend($arguments = array()) {
@@ -31,7 +31,7 @@ class VTExpression_getTranslatedLabelsForEnum extends VTExpression {
       if ( isset($arguments['language_key']) ) {
          $lang = $arguments['language_key'];
       } else {
-         $lang = $_GLOBALS['current_language'];
+         $lang = $GLOBALS['current_language'];
       }
       $strings = return_app_list_strings_language($lang);
       $values = unencodeMultienum($string_values);
@@ -43,7 +43,7 @@ class VTExpression_getTranslatedLabelsForEnum extends VTExpression {
 
    /**
     * Warning! if frontend is not set, return false
-    * @return type
+    * @return string
     */
    public function frontend() {
       return <<<EOQ

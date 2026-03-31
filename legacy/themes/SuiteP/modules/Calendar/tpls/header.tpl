@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,7 +50,7 @@
 
     <div style='float:left; width: 70%;'>
         {foreach name=tabs from=$tabs key=k item=tab}
-            <input type="button" class="button" {if $view == $k} selected {/if} id="{$tabs_params[$k].id}" title="{$tabs_params[$k].title}" value="{$tabs_params[$k].title}" onclick="showLoadingScreen('{$tabs_params[$k].title}', viewTools.language.get('app_strings', 'LBL_LOADING')); {$tabs_params[$k].link}">
+            <input type="button" class="button" {if $view == $k} selected {/if} id="{$tabs_params[$k].id}" title="{$tabs_params[$k].title}" value="{$tabs_params[$k].title}" onclick="showLoadingScreen('{$tabs_params[$k].title}', viewTools.language.get('app_strings', 'LBL_LOADING')); {$tabs_params[$k].link};">
         {/foreach}
     </div>
 

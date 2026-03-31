@@ -8,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -36,45 +36,45 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-class WorkplacesApi
-{
+#[\AllowDynamicProperties]
+class WorkplacesApi {
 
     public function canSelectRoom($args)
     {
         $room = BeanFactory::getBean('Rooms', $args['room_id']);
         return 'active' === $room->availability;
-    }
+   }
 
     public function canChangeMode($args)
     {
-        $result = true;
+      $result = true;  
         $workplace = BeanFactory::getBean('Workplaces', $args['id']);
-        $prev_mode = $workplace->fetched_row['mode'];
+      $prev_mode=$workplace->fetched_row['mode'];
         if (null !== $prev_mode && $prev_mode !== $args['mode']) {
-            $result = $this->checkForCurrentAllocation($workplace);
-        }
-        return $result;
-    }
+         $result=$this->checkForCurrentAllocation($workplace);
+      }
+      return $result;
+   }
 
     protected function checkForCurrentAllocation($workplace)
     {
-        $workplace->load_relationship('workplaces_allocations');
-        $allocations = $workplace->workplaces_allocations->getBeans();
-        $today = strtotime(date("Y-m-d"));
+      $workplace->load_relationship('workplaces_allocations');
+      $allocations = $workplace->workplaces_allocations->getBeans();
+      $today = strtotime(date("Y-m-d"));
 
         foreach ($allocations as $allocation) {
-            $end_date = strtotime($allocation->date_to);
+         $end_date = strtotime($allocation->date_to);
             if (empty($end_date) || $end_date >= $today) {
-                return false;
-            }
-        }
-        return true;
-    }
+            return false;
+         }
+      }
+      return true;
+  }
 }

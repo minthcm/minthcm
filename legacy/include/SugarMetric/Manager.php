@@ -17,6 +17,7 @@
  * All configuration should be done in Config/providers.php file
  * or initialize method should be called with config array
  */
+#[\AllowDynamicProperties]
 class SugarMetric_Manager
 {
     /**
@@ -43,12 +44,7 @@ class SugarMetric_Manager
     {
         global $sugar_config;
 
-        // Check metrics is enabled in configuration
-        if (empty($sugar_config['metrics_enabled'])) {
-            return $this;
-        }
-
-        if (isset($sugar_config['metric_providers'])) {
+        if (!empty($sugar_config['metrics_enabled']) && isset($sugar_config['metric_providers'])) {
             foreach ($sugar_config['metric_providers'] as $name => $path) {
 
                 // Could not use SugarAutoLoader there, because in case of

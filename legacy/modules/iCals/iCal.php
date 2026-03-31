@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,9 +56,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * @see vCal
  */
+#[\AllowDynamicProperties]
  class iCal extends vCal
  {
-     const UTC_FORMAT = 'Ymd\THi00\Z';
+    public const UTC_FORMAT = 'Ymd\THi00\Z';
  
      /**
      * Constructor for the iCal class.
@@ -158,7 +159,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $ical_array[] = array("SUMMARY", $task->name);
          $ical_array[] = array("UID", $task->id);
          if ($validDueDate) {
-             $iCalDueDate = str_replace("-", "", $task->date_due);
+            $iCalDueDate = str_replace("-", "", (string) $task->date_due);
              if (strlen($iCalDueDate) > 8) {
                  $iCalDueDate = substr($iCalDueDate, 0, 8);
              }
@@ -265,16 +266,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
                      str_replace(
                          "Z",
                          "",
-                         $timedate->tzUser($act->start_time, $current_user)->format(self::UTC_FORMAT)
-                     )
+                         (string) $timedate->tzUser($act->start_time, $current_user)->format(self::UTC_FORMAT)
+                         )
                  );
                  $ical_array[] = array(
                      "DTEND;TZID=" . $user_bean->getPreference('timezone'),
                      str_replace(
                          "Z",
                          "",
-                         $timedate->tzUser($act->end_time, $current_user)->format(self::UTC_FORMAT)
-                     )
+                         (string) $timedate->tzUser($act->end_time, $current_user)->format(self::UTC_FORMAT)
+                         )
                  );
                  $ical_array[] = array("DTSTAMP", $dtstamp);
                  $ical_array[] = array("DESCRIPTION", $event->description);
@@ -523,7 +524,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $ical_array[] = array("VERSION", "2.0");
          $ical_array[] = array("METHOD", "PUBLISH");
          $ical_array[] = array("X-WR-CALNAME", "$cal_name (SugarCRM)");
-         $ical_array[] = array("PRODID", "-//SugarCRM//SugarCRM Calendar//EN");
+        $ical_array[] = array("PRODID", "-//SuiteCRM//SuiteCRM Calendar//EN");
          $ical_array = array_merge($ical_array, vCal::create_ical_array_from_string($this->getTimezoneString()));
          $ical_array[] = array("CALSCALE", "GREGORIAN");
  
@@ -553,7 +554,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          $str .= vCal::create_ical_string_from_array($ical_array, true);
  
-         return htmlspecialchars_decode(preg_replace("/&#([0-9]+)\\\\;/", '&#$1;', utf8_decode($str)));
-     }
+         return htmlspecialchars_decode(preg_replace("/&#([0-9]+)\\\\;/", '&#$1;', mb_convert_encoding($str, 'ISO-8859-1')));
+    }
  }
  

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
- if (!defined('sugarEntry') || !sugarEntry) {
+if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -54,6 +54,7 @@ include_once get_custom_file_if_exists('modules/Users/authentication/SugarAuthen
  * This file is where the user authentication occurs. No redirection should happen in this file.
  *
  */
+#[\AllowDynamicProperties]
 class SugarAuthenticateUser
 {
 
@@ -141,7 +142,12 @@ class SugarAuthenticateUser
         if (!empty($_SESSION['authenticated_user_id']) || !empty($user_id)) {
             $GLOBALS['current_user'] = BeanFactory::newBean('Users');
             if ($GLOBALS['current_user']->retrieve($_SESSION['authenticated_user_id'])) {
-                return true;
+                if ($GLOBALS['current_user']->isEnabled()) {
+                    return true;
+                } else {
+                    $GLOBALS['log']->security('Load user failed: user ' . $GLOBALS['current_user']->user_name . ' is not active');
+                    return false;
+                }
             }
         }
         return false;

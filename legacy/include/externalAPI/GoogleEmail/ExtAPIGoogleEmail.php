@@ -19,6 +19,7 @@ use Google\Service\Gmail;
 /**
  * ExtAPIGoogleEmail
  */
+#[\AllowDynamicProperties]
 class ExtAPIGoogleEmail extends ExternalAPIBase
 {
     public $supportedModules = array('OutboundEmail', 'InboundEmail');
@@ -65,7 +66,7 @@ class ExtAPIGoogleEmail extends ExternalAPIBase
         $client->setState('email');
         $client->setScopes($this->scopes);
         $client->setAccessType('offline');
-        $client->setApprovalPrompt('force');
+        $client->setPrompt('consent');
 
         return $client;
     }
@@ -271,5 +272,15 @@ class ExtAPIGoogleEmail extends ExternalAPIBase
     public function getPHPMailerOAuth2ProviderClass()
     {
         return League\OAuth2\Client\Provider\Google::class;
+    }
+
+    public function getSettings()
+    {
+        $config = $this->getGoogleOauth2Config();
+        return [
+            'clientId' => $config['properties']['oauth2_client_id'],
+            'clientSecret' => $config['properties']['oauth2_client_secret'],
+            'redirectUri' => $config['redirect_uri'],
+        ];
     }
 }

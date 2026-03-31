@@ -8,10 +8,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+ * Copyright (C) 2011 - 2024 SalesAgility Ltd.
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/DynamicFields/DynamicField.php') ;
 
+#[\AllowDynamicProperties]
 class StandardField extends DynamicField
 {
     public $custom_def = array();
@@ -117,25 +118,29 @@ class StandardField extends DynamicField
         $this->loadCustomDef($field->name);
         $this->loadBaseDef($field->name);
         $newDef = $field->get_field_def();
+        
         require_once('modules/DynamicFields/FieldCases.php') ;
         $this->baseField = get_widget($field->type) ;
         foreach ($field->vardef_map as $property => $fmd_col) {
             if ($property == "action" || $property == "label_value" || $property == "label"
-                || ((substr($property, 0, 3) == 'ext' && strlen($property) == 4))
+                || ((str_starts_with((string)$property, 'ext') && strlen((string) $property) == 4))
+                // possible bug here...  $property is often the same as $fmd_col, but not always. Maybe we should also add:
+                // || ((str_starts_with((string)$fmd_col, 'ext') && strlen((string) $fmd_col) == 4))
+                // ... but a thorough analysis of the consequences of this would be required.
             ) {
                 continue;
             }
-                   
-            // Bug 37043 - Avoid writing out vardef defintions that are the default value.
+
+            // Avoid writing out vardef definitions that are the default value, when possible.
+            // Since isDefaultvalue() is quite limited, and doesn't handle all cases well,
+            // sometimes we won't detect defaults and will store them anyway.
             if (isset($newDef[$property]) &&
-                (
-                    (!isset($currdef[$property]) && !$this->isDefaultValue($property, $newDef[$property], $this->baseField))
-                    || (isset($currdef[$property]) && $currdef[$property] != $newDef[$property])
-                )
+                !$this->isDefaultValue($property, $newDef[$property], $this->baseField)
             ) {
                 $this->custom_def[$property] =
                     is_string($newDef[$property]) ? htmlspecialchars_decode($newDef[$property], ENT_QUOTES) : $newDef[$property];
             }
+            
             //Remove any orphaned entries
             if (isset($this->custom_def[$property]) && !isset($newDef[$property])) {
                 unset($this->custom_def[$property]);

@@ -202,6 +202,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   //   extract() : Extract the content of the archive
   //   properties() : List the properties of the archive
   // --------------------------------------------------------------------------------
+  #[\AllowDynamicProperties]
    class PclZip
   {
     // ----- Filename of the zip file

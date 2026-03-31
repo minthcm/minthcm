@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,17 +50,18 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class EmailsDataAddressCollector
 {
-    const ERR_INVALID_INBOUND_EMAIL_TYPE = 201;
-    const ERR_STORED_OUTBOUND_EMAIL_NOT_SET = 202;
-    const ERR_STORED_OUTBOUND_EMAIL_ID_IS_INVALID = 203;
-    const ERR_REPLY_TO_ADDR_NOT_FOUND = 204;
-    const ERR_REPLY_TO_FORMAT_INVALID_SPLITS = 205;
-    const ERR_STORED_OUTBOUND_EMAIL_NOT_FOUND = 206;
-    const ERR_REPLY_TO_FORMAT_INVALID_NO_NAME = 207;
-    const ERR_REPLY_TO_FORMAT_INVALID_NO_ADDR = 208;
-    const ERR_REPLY_TO_FORMAT_INVALID_AS_FROM = 209;
+    public const ERR_INVALID_INBOUND_EMAIL_TYPE = 201;
+    public const ERR_STORED_OUTBOUND_EMAIL_NOT_SET = 202;
+    public const ERR_STORED_OUTBOUND_EMAIL_ID_IS_INVALID = 203;
+    public const ERR_REPLY_TO_ADDR_NOT_FOUND = 204;
+    public const ERR_REPLY_TO_FORMAT_INVALID_SPLITS = 205;
+    public const ERR_STORED_OUTBOUND_EMAIL_NOT_FOUND = 206;
+    public const ERR_REPLY_TO_FORMAT_INVALID_NO_NAME = 207;
+    public const ERR_REPLY_TO_FORMAT_INVALID_NO_ADDR = 208;
+    public const ERR_REPLY_TO_FORMAT_INVALID_AS_FROM = 209;
 
     /**
      *
@@ -252,9 +253,9 @@ class EmailsDataAddressCollector
             $this->oeId = null;
             $this->oeName = null;
         } else {
-            $this->replyTo = utf8_encode($storedOptions['reply_to_addr']);
-            $this->fromName = utf8_encode($storedOptions['from_name']);
-            $this->fromAddr = utf8_encode($storedOptions['from_addr']);
+            $this->replyTo = mb_convert_encoding($storedOptions['reply_to_addr'], 'UTF-8', 'ISO-8859-1');
+            $this->fromName = mb_convert_encoding($storedOptions['from_name'], 'UTF-8', 'ISO-8859-1');
+            $this->fromAddr = mb_convert_encoding($storedOptions['from_addr'], 'UTF-8', 'ISO-8859-1');
             $this->oeId = $this->oe->id;
             $this->oeName = $this->oe->name;
         }
@@ -392,13 +393,13 @@ class EmailsDataAddressCollector
                 $dataAddress['emailSignatures'] = $defaultEmailSignature;
             } else {
                 $dataAddress['emailSignatures'] = array(
-                    'html' => utf8_encode(html_entity_decode($defaultEmailSignature['signature_html'])),
+                    'html' => mb_convert_encoding(html_entity_decode((string) $defaultEmailSignature['signature_html']), 'UTF-8', 'ISO-8859-1'),
                     'plain' => $defaultEmailSignature['signature'],
                 );
             }
         } else {
             $dataAddress['emailSignatures'] = array(
-                'html' => utf8_encode(html_entity_decode($signature['signature_html'])),
+                'html' => mb_convert_encoding(html_entity_decode((string) $signature['signature_html']), 'UTF-8', 'ISO-8859-1'),
                 'plain' => $signature['signature'],
             );
         }
@@ -496,7 +497,8 @@ class EmailsDataAddressCollector
         );
         $dataAddressesWithUserAddressesAndSystem = $this->fillDataAddressWithSystemMailerSettings(
             $dataAddressesWithUserAddresses,
-            $defaultEmailSignature
+            $defaultEmailSignature,
+            $prependSignature
         );
 
         return
@@ -653,7 +655,7 @@ class EmailsDataAddressCollector
             null,
             null,
             [
-                'html' => utf8_encode(html_entity_decode($signatureHtml)),
+                'html' => mb_convert_encoding(html_entity_decode($signatureHtml), 'UTF-8', 'ISO-8859-1'),
                 'plain' => $signatureTxt,
             ],
             $userAddress['email_address']
@@ -664,9 +666,10 @@ class EmailsDataAddressCollector
      *
      * @param array $dataAddresses
      * @param array $defaultEmailSignature
+     * @param boolean $prependSignature
      * @return array
      */
-    protected function fillDataAddressWithSystemMailerSettings($dataAddresses, $defaultEmailSignature)
+    protected function fillDataAddressWithSystemMailerSettings($dataAddresses, $defaultEmailSignature, $prependSignature)
     {
         $this->setOe(new OutboundEmail());
         if ($this->getOe()->isAllowUserAccessToSystemDefaultOutbound()) {
@@ -677,7 +680,8 @@ class EmailsDataAddressCollector
                 $system->smtp_from_name,
                 $system->smtp_from_addr,
                 $system->mail_smtpuser,
-                $defaultEmailSignature
+                $defaultEmailSignature,
+                $prependSignature
             );
         }
 
@@ -747,6 +751,7 @@ class EmailsDataAddressCollector
      * @param string $fromAddr
      * @param string $mailUser
      * @param array $defaultEmailSignature
+     * @param boolean $prependSignature
      * @return array
      */
     protected function getFillDataAddressArray(
@@ -755,7 +760,8 @@ class EmailsDataAddressCollector
         $fromName,
         $fromAddr,
         $mailUser,
-        $defaultEmailSignature
+        $defaultEmailSignature,
+        bool $prependSignature = false
     ) {
         $dataAddress = new EmailsDataAddress();
 
@@ -766,7 +772,7 @@ class EmailsDataAddressCollector
             $fromAddr,
             $fromName,
             false,
-            false,
+            $prependSignature,
             true,
             $id,
             $name,

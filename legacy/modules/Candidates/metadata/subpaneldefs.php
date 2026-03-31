@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -57,129 +57,73 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
             ),
         ),
     ),
-    'activities' => array(
-        'order' => 10,
-        'sort_order' => 'desc',
-        'sort_by' => 'date_start',
-        'title_key' => 'LBL_ACTIVITIES_SUBPANEL_TITLE',
-        'type' => 'collection',
-        'subpanel_name' => 'activities',
-        'module' => 'Activities',
+    'meetings' => array(
+        'order' => 100,
+        'module' => 'Meetings',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_MEETINGS_TITLE',
+        'get_subpanel_data' => 'meetings',
         'top_buttons' => array(
             array(
-                'widget_class' => 'SubPanelTopCreateTaskButton',
-            ),
-            array(
-                'widget_class' => 'SubPanelTopScheduleMeetingButton',
-            ),
-            array(
-                'widget_class' => 'SubPanelTopScheduleCallButton',
-            ),
-            array(
-                'widget_class' => 'SubPanelTopComposeEmailButton',
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
         ),
-        'collection_list' => array(
-            'meetings' => array(
-                'module' => 'Meetings',
-                'subpanel_name' => 'ForActivities',
-                'get_subpanel_data' => 'meetings',
-            ),
-            'tasks' => array(
-                'module' => 'Tasks',
-                'subpanel_name' => 'ForActivities',
-                'get_subpanel_data' => 'tasks',
-            ),
-            'calls' => array(
-                'module' => 'Calls',
-                'subpanel_name' => 'ForActivities',
-                'get_subpanel_data' => 'calls',
-            ),
-        ),
-        'get_subpanel_data' => 'activities',
     ),
-    "history" => array(
-        'order' => 20,
-        'sort_order' => 'desc',
-        'sort_by' => 'date_modified',
-        'title_key' => 'LBL_HISTORY',
-        'type' => 'collection',
-        'subpanel_name' => 'history',
-        'module' => 'History',
+    'tasks' => array(
+        'order' => 100,
+        'module' => 'Tasks',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_TASKS_TITLE',
+        'get_subpanel_data' => 'tasks',
         'top_buttons' => array(
-            0 => array(
-                'widget_class' => 'SubPanelTopCreateNoteButton',
-            ),
-            1 => array(
-                'widget_class' => 'SubPanelTopArchiveEmailButton',
-            ),
-            2 => array(
-                'widget_class' => 'SubPanelTopSummaryButton',
-            ),
-            3 => array(
-                'widget_class' => 'SubPanelTopFilterButton',
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
         ),
-        'collection_list' => array(
-            'meetings' => array(
-                'module' => 'Meetings',
-                'subpanel_name' => 'ForHistory',
-                'get_subpanel_data' => 'meetings',
-            ),
-            'tasks' => array(
-                'module' => 'Tasks',
-                'subpanel_name' => 'ForHistory',
-                'get_subpanel_data' => 'tasks',
-            ),
-            'calls' => array(
-                'module' => 'Calls',
-                'subpanel_name' => 'ForHistory',
-                'get_subpanel_data' => 'calls',
-            ),
-            'notes' => array(
-                'module' => 'Notes',
-                'subpanel_name' => 'ForHistory',
-                'get_subpanel_data' => 'notes',
-            ),
-            'emails' => array(
-                'module' => 'Emails',
-                'subpanel_name' => 'ForHistory',
-                'get_subpanel_data' => 'emails',
-            ),
-            'linkedemails' => array(
-                'module' => 'Emails',
-                'subpanel_name' => 'ForUnlinkedEmailHistory',
-                'get_subpanel_data' => 'function:get_unlinked_email_query',
-                'generate_select' => true,
-                'function_parameters' => array('return_as_array' => 'true'),
+    ),
+    'calls' => array(
+        'order' => 100,
+        'module' => 'Calls',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_CALLS',
+        'get_subpanel_data' => 'calls',
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
         ),
-        'get_subpanel_data' => 'history',
-        'searchdefs' => array(
-            'collection' => array(
-                'name' => 'collection',
-                'label' => 'LBL_COLLECTION_TYPE',
-                'type' => 'enum',
-                'options' => $GLOBALS['app_list_strings']['collection_temp_list'],
-                'default' => true,
-                'width' => '10%',
+    ),
+    'notes' => array(
+        'order' => 100,
+        'module' => 'Notes',
+        'subpanel_name' => 'default',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_NOTES_TITLE',
+        'get_subpanel_data' => 'notes',
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
-            'name' => array(
-                'name' => 'name',
-                'default' => true,
-                'width' => '10%',
-            ),
-            'current_user_only' => array(
-                'name' => 'current_user_only',
-                'label' => 'LBL_CURRENT_USER_FILTER',
-                'type' => 'bool',
-                'default' => true,
-                'width' => '10%',
-            ),
-            'date_modified' => array(
-                'name' => 'date_modified',
-                'default' => true,
-                'width' => '10%',
+        ),
+    ),
+    'emails' => array(
+        'order' => 100,
+        'module' => 'Emails',
+        'subpanel_name' => 'ForHistory',
+        'sort_order' => 'asc',
+        'sort_by' => 'id',
+        'title_key' => 'LBL_EMAILS_TITLE',
+        'get_subpanel_data' => 'emails',
+        'top_buttons' => array(
+            array(
+                'widget_class' => 'SubPanelTopButtonQuickCreate',
             ),
         ),
     ),
@@ -227,13 +171,5 @@ $layout_defs["Candidates"]["subpanel_setup"] = array(
         'get_subpanel_data' => 'SecurityGroups',
         'add_subpanel_data' => 'securitygroup_id',
         'title_key' => 'LBL_SECURITYGROUPS_SUBPANEL_TITLE',
-    ),
-    'files' => array(
-        'order' => 100,
-        'module' => 'Files',
-        'subpanel_name' => 'default',
-        'title_key' => 'LBL_FILES',
-        'get_subpanel_data' => 'files',
-        'dropzone' => true
     ),
 );

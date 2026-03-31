@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -318,18 +318,6 @@ class="yui-navset detailview_tabs"
                         </td>
                         <td>
                             <span>{$MOD.LBL_EXPORT_CHARSET_DESC}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row" valign="top">
-                            <span>{$MOD.LBL_USE_REAL_NAMES|strip_semicolon}:</span>
-                        </td>
-                        <td>
-                            <span><input tabindex='3' name='use_real_names' disabled class="checkbox"
-                                         type="checkbox" {$USE_REAL_NAMES}></span>
-                        </td>
-                        <td>
-                            <span>{$MOD.LBL_USE_REAL_NAMES_DESC}</span>
                         </td>
                     </tr>
                     {if $DISPLAY_EXTERNAL_AUTH}

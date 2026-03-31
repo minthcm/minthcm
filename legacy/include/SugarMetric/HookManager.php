@@ -17,6 +17,7 @@
  * @see custom/Extension/application/Ext/LogicHooks/SugarMetricHoolks.php
  * contains hook configuration for SugarMetric
  */
+#[\AllowDynamicProperties]
 class SugarMetric_HookManager
 {
     /**

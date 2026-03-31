@@ -1,8 +1,9 @@
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { INSTALL_CONFIG } from './InstallViewConfig'
 import { useRouter } from 'vue-router'
+import { mintApi } from '@/api/api'
 
 export interface InstallEnvironment {
     [key: string]: {
@@ -52,7 +53,7 @@ export const useInstallViewStore = defineStore('install-view', () => {
     async function fetchInitialData() {
         isInitialLoading.value = true
         try {
-            const response = await axios.get('api/install/init')
+            const response = await mintApi.get('install/init', {rawError: true})
             version.value = response.data?.version ?? ''
             license.value = response.data?.license ?? ''
             environment.value = response.data?.environment ?? ''
@@ -70,13 +71,13 @@ export const useInstallViewStore = defineStore('install-view', () => {
     }
 
     async function fetchLicense() {
-        const response = await axios.get('api/install/license')
+        const response = await mintApi.get('install/license')
         license.value = response.data?.license ?? ''
     }
 
     async function recheckEnvironment() {
         isLoading.value = true
-        const response = await axios.get('api/install/init')
+        const response = await mintApi.get('install/init')
         if (response.data.environment) {
             environment.value = response.data.environment
         }
@@ -86,7 +87,7 @@ export const useInstallViewStore = defineStore('install-view', () => {
     async function validateDb() {
         isLoading.value = true
         try {
-            const response = await axios.post('api/install/validate_db', databaseConfig.value)
+            const response = await mintApi.post('install/validate_db', databaseConfig.value, {rawError: true})
             isLoading.value = false
             if (response.data?.status === 0) {
                 errorMsg.value = response.data.message
@@ -105,7 +106,7 @@ export const useInstallViewStore = defineStore('install-view', () => {
     async function validateElastic() {
         isLoading.value = true
         try {
-            const response = await axios.post('api/install/validate_elastic', elasticConfig.value)
+            const response = await mintApi.post('install/validate_elastic', elasticConfig.value, {rawError: true})
             isLoading.value = false
             if (response.data?.status === 0) {
                 errorMsg.value = response.data.message
@@ -126,7 +127,7 @@ export const useInstallViewStore = defineStore('install-view', () => {
             return true
         }
         isInstalling.value = true
-        const response = await axios.post('api/install/submit', {
+        const response = await mintApi.post('install/submit', {
             db: databaseConfig.value,
             elastic: elasticConfig.value,
             site: siteConfig.value,

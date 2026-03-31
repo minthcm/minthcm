@@ -85,12 +85,12 @@ class ElasticMapperParser
         return $this->map_config['mappings'][$module];
     }
 
-    public function getFieldAttributePath(string $module, string $field): ?string
+    public function getFieldAttributePath(string $module, string $field, bool $is_sort = false): ?string
     {
         $mappings = $this->getDefaultMapParams($module);
 
         $list_config = ConstantsLoader::getConstants('list_constants');
-        if (in_array($field, $list_config['fields_without_prefix'])) {
+        if (!empty($list_config['fields_without_prefix']) && in_array($field, $list_config['fields_without_prefix'])) {
             return $field;
         }
         $field = str_replace('.keyword', '', $field);
@@ -102,7 +102,11 @@ class ElasticMapperParser
             return $module . '__' . $n;
         }, $path_steps);
         $path = $this->findFieldPath($mappings, $path_steps);
+        $type = $this->findFieldType($mappings, $path_steps);
 
+        if ($is_sort && end($path) !== 'keyword' && $type == 'text') {
+            $path[] = 'keyword';
+        }
         return implode('.', array_filter($path));
     }
 
@@ -134,6 +138,35 @@ class ElasticMapperParser
             } else if ($key === $current_part && isset($value['properties'])) {
                 array_shift($looking_for);
                 $return = array_merge($return, $this->findFieldPath($value, $looking_for));
+            }
+        }
+        return $return;
+    }
+
+    private function findFieldType($array, array | string $looking_for)
+    {
+        if (is_string($looking_for)) {
+            $looking_for = [$looking_for];
+        }
+        $return = '';
+        $current_part = $looking_for[0];
+        foreach ($array as $key => $value) {
+            if ('properties' === $key) {
+                $return = $this->findFieldType($value, $looking_for);
+            } else if ($key === $current_part && (isset($value['type']) || $value['properties'])) {
+                if(empty($value['type']) && !empty($value['properties'])){
+                    foreach($value['properties'] as $prop_val){
+                        if(isset($prop_val['type'])){
+                            $return = $prop_val['type'];
+                            break;
+                        }
+                    }
+                } else {
+                    $return = $value['type'];
+                }
+            }else if ($key === $current_part && isset($value['properties'])) {
+                array_shift($looking_for);
+                $return = $this->findFieldType($value, $looking_for);
             }
         }
         return $return;

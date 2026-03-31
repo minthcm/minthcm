@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -211,7 +211,13 @@ $dictionary['Project'] = array(
                 'type' => 'ColoredEnum',
                 'dbType' => 'varchar',
                 'options' => 'project_status_dom',
-                'options_colors' => 'project_status_dom_colored',
+                'options_colors' => [
+                    'Draft' => 'gray',
+                    'In Review' => 'yellow',
+                    'Underway' => 'yellow',
+                    'On_Hold' => 'yellow',
+                    'Completed' => 'green',
+                ],
             ),
 
         'priority' =>

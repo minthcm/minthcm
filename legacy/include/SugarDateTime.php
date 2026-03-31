@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@
  * Extends regular PHP DateTime with useful services
  * @api
  */
+#[\AllowDynamicProperties]
 class SugarDateTime extends DateTime
 {
     // Recognized properties and their formats
@@ -112,6 +113,7 @@ class SugarDateTime extends DateTime
      * @return SugarDateTime
      * @see DateTime::createFromFormat
      */
+    #[ReturnTypeWillChange]
     public static function createFromFormat($format, $time, $timezone = null)
     {
         if (empty($time) || empty($format)) {
@@ -143,7 +145,7 @@ class SugarDateTime extends DateTime
      * @deprecated No longer necessary since PHP 5.2 is no longer supported.
      * @param string $format Format like in date()
      * @param string $time Time string to parse
-     * @param DateTimeZone $timezone TZ
+     * @param \DateTimeZone|null $timezone TZ
      * @return SugarDateTime
      * @see DateTime::createFromFormat
      */

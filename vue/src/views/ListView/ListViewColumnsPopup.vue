@@ -1,5 +1,5 @@
 <template>
-    <div class="columns-popup">
+    <div class="columns-popup" :class="{ 'columns-popup-railed': $vuetify.display.mdAndDown }">
         <div class="columns">
             <div class="column">
                 <span v-text="languages.label('LBL_ESLIST_VISIBLE_COLUMNS')" />
@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, defineEmits } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import { useLanguagesStore } from '@/store/languages'
 import { useListViewStore } from './ListViewStore'
@@ -168,6 +168,11 @@ function onDrop(e, list) {
     display: flex;
     flex-direction: column;
     min-width: 700px;
+
+    &.columns-popup-railed {
+        min-width: 0px;
+        width: calc(100vw - 40px);
+    }
 
     .columns {
         display: flex;

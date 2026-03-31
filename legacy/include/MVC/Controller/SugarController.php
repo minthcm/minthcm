@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -415,6 +415,10 @@ class SugarController
      */
     private function processView()
     {
+        if($this->getSystemModeAccess()){
+            ACLController::displayNoAccess(true);
+            sugar_cleanup(true);
+        }
         if (!isset($this->view_object_map['remap_action']) && isset($this->action_view_map[strtolower($this->action)])) {
             $this->view_object_map['remap_action'] = $this->action_view_map[strtolower($this->action)];
         }
@@ -434,6 +438,26 @@ class SugarController
             $view->errors = $this->errors;
         }
         $view->process();
+    }
+
+    protected function getSystemModeAccess(): bool
+    {
+        global $sugar_config;
+        if(!isset($sugar_config['system_mode'])){
+            return false;
+        }
+        return (
+            isset($sugar_config['system_mode']) 
+            && $sugar_config['system_mode'] !== 'normal'
+            && ( 
+                (
+                    $_REQUEST['module'] === 'Administration' && in_array($_REQUEST['action'], $sugar_config['system_mode_restriced_administration_actions'])
+                )
+                || (
+                    in_array($_REQUEST['module'], $sugar_config['system_mode_restriced_modules'])
+                )
+            )
+        );
     }
 
     /**
@@ -1021,7 +1045,11 @@ class SugarController
                 require_once($this->entry_point_registry[$entryPoint]['file']);
                 $this->_processed = true;
                 $this->view = '';
+            } else {
+                $this->no_action();
             }
+        } elseif (isset($_REQUEST['entryPoint'])) {
+            $this->no_action();
         }
     }
 

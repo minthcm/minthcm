@@ -63,7 +63,7 @@ class VTFormulaParser {
 
    /**
     * Build php code which can be eval'ed
-    * @param type $formula
+    * @param string $formula
     * @return string
     */
    public static function buildFormulaExpression($formula) {
@@ -84,7 +84,7 @@ class VTFormulaParser {
       /*
        * If found at least one sql declaration
        */
-      if ( count($sql_positions) > 0 ) {
+      if (is_countable($sql_positions) ? count($sql_positions) > 0 : 0) {
 
          $tmp_formula_sector_counter = 0;
          $tmp_formula_type = 'normal';
@@ -216,9 +216,9 @@ class VTFormulaParser {
    }
 
    /**
-    * @global Array $dictionary
-    * @global Array $mod_strings
-    * @param String $message
+    * @global array $dictionary
+    * @global array $mod_strings
+    * @param string $message
     */
    public function appendErrorMessage($message = null, &$bean, $field_key) {
       global $dictionary;

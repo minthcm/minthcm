@@ -244,9 +244,14 @@ class DemoDataDumpCommand extends Command
     protected function getInsertStatement($table, $columns)
     {
         $insert_into_columns = implode(", ", $columns);
+        
+        // Use MySQL QUOTE() function to properly escape all special characters including apostrophes
+        // QUOTE() adds quotes and escapes backslashes, single quotes, etc.
+        // For NULL values, it returns 'NULL' as string, so we handle that separately
         $value_columns = array_map(function ($field) {
-            return "IFNULL(CONCAT('\'', {$field}, '\''), 'NULL')";
+            return "IF(`{$field}` IS NULL, 'NULL', QUOTE(`{$field}`))";
         }, $columns);
+        
         $value_columns_imploded = implode(",',',", $value_columns);
         $sql = "SELECT
         CONCAT(

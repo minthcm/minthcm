@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -105,5 +105,33 @@ $mod_strings = array(
     'LBL_DELETED' => 'Deleted',
     'LBL_LIST_TITLE' => 'Note or Attachment',
     'LBL_FILE_CONTENTS' => 'File Contents',
+    
+    'LBL_ASCENDING' => 'Ascending',
+    'LBL_DESCENDING' => 'Descending',
     'LBL_APPRAISAL' => 'Appraisal',
+    'LBL_DATE_INDEXED' => 'Date Indexed',
+    'LBL_BUGS' => 'Bugs',
+    'LBL_PROJECT_TASKS' => 'Project Tasks',
+    'LBL_ID_COMMENT' => 'Unique identifier for the note.',
+    'LBL_DATE_ENTERED_COMMENT' => 'Date the note record was created.',
+    'LBL_DATE_MODIFIED_COMMENT' => 'Date the note record was last modified.',
+    'LBL_DATE_INDEXED_COMMENT' => 'Date the note record was last indexed.',
+    'LBL_MODIFIED_COMMENT' => 'User who last modified the record.',
+    'LBL_CREATED_BY_COMMENT' => 'User who created the record.',
+    'LBL_NOTE_SUBJECT_COMMENT' => 'Name or subject of the note.',
+    'LBL_FILE_MIME_TYPE_COMMENT' => 'MIME type of the attachment.',
+    'LBL_FILE_URL_COMMENT' => 'Path to file (can be URL).',
+    'LBL_FILENAME_COMMENT' => 'File name associated with the note (attachment).',
+    'LBL_FILE_CONTENTS_COMMENT' => 'Contents of the file (non-db).',
+    'LBL_PARENT_TYPE_COMMENT' => 'Sugar module the Note is associated with.',
+    'LBL_PARENT_ID_COMMENT' => 'ID of the Sugar item specified in parent_type.',
+    'LBL_PORTAL_FLAG_COMMENT' => 'Indicates if the note was created via portal.',
+    'LBL_EMBED_FLAG_COMMENT' => 'Indicates if the note is embedded in an email.',
+    'LBL_DESCRIPTION_COMMENT' => 'Full text of the note.',
+    'LBL_DELETED_COMMENT' => 'Indicates whether the record is deleted.',
+    'LBL_RELATED_TO_COMMENT' => 'Module record the note is related to.',
+    'LBL_SHOW_PREVIEW_COMMENT' => 'Flag for showing preview of the note.',
+    'LBL_CAMPAIGN_ID_COMMENT' => 'ID of the campaign the note is associated with.',
+    'LBL_CASE_ID_COMMENT' => 'ID of the related case for the note.',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

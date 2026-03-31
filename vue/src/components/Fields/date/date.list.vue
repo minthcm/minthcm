@@ -1,30 +1,20 @@
 <template>
-    <span>{{ parsedDate }}</span>
+    <span :name="props.defs.name">{{ parsedDate }}</span>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
-import { DateTime } from 'luxon'
-import { usePreferencesStore } from '@/store/preferences';
+import { FieldProps } from '../Field.model';
+import { MintDate, useMintDate } from '@/composables/useMintDate';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
+const props = defineProps<FieldProps<MintDate>>()
 
-const props = defineProps<Props>()
-const preferences = usePreferencesStore()
 const parsedDate = computed(() => {
-    const dateString = props.data.bean[props.defs.name].trim()
-    if (!dateString) {
-        return ''
+    if (props.field) {
+        return props.field.model.isValid ? props.field.formatted.user : ''
     }
-    let dateTime = DateTime.fromFormat(dateString, preferences.user?.date_format || 'dd.MM.yyyy')
-    if (!dateTime.isValid) {
-        dateTime = DateTime.fromSQL(dateString)
-    }
-    return dateTime.isValid ? dateTime.toFormat(preferences.user?.date_format || 'dd.MM.yyyy') : dateString
+    const date = useMintDate(props.modelValue as string)
+    return date.isValid.value ? date.formatted.value.user_date : ''
 })
 </script>
 

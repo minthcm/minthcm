@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ use Api\V8\BeanDecorator\BeanManager;
 use DBManagerFactory;
 use User;
 
+#[\AllowDynamicProperties]
 class ApiCommands extends Tasks
 {
     use RoboTrait;
@@ -177,13 +178,8 @@ class ApiCommands extends Tasks
     public function apiCreateClient($name)
     {
         $count = $this->getNameCount($name, 'oauth2clients', 'name');
-        $dateTime = new DateTime();
 
-        $clientSecret = base_convert(
-            $dateTime->getTimestamp() * 4096,
-            10,
-            16
-        );
+        $clientSecret = bin2hex(random_bytes(50));
 
         $clientBean = $this->beanManager->newBeanSafe(
             OAuth2Clients::class

@@ -76,6 +76,49 @@ $dictionary['Kudos'] = array(
             'vname' => 'LBL_PRIVATE',
             'audited' => true,
         ),
+        'alerts' => array(
+            'name' => 'alerts',
+            'type' => 'link',
+            'relationship' => 'kudos_alerts',
+            'module' => 'Alerts',
+            'bean_name' => 'Alert',
+            'source' => 'non-db',
+            'vname' => 'LBL_ALERTS',
+        ),
+        'reactions' => array(
+            'name' => 'reactions',
+            'type' => 'link',
+            'relationship' => 'kudos_reactions',
+            'module' => 'Reactions',
+            'bean_name' => 'Reaction',
+            'source' => 'non-db',
+            'vname' => 'LBL_REACTIONS',
+        ),
+    ),
+    'relationships' => array(
+        'kudos_alerts' => array(
+            'lhs_module' => 'Kudos',
+            'lhs_table' => 'kudos',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Alerts',
+            'rhs_table' => 'alerts',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Kudos',
+        ),
+        'kudos_reactions' => array(
+            'lhs_module' => 'Kudos',
+            'lhs_table' => 'kudos',
+            'lhs_key' => 'id',
+            'rhs_module' => 'Reactions',
+            'rhs_table' => 'reactions',
+            'rhs_key' => 'parent_id',
+            'relationship_type' => 'one-to-many',
+            'relationship_role_column' => 'parent_type',
+            'relationship_role_column_value' => 'Kudos',
+        ),
+
     ),
     'optimistic_locking' => true,
     'unified_search' => true,
@@ -89,3 +132,11 @@ $dictionary['Kudos']['fields']['name']['audited'] = true;
 $dictionary['Kudos']['fields']['assigned_user_name']['required'] = true;
 $dictionary['Kudos']['fields']['employee_name']['required'] = true;
 $dictionary['Kudos']['fields']['description']['required'] = true;
+$dictionary['Kudos']['fields']['employee_name']['filters'] = [
+    [
+        'field' => 'employee_status',
+        'operator' => 'equal',
+        'value' => 'Active',
+        'editable' => false,
+    ],
+];

@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -169,33 +169,6 @@ $dictionary['EmployeeCertificates'] = array(
             'isnull' => 'true',
             'dbType' => 'id',
         ),
-        "employeecertificates_employees" => array(
-            'name' => 'employeecertificates_employees',
-            'type' => 'link',
-            'relationship' => 'employeecertificates_employees',
-            'source' => 'non-db',
-            'module' => 'Employees',
-            'bean_name' => 'Employee',
-            'vname' => 'LBL_EMPLOYEES',
-            'id_name' => 'employee_id',
-        ),
-        "employee_name" => array(
-            'name' => 'employee_name',
-            'type' => 'relate',
-            'source' => 'non-db',
-            'vname' => 'LBL_EMPLOYEES',
-            'id_name' => 'employee_id',
-            'link' => 'employeecertificates_employees',
-            'module' => 'Employees',
-            'table' => 'users',
-            'rname' => 'name',
-        ),
-        "employee_id" => array(
-            'name' => 'employee_id',
-            'relationship' => 'employeecertificates_employees',
-            'type' => 'id',
-            'vname' => 'LBL_EMPLOYEES_ID',
-        ),
         'attempts_number' => array(
             'name' => 'attempts_number',
             'vname' => 'LBL_ATTEMPTS_NUMBER',
@@ -256,15 +229,6 @@ $dictionary['EmployeeCertificates'] = array(
             'rhs_module' => 'EmployeeCertificates',
             'rhs_table' => 'employeecertificates',
             'rhs_key' => 'certificate_id',
-            'relationship_type' => 'one-to-many',
-        ),
-        "employeecertificates_employees" => array(
-            'lhs_module' => 'Employees',
-            'lhs_table' => 'users',
-            'lhs_key' => 'id',
-            'rhs_module' => 'EmployeeCertificates',
-            'rhs_table' => 'employeecertificates',
-            'rhs_key' => 'employee_id',
             'relationship_type' => 'one-to-many',
         ),
     ),

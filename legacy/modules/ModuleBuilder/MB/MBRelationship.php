@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ require_once 'modules/ModuleBuilder/parsers/relationships/ManyToManyRelationship
  * As ModuleBuilder is updated, references to this MBRelationship class should be replaced by direct references to UndeployedRelationships
  */
 
+ #[\AllowDynamicProperties]
 class MBRelationship
 {
     public $relatableModules = array( ) ; // required by MBModule

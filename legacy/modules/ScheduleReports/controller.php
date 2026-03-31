@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,33 +36,37 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-class ScheduleReportsController extends SugarController {
+#[\AllowDynamicProperties]
+class ScheduleReportsController extends SugarController
+{
 
-   /**
-    * Function change view on Email Options
-    */
-   function action_config() {
-      $this->view = "EmailOptions";
-   }
+    /**
+     * Function change view on Email Options
+     */
+    public function action_config()
+    {
+        $this->view = "EmailOptions";
+    }
 
-   /**
-    * Function started when we save changes in EmailOptions and this saves details in file 
-    */
-   public function action_saveEmailOptions() {
-      $path = 'modules/ScheduleReports/pdf_email_cfg.php';
-      $options = array();
-      $options['email_template_id']['ScheduleReports'] = $_REQUEST['email_template_id'];
-      $fp = sugar_fopen($path, 'w');
-      fclose($fp);
-      write_array_to_file('options', $options, $path);
-      SugarApplication::redirect("index.php?module=ScheduleReports&action=index");
-   }
+    /**
+     * Function started when we save changes in EmailOptions and this saves details in file
+     */
+    public function action_saveEmailOptions()
+    {
+        $path = 'modules/ScheduleReports/pdf_email_cfg.php';
+        $options = array();
+        $options['email_template_id']['ScheduleReports'] = $_REQUEST['email_template_id'];
+        $fp = sugar_fopen($path, 'w');
+        fclose($fp);
+        write_array_to_file('options', $options, $path);
+        SugarApplication::redirect("index.php?module=ScheduleReports&action=index");
+    }
 
 }

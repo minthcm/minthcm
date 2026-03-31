@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  require_once('modules/Users/Forms.php');
  require_once('modules/Configurator/Configurator.php');
  
+ #[\AllowDynamicProperties]
  class ViewWizard extends SugarView
  {
      /**
@@ -207,6 +208,14 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          //// Name display format
          $this->ss->assign('default_locale_name_format', $locale->getLocaleFormatMacro($current_user));
+        $disabledLanguages = $sugar_config['disabled_languages'] ?? '';
+        $language = $current_user->getPreference('language');
+
+        if (str_contains($disabledLanguages, $language)){
+            $language = $sugar_config['default_language'];
+        }
+
+        $this->ss->assign('user_language', get_select_options_with_id(get_languages(), $language));
          $this->ss->assign('getNameJs', $locale->getNameJs());
  
          $this->ss->assign('TIMEOPTIONS', get_select_options_with_id($sugar_config['time_formats'], $current_user->_userPreferenceFocus->getDefaultPreference('default_time_format')));

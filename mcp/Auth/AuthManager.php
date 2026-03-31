@@ -2,7 +2,7 @@
 
 namespace MintMCP\Auth;
 
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 use BeanFactory;
 
 /**

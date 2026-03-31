@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ if (file_exists("modules/ACLActions/actiondefs.override.php")) {
 /* END - SECURITY GROUPS */
 require_once('modules/ACL/ACLJSController.php');
 
+#[\AllowDynamicProperties]
 class ACLController
 {
     /* BEGIN - SECURITY GROUPS - added $in_group */
@@ -163,7 +164,7 @@ class ACLController
      * Determines if user requires ownership
      *
      * @param string $category
-     * @param Bool $value
+     * @param string $value
      * @param string $type
      * @return bool
      */
@@ -183,7 +184,7 @@ class ACLController
      * Determines if user requires a security group
      *
      * @param string $category
-     * @param Bool $value
+     * @param string $value
      * @param string $type
      * @return bool
      */

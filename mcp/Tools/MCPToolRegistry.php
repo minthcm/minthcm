@@ -28,6 +28,8 @@ class MCPToolRegistry {
         $this->registerTool(new SearchRecords());
         $this->registerTool(new UpdateRecord());
         $this->registerTool(new DeleteRecord());
+        $this->registerTool(new ListKReports());
+        $this->registerTool(new GetKReportDetails());
         
         // Add new tools here:
         // $this->registerTool(new YourNewTool());

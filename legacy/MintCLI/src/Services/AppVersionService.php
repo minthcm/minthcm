@@ -4,6 +4,7 @@ namespace MintHCM\MintCLI\Services;
 
 use MintHCM\MintCLI\SystemRequirements\SystemRequirements;
 
+#[\AllowDynamicProperties]
 class AppVersionService
 {
     private $response = [

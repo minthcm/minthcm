@@ -13,11 +13,13 @@ $ESListViewDefs['OAuth2Clients'] = [
         'assigned_user_name' => [
             'default' => true,
         ],
+        'is_confidential' => [
+            'default' => false,
+        ],
     ],
     'search' => [
-        'name' => [
-        ],
-        'allowed_grant_type' => [
-        ],
+        'name' => [],
+        'allowed_grant_type' => [],
+        'is_confidential' => [],
     ],
 ];

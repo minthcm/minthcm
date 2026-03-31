@@ -12,7 +12,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -317,10 +317,12 @@ if (!empty($sugar_config['lock_homepage']) && $sugar_config['lock_homepage'] == 
     $sugar_smarty->assign('lock_homepage', true);
 }
 
+$serverUniqueKey = $GLOBALS['server_unique_key'] ?? '';
+
 $sugar_smarty->assign('colNum', (int)$numCols);
 $sugar_smarty->assign('sugarVersion', $sugar_version);
 $sugar_smarty->assign('currentLanguage', $GLOBALS['current_language']);
-$sugar_smarty->assign('serverUniqueKey', $GLOBALS['server_unique_key']);
+$sugar_smarty->assign('serverUniqueKey', $serverUniqueKey);
 $sugar_smarty->assign('imagePath', $GLOBALS['image_path']);
 
 $sugar_smarty->assign('maxCount', empty($sugar_config['max_dashlets_homepage']) ? 15 : $sugar_config['max_dashlets_homepage']);

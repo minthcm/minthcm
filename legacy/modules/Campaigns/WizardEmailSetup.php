@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
        die('Not A Valid Entry Point');
 }
 
@@ -108,7 +108,7 @@ if (isset($focus->settings['massemailer_campaign_emails_per_run']) && !empty($fo
     $ss->assign("EMAILS_PER_RUN", 500);
 }
 
-if (!isset($focus->settings['massemailer_tracking_entities_location_type']) or empty($focus->settings['massemailer_tracking_entities_location_type']) or $focus->settings['massemailer_tracking_entities_location_type']=='1') {
+if (!isset($focus->settings['massemailer_tracking_entities_location_type']) || empty($focus->settings['massemailer_tracking_entities_location_type']) || $focus->settings['massemailer_tracking_entities_location_type']=='1') {
     $ss->assign("DEFAULT_CHECKED", "checked");
     $ss->assign("TRACKING_ENTRIES_LOCATION_STATE", "disabled");
     $ss->assign("TRACKING_ENTRIES_LOCATION", $mod_strings['TRACKING_ENTRIES_LOCATION_DEFAULT_VALUE']);
@@ -120,7 +120,7 @@ if (!isset($focus->settings['massemailer_tracking_entities_location_type']) or e
 $ss->assign("SITEURL", $sugar_config['site_url']);
 
 // Change the default campaign to not store a copy of each message.
-if (!empty($focus->settings['massemailer_email_copy']) and $focus->settings['massemailer_email_copy']=='1') {
+if (!empty($focus->settings['massemailer_email_copy']) && $focus->settings['massemailer_email_copy']=='1') {
     $ss->assign("YES_CHECKED", "checked='checked'");
 } else {
     $ss->assign("NO_CHECKED", "checked='checked'");
@@ -132,6 +132,7 @@ $ss->assign("MAIL_SSL_OPTIONS", get_select_options_with_id($app_list_strings['em
 /*********** New Mail Box UI DIV Stuff ****************/
 $mbox_qry = "select * from inbound_email where deleted ='0' and mailbox_type = 'bounce'";
 $mbox_res = $focus->db->query($mbox_qry);
+$mbox = [];
 while ($mbox_row = $focus->db->fetchByAssoc($mbox_res)) {
     $mbox[] = $mbox_row;
 }
@@ -139,8 +140,9 @@ $mbox_msg = ' ';
 $need_mbox = '';
 
 $mboxTable = "<table class='list view' width='100%' border='0' cellspacing='1' cellpadding='1'>";
-if (isset($mbox) && count($mbox)>0) {
-    $mboxTable .= "<tr><td colspan='5'><b>" .count($mbox) ." ". $mod_strings['LBL_MAILBOX_CHECK_WIZ_GOOD']." </b>.</td></tr>";
+$mboxCount =  is_countable($mbox) ? count($mbox) : 0;
+if (isset($mbox) && $mboxCount>0) {
+    $mboxTable .= "<tr><td colspan='5'><b>" . $mboxCount ." ". $mod_strings['LBL_MAILBOX_CHECK_WIZ_GOOD']." </b>.</td></tr>";
     $mboxTable .= "<tr class='listViewHRS1'><td width='20%'><b>".$mod_strings['LBL_MAILBOX_NAME']."</b></td>"
                    .  " <td width='20%'><b>".$mod_strings['LBL_LOGIN']."</b></td>"
                    .  " <td width='20%'><b>".$mod_strings['LBL_MAILBOX']."</b></td>"
@@ -153,7 +155,7 @@ if (isset($mbox) && count($mbox)>0) {
         } else {
             $colorclass= "class='evenListRowS1'";
         }
-        
+
         $mboxTable .= "<tr $colorclass>";
         $mboxTable .= "<td>".$details['name']."</td>";
         $mboxTable .= "<td>".$details['email_user']."</td>";
@@ -179,10 +181,10 @@ if (!$imapFactory->areAllHandlersAvailable()) {
 /**************************** SUMMARY UI DIV Stuff *******************/
 
 /**************************** WIZARD UI DIV Stuff *******************/
-  
+
 //  this is the wizard control script that resides in page
  $divScript = <<<EOQ
- <script type="text/javascript" language="javascript">  
+ <script type="text/javascript" language="javascript">
 
     //this function toggles visibility of fields based on selected options
     function notify_setrequired() {
@@ -196,7 +198,7 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         document.getElementById("wiz_new_mbox").value = (document.getElementById('create_mbox').checked) ? "1" : "0";
         return true;
     }
-    
+
     //this function will copy as much information as possible from the first step in wizard
     //onto the second step in wizard
     function copy_down() {
@@ -206,16 +208,16 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         if(document.getElementById("mail_sendtype").value=='SMTP'){
             document.getElementById("protocol").value = "SMTP";
             document.getElementById("server_url").value = document.getElementById("mail_smtpserver").value;
-            if(document.getElementById('mail_smtpauth_req').checked){    
+            if(document.getElementById('mail_smtpauth_req').checked){
                 document.getElementById("email_user").value = document.getElementById("mail_smtpuser").value;
                 document.getElementById("email_password").value = document.getElementById("mail_smtppass").value;
             }
-        
+
         }
         return true;
     }
 
-    //this calls the validation functions for each step that needs validation 
+    //this calls the validation functions for each step that needs validation
     function validate_wiz_form(step){
         switch (step){
             case 'step1':
@@ -223,21 +225,21 @@ if (!$imapFactory->areAllHandlersAvailable()) {
               copy_down();
             break;
             case 'step2':
-           if(!validate_step2()){return false;} 
-            break;                  
-            default://no additional validation needed      
+           if(!validate_step2()){return false;}
+            break;
+            default://no additional validation needed
         }
         return true;
-    
+
     }
-    
+
     //this function will add validation to step1
     function validate_step1(){
         requiredTxt = SUGAR.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS');
         var haserrors = 0;
         var fields = new Array();
 
-        //create list of fields that need validation, based on selected options        
+        //create list of fields that need validation, based on selected options
         fields[0] = 'notify_fromname';
         fields[1] = 'notify_fromaddress';
         fields[2] = 'massemailer_campaign_emails_per_run';
@@ -245,14 +247,14 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         if(document.getElementById("mail_sendtype").value=='SMTP'){
             fields[4] = 'mail_smtpserver';
             fields[5] = 'mail_smtpport';
-                if(document.getElementById('mail_smtpauth_req').checked){    
+                if(document.getElementById('mail_smtpauth_req').checked){
                     fields[6] = 'mail_smtpuser';
                     fields[7] = 'mail_smtppass';
                 }
         }
-        
+
         var field_value = '';
-        //iterate through required fields and set empty string values ('  '') to null, this will cause failure later on 
+        //iterate through required fields and set empty string values ('  '') to null, this will cause failure later on
         for (i=0; i < fields.length; i++){
             elem = document.getElementById(fields[i]);
             field_value = trim(elem.value);
@@ -261,37 +263,37 @@ if (!$imapFactory->areAllHandlersAvailable()) {
             }
         }
         //add to generic validation and call function to calidate
-        if(validate['wizform']!='undefined'){delete validate['wizform']};        
+        if(validate['wizform']!='undefined'){delete validate['wizform']};
         addToValidate('wizform', 'notify_fromaddress', 'email', true,  document.getElementById('notify_fromaddress').title);
         addToValidate('wizform', 'notify_fromname', 'alphanumeric', true,  document.getElementById('notify_fromname').title);
         addToValidate('wizform', 'massemailer_campaign_emails_per_run', 'int', true,  document.getElementById('massemailer_campaign_emails_per_run').title);
         addToValidate('wizform', 'massemailer_tracking_entities_location', 'alphanumeric', true,  document.getElementById('massemailer_tracking_entities_location').title);
         if(document.getElementById("mail_sendtype").value=='SMTP'){
             addToValidate('wizform', 'mail_smtpserver', 'alphanumeric', true,  document.getElementById('mail_smtpserver').title);
-            addToValidate('wizform', 'mail_smtpport', 'int', true,  document.getElementById('mail_smtpport').title);        
-                if(document.getElementById('mail_smtpauth_req').checked){    
+            addToValidate('wizform', 'mail_smtpport', 'int', true,  document.getElementById('mail_smtpport').title);
+                if(document.getElementById('mail_smtpauth_req').checked){
                     addToValidate('wizform', 'mail_smtpuser', 'alphanumeric', true,  document.getElementById('mail_smtpuser').title);
                     addToValidate('wizform', 'mail_smtppass', 'alphanumeric', true,  document.getElementById('mail_smtppass').title);
                 }
         }
-    
-      
-        return check_form('wizform');    
-    }    
-    
-    
-    
+
+
+        return check_form('wizform');
+    }
+
+
+
     function validate_step2(){
         requiredTxt = SUGAR.language.get('app_strings', 'ERR_MISSING_REQUIRED_FIELDS');
         //validate only if the create mailbox form input has been selected
         if(document.getElementById("wiz_new_mbox").value == "0"){
          //this form is not checked, do not validate
-         return true;   
+         return true;
         }
         var haserrors = 0;
         var wiz_message = document.getElementById('wiz_message');
 
-        //create list of fields that need validation, based on selected options        
+        //create list of fields that need validation, based on selected options
         var fields = new Array();
         fields[0] = 'name';
         fields[1] = 'server_url';
@@ -300,9 +302,9 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         fields[4] = 'email_password';
         fields[5] = 'mailbox';
         fields[6] = 'port';
-    
-        //iterate through required fields and set empty string values ('  '') to null, this will cause failure later on 
-        var field_value = ''; 
+
+        //iterate through required fields and set empty string values ('  '') to null, this will cause failure later on
+        var field_value = '';
         for (i=0; i < fields.length; i++){
             field_value = trim(document.getElementById(fields[i]).value);
             if(field_value.length<1){
@@ -312,14 +314,14 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         }
 
         //add to generic validation and call function to calidate
-        if(validate['wizform']!='undefined'){delete validate['wizform']};        
+        if(validate['wizform']!='undefined'){delete validate['wizform']};
         addToValidate('wizform', 'name', 'alphanumeric', true,  document.getElementById('name').title);
         addToValidate('wizform', 'server_url', 'alphanumeric', true,  document.getElementById('server_url').title);
         addToValidate('wizform', 'email_user', 'alphanumeric', true,  document.getElementById('email_user').title);
         addToValidate('wizform', 'email_password', 'alphanumeric', true,  document.getElementById('email_password').title);
         addToValidate('wizform', 'mailbox', 'alphanumeric', true,  document.getElementById('mailbox').title);
         addToValidate('wizform', 'protocol', 'alphanumeric', true,  document.getElementById('protocol').title);
-        addToValidate('wizform', 'port', 'int', true,  document.getElementById('port').title);        
+        addToValidate('wizform', 'port', 'int', true,  document.getElementById('port').title);
 
         if(haserrors == 1){
             return false;
@@ -327,12 +329,12 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         return check_form('wizform');
 
 
-    }    
+    }
 
     /*
      * The generic create summary will not work for this wizard, as we have a step that only gets
      * displayed if a check box is marked, and we also have certain inputs we do not want displayed(ie. password)
-     * so this function will override the genereic version 
+     * so this function will override the genereic version
      */
     function create_summary(){
         var current_step = document.getElementById('wiz_current_step');
@@ -346,16 +348,16 @@ if (!$imapFactory->areAllHandlersAvailable()) {
         fields[1] = 'notify_fromaddress';
         fields[2] = 'massemailer_campaign_emails_per_run';
         fields[3] = 'massemailer_tracking_entities_location';
-        
+
          if(document.getElementById("mail_sendtype").value=='SMTP'){
               fields[4] = 'mail_smtpserver';
               fields[5] = 'mail_smtpport';
-                 if(document.getElementById('mail_smtpauth_req').checked){    
+                 if(document.getElementById('mail_smtpauth_req').checked){
                       fields[6] = 'mail_smtpuser';
                  }
               fields[7] = 'mail_smtpssl';
           }
-        
+
           if(document.getElementById("wiz_new_mbox").value != "0"){
                 fields[8] = 'name';
                 fields[9] = 'server_url';
@@ -366,7 +368,7 @@ if (!$imapFactory->areAllHandlersAvailable()) {
                 fields[14] = 'port';
                 fields[15] = 'ssl';
           }
-    
+
         //iterate through list and create table
         var summhtml = "<table class='detail view' width='100%' border='0' cellspacing='1' cellpadding='1'>";
         var colorclass = 'tabDetailViewDF2';
@@ -392,23 +394,23 @@ if (!$imapFactory->areAllHandlersAvailable()) {
             }
             if( colorclass== 'tabDetailViewDL2'){
                 colorclass= 'tabDetailViewDF2';
-            }else{ 
+            }else{
                 colorclass= 'tabDetailViewDL2'
-            }            
+            }
           }
 
         summhtml = summhtml+ "</table>";
         temp_elem = document.getElementById('wiz_summ');
         temp_elem.innerHTML = summhtml;
-        
+
     }
 
     showfirst('email');
     notify_setrequired();
-    
-    
-    
-    
+
+
+
+
 </script>
 EOQ;
 

@@ -11,6 +11,7 @@ require_once('include/export_utils.php');
 require_once("include/Sugar_Smarty.php");
 require_once('modules/jjwg_Maps/jjwg_Maps.php');
 
+#[\AllowDynamicProperties]
 class jjwg_MapsController extends SugarController
 {
 
@@ -79,6 +80,9 @@ class jjwg_MapsController extends SugarController
         $this->configuration();
     }
 
+
+
+
     /**
      * Load Configuration Settings using Administration Module
      * See jjwg_Maps module for settings
@@ -113,8 +117,8 @@ class jjwg_MapsController extends SugarController
                 $this->bean->geocoded_headings[] = $code;
             }
         }
-        $responses['Approximate'] = 'APPROXIMATE';
-        $responses['Empty'] = 'Empty';
+        $responses['APPROXIMATE'] = 'APPROXIMATE';
+        $responses['EMPTY'] = 'EMPTY';
         $this->bean->geocoded_headings[] = 'APPROXIMATE';
         $this->bean->geocoded_headings[] = 'EMPTY';
 
@@ -373,6 +377,7 @@ class jjwg_MapsController extends SugarController
         }
 
         // JSON Encoded $result
+        $out = [];
         $out['message'] = $result['message'];
         $out['list']['name'] = $result['object_name'];
         header('Content-Type: application/json');
@@ -451,7 +456,7 @@ class jjwg_MapsController extends SugarController
         header("Content-type: application/octet-stream");
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header("Content-Transfer-Encoding: binary");
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+        if (strpos((string) $_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
             // IE cannot download from sessions without a cache
             header('Cache-Control: public');
         }
@@ -470,12 +475,12 @@ class jjwg_MapsController extends SugarController
      */
     private function list_row_to_csv($fields, $delimiter = ',', $enclosure = '"')
     {
-        $delimiter_esc = preg_quote($delimiter, '/');
-        $enclosure_esc = preg_quote($enclosure, '/');
+        $delimiter_esc = preg_quote((string) $delimiter, '/');
+        $enclosure_esc = preg_quote((string) $enclosure, '/');
         $output = array();
         foreach ($fields as $field) {
-            $output[] = preg_match("/(?:${delimiter_esc}|${enclosure_esc}|\s)/", $field) ? (
-                $enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure
+            $output[] = preg_match("/(?:{$delimiter_esc}|{$enclosure_esc}|\s)/", (string) $field) ? (
+                $enclosure . str_replace($enclosure, $enclosure . $enclosure, (string) $field) . $enclosure
                     ) : $field;
         }
 
@@ -491,7 +496,7 @@ class jjwg_MapsController extends SugarController
         $this->view = 'geocoding_test';
 
         if (!empty($_REQUEST['geocoding_address']) && !empty($_REQUEST['process_trigger']) &&
-                strlen($_REQUEST['geocoding_address']) <= 255) {
+                strlen((string) $_REQUEST['geocoding_address']) <= 255) {
             $this->bean->geocoding_results = $this->bean->getGoogleMapsGeocode($_REQUEST['geocoding_address'], true, true);
         }
     }
@@ -622,6 +627,11 @@ class jjwg_MapsController extends SugarController
      */
     public function action_map_markers()
     {
+        $map_module_type = '';
+        $map_unit_type = 'mi';
+        $map_distance = 250;
+        $map = null;
+        $search_array = [];
         header_remove('X-Frame-Options');
         $this->view = 'map_markers';
 
@@ -713,7 +723,7 @@ class jjwg_MapsController extends SugarController
                 // Geocode 'quick_address'
                 $aInfo = $this->bean->getGoogleMapsGeocode($_REQUEST['quick_address'], false, true);
                 // If not status 'OK', then fail here and exit. Note: Inside of iFrame
-                if (!empty($aInfo['status']) && $aInfo['status'] != 'OK' && preg_match('/[A-Z\_]/', $aInfo['status'])) {
+                if (!empty($aInfo['status']) && $aInfo['status'] != 'OK' && preg_match('/[A-Z\_]/', (string) $aInfo['status'])) {
                     echo '<br /><br /><div><b>'.$GLOBALS['mod_strings']['LBL_MAP_LAST_STATUS'].': '.$aInfo['status'].'</b></div><br /><br />';
                     exit;
                 }
@@ -750,7 +760,7 @@ class jjwg_MapsController extends SugarController
                     "(" . $calc_distance_expression . " < " . $map_distance . ")";
             $query = $this->display_object->create_new_list_query('display_object_distance', $where_conds, array(), array(), 0, '', false, $this->display_object, false);
             // Add the disply_object_distance into SELECT list
-            $query = str_replace('SELECT ', 'SELECT (' . $calc_distance_expression . ') AS display_object_distance, ', $query);
+            $query = str_replace('SELECT ', 'SELECT (' . $calc_distance_expression . ') AS display_object_distance, ', (string) $query);
             //var_dump($query);
             $display_result = $this->bean->db->limitQuery($query, 0, $this->settings['map_markers_limit']);
             while ($display = $this->bean->db->fetchByAssoc($display_result)) {
@@ -831,7 +841,7 @@ class jjwg_MapsController extends SugarController
                         ' FROM '.$this->display_object->table_name.' '.
                             'LEFT JOIN prospect_lists_prospects ON prospect_lists_prospects.related_id = '.$this->display_object->table_name.'.id AND prospect_lists_prospects.deleted=0 '.
                             'LEFT JOIN prospect_lists ON prospect_lists_prospects.prospect_list_id = prospect_lists.id AND prospect_lists.deleted=0 ',
-                        $query
+                        (string) $query
                     );
                     // Restrict WHERE to related type and $list_id
                     $query .= ' AND prospect_lists_prospects.related_type = \''.$this->display_object->module_name.'\' AND '.
@@ -893,8 +903,8 @@ class jjwg_MapsController extends SugarController
                         @$selected_query = $this->display_object->create_export_query($order_by, $ret_array['where']);
                     }
                     // SugarOnDemand JOIN Bug: If $ret_array['join'] is not included in query, force it in!
-                    if (strpos($ret_array['join'], $selected_query) === false) {
-                        $selected_query = str_replace(' where ', $ret_array['join'].' where ', $selected_query);
+                    if (strpos((string) $ret_array['join'], (string) $selected_query) === false) {
+                        $selected_query = str_replace(' where ', $ret_array['join'].' where ', (string) $selected_query);
                     }
                     // Avoiding subquery. Let's just record the record ID's for later
                     $selected_result = $this->bean->db->limitQuery($selected_query, 0, $this->settings['map_markers_limit']);
@@ -1057,11 +1067,13 @@ class jjwg_MapsController extends SugarController
             $this->sugarSmarty->assign("address", $display['jjwg_maps_address_c']);
             $this->sugarSmarty->assign("fields", $display); // display fields array
             // Use @ error suppression to avoid issues with SugarCRM On-Demand
-            $marker['html'] = @$this->sugarSmarty->fetch('./custom/modules/jjwg_Maps/tpls/' . $module_type . 'InfoWindow.tpl');
+            if (file_exists('./custom/modules/jjwg_Maps/tpls/' . $module_type . 'InfoWindow.tpl')) {
+                $marker['html'] = $this->sugarSmarty->fetch('./custom/modules/jjwg_Maps/tpls/' . $module_type . 'InfoWindow.tpl');
+            }
             if (empty($marker['html'])) {
                 $marker['html'] = $this->sugarSmarty->fetch('./modules/jjwg_Maps/tpls/' . $module_type . 'InfoWindow.tpl');
             }
-            $marker['html'] = preg_replace('/\n\r/', ' ', $marker['html']);
+            $marker['html'] = preg_replace('/\n\r/', ' ', (string) $marker['html']);
             //var_dump($marker['html']);
             return $marker;
         } else {
@@ -1105,11 +1117,13 @@ class jjwg_MapsController extends SugarController
             $this->sugarSmarty->assign("module_type", 'jjwg_Markers');
             $this->sugarSmarty->assign("fields", $fields); // display fields array
             // Use @ error suppression to avoid issues with SugarCRM On-Demand
-            $marker['html'] = @$this->sugarSmarty->fetch('./custom/modules/jjwg_Markers/tpls/MarkersInfoWindow.tpl');
+            if (file_exists('./custom/modules/jjwg_Markers/tpls/MarkersInfoWindow.tpl')) {
+                $marker['html'] = $this->sugarSmarty->fetch('./custom/modules/jjwg_Markers/tpls/MarkersInfoWindow.tpl');
+            }
             if (empty($marker['html'])) {
                 $marker['html'] = $this->sugarSmarty->fetch('./modules/jjwg_Markers/tpls/MarkersInfoWindow.tpl');
             }
-            $marker['html'] = preg_replace('/\n\r/', ' ', $marker['html']);
+            $marker['html'] = preg_replace('/\n\r/', ' ', (string) $marker['html']);
             //var_dump($marker['html']);
             return $marker;
         } else {
@@ -1134,7 +1148,7 @@ class jjwg_MapsController extends SugarController
         $area['coordinates'] = $area_object->coordinates;
 
         // Check for proper coordinates pattern
-        if (preg_match('/^[0-9\s\(\)\,\.\-]+$/', $area_object->coordinates)) {
+        if (preg_match('/^[0-9\s\(\)\,\.\-]+$/', (string) $area_object->coordinates)) {
             $fields = array();
             foreach ($area_object->column_fields as $field) {
                 $fields[$field] = $area_object->$field;
@@ -1143,11 +1157,13 @@ class jjwg_MapsController extends SugarController
             $this->sugarSmarty->assign("module_type", 'jjwg_Areas');
             $this->sugarSmarty->assign("fields", $fields); // display fields array
             // Use @ error suppression to avoid issues with SugarCRM On-Demand
-            $area['html'] = @$this->sugarSmarty->fetch('./custom/modules/jjwg_Areas/tpls/AreasInfoWindow.tpl');
+            if (file_exists('./custom/modules/jjwg_Areas/tpls/AreasInfoWindow.tpl')) {
+                $area['html'] = $this->sugarSmarty->fetch();
+            }
             if (empty($area['html'])) {
                 $area['html'] = $this->sugarSmarty->fetch('./modules/jjwg_Areas/tpls/AreasInfoWindow.tpl');
             }
-            $area['html'] = preg_replace('/\n\r/', ' ', $area['html']);
+            $area['html'] = preg_replace('/\n\r/', ' ', (string) $area['html']);
             //var_dump($marker['html']);
             return $area;
         } else {

@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
+if ( !defined('sugarEntry') || !sugarEntry ) {
+   die('Not A Valid Entry Point');
 }
 /* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -43,14 +43,14 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('include/MVC/View/views/view.detail.php');
 
-class NewsViewDetail extends ViewDetail
-{
+#[\AllowDynamicProperties]
+class NewsViewDetail extends ViewDetail {
 
     public function display()
     {
-        $this->setDecodeHTML();
-        parent::display();
-    }
+      $this->setDecodeHTML();
+      parent::display();
+   }
 
     public function setDecodeHTML()
     {
@@ -60,7 +60,7 @@ class NewsViewDetail extends ViewDetail
                 <img src="index.php?entryPoint=download&type=News&id='.$this->bean->id.'_photo&photo='.$this->bean->photo.'" 
                 alt="'.$this->bean->photo.'" />
             </div>';
-        }
+ }
         $this->bean->content_of_announcement = html_entity_decode($photo_html . str_replace('&nbsp;', ' ', $this->bean->content_of_announcement));
-    }
+}
 }

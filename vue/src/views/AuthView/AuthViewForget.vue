@@ -37,11 +37,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useLanguagesStore } from '@/store/languages'
 import MintButton from '@/components/MintButtons/MintButton.vue'
-import MintStatusBox from '@/components/MintStatusBox.vue'
+import MintStatusBox from '@/components/MintStatusBoxes/MintStatusBox.vue'
 import { useAuthViewStore } from './AuthViewStore'
+import { mintApi } from '@/api/api'
 
 const authViewStore = useAuthViewStore()
 const languages = useLanguagesStore()
@@ -61,10 +62,10 @@ onMounted(() => {
 async function handleForgetBtnClick() {
     forgetError.value = ''
     try {
-        await axios.post('api/forget_password', {
+        await mintApi.post('forget_password', {
             username: authViewStore.username,
             email: email.value,
-        })
+        }, { rawError: true })
         forgetSuccess.value = true
     } catch (err) {
         forgetError.value = (err as AxiosError<{ message: string }>).response?.data?.message ?? ''

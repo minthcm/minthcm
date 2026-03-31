@@ -4,80 +4,63 @@
         variant="outlined"
         density="compact"
         hide-details
+        :error="props.state === 'error'"
         v-model="parsedValue"
-        :items="languages.getList(props.defs?.options)"
+        :items="items"
         item-title="value"
         item-value="key"
         @keyup.enter="$emit('inlineEditSave')"
         @keyup.esc="$emit('inlineEditCancel')"
-    ></v-select>
+    >
+    </v-select>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
+import { ref, computed, watch } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
+import { FieldProps } from '../Field.model'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 const languages = useLanguagesStore()
 const emit = defineEmits(['update:modelValue'])
 const model = ref('')
 
 const parsedValue = computed({
     get() {
-        return languages.translateListValue(props.modelValue ?? props.defs?.default ?? '', props.defs?.options)
+        return items.value.find((item) => item.key === props.field.model)?.key || ''
     },
     set(newValue) {
         model.value = newValue
+        props.field.model = newValue
         emit('update:modelValue', model.value)
     },
 })
+
+const items = computed(() => {
+    const options = props.options ?? props.defs?.options
+    if (!options) {
+        return []
+    }
+    if (typeof options === 'string') {
+        return languages.getList(options)
+    }
+    if (!Array.isArray(options) && typeof options === 'object') {
+        return Object.entries(options).map(([key, value]) => ({
+            key,
+            value,
+        }))
+    }
+    return options
+})
+
+watch(items, () => {
+    if (!items.value.find((item) => item.key === model.value)) {
+        const newItem = items.value.find((item) => !item.key) || items.value[0]
+        model.value = newItem?.key || ''
+        props.field.model = newItem
+        emit('update:modelValue', model.value)
+    }
+})
 </script>
 
-<style scoped lang="scss">
-.v-input {
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        opacity: 1;
-    }
-
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        border-color: #dbdbdb;
-    }
-
-    &:hover {
-        :deep(.v-field__outline__start),
-        :deep(.v-field__outline__notch)::before,
-        :deep(.v-field__outline__notch)::after,
-        :deep(.v-field__outline__end) {
-            border-color: rgb(var(--v-theme-primary));
-        }
-    }
-
-    :deep(.v-field--focused .v-field__outline__start),
-    :deep(.v-field--focused .v-field__outline__notch)::before,
-    :deep(.v-field--focused .v-field__outline__notch)::after,
-    :deep(.v-field--focused .v-field__outline__end) {
-        border-color: rgb(var(--v-theme-primary));
-    }
-
-    :deep(.v-field-label.v-field-label--floating) {
-        background: rgb(var(--v-theme-surface));
-        color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-        opacity: 1;
-        padding: 0px 2px;
-    }
-}
-</style>
+<style scoped lang="scss"></style>

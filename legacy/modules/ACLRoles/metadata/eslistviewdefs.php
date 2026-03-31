@@ -10,6 +10,12 @@ $ESListViewDefs['ACLRoles'] = [
         'description' => [
             'default' => true,
         ],
+        'created_by' => [
+            'default' => true,
+        ],
+        'modified_user_id' => [
+            'default' => true,
+        ],
     ],
     'search' => [
         'search_name' => [
@@ -19,6 +25,10 @@ $ESListViewDefs['ACLRoles'] = [
         'last_name' => [
         ],
         'recr_contact_agree' => [
+        ],
+        'created_by' => [
+        ],
+        'modified_user_id' => [
         ],
     ],
 ];

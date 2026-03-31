@@ -19,6 +19,12 @@ $ESListViewDefs['EmailTemplates'] = [
         'date_entered' => [
             'default' => true,
         ],
+        'created_by' => [
+            'default' => false,
+        ],
+        'modified_user_id' => [
+            'default' => false,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -27,7 +33,7 @@ $ESListViewDefs['EmailTemplates'] = [
         'assigned_user_name' => [],
         'date_entered' => [],
         'date_modified' => [],
-        'created_by_name' => [],
-        'modified_by_name' => [],
+        'created_by' => [],
+        'modified_user_id' => [],
     ],
 ];

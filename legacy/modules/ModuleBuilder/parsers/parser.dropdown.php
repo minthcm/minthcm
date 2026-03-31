@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,8 +46,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
- require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
+require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
 
+ #[\AllowDynamicProperties]
  class ParserDropDown extends ModuleBuilderParser
  {
 
@@ -67,7 +68,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $dropdown_name = $params['dropdown_name'];
          $json = getJSONobj();
 
-         $list_value = str_replace('&quot;&quot;:&quot;&quot;', '&quot;__empty__&quot;:&quot;&quot;', $params['list_value']);
+         $list_value = str_replace('&quot;&quot;:&quot;&quot;', '&quot;__empty__&quot;:&quot;&quot;', (string) $params['list_value']);
          //Bug 21362 ENT_QUOTES- convert single quotes to escaped single quotes.
          $rawurldecode = rawurldecode($list_value);
          $htmldecode = html_entity_decode($rawurldecode, ENT_QUOTES);
@@ -108,7 +109,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  $GLOBALS['app_list_strings'][$dropdown_name] = $dropdown;
              }
              //write to contents
-             $contents = str_replace("?>", '', $contents);
+             $contents = str_replace("?>", '', (string) $contents);
              if (empty($contents)) {
                  $contents = "<?php";
              }
@@ -120,7 +121,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                      if (!isset($my_list_strings[$dropdown_name][$key]) || strcmp($my_list_strings[$dropdown_name][$key], $value) != 0) {
                          //clear out the old value
                          $pattern_match = '/\s*\$app_list_strings\s*\[\s*\''.$dropdown_name.'\'\s*\]\[\s*\''.$key.'\'\s*\]\s*=\s*[\'\"]{1}.*?[\'\"]{1};\s*/ism';
-                         $contents = preg_replace($pattern_match, "\n", $contents);
+                         $contents = preg_replace($pattern_match, "\n", (string) $contents);
                          //add the new ones
                          $contents .= "\n\$app_list_strings['$dropdown_name']['$key']=" . var_export_helper($value) . ";";
                      }
@@ -224,7 +225,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
      public function getNewCustomContents($dropdown_name, $dropdown, $lang)
      {
          $contents = return_custom_app_list_strings_file_contents($lang);
-         $contents = str_replace("?>", '', $contents);
+         $contents = str_replace("?>", '', (string) $contents);
          if (empty($contents)) {
              $contents = "<?php";
          }

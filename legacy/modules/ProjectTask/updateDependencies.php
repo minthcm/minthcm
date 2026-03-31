@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+#[\AllowDynamicProperties]
 class updateDependencies
 {
     public function update_dependency(&$bean, $event, $arguments)
@@ -62,7 +63,7 @@ class updateDependencies
 
         if ($bean->date_finish != $fetchedDateFinish) { //if the end date of a current task is changed
 
-            $diff = $this->count_days($bean->date_finish, $bean->fetched_row['date_finish']); //Gets the difference in days
+            $diff = $this->count_days($bean->date_finish, $bean->fetched_row['date_finish'] ?? ''); //Gets the difference in days
 
             if ($tasks) {
                 foreach ($tasks as $task) { //loop through all dependant tasks

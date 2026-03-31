@@ -55,7 +55,7 @@ import { onMounted, ref, computed, onBeforeUnmount } from 'vue'
 import { useInstallViewStore } from './InstallViewStore'
 import { INSTALL_CONFIG } from './InstallViewConfig'
 import MintButton from '@/components/MintButtons/MintButton.vue'
-import MintStatusBox from '@/components/MintStatusBox.vue'
+import MintStatusBox from '@/components/MintStatusBoxes/MintStatusBox.vue'
 import InstallViewCompleted from './steps/InstallViewCompleted.vue'
 import LoadingScreen from '@/components/LoadingScreen.vue'
 

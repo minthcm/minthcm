@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,6 +44,7 @@
 
  require_once('include/MVC/View/SugarView.php');
 
+ #[\AllowDynamicProperties]
  class CalendarViewSaveSettings extends SugarView
  {
      public function CalendarViewSettings()
@@ -60,9 +61,12 @@
      {
          global $current_user;
          
-         $db_start = $this->to_db_time($_REQUEST['day_start_hours'], $_REQUEST['day_start_minutes'], $_REQUEST['day_start_meridiem']);
-         $db_end = $this->to_db_time($_REQUEST['day_end_hours'], $_REQUEST['day_end_minutes'], $_REQUEST['day_end_meridiem']);
-         
+         $dayStartMeridiem = $_REQUEST['day_start_meridiem'] ?? '';
+         $dayEndMeridiem = $_REQUEST['day_end_meridiem'] ?? '';
+ 
+         $db_start = $this->to_db_time($_REQUEST['day_start_hours'], $_REQUEST['day_start_minutes'], $dayStartMeridiem);
+         $db_end = $this->to_db_time($_REQUEST['day_end_hours'], $_REQUEST['day_end_minutes'], $dayEndMeridiem);
+ 
          $current_user->setPreference('day_start_time', $db_start, 0, 'global', $current_user);
          $current_user->setPreference('day_end_time', $db_end, 0, 'global', $current_user);
          

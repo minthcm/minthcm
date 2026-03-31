@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -77,7 +77,7 @@ function clearCacheSU($thedir, $extension)
             if ($children !== '.' && $children !== '..') {
                 if (is_dir($thedir . '/' . $children)) {
                     clearCacheSU($thedir . '/' . $children, $extension);
-                } elseif (is_file($thedir . '/' . $children) && substr_count($children, $extension)) {
+                } elseif (is_file($thedir . '/' . $children) && substr_count($children, (string) $extension)) {
                     unlink($thedir . '/' . $children);
                 }
             }
@@ -119,7 +119,7 @@ function checkLoggerSettings()
             'file' =>
                 [
                     'ext' => '.log',
-		      'name' => 'minthcm',
+                    'name' => 'minthcm',
                     'dateFormat' => '%c',
                     'maxSize' => '10MB',
                     'maxLogs' => 10,
@@ -331,9 +331,9 @@ function verifyArguments($argv, $usage_regular)
             echo "FAILURE\n";
             exit(1);
         }
-        if (count($argv) < 5) {
+        if ((is_countable($argv) ? count($argv) : 0) < 5) {
             echo "*******************************************************************************\n";
-            echo '*** ERROR: Missing required parameters.  Received ' . count($argv) . " argument(s), require 5.\n";
+            echo '*** ERROR: Missing required parameters.  Received ' . (is_countable($argv) ? count($argv) : 0) . " argument(s), require 5.\n";
             echo $usage_regular;
             echo "FAILURE\n";
             exit(1);
@@ -481,7 +481,7 @@ if ($upgradeType !== constant('DCE_INSTANCE')) {
     $zip_from_dir = substr($patchName, 0, -4); // patch folder name (minus ".zip")
     $path = $argv[2]; // custom log file, if blank will use ./upgradeWizard.log
 
-    $db = &DBManagerFactory::getInstance();
+    $db = DBManagerFactory::getInstance();
     $UWstrings = return_module_language('en_us', 'UpgradeWizard');
     $adminStrings = return_module_language('en_us', 'Administration');
     $app_list_strings = return_app_list_strings_language('en_us');
@@ -568,7 +568,7 @@ if ($upgradeType !== constant('DCE_INSTANCE')) {
     $destFiles = [];
 
     foreach ($uwFiles as $uwFile) {
-        $destFile = str_replace($zipBasePath . "/", '', $uwFile);
+        $destFile = str_replace($zipBasePath . "/", '', (string) $uwFile);
         copy($uwFile, $destFile);
     }
     require_once 'modules/UpgradeWizard/uw_utils.php'; // must upgrade UW first

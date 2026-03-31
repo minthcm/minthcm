@@ -30,8 +30,9 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted, computed, watch } from 'vue'
 import { useInstallViewStore } from '../InstallViewStore'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { nextTick } from 'vue'
+import { mintApi } from '@/api/api'
 
 const store = useInstallViewStore()
 
@@ -61,7 +62,7 @@ onUnmounted(() => {
 
 async function fetchStatus() {
     try {
-        const response = await axios.get('api/install/status')
+        const response = await mintApi.get('install/status', {rawError: true})
         if (Object.keys(response.data || {}).length !== Object.keys(status.value).length) {
             status.value = response.data || {}
         }

@@ -31,6 +31,7 @@
  */
 
 
+#[\AllowDynamicProperties]
 class AOS_Contracts_sugar extends Basic
 {
     public $new_schema = true;
@@ -70,13 +71,13 @@ class AOS_Contracts_sugar extends Basic
         parent::__construct();
     }
 
-	public function bean_implements($interface){
-		switch($interface){
-			case 'ACL': return false;
+    public function bean_implements($interface){
+        switch($interface){
+            case 'ACL': return false;
         }
 		return false;
         }
-        
+
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
         return false;
     }

@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,15 +49,19 @@ namespace MintHCM\Data;
 use MintHCM\Data\MintBean;
 use \BeanFactory as LegacyFactory;
 
+#[\AllowDynamicProperties]
 class BeanFactory
 {
     public static function getBean($module, $id = null, $params = array(), $deleted = true)
     {
-        chdir('../legacy/');
-        $legacy_bean = LegacyFactory::getBean($module, $id, $params, $deleted);
-        chdir('../api/');
-
-        return new MintBean($legacy_bean);
+        $originalDir = getcwd();
+        try {
+            chdir('../legacy/');
+            $legacyBean = LegacyFactory::getBean($module, $id, $params, $deleted);
+        } finally {
+            chdir($originalDir);
+        }
+        return new MintBean($legacyBean);
     }
 
     public static function newBean($module)
@@ -67,9 +71,13 @@ class BeanFactory
 
     public static function __callStatic($name, $arguments)
     {
-        chdir('../legacy/');
-        $reposnse = LegacyFactory::$name($arguments);
-        chdir('../api/');
+        $originalDir = getcwd();
+        try {
+            chdir('../legacy/');
+        $response = LegacyFactory::$name(...$arguments);
+        } finally {
+            chdir($originalDir);
+        }
 
         return $response;
     }

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Popup, usePopupsStore } from '@/store/popups'
 import { useDraggable } from '@/composables/useDraggable'
 import { nextTick } from 'vue'

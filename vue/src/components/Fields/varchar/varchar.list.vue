@@ -1,16 +1,11 @@
 <template>
-    <span>{{ props.data.bean[defs.name] }}</span>
+    <span>{{ props.modelValue }}</span>
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 </script>
 
 <style scoped lang="scss"></style>

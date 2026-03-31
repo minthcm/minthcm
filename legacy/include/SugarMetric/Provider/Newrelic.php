@@ -19,6 +19,7 @@
  */
 require_once('include/SugarMetric/Provider/Interface.php');
 
+#[\AllowDynamicProperties]
 class SugarMetric_Provider_Newrelic implements SugarMetric_Provider_Interface
 {
     /**

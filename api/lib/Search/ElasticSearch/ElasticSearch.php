@@ -118,5 +118,4 @@ class ElasticSearch extends SearchManager
 
         $this->client = ClientBuilder::create()->setHosts($hosts)->build();
     }
-
 }

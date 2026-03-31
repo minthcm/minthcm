@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -168,7 +168,7 @@ if (isset($_SESSION['current_db_version']) && isset($_SESSION['target_db_version
         include 'modules/ACL/install_actions.php';
         include_once 'include/Smarty/internals/core.write_file.php';
         ob_end_clean();
-        $db = &DBManagerFactory::getInstance();
+        $db = DBManagerFactory::getInstance();
         if ($ce_to_pro_ent) {
             //Also set license information
             $admin = BeanFactory::newBean('Administration');
@@ -254,10 +254,10 @@ $mod_strings = return_module_language($current_language, 'UpgradeWizard');
 $stop = false;
 
 $httpHost = $_SERVER['HTTP_HOST'];  // cn: 8472 - HTTP_HOST includes port in some cases
-if ($colon = strpos($httpHost, ':')) {
-    $httpHost = substr($httpHost, 0, $colon);
+if ($colon = strpos((string) $httpHost, ':')) {
+    $httpHost = substr((string) $httpHost, 0, $colon);
 }
-$parsedSiteUrl = parse_url($sugar_config['site_url']);
+$parsedSiteUrl = parse_url((string) $sugar_config['site_url']);
 $host = ($parsedSiteUrl['host'] != $httpHost) ? $httpHost : $parsedSiteUrl['host'];
 
 // aw: 9747 - use SERVER_PORT for users who don't plug in the site_url at install correctly

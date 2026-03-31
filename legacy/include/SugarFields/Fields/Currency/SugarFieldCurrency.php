@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,9 +46,8 @@
 
 require_once('include/SugarFields/Fields/Float/SugarFieldFloat.php');
 
-class SugarFieldCurrency extends SugarFieldFloat 
+class SugarFieldCurrency extends SugarFieldFloat
 {
-
     public function getListViewSmarty($parentFieldArray, $vardef, $displayParams, $col)
     {
         global $locale, $current_user;
@@ -97,11 +96,18 @@ class SugarFieldCurrency extends SugarFieldFloat
         $vardef,
         $focus,
         ImportFieldSanitize $settings
-        )
-    {
-        $value = str_replace($settings->currency_symbol,"",$value);
+        ) {
+        $value = str_replace($settings->currency_symbol, "", $value);
         
-        return $settings->float($value,$vardef,$focus);
+        $value = str_replace($settings->num_grp_sep, "", $value);       
+
+        if (isset($vardef['len'])) {
+            // check for field length
+            $length = explode(',', $vardef['len']);
+            $value = sugar_substr($value, $length[0]);
+        }
+
+        return $value;
     }
 
     /**
@@ -116,10 +122,9 @@ class SugarFieldCurrency extends SugarFieldFloat
         // for currency fields, use the user or system precision, not the precision in the vardef
         //this is achived by passing in $precision as null
         $precision = null;
-        if ( $rawField === '' || $rawField === NULL ) {
+        if ($rawField === '' || $rawField === null) {
             return '';
         }
         return format_number($rawField, $precision, $precision);
     }
 }
-

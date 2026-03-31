@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ require_once('include/ytree/Tree.php');
 require_once('include/ytree/Node.php');
 require_once('ModuleInstall/PackageManager/ListViewPackages.php');
 
+#[\AllowDynamicProperties]
 class PackageManagerDisplay
 {
 
@@ -200,7 +201,7 @@ class PackageManagerDisplay
         $releases = array();
         if ($isAlive) {
             $filter = array();
-            $count = count($types);
+            $count = is_countable($types) ? count($types) : 0;
             $index = 1;
             $type_str = '"';
             foreach ($types as $type) {
@@ -220,7 +221,7 @@ class PackageManagerDisplay
             	$releases = $pm->getReleases('', '', $filter);
             }*/
         }
-        if ($form_action == 'install.php' && (empty($releases) || count($releases['packages']) == 0)) {
+        if ($form_action == 'install.php' && (empty($releases) || (is_countable($releases['packages']) ? count($releases['packages']) : 0) == 0)) {
             //return false;
         }
         $tree = PackageManagerDisplay::buildTreeView('treeview', $isAlive);
@@ -411,16 +412,16 @@ class PackageManagerDisplay
         //if($type == 'patch' && $releases != null){
         if ($type == 'patch') {
             $ss->assign('module_load', 'false');
-            $patches = PackageManagerDisplay::createJavascriptPackageArray($releases);
+            $patches = self::createJavascriptPackageArray($releases);
             $ss->assign('PATCHES', $patches);
             $ss->assign('GRID_TYPE', implode(',', $types));
         } else {
             $pm = new PackageManager();
             $releases = $pm->getPackagesInStaging();
-            $patches = PackageManagerDisplay::createJavascriptModuleArray($releases);
+            $patches = self::createJavascriptModuleArray($releases);
             $ss->assign('PATCHES', $patches);
             $installeds = $pm->getinstalledPackages();
-            $patches = PackageManagerDisplay::createJavascriptModuleArray($installeds, 'mti_installed_data');
+            $patches = self::createJavascriptModuleArray($installeds, 'mti_installed_data');
             $ss->assign('INSTALLED_MODULES', $patches);
             $ss->assign('UPGARDE_WIZARD_URL', 'index.php?module=UpgradeWizard&action=index');
             $ss->assign('module_load', 'true');
@@ -473,10 +474,10 @@ class PackageManagerDisplay
         return $str;
     }
 
-    public function createJavascriptPackageArray($releases)
+    public static function createJavascriptPackageArray($releases)
     {
         $output = "var mti_data = [";
-        $count = count($releases);
+        $count = is_countable($releases) ? count($releases) : 0;
         $index = 1;
         if (!empty($releases['packages'])) {
             foreach ($releases['packages'] as $release) {
@@ -497,7 +498,7 @@ class PackageManagerDisplay
     public static function createJavascriptModuleArray($modules, $variable_name = 'mti_data')
     {
         $output = "var ".$variable_name." = [";
-        $count = count($modules);
+        $count = is_countable($modules) ? count($modules) : 0;
         $index = 1;
         if (!empty($modules)) {
             foreach ($modules as $module) {
@@ -523,7 +524,7 @@ class PackageManagerDisplay
      *  This method is meant to be used to display the license agreement inline on the page
      *  if the system would like to perform the installation on the same page via an Ajax call
      */
-    public function buildLicenseOutput($file)
+    public static function buildLicenseOutput($file)
     {
         global $current_language;
 
@@ -620,7 +621,7 @@ class PackageManagerDisplay
                 $manifest_copy_files_to_dir = isset($manifest['copy_files']['to_dir']) ? clean_path($manifest['copy_files']['to_dir']) : "";
                 $manifest_copy_files_from_dir = isset($manifest['copy_files']['from_dir']) ? clean_path($manifest['copy_files']['from_dir']) : "";
                 $manifest_icon = clean_path($manifest['icon']);
-                $icon = "<img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? substr($manifest_icon, strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
+                $icon = "<img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir !== "" ? substr((string) $manifest_icon, strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
             } else {
                 $icon = getImageForType($manifest['type']);
             }

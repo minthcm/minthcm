@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -81,7 +81,7 @@ if (!empty($_REQUEST['duplicateSave']) &&  !empty($_REQUEST['duplicateId'])) {
 
     $focus->load_relationship('prospectlists');
     $target_lists = $copyFromCompaign->prospectlists->get();
-    if (count($target_lists)>0) {
+    if ((is_countable($target_lists) ? count($target_lists) : 0)>0) {
         foreach ($target_lists as $prospect_list_id) {
             $focus->prospectlists->add($prospect_list_id);
         }
@@ -108,7 +108,7 @@ if ($focus->campaign_type =='NewsLetter') {
 
     $focus->load_relationship('prospectlists');
     $target_lists = $focus->prospectlists->get();
-    if (count($target_lists)<1) {
+    if ((is_countable($target_lists) ? count($target_lists) : 0)<1) {
         global $current_user;
         global $mod_strings;
         //if no prospect lists are attached, then lets create a subscription and unsubscription

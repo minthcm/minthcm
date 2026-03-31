@@ -3,7 +3,9 @@
 .vscode/launch.json
 .htaccess
 legacy/.htaccess
+legacy/upload
 legacy/cache/**/*
+legacy/custom/blowfish/
 legacy/custom/modules/*/logic_hooks.php
 legacy/custom/modules/*/Ext/Vardefs/vardefs.ext.php
 legacy/minthcm.log
@@ -33,6 +35,7 @@ legacy/install.log
 legacy/install/status.json
 legacy/search_index.log
 legacy/suitecrm.log
+legacy/templates_c
 
 api/app/Config/AppConfig.php
 install/assets/status.json
@@ -53,12 +56,13 @@ legacy/include/ViewTools/Expressions/documentation.html
 legacy/include/ViewTools/javascript/viewTools.cache.js
 legacy/include/SugarEmailAddress/SugarEmailAddress.js
 
-legacy/include/ViewTools/javascript/viewTools.cache.js
-legacy/include/ViewTools/Expressions/documentation.html
-
-api/var/cache/*
+api/cache
+api/minthcm.log
 legacy/custom/include/language/en_us.lang.php
-legacy/custom/modules/Connectors/metadata/connectors.php
+legacy/custom/modules/Connectors/connectors/sources/ext/*/*/config.php
+legacy/custom/modules/Connectors/connectors/sources/ext/*/*/mapping.php
+legacy/custom/modules/Connectors/connectors/sources/ext/*/*/searchdefs.php
+legacy/custom/modules/Connectors/metadata/*
 
 legacy/include/**/*.lang.php
 !legacy/include/**/en_us.lang.php
@@ -72,3 +76,7 @@ legacy/modules/**/*.lang.php
 legacy/lib/Search/ElasticSearch/defaultParams.yml
 legacy/modules/ACLRoles/ACLRoles.js
 legacy/modules/Meetings/jsclass_scheduler.js
+legacy/reindexElastic.php
+
+#CLAUDE
+.claude/settings.local.json

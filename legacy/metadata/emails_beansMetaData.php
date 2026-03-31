@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -267,14 +267,14 @@ $dictionary['emails_text'] = array(
             'name'			=> 'from_addr',
             'vname'			=> 'LBL_FROM',
             'type'			=> 'varchar',
-            'len'			=> 250,
+            'len'			=> 255,
             'comment'		=> 'Email address of person who send the email',
         ),
         'reply_to_addr' => array(
             'name'			=> 'reply_to_addr',
             'vname'			=> 'LBL_REPLY_TO',
             'type'			=> 'varchar',
-            'len'			=> 250,
+            'len'			=> 255,
             'comment'		=> 'reply to email address',
         ),
         'to_addrs' => array(

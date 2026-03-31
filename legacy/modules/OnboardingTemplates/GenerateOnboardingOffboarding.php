@@ -194,6 +194,7 @@ class GenerateOnboardingOffboarding
         $bean->date_due = $date_start_object->modify("+{$duration_hours} hours {$duration_minutes} minutes")->format($timedate->get_db_date_time_format());
         $bean->parent_type = $this->process->module_name;
         $bean->parent_id = $this->process->id;
+        $bean->checklist = $element->checklist;
         $bean->save();
         $this->addSecurityGroupToEmployee($bean);
         $this->addSecurityGroupToRecord($bean, $this->user_scheduled_onboarding->getUserPrivateGroup());

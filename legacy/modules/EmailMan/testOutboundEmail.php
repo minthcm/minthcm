@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,9 +56,22 @@ global $mod_strings;
 global $app_list_strings;
 global $app_strings;
 global $current_user;
+global $sugar_config;
+
+$testMaxTimeout = 30; // seconds
+if (isset($sugar_config['outbound_email_test_max_timeout']) && is_numeric($sugar_config['outbound_email_test_max_timeout'])) {
+    $testMaxTimeout = (int)$sugar_config['outbound_email_test_max_timeout'];
+}
+
+ini_set('max_execution_time', $testMaxTimeout);
 
 $json = getJSONobj();
 $pass = '';
+
+if (empty($_REQUEST['mail_smtppass'])) {
+    $_REQUEST['mail_smtppass'] = BeanFactory::getBean('OutboundEmailAccounts', $_REQUEST['record'])?->mail_smtppass ?? '';
+}
+
 if (!empty($_REQUEST['mail_smtppass'])) {
     $pass = $_REQUEST['mail_smtppass'];
 } elseif (isset($_REQUEST['mail_type'])) {
@@ -75,8 +88,8 @@ if (!empty($_REQUEST['mail_smtppass'])) {
 
 // MintHCM #110041 START
 $smtpType = !empty($_REQUEST['mail_smtptype']) ? $_REQUEST['mail_smtptype'] : '';
-$authType = !empty($_REQUEST['mail_authtype']) ? $_REQUEST['mail_authtype'] : '';
-$eapmId = !empty($_REQUEST['eapm_id']) ? $_REQUEST['eapm_id'] : '';
+$authType = !empty($_REQUEST['mail_authtype']) ? $_REQUEST['mail_authtype'] : ($_REQUEST['mail_auth_type'] ?? 'no_auth');
+$eapmId = !empty($_REQUEST['eapm_id']) ? $_REQUEST['eapm_id'] : ($_REQUEST['mail_external_oauth_connection_id'] ?? '');
 $authAccount = !empty($_REQUEST['authorized_account']) ? $_REQUEST['authorized_account'] : '';
 
 $email = BeanFactory::newBean('Emails');
@@ -84,17 +97,15 @@ $out = $email->sendEmailTest(
     $_REQUEST['mail_smtpserver'],
     $_REQUEST['mail_smtpport'],
     $_REQUEST['mail_smtpssl'],
-    ($_REQUEST['mail_smtpauth_req'] == 'true' ? 1 : 0),
+    (isTrue($_REQUEST['mail_smtpauth_req']) ? 1 : 0),
     $_REQUEST['mail_smtpuser'],
     $pass,
     $_REQUEST['outboundtest_from_address'],
     $_REQUEST['outboundtest_to_address'],
     $_REQUEST['mail_sendtype'],
     (!empty($_REQUEST['mail_from_name']) ? $_REQUEST['mail_from_name'] : ''),
-    $smtpType,
     $authType,
     $eapmId,
-    $authAccount
 );
 // MintHCM #110041 END
 

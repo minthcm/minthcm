@@ -67,7 +67,7 @@ class SearchFormView extends View
     /** @inheritdoc */
     public function display(): void
     {
-        global $sugar_config;
+        global $sugar_config, $app_strings;
 
         $sizes = $this->makeSizesFromConfig();
         $engines = [];
@@ -88,6 +88,7 @@ class SearchFormView extends View
 
         $this->smarty->assign('sizeOptions', $sizes);
         $this->smarty->assign('engineOptions', $engines);
+        $this->smarty->assign('APP', $app_strings);
 
         parent::display();
     }

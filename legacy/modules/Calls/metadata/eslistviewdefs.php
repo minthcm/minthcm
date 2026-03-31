@@ -48,5 +48,9 @@ $ESListViewDefs[$module_name] = [
         'parent_name' => [],
         'assigned_user_name' => [],
     ],
+    'defaultSort' => [
+        'field' => 'date_start',
+        'order' => 'DESC' 
+    ],
 ];
 

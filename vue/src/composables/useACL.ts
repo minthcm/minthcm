@@ -1,6 +1,6 @@
 import { useModulesStore } from '@/store/modules'
 
-type ACLView = 'delete' | 'edit' | 'export' | 'import' | 'list' | 'massupdate' | 'view'
+export type ACLView = 'delete' | 'edit' | 'export' | 'import' | 'list' | 'massupdate' | 'view'
 
 export const useACL = () => {
     const ACL_ALLOW_DEFAULT = 0

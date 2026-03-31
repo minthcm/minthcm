@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ require_once('modules/ModuleBuilder/views/view.relationship.php') ;
 require_once('modules/ModuleBuilder/Module/StudioModule.php') ;
 require_once('modules/ModuleBuilder/Module/StudioBrowser.php') ;
 
+#[\AllowDynamicProperties]
 class ViewRelationships extends SugarView
 {
     /**
@@ -82,7 +83,7 @@ class ViewRelationships extends SugarView
             $relationships = new DeployedRelationships($moduleName) ;
             $ajaxRelationships = $this->getAjaxRelationships($relationships) ;
             $smarty->assign('relationships', $json->encode($ajaxRelationships)) ;
-            $smarty->assign('empty', (count($ajaxRelationships) == 0)) ;
+            $smarty->assign('empty', ((is_countable($ajaxRelationships) ? count($ajaxRelationships) : 0) == 0)) ;
             $smarty->assign('studio', true) ;
 
             //crumb
@@ -103,7 +104,7 @@ class ViewRelationships extends SugarView
             $relationships = new UndeployedRelationships($module->getModuleDir()) ;
             $ajaxRelationships = $this->getAjaxRelationships($relationships) ;
             $smarty->assign('relationships', $json->encode($ajaxRelationships)) ;
-            $smarty->assign('empty', (count($ajaxRelationships) == 0)) ;
+            $smarty->assign('empty', ((is_countable($ajaxRelationships) ? count($ajaxRelationships) : 0) == 0)) ;
 
             $module->help [ 'default' ] = (empty($_REQUEST [ 'view_module' ])) ? 'create' : 'modify' ;
             $module->help [ 'group' ] = 'module' ;

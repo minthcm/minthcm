@@ -5,6 +5,7 @@ require_once 'modules/SchedulersJobs/SchedulersJob.php';
 require_once 'include/LastNextContacts/LastNextContacts.php';
 require_once 'include/LastNextContacts/LastNextContactsConfig.php';
 
+#[\AllowDynamicProperties]
 class LastNextContactsQueue
 {
     const STATUS_WAITING = 0;

@@ -43,7 +43,7 @@ $ESListViewDefs['Rooms'] = [
     'search' => [
         'name' => [],
         'reservation_type' => [],
-        'number_of_seats',
+        'number_of_seats' => [],
         'availability' => [],
         'room_surface' => [],
         'resource_name' => [],

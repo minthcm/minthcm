@@ -7,6 +7,7 @@ use MintHCM\Lib\Search\ElasticSearch\ESListACLHelper;
 use MintHCM\Data\BeanFactory;
 use MintHCM\Utils\LegacyConnector;
 
+#[\AllowDynamicProperties]
 class BaseListACL
 {
     protected $module;
@@ -42,17 +43,22 @@ class BaseListACL
         }
 
         $filters = [];
-        if (isset($bean->field_defs['assigned_user_id'])) {
-            $filters[] = [
-                'terms' => [ $this->prefixer->modify('meta.assigned.user_id') => $this->getOwnerIds($user_id) ],
-            ];
+        $owner_ids = $this->getOwnerIds($user_id);
+        
+        if (empty($owner_ids)) {
+            $owner_ids = [$user_id];
         }
+            if (isset($bean->field_defs['assigned_user_id'])) {
+                $filters[] = [
+                    'terms' => [ $this->prefixer->modify('meta.assigned.user_id') => array_values($owner_ids) ],
+                ];
+            }
 
-        if ($this->acl_helper->doesModuleUseEmployeeRelationship($this->module)) {
-            $filters[] = [
-                'terms' => [ $this->prefixer->modify('employee_id') => $this->getOwnerIds($user_id) ],
-            ];
-        }
+            if ($this->acl_helper->doesModuleUseEmployeeRelationship($this->module)) {
+                $filters[] = [
+                    'terms' => [ $this->prefixer->modify('employee_id') => array_values($owner_ids) ],
+                ];
+            }
 
         if (empty($filters) && isset($bean->field_defs['created_by'])) {
             $filters[] = [
@@ -80,7 +86,7 @@ class BaseListACL
                     'path' => 'security_groups',
                     'query' => [
                         'terms' => [
-                            'security_groups.id.keyword' => $group_ids,
+                            'security_groups.id.keyword' => array_values($group_ids),
                         ],
                     ],
                     'ignore_unmapped' => true,
@@ -113,7 +119,8 @@ class BaseListACL
         /** @var \UsersController $controller */
         $controller = $controller_factory::getController('Users');
         $subordinates_ids = $controller::getIDOfSubordinates([$user_id]);
-        return array_merge([$user_id], $subordinates_ids);
+        $all_ids = array_merge([$user_id], is_array($subordinates_ids) ? $subordinates_ids : []);
+        return array_values(array_filter($all_ids, fn($id) => $id !== null && $id !== ''));
     }
 
     protected function getSecurityGroupIds(string $user_id): array
@@ -130,6 +137,6 @@ class BaseListACL
             $group_ids[] = $row['securitygroup_id'];
         }
 
-        return $group_ids;
+        return array_values(array_filter(array_unique($group_ids), fn($id) => $id !== null && $id !== ''));
     }
 }

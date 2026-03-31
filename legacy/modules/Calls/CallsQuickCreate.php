@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+ #[\AllowDynamicProperties]
  class CallsQuickCreate extends QuickCreate
  {
 	 public $javascript;
@@ -91,9 +92,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 		 }
  
 		 $this->ss->assign("DATE_START", $focus->date_start);
-		 $this->ss->assign("TIME_START", substr($focus->time_start, 0, 5));
-		 $time_start_hour = (int)substr($focus->time_start, 0, 2);
-		 $time_start_minutes = substr($focus->time_start, 3, 5);
+		 $this->ss->assign("TIME_START", substr((string) $focus->time_start, 0, 5));
+		 $time_start_hour = (int)substr((string) $focus->time_start, 0, 2);
+		 $time_start_minutes = substr((string) $focus->time_start, 3, 5);
  
 		 if ($time_start_minutes > 0 && $time_start_minutes < 15) {
 			 $time_start_minutes = "15";
@@ -119,21 +120,21 @@ if (!defined('sugarEntry') || !sugarEntry) {
 		 $start_at = 0;
  
 		 $time_pref = $timedate->get_time_format();
-		 if (strpos($time_pref, 'a') || strpos($time_pref, 'A')) {
-			 $num_of_hours = 13;
-			 $start_at = 1;
- 
-			 // It's important to do this block first before we recalculate $time_start_hour
-			 $options = strpos($time_pref, 'a') ? $app_list_strings['dom_meridiem_lowercase'] : $app_list_strings['dom_meridiem_uppercase'];
-			 if (strpos($time_pref, 'a')) {
-				 $this->ss->assign("TIME_MERIDIEM", get_select_options_with_id($options, strpos($focus->time_start, 'a') ? 'am' : 'pm'));
-			 } else {
-				 $this->ss->assign("TIME_MERIDIEM", get_select_options_with_id($options, strpos($focus->time_start, 'A') ? 'AM' : 'PM'));
-			 }
- 
-			 // the $num_of_hours array is keyed by values 01, 02, ... 12 for meridiem times
-			 $time_start_hour = $time_start_hour < 10 ? '0'.$time_start_hour : $time_start_hour;
-		 }
+		 if (strpos((string) $time_pref, 'a') || strpos((string) $time_pref, 'A')) {
+            $num_of_hours = 13;
+            $start_at = 1;
+
+            // It's important to do this block first before we recalculate $time_start_hour
+            $options = strpos((string) $time_pref, 'a') ? $app_list_strings['dom_meridiem_lowercase'] : $app_list_strings['dom_meridiem_uppercase'];
+            if (strpos((string) $time_pref, 'a')) {
+                $this->ss->assign("TIME_MERIDIEM", get_select_options_with_id($options, strpos((string) $focus->time_start, 'a') ? 'am' : 'pm'));
+            } else {
+                $this->ss->assign("TIME_MERIDIEM", get_select_options_with_id($options, strpos((string) $focus->time_start, 'A') ? 'AM' : 'PM'));
+            }
+
+            // the $num_of_hours array is keyed by values 01, 02, ... 12 for meridiem times
+            $time_start_hour = $time_start_hour < 10 ? '0'.$time_start_hour : $time_start_hour;
+        }
  
 		 for ($i = $start_at; $i < $num_of_hours; $i ++) {
 			 $i = $i."";

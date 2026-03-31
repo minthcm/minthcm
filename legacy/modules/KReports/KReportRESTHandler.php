@@ -11,57 +11,58 @@
  * You can contact us at info@kreporter.org
  * ****************************************************************************** */
 
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
+require_once 'modules/KReports/utils.php';
 
-
-if (!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
-require_once('modules/KReports/utils.php');
-
+#[\AllowDynamicProperties]
 class KReporterRESTHandler
 {
 
-    function __construct()
+    public function __construct()
     {
 
     }
 
-    function getCurrencies()
+    public function getCurrencies()
     {
         $curResArray = $GLOBALS['db']->query('SELECT id, symbol, conversion_rate FROM currencies WHERE deleted = \'0\'');
 
         $curArray = array();
         $curArray['-99'] = array(
             'symbol' => $GLOBALS['sugar_config']['default_currency_symbol'],
-            'conversion_rate' => 1
+            'conversion_rate' => 1,
         );
         while ($thisCurEntry = $GLOBALS['db']->fetchByAssoc($curResArray)) {
             $curArray[$thisCurEntry['id']] = array(
                 'symbol' => $thisCurEntry['symbol'],
-                'conversion_rate' => $thisCurEntry['conversion_rate']
+                'conversion_rate' => $thisCurEntry['conversion_rate'],
             );
         }
 
         return $curArray;
     }
 
-    function getWhereFunctions()
+    public function getWhereFunctions()
     {
         $retarray = array();
         $retarray[] = array(
             'field' => '',
-            'description' => '-'
+            'description' => '-',
         );
         $customFunctionInclude = '';
         $kreportCustomFunctions = array();
-        include('modules/KReports/kreportsConfig.php');
-        if ($customFunctionInclude != '') {
-            include($customFunctionInclude);
+        include 'modules/KReports/kreportsConfig.php';
+        if ('' != $customFunctionInclude) {
+            include $customFunctionInclude;
             if (is_array($kreportCustomFunctions) && count($kreportCustomFunctions)
                 > 0) {
                 foreach ($kreportCustomFunctions as $functionname => $functiondescription) {
                     $retarray[] = array(
                         'field' => $functionname,
-                        'description' => $functiondescription
+                        'description' => $functiondescription,
                     );
                 }
             }
@@ -70,19 +71,19 @@ class KReporterRESTHandler
         return $retarray;
     }
 
-    function getLayouts()
+    public function getLayouts()
     {
-        include('modules/KReports/config/KReportLayouts.php');
+        include 'modules/KReports/config/KReportLayouts.php';
         $layouts = array();
         $layouts[] = array(
             'name' => '-',
-            'count' => 0
+            'count' => 0,
         );
         if (is_array($kreportLayouts)) {
             foreach ($kreportLayouts as $layoutName => $layoutData) {
                 $layouts[] = array(
                     'name' => $layoutName,
-                    'count' => count($layoutData['items'])
+                    'count' => count($layoutData['items']),
                 );
             }
         }
@@ -90,7 +91,7 @@ class KReporterRESTHandler
         return $layouts;
     }
 
-    function getBuckets()
+    public function getBuckets()
     {
         global $db;
         $buckets = array();
@@ -108,21 +109,21 @@ class KReporterRESTHandler
         return $buckets;
     }
 
-    function getVizColors()
+    public function getVizColors()
     {
         $colors = [];
-        include('modules/KReports/config/KReportColors.php');
+        include 'modules/KReports/config/KReportColors.php';
         foreach ($kreportColors as $colorSchema => $colorDetails) {
             $colors[] = array(
                 'id' => $colorSchema,
                 'name' => $colorDetails['name'],
-                'colors' => implode('*', $colorDetails['colors'])
+                'colors' => implode('*', $colorDetails['colors']),
             );
         }
         return $colors;
     }
 
-    function getSysinfo()
+    public function getSysinfo()
     {
         global $sugar_config, $db, $current_user;
 
@@ -137,7 +138,7 @@ class KReporterRESTHandler
         );
     }
 
-    function getModuleFields($module)
+    public function getModuleFields($module)
     {
         global $current_language, $beanFiles, $beanList;
 
@@ -152,8 +153,8 @@ class KReporterRESTHandler
                 $retarray[] = array(
                     'field' => $fieldname,
                     'description' => isset($fielddefs['vname']) ? isset($langArray[$fielddefs['vname']])
-                        ? $langArray[$fielddefs['vname']] : $fielddefs['vname'] : $fieldname,
-                    'type' => $fielddefs['type']
+                    ? $langArray[$fielddefs['vname']] : $fielddefs['vname'] : $fieldname,
+                    'type' => $fielddefs['type'],
                 );
             }
         }
@@ -161,7 +162,7 @@ class KReporterRESTHandler
         return $retarray;
     }
 
-    function get_user_datetime_format()
+    public function get_user_datetime_format()
     {
         global $current_user;
         $timef = $current_user->getPreference('timef');
@@ -183,7 +184,7 @@ class KReporterRESTHandler
         return array('timef' => $timef, 'datef' => $datef);
     }
 
-    function get_user_prefs()
+    public function get_user_prefs()
     {
         global $current_user;
         $timef = $current_user->getPreference('timef');
@@ -213,7 +214,7 @@ class KReporterRESTHandler
         return array('timef' => $timef, 'datef' => $datef, 'precision' => $precision);
     }
 
-    function get_users_list($params = array())
+    public function get_users_list($params = array())
     {
         $responseArray = array();
         $tmpBean = new User();
@@ -227,10 +228,12 @@ class KReporterRESTHandler
                 $whereParts = array();
                 $searchtermfields = json_decode($params['searchtermfields'], true);
                 foreach ($searchtermfields as $searchfield) {
-                    $whereParts[] = "users.$searchfield LIKE '%".$params['searchterm']."%'";
+                    $whereParts[] = "users.$searchfield LIKE '%" . $params['searchterm'] . "%'";
                 }
-                if (!empty($whereParts))
-                        $where .= "(".implode(" OR ", $whereParts).")";
+                if (!empty($whereParts)) {
+                    $where .= "(" . implode(" OR ", $whereParts) . ")";
+                }
+
             }
         }
         if (isset($params['limit'])) {
@@ -254,21 +257,20 @@ class KReporterRESTHandler
         return $responseArray;
     }
 
-    function whereInitialize()
+    public function whereInitialize()
     {
-        include('modules/KReports/config/KReportWhereOperators.php');
+        include 'modules/KReports/config/KReportWhereOperators.php';
         return array(
-            'operatorCount' => $kreporterWhereOperatorCount
+            'operatorCount' => $kreporterWhereOperatorCount,
         );
     }
 
-    function geAutoCompletevalues($path, $query, $start, $limit)
+    public function geAutoCompletevalues($path, $query, $start, $limit)
     {
         global $beanFiles, $beanList, $db;
 
         $returnArray = array();
         $fieldArray = array();
-
 
         // explode the path
         $pathArray = explode('::', $path);
@@ -278,10 +280,10 @@ class KReporterRESTHandler
         $moduleArray = explode(':', $pathArray[count($pathArray) - 2]);
 
         // load the parent module
-        require_once($beanFiles[$beanList[$moduleArray[1]]]);
+        require_once $beanFiles[$beanList[$moduleArray[1]]];
         $parentModule = new $beanList[$moduleArray[1]];
 
-        if ($moduleArray[0] == 'link') {
+        if ('link' == $moduleArray[0]) {
             // load the Relationshop to get the module
             $parentModule->load_relationship($moduleArray[2]);
 
@@ -290,42 +292,46 @@ class KReporterRESTHandler
             //ORIGINAL: $parentModule->$moduleArray[2]->getRelatedModuleName();
             $moduleArrayEl = $moduleArray[2];
             $thisModuleName = $parentModule->$moduleArrayEl->getRelatedModuleName();
-            require_once($beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]]);
+            require_once $beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]];
             $thisModule = new $beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()];
             //END
-        } else $thisModule = $parentModule;
+        } else {
+            $thisModule = $parentModule;
+        }
 
-        if ($thisModule->table_name != '') {
+        if ('' != $thisModule->table_name) {
 
             // determine the field name we need to go for
             $fieldName = 'name';
             // #bug 520 changed to object rather than array.
-            if ($fieldArray[0] == 'field' && isset($thisModule->field_defs[$fieldArray[1]])
-                && $fieldArray[1] != 'id') $fieldName = $fieldArray[1];
+            if ('field' == $fieldArray[0] && isset($thisModule->field_defs[$fieldArray[1]])
+                && 'id' != $fieldArray[1]) {
+                $fieldName = $fieldArray[1];
+            }
 
-            $query_res = $db->limitQuery("SELECT id, ".$fieldName." FROM $thisModule->table_name WHERE ".(!empty($query)
-                    ? "name like '%".$query."%' AND" : "")." deleted='0' ORDER BY name ASC", (!empty($start)
-                    ? $start : 0), (!empty($limit) ? $limit : 25));
+            $query_res = $db->limitQuery("SELECT id, " . $fieldName . " FROM $thisModule->table_name WHERE " . (!empty($query)
+                ? "name like '%" . $query . "%' AND" : "") . " deleted='0' ORDER BY name ASC", (!empty($start)
+                ? $start : 0), (!empty($limit) ? $limit : 25));
             while ($thisEntry = $db->fetchByAssoc($query_res)) {
                 $returnArray['data'][] = array('itemid' => $thisEntry['id'], 'itemtext' => $thisEntry[$fieldName]);
             }
 
             // get count
-            $totalRec = $db->fetchByAssoc($db->query("SELECT count(*) as count FROM $thisModule->table_name WHERE ".(!empty($query)
-                        ? "name like '%".$query."%' AND" : "")." deleted='0'"));
+            $totalRec = $db->fetchByAssoc($db->query("SELECT count(*) as count FROM $thisModule->table_name WHERE " . (!empty($query)
+                ? "name like '%" . $query . "%' AND" : "") . " deleted='0'"));
             $returnArray['total'] = $totalRec['count'];
         }
 
         return $returnArray;
     }
 
-    function getWhereOperators($path, $grouping, $designer)
+    public function getWhereOperators($path, $grouping, $designer)
     {
         global $app_list_strings, $beanFiles, $beanList, $db, $current_language;
 
         $app_list_strings = return_app_list_strings_language($current_language);
 
-        include('modules/KReports/config/KReportWhereOperators.php');
+        include 'modules/KReports/config/KReportWhereOperators.php';
 
         //2013-01-18 take in account the users language
         $mod_strings = return_module_language($GLOBALS['current_language'], 'KReports');
@@ -333,19 +339,20 @@ class KReporterRESTHandler
         $retarray[] = array(
             'operator' => 'ignore',
             'values' => $kreporterWhereOperatorCount['ignore'],
-            'display' => $mod_strings['LBL_OP_IGNORE']
+            'display' => $mod_strings['LBL_OP_IGNORE'],
         );
-
 
         //2013-08-07 check if path is set
         if (empty($path)) {
             // parse the options into the return array
-            foreach ($kreporterWhereOperatorTypes[$kreporterWhereOperatorAssignments['fixed']] as $operator)
+            foreach ($kreporterWhereOperatorTypes[$kreporterWhereOperatorAssignments['fixed']] as $operator) {
                 $retarray[] = array(
                     'operator' => $operator,
                     'values' => $kreporterWhereOperatorCount[$operator],
-                    'display' => $mod_strings['LBL_OP_'.strtoupper($operator)]
+                    'display' => $mod_strings['LBL_OP_' . strtoupper($operator)],
                 );
+            }
+
         } else {
 
             // explode the path
@@ -356,11 +363,11 @@ class KReporterRESTHandler
             $moduleArray = explode(':', $pathArray[count($pathArray) - 2]);
 
             // load the parent module
-            require_once($beanFiles[$beanList[$moduleArray[1]]]);
+            require_once $beanFiles[$beanList[$moduleArray[1]]];
             $parentModule = new $beanList[$moduleArray[1]];
 
             // get the module we need to determine the type
-            if ($moduleArray[0] == 'link') {
+            if ('link' == $moduleArray[0]) {
                 // load the Relationshop to get the module
                 $parentModule->load_relationship($moduleArray[2]);
 
@@ -368,89 +375,98 @@ class KReporterRESTHandler
                 //PHP7 - 5.6 COMPAT
                 //ORIGINAL: require_once($beanFiles[$beanList[$parentModule->$moduleArray[2]->getRelatedModuleName()]]);
                 $moduleArrayEl = $moduleArray[2];
-                require_once($beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]]);
+                require_once $beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]];
                 $thisModule = new $beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()];
                 //END
             } //2013-09-25 add support for relate fields BUG #498
-            elseif ($moduleArray[0] == 'relate') {
-                require_once($beanFiles[$beanList[$moduleArray['1']]]);
+            elseif ('relate' == $moduleArray[0]) {
+                require_once $beanFiles[$beanList[$moduleArray['1']]];
                 $nodeModule = new $beanList[$moduleArray['1']]();
                 $thisModuleName = $nodeModule->field_defs[$moduleArray[2]]['module'];
-                require_once($beanFiles[$beanList[$thisModuleName]]);
+                require_once $beanFiles[$beanList[$thisModuleName]];
                 $thisModule = new $beanList[$thisModuleName]();
-            } else $thisModule = $parentModule;
+            } else {
+                $thisModule = $parentModule;
+            }
 
             //2013-02-26 ... added operators for audit fields
-            if ($moduleArray[0] == 'audit') {
+            if ('audit' == $moduleArray[0]) {
                 //2013-04-12 handle where operators for types ... Bug #465
                 switch ($fieldArray[1]) {
                     case 'date_created':
-                        foreach ($kreporterWhereOperatorTypes['date'] as $operator)
+                        foreach ($kreporterWhereOperatorTypes['date'] as $operator) {
                             $retarray[] = array(
                                 'operator' => $operator,
                                 'values' => $kreporterWhereOperatorCount[$operator],
-                                'display' => $mod_strings['LBL_OP_'.strtoupper($operator)]
+                                'display' => $mod_strings['LBL_OP_' . strtoupper($operator)],
                             );
+                        }
+
                         break;
                     default:
-                        foreach ($kreporterWhereOperatorTypes['varchar'] as $operator)
+                        foreach ($kreporterWhereOperatorTypes['varchar'] as $operator) {
                             $retarray[] = array(
                                 'operator' => $operator,
                                 'values' => $kreporterWhereOperatorCount[$operator],
-                                'display' => $mod_strings['LBL_OP_'.strtoupper($operator)]
+                                'display' => $mod_strings['LBL_OP_' . strtoupper($operator)],
                             );
+                        }
+
                         break;
                 }
             }
 
             // special handling for Kreporttype if we have an eval array
-            if ($thisModule->field_defs[$fieldArray[1]]['type'] == 'kreporter' && is_array($thisModule->field_defs[$fieldArray[1]]['eval'])) {
-                foreach ($thisModule->field_defs[$fieldArray[1]]['eval']['selection'] as $operator => $eval)
+            if ('kreporter' == $thisModule->field_defs[$fieldArray[1]]['type'] && is_array($thisModule->field_defs[$fieldArray[1]]['eval'])) {
+                foreach ($thisModule->field_defs[$fieldArray[1]]['eval']['selection'] as $operator => $eval) {
                     $retarray[] = array(
                         'operator' => $operator,
                         'values' => $kreporterWhereOperatorCount[$operator],
-                        'display' => $mod_strings['LBL_OP_'.strtoupper($operator)]
+                        'display' => $mod_strings['LBL_OP_' . strtoupper($operator)],
                     );
+                }
 
                 //2013-02-26 ... add reference also for kreporter fields
                 if ($designer) {
                     $retarray[] = array(
                         'operator' => 'reference',
                         'values' => 1,
-                        'display' => $mod_strings['LBL_OP_REFERENCE']
+                        'display' => $mod_strings['LBL_OP_REFERENCE'],
                     );
                 }
             } else {
                 // parse the options into the return array
                 // Mint start
-                if ($fieldArray[1] == 'first_name' || $fieldArray[1] == 'last_name') {
+                if ('first_name' == $fieldArray[1] || 'last_name' == $fieldArray[1]) {
                     $wheretype = $kreporterWhereOperatorAssignments['name2'];
                 } else {
                     $wheretype = $kreporterWhereOperatorAssignments[isset($thisModule->field_defs[$fieldArray[1]]['kreporttype'])
-                            ? $thisModule->field_defs[$fieldArray[1]]['kreporttype']
-                            : $thisModule->field_defs[$fieldArray[1]]['type']];
+                        ? $thisModule->field_defs[$fieldArray[1]]['kreporttype']
+                        : $thisModule->field_defs[$fieldArray[1]]['type']];
                 }
                 // Mint end
-                if (!empty($grouping) && isset($kreporterWhereOperatorTypes[$wheretype.'grouped']))
-                        $wheretype .= 'grouped';
+                if (!empty($grouping) && isset($kreporterWhereOperatorTypes[$wheretype . 'grouped'])) {
+                    $wheretype .= 'grouped';
+                }
 
-                foreach ($kreporterWhereOperatorTypes[$wheretype] as $operator)
+                foreach ($kreporterWhereOperatorTypes[$wheretype] as $operator) {
                     $retarray[] = array(
                         'operator' => $operator,
                         'values' => $kreporterWhereOperatorCount[$operator],
-                        'display' => $mod_strings['LBL_OP_'.strtoupper($operator)]
+                        'display' => $mod_strings['LBL_OP_' . strtoupper($operator)],
                     );
+                }
 
                 if ($designer) {
                     $retarray[] = array(
                         'operator' => 'function',
                         'values' => 1,
-                        'display' => $mod_strings['LBL_OP_FUNCTION']
+                        'display' => $mod_strings['LBL_OP_FUNCTION'],
                     );
                     $retarray[] = array(
                         'operator' => 'reference',
                         'values' => 1,
-                        'display' => $mod_strings['LBL_OP_REFERENCE']
+                        'display' => $mod_strings['LBL_OP_REFERENCE'],
                     );
                 }
             }
@@ -459,7 +475,7 @@ class KReporterRESTHandler
         return $retarray;
     }
 
-    function getEnumOptions($path, $grouping = '', $operators = array())
+    public function getEnumOptions($path, $grouping = '', $operators = array())
     {
 
         global $current_language, $beanFiles, $beanList, $db;
@@ -475,19 +491,18 @@ class KReporterRESTHandler
         $fieldArray = explode(':', $pathArray[count($pathArray) - 1]);
         $moduleArray = explode(':', $pathArray[count($pathArray) - 2]);
 
-
         // load the parent module
-        require_once($beanFiles[$beanList[$moduleArray[1]]]);
+        require_once $beanFiles[$beanList[$moduleArray[1]]];
         $parentModule = new $beanList[$moduleArray[1]];
 
         // Mint start
         $fieldType = "";
-        if ($fieldArray[1] == 'first_name' || $fieldArray[1] == 'last_name') {
+        if ('first_name' == $fieldArray[1] || 'last_name' == $fieldArray[1]) {
             $fieldType = 'name2';
         }
         // Mint end
 
-        if ($moduleArray[0] == 'link' || $moduleArray[0] == 'relate') {
+        if ('link' == $moduleArray[0] || 'relate' == $moduleArray[0]) {
             switch ($moduleArray[0]) {
                 case 'link':
                     // load the Relationshop to get the module
@@ -498,30 +513,30 @@ class KReporterRESTHandler
                     //ORIGINAL: $parentModule->$moduleArray[2]->getRelatedModuleName();
                     $moduleArrayEl = $moduleArray[2];
                     $thisModuleName = $parentModule->$moduleArrayEl->getRelatedModuleName();
-                    require_once($beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]]);
+                    require_once $beanFiles[$beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()]];
                     $thisModule = new $beanList[$parentModule->$moduleArrayEl->getRelatedModuleName()];
                     //END
                     break;
                 //2013-09-25 add support for relate fields BUG #499
                 case 'relate':
-                    require_once($beanFiles[$beanList[$moduleArray['1']]]);
+                    require_once $beanFiles[$beanList[$moduleArray['1']]];
                     $nodeModule = new $beanList[$moduleArray['1']]();
                     $thisModuleName = $nodeModule->field_defs[$moduleArray[2]]['module'];
-                    require_once($beanFiles[$beanList[$thisModuleName]]);
+                    require_once $beanFiles[$beanList[$thisModuleName]];
                     $thisModule = new $beanList[$thisModuleName]();
                     break;
             }
 
             //2013-02-28 if we have the kreporttype set ... override the type
-            if ($thisModule->field_defs[$fieldArray[1]]['type'] == 'kreporter' && !empty($thisModule->field_defs[$fieldArray[1]]['kreporttype']))
-                    $thisModule->field_defs[$fieldArray[1]]['type'] = $thisModule->field_defs[$fieldArray[1]]['kreporttype'];
-
+            if ('kreporter' == $thisModule->field_defs[$fieldArray[1]]['type'] && !empty($thisModule->field_defs[$fieldArray[1]]['kreporttype'])) {
+                $thisModule->field_defs[$fieldArray[1]]['type'] = $thisModule->field_defs[$fieldArray[1]]['kreporttype'];
+            }
 
             // pars the otpions into the return array
             // Mint start
             if (empty($fieldType)) {
                 $fieldType = $thisModule->field_defs[$fieldArray[1]]['kreporttype']
-                        ?: $thisModule->field_defs[$fieldArray[1]]['type'];
+                ?: $thisModule->field_defs[$fieldArray[1]]['type'];
             }
             switch ($fieldType) {
                 // Mint end
@@ -529,14 +544,16 @@ class KReporterRESTHandler
                 case 'radioenum':
                 case 'multienum':
                     if ($thisModule->field_defs[$fieldArray[1]]['function']) {
-                        require_once($thisModule->field_defs[$fieldArray[1]]['function']['include']);
+                        require_once $thisModule->field_defs[$fieldArray[1]]['function']['include'];
                         $functionName = $thisModule->field_defs[$fieldArray[1]]['function']['name'];
                         $returnArray = $functionName($thisModule, $fieldArray[1], '', 'KReporterOptions', $operators);
                     } else {
                         foreach ($app_list_strings[$thisModule->field_defs[$fieldArray[1]]['options']] as $value => $text) {
-                            if ($value !== "")
-                                    $returnArray[] = array('value' => $value, 'text' => (!empty($text)
-                                        ? $text : '-'));
+                            if ("" !== $value) {
+                                $returnArray[] = array('value' => $value, 'text' => (!empty($text)
+                                    ? $text : '-'));
+                            }
+
                         }
                     }
                     break;
@@ -598,14 +615,14 @@ class KReporterRESTHandler
         } else {
 
             //2013-02-28 if we have the kreporttype set ... override the type
-            if ($parentModule->field_defs[$fieldArray[1]]['type'] == 'kreporter'
-                && !empty($parentModule->field_defs[$fieldArray[1]]['kreporttype']))
-                    $parentModule->field_defs[$fieldArray[1]]['type'] = $parentModule->field_defs[$fieldArray[1]]['kreporttype'];
+            if ('kreporter' == $parentModule->field_defs[$fieldArray[1]]['type'] && !empty($parentModule->field_defs[$fieldArray[1]]['kreporttype'])) {
+                $parentModule->field_defs[$fieldArray[1]]['type'] = $parentModule->field_defs[$fieldArray[1]]['kreporttype'];
+            }
 
             // Mint start
             if (empty($fieldType)) {
                 $fieldType = $parentModule->field_defs[$fieldArray[1]]['kreporttype']
-                        ?: $parentModule->field_defs[$fieldArray[1]]['type'];
+                ?: $parentModule->field_defs[$fieldArray[1]]['type'];
             }
             // we have the root module
             switch (strtolower($fieldType)) {
@@ -615,17 +632,19 @@ class KReporterRESTHandler
                 case 'multienum':
                 case 'coloredenum':
                     if ($parentModule->field_defs[$fieldArray[1]]['function']) {
-                        require_once($parentModule->field_defs[$fieldArray[1]]['function']['include']);
+                        require_once $parentModule->field_defs[$fieldArray[1]]['function']['include'];
                         $functionName = $parentModule->field_defs[$fieldArray[1]]['function']['name'];
-                        if(isset($parentModule->field_defs[$fieldArray[1]]['function']['additional_params'])){
+                        if (isset($parentModule->field_defs[$fieldArray[1]]['function']['additional_params'])) {
                             $operators['additional_params'] = $parentModule->field_defs[$fieldArray[1]]['function']['additional_params'];
                         }
                         $returnArray = formatEnumArray($functionName($parentModule, $fieldArray[1], '', 'KReporterOptions', $operators));
                     } else {
                         foreach ($app_list_strings[$parentModule->field_defs[$fieldArray[1]]['options']] as $value => $text) {
-                            if ($value !== "")
-                                    $returnArray[] = array('value' => $value, 'text' => (!empty($text)
-                                        ? $text : '-'));
+                            if ("" !== $value) {
+                                $returnArray[] = array('value' => $value, 'text' => (!empty($text)
+                                    ? $text : '-'));
+                            }
+
                         }
                     }
                     break;
@@ -681,20 +700,22 @@ class KReporterRESTHandler
                     $groupedReturnArray[] = array('value' => $mappingDetail['mappingvalue'],
                         'text' => $mappingDetail['mappingvalue']);
                     foreach ($mappingDetail['children'] as $mappedValue) {
-                        foreach ($returnArray as $returnIndex => $returnEntry)
-                            if ($returnEntry['value'] == $mappedValue)
-                                    unset($returnArray[$returnIndex]);
+                        foreach ($returnArray as $returnIndex => $returnEntry) {
+                            if ($returnEntry['value'] == $mappedValue) {
+                                unset($returnArray[$returnIndex]);
+                            }
+                        }
+
                     }
                 }
                 $returnArray = array_merge($groupedReturnArray, $returnArray);
             }
         }
 
-
         return $returnArray;
     }
 
-    function getFields($nodeid)
+    public function getFields($nodeid)
     {
         global $_REQUEST, $beanFiles, $beanList;
         $pathArray = explode('::', $nodeid);
@@ -706,10 +727,10 @@ class KReporterRESTHandler
         $returnArray = array();
 
         // check if we have the root module or a union module ...
-        if ($nodeArray[0] == 'root' || preg_match('/union/', $nodeArray[0]) == 1) {
+        if ('root' == $nodeArray[0] || preg_match('/union/', $nodeArray[0]) == 1) {
             return $this->buildFieldArray($nodeArray['1']);
         }
-        if ($nodeArray[0] == 'link') {
+        if ('link' == $nodeArray[0]) {
             $nodeModule = BeanFactory::getBean($nodeArray['1']);
             $nodeModule->load_relationship($nodeArray['2']);
 
@@ -721,15 +742,15 @@ class KReporterRESTHandler
         }
 
         //2013-01-09 add support for Studio Relate Fields
-        if ($nodeArray[0] == 'relate') {
-            require_once($beanFiles[$beanList[$nodeArray['1']]]);
+        if ('relate' == $nodeArray[0]) {
+            require_once $beanFiles[$beanList[$nodeArray['1']]];
             $nodeModule = new $beanList[$nodeArray['1']];
 
             $returnArray = $this->buildFieldArray($nodeModule->field_defs[$nodeArray[2]]['module']);
         }
 
-        if ($nodeArray[0] == 'relationship') {
-            require_once($beanFiles[$beanList[$nodeArray['1']]]);
+        if ('relationship' == $nodeArray[0]) {
+            require_once $beanFiles[$beanList[$nodeArray['1']]];
             $nodeModule = new $beanList[$nodeArray['1']];
             $nodeModule->load_relationship($nodeArray['2']);
 
@@ -739,14 +760,14 @@ class KReporterRESTHandler
             $returnArray = $this->buildLinkFieldArray($nodeModule->$nodeArrayEl);
             //END
         }
-        if ($nodeArray[0] == 'audit') {
+        if ('audit' == $nodeArray[0]) {
             $returnArray = $this->buildAuditFieldArray();
         }
 
         return $returnArray;
     }
 
-    function getNodes($nodeid)
+    public function getNodes($nodeid)
     {
         // main processing
         global $beanFiles, $beanList;
@@ -759,12 +780,12 @@ class KReporterRESTHandler
 
         $returnArray = array();
 
-        if ($nodeArray[0] == 'root' || preg_match('/union/', $nodeArray[0]) > 0) {
+        if ('root' == $nodeArray[0] || preg_match('/union/', $nodeArray[0]) > 0) {
             return $this->buildNodeArray($nodeArray['1']);
         }
 
-        if ($nodeArray[0] == 'link') {
-            require_once($beanFiles[$beanList[$nodeArray['1']]]);
+        if ('link' == $nodeArray[0]) {
+            require_once $beanFiles[$beanList[$nodeArray['1']]];
             $nodeModule = new $beanList[$nodeArray['1']];
             $nodeModule->load_relationship($nodeArray['2']);
             //PHP7 - 5.6 COMPAT
@@ -775,8 +796,8 @@ class KReporterRESTHandler
         }
 
         //2013-01-09 add support for Studio Relate Fields
-        if ($nodeArray[0] == 'relate') {
-            require_once($beanFiles[$beanList[$nodeArray['1']]]);
+        if ('relate' == $nodeArray[0]) {
+            require_once $beanFiles[$beanList[$nodeArray['1']]];
             $nodeModule = new $beanList[$nodeArray['1']];
 
             return $this->buildNodeArray($nodeModule->field_defs[$nodeArray[2]]['module']);
@@ -789,9 +810,9 @@ class KReporterRESTHandler
     private function buildNodeArray($module, $thisLink = '')
     {
         global $beanFiles, $beanList;
-        require_once('include/utils.php');
+        require_once 'include/utils.php';
 
-        include('modules/KReports/kreportsConfig.php');
+        include 'modules/KReports/kreportsConfig.php';
 
         $returnArray = array();
 
@@ -805,118 +826,127 @@ class KReporterRESTHandler
             // print_r($GLOBALS['dictionary']);//
             // 2011-07-21 add audit table
             if (isset($GLOBALS['dictionary'][$nodeModule->object_name]['audited'])
-                && $GLOBALS['dictionary'] [$nodeModule->object_name]['audited'])
-                    $functionsArray[] = array(
+                && $GLOBALS['dictionary'][$nodeModule->object_name]['audited']) {
+                $functionsArray[] = array(
                     'path' => /* ($requester != '' ? $requester. '#': '') . */
-                    'audit:'.$module.':audit',
+                    'audit:' . $module . ':audit',
                     'module' => 'auditRecords',
                     'leaf' => true);
+            }
 
             //2011-08-15 add relationship fields in many-to.many relationships
             //2012-03-20 change for 6.4
-            if (
-                $thisLink != '' && get_class($thisLink) == 'Link2'
+            if ('' != $thisLink && get_class($thisLink) == 'Link2'
             ) {
-                if ($thisLink != '' && $thisLink->_relationship->relationship_type
-                    == 'many-to-many')
-                        $functionsArray[] = array(
+                if ('' != $thisLink && 'many-to-many'
+                    == $thisLink->_relationship->relationship_type) {
+                    $functionsArray[] = array(
                         'path' => /*  ($requester != '' ? $requester. '#': '') . */
-                        'relationship:'.$thisLink->focus->module_dir /* $module */.':'.$thisLink->name,
+                        'relationship:' . $thisLink->focus->module_dir/* $module */ . ':' . $thisLink->name,
                         'module' => 'relationship Fields',
-                        'leaf' => true
+                        'leaf' => true,
                     );
+                }
+
             } else {
-                if ($thisLink != '' && $thisLink->_relationship->relationship_type
-                    == 'many-to-many')
-                        $functionsArray[] = array(
+                if ('' != $thisLink && 'many-to-many'
+                    == $thisLink->_relationship->relationship_type) {
+                    $functionsArray[] = array(
                         'path' => /*  ($requester != '' ? $requester. '#': '') . */
-                        'relationship:'.$thisLink->_bean->module_dir /* $module */.':'.$thisLink->name,
+                        'relationship:' . $thisLink->_bean->module_dir/* $module */ . ':' . $thisLink->name,
                         'name' => 'relationship Fields',
-                        'leaf' => true
+                        'leaf' => true,
                     );
+                }
+
             }
 
             foreach ($nodeModule->field_defs as $field_name => $field_defs) {
                 // 2011-03-23 also exculde the excluded modules from the config in the Module Tree
                 //if ($field_defs['type'] == 'link' && (!isset($field_defs['module']) || (isset($field_defs['module']) && array_search($field_defs['module'], $excludedModules) == false))) {
-                if ($field_defs['type'] == 'link' && (!isset($field_defs['reportable'])
-                    || (isset($field_defs ['reportable']) && $field_defs['reportable']))
+                if ('link' == $field_defs['type'] && (!isset($field_defs['reportable'])
+                    || (isset($field_defs['reportable']) && $field_defs['reportable']))
                     && (!isset($field_defs['module']) || (isset($field_defs['module'])
-                    && array_search($field_defs['module'], $excludedModules) == false))) {
-
+                        && array_search($field_defs['module'], $excludedModules) == false))) {
 
                     //BUGFIX 2010/07/13 to display alternative module name if vname is not maintained
-                    if (isset($field_defs['vname']))
-                            $returnArray[] = array(
+                    if (isset($field_defs['vname'])) {
+                        $returnArray[] = array(
                             'path' => /* ($requester != '' ? $requester. '#': '') . */
-                            'link:'.$module.':'.$field_name,
+                            'link:' . $module . ':' . $field_name,
                             'module' => ((translate($field_defs['vname'], $module))
-                            == "" ? ('['.$field_defs['name'].']') : (translate($field_defs
-                                ['vname'], $module))),
+                                == "" ? ('[' . $field_defs['name'] . ']') : (translate($field_defs
+                                    ['vname'], $module))),
                             'bean' => $nodeModule->$field_name->focus->object_name,
-                            'leaf' => false
+                            'leaf' => false,
                         );
-                    elseif (isset($field_defs['module']))
-                            $returnArray[] = array(
+                    } elseif (isset($field_defs['module'])) {
+                        $returnArray[] = array(
                             'path' => /*  ($requester != '' ? $requester. '#': '') . */
-                            'link:'.$module.':'.$field_name,
+                            'link:' . $module . ':' . $field_name,
                             'module' => translate($field_defs['module'], $module),
                             'bean' => $nodeModule->$field_name->focus->object_name,
-                            'leaf' => false
+                            'leaf' => false,
                         );
-                    else {
+                    } else {
                         $field_defs_rel = $field_defs['relationship'];
                         $returnArray[] = array(
                             'path' => /* ($requester != '' ? $requester. '#': '') . */
-                            'link:'.$module.':'.$field_name,
+                            'link:' . $module . ':' . $field_name,
                             'module' => get_class($nodeModule->$field_defs_rel->_bean), //PHP7 - 5.6 COMPAT $nodeModule->$field_defs['relationship']->_bean
                             'bean' => $nodeModule->$field_name->focus->object_name,
-                            'leaf' => false
+                            'leaf' => false,
                         );
                     }
                 }
 
                 //2013-01-09 add support for Studio Relate Fields
                 // get all relate fields where the link is empty ... those with link we get via the link anyway properly
-                if ($field_defs['type'] == 'relate' && empty($field_defs['link'])
-                    && (!isset($field_defs['reportable']) || (isset($field_defs ['reportable'])
-                    && $field_defs['reportable'])) && (!isset($field_defs['module'])
-                    || (
-                    isset($field_defs['module']) && array_search($field_defs['module'], $excludedModules)
-                    == false))
+                if ('relate' == $field_defs['type'] && empty($field_defs['link'])
+                    && (!isset($field_defs['reportable']) || (isset($field_defs['reportable'])
+                        && $field_defs['reportable'])) && (!isset($field_defs['module'])
+                        || (
+                            isset($field_defs['module']) && array_search($field_defs['module'], $excludedModules)
+                            == false))
                 ) {
-                    if (isset($field_defs['vname']))
-                            $returnArray [] = array(
-                            'path' => 'relate:'.$module.':'.$field_name,
+                    if (isset($field_defs['vname'])) {
+                        $returnArray[] = array(
+                            'path' => 'relate:' . $module . ':' . $field_name,
                             'module' => ((translate($field_defs['vname'], $module))
-                            == "" ? ('['.$field_defs['name'].']') : (translate($field_defs
-                                ['vname'], $module))),
+                                == "" ? ('[' . $field_defs['name'] . ']') : (translate($field_defs
+                                    ['vname'], $module))),
                             'bean' => $field_defs['module'],
-                            'leaf' => false
+                            'leaf' => false,
                         );
-                    elseif (isset($field_defs['module']))
-                            $returnArray[] = array(
-                            'path' => 'relate:'.$module.':'.$field_name,
+                    } elseif (isset($field_defs['module'])) {
+                        $returnArray[] = array(
+                            'path' => 'relate:' . $module . ':' . $field_name,
                             'module' => translate($field_defs['module'], $module),
                             'bean' => $field_defs['module'],
-                            'leaf' => false
+                            'leaf' => false,
                         );
-                    else
-                            $returnArray[] = array(
-                            'path' => 'relate:'.$module.':'.$field_name,
+                    } else {
+                        $returnArray[] = array(
+                            'path' => 'relate:' . $module . ':' . $field_name,
                             'module' => $field_defs['name'],
                             'bean' => $field_defs['module'],
-                            'leaf' => false
+                            'leaf' => false,
                         );
+                    }
+
                 }
             }
         }
         // 2013-08-21 BUG #492 added sorting for the module tree
         usort($returnArray, function ($a, $b) {
-            if (strtolower($a['module']) > strtolower($b['module'])) return 1;
-            elseif (strtolower($a['module']) == strtolower($b['module']))
-                    return 0;
-            else return -1;
+            if (strtolower($a['module']) > strtolower($b['module'])) {
+                return 1;
+            } elseif (strtolower($a['module']) == strtolower($b['module'])) {
+                return 0;
+            } else {
+                return -1;
+            }
+
         });
 
         // 2013-08-21 BUG #492 merge with the basic functional elelements
@@ -926,37 +956,35 @@ class KReporterRESTHandler
     private function buildFieldArray($module)
     {
         global $beanFiles, $beanList;
-        require_once('include/utils.php');
+        require_once 'include/utils.php';
         $returnArray = array();
-        if ($module != '' && $module != 'undefined' && file_exists($beanFiles[$beanList [$module]])) {
-            require_once($beanFiles[$beanList[$module]]);
+        if ('' != $module && 'undefined' != $module && file_exists($beanFiles[$beanList[$module]])) {
+            require_once $beanFiles[$beanList[$module]];
             $nodeModule = new $beanList[$module];
 
             foreach ($nodeModule->field_defs as $field_name => $field_defs) {
-                if ($field_defs['type'] != 'link' && (!isset($field_defs['reportable'])
-                    || (isset($field_defs['reportable']) && $field_defs['reportable']
-                    == true))
+                if ('link' != $field_defs['type'] && (!isset($field_defs['reportable'])
+                    || (isset($field_defs['reportable']) && true
+                        == $field_defs['reportable']))
                     //&& $field_defs['type'] != 'relate'
                     && (!array_key_exists('source', $field_defs) || (array_key_exists('source', $field_defs)
-                    && (
-                    $field_defs['source'] != 'non-db' || ($field_defs['source'] == 'non-db'
-                    && $field_defs['type'] == 'kreporter')
-                    )
+                        && ('non-db' != $field_defs['source'] || ('non-db' == $field_defs['source'] && 'kreporter' == $field_defs['type'])
+                        )
                     ))
                 ) {
                     $returnArray[] = array(
-                        'id' => 'field:'.$field_defs['name'],
+                        'id' => 'field:' . $field_defs['name'],
                         'name' => $field_defs['name'],
                         // in case of a kreporter field return the report_data_type so operators ar processed properly
                         // 2011-05-31 changed to kreporttype returned if fieldttype is kreporter
                         // 2011-10-15 if the kreporttype is set return it
                         //'type' => ($field_defs['type'] == 'kreporter') ? $field_defs['kreporttype'] :  $field_defs['type'],
                         'type' => (isset($field_defs['kreporttype'])) ? $field_defs['kreporttype']
-                            : $field_defs['type'],
+                        : $field_defs['type'],
                         'text' => (translate($field_defs['vname'], $module) != '')
-                            ? translate($field_defs['vname'], $module) : $field_defs['name'],
+                        ? translate($field_defs['vname'], $module) : $field_defs['name'],
                         'leaf' => true,
-                        'options' => $field_defs['options']
+                        'options' => $field_defs['options'],
                     );
                 }
             }
@@ -977,7 +1005,7 @@ class KReporterRESTHandler
             'text' => 'date_created',
             'type' => 'datetime',
             'name' => 'date_created',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -985,7 +1013,7 @@ class KReporterRESTHandler
             'text' => 'created_by',
             'type' => 'varchar',
             'name' => 'created_by',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -993,7 +1021,7 @@ class KReporterRESTHandler
             'text' => 'field_name',
             'type' => 'varchar',
             'name' => 'field_name',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -1001,7 +1029,7 @@ class KReporterRESTHandler
             'text' => 'before_value_string',
             'type' => 'varchar',
             'name' => 'before_value_string',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -1009,7 +1037,7 @@ class KReporterRESTHandler
             'text' => 'after_value_string',
             'type' => 'varchar',
             'name' => 'after_value_string',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -1017,7 +1045,7 @@ class KReporterRESTHandler
             'text' => 'before_value_text',
             'type' => 'text',
             'name' => 'before_value_text',
-            'leaf' => true
+            'leaf' => true,
         );
 
         $returnArray[] = array(
@@ -1025,7 +1053,7 @@ class KReporterRESTHandler
             'text' => 'after_value_text',
             'type' => 'text',
             'name' => 'after_value_text',
-            'leaf' => true
+            'leaf' => true,
         );
         return $returnArray;
     }
@@ -1035,26 +1063,27 @@ class KReporterRESTHandler
 
         global $db;
         // bug #528
-        if ($GLOBALS['db']->dbType == 'oci8')
-                $queryRes = $db->query("SELECT column_name FROM all_tab_columns WHERE  table_name = '".strtoupper($thisLink->_relationship->join_table)."'");
-        else
-                $queryRes = $db->query('describe '.$thisLink->_relationship->join_table);
+        if ('oci8' == $GLOBALS['db']->dbType) {
+            $queryRes = $db->query("SELECT column_name FROM all_tab_columns WHERE  table_name = '" . strtoupper($thisLink->_relationship->join_table) . "'");
+        } else {
+            $queryRes = $db->query('describe ' . $thisLink->_relationship->join_table);
+        }
 
         while ($thisRow = $db->fetchByAssoc($queryRes)) {
             $returnArray[] = array(
-                'id' => 'field:'.($thisRow['Field'] ? $thisRow['Field'] : $thisRow['column_name']),
+                'id' => 'field:' . ($thisRow['Field'] ? $thisRow['Field'] : $thisRow['column_name']),
                 'text' => ($thisRow['Field'] ? $thisRow['Field'] : $thisRow['column_name']),
                 // in case of a kreporter field return the report_data_type so operators ar processed properly
                 'type' => 'varchar',
                 'name' => ($thisRow['Field'] ? $thisRow['Field'] : $thisRow['column_name']),
-                'leaf' => true
+                'leaf' => true,
             );
         }
 
         return $returnArray;
     }
 
-    function getPresentation($reportId, $requestParams)
+    public function getPresentation($reportId, $requestParams)
     {
 
         global $db, $app_list_string, $current_language;
@@ -1065,13 +1094,18 @@ class KReporterRESTHandler
         // get the report and the vizParams
         $thisReport = BeanFactory::getBean('KReports', $reportId);
 
-        if (!isset($requestParams['start'])) $requestParams['start'] = 0;
-        if (!isset($requestParams['limit'])) $requestParams['limit'] = 0;
+        if (!isset($requestParams['start'])) {
+            $requestParams['start'] = 0;
+        }
+
+        if (!isset($requestParams['limit'])) {
+            $requestParams['limit'] = 0;
+        }
 
         // set request Paramaters
         $reportParams = array('noFormat' => true, 'start' => isset($requestParams['start'])
-                ? $requestParams['start'] : 0, 'limit' => isset($requestParams['limit'])
-                ? $requestParams['limit'] : 0);
+            ? $requestParams['start'] : 0, 'limit' => isset($requestParams['limit'])
+            ? $requestParams['limit'] : 0);
 
         if (isset($requestParams['sort']) && isset($requestParams['dir'])) {
             $reportParams['sortseq'] = $requestParams['dir'];
@@ -1088,14 +1122,17 @@ class KReporterRESTHandler
 
         // if a filter is set evaluate it .. comes from the dashlet
         if (!empty($requestParams['filter'])) {
-            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '".$requestParams['filter']."'"));
+            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . $requestParams['filter'] . "'"));
             $thisReport->whereOverride = json_decode(html_entity_decode($filter['selectedfilters']), true);
         }
 
         //get parent bean
         if (isset($requestParams['parentbeanId']) && isset($requestParams['parentbeanModule'])) {
             $parentbean = BeanFactory::getBean($requestParams['parentbeanModule'], $requestParams['parentbeanId']);
-            if ($parentbean->id) $reportParams['parentbean'] = $parentbean;
+            if ($parentbean->id) {
+                $reportParams['parentbean'] = $parentbean;
+            }
+
         }
 
         // print_r(json_decode(html_entity_decode($requestParams['whereConditions']), true));
@@ -1109,17 +1146,25 @@ class KReporterRESTHandler
                     if ((!empty($dynamicoption['fieldid']) && $dynamicoption['fieldid']
                         == $wherecondition['fieldid']) ||
                         (!empty($dynamicoption['reference']) && $dynamicoption['reference']
-                        == $wherecondition['reference'])) {
+                            == $wherecondition['reference'])) {
                         $whereconditions[$idx]['operator'] = $dynamicoption['operator'];
-                        if (isset($dynamicoption['value']))
-                                $whereconditions[$idx]['value'] = $dynamicoption['value'];
-                        if (isset($dynamicoption['valuekey']))
-                                $whereconditions[$idx]['valuekey'] = $dynamicoption['valuekey'];
-                        if (isset($dynamicoption['valueto']))
-                                $whereconditions[$idx]['valueto'] = $dynamicoption['valueto'];
-                        if (isset($dynamicoption['valuetokey']))
-                                $whereconditions[$idx]['valuetokey'] = $dynamicoption['valuetokey'];
-                        $whereoverride [] = $whereconditions[$idx];
+                        if (isset($dynamicoption['value'])) {
+                            $whereconditions[$idx]['value'] = $dynamicoption['value'];
+                        }
+
+                        if (isset($dynamicoption['valuekey'])) {
+                            $whereconditions[$idx]['valuekey'] = $dynamicoption['valuekey'];
+                        }
+
+                        if (isset($dynamicoption['valueto'])) {
+                            $whereconditions[$idx]['valueto'] = $dynamicoption['valueto'];
+                        }
+
+                        if (isset($dynamicoption['valuetokey'])) {
+                            $whereconditions[$idx]['valuetokey'] = $dynamicoption['valuetokey'];
+                        }
+
+                        $whereoverride[] = $whereconditions[$idx];
                     }
                 }
             }
@@ -1127,11 +1172,12 @@ class KReporterRESTHandler
         //allocate dynamicoptions to whereOverride
         if (is_array($thisReport->whereOverride)) {
             $thisReport->whereOverride = array_merge($thisReport->whereOverride, $whereoverride);
-        } else $thisReport->whereOverride = $whereoverride;
-
+        } else {
+            $thisReport->whereOverride = $whereoverride;
+        }
 
         $retData['records'] = $thisReport->getSelectionResults($reportParams, isset($requestParams['snapshotid'])
-                ? $requestParams['snapshotid'] : '0', false);
+            ? $requestParams['snapshotid'] : '0', false);
 
         // rework ... load from kQuery fieldArray
         $fieldArr = array();
@@ -1149,10 +1195,10 @@ class KReporterRESTHandler
                 case 'float':
                     $thisFieldArray['type'] = 'number';
                     break;
-//type date will modified date format in store and check on timezone on user's machine! 
-//2016-06-25 will become Sat Jun 24 2016 20:00:00 GMT-0400 (Zentalbrasilianische Normalzeit)                
+//type date will modified date format in store and check on timezone on user's machine!
+//2016-06-25 will become Sat Jun 24 2016 20:00:00 GMT-0400 (Zentalbrasilianische Normalzeit)
 //                case 'date':
-//                    $thisFieldArray['type'] = 'date'; 
+//                    $thisFieldArray['type'] = 'date';
 //                    break;
                 default:
                     $thisFieldArray['type'] = 'string';
@@ -1160,18 +1206,21 @@ class KReporterRESTHandler
             }
 
             // BUG #524 if we have a custom function then send string sicne we do not know what tpye is returned
-            if ($thisReport->fieldNameMap[$fieldid]['customFunction'] != '')
-                    $thisFieldArray['type'] = 'string';
+            if ('' != $thisReport->fieldNameMap[$fieldid]['customFunction']) {
+                $thisFieldArray['type'] = 'string';
+            }
 
-            if (isset($linkArray[$fieldid]))
-                    $thisFieldArray['linkInfo'] = json_encode($linkArray[$fieldid]);
+            if (isset($linkArray[$fieldid])) {
+                $thisFieldArray['linkInfo'] = json_encode($linkArray[$fieldid]);
+            }
+
             $fieldArr[] = $thisFieldArray;
         }
 
         $retData['metaData'] = array(
             'totalProperty' => 'count',
             'root' => 'records',
-            'fields' => $fieldArr
+            'fields' => $fieldArr,
         );
 
         $thisPresentationManager = new KReportPresentationManager();
@@ -1192,31 +1241,34 @@ class KReporterRESTHandler
                 'fieldname' => $reportField['fieldname'],
                 'name' => $reportField['name'],
                 'type' => !empty($reportField['overridetype']) ? $reportField['overridetype']
-                    : $thisReport->fieldNameMap[$reportField['fieldid']]['type'],
+                : $thisReport->fieldNameMap[$reportField['fieldid']]['type'],
                 'display' => $reportField['display'],
                 'width' => $reportField['width'],
                 'path' => $reportField['path'],
                 'link' => $reportField['link'],
                 'linkinfo' => $linkArray[$fieldid] ? $linkArray[$reportField['fieldid']]
-                    : []
+                : []
             );
         };
 
-        if ($thisReport->kQueryArray->summarySelectString != '') {
+        if ('' != $thisReport->kQueryArray->summarySelectString) {
             $retData['recordtotal'] = $db->fetchByAssoc($db->query($thisReport->kQueryArray->summarySelectString));
             $thisReport->processFormulas($retData['recordtotal']);
         }
 
         // do a count
         $parameters = array('start' => $requestParams['start'], 'limit' => $requestParams['limit']);
-        if ($parentbean) $parameters['parentbean'] = $parentbean;
+        if ($parentbean) {
+            $parameters['parentbean'] = $parentbean;
+        }
+
         $retData['count'] = $thisReport->getSelectionResults($parameters, isset($requestParams['snapshotid'])
-                ? $requestParams['snapshotid'] : '0', true);
-        $GLOBALS['log']->debug('Generated report presentation data: '.$retData);
+            ? $requestParams['snapshotid'] : '0', true);
+        $GLOBALS['log']->debug('Generated report presentation data: ' . $retData);
         return $retData;
     }
 
-    function getVisualization($reportId, $requestParams)
+    public function getVisualization($reportId, $requestParams)
     {
         global $db;
 
@@ -1231,23 +1283,25 @@ class KReporterRESTHandler
 
         // if a filter is set evaluate it .. comes from the dashlet
         if (!empty($requestParams['filter'])) {
-            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '".$requestParams['filter']."'"));
+            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . $requestParams['filter'] . "'"));
             $thisReport->whereOverride = json_decode(html_entity_decode($filter['selectedfilters']), true);
         }
 
         //get parent bean
         if (isset($requestParams['parentbeanId']) && isset($requestParams['parentbeanModule'])) {
             $parentbean = BeanFactory::getBean($requestParams['parentbeanModule'], $requestParams['parentbeanId']);
-            if ($parentbean->id) $reportParams['parentbean'] = $parentbean;
-        }
+            if ($parentbean->id) {
+                $reportParams['parentbean'] = $parentbean;
+            }
 
+        }
 
         //catch dynamic options sent by drilldown plugin at first load
         if (isset($requestParams['dynamicoptions']) && !empty($requestParams['dynamicoptions'])) {
             $dynamicoptions = json_decode(html_entity_decode(base64_decode($requestParams['dynamicoptions'])), true);
-            if (count($thisReport->whereOverride) <= 0)
-                    $thisReport->whereOverride = $dynamicoptions;
-            else {
+            if (count($thisReport->whereOverride) <= 0) {
+                $thisReport->whereOverride = $dynamicoptions;
+            } else {
                 $dynamicoptions = json_decode(html_entity_decode($requestParams['dynamicoptions']), true);
                 foreach ($thisReport->whereOverride as $idx => $whereOverride) {
                     foreach ($dynamicoptions as $idxdo => $dynamicoption) {
@@ -1266,13 +1320,15 @@ class KReporterRESTHandler
         $vizManager = new KReportVisualizationManager();
         $pluginManager = new KReportPluginManager();
 
-        if (!is_array($reportParams)) $reportParams = array();
+        if (!is_array($reportParams)) {
+            $reportParams = array();
+        }
 
         // loop over the plugins
         for ($i = 0; $i < count($vizManager->layouts[$vizData['layout']]['items']); $i++) {
             // add the layout
             $itemData = array(
-                'plugin' => $vizData[$i + 1]['plugin']
+                'plugin' => $vizData[$i + 1]['plugin'],
             );
 
             // get the object
@@ -1283,7 +1339,7 @@ class KReporterRESTHandler
                 "top" => $vizManager->layouts[$vizData['layout']]['items'][$i]['top'],
                 "left" => $vizManager->layouts[$vizData['layout']]['items'][$i]['left'],
                 "height" => $vizManager->layouts[$vizData['layout']]['items'][$i]['height'],
-                "width" => $vizManager->layouts[$vizData['layout']]['items'][$i]['width']
+                "width" => $vizManager->layouts[$vizData['layout']]['items'][$i]['width'],
             );
 
             // add the data of the item
@@ -1291,8 +1347,8 @@ class KReporterRESTHandler
             // Mint start #39707
             if ($vizObject) {
                 $itemData['data'] = $vizObject->getItem($vizData[$i + 1][$itemData['plugin']]['uid'], $thisReport, $vizData[$i
-                    + 1][$itemData['plugin']], $reportParams, $requestParams['snapshotid']
-                        ? $requestParams['snapshotid'] : '0');
+                     + 1][$itemData['plugin']], $reportParams, $requestParams['snapshotid']
+                    ? $requestParams['snapshotid'] : '0');
             }
             // Mint end #39707
 
@@ -1302,7 +1358,7 @@ class KReporterRESTHandler
         return $retData;
     }
 
-    function saveStandardLayout($reportId, $layoutParams)
+    public function saveStandardLayout($reportId, $layoutParams)
     {
         $thisReport = new KReport();
         $thisReport->retrieve($reportId);
@@ -1320,11 +1376,12 @@ class KReporterRESTHandler
                     $thisListField['sequence'] = (string) $thisLayoutParam['sequence'];
 
                     // bug 2011-03-04 sequence needs leading 0
-                    if (strlen($thisListField['sequence']) < 2)
-                            $thisListField['sequence'] = '0'.$thisListField['sequence'];
+                    if (strlen($thisListField['sequence']) < 2) {
+                        $thisListField['sequence'] = '0' . $thisListField['sequence'];
+                    }
 
                     $thisListField['display'] = $thisLayoutParam['isHidden'] ? 'no'
-                            : 'yes';
+                    : 'yes';
                     $listFields[$thisFieldIndex] = $thisListField;
                     break;
                 }
@@ -1342,13 +1399,15 @@ class KReporterRESTHandler
     {
         global $db;
         $whereClause = "";
-        if (!empty($params['assigneduserid']))
-                $whereClause = " AND (ksf.assigned_user_id='".$params['assigneduserid']."' OR ksf.is_global > 0)";
+        if (!empty($params['assigneduserid'])) {
+            $whereClause = " AND (ksf.assigned_user_id='" . $params['assigneduserid'] . "' OR ksf.is_global > 0)";
+        }
+
         $results = array();
         $mod_strings = return_module_language($GLOBALS['current_language'], 'KReports');
 
         //set empty record for Viewer only
-        if (isset($params['context']) && $params['context'] == "Viewer") {
+        if (isset($params['context']) && "Viewer" == $params['context']) {
             $results[] = array(
                 'savedfilter_id' => 'none',
                 'name' => '---',
@@ -1356,7 +1415,7 @@ class KReporterRESTHandler
                 'assigned_user_id' => null,
                 'assigned_user_name' => null,
                 'is_global' => 1,
-                'selectedfilters' => null
+                'selectedfilters' => null,
             );
         }
 
@@ -1368,10 +1427,10 @@ class KReporterRESTHandler
 
         //get data
         $records = $db->query("SELECT ksf.*, u.user_name FROM kreportsavedfilters ksf "
-            ."INNER JOIN users u ON u.id = ksf.assigned_user_id "
-            ."WHERE ksf.deleted= 0 AND ksf.kreport_id='".$params['reportid']."' "
-            .$whereClause
-            ." ORDER BY ksf.name ASC");
+            . "INNER JOIN users u ON u.id = ksf.assigned_user_id "
+            . "WHERE ksf.deleted= 0 AND ksf.kreport_id='" . $params['reportid'] . "' "
+            . $whereClause
+            . " ORDER BY ksf.name ASC");
 
         //prepare records
         while ($record = $db->fetchByAssoc($records)) {
@@ -1394,8 +1453,8 @@ class KReporterRESTHandler
             //set entry values
             $results[] = array(
                 'savedfilter_id' => $record['id'],
-                'name' => ($record['is_global'] ? $mod_strings['LBL_KSAVEDFILTERS_IS_GLOBAL_MARK'].' '
-                    : '').$record['name'],
+                'name' => ($record['is_global'] ? $mod_strings['LBL_KSAVEDFILTERS_IS_GLOBAL_MARK'] . ' '
+                    : '') . $record['name'],
                 'kreport_id' => $record['kreport_id'],
                 'assigned_user_id' => $record['assigned_user_id'],
                 'assigned_user_name' => $record['user_name'],
@@ -1407,8 +1466,8 @@ class KReporterRESTHandler
 
         return $results;
     }
-###################### END SavedFilters ksavedfilters ######################    
-###################### BEGIN BucketManager ######################    
+###################### END SavedFilters ksavedfilters ######################
+###################### BEGIN BucketManager ######################
 
     /**
      * Handler for Bucketmanager
@@ -1425,7 +1484,9 @@ class KReporterRESTHandler
 
         //check first if table exists (PRO version). If not, just return empty array
         $resArray = $GLOBALS['db']->query("SHOW TABLES like 'kreportgroupings'");
-        if ($GLOBALS['db']->getRowCount($resArray) > 0) $queryOnTable = true;
+        if ($GLOBALS['db']->getRowCount($resArray) > 0) {
+            $queryOnTable = true;
+        }
 
         //get groupings
         if ($queryOnTable) {
@@ -1439,7 +1500,7 @@ class KReporterRESTHandler
                     'modulename' => $thisEntry['modulename'],
                     'fieldname' => $thisEntry['fieldname'],
                     'fieldtype' => $thisEntry['fieldtype'],
-                    'mapping' => $thisEntry['mapping']
+                    'mapping' => $thisEntry['mapping'],
                 );
             }
         }
@@ -1468,7 +1529,9 @@ class KReporterRESTHandler
             }
             //re-index
             $fieldsArray = array_values($fieldsArray);
-        } else $fieldsArray = array();
+        } else {
+            $fieldsArray = array();
+        }
 
         return $fieldsArray;
     }
@@ -1495,13 +1558,14 @@ class KReporterRESTHandler
         $start = $params['start'];
         $limit = $params['limit'];
 
-
-        if (empty($module) || empty($fieldname)) return array();
+        if (empty($module) || empty($fieldname)) {
+            return array();
+        }
 
         $useArray = array();
         $fieldsArray = $this->buildFieldArray($module);
         foreach ($fieldsArray as $idx => $field) {
-            if ($field['type'] == 'enum' && $field['name'] == $fieldname) {
+            if ('enum' == $field['type'] && $field['name'] == $fieldname) {
                 $dom = $fieldsArray[$idx]['options'];
                 $getValuesFrom = 'dom';
                 break;
@@ -1532,22 +1596,26 @@ class KReporterRESTHandler
                 //query on table
                 $bean = BeanFactory::getBean($module);
                 //Get table_name from $module
-                $q = "SELECT DISTINCT(".$fieldname.") colvalue "
-                    ." FROM ".$bean->table_name." "
-                    ." WHERE ".$fieldname." LIKE '".$fieldvalue."%' AND deleted = 0 "
-                    ." LIMIT ".$start.", ".$limit.";";
-                if (!$res = $GLOBALS['db']->query($q))
-                        $GLOBALS['log']->fatal("DB query error ".$GLOBALS['db']->last_error);
+                $q = "SELECT DISTINCT(" . $fieldname . ") colvalue "
+                . " FROM " . $bean->table_name . " "
+                    . " WHERE " . $fieldname . " LIKE '" . $fieldvalue . "%' AND deleted = 0 "
+                    . " LIMIT " . $start . ", " . $limit . ";";
+                if (!$res = $GLOBALS['db']->query($q)) {
+                    $GLOBALS['log']->fatal("DB query error " . $GLOBALS['db']->last_error);
+                }
+
                 while ($row = $GLOBALS['db']->fetchByAssoc($res)) {
                     $useArray[$row['colvalue']] = $row['colvalue'];
                 }
 
                 //total count
-                $q = "SELECT count(DISTINCT(".$fieldname.")) total "
-                    ." FROM ".$bean->table_name." "
-                    ." WHERE ".$fieldname." LIKE '".$fieldvalue."%' AND deleted = 0 ";
-                if (!$res = $GLOBALS['db']->query($q))
-                        $GLOBALS['log']->fatal("DB query error count ".$GLOBALS['db']->last_error);
+                $q = "SELECT count(DISTINCT(" . $fieldname . ")) total "
+                . " FROM " . $bean->table_name . " "
+                    . " WHERE " . $fieldname . " LIKE '" . $fieldvalue . "%' AND deleted = 0 ";
+                if (!$res = $GLOBALS['db']->query($q)) {
+                    $GLOBALS['log']->fatal("DB query error count " . $GLOBALS['db']->last_error);
+                }
+
                 while ($row = $GLOBALS['db']->fetchByAssoc($res)) {
                     $totalCount = $row['total'];
                 }
@@ -1555,9 +1623,10 @@ class KReporterRESTHandler
         }
 
         $fieldsArray = array();
-        foreach ($useArray as $value => $lbl)
+        foreach ($useArray as $value => $lbl) {
             $fieldsArray[] = array('enumvalue' => $value, 'label' => (empty($value)
-                    ? '-- empty --' : $lbl));
+                ? '-- empty --' : $lbl));
+        }
 
         return array('items' => $fieldsArray, 'total' => $totalCount);
     }
@@ -1566,11 +1635,12 @@ class KReporterRESTHandler
     {
         $returnArray = array();
         $q = "INSERT INTO kreportgroupings (id,name,modulename,fieldname,fieldtype) "
-            ."VALUES('".$params['id']."','".$params['name']."','".$params['modulename']."','".$params['fieldname']."', '".$this->getFieldType($params['modulename'], $params['fieldname'])."')";
+        . "VALUES('" . $params['id'] . "','" . $params['name'] . "','" . $params['modulename'] . "','" . $params['fieldname'] . "', '" . $this->getFieldType($params['modulename'], $params['fieldname']) . "')";
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'groupingid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not insert record into DB.kreportgroupings');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not insert record into DB.kreportgroupings');
+        }
 
         return $returnArray;
     }
@@ -1579,12 +1649,13 @@ class KReporterRESTHandler
     {
         $returnArray = array();
         $q = "UPDATE kreportgroupings SET "
-            ."deleted = 1 "
-            ."WHERE id='".$params['id']."'";
+            . "deleted = 1 "
+            . "WHERE id='" . $params['id'] . "'";
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'groupingid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not set record deleted into DB.kreportgroupings');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not set record deleted into DB.kreportgroupings');
+        }
 
         return $returnArray;
     }
@@ -1593,18 +1664,19 @@ class KReporterRESTHandler
     {
         $returnArray = array();
         $q = "UPDATE kreportgroupings SET "
-            ."name = '".$GLOBALS['db']->quote($params['name'])."', "
-            ."modulename = '".$GLOBALS['db']->quote($params['modulename'])."', "
-            ."fieldname = '".$GLOBALS['db']->quote($params['fieldname'])."', "
-            ."fieldtype = '".(empty($params['fieldtype']) ? $this->getFieldType($params['modulename'], $params['fieldname'])
-                : $params['fieldtype'])."', "
-            ."mapping='".$GLOBALS['db']->quote($params['mapping'])."' "
-            ."WHERE id='".$params['id']."'";
+        . "name = '" . $GLOBALS['db']->quote($params['name']) . "', "
+        . "modulename = '" . $GLOBALS['db']->quote($params['modulename']) . "', "
+        . "fieldname = '" . $GLOBALS['db']->quote($params['fieldname']) . "', "
+        . "fieldtype = '" . (empty($params['fieldtype']) ? $this->getFieldType($params['modulename'], $params['fieldname'])
+            : $params['fieldtype']) . "', "
+        . "mapping='" . $GLOBALS['db']->quote($params['mapping']) . "' "
+            . "WHERE id='" . $params['id'] . "'";
 
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'groupingid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not update record in DB.kreportgroupings');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not update record in DB.kreportgroupings');
+        }
 
         return $returnArray;
     }
@@ -1618,11 +1690,11 @@ class KReporterRESTHandler
 //        }
 //        else
 //           $return = array('success' => 0, 'msg' => 'Could not save mapping into DB.kreportgroupings');
-//        
+//
 //        echo json_encode($return);
 //    }
-###################### END BucketManager ######################    
-###################### BEGIN DListManager ######################    
+###################### END BucketManager ######################
+###################### BEGIN DListManager ######################
 
     /**
      * Handler for DListManager
@@ -1639,7 +1711,9 @@ class KReporterRESTHandler
 
         //check first if table exists (PRO version). If not, just return empty array
         $resArray = $GLOBALS['db']->query("SHOW TABLES like 'kreportdlists'");
-        if ($GLOBALS['db']->getRowCount($resArray) > 0) $queryOnTable = true;
+        if ($GLOBALS['db']->getRowCount($resArray) > 0) {
+            $queryOnTable = true;
+        }
 
         //get dlists
         if ($queryOnTable) {
@@ -1667,7 +1741,7 @@ class KReporterRESTHandler
     public function getDList($id)
     {
         $returnArray = array();
-        $resArray = $GLOBALS['db']->query('SELECT id, name, description, dlistdata FROM kreportdlists WHERE id = \''.$id.'\'');
+        $resArray = $GLOBALS['db']->query('SELECT id, name, description, dlistdata FROM kreportdlists WHERE id = \'' . $id . '\'');
 
         while ($thisEntry = $GLOBALS['db']->fetchByAssoc($resArray)) {
             $returnArray[] = array(
@@ -1689,15 +1763,15 @@ class KReporterRESTHandler
         $order_by = "users.last_name ASC";
 
         if (!empty($params['userids'])) {
-            $where = "users.id IN('".implode("','", json_decode($params['userids'], true))."')";
+            $where = "users.id IN('" . implode("','", json_decode($params['userids'], true)) . "')";
             $callGetList = true;
-        } elseif ($params['all'] == '*') {
+        } elseif ('*' == $params['all']) {
             $where = "";
             $callGetList = true;
         }
 
         if (!empty($params['nameFilter'])) {
-            $where = " users.first_name like '%".$params['nameFilter']."%' OR users.last_name like '%".$params['nameFilter']."%' OR users.user_name like '%".$params['nameFilter']."%' ";
+            $where = " users.first_name like '%" . $params['nameFilter'] . "%' OR users.last_name like '%" . $params['nameFilter'] . "%' OR users.user_name like '%" . $params['nameFilter'] . "%' ";
         }
 
         if ($callGetList) {
@@ -1741,11 +1815,11 @@ class KReporterRESTHandler
         $order_by = "contacts.last_name ASC";
 
         if (!empty($params['contactids'])) {
-            $where = "contacts.id IN('".implode("','", json_decode($params['contactids'], true))."')";
+            $where = "contacts.id IN('" . implode("','", json_decode($params['contactids'], true)) . "')";
             $callGetList = true;
         } elseif (!empty($params['like'])) {
-            $where = "contacts.last_name LIKE '".$params['like']."%' "
-                ."OR contacts.first_name LIKE '".$params['like']."%'";
+            $where = "contacts.last_name LIKE '" . $params['like'] . "%' "
+                . "OR contacts.first_name LIKE '" . $params['like'] . "%'";
             $callGetList = true;
         }
         //get contact list
@@ -1791,19 +1865,22 @@ class KReporterRESTHandler
         $order_by = "kreports.name ASC";
 
         if (!empty($params['kreportids'])) {
-            $where = "kreports.id IN('".implode("','", json_decode($params['kreportids'], true))."')";
+            $where = "kreports.id IN('" . implode("','", json_decode($params['kreportids'], true)) . "')";
             $callGetList = true;
-        } elseif ($params['all'] == '*') {
+        } elseif ('*' == $params['all']) {
             $where = "";
             $callGetList = true;
         }
 
         if (!empty($params['nameFilter'])) {
-            $where = " kreports.name like '%".$params['nameFilter']."%'";
+            $where = " kreports.name like '%" . $params['nameFilter'] . "%'";
             $callGetList = true;
         }
 
-        if (!empty($where)) $where .= ' AND ';
+        if (!empty($where)) {
+            $where .= ' AND ';
+        }
+
         $where .= " kreports.report_module in ('Users', 'Contacts') ";
 
         if ($callGetList) {
@@ -1827,11 +1904,12 @@ class KReporterRESTHandler
     {
         $returnArray = array();
         $q = "INSERT INTO kreportdlists (id, name, description) "
-            ."VALUES('".$params['id']."','".$params['name']."', null)";
+            . "VALUES('" . $params['id'] . "','" . $params['name'] . "', null)";
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not insert record into DB.kreportdlists');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not insert record into DB.kreportdlists');
+        }
 
         return $returnArray;
     }
@@ -1841,12 +1919,13 @@ class KReporterRESTHandler
 
         $returnArray = array();
         $q = "UPDATE kreportdlists SET "
-            ."deleted = 1 "
-            ."WHERE id='".$params['id']."'";
+            . "deleted = 1 "
+            . "WHERE id='" . $params['id'] . "'";
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not set record deleted into DB.kreportdlists');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not set record deleted into DB.kreportdlists');
+        }
 
         return $returnArray;
     }
@@ -1855,26 +1934,29 @@ class KReporterRESTHandler
     {
         $returnArray = array();
         $q = "UPDATE kreportdlists SET "
-            ."name = '".$GLOBALS['db']->quote($params['name'])."', "
-            ."dlistdata = '".$GLOBALS['db']->quote($params['dlistdata'])."' "
-            ."WHERE id='".$params['id']."'";
+        . "name = '" . $GLOBALS['db']->quote($params['name']) . "', "
+        . "dlistdata = '" . $GLOBALS['db']->quote($params['dlistdata']) . "' "
+            . "WHERE id='" . $params['id'] . "'";
 
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
-        } else
-                $returnArray = array('success' => 0, 'msg' => 'Could not update record in DB.kreportdlists');
+        } else {
+            $returnArray = array('success' => 0, 'msg' => 'Could not update record in DB.kreportdlists');
+        }
 
         return $returnArray;
     }
-###################### END DListManager ######################      
+###################### END DListManager ######################
 
     public function getFieldType($modulename, $fieldname)
     {
         $fieldtype = "";
         $modulefields = $this->getModuleFields($modulename);
         foreach ($modulefields as $idx => $fielddata) {
-            if ($fielddata['field'] == $fieldname)
-                    $fieldtype = $fielddata['type'];
+            if ($fielddata['field'] == $fieldname) {
+                $fieldtype = $fielddata['type'];
+            }
+
         }
 
         //simplify field types
@@ -1915,7 +1997,7 @@ class KReporterRESTHandler
     public function getLabels()
     {
         $labels = return_module_language((empty($GLOBALS['current_language']) ? $GLOBALS['sugar_config']['default_language']
-                : $GLOBALS['current_language']), 'KReports');
+            : $GLOBALS['current_language']), 'KReports');
 
         return $labels;
     }
@@ -1932,24 +2014,38 @@ function arraySortBySequence($a, $b)
 // 2013-08-21 BUG #492 function to be called from usort to sort by Text
 function arraySortByText($a, $b)
 {
-    if (strtolower($a['text']) > strtolower($b['text'])) return 1;
-    elseif (strtolower($a['text']) == strtolower($b['text'])) return 0;
-    else return -1;
+    if (strtolower($a['text']) > strtolower($b['text'])) {
+        return 1;
+    } elseif (strtolower($a['text']) == strtolower($b['text'])) {
+        return 0;
+    } else {
+        return -1;
+    }
+
 }
 
 // 2013-08-21 Bug#493 sorting name for the fields
 function arraySortByName($a, $b)
 {
-    if (strtolower($a['name']) > strtolower($b['name'])) return 1;
-    elseif (strtolower($a['name']) == strtolower($b['name'])) return 0;
-    else return -1;
+    if (strtolower($a['name']) > strtolower($b['name'])) {
+        return 1;
+    } elseif (strtolower($a['name']) == strtolower($b['name'])) {
+        return 0;
+    } else {
+        return -1;
+    }
+
 }
 
 // 2014-03-26 sorting of modules Bug #517
 function arraySortByDescription($a, $b)
 {
-    if (strtolower($a['description']) > strtolower($b['description'])) return 1;
-    elseif (strtolower($a['description']) == strtolower($b['description']))
-            return 0;
-    else return -1;
+    if (strtolower($a['description']) > strtolower($b['description'])) {
+        return 1;
+    } elseif (strtolower($a['description']) == strtolower($b['description'])) {
+        return 0;
+    } else {
+        return -1;
+    }
+
 }

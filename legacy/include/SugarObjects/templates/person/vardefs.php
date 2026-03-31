@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,7 +51,7 @@ $vardefs = array(
             'options' => 'salutation_dom',
             'massupdate' => false,
             'len' => '255',
-            'comment' => 'Contact salutation (e.g., Mr, Ms)'
+            'comment' => 'LBL_SALUTATION_COMMENT'
         ),
         'first_name' => array(
             'name' => 'first_name',
@@ -60,7 +60,7 @@ $vardefs = array(
             'len' => '100',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'First name of the contact',
+            'comment' => 'LBL_FIRST_NAME_COMMENT',
             'merge_filter' => 'selected',
 
         ),
@@ -71,7 +71,7 @@ $vardefs = array(
             'len' => '100',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'Last name of the contact',
+            'comment' => 'LBL_LAST_NAME_COMMENT',
             'merge_filter' => 'selected',
             'required' => true,
             'importable' => 'required',
@@ -89,6 +89,7 @@ $vardefs = array(
             'len' => '255',
             'db_concat_fields' => array(0 => 'first_name', 1 => 'last_name'),
             'importable' => 'false',
+            'comment' => 'LBL_NAME_COMMENT'
         ),
         'full_name' => array(
             'name' => 'full_name',
@@ -102,13 +103,14 @@ $vardefs = array(
             'len' => '510',
             'db_concat_fields' => array(0 => 'first_name', 1 => 'last_name'),
             'studio' => array('listview' => false),
+            'comment' => 'LBL_NAME_COMMENT'
         ),
         'title' => array(
             'name' => 'title',
             'vname' => 'LBL_TITLE',
             'type' => 'varchar',
             'len' => '100',
-            'comment' => 'The title of the contact'
+            'comment' => 'LBL_TITLE_COMMENT'
         ),
         'photo' => array(
             'name' => 'photo',
@@ -124,13 +126,14 @@ $vardefs = array(
             'width' => '160',
             'height' => '160',
 			'studio' => array('listview' => true),
+            'comment' => 'LBL_PHOTO_COMMENT'
         ),
         'department' => array(
             'name' => 'department',
             'vname' => 'LBL_DEPARTMENT',
             'type' => 'varchar',
             'len' => '255',
-            'comment' => 'The department of the contact',
+            'comment' => 'LBL_DEPARTMENT_COMMENT',
             'merge_filter' => 'enabled',
         ),
         'do_not_call' => array(
@@ -139,7 +142,7 @@ $vardefs = array(
             'type' => 'bool',
             'default' => '0',
             'audited' => true,
-            'comment' => 'An indicator of whether contact can be called'
+            'comment' => 'LBL_DO_NOT_CALL_COMMENT'
         ),
         'phone_home' => array(
             'name' => 'phone_home',
@@ -149,7 +152,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Home phone number of the contact',
+            'comment' => 'LBL_PHONE_HOME_COMMENT',
             'merge_filter' => 'enabled',
         ),
         //bug 42902
@@ -175,7 +178,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Mobile phone number of the contact',
+            'comment' => 'LBL_PHONE_MOBILE_COMMENT',
             'merge_filter' => 'enabled',
         ),
         'phone_work' => array(
@@ -187,7 +190,7 @@ $vardefs = array(
             'audited' => true,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Work phone number of the contact',
+            'comment' => 'LBL_PHONE_WORK_COMMENT',
             'merge_filter' => 'enabled',
         ),
         'phone_other' => array(
@@ -198,7 +201,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Other phone number for the contact',
+            'comment' => 'LBL_PHONE_OTHER_COMMENT',
             'merge_filter' => 'enabled',
         ),
         'phone_fax' => array(
@@ -209,7 +212,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Contact fax number',
+            'comment' => 'LBL_PHONE_FAX_COMMENT',
             'merge_filter' => 'enabled',
         ),
         'email1' => array(
@@ -227,6 +230,7 @@ $vardefs = array(
             // bug 46859
             'full_text_search' => array('boost' => 3, 'analyzer' => 'whitespace'),
             //bug 54567
+            'comment' => 'LBL_EMAIL_ADDRESS_COMMENT'
         ),
         'email2' => array(
             'name' => 'email2',
@@ -272,6 +276,7 @@ $vardefs = array(
             'options' => 'lawful_basis_dom',
             'audited' => true,
             'importable' => true,
+            'comment' => 'LBL_LAWFUL_BASIS_COMMENT'
         ),
         'date_reviewed' => array(
             'name' => 'date_reviewed',
@@ -280,6 +285,7 @@ $vardefs = array(
             'massupdate' => true,
             'audited' => true,
             'importable' => true,
+            'comment' => 'LBL_DATE_REVIEWED_COMMENT'
         ),
         'lawful_basis_source' => array(
             'name' => 'lawful_basis_source',
@@ -296,6 +302,7 @@ $vardefs = array(
             'options' => 'lawful_basis_source_dom',
             'audited' => true,
             'importable' => true,
+            'comment' => 'LBL_LAWFUL_BASIS_SOURCE_COMMENT'
         ),
         'primary_address_street' => array(
             'name' => 'primary_address_street',
@@ -303,8 +310,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'group' => 'primary_address',
-            'comment' => 'Street address for primary address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_PRIMARY_ADDRESS_STREET_COMMENT',
         ),
         'primary_address_street_2' => array(
             'name' => 'primary_address_street_2',
@@ -326,8 +333,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '100',
             'group' => 'primary_address',
-            'comment' => 'City for primary address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_PRIMARY_ADDRESS_CITY_COMMENT',
         ),
         'primary_address_state' => array(
             'name' => 'primary_address_state',
@@ -335,8 +342,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '100',
             'group' => 'primary_address',
-            'comment' => 'State for primary address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_PRIMARY_ADDRESS_STATE_COMMENT',
         ),
         'primary_address_postalcode' => array(
             'name' => 'primary_address_postalcode',
@@ -344,8 +351,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '20',
             'group' => 'primary_address',
-            'comment' => 'Postal code for primary address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_PRIMARY_ADDRESS_POSTALCODE_COMMENT',
 
         ),
         'primary_address_country' => array(
@@ -353,8 +360,8 @@ $vardefs = array(
             'vname' => 'LBL_PRIMARY_ADDRESS_COUNTRY',
             'type' => 'varchar',
             'group' => 'primary_address',
-            'comment' => 'Country for primary address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_PRIMARY_ADDRESS_COUNTRY_COMMENT',
         ),
         'alt_address_street' => array(
             'name' => 'alt_address_street',
@@ -362,8 +369,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'group' => 'alt_address',
-            'comment' => 'Street address for alternate address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ALT_ADDRESS_STREET_COMMENT',
         ),
         'alt_address_street_2' => array(
             'name' => 'alt_address_street_2',
@@ -385,8 +392,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '100',
             'group' => 'alt_address',
-            'comment' => 'City for alternate address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ALT_ADDRESS_CITY_COMMENT',
         ),
         'alt_address_state' => array(
             'name' => 'alt_address_state',
@@ -394,8 +401,8 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '100',
             'group' => 'alt_address',
-            'comment' => 'State for alternate address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ALT_ADDRESS_STATE_COMMENT',
         ),
         'alt_address_postalcode' => array(
             'name' => 'alt_address_postalcode',
@@ -403,16 +410,16 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '20',
             'group' => 'alt_address',
-            'comment' => 'Postal code for alternate address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ALT_ADDRESS_POSTALCODE_COMMENT',
         ),
         'alt_address_country' => array(
             'name' => 'alt_address_country',
             'vname' => 'LBL_ALT_ADDRESS_COUNTRY',
             'type' => 'varchar',
             'group' => 'alt_address',
-            'comment' => 'Country for alternate address',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ALT_ADDRESS_COUNTRY_COMMENT',
         ),
         'assistant' => array(
             'name' => 'assistant',
@@ -421,8 +428,8 @@ $vardefs = array(
             'len' => '75',
             'unified_search' => true,
             'full_text_search' => array('boost' => 2),
-            'comment' => 'Name of the assistant of the contact',
             'merge_filter' => 'enabled',
+            'comment' => 'LBL_ASSISTANT_COMMENT',
         ),
         'assistant_phone' => array(
             'name' => 'assistant_phone',
@@ -433,7 +440,7 @@ $vardefs = array(
             'group' => 'assistant',
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'Phone number of the assistant of the contact',
+            'comment' => 'LBL_ASSISTANT_PHONE_COMMENT',
             'merge_filter' => 'enabled',
         ),
 

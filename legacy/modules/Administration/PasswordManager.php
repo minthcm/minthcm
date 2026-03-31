@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -220,7 +220,7 @@ if ($mail->Mailer == 'smtp' && $mail->Host == '') {
 
 $focus = BeanFactory::newBean('InboundEmail');
 $focus->checkImap();
-$storedOptions = unserialize(base64_decode($focus->stored_options));
+$storedOptions = unserialize(base64_decode($focus->stored_options), ['allowed_classes' => false]);
 $email_templates_arr = get_bean_select_array(true, 'EmailTemplate', 'name', '', 'name', true);
 $create_case_email_template = (isset($storedOptions['create_case_email_template'])) ? $storedOptions['create_case_email_template'] : "";
 $TMPL_DRPDWN_LOST = get_select_options_with_id($email_templates_arr, $res['lostpasswordtmpl']);

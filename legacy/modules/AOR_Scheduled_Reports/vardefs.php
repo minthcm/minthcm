@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -70,7 +70,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
         'last_run' => array(
             'name' => 'last_run',
             'vname' => 'LBL_LAST_RUN',
-            'dbtype' => 'datetime',
+            'dbType' => 'datetime',
             'type' => 'readonly',
             'required' => false,
             'reportable' => false,

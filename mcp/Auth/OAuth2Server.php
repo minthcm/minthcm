@@ -8,7 +8,7 @@ use MintMCP\Auth\Services\ClientService;
 use MintMCP\Auth\Services\TokenService;
 use MintMCP\Auth\Services\UserService;
 use MintMCP\Auth\Utils\UrlHelper;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 
 /**
  * OAuth2 Server Implementation for MintHCM
@@ -85,7 +85,9 @@ class OAuth2Server
             'jwks_uri' => $oauthBase . '/jwks',
             'registration_endpoint' => $oauthBase . '/register',
             'scopes_supported' => ['openid', 'profile', 'email', 'mcp:read', 'mcp:write'],
-            'response_types_supported' => ['code']
+            'response_types_supported' => ['code'],
+            'code_challenge_methods_supported' => ['S256'],
+            'grant_types_supported' => ['authorization_code', 'refresh_token'],
         ];
     }
 
@@ -293,11 +295,6 @@ class OAuth2Server
             return $this->createError(400, 'invalid_grant', 'PKCE validation failed');
         }
 
-        // Validate client
-        if ($authCodeData['client_id'] !== $params['clientId']) {
-            return $this->createError(400, 'invalid_grant', 'Client ID mismatch');
-        }
-
         // Check code expiry (10 minutes)
         if (strtotime($authCodeData['code_expires']) < time()) {
             return $this->createError(400, 'invalid_grant', 'Authorization code expired');
@@ -305,7 +302,7 @@ class OAuth2Server
 
         // Generate tokens
         chdir('../legacy');
-        $clientBean = $this->clientService->getClientById($params['clientId']);
+        $clientBean = $this->clientService->getClientById($authCodeData['client_id']);
         chdir('../mcp');
         if (!$clientBean) {
             return $this->createError(400, 'invalid_client', 'Client not found');
@@ -353,7 +350,6 @@ class OAuth2Server
     private function handleRefreshTokenGrant(): array
     {
         $refreshToken = $_POST['refresh_token'] ?? '';
-        $clientId = $_POST['client_id'] ?? '';
 
         // Validate refresh token
         chdir('../legacy');
@@ -361,11 +357,6 @@ class OAuth2Server
         chdir('../mcp');
         if (!$tokenBean) {
             return $this->createError(400, 'invalid_grant', 'Invalid refresh token');
-        }
-
-        // Check if refresh token belongs to this client
-        if ($tokenBean->client !== $clientId) {
-            return $this->createError(400, 'invalid_grant', 'Refresh token not issued to this client');
         }
 
         // Check if refresh token is expired
@@ -376,6 +367,7 @@ class OAuth2Server
             return $this->createError(400, 'invalid_grant', 'Refresh token expired');
         }
 
+        $clientId = $tokenBean->client;
         // Get client
         chdir('../legacy');
         $clientBean = $this->clientService->getClientById($clientId);

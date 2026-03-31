@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
 
 namespace MintHCM\Utils;
 
+#[\AllowDynamicProperties]
 class LegacyConnector
 {
     protected $class;
@@ -53,28 +54,33 @@ class LegacyConnector
 
     public function __construct($class_name, $link = null, $params = array())
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        if (isset($link)) {
-            require_once $link;
+        try {
+            if (isset($link)) {
+                require_once $link;
+            }
+            if (!empty($params)) {
+                $this->class = new $class_name(...$params);
+                static::$static_class = new $class_name(...$params);
+            } else {
+                $this->class = new $class_name();
+                static::$static_class = new $class_name();
+            }
+        } finally {
+            chdir($old_cwd);
         }
-        if(!empty($params)){
-            $this->class = new $class_name(...$params);
-            static::$static_class = new $class_name(...$params);
-        } else {
-            $this->class = new $class_name();
-            static::$static_class = new $class_name();
-        }
-        
-        chdir('../api/');
     }
 
     public function __get($name)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = $this->class->$name;
-        chdir('../api/');
-
-        return $response;
+        try {
+            return $this->class->$name;
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __set($name, $value)
@@ -84,26 +90,34 @@ class LegacyConnector
             return;
         }
 
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $this->class->$name = $value;
-        chdir('../api/');
+        try {
+            $this->class->$name = $value;
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __call($name, $arguments)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = $this->class->$name(...$arguments);
-        chdir('../api/');
-
-        return $response;
+        try {
+            return $this->class->$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public static function __callStatic($name, $arguments)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = static::$static_class::$name(...$arguments);
-        chdir('../api/');
-
-        return $response;
+        try {
+            return static::$static_class::$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 }

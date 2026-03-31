@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -62,7 +62,6 @@ $entry_point_registry = array(
    'TreeData' => array( 'file' => 'TreeData.php', 'auth' => true ),
    'image' => array( 'file' => 'modules/Campaigns/image.php', 'auth' => false ),
    'campaign_trackerv2' => array( 'file' => 'modules/Campaigns/Tracker.php', 'auth' => false ),
-   'WebToPersonCapture' => array( 'file' => 'modules/Campaigns/WebToPersonCapture.php', 'auth' => false ),
    'removeme' => array( 'file' => 'modules/Campaigns/RemoveMe.php', 'auth' => false ),
    'ConfirmOptIn' => array( 'file' => 'include/entryPointConfirmOptInConnector.php', 'auth' => false ),
    'acceptDecline' => array( 'file' => 'modules/Contacts/AcceptDecline.php', 'auth' => false ),

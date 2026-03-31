@@ -1,12 +1,14 @@
 <template>
     <div class="setup-wizard-locale-settings-container">
+        <v-form ref="formRef" class="setup-wizard-locale-settings-form">
         <v-select
             v-model="store.setupData.time_zone"
             :items="timezonesList"
             density="comfortable"
             variant="outlined"
             :label="languages.label('LBL_MINT4_SETUP_WIZARD_LOCALE_SETTINGS_TIME_ZONE')"
-            hide-details
+            :rules="[requiredRule]"
+            hide-details="auto"
         />
         <v-select
             v-model="store.setupData.time_format"
@@ -14,7 +16,8 @@
             density="comfortable"
             variant="outlined"
             :label="languages.label('LBL_MINT4_SETUP_WIZARD_LOCALE_SETTINGS_TIME_FORMAT')"
-            hide-details
+            :rules="[requiredRule]"
+            hide-details="auto"
         />
         <v-select
             v-model="store.setupData.date_format"
@@ -22,7 +25,8 @@
             density="comfortable"
             variant="outlined"
             :label="languages.label('LBL_MINT4_SETUP_WIZARD_LOCALE_SETTINGS_DATE_FORMAT')"
-            hide-details
+            :rules="[requiredRule]"
+            hide-details="auto"
         />
         <v-select
             v-model="store.setupData.display_name_format"
@@ -30,13 +34,16 @@
             density="comfortable"
             variant="outlined"
             :label="languages.label('LBL_MINT4_SETUP_WIZARD_LOCALE_SETTINGS_NAME_FORMAT')"
-            hide-details
+            :rules="[requiredRule]"
+            hide-details="auto"
         />
+        </v-form>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import type { VForm } from 'vuetify/components'
 import { useBackendStore } from '@/store/backend'
 import { useLanguagesStore } from '@/store/languages'
 import { useSetupWizardStore } from '../SetupWizardStore'
@@ -44,6 +51,17 @@ import { useSetupWizardStore } from '../SetupWizardStore'
 const backend = useBackendStore()
 const languages = useLanguagesStore()
 const store = useSetupWizardStore()
+
+const formRef = ref<VForm>()
+
+async function validate() {
+    const result = await formRef.value?.validate()
+    return result?.valid ?? true
+}
+
+defineExpose({ validate })
+
+const requiredRule = (v: unknown) => !!v || languages.label('ERR_FIELD_REQUIRED')
 
 const timezonesList = computed(() =>
     Object.entries(backend.initData?.global?.time_zones ?? {}).map(([value, title]) => ({ value, title })),
@@ -65,6 +83,12 @@ const dateFormats = computed(() =>
     flex-direction: column;
     gap: 32px;
     margin-top: 8px;
+}
+
+.setup-wizard-locale-settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
 .v-input {

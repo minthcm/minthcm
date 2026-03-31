@@ -52,6 +52,7 @@ require_once __DIR__ . '/ImapHandlerInterface.php';
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class ImapHandlerOAuth2 implements ImapHandlerInterface
 {
 
@@ -911,7 +912,8 @@ class ImapHandlerOAuth2 implements ImapHandlerInterface
         int $offset,
         int $pageSize,
         array &$mailboxInfo,
-        array $columns
+        array $columns,
+        string $auth_type
     ): array
     {
         // MintHCM must implement or be abstract

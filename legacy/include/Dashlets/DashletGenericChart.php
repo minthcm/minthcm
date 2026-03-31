@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,8 @@ require_once('include/generic/LayoutManager.php');
 
 abstract class DashletGenericChart extends Dashlet
 {
+    public $layoutManager;
+    public $currentSearchFields;
     /**
      * The title of the dashlet
      * @var string
@@ -104,12 +106,13 @@ abstract class DashletGenericChart extends Dashlet
      * Constructor
      *
      * @param int $id
-     * @param array $options
+     * @param mixed[]|null $options
      */
     public function __construct(
         $id,
         array $options = null
         ) {
+        $dashletData = [];
         parent::__construct($id);
 
         if (isset($options)) {
@@ -233,7 +236,7 @@ abstract class DashletGenericChart extends Dashlet
         }
 
         if (!empty($req['dashletTitle'])) {
-            $options['title'] = $req['dashletTitle'];
+            $options['title'] = htmlentities(html_entity_decode($req['dashletTitle']));
         }
 
         $options['autoRefresh'] = empty($req['autoRefresh']) ? '0' : $req['autoRefresh'];
@@ -415,6 +418,7 @@ abstract class DashletGenericChart extends Dashlet
      */
     public function sortData($data_set, $keycolname1=null, $translate1=false, $keycolname2=null, $translate2=false, $ifsort2=false)
     {
+        $sortby1 = [];
         //You can set whether the columns need to be translated or sorted. It the column needn't to be translated, the sorting must be done in SQL, this function will not do the sorting.
         global $app_list_strings;
         $sortby1[] = array();

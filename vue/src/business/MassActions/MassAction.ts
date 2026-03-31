@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios'
+import { mintApi } from '@/api/api'
+import { AxiosResponse } from 'axios'
 
 export abstract class MassAction {
     protected module = ''
@@ -11,10 +12,11 @@ export abstract class MassAction {
 
     public abstract execute(): Promise<boolean>
 
-    protected async sendRequest(): Promise<AxiosResponse> {
+    protected async sendRequest(additional_data = {}): Promise<AxiosResponse> {
         const className = this.constructor.name
-        return await axios.post(`api/${this.module}/MassActions/${className}`, {
+        return await mintApi.post(`${this.module}/MassActions/${className}`, {
             ids: this.ids,
+            ...additional_data,
         })
     }
 }

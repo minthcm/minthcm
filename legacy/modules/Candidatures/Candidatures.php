@@ -16,6 +16,7 @@
 require_once 'modules/Candidatures/Candidatures_sugar.php';
 require_once 'modules/Candidatures/SugarFeeds/CandidaturesFeed.php';
 
+#[\AllowDynamicProperties]
 class Candidatures extends Candidatures_sugar
 {
 
@@ -24,27 +25,39 @@ class Candidatures extends Candidatures_sugar
 
         $old_bean = $this->fetched_row;
 
-        if ($old_bean['status'] != $this->status) {
+        if (!empty($old_bean) && $old_bean['status'] != $this->status) {
             $this->to_decision = 0;
         }
 
-        if (!strlen($this->name) > 0 || $old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['recruitment_end_id'] != $this->recruitment_end_id || $old_bean['parent_id'] != $this->parent_id) {
+        if (!strlen($this->name) > 0 || $old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['parent_id'] != $this->parent_id) {
             $this->generateName();
         }
         $this->change_relation = false;
-        if ($this->recruitment_end_id != $this->fetched_row['recruitment_end_id']) {
+        if ($this->recruitment_id != $this->fetched_row['recruitment_id']) {
             $this->change_relation = true;
         }
-        $this->setCountEmployees($this->recruitment_end_id, true);
-        $this->setCountEmployees($this->fetched_row['recruitment_end_id'], false);
+        $this->setCountEmployees($this->recruitment_id, true);
+        $this->setCountEmployees($this->fetched_row['recruitment_id'], false);
 
         $this->calculateCurrencies();
+        $this->closeRejectedCandidature();
 
         $id = parent::save($check_notify);
 
         $this->pushFeed();
 
         return $id;
+    }
+
+    protected function closeRejectedCandidature()
+    {
+        if (!empty($this->original_candidature_id)) {
+            $originalCandidature = BeanFactory::getBean('Candidatures', $this->original_candidature_id);
+            if ($originalCandidature && $originalCandidature->status != 'Rejected') {
+                $originalCandidature->status = 'Rejected';
+                $originalCandidature->save();
+            }
+        }
     }
 
     protected function pushFeed()
@@ -62,7 +75,7 @@ class Candidatures extends Candidatures_sugar
         ";
         $candidate_name = $this->db->getOne($sql);
 
-        $recruitement_id = $this->recruitment_end_id ?? $this->recruitment_id;
+        $recruitement_id = $this->recruitment_id;
         $sql = "SELECT p.name
             FROM positions p
             WHERE p.id = (
@@ -76,11 +89,11 @@ class Candidatures extends Candidatures_sugar
         $this->name = "{$candidate_name} {$position_name}";
     }
 
-    private function setCountEmployees($recruitment_end_id, $change_rel = true)
+    private function setCountEmployees($recruitment_id, $change_rel = true)
     {
-        if ('' != $recruitment_end_id) {
-            $recruitment = BeanFactory::getBean('Recruitments', $recruitment_end_id);
-            if ($recruitment->load_relationship('candidatures_end')) {
+        if ('' != $recruitment_id) {
+            $recruitment = BeanFactory::getBean('Recruitments', $recruitment_id);
+            if ($recruitment->load_relationship('candidatures')) {
                 $employees_number = $this->countEmployees($recruitment, $change_rel);
                 if ($employees_number != $recruitment->employees_number) {
                     $recruitment->counted = true;
@@ -94,7 +107,7 @@ class Candidatures extends Candidatures_sugar
     private function countEmployees($recruitment, $change_rel = true)
     {
         $result = 0;
-        $candidatures = $recruitment->candidatures_end->getBeans();
+        $candidatures = $recruitment->candidatures->getBeans();
         if ($this->change_relation) {
             if ($change_rel) {
                 $candidatures[] = $this;

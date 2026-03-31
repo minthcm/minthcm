@@ -1,13 +1,12 @@
 <?php
-
 namespace MintHCM\Api\Controllers\Module;
 
 use MintHCM\Data\MassActions\MassActionLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
-use Slim\Exception\HttpBadRequestException;
 
 class ListMassActionsController
 {
@@ -28,6 +27,14 @@ class ListMassActionsController
 
         if (!$mass_action->hasAccess()) {
             throw new HttpForbiddenException($request);
+        }
+        
+        if (method_exists($mass_action, 'setArrayFields')) {
+            $update_fields = $request->getAttribute('update_fields');
+            if (empty($update_fields) || !is_array($update_fields)) {
+                throw new HttpBadRequestException($request, "update_fields is required and should be an array");
+            }
+            $mass_action->setArrayFields($update_fields);
         }
 
         $result = $mass_action->execute();

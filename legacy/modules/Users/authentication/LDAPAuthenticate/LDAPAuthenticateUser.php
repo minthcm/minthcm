@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -57,6 +57,8 @@ define('DEFAULT_PORT', 389);
 class LDAPAuthenticateUser extends SugarAuthenticateUser
 {
 
+    public $ldapUserInfo;
+    public $user_name;
     /**
      * Does the actual authentication of the user and returns an id that will be used
      * to load the current user (loadUserOnSession)
@@ -176,7 +178,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
                     $user_uid = $user_uid[0];
                 }
                 // If user_uid contains special characters (for LDAP) we need to escape them !
-                $user_uid = str_replace(array("(", ")"), array("\(", "\)"), $user_uid);
+                $user_uid = str_replace(array("(", ")"), array("\(", "\)"), (string) $user_uid);
 
 
                 // build search query and determine if we are searching for a bare id or the full dn path
@@ -245,7 +247,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         //add the additional user filter if it is specified
         if (!empty($GLOBALS['ldap_config']->settings['ldap_login_filter'])) {
             $add_filter = $GLOBALS['ldap_config']->settings['ldap_login_filter'];
-            if (substr($add_filter, 0, 1) !== "(") {
+            if (substr((string) $add_filter, 0, 1) !== "(") {
                 $add_filter = "(" . $add_filter . ")";
             }
             $name_filter = "(&" . $name_filter . $add_filter . ")";
@@ -352,10 +354,10 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
 
         // MFH BUG# 14547 - Added htmlspecialchars_decode()
         $server = $GLOBALS['ldap_config']->settings['ldap_hostname'];
-        $base_dn = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_base_dn']);
+        $base_dn = htmlspecialchars_decode((string) $GLOBALS['ldap_config']->settings['ldap_base_dn']);
         if (!empty($GLOBALS['ldap_config']->settings['ldap_authentication'])) {
-            $admin_user = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_user']);
-            $admin_password = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_password']);
+            $admin_user = htmlspecialchars_decode((string) $GLOBALS['ldap_config']->settings['ldap_admin_user']);
+            $admin_password = htmlspecialchars_decode((string) $GLOBALS['ldap_config']->settings['ldap_admin_password']);
         } else {
             $admin_user = '';
             $admin_password = '';
@@ -417,7 +419,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         }
         ldap_unbind($ldapconn);
 
-        $GLOBALS['log']->info("ldapauth.ldap_rdn_lookup: Search result:\nldapauth.ldap_rdn_lookup: " . count($info));
+        $GLOBALS['log']->info("ldapauth.ldap_rdn_lookup: Search result:\nldapauth.ldap_rdn_lookup: " . (is_countable($info) ? count($info) : 0));
 
         if ($bind_attr == "dn") {
             $found_bind_user = $info[0]['dn'];

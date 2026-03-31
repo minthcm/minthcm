@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'include/SugarOAuthServer.php';
 
+#[\AllowDynamicProperties]
 class OauthTokensViewAuthorize extends SugarView
 {
     public function display()
@@ -90,7 +91,7 @@ class OauthTokensViewAuthorize extends SugarView
             $verify = $token->authorize(array("user" => $current_user->id));
             if (!empty($token->callback_url)) {
                 $redirect_url=$token->callback_url;
-                if (strstr($redirect_url, "?") !== false) {
+                if (strstr((string) $redirect_url, "?") !== false) {
                     $redirect_url .= '&';
                 } else {
                     $redirect_url .= '?';

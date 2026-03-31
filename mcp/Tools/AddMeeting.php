@@ -5,7 +5,8 @@ namespace MintMCP\Tools;
 
 use Mcp\Types\CallToolResult;
 use Mcp\Types\ToolInputSchema;
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\DateTimeConversion;
+use MintMCP\Tools\Utils\ToolValidation;
 
 class AddMeeting extends AbstractMCPTool
 {
@@ -118,17 +119,17 @@ class AddMeeting extends AbstractMCPTool
      */
     private function validateArguments($arguments): void
     {
-        ToolValidationMiddleware::validateMany([
-            ToolValidationMiddleware::make($arguments->name, 'name')->required()->string(),
-            ToolValidationMiddleware::make($arguments->date_start, 'date_start')->required()->string()->date(),
-            ToolValidationMiddleware::make($arguments->duration_hours ?? 1, 'duration_hours')->integer()->greaterThanOrEquals(0),
-            ToolValidationMiddleware::make($arguments->duration_minutes ?? 0, 'duration_minutes')->integer()->greaterThanOrEquals(0)->lessThan(60),
+        ToolValidation::validateMany([
+            ToolValidation::make($arguments->name, 'name')->required()->string(),
+            ToolValidation::make($arguments->date_start, 'date_start')->required()->string()->date(),
+            ToolValidation::make($arguments->duration_hours ?? 1, 'duration_hours')->integer()->greaterThanOrEquals(0),
+            ToolValidation::make($arguments->duration_minutes ?? 0, 'duration_minutes')->integer()->greaterThanOrEquals(0)->lessThan(60),
         ]);
 
         if (!empty($arguments->date_end)) {
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->date_end, 'date_end')->string()->date(),
-                ToolValidationMiddleware::make($arguments->date_end, 'date_end')->isAfter($arguments->date_start, 'date_start'),
+            ToolValidation::validateMany([
+                ToolValidation::make($arguments->date_end, 'date_end')->string()->date(),
+                ToolValidation::make($arguments->date_end, 'date_end')->isAfter($arguments->date_start, 'date_start'),
             ]);
         }
     }
@@ -156,15 +157,15 @@ class AddMeeting extends AbstractMCPTool
         $meeting->external_id = $arguments->external_id ?? '';
         $meeting->duration_hours = $arguments->duration_hours ?? 1;
         $meeting->duration_minutes = $arguments->duration_minutes ?? 0;
-        $meeting->date_start = $arguments->date_start;
+        $meeting->date_start = DateTimeConversion::fromUserTZ($arguments->date_start);
 
         // Calculate date_end if not provided
         if (empty($arguments->date_end)) {
-            $startTime = strtotime($arguments->date_start);
+            $startTime = strtotime($meeting->date_start);
             $duration = ($meeting->duration_hours * 3600) + ($meeting->duration_minutes * 60);
             $meeting->date_end = date('Y-m-d H:i:s', $startTime + $duration);
         } else {
-            $meeting->date_end = $arguments->date_end;
+            $meeting->date_end = DateTimeConversion::fromUserTZ($arguments->date_end);
         }
 
         $id = $meeting->save();
@@ -204,13 +205,13 @@ class AddMeeting extends AbstractMCPTool
         $resultText .= "Description: " . $meeting->description . "\n";
         $resultText .= "Assigned User: " . ($meeting->assigned_user_name ?? '') . " (" . $meeting->assigned_user_id . ")\n";
         $resultText .= "Location: " . $meeting->location . "\n";
-        $resultText .= "Start: " . $meeting->date_start . "\n";
-        $resultText .= "End: " . $meeting->date_end . "\n";
+        $resultText .= "Start: " . DateTimeConversion::toUserTZ($meeting->date_start) . "\n";
+        $resultText .= "End: " . DateTimeConversion::toUserTZ($meeting->date_end) . "\n";
         $resultText .= "Duration: " . $meeting->duration_hours . "h " . $meeting->duration_minutes . "m\n";
         $resultText .= "Status: " . ($meeting->status) . "\n";
         $resultText .= "Join URL: " . ($meeting->join_url ?? '') . "\n";
         $resultText .= "Creator: " . ($meeting->creator ?? $GLOBALS['current_user']->user_name) . "\n";
-        $resultText .= "Modified: " . $meeting->date_modified . "\n";
+        $resultText .= "Modified: " . DateTimeConversion::toUserTZ($meeting->date_modified) . "\n";
         $resultText .= "MintHCM URL: " . $this->getRecordUrl('Meetings', $meetingId) . "\n";
 
         return $resultText;

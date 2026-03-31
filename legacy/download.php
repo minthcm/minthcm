@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -78,8 +78,9 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         $bean_name = $beanList[$module];
         if ($bean_name == 'aCase') {
             $bean_name = 'Case';
-        }
-        if (!file_exists('modules/' . $module . '/' . $bean_name . '.php')) {
+        }        
+        global $beanFiles;
+        if (!file_exists($beanFiles[$bean_name])){
             die($app_strings['ERROR_TYPE_NOT_VALID']);
         }
 
@@ -152,7 +153,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         $local_location = "include/images/default-profile.png";
     }
 
-    if (!file_exists($local_location) || strpos($local_location, "..")) {
+    if (!file_exists($local_location) || strpos((string) $local_location, "..")) {
         if (isset($image_field)) {
             header("Content-Type: image/png");
             header("Content-Disposition: attachment; filename=\"No-Image.png\"");
@@ -229,7 +230,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             }
             // expose original mime type only for images, otherwise the content of arbitrary type
             // may be interpreted/executed by browser
-            if (isset($row['file_mime_type']) && strpos($row['file_mime_type'], 'image/') === 0) {
+            if (isset($row['file_mime_type']) && strpos((string) $row['file_mime_type'], 'image/') === 0) {
                 $mime_type = $row['file_mime_type'];
             }
             if (isset($_REQUEST['field'])) {
@@ -251,7 +252,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             }
         }
 
-        if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT'])) {
+        if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/MSIE/", (string) $_SERVER['HTTP_USER_AGENT'])) {
             $name = urlencode($name);
             $name = str_replace("+", "_", $name);
         }
@@ -276,10 +277,10 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             $allowedPreview = $sugar_config['allowed_preview'] ?? [];
 
             if (empty($row['file_ext'])) {
-                $row['file_ext'] = pathinfo($name, PATHINFO_EXTENSION);
+                $row['file_ext'] = pathinfo((string) $name, PATHINFO_EXTENSION);
             }
 
-            if (in_array($row['file_ext'], $allowedPreview, true)) {
+            if (!empty($row['file_ext']) && in_array($row['file_ext'], $allowedPreview, true)) {
                 $showPreview = isset($_REQUEST['preview']) && $_REQUEST['preview'] === 'yes' && $mime_type !== 'text/html';
             }
 

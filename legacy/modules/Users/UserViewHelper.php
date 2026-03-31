@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * This helper handles the rest of the fields for the Users Edit and Detail views.
  * There are a lot of fields on those views that do not map directly to being used on the metadata based UI, so they are handled here.
  */
+#[\AllowDynamicProperties]
 class UserViewHelper
 {
 
@@ -312,21 +313,48 @@ class UserViewHelper
         }
 
         // If new regular user without system generated password or new portal user
-        if (((isset($enable_syst_generate_pwd) && !$enable_syst_generate_pwd && $this->usertype != 'GROUP') || $this->usertype == 'PORTAL_ONLY') && empty($this->bean->id)) {
+        if (
+            (
+                (
+                    isset($enable_syst_generate_pwd)
+                    && !$enable_syst_generate_pwd
+                    && $this->usertype != 'GROUP'
+                )
+                || $this->usertype == 'PORTAL_ONLY'
+            )
+            && empty($this->bean->id)
+            && empty($GLOBALS['system_config']->settings['system_ldap_enabled'])
+        ) {
             $this->ss->assign('REQUIRED_PASSWORD', '1');
         } else {
             $this->ss->assign('REQUIRED_PASSWORD', '0');
         }
 
         // If my account page or portal only user or regular user without system generated password or a duplicate user
-        if ((($current_user->id == $this->bean->id) || $this->usertype == 'PORTAL_ONLY' || (($this->usertype == 'REGULAR' || $this->usertype == 'Administrator' || (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true' && $this->usertype != 'GROUP')) && !$enable_syst_generate_pwd)) && !$this->bean->external_auth_only) {
+        // Make sure group users don't get a password change prompt
+        if (
+            (
+                $current_user->id == $this->bean->id
+                || $this->usertype == 'PORTAL_ONLY' 
+                || (
+                    (
+                        $this->usertype == 'REGULAR' 
+                        || $this->usertype == 'Administrator' 
+                        || (
+                            isset($_REQUEST['isDuplicate']) 
+                            && $_REQUEST['isDuplicate'] == 'true' 
+                            && $this->usertype != 'GROUP'
+                        )
+                    ) 
+                    && !$enable_syst_generate_pwd
+                )
+            )
+            && !$this->bean->external_auth_only
+            && $this->usertype != 'GROUP'
+            && empty($GLOBALS['system_config']->settings['system_ldap_enabled'])
+        ) {
             $this->ss->assign('CHANGE_PWD', '1');
         } else {
-            $this->ss->assign('CHANGE_PWD', '0');
-        }
-
-        // Make sure group users don't get a password change prompt
-        if ($this->usertype == 'GROUP') {
             $this->ss->assign('CHANGE_PWD', '0');
         }
 
@@ -358,7 +386,7 @@ class UserViewHelper
         } else {
             $this->ss->assign("THEMES", get_select_options_with_id(SugarThemeRegistry::availableThemes(), $GLOBALS['sugar_config']['default_theme']));
         }
-        $this->ss->assign("SHOW_THEMES", count(SugarThemeRegistry::availableThemes()) > 1);
+        $this->ss->assign("SHOW_THEMES", (is_countable(SugarThemeRegistry::availableThemes()) ? count(SugarThemeRegistry::availableThemes()) : 0) > 1);
         $this->ss->assign("USER_THEME_COLOR", $this->bean->getPreference('user_theme_color'));
         $this->ss->assign("USER_THEME_FONT", $this->bean->getPreference('user_theme_font'));
         $this->ss->assign("USER_THEME", $user_theme);
@@ -404,6 +432,9 @@ class UserViewHelper
     {
         global $current_user, $locale, $app_strings, $app_list_strings, $sugar_config;
         // This is for the "Advanced" tab, it's not controlled by the metadata UI so we have to do more for it.
+
+        $admin = BeanFactory::newBean('Administration');
+        $admin->retrieveSettings();
 
         $this->ss->assign('EXPORT_DELIMITER', $this->bean->getPreference('export_delimiter'));
 
@@ -456,9 +487,9 @@ class UserViewHelper
         /* MintHCM #138652 START */
         $site_url = rtrim($sugar_config['site_url'], '/');
         $publish_url = $site_url . '/vcal_server.php';
+        $token = "?";
         /* MintHCM #138652 END */
 
-        $token = "/";
         //determine if the web server is running IIS
         //if so then change the publish url
         if (isset($_SERVER) && !empty($_SERVER['SERVER_SOFTWARE'])) {
@@ -477,7 +508,7 @@ class UserViewHelper
 
         /* MintHCM #138652 START */
         $ical_url = $site_url . "/ical_server.php?type=ics&key=<span id=\"ical_pub_key_span\">$publish_key</span>";
-        /* MintHCMMM #138652 END */
+        /* MintHCM #138652 END */
 
         if (!empty($this->bean->email1)) {
             $ical_url .= '&email=' . $this->bean->email1;
@@ -487,7 +518,7 @@ class UserViewHelper
 
         $this->ss->assign("CALENDAR_PUBLISH_URL", $publish_url);
         /* MintHCM #138652 START */
-        $this->ss->assign("CALENDAR_SEARCH_URL", $site_url . "/vcal_server.php/type=vfb&key=<span id=\"search_pub_key_span\">$publish_key</span>&email=%NAME%@%SERVER%");
+        $this->ss->assign("CALENDAR_SEARCH_URL", $site_url . "/vcal_server.php?type=vfb&key=<span id=\"search_pub_key_span\">$publish_key</span>&email=%NAME%@%SERVER%");
         /* MintHCM #138652 END */
         $this->ss->assign("CALENDAR_ICAL_URL", $ical_url);
 
@@ -577,6 +608,8 @@ class UserViewHelper
     protected function setupAdvancedTabNavSettings()
     {
         global $app_list_strings;
+
+        $ss = null;
 
         // Grouped tabs?
         $useGroupTabs = $this->bean->getPreference('navigation_paradigm');
@@ -690,9 +723,12 @@ class UserViewHelper
             $this->bean->setPreference('timezone', $userTZ);
         }
 
-        if (!$this->bean->getPreference('ut')) {
+        $ut = $this->bean->getPreference('ut');
+
+        if ($ut === '0') {
             $this->ss->assign('PROMPTTZ', ' checked');
         }
+
         $this->ss->assign('TIMEZONE_CURRENT', $userTZ);
         $this->ss->assign('TIMEZONEOPTIONS', TimeDate::getTimezoneList());
         $this->ss->assign("TIMEZONE", TimeDate::tzName($userTZ));

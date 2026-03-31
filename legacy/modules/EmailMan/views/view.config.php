@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ require_once('modules/EmailMan/Forms.php');
 require_once 'modules/EAPM/OAuth2InfoObtainer.php';
 // MintHCM #110041 END
 
+#[\AllowDynamicProperties]
 class ViewConfig extends SugarView
 {
     // MintHCM #110041 START
@@ -154,7 +155,8 @@ class ViewConfig extends SugarView
         $focus = BeanFactory::newBean('Administration');
         $focus->retrieveSettings(); //retrieve all admin settings.
         $GLOBALS['log']->info("Mass Emailer(EmailMan) ConfigureSettings view");
-        
+
+
         $useLegacyEmailConfig = $sugar_config['legacy_email_behaviour'] ?? false;
 
         $this->ss->assign("legacyEmailConfigEnabled", $useLegacyEmailConfig);
@@ -185,56 +187,56 @@ class ViewConfig extends SugarView
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp type is not set for focus');
         }
-        
+
         $mailSmtpServer = null;
         if (isset($focus->settings['mail_smtpserver'])) {
             $mailSmtpServer = $focus->settings['mail_smtpserver'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp type is not set for focus');
         }
-        
+
         $mailSmtpPort = null;
         if (isset($focus->settings['mail_smtpport'])) {
             $mailSmtpPort = $focus->settings['mail_smtpport'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp port is not set for focus');
         }
-        
+
         $mailSmtpUser = null;
         if (isset($focus->settings['mail_smtpuser'])) {
             $mailSmtpUser = $focus->settings['mail_smtpuser'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp user is not set for focus');
         }
-        
+
         $mailSmtpAuthReq = null;
         if (isset($focus->settings['mail_smtpauth_req'])) {
             $mailSmtpAuthReq = $focus->settings['mail_smtpauth_req'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp auth req is not set for focus');
         }
-        
+
         $mailSmtpSsl = null;
         if (isset($focus->settings['mail_smtpssl'])) {
             $mailSmtpSsl = $focus->settings['mail_smtpssl'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp pass is not set for focus');
         }
-        
+
         $mailSmtpPass = null;
         if (isset($focus->settings['mail_smtppass'])) {
             $mailSmtpPass = $focus->settings['mail_smtppass'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail smtp pass is not set for focus');
         }
-        
+
         $mailSendType = null;
         if (isset($focus->settings['mail_sendtype'])) {
             $mailSendType = $focus->settings['mail_sendtype'];
         } else {
             LoggerManager::getLogger()->error('EmailMan view display error: mail send type is not set for focus');
         }
-        
+
         $mailAllowUserSend = null;
         if (isset($sugar_config['email_allow_send_as_user'])) {
             $mailAllowUserSend = $sugar_config['email_allow_send_as_user'];
@@ -247,8 +249,13 @@ class ViewConfig extends SugarView
         $this->ss->assign("mail_authtype", $focus->settings['mail_authtype']);
         $this->ss->assign("js_authinfo", $this->getAuthInfo($focus->settings));
         // MintHCM #110041 END
-        
-        $this->ss->assign("mail_smtptype", $mailSmtpType);
+
+        $oe = new OutboundEmail();
+        $oe = $oe->getSystemEmail();
+
+        $this->ss->assign("system_outbound_email_id", $oe->id);
+        $this->ss->assign("system_outbound_email_name", $oe->name);
+
         $this->ss->assign("mail_smtpserver", $mailSmtpServer);
         $this->ss->assign("mail_smtpport", $mailSmtpPort);
         $this->ss->assign("mail_smtpuser", $mailSmtpUser);
@@ -326,7 +333,7 @@ class ViewConfig extends SugarView
                 $emailEnableConfirmOptIn
             )
         );
-        
+
         ////	END USER EMAIL DEFAULTS
         ///////////////////////////////////////////////////////////////////////////////
 
@@ -342,7 +349,7 @@ class ViewConfig extends SugarView
             $sugar_config['email_xss'] = getDefaultXssTags();
         }
 
-        foreach (unserialize(base64_decode($sugar_config['email_xss'])) as $k => $v) {
+        foreach (unserialize(base64_decode($sugar_config['email_xss']), ['allowed_classes' => false]) as $k => $v) {
             $this->ss->assign($k."Checked", 'CHECKED');
         }
 

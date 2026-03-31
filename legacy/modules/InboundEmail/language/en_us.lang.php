@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,6 +56,7 @@ $mod_strings = array(
     'ERR_NO_IMAP' => 'No IMAP libraries found. Please resolve this before continuing with Inbound Email',
     'ERR_NO_OPTS_SAVED' => 'No optimums were saved with your Inbound Email account. Please review the settings',
     'ERR_TEST_MAILBOX' => 'Please check your settings and try again.',
+    'ERR_INVALID_PORT' => 'Invalid Port',
 
     'LBL_AUTOREPLY' => 'Auto-Reply Template',
     'LBL_BASIC' => 'Mail Account Information',
@@ -106,6 +107,8 @@ $mod_strings = array(
     'LBL_SSL_DESC' => 'If your mail server supports secure socket connections, enabling this will force SSL connections when importing email.',
     'LBL_SSL' => 'Use SSL',
     'LBL_STATUS' => 'Status',
+    'LBL_EMAIL_BODY_FILTERING' => 'Email Body Filter Type',
+    'LBL_SYSTEM_DEFAULT' => 'System Default',
     'LBL_TEST_BUTTON_TITLE' => 'Test',
     'LBL_TEST_SETTINGS' => 'Test Settings',
     'LBL_TEST_CONNECTION_SETTINGS' => 'Test Connection Settings',
@@ -140,6 +143,7 @@ $mod_strings = array(
     'LNK_QUICK_REPLY' => 'Reply',
     'LNK_SENT_EMAIL_LIST' => 'Sent Emails',
     'LBL_EDIT_LAYOUT' => 'Edit Layout' /*for 508 compliance fix*/,
+    'LBL_TYPE_DIFFERENT' => 'External OAuth Connection type must be the SAME as the Inbound Email Account type',
 
     'LBL_MODIFIED_BY' => 'Modified By',
     'LBL_SERVICE' => 'Service',
@@ -194,5 +198,6 @@ $mod_strings = array(
     'LBL_SET_AS_DEFAULT_BUTTON' => 'Set as default',
 
     'LBL_MOVE_MESSAGES_TO_TRASH_AFTER_IMPORT' => 'Move Messages To Trash After Import?',
+    'LBL_EAPM_ID' => 'EAPM (ID)'
 );
 

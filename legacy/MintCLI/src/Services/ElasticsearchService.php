@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\Services;
 
+#[\AllowDynamicProperties]
 class ElasticsearchService
 {
     public function testConnection(string $host, string $port, ?string $username, ?string $password)
@@ -24,9 +25,13 @@ class ElasticsearchService
             return $this->error("Invalid response from ElasticSearch");
         }
 
-        $major_version = explode('.', $response['version']['number'])[0];
+        $version = $response['version']['number'];
+        $major_version = explode('.', $version)[0];
         if ($major_version !== '7') {
-            return $this->error("MintHCM currently supports only Elasticsearch 7, you tried to connect with $major_version");
+            return $this->error("MintHCM currently supports only Elasticsearch 7.x, you tried to connect with $major_version");
+        }
+        if (version_compare($version, '7.10.0', '<')) {
+            return $this->error("MintHCM requires Elasticsearch 7.10 or higher, you have $version");
         }
 
         return $this->ok();

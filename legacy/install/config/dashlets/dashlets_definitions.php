@@ -9,6 +9,14 @@ $dashlets_definitions = array(
             'title' => 'LBL_TODAYS_WORK_SCHEDULE_DASHLET',
         ),
     ),
+    'main_my_spent_time_dashlet' => array(
+        'className' => 'SpentTimeDashlet',
+        'module' => 'SpentTime',
+        'fileLocation' => 'modules/SpentTime/Dashlets/SpentTimeDashlet/SpentTimeDashlet.php',
+        'options' => array(
+            'title' => 'LBL_MY_SPENT_TIME_DASHLET',
+        ),
+    ),
     'main_my_tasks_dashlet' => array(
         'className' => 'MyTasksDashlet',
         'module' => 'Tasks',

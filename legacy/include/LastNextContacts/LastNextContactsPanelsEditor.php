@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class LastNextContactsPanelsEditor {
 
    const TYPE_TABS = 1;

@@ -1,14 +1,22 @@
 <template>
     <v-menu offset="16">
         <template v-slot:activator="{ props, isActive }">
-            <button class="user-btn" :class="[isActive && 'active']" v-ripple v-bind="props">
+            <button 
+                :class="{
+                    'user-btn': true,
+                    'active': isActive, 
+                    'user-btn-railed': $vuetify.display.mdAndDown
+                }" 
+                v-ripple 
+                v-bind="props"
+            >
                 <img
                     v-if="auth.user?.photo"
                     class="user-avatar"
                     :src="`legacy/index.php?entryPoint=download&type=Users&id=${auth.user?.id}_photo`"
                 />
                 <v-icon v-else icon="mdi-account" class="user-default-avatar" />
-                <span>
+                <span v-if="!$vuetify.display.mdAndDown">
                     {{ auth.user?.first_name || auth.user?.last_name }}
                 </span>
             </button>
@@ -107,6 +115,17 @@ const menuItems = computed<MenuListItem[]>(() => {
         font-size: 28px;
         padding: 20px 12px 20px 20px;
         border-radius: 50%;
+    }
+
+    &.user-btn-railed {
+        border-radius: 50%;
+        padding: 6px;
+        align-items: start;
+
+        .user-default-avatar {
+            padding: 0px;
+            border-radius: 50%;
+        }
     }
 }
 </style>

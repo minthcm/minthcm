@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -91,4 +91,7 @@ $mod_strings = array(
    'LBL_PARENT_NAME' => 'Related to',
    'LBL_PARENT_ID' => 'Related to (ID)',
    'LBL_LIST_TITLE' => 'Reservation',
+   'LBL_RECORDVIEW_PANEL1' => 'Reservation Details', 
+   'LBL_OTHER' => 'Other',  
+   'ERR_RESERVATION_TIME_CONFLICT' => 'This reservation already exist.',
 );

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -64,6 +64,7 @@ require_once('modules/ModuleBuilder/parsers/views/History.php');
  * SugarMerge wraps around all the merge functionality of Sugar given a module name and the path to an unzipped patch
  *
  */
+#[\AllowDynamicProperties]
 class SugarMerge
 {
     private $mergeMapping = array();
@@ -75,9 +76,9 @@ class SugarMerge
 
     public function __construct($new_path='', $original_path='', $custom_path='custom')
     {
-        $this->new_path = empty($new_path) || preg_match('/[\/]$/', $new_path) ? $new_path : $new_path . '/';
-        $this->original_path = empty($original_path) || preg_match('/[\/]$/', $original_path) ? $original_path : $original_path . '/';
-        $this->custom_path = empty($custom_path) || preg_match('/[\/]$/', $custom_path) ? $custom_path : $custom_path . '/';
+        $this->new_path = empty($new_path) || preg_match('/[\/]$/', (string) $new_path) ? $new_path : $new_path . '/';
+        $this->original_path = empty($original_path) || preg_match('/[\/]$/', (string) $original_path) ? $original_path : $original_path . '/';
+        $this->custom_path = empty($custom_path) || preg_match('/[\/]$/', (string) $custom_path) ? $custom_path : $custom_path . '/';
 
         $this->mergeMapping = array(
             'editviewdefs.php'=> new EditViewMerge(),
@@ -109,8 +110,8 @@ class SugarMerge
     {
         $this->merged = array();
         $searchDirectory = $this->custom_path;
-        if (!preg_match('/[\/]modules$/si', $searchDirectory)) {
-            $searchDirectory .= preg_match('/[\/]$/', $this->custom_path) ? 'modules' : '/modules';
+        if (!preg_match('/[\/]modules$/si', (string) $searchDirectory)) {
+            $searchDirectory .= preg_match('/[\/]$/', (string) $this->custom_path) ? 'modules' : '/modules';
         }
 
         if (file_exists($searchDirectory)) {

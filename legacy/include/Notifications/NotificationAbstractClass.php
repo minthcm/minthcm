@@ -5,6 +5,7 @@
  * if notification does not be return for process,
  * system returns Null object in order not to stop whole process
  */
+#[\AllowDynamicProperties]
 abstract class NotificationAbstractClass
 {
 

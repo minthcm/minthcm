@@ -1,5 +1,6 @@
 <?php
 require_once 'include/WebPushNotifications/WebPushNotification.php';
+#[\AllowDynamicProperties]
 class WebPushUserNewsNotification extends WebPushNotification
 {
     public function __construct(UsersNews $bean)

@@ -7,6 +7,7 @@ require_once 'include/LastNextContacts/LastNextContactsQueries.php';
 require_once 'include/LastNextContacts/LastNextContactsEmail.php';
 require_once 'include/LastNextContacts/LastNextContactsConfig.php';
 
+#[\AllowDynamicProperties]
 class LastNextContacts extends LastNextContactsDeadCode
 {
     protected $tmp_beans = array();
@@ -26,7 +27,7 @@ class LastNextContacts extends LastNextContactsDeadCode
             $bean->load_relationship('candidates');
             if (isset($bean->candidates)) {
                 $beans = $bean->candidates->getBeans();
-                if (count($beans) > 0) {
+                if (is_countable($beans) ? count($beans) > 0 : false) {
                     $this->getCandidates($beans);
                 }
             }
@@ -184,7 +185,8 @@ class LastNextContacts extends LastNextContactsDeadCode
         $dates = $this->unsetInvalidValues($dates);
 
         sort($dates);
-        return count($dates) > 0 ? $dates[count($dates) - 1] : null;
+        $dates_count = is_countable($dates) ? count($dates) : 0;
+        return $dates_count > 0 ? $dates[$dates_count - 1] : null;
     }
 
     protected function getFirstEmailFromBean($bean)
@@ -254,7 +256,8 @@ class LastNextContacts extends LastNextContactsDeadCode
         $dates = $this->unsetInvalidValues($dates);
 
         sort($dates);
-        return count($dates) > 0 ? $dates[0] : null;
+        $dates_count = is_countable($dates) ? count($dates) : 0;
+        return $dates_count > 0 ? $dates[0] : null;
     }
     protected function getLNCQueries()
     {

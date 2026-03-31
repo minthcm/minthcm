@@ -1,5 +1,6 @@
 <?php
 require_once 'include/WebPushNotifications/WebPushNotifiable.php';
+#[\AllowDynamicProperties]
 abstract class WebPushNotification implements WebPushNotifiable
 {
     protected $title;

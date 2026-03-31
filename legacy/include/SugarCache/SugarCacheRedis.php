@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -109,6 +109,14 @@ class SugarCacheRedis extends SugarCacheAbstract
                 if (!$this->_redis->connect($this->_host, $this->_port)) {
                     return false;
                 }
+                
+                // Authenticate if password is configured
+                $password = SugarConfig::getInstance()->get('external_cache.redis.password');
+                if (!empty($password)) {
+                    if (!$this->_redis->auth($password)) {
+                        return false;
+                    }
+                }
             }
         } catch (RedisException $e) {
             return false;
@@ -145,7 +153,7 @@ class SugarCacheRedis extends SugarCacheAbstract
         }
         
         return is_string($returnValue) ?
-            unserialize($returnValue) :
+            unserialize($returnValue, ['allowed_classes' => false]) :
             $returnValue;
     }
     

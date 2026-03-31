@@ -2,6 +2,7 @@
 
 require_once 'modules/SecurityGroups/SecurityGroup_sugar.php';
 require_once('modules/SecurityGroups/SugarFeeds/SecurityGroupsFeed.php');
+#[\AllowDynamicProperties]
 class SecurityGroup extends SecurityGroup_sugar {
 
    /**
@@ -232,7 +233,7 @@ LIMIT 1";
          //check to see if a member of more than 1 group...if not then just inherit the one.
          //Otherwise, this is taken on the edit view on create now
          $security_modules = self::getSecurityModules();
-         if ( in_array($focus->module_dir, array_keys($security_modules)) ) {
+         if (array_key_exists($focus->module_dir, $security_modules)) {
             //check if user is in more than 1 group. If so then set the session var otherwise inherit it's only group
             global $current_user;
 
@@ -253,9 +254,9 @@ LIMIT 1";
       if ( !$isUpdate ) {
          //inherit only for those that support Security Groups
          $security_modules = self::getSecurityModules();
-         if ( !in_array($focus->module_dir, array_keys($security_modules)) ) {
+         if (!array_key_exists($focus->module_dir, $security_modules)) {
             return;
-         }
+        }
 
          $defaultGroups = self::retrieveDefaultGroups();
          foreach ( $defaultGroups as $default_id => $defaultGroup ) {
@@ -296,7 +297,7 @@ LIMIT 1";
          //inherit only for those that support Security Groups
          $security_modules = self::getSecurityModules();
 
-         if ( in_array($focus->module_dir, array_keys($security_modules)) ) {
+         if (array_key_exists($focus->module_dir, $security_modules)) {
             $query = 'INSERT INTO securitygroups_records(id,securitygroup_id,record_id,module,date_modified,deleted) '
                     . 'SELECT DISTINCT ';
             if ( $focus->db->dbType == 'mysql' ) {
@@ -330,8 +331,8 @@ LIMIT 1";
             //inherit only for those that support Security Groups
             $security_modules = self::getSecurityModules();
             //if(in_array($focus->module_dir,$security_modules)) {
-            if ( in_array($focus->module_dir, array_keys($security_modules)) ) {
-               $query = 'INSERT INTO securitygroups_records(id,securitygroup_id,record_id,module,date_modified,deleted) '
+               if (array_key_exists($focus->module_dir, $security_modules)) {
+                  $query = 'INSERT INTO securitygroups_records(id,securitygroup_id,record_id,module,date_modified,deleted) '
                        . 'SELECT DISTINCT ';
                if ( $focus->db->dbType == 'mysql' ) {
                   $query .= ' uuid() ';
@@ -368,7 +369,7 @@ LIMIT 1";
          //inherit only for those that support Security Groups
          $security_modules = self::getSecurityModules();
          //if(!in_array($focus_module_dir,$security_modules)) {
-         if ( !in_array($focus_module_dir, array_keys($security_modules)) ) {
+         if (!array_key_exists($focus_module_dir, $security_modules)) {
             //rost fix2
             return; //don't inherit for this module
          }
@@ -381,7 +382,7 @@ LIMIT 1";
          if ( isset($_REQUEST['relate_to']) && isset($_REQUEST['relate_id']) ) {
             //relate_to is not guaranteed to be a module name anymore.
             //if it isn't load the relationship and find the module name that way
-            if ( !in_array($_REQUEST['relate_to'], array_keys($security_modules)) ) {
+            if (!array_key_exists($_REQUEST['relate_to'], $security_modules)) {
                //check to see if relate_to is the relationship name
                require_once 'modules/Relationships/Relationship.php';
                $relationship = BeanFactory::newBean('Relationships');
@@ -609,6 +610,10 @@ LIMIT 1";
    public static function getSecurityModules() 
    {
       global $app_list_strings;
+      if (empty($app_list_strings)) {
+        global $current_language;
+        $app_list_strings = return_app_list_strings_language($current_language);
+      }
 
       $security_modules = array();
 
@@ -621,11 +626,11 @@ LIMIT 1";
       $query = "SELECT lhs_module, rhs_module FROM $rs->table_name WHERE deleted=0 AND (lhs_module = 'SecurityGroups' OR rhs_module='SecurityGroups')";
       $GLOBALS['log']->debug("SecuritySuite: Get SecuritySuite Enabled Modules: $query");
       $result = $rs->db->query($query);
-      while ( ($row = $rs->db->fetchByAssoc($result)) != null ) {
-         if ( $row['lhs_module'] == 'SecurityGroups' ) {
-            if ( in_array($row['rhs_module'], $module_blacklist) ) {
-               continue;
-            }
+      while (($row = $rs->db->fetchByAssoc($result)) != null) {
+         if ($row['lhs_module'] === 'SecurityGroups') {
+             if (in_array($row['rhs_module'], $module_blacklist)) {
+                 continue;
+             }
 
             if ( isset($app_list_strings['moduleList'][$row['rhs_module']]) ) {
                $security_modules[$row['rhs_module']] = $app_list_strings['moduleList'][$row['rhs_module']]; //rost fix

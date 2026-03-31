@@ -41,9 +41,13 @@ class DemoDataService
 
     protected function loadTablesWithSQLFilesInfo() {
         foreach(array_filter(glob(static::SQL_FILES_PATH.'/*.sql'), 'is_file') as $file) {
+            $table_name = pathinfo($file, PATHINFO_FILENAME);
+            if(isset($this->config['blacklist_tables']) && in_array($table_name, $this->config['blacklist_tables'])) {
+                continue;
+            }
             $this->tables[] = 
             [
-                'file_name' => pathinfo($file, PATHINFO_FILENAME), 
+                'file_name' => $table_name, 
                 'file_path' => $file,
             ];
         }

@@ -3,6 +3,7 @@
 require_once 'include/LastNextContacts/LastNextContactsConfig.php';
 require_once 'include/LastNextContacts/LastNextContactsBase.php';
 
+#[\AllowDynamicProperties]
 class LastNextContactsQueries extends LastNextContactsBase
 {
     protected $date_sent_field;

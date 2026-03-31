@@ -41,6 +41,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/WorkingMonths/WorkingMonths.php');
 
+#[\AllowDynamicProperties]
 class WorkingMonthsDashlet extends DashletGeneric {
 
    public function __construct($id, $def = null) {

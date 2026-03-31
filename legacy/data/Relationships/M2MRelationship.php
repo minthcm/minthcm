@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ require_once("data/Relationships/SugarRelationship.php");
  * Represents a many to many relationship that is table based.
  * @api
  */
+#[\AllowDynamicProperties]
 class M2MRelationship extends SugarRelationship
 {
     public $type = "many-to-many";
@@ -100,7 +101,7 @@ class M2MRelationship extends SugarRelationship
         //Multiple links with same relationship name
         else {
             if (is_array($results)) {
-                $GLOBALS['log']->error("Warning: Multiple links found for relationship {$this->name} within module {$module}");
+                $GLOBALS['log']->warn("Multiple links found for relationship {$this->name} within module {$module}");
                 return $this->getMostAppropriateLinkedDefinition($results);
             } else {
                 return false;
@@ -415,6 +416,7 @@ class M2MRelationship extends SugarRelationship
 
     public function getQuery($link, $params = array())
     {
+        $whereTable = '';
         if ($this->linkIsLHS($link)) {
             $knownKey = $this->def['join_key_lhs'];
             $targetKey = $this->def['join_key_rhs'];
@@ -701,4 +703,3 @@ class M2MRelationship extends SugarRelationship
         return $fields;
     }
 }
-

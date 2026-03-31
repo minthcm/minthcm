@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -161,7 +161,7 @@ $dictionary['SalaryRanges'] = array(
             'name' => 'currency_id',
             'dbType' => 'id',
             'vname' => 'LBL_CURRENCY_ID',
-            'type' => 'currency_id',
+            'type' => 'id',
             'function' => array(
                 'name' => 'getCurrencyDropDown', 
                 'returns' => 'html',
@@ -169,7 +169,6 @@ $dictionary['SalaryRanges'] = array(
             'function_bean' => 'Currencies',
             'required' => false,
             'reportable' => false,
-            'default' => '-99',
             'importable' => false,
         ),
         'net_value_from' => array(
@@ -364,7 +363,7 @@ $dictionary['SalaryRanges'] = array(
             'vname' => 'LBL_POSITION_NAME',
             'label' => 'LBL_POSITION_NAME',
             'id_name' => 'position_id',
-            'link' => 'position',
+            'link' => 'positions',
             'module' => 'Positions',
             'table' => 'positions',
             'rname' => 'name',

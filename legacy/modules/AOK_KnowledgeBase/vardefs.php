@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -95,7 +95,13 @@ $dictionary['AOK_KnowledgeBase'] = array(
                 'len' => 100,
                 'size' => '20',
                 'options' => 'aok_status_list',
-                'options_colors' => 'aok_status_list_colored',
+                'options_colors' => [
+                    'Draft' => 'gray',
+                    'Expired' => 'red',
+                    'In_Review' => 'yellow',
+                    'published_private' => 'green',
+                    'published_public' => 'green',
+                ],
                 'studio' => 'visible',
                 'dependency' => false,
             ),

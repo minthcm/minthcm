@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -78,7 +78,7 @@ $maxExecutionTime = ini_get('max_execution_time');
 set_time_limit(600);
 $dataDir = create_cache_directory("MergedDocuments/");
 $fileName = UploadFile::realpath("upload://$document->document_revision_id");
-$outfile = pathinfo($document->filename, PATHINFO_FILENAME);
+$outfile = pathinfo((string) $document->filename, PATHINFO_FILENAME);
 
 $mm = new MailMerge(null, null, $dataDir);
 $mm->SetDataList($items);

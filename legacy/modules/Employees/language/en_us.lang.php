@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -180,7 +180,7 @@ $mod_strings = array(
     'LBL_USERS_FORCED_TABS_DASHBOARDS' => 'Forced dashboards',
     'LBL_USERS_LOCKED_DASHBOARDS' => 'Locked dashboards',
     'LBL_USERS_ONBOARDINGOFFBOARDINGELEMENTS' => 'Onboarding/Offboarding elements',
-    'LBL_POSITION_EMPLOYEES' => 'Stanowiska',
+    'LBL_POSITION_EMPLOYEES' => 'Positions',
     'LBL_CANDIDATE_EMPLOYEE_LINK_FROM_EMPLOYEE' => 'Employee candidate link',
     'LBL_CANDIDATE_EMPLOYEE_ID_FROM_EMPLOYEE' => 'Candidate ID for employee',
     'LBL_USERS_ONE_TIME_DEFAULT_DASHBOARDS' => 'Users: One Time Default',
@@ -203,7 +203,12 @@ $mod_strings = array(
     'LBL_CANDIDATES_MODULE_DUP' => 'Candidates',
     'MSG_SHOW_DUPLICATES' => 'The record you are about to create might be a duplicate of a Candidates or Employees record that already exists. Candidates and Employees records containing similar names are listed below.<br>Click Create to continue creating this new Candidate, or select an existing listed below.',
     /* MintHCM #84233 END */
+
+    'LBL_FACTOR_AUTH_INTERFACE' => 'Two Factor Authentication Interface:',
+    'LBL_EDITOR_TYPE' => 'Editor',
     'LBL_BIRTHDATE' => 'Birthdate',
     'LBL_KUDOS' => 'Kudos',
-    'LBL_FILES' => 'Files'
+    'LBL_FILES' => 'Files',
+    'LBL_EVALUATIONS' => 'Evaluations',
+    'LBL_DATE_INDEXED' => 'Date Indexed',
 );

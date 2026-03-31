@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -55,6 +55,7 @@ require_once __DIR__ . '/JsonRPCServerUtils.php';
 /**
  * Class JsonServerCalls
  */
+#[\AllowDynamicProperties]
 class JsonRPCServerCalls
 {
     /**
@@ -112,7 +113,7 @@ class JsonRPCServerCalls
         if (is_array($args['conditions'])) {
             foreach ($args['conditions'] as $key => $condition) {
                 if (!empty($condition['value'])) {
-                    $where = $jsonParser::decode(utf8_encode($condition['value']));
+                    $where = $jsonParser::decode(mb_convert_encoding($condition['value'], 'UTF-8', 'ISO-8859-1'));
                     $where = empty($where) ? $condition['value'] : $where;
                     $args['conditions'][$key]['value'] = $db->quote($where);
                 }
@@ -130,7 +131,7 @@ class JsonRPCServerCalls
 
             $query_orderby = '';
             if (!empty($args['order'])) {
-                $query_orderby = preg_replace('/[^\w_.-]+/i', '', $args['order']['by']);
+                $query_orderby = preg_replace('/[^\w_.-]+/i', '', (string) $args['order']['by']);
                 if (!empty($args['order']['desc'])) {
                     $query_orderby .= ' DESC';
                 } else {

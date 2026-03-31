@@ -1,12 +1,16 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" @keyup.enter="$emit('inlineEditSave')">
-            <router-link :to="recordUrl" class="relate-field">
+        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()" @keyup.enter="$emit('inlineEditSave')">
+            <router-link :name="props.defs.name" v-if="hasViewAccess" :to="recordUrl" class="relate-field">
                 {{ props.modelValue }}
             </router-link>
+            <span :name="props.defs.name" v-else>
+                {{ props.modelValue }}
+            </span>
             <Pencil
                 :defs="props.defs"
+                :hidePencil="hidePencil"
                 @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
             />
         </div>
@@ -15,22 +19,26 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
 import Pencil from '../Pencil.vue'
+import { FieldProps } from '../Field.model';
+import { useACL } from '@/composables/useACL';
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
+const emit = defineEmits(['inlineEditBtnClicked'])
 
 const recordUrl = computed(() => {
     const module = props.defs.module
-    const id = props.data.bean[props.defs.id_name]
+    const id = props.data?.bean?.attributes?.[props.defs?.id_name]
+    if (!module || !id) return ''
     return `/modules/${module}/DetailView/${id}`
+})
+function startInlineEdit() {
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
+}
+const hasViewAccess = computed<boolean>(() => {
+    return useACL().hasAccess(props.defs.module, 'view', true, true)
 })
 </script>
 

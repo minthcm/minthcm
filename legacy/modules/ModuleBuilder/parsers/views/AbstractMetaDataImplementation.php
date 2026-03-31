@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ require_once 'modules/ModuleBuilder/parsers/views/History.php';
  * - Deployed modules (such as OOB modules and deployed ModuleBuilder modules) that are located in the /modules directory and have metadata in modules/<name>/metadata and in the custom directory
  * - WIP modules which are being worked on in ModuleBuilder and that are located in custom
  */
+#[\AllowDynamicProperties]
 abstract class AbstractMetaDataImplementation
 {
     /**
@@ -120,6 +121,39 @@ abstract class AbstractMetaDataImplementation
      */
     protected $_variables;
 
+    protected const RECORDVIEW_ADDRESS_FIELDS = [
+        'primary_address_street' => [
+            'name' => 'primary_address',
+            'type' => 'fieldset',
+            'label' => 'LBL_PRIMARY_ADDRESS',
+            'properties' => [
+                'fields' => [
+                    'primary_address_street',
+                    'primary_address_city',
+                    'primary_address_state',
+                    'primary_address_postalcode',
+                    'primary_address_country',
+                ],
+                'separator' => ', ',
+            ],
+        ],
+        'alt_address_street' => [
+            'name' => 'alt_address',
+            'type' => 'fieldset',
+            'label' => 'LBL_ALT_ADDRESS',
+            'properties' => [
+                'fields' => [
+                    'alt_address_street',
+                    'alt_address_city',
+                    'alt_address_state',
+                    'alt_address_postalcode',
+                    'alt_address_country',
+                ],
+                'separator' => ', ',
+            ],
+        ],
+    ];
+
     /**
      * Getters for the definitions loaded by the Constructor
      * @return array
@@ -174,6 +208,7 @@ abstract class AbstractMetaDataImplementation
      */
     protected function _loadFromFile($filename)
     {
+        $viewdefs = [];
         // BEGIN ASSERTIONS
         if (!file_exists($filename)) {
             return null;
@@ -191,8 +226,8 @@ abstract class AbstractMetaDataImplementation
 
         $variables = array();
         foreach ($moduleVariables as $name) {
-            if (isset($$name)) {
-                $variables [$name] = $$name;
+            if (isset(${$name})) {
+                $variables [$name] = ${$name};
             }
         }
 
@@ -200,7 +235,7 @@ abstract class AbstractMetaDataImplementation
             // get view name by performing a case insensitive search on each key
             $key = '';
             foreach ($viewdefs[$this->_moduleName] as $viewdefKey => $viewdefVal) {
-                if (stristr($viewdefKey, $this->_view) !== false) {
+                if (stristr((string) $viewdefKey, $this->_view) !== false) {
                     $key = $viewdefKey;
                     break;
                 }
@@ -215,7 +250,7 @@ abstract class AbstractMetaDataImplementation
 
         // Extract the layout definition from the loaded file - the layout definition is held under a variable name that varies between the various layout types (e.g., listviews hold it in listViewDefs, editviews in viewdefs)
         $viewVariable = $this->_fileVariables [$this->_view];
-        $defs = $$viewVariable;
+        $defs = ${$viewVariable};
 
         // Now tidy up the module name in the viewdef array
         // MB created definitions store the defs under packagename_modulename and later methods that expect to find them under modulename will fail
@@ -259,7 +294,7 @@ abstract class AbstractMetaDataImplementation
 
         require $filename; // loads the viewdef - must be a require not require_once to ensure can reload if called twice in succession
         $viewVariable = $this->_fileVariables [$this->_view];
-        $defs = $$viewVariable;
+        $defs = ${$viewVariable};
         if (!$forSave) {
             //Now we will unset the reserve field in pop definition file.
             $limitFields = PopupMetaDataParser::$reserveProperties;
@@ -344,7 +379,7 @@ abstract class AbstractMetaDataImplementation
 
         mkdir_recursive(dirname($filename));
 
-        $useVariables = (count($this->_variables) > 0) && $useVariables; // only makes sense to do the variable replace if we have variables to replace...
+        $useVariables = (count((array) $this->_variables) > 0) && $useVariables; // only makes sense to do the variable replace if we have variables to replace...
 
         // create the new metadata file contents, and write it out
         $out = "<?php\n";
@@ -427,7 +462,67 @@ EOQ;
         }
     }
     //MintHCM end
-    
+
+    protected function _saveToFileRecordView($filename, $defs, $recordView)
+    {
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+
+        mkdir_recursive(dirname($filename));
+        
+        foreach ($defs as $section => $rows) {
+            foreach ($rows as $rowIndex => $row) {
+                foreach ($row as $index => $fields) {
+                    foreach ($fields as $fieldKey => $field) {
+                        if ($field == '(filler)') {
+                            $defs[$section][$rowIndex][$index][$fieldKey] = '';
+                        }
+
+                        if ($field == '(empty)') {
+                            unset($defs[$section][$rowIndex][$index][$fieldKey]);
+                        }
+
+                        if (in_array($field, array_keys(self::RECORDVIEW_ADDRESS_FIELDS))) {
+                            $defs[$section][$rowIndex][$index][$fieldKey] = self::RECORDVIEW_ADDRESS_FIELDS[$field];
+                        }
+                    }
+                }
+            }
+        }
+
+        $main_panel = '';
+        foreach ($recordView['panels'] as $key => $panel) {
+            if ($panel['component'] === 'MintPanelRecordDetails') {
+                $main_panel = $key;
+                break;
+            }
+        }
+
+        unset($recordView['panels'][$main_panel]['data']['sections']);
+
+        foreach ($defs['RecordView'] as $key => $fields) {
+            $recordView['panels'][$main_panel]['data']['sections'][$key]['fields'] = $fields;
+            $recordView['panels'][$main_panel]['data']['sections'][$key]['title'] = strtoupper($key);
+        }
+
+        $start = "<?php\n";
+        $out = "\$viewdefs['" . $this->_moduleName . "'] = " . var_export_helper($recordView);
+        $out .= ";";
+
+        $out = str_replace('array (', '[', $out);
+        $out = str_replace(')', ']', $out);
+        $out = preg_replace('/=>\s*\[/', '=> [', $out);
+        $out = preg_replace('/\[\s*\n\s*\]/', '[]', $out);
+        $out = str_replace('  ', '    ', $out);
+
+        $out = $start . $out;
+
+        if (sugar_file_put_contents($filename, $out) === false) {
+            $GLOBALS ['log']->fatal(get_class($this) . ": could not write new viewdef file " . $filename);
+        }
+    }
+
     /**
      * @param $defs array The definitions to save
      * @return bool
@@ -515,7 +610,7 @@ EOQ;
         // BEGIN ASSERTIONS
         if ($type != MB_BASEMETADATALOCATION && $type != MB_HISTORYMETADATALOCATION) {
             // just warn rather than die
-            $GLOBALS ['log']->warning(
+            $GLOBALS ['log']->warn(
                 "UndeployedMetaDataImplementation->getFileName(): view type $type is not recognized"
             );
         }

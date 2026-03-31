@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,14 +55,28 @@
                            ),
                     'layout' => array(
                         'basic_search' => array(
-                            array('name'=>'campaign_name', 'label'=>'LBL_LIST_CAMPAIGN',),
-                            array('name'=>'current_user_only', 'label'=>'LBL_CURRENT_USER_FILTER', 'type'=>'bool'),
-                        ),
-                        'advanced_search' => array(
-                            array('name'=>'campaign_name', 'label'=>'LBL_LIST_CAMPAIGN',),
+                            array('name'=>'campaign_name', 'label'=>'LBL_LIST_CAMPAIGN'),
                             array('name'=>'to_name', 'label'=>'LBL_LIST_RECIPIENT_NAME'),
                             array('name'=>'to_email', 'label'=>'LBL_LIST_RECIPIENT_EMAIL'),
+                            array('name'=>'message_name', 'label'=>'LBL_LIST_MESSAGE_NAME'),
+                            array('name'=>'send_date_time', 'label'=>'LBL_SEND_DATE_TIME'),                        
+                            array('name'=>'send_attempts', 'label'=>'LBL_SEND_ATTEMPTS'),
+                            array('name'=>'in_queue', 'label'=>'LBL_IN_QUEUE'),
+                        ),
+                        'advanced_search' => array(
+                            array('name'=>'campaign_name', 'label'=>'LBL_LIST_CAMPAIGN'),
+                            array('name'=>'to_name', 'label'=>'LBL_LIST_RECIPIENT_NAME'),
+                            array('name'=>'to_email', 'label'=>'LBL_LIST_RECIPIENT_EMAIL'),
+                            array('name'=>'message_name', 'label'=>'LBL_LIST_MESSAGE_NAME'),
+                            array('name'=>'send_date_time', 'label'=>'LBL_SEND_DATE_TIME'),
+                            array('name'=>'send_attempts', 'label'=>'LBL_SEND_ATTEMPTS'),
+                            array('name'=>'in_queue', 'label'=>'LBL_IN_QUEUE'),
                             array('name'=>'current_user_only', 'label'=>'LBL_CURRENT_USER_FILTER', 'type'=>'bool'),
+
+                            array('name' => 'date_entered', 'label' => 'LBL_DATE_ENTERED' ),
+                            array('name' => 'date_modified', 'label' => 'LBL_DATE_MODIFIED' ),
+                            array('name' => 'modified_user_id', 'label' => 'LBL_MODIFIED_USER'),
+                            array('name' => 'user_id', 'label' => 'LBL_USER_ID' ),
                         ),
                     ),
                );

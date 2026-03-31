@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -244,17 +244,18 @@ class ListViewDisplay
         // MintHCM #94842 END
         if (!is_array($data)) {
             LoggerManager::getLogger()->warn('Row data must be an array, ' . gettype($data) . ' given.');
+            $data = [];
         } else if (is_array($data) && !is_array($data['data'])) {
             LoggerManager::getLogger()->warn('Row data must be an array, ' . gettype($data['data']) . ' given and converting to an array.');
         }
-        $this->rowCount = count((array)$data['data']);
+        $this->rowCount = count((array)($data['data'] ?? []));
         // MintHCM #94842 START
         if (empty($dashlet_initial_loading) && !isset($data['pageData']['bean'])) {
             // MintHCM #94842 END
             $GLOBALS['log']->warn("List view process error: Invalid data, bean is not set");
             return false;
         }
-        $this->moduleString = $data['pageData']['bean']['moduleDir'] . '2_' . strtoupper($htmlVar) . '_offset';
+        $this->moduleString = ($data['pageData']['bean']['moduleDir'] ?? '') . '2_' . strtoupper($htmlVar) . '_offset';
         return true;
     }
 

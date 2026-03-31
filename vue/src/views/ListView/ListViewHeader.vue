@@ -1,5 +1,5 @@
 <template>
-    <div class="list-header">
+    <div class="list-header" :class="{ 'list-header-railed': $vuetify.display.mdAndDown }">
         <v-menu v-if="store.mode === 'list' && store.massActions.length" offset="16">
             <template v-slot:activator="{ props, isActive }">
                 <MintButton
@@ -7,7 +7,7 @@
                     :active="isActive"
                     append-icon="mdi-menu-down"
                     :text="languages.label('LBL_ESLIST_MASS_ACTION')"
-                    :disabled="!store.selected?.length"
+                    :disabled="!store.selected?.length || store.isMassUpdate"
                 />
             </template>
             <MintMenuList :items="store.massActions" />
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintMenuList from '@/components/MintMenuList.vue'
 import { useListViewStore } from './ListViewStore'
@@ -62,6 +62,14 @@ function showColumnsPopup() {
         icon: 'mdi-playlist-plus',
     })
 }
+
+onMounted(() => {
+    store.massActions.map((action) => {
+        if (!action.onClick) {
+            console.error('Mass action missing onClick handler', action)
+        }
+    })
+})
 </script>
 
 <style scoped lang="scss">
@@ -72,5 +80,10 @@ function showColumnsPopup() {
     gap: 16px;
     padding: 16px;
     justify-content: space-between;
+
+    &.list-header-railed {
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
 }
 </style>

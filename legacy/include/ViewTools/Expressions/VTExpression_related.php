@@ -37,8 +37,8 @@ class VTExpression_related extends VTExpression {
 
    /**
     * Warning! if backend is not set, return false
-    * @param Array 
-    * @return boolean
+    * @param array 
+    * @return string|bool
     * Please set input params as Array
     */
    public function backend($arguments = array()) {

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,7 +54,7 @@ if (!isset($_REQUEST['record'])) {
 $focus = BeanFactory::newBean('Campaigns');
 $focus->retrieve($_REQUEST['record']);
 
-if (isset($_REQUEST['mode']) and $_REQUEST['mode']=='Test') {
+if (isset($_REQUEST['mode']) && $_REQUEST['mode']=='Test') {
     //deletes all data associated with the test run.
     require_once('modules/Campaigns/DeleteTestCampaigns.php');
     $deleteTest = new DeleteTestCampaigns();

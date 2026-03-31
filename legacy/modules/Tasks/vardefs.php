@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -68,7 +68,13 @@ $dictionary['Task'] = array(
             'name' => 'status',
             'vname' => 'LBL_STATUS',
             'options' => 'task_status_dom',
-            'options_colors' => 'task_status_dom_colored',
+            'options_colors' => [
+                'Not Started' => 'gray',
+                'In Progress' => 'yellow',
+                'Completed' => 'green',
+                'Pending Input' => 'yellow',
+                'Deferred' => 'gray',
+            ],
             'type' => 'ColoredEnum',
             'dbType' => 'varchar',
             'len' => 100,
@@ -104,6 +110,7 @@ $dictionary['Task'] = array(
             'importable' => 'false',
             'massupdate' => false,
             'audited' => true,
+            'inline_edit' => false,
         ),
         'date_start_flag' => array(
             'name' => 'date_start_flag',
@@ -165,7 +172,6 @@ $dictionary['Task'] = array(
             'type' => 'enum',
             'options' => 'task_priority_dom',
             'len' => 100,
-            'required' => 'true',
             'audited' => true,
         ),
         'users' => array(
@@ -218,6 +224,19 @@ $dictionary['Task'] = array(
             'bean_name' => 'Note',
             'source' => 'non-db',
             'vname' => 'LBL_NOTES',
+        ),
+        "checklist"  => array(
+            'name' => 'checklist',
+            'vname' => 'LBL_CHECKLIST',
+            'label' => 'LBL_CHECKLIST',
+            'dbType' => 'text',
+            'type' => 'checklist',
+            'rows' => 6,
+            'cols' => 80,
+            'importable' => 'true',
+            'audited' => true,
+            'reportable' => true,
+            'vt_dependency' => "equals(\$parent_type,'Onboardings')",
         ),
     )
     ,
@@ -289,3 +308,22 @@ VardefManager::createVardef('Tasks', 'Task', array(
 
 $dictionary['Task']['fields']['assigned_user_id']['audited'] = false;
 $dictionary['Task']['fields']['assigned_user_name']['audited'] = true;
+
+foreach ([
+    'name' => 'LBL_SUBJECT_COMMENT',
+    'status' => 'LBL_STATUS_COMMENT',
+    'date_due_flag' => 'LBL_DATE_DUE_FLAG_COMMENT',
+    'date_due' => 'LBL_DUE_DATE_COMMENT',
+    'time_due' => 'LBL_DUE_TIME_COMMENT',
+    'date_start_flag' => 'LBL_DATE_START_FLAG_COMMENT',
+    'date_start' => 'LBL_START_DATE_COMMENT',
+    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
+    'parent_name' => 'LBL_PARENT_NAME_COMMENT',
+    'parent_id' => 'LBL_PARENT_ID_COMMENT',
+    'priority' => 'LBL_PRIORITY_COMMENT',
+    'checklist' => 'LBL_CHECKLIST_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Task']['fields'][$field])) {
+        $dictionary['Task']['fields'][$field]['comment'] = $commentLabel;
+    }
+}

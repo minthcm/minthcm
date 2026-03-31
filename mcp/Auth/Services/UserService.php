@@ -4,7 +4,7 @@ namespace MintMCP\Auth\Services;
 
 use BeanFactory;
 use MintMCP\Auth\Utils\LegacyBridge;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 
 /**
  * Handles user-related operations

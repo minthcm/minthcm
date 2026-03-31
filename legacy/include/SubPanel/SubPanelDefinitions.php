@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -421,7 +421,8 @@ class aSubPanel
 
     public function isDatasourceFunction()
     {
-        if (strpos($this->get_inst_prop_value('get_subpanel_data'), 'function') === false) {
+        $subpanelData = $this->get_inst_prop_value('get_subpanel_data') ?? '';
+        if (strpos($subpanelData, 'function') === false) {
             return false ;
         }
         return true ;
@@ -864,8 +865,6 @@ class SubPanelDefinitions
      */
     public function get_hidden_subpanels()
     {
-        global $moduleList;
-
         //create variable as static to minimize queries
         static $hidden_subpanels = null;
 
@@ -880,25 +879,9 @@ class SubPanelDefinitions
                 $hidden_subpanels = $administration->settings['MySettings_hide_subpanels'];
                 $hidden_subpanels = trim($hidden_subpanels);
 
-                //make sure serialized string is not empty
                 if (!empty($hidden_subpanels)) {
-                    //decode and unserialize to retrieve the array
-                    $hidden_subpanels = base64_decode($hidden_subpanels);
-                    $hidden_subpanels = unserialize($hidden_subpanels);
-
-                    //Ensure modules saved in the preferences exist.
-                    //get user preference
-                    //unserialize and add to array if not empty
-                    $pref_hidden = array();
-                    foreach ($pref_hidden as $id => $pref_hidden_panel) {
-                        $hidden_subpanels[] = $pref_hidden_panel;
-                    }
-                } else {
-                    //no settings found, return empty
-                    return $hidden_subpanels;
+                    $hidden_subpanels = unserialize(base64_decode($hidden_subpanels), ['allowed_classes' => false]);
                 }
-            } else {	//no settings found, return empty
-                return $hidden_subpanels;
             }
         }
 

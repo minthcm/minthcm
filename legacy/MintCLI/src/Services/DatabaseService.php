@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\Services;
 
+#[\AllowDynamicProperties]
 class DatabaseService
 {
     public function testConnection($host, $port, $username, $password)

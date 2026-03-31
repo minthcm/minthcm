@@ -6,7 +6,7 @@ use BeanFactory;
 use DateInterval;
 use DateTime;
 use Exception;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 use OAuth2Clients;
 use OAuth2Tokens;
 

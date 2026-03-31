@@ -37,4 +37,5 @@ $mod_strings = array(
     "LBL_PINNED" => "Pinned",
     "LBL_REMOVED" => "Removed",
     "LBL_DATE_EDITED" => "Date Edited",
+    'LBL_REACTIONS' => 'Reactions',
 );

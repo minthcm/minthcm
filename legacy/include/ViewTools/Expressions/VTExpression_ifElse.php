@@ -21,8 +21,8 @@ class VTExpression_ifElse extends VTExpression
 
     /**
      * Warning! if backend is not set, return false
-     * @param Array
-     * @return boolean
+     * @param array
+     * @return mixed
      * Please set input params as Array
      */
     public function backend($arguments = array())
@@ -42,7 +42,7 @@ class VTExpression_ifElse extends VTExpression
 
     /**
      * Warning! if frontend is not set, return false
-     * @return type
+     * @return string
      */
     public function frontend()
     {

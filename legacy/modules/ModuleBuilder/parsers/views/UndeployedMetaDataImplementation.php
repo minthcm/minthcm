@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ require_once 'modules/ModuleBuilder/parsers/views/ListLayoutMetaDataParser.php' 
 require_once 'modules/ModuleBuilder/parsers/views/GridLayoutMetaDataParser.php' ;
 require_once 'modules/ModuleBuilder/parsers/constants.php' ;
 
+#[\AllowDynamicProperties]
 class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation implements MetaDataImplementationInterface
 {
     protected $_packageName ;
@@ -153,7 +154,7 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
     public function deploy($defs)
     {
         //If we are pulling from the History Location, that means we did a restore, and we need to save the history for the previous file.
-        if ($this->_sourceFilename == $this->getFileName($this->_view, $this->_moduleName, MB_HISTORYMETADATALOCATION)
+        if ($this->_sourceFilename === $this->getFileName($this->_view, $this->_moduleName, MB_HISTORYMETADATALOCATION)
         && file_exists($this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION))) {
             $this->_history->append($this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION));
         } else {
@@ -220,7 +221,7 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
                 return $module->getModuleDir() . '/metadata/' . $filenames [ $view ] . '.php' ;
         }
     }
-    
+
     public function getModuleDir()
     {
         return $this->module->key_name;

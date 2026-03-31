@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -270,14 +270,14 @@ function display_single_update(AOP_Case_Updates $update)
         if ($update->internal) {
             $html = "<div id='caseStyleInternal'>" . getUpdateDisplayHead($update);
             $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-            $html .= nl2br(html_entity_decode($update->description));
+            $html .= nl2br(html_entity_decode(purify_html((string) $update->description, ['HTML.ForbiddenElements' => ['iframe' => true]])));
             $html .= '</div></div>';
 
             return $html;
         } /*if standard update*/ else {
             $html = "<div id='lessmargin'><div id='caseStyleUser'>" . getUpdateDisplayHead($update);
             $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-            $html .= nl2br(html_entity_decode($update->description));
+            $html .= nl2br(html_entity_decode(purify_html((string) $update->description, ['HTML.ForbiddenElements' => ['iframe' => true]])));
             $html .= '</div></div></div>';
 
             return $html;
@@ -287,7 +287,7 @@ function display_single_update(AOP_Case_Updates $update)
     /*if contact user*/
     $html = "<div id='extramargin'><div id='caseStyleContact'>" . getUpdateDisplayHead($update);
     $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-    $html .= html_entity_decode($update->description);
+    $html .= html_entity_decode(purify_html((string) $update->description, ['HTML.ForbiddenElements' => ['iframe' => true]]));
     $html .= '</div></div></div>';
 
     return $html;
@@ -303,6 +303,9 @@ function display_single_update(AOP_Case_Updates $update)
 function display_case_attachments($case)
 {
     $html = '';
+    if(empty($case->id)){
+        return '';
+    }
     $notes = $case->get_linked_beans('notes', 'Notes');
     if ($notes) {
         foreach ($notes as $note) {

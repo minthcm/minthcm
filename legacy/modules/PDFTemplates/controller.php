@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -10,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,24 +43,29 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-require_once('include/MVC/Controller/SugarController.php');
-require_once('include/database/DBManagerFactory.php');
+require_once 'include/MVC/Controller/SugarController.php';
+require_once 'include/database/DBManagerFactory.php';
 
-class PDFTemplatesController extends SugarController {
+#[\AllowDynamicProperties]
+class PDFTemplatesController extends SugarController
+{
 
-   var $parse_errors;
-   var $db;
+    public $parse_errors;
+    public $db;
    
-   function __construct() {
-      $this->db = &DBManagerFactory::getInstance();
+    public function __construct()
+    {
+      $this->db = DBManagerFactory::getInstance();
       parent::__construct();
    }
 
-   function action_wizard() {
+    public function action_wizard()
+    {
       $this->view = "wizard";
    }
 
-   function action_templates() {
+    public function action_templates()
+    {
       global $moduleList;
       if ( isset($_POST['rmodule']) && (in_array($_POST['rmodule'], $moduleList) || $_POST['rmodule'] == 'Employees') ) {
          $rmodule = $_POST['rmodule'];
@@ -79,7 +83,8 @@ class PDFTemplatesController extends SugarController {
       echo $json->encode($rows);
    }
 
-   function action_saveTempTemplate() {
+    public function action_saveTempTemplate()
+    {
       if ( isset($_REQUEST['html_data']) ) {
          $guid = null;
          if ( isset($_REQUEST['save_to_id']) && $_REQUEST['save_to_id'] != '' ) {
@@ -98,7 +103,8 @@ class PDFTemplatesController extends SugarController {
       }
    }
 
-   function action_checkSyntax() {
+    public function action_checkSyntax()
+    {
       $response['error'] = 0;
       $response['message'] = '';
 
@@ -113,7 +119,7 @@ class PDFTemplatesController extends SugarController {
 
          $tpl = preg_replace(array( '/<!--repeat[="_ A-Za-z0-9]+-->/e', '/<!--endrepeat-->/' ), array( 'preg_replace(array("/<!--repeat/", "/-->/"), array("<repeat", ">"), "$0")', '</repeat>' ), $tpl);
 
-         require_once('modules/PDFGenerator/lib/simple_html_dom.php');//TODO olka fixed? lib
+            require_once 'modules/PDFGenerator/lib/simple_html_dom.php'; //TODO olka fixed? lib
 
          $this->parse_errors = array();
 
@@ -121,7 +127,7 @@ class PDFTemplatesController extends SugarController {
 
          $this->checkVariablePosition($variables, $_REQUEST['for_module']);
 
-         if ( count($this->parse_errors) > 0 ) {
+            if (is_countable($this->parse_errors) ? count($this->parse_errors) > 0 : 0) {
             $response['error'] = 1;
             $response['message'] = translate("LBL_ERRORS_FIND", "PDFTemplates");
             $response['errors'] = $this->parse_errors;
@@ -138,7 +144,8 @@ class PDFTemplatesController extends SugarController {
       echo $json->encode($response);
    }
 
-   protected function checkVariablePosition($variables, $bean, $relation = '') {
+    protected function checkVariablePosition($variables, $bean, $relation = '')
+    {
       // List of standard relations
       $standard_relationships = array( 'assigned_user_link', 'created_by_link', 'modified_user_link' );
 
@@ -162,14 +169,15 @@ class PDFTemplatesController extends SugarController {
       }
    }
 
-   function checkVariablePositionElementNoArray($relation, $element_src, $bean, $standard_relationships) {
+    public function checkVariablePositionElementNoArray($relation, $element_src, $bean, $standard_relationships)
+    {
       // Remove $ sign - for easier checking later
       $element = str_replace('$', '', $element_src);
 
       // Split the name of variable to rate its proper position in template and to compare it with real one
       $table = explode('__', $element);
 
-      if ( count($table) > 1 ) {
+        if (is_countable($table) ? count($table) > 1 : 0) {
          if ( $relation != '' ) {
             $this->checkVariablePositionForNoEmptyRelation($relation, $element, $table, $bean, $standard_relationships);
          } else {
@@ -178,7 +186,8 @@ class PDFTemplatesController extends SugarController {
       }
    }
 
-   function checkVariablePositionForNoEmptyRelation($relation, $element, $table, $bean, $standard_relationships) {
+    public function checkVariablePositionForNoEmptyRelation($relation, $element, $table, $bean, $standard_relationships)
+    {
       // get field name from array
       $field_name = array_pop($table);
 
@@ -204,7 +213,8 @@ class PDFTemplatesController extends SugarController {
       }
    }
 
-   function checkVariablePositionForEmptyRelation($element, $table, $bean, $standard_relationships) {
+    public function checkVariablePositionForEmptyRelation($element, $table, $bean, $standard_relationships)
+    {
       // first nesting level, field is one-to-many on the many side
       // Get info about probable relation
       $rel_info = $this->relationshipInfo($table);
@@ -218,7 +228,8 @@ class PDFTemplatesController extends SugarController {
       }
    }
 
-   protected function getRelatedModule($bean, $relationship) {
+    protected function getRelatedModule($bean, $relationship)
+    {
       $query = "SELECT * FROM relationships WHERE relationship_name = '" . $relationship . "' AND deleted = 0";
       $row = $this->bean->db->fetchByAssoc($this->bean->db->query($query));
       $module_name = $bean->module_name;
@@ -228,7 +239,8 @@ class PDFTemplatesController extends SugarController {
       return ($row['lhs_module'] == $module_name) ? $row['rhs_module'] : $row['lhs_module'];
    }
 
-   protected function relationshipInfo($name) {
+    protected function relationshipInfo($name)
+    {
       $query = "SELECT * FROM relationships WHERE relationship_name = '" . $name . "' AND deleted = 0";
       $row = $this->bean->db->fetchByAssoc($this->bean->db->query($query));
 
@@ -239,7 +251,8 @@ class PDFTemplatesController extends SugarController {
     * Function analizes position of individual variables and returns an array 
     */
 
-   function parseSytnax($tpl) {
+    public function parseSytnax($tpl)
+    {
       $html = str_get_html($tpl);
       $block = $html->find('repeat', 0);
       $var_array = array();
@@ -259,7 +272,7 @@ class PDFTemplatesController extends SugarController {
 
       // Clear duplicates
       $variables = array_unique($matches[0]);
-      if ( count($matches[0]) > 0 ) {
+        if (is_countable($matches[0]) ? count($matches[0]) > 0 : 0) {
          foreach ( $matches[0] as $key => $variable ) {
             $tpl = str_replace($variable, $matches[1][$key], $tpl);
             $var_array[] = $variable;
@@ -270,13 +283,12 @@ class PDFTemplatesController extends SugarController {
 
 }
 
-function getModules() {
+function getModules()
+{
    global $moduleList;
-   $a = Array();
+    $a = array();
    foreach ( $moduleList as $item ) {
       $a[$item] = translate("LBL_MODULE_NAME", $item);
    }
    return $a;
 }
-
-?>

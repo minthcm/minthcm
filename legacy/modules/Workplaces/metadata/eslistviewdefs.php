@@ -44,4 +44,8 @@ $ESListViewDefs['Workplaces'] = [
         'date_modified' => [],
         'date_entered' => [],
     ],
+    'defaultSort' => [
+        'field' => 'availability',
+        'order' => 'ASC'
+    ],
 ];

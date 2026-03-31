@@ -222,7 +222,7 @@ class UpdateNewsByProspectLists
             'description' => translate("LBL_NEW_USERS_NEWS", "News") . ": " . $news->name,
         ];
         (new Notification())->setRelatedBeanFromBean($news)->setAssignedUserId($employee_id)->setName($users_news->news_name)->setType('UserNews')
-            ->simpleAlert(true, $override)->WebPush(false, true, $override);
+                        ->saveAsAlert(true, $override)->WebPush(false, true, $override);
     }
 
     protected function addUserPrivateGroupToNews($news_id, $employee_id)

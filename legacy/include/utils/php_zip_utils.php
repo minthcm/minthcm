@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -81,14 +81,23 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     $res = $zip->open(UploadFile::realpath($zip_archive));
 
     if ($res !== true) {
-        LoggerManager::getLogger()->fatal(sprintf(sprintf('ZIP Error(%d): Status(%s)', $res, $zip->status)));
+        LoggerManager::getLogger()->fatal(sprintf('ZIP Error(%d): Status(%s)', $res, $zip->status));
         if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
             return false;
         }
     }
 
     if ($archive_file !== null) {
-        $res = $zip->extractTo(UploadFile::realpath($zip_dir), $archive_file);
+        try {
+            $res = $zip->extractTo(UploadFile::realpath($zip_dir), $archive_file);
+        } catch (ValueError $t) {
+            if (file_exists($zip_archive)){
+                LoggerManager::getLogger()->fatal(sprintf('ZIP Error(%d): Invalid file(%s). Deleting.', $res, $zip_archive));
+                unlink($zip_archive);
+            }
+            throw $t;
+        }
+
         if ((new SplFileInfo($archive_file))->getExtension() == 'php') {
             SugarCache::cleanFile(UploadFile::realpath($zip_dir).'/'.$archive_file);
         }
@@ -98,7 +107,7 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     }
 
     if ($res !== true) {
-        LoggerManager::getLogger()->fatal(sprintf(sprintf('ZIP Error(%d): Status(%s)', $res, $zip->status)));
+        LoggerManager::getLogger()->fatal(sprintf('ZIP Error(%d): Status(%s)', $res, $zip->status));
         if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
             return false;
         }
@@ -126,7 +135,7 @@ function zip_dir($zip_dir, $zip_archive)
     $zip->open(UploadFile::realpath($zip_archive),
         ZipArchive::CREATE | ZipArchive::OVERWRITE);
     $path = UploadFile::realpath($zip_dir);
-    $chop = strlen($path) + 1;
+    $chop = strlen((string) $path) + 1;
     $dir = new RecursiveDirectoryIterator($path);
     foreach (new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST) as $fileinfo) {
         // Bug # 45143
@@ -136,7 +145,7 @@ function zip_dir($zip_dir, $zip_archive)
         if ($fileName === '.' || $fileName === '..') {
             continue;
         }
-        $localname = str_replace("\\", '/', substr($fileinfo->getPathname(), $chop));
+        $localname = str_replace("\\", '/', substr((string) $fileinfo->getPathname(), $chop));
         if ($fileinfo->isDir()) {
             $zip->addEmptyDir($localname . '/');
         } else {
@@ -167,8 +176,8 @@ function zip_files_list($zip_file, $file_list, $prefix = '')
         return false;
     }
     foreach ($file_list as $file) {
-        if (!empty($prefix) && preg_match($prefix, $file, $matches) > 0) {
-            $zipname = substr($file, strlen($matches[0]));
+        if (!empty($prefix) && preg_match($prefix, (string) $file, $matches) > 0) {
+            $zipname = substr((string) $file, strlen($matches[0]));
         } else {
             $zipname = $file;
         }

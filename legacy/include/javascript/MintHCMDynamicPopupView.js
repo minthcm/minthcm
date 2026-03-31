@@ -192,7 +192,7 @@ var MintHCMDynamicPopupView = {
 
 
             SUGAR_callsInProgress++;
-            showLoadingScreen();
+            showLoadingScreen(viewTools.language.get('app_strings', 'LBL_LOADING'), viewTools.language.get('app_strings', 'LBL_LOADING_PAGE'));
             ui.lastCall = YAHOO.util.Connect.asyncRequest('GET', url + '&minthcm_popup=1&ajax_load=1' + loadLanguageJS, {
                 success: this.callback.bind(this),
                 failure: function () {

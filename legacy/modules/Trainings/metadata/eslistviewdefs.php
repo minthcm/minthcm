@@ -30,6 +30,10 @@ $ESListViewDefs['Trainings'] = [
             'link' => true,
             'default' => true,
         ],
+        'element_name' => [
+            'link' => true,
+            'default' => true,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -43,5 +47,10 @@ $ESListViewDefs['Trainings'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'element_name' => [],
+    ],
+    'defaultSort' => [
+        'field' => 'date_start',
+        'order' => 'DESC'
     ],
 ];

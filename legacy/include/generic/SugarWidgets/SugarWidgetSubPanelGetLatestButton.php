@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 //this widget is used only by the contracts module..
 
 
+#[\AllowDynamicProperties]
 class SugarWidgetSubPanelGetLatestButton extends SugarWidgetField
 {
     public function displayHeaderCell($layout_def)
@@ -62,8 +63,13 @@ class SugarWidgetSubPanelGetLatestButton extends SugarWidgetField
         //if the contract has been executed or selected_revision is same as latest revision
         //then hide the latest button.
         //if the contract state is executed or document is not a template hide this action.
-        if ((!empty($layout_def['fields']['CONTRACT_STATUS']) && $layout_def['fields']['CONTRACT_STATUS']=='executed') or
-            $layout_def['fields']['SELECTED_REVISION_ID']== $layout_def['fields']['LATEST_REVISION_ID']) {
+        if (
+            (
+                !empty($layout_def['fields']['CONTRACT_STATUS']) &&
+                $layout_def['fields']['CONTRACT_STATUS'] === 'executed'
+            ) ||
+            $layout_def['fields']['SELECTED_REVISION_ID'] === $layout_def['fields']['LATEST_REVISION_ID']
+        ) {
             return "";
         }
         

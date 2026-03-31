@@ -7,9 +7,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,12 +56,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Class ApiException
  * @package SuiteCRM\API\v8\Exception
  */
+#[\AllowDynamicProperties]
 class ApiException extends LangException
 {
-    const MSG_PREFIX = '[SuiteCRM] [API]';
-    const DEFAULT_CODE = 8000;
-    const HTTP_STATUS = 500;
-    const DETAIL_TEXT_LABEL = 'LBL_API_EXCEPTION_DETAIL';
+    public const MSG_PREFIX = '[SuiteCRM] [API]';
+    public const DEFAULT_CODE = 8000;
+    public const HTTP_STATUS = 500;
+    public const DETAIL_TEXT_LABEL = 'LBL_API_EXCEPTION_DETAIL';
     
     /**
      *
@@ -79,8 +80,8 @@ class ApiException extends LangException
      *
      * @param string $message
      * @param integer $code
-     * @param \Exception $previous
-     * @param LangText $langMessage
+     * @param \Exception|null $previous
+     * @param LangText|null $langMessage
      */
     public function __construct($message = "", $code = 0, \Exception $previous = null, LangText $langMessage = null)
     {

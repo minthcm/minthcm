@@ -1,3 +1,3 @@
-
+*.key
 /*/*
 !/*/config.php

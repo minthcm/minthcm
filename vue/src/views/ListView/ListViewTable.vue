@@ -1,6 +1,6 @@
 <template>
     <v-data-table-server
-        class="list-table"
+        class="list-table sticky-columns"
         :style="{
             minHeight: store.mode === 'relate' ? 'calc(100vh - 300px)' : 0,
         }"
@@ -12,73 +12,59 @@
         must-sort
         :show-select="store.itemsSelectable"
         v-model="store.selected"
+        v-model:sort-by="store.options.sortBy"
         @update:options="store.options = $event"
-        :no-data-text="store.error ? languages.label('LBL_ESLIST_FETCHING_DATA_ERROR') : languages.label('LBL_ESLIST_NO_DATA_AVAILABLE')"
+        :no-data-text="
+            store.error
+                ? languages.label('LBL_ESLIST_FETCHING_DATA_ERROR')
+                : languages.label('LBL_ESLIST_NO_DATA_AVAILABLE')
+        "
         hover
     >
-        <template v-slot:item.name="{ item }">
-            <a @click="store.handleNameClick(item)" class="list-table-name-link">
-                {{ item.name || item.full_name }}
-            </a>
-        </template>
-        <template
-            v-for="link in store.customFields.links"
-            v-slot:[`item.${link.nameField}`]="{ item }"
-            :key="link.nameField"
-        >
-            <router-link
-                v-if="item[link.urlField]"
-                :to="url.fromLegacyUrl(item[link.urlField])"
-                :target="store.mode === 'relate' ? '_blank' : null"
-                v-text="item[link.nameField]"
-            />
-            <a v-else @click="store.handleNameClick(item)" class="list-table-name-link">
-                {{ item[link.nameField] }}
-            </a>
-        </template>
-        <template v-for="bool in store.customFields.booleans" v-slot:[`item.${bool}`]="{ item }" :key="bool">
+        <template v-slot:item.is_favorite="{ item }">
             <v-icon
                 color="secondary"
-                :icon="item[bool] && item[bool] !== '0' ? 'mdi-checkbox-marked-circle' : 'mdi-close'"
+                :icon="item.attributes.is_favorite ? 'mdi-heart' : 'mdi-heart-outline'"
+                @click="store.toggleFavorite(item)"
+                size="small"
+                class="favorite-icon"
+                v-ripple
             />
         </template>
-        <template v-for="list in store.customFields.lists" v-slot:[`item.${list.field}`]="{ item }" :key="list.field">
-            <div
-                v-if="list.colors"
-                class="enum-chip"
-                :style="list.colors[item[list.field]]"
-                v-text="list.options[item[list.field]]"
+        <template v-for="column in store.visibleColumns" v-slot:[`item.${column.name}`]="{ item }" :key="column.name">
+            <Field
+                view="list"
+                :defs="
+                    column.name === 'name'
+                        ? Object.assign(store.defs.columns[column.name], { type: 'name' })
+                        : store.defs.columns[column.name]
+                "
+                :data="{ bean: item }"
+                :label="languages.label(store.defs.columns[column.name].label, store.module)"
+                :options="item.logic.fieldsOptions[column.name]"
+                :modelValue="item.attributes[column.name]"
+                :field="item.fields[column.name]"
             />
-            <span v-else v-text="list.options[item[list.field]]" />
-        </template>
-        <template
-            v-for="multienum in store.customFields.multienums"
-            v-slot:[`item.${multienum.field}`]="{ item }"
-            :key="multienum.field"
-        >
-            <span v-text="formatMultienum(item[multienum.field], multienum.options)" />
-        </template>
-        <template v-for="date in store.customFields.dates" v-slot:[`item.${date.field}`]="{ item }" :key="date.field">
-            <span v-text="item[date.field]" :style="date.style" />
-        </template>
-        <template
-            v-for="currency in store.customFields.currencies"
-            v-slot:[`item.${currency}`]="{ item }"
-            :key="currency"
-        >
-            <span v-text="NumberUtils.formatCurrency(item[currency], item.currency_id)" />
         </template>
         <template v-slot:item.actions="{ item }">
             <div class="d-flex justify-end" style="gap: 8px">
-                <v-icon
-                    v-for="action in getItemActions(item)"
+                <v-tooltip
+                    v-for="(action, index) in getItemActions(item)"
                     v-show="action.icon"
-                    :key="action.icon"
-                    @click="action.onClick(item)"
-                    color="secondary"
-                    size="small"
-                    :icon="action.icon"
-                />
+                    :key="`${action.icon}-${index}`"
+                    location="top"
+                >
+                    <template v-slot:activator="{ props }">
+                        <v-icon
+                            v-bind="props"
+                            @click="action.onClick(item)"
+                            color="secondary"
+                            size="small"
+                            :icon="action.icon"
+                        />
+                    </template>
+                    <span>{{ action.label ? languages.label(action.label, url.module) : '' }}</span>
+                </v-tooltip>
             </div>
         </template>
         <template #bottom>
@@ -92,14 +78,14 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useListViewStore } from './ListViewStore'
 import { useLanguagesStore } from '@/store/languages'
 import { useUrlStore } from '@/store/url'
 import { usePopupsStore } from '@/store/popups'
-import NumberUtils from '@/utils/numbers'
+import { mintApi } from '@/api/api'
+import Field from '@/components/Fields/Field.vue'
 
 const router = useRouter()
 const store = useListViewStore()
@@ -115,45 +101,70 @@ const pageText = computed(() => {
 const coreActions = {
     edit: {
         icon: 'mdi-pencil',
+        label: 'LBL_EDIT_BUTTON',
         onClick: (item) => router.push(`/modules/${url.module}/EditView/${item.id}`),
     },
     view: {
         icon: 'mdi-eye',
+        label: 'LBL_VIEW_BUTTON',
         onClick: (item) => router.push(`/modules/${url.module}/DetailView/${item.id}`),
     },
     delete: {
         icon: 'mdi-delete',
+        label: 'LBL_DELETE_BUTTON',
         onClick: async (item) => {
             const confirmMessage = `${languages.label('LBL_ESLIST_DELETE_RECORD_CONFIRM_BODY')} ${item.name}?`
             if (await popups.confirm(confirmMessage)) {
-                await axios.delete(`api/${url.module}/${item.id}`)
+                await mintApi.delete(`${url.module}/${item.id}`)
                 store.getData()
             }
         },
     },
 }
 
-function getItemActions(item: any) {
-    return store.config.config.actions
-        .filter((action) => typeof action !== 'string' || item.acl_access[action])
-        .map((action) => {
-            if (typeof action === 'string') {
-                return coreActions[action] ?? {}
+function getItemActions(item: Record<string, unknown>) {
+    // Access computed to establish reactivity dependency
+    store.actionsLoaded
+
+    const actions = store.config.config.actions
+        .filter((action: any) => typeof action !== 'string' || (item.aclAccess as any)[action])
+        .map((action: any) => {
+            const actionName = action.action || action
+            if (typeof actionName === 'string') {
+                const cached = store.customActionsCache.get(`${url.module}-${actionName}`)
+                if (cached) {
+                    if (cached.hasAccess && !cached.hasAccess(item)) {
+                        return null
+                    }
+                    return cached
+                }
+
+                const coreAction = (coreActions as any)[actionName]
+
+                if (!coreAction) {
+                    store.loadCustomAction(actionName)
+                    return {
+                        icon: 'mdi-loading',
+                        label: 'LBL_LOADING',
+                        onClick: async (item: any) => {
+                            const resolvedAction = await store.loadCustomAction(actionName)
+                            if (resolvedAction?.onClick) {
+                                await resolvedAction.onClick(item)
+                            }
+                        },
+                    }
+                }
+
+                return coreAction
             }
             return {
                 ...action,
-                onClick: (item) => eval(action.onClick)(item),
+                onClick: (item: any) => eval(action.onClick)(item),
             }
         })
-}
+        .filter((action: any) => action !== null)
 
-function formatMultienum(value, labels) {
-    return value
-        .replaceAll('^', '')
-        .split(',')
-        .filter((label) => label in labels)
-        .map((label) => labels[label])
-        .join(', ')
+    return actions
 }
 </script>
 
@@ -167,20 +178,45 @@ function formatMultienum(value, labels) {
     :deep(.v-pagination__last) {
         display: none;
     }
-    .enum-chip {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        font-size: 13px;
-        padding: 4px 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-        border-radius: 5px;
-        letter-spacing: 0.09px;
-    }
-    .list-table-name-link {
+    .favorite-icon {
+        position: relative;
         cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 40px;
+        min-height: 40px;
+
+        &:hover {
+            background-color: rgba(var(--v-theme-on-surface), 0.04);
+        }
+        &:focus-visible {
+            background-color: rgba(var(--v-theme-on-surface), 0.12);
+            outline: 2px solid rgb(var(--v-theme-primary));
+            outline-offset: 2px;
+        }
+        &:active {
+            background-color: rgba(var(--v-theme-on-surface), 0.16);
+        }
+    }
+
+    @media only screen and (min-width: 1280px) {
+        &.sticky-columns {
+            :deep(th:nth-child(2)),
+            :deep(td:nth-child(2)) {
+                position: sticky;
+                left: 48px;
+                z-index: 9;
+                background-color: rgb(var(--v-theme-surface));
+            }
+
+            :deep(th:first-child),
+            :deep(td:first-child) {
+                position: sticky;
+                left: 0;
+                z-index: 10;
+                background-color: rgb(var(--v-theme-surface));
+            }
+        }
     }
 }
 </style>

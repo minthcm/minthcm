@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+ #[\AllowDynamicProperties]
  class Group extends User
  {
      // User attribute overrides
@@ -67,11 +68,21 @@ if (!defined('sugarEntry') || !sugarEntry) {
       */
      public function mark_deleted($id)
      {
+        global $current_user;
+        if (!is_admin($current_user)) {
+            throw new RuntimeException('Not authorized');
+        }
+        
          SugarBean::mark_deleted($id);
      }
  
      public function create_export_query($order_by, $where, $relate_link_join = '')
      {
+        global $current_user;
+        if (!is_admin($current_user)) {
+            throw new RuntimeException('Not authorized');
+        }
+
          $query = "SELECT users.*";
          $query .= " FROM users ";
          $where_auto = " users.deleted = 0";

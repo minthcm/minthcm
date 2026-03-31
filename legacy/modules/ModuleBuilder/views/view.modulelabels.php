@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@
 
 require_once('modules/ModuleBuilder/MB/AjaxCompose.php');
 
+#[\AllowDynamicProperties]
 class ViewModulelabels extends SugarView
 {
     /**
@@ -75,32 +76,32 @@ class ViewModulelabels extends SugarView
         $package_name = $_REQUEST['view_package'];
         $module_name = $_REQUEST['view_module'];
 
-		require_once('modules/ModuleBuilder/MB/ModuleBuilder.php');
-		$mb = new ModuleBuilder();
-		$mb->getPackage($_REQUEST['view_package']);
-		$package = $mb->packages[$_REQUEST['view_package']];
-		$package->getModule($module_name);
-		$mbModule = $package->modules[$module_name];
-		$selected_lang = (!empty($_REQUEST['selected_lang'])?$_REQUEST['selected_lang']:$_SESSION['authenticated_user_language']);
-		if(empty($selected_lang)){
-	    	$selected_lang = $GLOBALS['sugar_config']['default_language'];
-		}
-	        //need to change the following to interface with MBlanguage.
+        require_once('modules/ModuleBuilder/MB/ModuleBuilder.php');
+        $mb = new ModuleBuilder();
+        $mb->getPackage($_REQUEST['view_package']);
+        $package = $mb->packages[$_REQUEST['view_package']];
+        $package->getModule($module_name);
+        $mbModule = $package->modules[$module_name];
+        $selected_lang = (!empty($_REQUEST['selected_lang'])?$_REQUEST['selected_lang']:$_SESSION['authenticated_user_language']);
+        if(empty($selected_lang)){
+            $selected_lang = $GLOBALS['sugar_config']['default_language'];
+        }
+        //need to change the following to interface with MBlanguage.
         $smarty->assign('MOD', $mbModule->getModStrings($selected_lang));
         // MintHCM #101863 START
         $smarty->assign('MOD_LABELS',$mbModule->getModStrings($selected_lang));
         // MintHCM #101863 END //
-		$smarty->assign('APP', $GLOBALS['app_strings']);
-		$smarty->assign('selected_lang', $selected_lang);
-		$smarty->assign('view_package', $package_name);
-		$smarty->assign('view_module', $module_name);
-		$smarty->assign('mb','1');
-		$smarty->assign('available_languages', get_languages());
-		///////////////////////////////////////////////////////////////////
- 		////ASSISTANT
- 		$smarty->assign('assistant',array('group'=>'module', 'key'=>'labels'));
-		/////////////////////////////////////////////////////////////////
-	 	////ASSISTANT
+        $smarty->assign('APP', $GLOBALS['app_strings']);
+        $smarty->assign('selected_lang', $selected_lang);
+        $smarty->assign('view_package', $package_name);
+        $smarty->assign('view_module', $module_name);
+        $smarty->assign('mb','1');
+        $smarty->assign('available_languages', get_languages());
+        ///////////////////////////////////////////////////////////////////
+        ////ASSISTANT
+        $smarty->assign('assistant',array('group'=>'module', 'key'=>'labels'));
+        /////////////////////////////////////////////////////////////////
+        ////ASSISTANT
 
         $ajax = new AjaxCompose();
         $ajax->addCrumb($bak_mod_strings['LBL_MODULEBUILDER'], 'ModuleBuilder.main("mb")');

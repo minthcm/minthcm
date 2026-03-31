@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -64,8 +64,8 @@ function getJSLanguage()
     $lang = clean_path($_REQUEST['lang']);
     $languages = get_languages();
 
-    if (!preg_match("/^\w\w_\w\w$/", $lang) || !isset($languages[$lang])) {
-        if (!preg_match("/^\w\w_\w\w$/", $lang)) {
+    if (!preg_match("/^\w\w_\w\w$/", (string) $lang) || !isset($languages[$lang])) {
+        if (!preg_match("/^\w\w_\w\w$/", (string) $lang)) {
             echo 'did not match regex<br/>';
         } else {
             echo  "$lang was not in list . <pre>".print_r($languages, true).'</pre>';

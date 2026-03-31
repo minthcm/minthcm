@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -70,4 +70,14 @@ $mod_strings = array(
     'LBL_OPT_IN_PENDING_EMAIL_NOT_SENT' => 'Pending Confirm opt in, Confirm opt in not sent',
     'LBL_OPT_IN_PENDING_EMAIL_SENT' => 'Pending Confirm opt in, Confirm opt in sent',
     'LBL_OPT_IN_CONFIRMED' => 'Opted in',
+    'LBL_ID_COMMENT' => 'Unique identifier',
+    'LBL_NAME_COMMENT' => 'Record name',
+    'LBL_DATE_ENTERED_COMMENT' => 'Date record created',
+    'LBL_DATE_MODIFIED_COMMENT' => 'Date record last modified',
+    'LBL_DATE_INDEXED_COMMENT' => 'Date record last indexed',
+    'LBL_MODIFIED_COMMENT' => 'User who last modified record',
+    'LBL_MODIFIED_NAME_COMMENT' => 'Name of the user who last modified record',
+    'LBL_CREATED_COMMENT' => 'User who created record',
+    'LBL_DESCRIPTION_COMMENT' => 'Full record description',
+    'LBL_DELETED_COMMENT' => 'Indicates whether record was deleted',
 );

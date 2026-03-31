@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2020 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -976,7 +976,7 @@ class ListView
 
         foreach ($priority_map as $p) {
             if (array_key_exists($p, $sortOrderList)) {
-                $order = strtolower($sortOrderList[$p]);
+                $order = strtolower($sortOrderList[$p] ?? '');
                 if (in_array($order, array('asc', 'desc'))) {
                     return $order;
                 }
@@ -1078,7 +1078,7 @@ class ListView
 
 
 
-    public function processUnionBeans($sugarbean, $subpanel_def, $html_var = 'CELL', $countOnly = false)
+    public function processUnionBeans($sugarbean, $subpanel_def, $html_var = 'CELL', $countOnly = false, $page = 1, $records_per_page = null)
     {
         $last_detailview_record = $this->getSessionVariable("detailview", "record");
         if (!empty($last_detailview_record) && $last_detailview_record != $sugarbean->id) {
@@ -1092,7 +1092,14 @@ class ListView
         }
         $this->setSessionVariable("detailview", "record", $sugarbean->id);
 
-        $current_offset = $this->getOffset($html_var);
+        $current_offset = 0;
+        if ($records_per_page) {
+            $rpp = $records_per_page ?? $this->records_per_page;
+            $current_offset = $page * $rpp;
+        } else {
+            $current_offset = $this->getOffset($html_var);
+        }
+        
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : '';
         $response = array();
 
@@ -1136,9 +1143,13 @@ class ListView
         $_SESSION['last_sub' .$this->subpanel_module. '_url'] = $this->getBaseURL($html_var);
 
         // Bug 8139 - Correct Subpanel sorting on 'name', when subpanel sorting default is 'last_name, first_name'
+        $sortBy = $subpanel_def->_instance_properties['sort_by'] ?? '';
         if (($this->sortby == 'name' || $this->sortby == 'last_name') &&
-            str_replace(' ', '', trim($subpanel_def->_instance_properties['sort_by'])) == 'last_name,first_name') {
+            str_replace(' ', '', trim($sortBy)) == 'last_name,first_name') {
             $this->sortby = 'last_name '.$this->sort_order.', first_name ';
+        }
+        if(!empty($_REQUEST['subpanel_sort_by'])){
+            $this->sortby = $_REQUEST['subpanel_sort_by'];
         }
         try {
             if (!empty($this->response)) {
@@ -1151,8 +1162,8 @@ class ListView
                     $this->sort_order,
                     $this->query_where,
                     $current_offset,
-                    -1,
-                    $this->records_per_page,
+                    $records_per_page ?: -1,
+                    $records_per_page ?: $this->records_per_page,
                     $this->query_limit,
                     $subpanel_def
                 );

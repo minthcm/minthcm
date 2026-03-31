@@ -1,39 +1,21 @@
 <template>
-    <div class="mint-datetime-field">{{ parsedDateTime }}</div>
+    <span :name="props.defs.name">{{ parsedDate }}</span>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
-import { DateTime } from 'luxon'
-import { usePreferencesStore } from '@/store/preferences';
+import { computed } from 'vue'
+import { FieldProps } from '../Field.model'
+import { MintDate, useMintDate } from '@/composables/useMintDate'
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
+const props = defineProps<FieldProps<MintDate>>()
 
-const props = defineProps<Props>()
-const preferences = usePreferencesStore()
-
-const parsedDateTime = computed(() => {
-    const dateString = props.data.bean[props.defs.name].trim()
-    if (!dateString) {
-        return ''
+const parsedDate = computed(() => {
+    if (props.field) {
+        return props.field.model.isValid ? props.field.formatted.user : ''
     }
-    let dateTime = DateTime.fromFormat(dateString, `${preferences.user?.date_format} ${preferences.user?.time_format}`)
-    if (!dateTime.isValid) {
-        dateTime = DateTime.fromSQL(dateString, { zone: 'UTC' })
-    }
-    return dateTime.isValid
-        ? dateTime.toLocal().toFormat(`${preferences.user?.date_format} ${preferences.user?.time_format}`)
-        : dateString
+    const date = useMintDate(props.modelValue as string)
+    return date.isValid.value ? date.formatted.value.user_datetime : ''
 })
 </script>
 
-<style scoped lang="scss">
-.mint-datetime-field {
-    width: min-content;
-    text-wrap: wrap;
-}
-</style>
+<style scoped lang="scss"></style>

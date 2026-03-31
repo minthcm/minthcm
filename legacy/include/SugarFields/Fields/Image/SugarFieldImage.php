@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -100,58 +100,59 @@ class SugarFieldImage extends SugarFieldFile
             $docType = isset($vardef['docType']) && isset($params[$prefix . $vardef['docType']]) ?
                 $params[$prefix . $vardef['docType']] : '';
             $upload_file->upload_doc($bean, $bean->id, $docType, $bean->$field, $upload_file->mime_type);
-        } else if (!empty($old_id)) {
-            // It's a duplicate, I think
+        } else {
+            if (!empty($old_id)) {
+                // It's a duplicate, I think
 
-            if (empty($params[$prefix . $vardef['docUrl']])) {
-                $upload_file->duplicate_file($old_id, $bean->id, $bean->$field);
+                if (empty($params[$prefix . $vardef['docUrl']])) {
+                    $upload_file->duplicate_file($old_id, $bean->id, $bean->$field);
+                } else {
+                    $docType = $vardef['docType'];
+                    $bean->$docType = $params[$prefix . $field . '_old_doctype'];
+                }
             } else {
-                $docType = $vardef['docType'];
-                $bean->$docType = $params[$prefix . $field . '_old_doctype'];
-            }
-        } else if (!empty($params[$prefix . $field . '_remoteName'])) {
-            // We aren't moving, we might need to do some remote linking
-            $displayParams = array();
-            $this->fillInOptions($vardef, $displayParams);
+                if (!empty($params[$prefix . $field . '_remoteName'])) {
+                    // We aren't moving, we might need to do some remote linking
+                    $displayParams = array();
+                    $this->fillInOptions($vardef, $displayParams);
 
-            if (isset($params[$prefix . $vardef['docId']])
+                    if (isset($params[$prefix . $vardef['docId']])
                 && !empty($params[$prefix . $vardef['docId']])
                 && isset($params[$prefix . $vardef['docType']])
                 && !empty($params[$prefix . $vardef['docType']])
             ) {
-                $bean->$field = $params[$prefix . $field . '_remoteName'];
+                        $bean->$field = $params[$prefix . $field . '_remoteName'];
 
-                require_once('include/utils/file_utils.php');
-                $extension = get_file_extension($bean->$field);
-                if (!empty($extension)) {
-                    $bean->file_ext = $extension;
-                    $bean->file_mime_type = get_mime_content_type_from_filename($bean->$field);
+                        require_once('include/utils/file_utils.php');
+                        $extension = get_file_extension($bean->$field);
+                        if (!empty($extension)) {
+                            $bean->file_ext = $extension;
+                            $bean->file_mime_type = get_mime_content_type_from_filename($bean->$field);
+                        }
+                    }
                 }
             }
         }
-
     }
 
-    public function verify_image($upload_file){
-        global $sugar_config;
-
-        $valid_ext = isset($sugar_config['image_ext']) ? $sugar_config['image_ext'] : array("image/jpeg","image/png");
-
-        $img_size = getimagesize($upload_file->temp_file_location);
-        $filetype = $img_size['mime'];
-        if( in_array($filetype, array_values($valid_ext)) ) {
+    public function verify_image($upload_file)
+    {
+        if (verify_uploaded_image($upload_file->temp_file_location)) {
             return true;
         }
-}
-    private function fillInOptions(&$vardef,&$displayParams) {
-        if ( isset($vardef['allowEapm']) && $vardef['allowEapm'] == true ) {
-            if ( empty($vardef['docType']) ) {
+
+        return false;
+    }
+    private function fillInOptions(&$vardef, &$displayParams)
+    {
+        if (isset($vardef['allowEapm']) && $vardef['allowEapm'] == true) {
+            if (empty($vardef['docType'])) {
                 $vardef['docType'] = 'doc_type';
             }
-            if ( empty($vardef['docId']) ) {
+            if (empty($vardef['docId'])) {
                 $vardef['docId'] = 'doc_id';
             }
-            if ( empty($vardef['docUrl']) ) {
+            if (empty($vardef['docUrl'])) {
                 $vardef['docUrl'] = 'doc_url';
             }
         } else {
@@ -159,15 +160,15 @@ class SugarFieldImage extends SugarFieldFile
         }
 
         // Override the default module
-        if ( isset($vardef['linkModuleOverride']) ) {
+        if (isset($vardef['linkModuleOverride'])) {
             $vardef['linkModule'] = $vardef['linkModuleOverride'];
         } else {
             $vardef['linkModule'] = '{$module}';
         }
 
         // This is needed because these aren't always filled out in the edit/detailview defs
-        if ( !isset($vardef['fileId']) ) {
-            if ( isset($displayParams['id']) ) {
+        if (!isset($vardef['fileId'])) {
+            if (isset($displayParams['id'])) {
                 $vardef['fileId'] = $displayParams['id'];
             } else {
                 $vardef['fileId'] = 'id';

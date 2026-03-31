@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -62,7 +62,7 @@ $focus = BeanFactory::newBean('EmailTemplates');
 
 $detailView = new DetailView();
 $offset=0;
-if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
+if (isset($_REQUEST['offset']) || isset($_REQUEST['record'])) {
     $result = $detailView->processSugarBean("EMAIL_TEMPLATE", $focus, $offset);
     if ($result == null) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
@@ -172,7 +172,8 @@ if (! isset($notes_list)) {
 }
 
 $attachments = '';
-for ($i=0; $i<count($notes_list); $i++) {
+$notes_listCount = count($notes_list);
+for ($i=0; $i<$notes_listCount; $i++) {
     $the_note = $notes_list[$i];
     $attachments .= "<a href=\"index.php?entryPoint=download&id={$the_note->id}&type=Notes\">".$the_note->name."</a><br />";
 }

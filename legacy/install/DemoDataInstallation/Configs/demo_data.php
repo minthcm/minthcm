@@ -44,6 +44,7 @@ $config = [
         "contracts_audit",
         "costs_audit",
         "cron_remove_documents",
+        "currencies",
         "custom_fields",
         "dashboardmanager_audit",
         "delegations_audit",

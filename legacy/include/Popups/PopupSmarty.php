@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2017 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('include/ListView/ListViewSmarty.php');
 require_once('include/TemplateHandler/TemplateHandler.php');
 require_once('include/SearchForm/SearchForm2.php');
 define("NUM_COLS", 2);
+#[\AllowDynamicProperties]
 class PopupSmarty extends ListViewSmarty
 {
     public $contextMenus = false;

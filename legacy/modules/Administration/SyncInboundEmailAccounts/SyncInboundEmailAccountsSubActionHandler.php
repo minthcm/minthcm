@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,13 +54,14 @@ use SuiteCRM\Utility\SuiteValidator;
  * Separated methods specially for SyncInboundEmailAccounts sub-actions handling
  *
  */
+#[\AllowDynamicProperties]
 class SyncInboundEmailAccountsSubActionHandler
 {
 
     /**
      * @const string
      */
-    const PROCESS_OUTPUT_FILE = "modules/Administration/SyncInboundEmailAccounts/sync_output.html";
+    public const PROCESS_OUTPUT_FILE = "modules/Administration/SyncInboundEmailAccounts/sync_output.html";
 
     /**
      * @var SyncInboundEmailAccountsPage
@@ -449,7 +450,7 @@ class SyncInboundEmailAccountsSubActionHandler
      */
     protected function getCompoundMessageIdMD5(InboundEmail $ie, $uid, $msgNo = null)
     {
-        if (empty($msgNo) and !empty($uid)) {
+        if (empty($msgNo) && !empty($uid)) {
             $msgNo = $ie->getImap()->getMessageNo((int)$uid);
         }
 
@@ -458,7 +459,7 @@ class SyncInboundEmailAccountsSubActionHandler
         $message_id = $header->message_id;
         $deliveredTo = $ie->id;
         $matches = array();
-        preg_match('/(delivered-to:|x-real-to:){1}\s*(\S+)\s*\n{1}/im', $fullHeader, $matches);
+        preg_match('/(delivered-to:|x-real-to:){1}\s*(\S+)\s*\n{1}/im', (string) $fullHeader, $matches);
         if (count($matches)) {
             $deliveredTo = $matches[2];
         }

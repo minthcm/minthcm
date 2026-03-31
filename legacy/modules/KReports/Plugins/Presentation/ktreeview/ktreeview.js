@@ -86,7 +86,7 @@ Ext.define( "SpiceCRM.KReporter.Viewer.store.reportResults", {
          refreshDashletHeight( true );
       },
       update: function () {
-         refreshDashletHeight();
+         refreshDashletHeight(true);
       }
    }
 } );
@@ -145,13 +145,15 @@ function refreshDashletHeight( delay ) {
    if ( window.insideSugarDashlet ) {
       if ( delay ) {
          setTimeout( function () {
-            $( '#kreportviewer' ).find( '.x-panel.x-panel-default' ).first().css( 'height', '' );
-            $( '#kreportviewer' ).find( '.x-panel-body.x-panel-body-default' ).first().css( 'height', '' );
+            const xpanel = $( '#kreportviewer' ).find( '.x-panel.x-panel-default.x-border-box' ).first();
+            xpanel.css( 'height', '' );
+            xpanel.find( '.x-panel-body.x-panel-body-default' ).first().css( 'height', '' );
             $( '#kreportviewer' ).find( 'div[id^="KReportViewer-VisualizationContainer"].x-panel-body' ).width( $( window.frameElement ).width() - 50 );
          }, 500 );
       } else {
-         $( '#kreportviewer' ).find( '.x-panel.x-panel-default' ).first().css( 'height', '' );
-         $( '#kreportviewer' ).find( '.x-panel-body.x-panel-body-default' ).first().css( 'height', '' );
+         const xpanel = $( '#kreportviewer' ).find( '.x-panel.x-panel-default.x-border-box' ).first();
+         xpanel.css( 'height', '' );
+         xpanel.find( '.x-panel-body.x-panel-body-default' ).first().css( 'height', '' );
          $( '#kreportviewer' ).find( 'div[id^="KReportViewer-VisualizationContainer"].x-panel-body' ).width( $( window.frameElement ).width() - 50 );
       }
    }

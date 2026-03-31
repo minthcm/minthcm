@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -43,7 +43,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -57,15 +57,16 @@ require_once 'include/SugarDateTime.php';
  *    The reason is that it's not possible to know if short string has only date or only time,
  *     and it makes more sense to assume time for the time conversion function.
  */
+#[\AllowDynamicProperties]
 class TimeDate
 {
-    const DB_DATE_FORMAT = 'Y-m-d';
-    const DB_TIME_FORMAT = 'H:i:s';
+    public const DB_DATE_FORMAT = 'Y-m-d';
+    public const DB_TIME_FORMAT = 'H:i:s';
     // little optimization
-    const DB_DATETIME_FORMAT = 'Y-m-d H:i:s';
-    const RFC2616_FORMAT = 'D, d M Y H:i:s \G\M\T';
+    public const DB_DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const RFC2616_FORMAT = 'D, d M Y H:i:s \G\M\T';
 
-    const SECONDS_IN_A_DAY = 86400;
+    public const SECONDS_IN_A_DAY = 86400;
 
     // Standard DB date/time formats
     // they are constant, vars are for compatibility
@@ -185,7 +186,7 @@ class TimeDate
 
     /**
      * Create TimeDate handler
-     * @param User $user User to work with, default if current user
+     * @param User|null $user User to work with, default if current user
      */
     public function __construct(User $user = null)
     {
@@ -248,7 +249,7 @@ class TimeDate
     /**
      * Set current user for this object
      *
-     * @param User $user User object, default is current user
+     * @param User|null $user User object, default is current user
      * @return TimeDate
      */
     public function setUser(User $user = null)
@@ -264,7 +265,7 @@ class TimeDate
      *
      * The order is: supplied parameter, TimeDate's user, global current user
      *
-     * @param User $user User object, default is current user
+     * @param User|null $user User object, default is current user
      * @return User
      * @internal
      */
@@ -283,7 +284,7 @@ class TimeDate
     /**
      * Get timezone for the specified user
      *
-     * @param User $user User object, default is current user
+     * @param User|null $user User object, default is current user
      * @return DateTimeZone
      */
     protected function _getUserTZ(User $user = null)
@@ -293,7 +294,7 @@ class TimeDate
             return self::$gmtTimezone;
         }
 
-        if ($this->allow_cache && $user->id == $this->current_user_id && !empty($this->current_user_tz)) {
+        if ($this->allow_cache && $user->id === $this->current_user_id && !empty($this->current_user_tz)) {
             // current user is cached
             return $this->current_user_tz;
         }
@@ -333,7 +334,7 @@ class TimeDate
      * Get user date format.
      * @todo add caching
      *
-     * @param User $user user object, current user if not specified
+     * @param User|null $user user object, current user if not specified
      * @return string
      */
     public function get_date_format(User $user = null)
@@ -457,7 +458,7 @@ class TimeDate
     /**
      * Get user's first day of week setting.
      *
-     * @param User $user user object, current user if not specified
+     * @param User|null $user user object, current user if not specified
      * @return int Day, 0 = Sunday, 1 = Monday, etc...
      */
     public function get_first_day_of_week(User $user = null)
@@ -597,7 +598,7 @@ class TimeDate
      * Format DateTime object as user datetime
      *
      * @param DateTime $date
-     * @param User $user
+     * @param User|null $user
      * @return string
      */
     public function asUser(DateTime $date, User $user = null)
@@ -611,7 +612,7 @@ class TimeDate
      * Format date as user-formatted field type
      * @param DateTime $date
      * @param string $type Field type - date, time, datetime[combo]
-     * @param User $user
+     * @param User|null $user
      * @return string
      */
     public function asUserType(DateTime $date, $type, User $user = null)
@@ -621,7 +622,7 @@ class TimeDate
                 return $this->asUserDate($date, true, $user);
                 break;
             case 'time':
-                return $this->asUserTime($date, true, $user);
+                return $this->asUserTime($date, $user);
                 break;
             case 'datetime':
             case 'datetimecombo':
@@ -637,7 +638,7 @@ class TimeDate
      * This is used by Javascript.
      *
      * @param DateTime $date
-     * @param User $user
+     * @param User|null $user
      * @return int
      */
     public function asUserTs(DateTime $date, User $user = null)
@@ -666,7 +667,7 @@ class TimeDate
      * Note: by default does not convert TZ!
      * @param DateTime $date
      * @param boolean $tz Perform TZ conversion?
-     * @param User $user
+     * @param User|null $user
      * @return string
      */
     public function asUserDate(DateTime $date, $tz = false, User $user = null)
@@ -695,7 +696,7 @@ class TimeDate
      * Format DateTime object as user time
      *
      * @param DateTime $date
-     * @param User $user
+     * @param User|null $user
      * @return string
      */
     public function asUserTime(DateTime $date, User $user = null)
@@ -802,7 +803,7 @@ class TimeDate
      * Get DateTime from user datetime string
      *
      * @param string $date
-     * @param User $user
+     * @param User|null $user
      * @return SugarDateTime
      */
     public function fromUser($date, User $user = null)
@@ -852,7 +853,7 @@ class TimeDate
      * Get DateTime from user time string
      *
      * @param string $date
-     * @param User $user
+     * @param User|null $user
      * @return SugarDateTime
      */
     public function fromUserTime($date, User $user = null)
@@ -873,7 +874,7 @@ class TimeDate
      * Note: by default does not convert tz!
      * @param string $date
      * @param bool $convert_tz perform TZ converson?
-     * @param User $user
+     * @param User|null $user
      * @return SugarDateTime
      */
     public function fromUserDate($date, $convert_tz = false, User $user = null)
@@ -898,7 +899,7 @@ class TimeDate
      * Same formats accepted as for DateTime ctor
      *
      * @param string $date
-     * @param User $user
+     * @param User|null $user
      * @return SugarDateTime
      */
     public function fromString($date, User $user = null)
@@ -936,7 +937,7 @@ class TimeDate
     /**
      * Convert DateTime to user timezone
      * @param DateTime $date
-     * @param User $user
+     * @param User|null $user
      * @return DateTime
      */
     public function tzUser(DateTime $date, User $user = null)
@@ -1351,11 +1352,12 @@ class TimeDate
      * Returns start and end of a certain local date in GMT
      * Example: for May 19 in PDT start would be 2010-05-19 07:00:00, end would be 2010-05-20 06:59:59
      * @param string|DateTime $date Date in any suitable format
-     * @param User $user
+     * @param User|null $user
      * @return array Start & end date in start, startdate, starttime, end, enddate, endtime
      */
     public function getDayStartEndGMT($date, User $user = null)
     {
+        $result = [];
         if ($date instanceof DateTime) {
             $min = clone $date;
             $min->setTimezone($this->_getUserTZ($user));
@@ -1431,7 +1433,7 @@ class TimeDate
 
     /**
      * Get the name of the timezone for the user
-     * @param User $user User, default - current user
+     * @param User|null $user User, default - current user
      * @return string
      */
     public static function userTimezone(User $user = null)
@@ -1519,7 +1521,7 @@ class TimeDate
      * We need the date because it can be DST or non-DST
      * Note it's different from TZ name in tzName() that relates to current date
      * @param DateTime $date Current date
-     * @param User $user User, default - current user
+     * @param User|null $user User, default - current user
      * @return string
      */
     public static function userTimezoneSuffix(DateTime $date, User $user = null)
@@ -1695,8 +1697,8 @@ class TimeDate
 
     /**
      * Returns the offset from user's timezone to GMT
-     * @param User $user
-     * @param DateTime $time When the offset is taken, default is now
+     * @param User|null $user
+     * @param \DateTime|null $time When the offset is taken, default is now
      * @return int Offset in minutes
      */
     public function getUserUTCOffset(User $user = null, DateTime $time = null)
@@ -1752,7 +1754,7 @@ class TimeDate
      * @internal
      * @param string $template Date expression
      * @param bool $daystart Do we want start or end of the day?
-     * @param User $user
+     * @param User|null $user
      * @param bool $adjustForTimezone
      * @return SugarDateTime
      */
@@ -1774,7 +1776,7 @@ class TimeDate
      * Get month-long range mdiff months from now
      * @internal
      * @param int $mdiff
-     * @param User $user
+     * @param User|null $user
      * @param bool $adjustForTimezone
      * @return array
      */
@@ -1793,7 +1795,7 @@ class TimeDate
      * Get year-long range ydiff years from now
      * @internal
      * @param int $ydiff
-     * @param User $user
+     * @param User|null $user
      * @param bool $adjustForTimezone
      * @return array
      */
@@ -1812,7 +1814,7 @@ class TimeDate
      * Parse date range expression
      * Returns beginning and end of the range as a date
      * @param string $range
-     * @param User $user
+     * @param User|null $user
      * @param bool $adjustForTimezone Do we need to adjust for timezone?
      * @return array of two Date objects, start & end
      */
@@ -1932,6 +1934,7 @@ class TimeDate
      */
     public function handleOffsetMax($date)
     {
+        $gmtDateTime = [];
         $min = new DateTime($date, $this->_getUserTZ());
         $min->setTime(0, 0);
         $max = new DateTime($date, $this->_getUserTZ());
@@ -1983,7 +1986,7 @@ class TimeDate
     /**
      * @deprecated for public use
      * get user timezone info
-     * @param User $user
+     * @param User|null $user
      * @return array
      */
     public function getUserTimeZone(User $user = null)

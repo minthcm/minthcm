@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -50,6 +50,7 @@ use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Equals;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Exists;
 use MintHCM\Lib\Search\ElasticSearch\Operators\MatchOperator;
+use MintHCM\Lib\Search\ElasticSearch\Operators\Nested;
 use MintHCM\Lib\Search\ElasticSearch\Operators\QueryString;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Range;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Term;
@@ -75,6 +76,7 @@ class ElasticQueryOperatorsManager
         'query_string' => QueryString::class,
         'terms' => Terms::class,
         'term' => Term::class,
+        'nested' => Nested::class,
     ];
 
     protected $query, $filters, $module;
@@ -93,34 +95,46 @@ class ElasticQueryOperatorsManager
 
     protected function setQuery()
     {
-        $query = [];
+        $this->query = $this->parseBooleanFilters($this->filters);
+    }
+
+    protected function parseBooleanFilters(array $filters): array
+    {
+        $parsed_filters = [];
         foreach (self::BOOLEAN_CLAUSES as $clause) {
-            if (isset($this->filters[$clause]) && is_array($this->filters[$clause])) {
-                if (is_array($this->filters[$clause])) {
-                    foreach ($this->filters[$clause] as $filter) {
-                        if (is_array($filter)) {
-                            foreach ($filter as $filter_type => $filter_data) {
-                                if (empty($filter_type) || !in_array($filter_type, array_keys($this::OPERATORS_MAPPER))) {
-                                    throw new BadRequest400Exception();
-                                }
-                                $class = $this::OPERATORS_MAPPER[$filter_type];
-                                $operator = new $class($filter_data);
-                                $data = $operator->getData(new ModulePrefixer($this->module));
-                                $query[$clause][] = $data;
-                            }
-                        }
+            if (!isset($filters[$clause]) || !is_array($filters[$clause])) {
+                continue;
+            }
+
+            foreach ($filters[$clause] as $filter) {
+                if (!is_array($filter)) {
+                    continue;
+                }
+                foreach ($filter as $filter_type => $filter_data) {
+                    if ($filter_type === 'bool' && is_array($filter_data)) {
+                        $parsed_filters[$clause][] = $this->parseBooleanFilters($filter_data);
+                        continue;
                     }
+                    if (empty($filter_type) || !in_array($filter_type, array_keys($this::OPERATORS_MAPPER))) {
+                        throw new BadRequest400Exception();
+                    }
+                    $class = $this::OPERATORS_MAPPER[$filter_type];
+                    $operator = new $class($filter_data);
+                    $data = $operator->getData(new ModulePrefixer($this->module));
+                    $parsed_filters[$clause][] = $data;
                 }
             }
         }
-        if (empty($query)) {
-            $this->query = [
+
+        if (empty($parsed_filters)) {
+            $parsed_filters = [
                 'bool' => ['must' => []],
             ];
         } else {
-            $this->query = [
-                'bool' => $query,
+            $parsed_filters = [
+                'bool' => $parsed_filters,
             ];
         }
+        return $parsed_filters;
     }
 }

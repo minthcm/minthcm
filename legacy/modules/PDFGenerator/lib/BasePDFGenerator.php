@@ -56,6 +56,7 @@ if (file_exists('custom/include/tcpdf/tcpdf.php')) {
 require_once 'modules/PDFGenerator/lib/MintPDF.php';
 require_once 'modules/PDFGenerator/lib/simple_html_dom.php';
 
+#[\AllowDynamicProperties]
 class BasePDFGenerator
 {
 

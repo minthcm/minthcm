@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -126,7 +126,7 @@ if (!isset($_REQUEST['copy_count']) || ($_REQUEST['copy_count'] == "")) {
 if (empty($_REQUEST['unzip_dir']) || $_REQUEST['unzip_dir'] == "." || $_REQUEST['unzip_dir'] == "..") {
     die($mod_strings['ERR_UW_NO_TEMP_DIR']);
 }
-$unzip_dir = $base_tmp_upgrade_dir. "/". basename($_REQUEST['unzip_dir']);
+ $unzip_dir = $base_tmp_upgrade_dir. "/". basename((string) $_REQUEST['unzip_dir']);
 
 if (empty($_REQUEST['install_file'])) {
     die($mod_strings['ERR_UW_NO_INSTALL_FILE']);
@@ -137,12 +137,12 @@ $install_type   = getInstallType($install_file);
 
 //from here on out, the install_file is used as the file path to copy or rename the physical file, so let's remove the stream wrapper if it's set
 //and replace it with the proper upload location
-if (strpos($install_file, 'upload://') === 0) {
+ if (strpos((string) $install_file, 'upload://') === 0) {
     //get the upload location if it's set, or default to 'upload'
     $upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
 
     //replace the wrapper in the file name with the directory
-    $install_file = str_replace('upload:/', $upload_dir, $install_file);
+     $install_file = str_replace('upload:/', $upload_dir, (string) $install_file);
     $_REQUEST['install_file'] = $install_file;
 }
 
@@ -260,11 +260,11 @@ for ($iii = 0; $iii < $_REQUEST['copy_count']; $iii++) {
 
         switch ($mode) {
             case "Install":
-                mkdir_recursive(dirname($dest_file));
+                 mkdir_recursive(dirname((string) $dest_file));
 
                 if ($install_type=="patch" && is_file($dest_file)) {
-                    if (!is_dir(dirname($rest_file))) {
-                        mkdir_recursive(dirname($rest_file));
+                     if (!is_dir(dirname((string) $rest_file))) {
+                         mkdir_recursive(dirname((string) $rest_file));
                     }
 
                     copy($dest_file, $rest_file);
@@ -349,9 +349,9 @@ switch ($install_type) {
             case "Install":
             //here we can determine if this is an upgrade or a new version
                 if (!empty($previous_version)) {
-                    $mi->install((string)$unzip_dir, true, $previous_version);
+                     $mi->install($unzip_dir, true, $previous_version);
                 } else {
-                    $mi->install((string)$unzip_dir);
+                     $mi->install($unzip_dir);
                 }
 
                 $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
@@ -367,7 +367,7 @@ switch ($install_type) {
                 } else {
                     $GLOBALS['mi_remove_tables'] = true;
                 }
-                $mi->uninstall((string)$unzip_dir);
+                 $mi->uninstall($unzip_dir);
                 break;
              case "Disable":
                 if (!$overwrite_files) {
@@ -375,7 +375,7 @@ switch ($install_type) {
                 } else {
                     $GLOBALS['mi_overwrite_files'] = true;
                 }
-                $mi->disable((string)$unzip_dir);
+                 $mi->disable($unzip_dir);
                 break;
              case "Enable":
                 if (!$overwrite_files) {
@@ -383,7 +383,7 @@ switch ($install_type) {
                 } else {
                     $GLOBALS['mi_overwrite_files'] = true;
                 }
-                $mi->enable((string)$unzip_dir);
+                 $mi->enable($unzip_dir);
                 break;
             default:
                 break;
@@ -487,7 +487,7 @@ switch ($mode) {
         $uh = new UpgradeHistory();
         $the_md5 = md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (count($md5_matches) == 0) {
+         if ((is_countable($md5_matches) ? count($md5_matches) : 0) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -499,7 +499,7 @@ switch ($mode) {
         $uh = new UpgradeHistory();
         $the_md5 = md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (count($md5_matches) == 0) {
+         if ((is_countable($md5_matches) ? count($md5_matches) : 0) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -512,7 +512,7 @@ switch ($mode) {
         $uh = new UpgradeHistory();
         $the_md5 = md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (count($md5_matches) == 0) {
+         if ((is_countable($md5_matches) ? count($md5_matches) : 0) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -564,3 +564,4 @@ if ($install_type != "module" && $install_type != "langpack") {
 <?php
     $GLOBALS['log']->info("Upgrade Wizard patches");
 ?>
+ 

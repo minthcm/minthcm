@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -146,7 +146,7 @@ $ss->assign("MAILBOXES_DETECTED_MESSAGE", $mboxTable);
 
 //email settings configured
 $conf_msg="<table border='0' width='100%' class='detail view' cellpadding='0' cellspacing='0'>";
-if (strstr($focus->settings['notify_fromaddress'], 'example.com')) {
+if (strstr((string) $focus->settings['notify_fromaddress'], 'example.com')) {
     //if from address is the default, then set "bad" message and increment health counter
     $conf_msg .= "<tr><td colspan = '5'><b class='error'> ".$mod_strings['LBL_MAILBOX_CHECK2_BAD']." </b></td></td>";
     $email_health =$email_health +1;

@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -59,6 +59,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * (We can use any kind of exception if it's an interface but
  * can not guarantee the proper translation in each implementation)
  */
+#[\AllowDynamicProperties]
 class LangException extends Exception implements LangExceptionInterface
 {
 
@@ -72,8 +73,8 @@ class LangException extends Exception implements LangExceptionInterface
      *
      * @param string $message
      * @param integer $code
-     * @param Exception $previous (Throwable)
-     * @param LangText $langMessage
+     * @param Exception|null $previous (Throwable)
+     * @param \SuiteCRM\LangText|null $langMessage
      */
     public function __construct($message = "", $code = 0, Exception $previous = null, LangText $langMessage = null)
     {

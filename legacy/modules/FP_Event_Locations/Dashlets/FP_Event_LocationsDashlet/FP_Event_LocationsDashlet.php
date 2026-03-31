@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,11 +56,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
  require_once('include/Dashlets/DashletGeneric.php');
  require_once('modules/FP_Event_Locations/FP_Event_Locations.php');
  
+ #[\AllowDynamicProperties]
  class FP_Event_LocationsDashlet extends DashletGeneric
  {
      public function __construct($id, $def = null)
      {
-         global $current_user, $app_strings;
+         global $current_user, $app_strings, $dashletData;
+ 
+         $dashletData = $dashletData ?? [];
+ 
          require('modules/FP_Event_Locations/metadata/dashletviewdefs.php');
  
          parent::__construct($id, $def);
@@ -74,6 +78,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          $this->seedBean = BeanFactory::newBean('FP_Event_Locations');
      }
-
+ 
+ 
  }
  

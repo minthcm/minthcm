@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,73 +42,72 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-$viewdefs['Users']['QuickCreate'] = array(
+ $viewdefs['Users']['QuickCreate'] = array(
     'templateMeta' => array('maxColumns' => '2',
-        'widths' => array(
-            array('label' => '10', 'field' => '30'),
-            array('label' => '10', 'field' => '30'),
-        ),
-        'form' => array(
-            'headerTpl' => 'modules/Users/tpls/EditViewHeader.tpl',
-            'footerTpl' => 'modules/Users/tpls/EditViewFooter.tpl',
-        ),
-        'javascript' => '<script type="text/javascript" src="modules/Users/UserEditView.js"></script>',
+                            'widths' => array(
+                                array('label' => '10', 'field' => '30'),
+                                array('label' => '10', 'field' => '30')
+                            ),
+                            'form' => array(
+                                'headerTpl'=>'modules/Users/tpls/EditViewHeader.tpl',
+                                'footerTpl'=>'modules/Users/tpls/EditViewFooter.tpl',
+                            ),
+                            'javascript' => '<script type="text/javascript" src="modules/Users/UserEditView.js"></script>',
     ),
     'panels' => array(
         'LBL_USER_INFORMATION' => array(
             array(
                 array(
-                    'name' => 'user_name',
-                    'displayParams' => array('required' => true),
+                    'name'=>'user_name',
+                    'displayParams' => array('required'=>true),
                 ),
-                'first_name',
+                'first_name'
             ),
             array(
                 array(
                     'name' => 'status',
-                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$STATUS_READONLY}{/if}',
-                    'displayParams' => array('required' => true),
+                    'customCode' => '{if !empty($IS_ADMIN)}@@FIELD@@{else}{if isset($STATUS_READONLY)}{$STATUS_READONLY}{/if}{/if}',
+                    'displayParams' => array('required'=>true),
                 ),
                 array(
-                    'name' => 'last_name',
-                    'displayParams' => array('required' => true),
+                    'name'=>'last_name',
+                    'displayParams' => array('required'=>true),
                 ),
             ),
             array(
                 array(
-                    'name' => 'email1',
-                    'displayParams' => array('required' => true),
+                    'name'=>'email1',
+                    'displayParams' => array('required'=>true),
                 ),
                 array(
-                    'name' => 'UserType',
-                    'customCode' => '{if $IS_ADMIN}{$USER_TYPE_DROPDOWN}{else}{$USER_TYPE_READONLY}{/if}',
+                    'name'=>'UserType',
+                    'customCode'=>'{if !empty($IS_ADMIN)}{$USER_TYPE_DROPDOWN}{else}{if isset($USER_TYPE_READONLY)}{$USER_TYPE_READONLY}{/if}{/if}',
                 ),
-                'business_role',
             ),
         ),
         'LBL_EMPLOYEE_INFORMATION' => array(
             array(
                 array(
-                    'name' => 'employee_status',
-                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$EMPLOYEE_STATUS_READONLY}{/if}',
+                    'name'=>'employee_status',
+                    'customCode'=>'{if !empty($IS_ADMIN)}@@FIELD@@{else}{if isset($EMPLOYEE_STATUS_READONLY)}{$EMPLOYEE_STATUS_READONLY}{/if}{/if}',
                 ),
-                'show_on_employees',
+                'show_on_employees'
             ),
             array(
                 array(
-                    'name' => 'title',
-                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$TITLE_READONLY}{/if}',
+                    'name'=>'title',
+                    'customCode'=>'{if !empty($IS_ADMIN)}@@FIELD@@{else} {if isset($TITLE_READONLY)}{$TITLE_READONLY}{/if} {/if}',
                 ),
-                'phone_work',
+                'phone_work'
             ),
             array(
                 array(
-                    'name' => 'department',
-                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$DEPT_READONLY}{/if}',
+                    'name'=>'department',
+                    'customCode'=>'{if !empty($IS_ADMIN)}@@FIELD@@{else} {if isset($DEPT_READONLY)}{$DEPT_READONLY}{/if} {/if}',
                 ),
                 array(
-                    'name' => 'reports_to_name',
-                    'customCode' => '{if $IS_ADMIN}@@FIELD@@{else}{$REPORTS_TO_READONLY}{/if}',
+                    'name'=>'reports_to_name',
+                    'customCode'=>'{if !empty($IS_ADMIN)}@@FIELD@@{else} {if isset($REPORTS_TO_READONLY)}{$REPORTS_TO_READONLY}{/if} {/if}',
                 ),
             ),
         ),

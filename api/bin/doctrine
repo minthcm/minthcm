@@ -4,7 +4,7 @@ require './vendor/autoload.php';
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\EntityManagerInterface;
-use MintHCM\Api\Containers\Doctrine\DoctrineContainerBuilder;
+use MintHCM\Data\ORM\Doctrine\DoctrineContainerBuilder;
 
 $doctrineContainerBuilder = new DoctrineContainerBuilder();
 $container = $doctrineContainerBuilder->build();

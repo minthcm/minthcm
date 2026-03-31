@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+
+
+
+
+
+#[\AllowDynamicProperties]
 class SugarWidgetSubPanelDetailViewLink extends SugarWidgetField
 {
     public function displayList(&$layout_def)
@@ -113,10 +119,15 @@ class SugarWidgetSubPanelDetailViewLink extends SugarWidgetField
         $action = 'DetailView';
         $value = $layout_def['fields'][$key];
         global $current_user;
+
+        $detailView = $layout_def['DetailView'] ?? '';
+        $ownerId = $layout_def['owner_id'] ?? '';
+        $ownerModule = $layout_def['owner_module'] ?? '';
+        $groupAccessView = SecurityGroup::groupHasAccess($module,$record,'view');
         if (!empty($record) &&
-            ($layout_def['DetailView'] && !$layout_def['owner_module']
-            ||  $layout_def['DetailView'] && !ACLController::moduleSupportsACL($layout_def['owner_module'])
-            || ACLController::checkAccess($layout_def['owner_module'], 'view', $layout_def['owner_id'] == $current_user->id))) {
+            ($detailView && !$layout_def['owner_module']
+            || $detailView && !ACLController::moduleSupportsACL($layout_def['owner_module'])
+            || ACLController::checkAccess($ownerModule, 'view', $ownerId == $current_user->id, 'module',  $groupAccessView))) {
             // MintHCM start #57627
             if ( $layout_def['owner_module'] && !empty($layout_def['fields']['PARENT_ID']) && !empty($layout_def['fields']['PARENT_NAME']) && !empty($layout_def['fields']['PARENT_TYPE']) ) {
                 $module = $layout_def['fields']['PARENT_TYPE'];

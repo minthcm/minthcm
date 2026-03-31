@@ -15,6 +15,7 @@ use Microsoft\Graph\Graph;
 /**
  * A proxy class for the Microsoft Graph API
  */
+#[\AllowDynamicProperties]
 class GraphProxy extends Graph
 {
     private $authURL;

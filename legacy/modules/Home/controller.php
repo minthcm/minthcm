@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 include_once("include/InlineEditing/InlineEditing.php");
 
+#[\AllowDynamicProperties]
 class HomeController extends SugarController
 {
     public function action_getEditFieldHTML()
@@ -114,12 +115,13 @@ class HomeController extends SugarController
             }
         }
     }
-    
+
     public function action_getRelateFieldJS()
     {
         global $beanFiles, $beanList;
-        
+
         $fieldlist = array();
+        $vardefFields = [];
         $view = "EditView";
 
         if (!isset($focus) || !($focus instanceof SugarBean)) {
@@ -133,7 +135,7 @@ class HomeController extends SugarController
         require_once("include/TemplateHandler/TemplateHandler.php");
         $template_handler = new TemplateHandler();
         $quicksearch_js = $template_handler->createQuickSearchCode($vardefFields, $vardefFields, $view);
-        $quicksearch_js = str_replace($_REQUEST['field'], $_REQUEST['field'] . '_display', $quicksearch_js);
+        $quicksearch_js = str_replace($_REQUEST['field'], $_REQUEST['field'] . '_display', (string) $quicksearch_js);
 
         if ($_REQUEST['field'] != "parent_name") {
             $quicksearch_js = str_replace($vardefFields[$_REQUEST['field']]['id_name'], $_REQUEST['field'], $quicksearch_js);

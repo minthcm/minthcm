@@ -4,12 +4,16 @@
             v-model="searchQuery"
             ref="searchInput"
             class="search-input"
-            :class="[isFocused && 'search-input-active']"
+            :class="{
+                'search-input-active': isFocused,
+                'search-input-railed': mdAndDown,
+            }"
             hide-details
             :placeholder="languages.label('LBL_MINT4_GS_SEARCH_INPUT')"
             @keyup.enter="goToFullList"
             variant="plain"
             @update:focused="isFocused = $event"
+            @blur="isFocused = false"
         >
             <template #prepend-inner>
                 <v-fab-transition class="search-prepend-icon">
@@ -72,14 +76,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { useModulesStore } from '@/store/modules'
 import he from 'he'
-import axios from 'axios'
 import { watch } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
 import { DateTime } from 'luxon'
+import { mintApi } from '@/api/api'
+import { useDisplay } from 'vuetify'
+
+const { mdAndDown } = useDisplay()
 
 const modules = useModulesStore()
 const languages = useLanguagesStore()
@@ -102,14 +109,7 @@ const standardizedQuery = computed(() => {
 
 function showRecord(module: string, id: string) {
     if (module && id) {
-        router.push({
-            name: 'module-view',
-            params: {
-                module,
-                action: 'DetailView',
-                record: id,
-            },
-        })
+        router.push(`/modules/${module}/DetailView/${id}`)
         searchQuery.value = ''
     }
 }
@@ -160,7 +160,7 @@ async function search() {
     if (standardizedQuery.value?.length >= 4) {
         isSearching.value = true
         try {
-            const response = await axios.get('api/global_search', {
+            const response = await mintApi.get('global_search', {
                 params: {
                     query: standardizedQuery.value,
                 },
@@ -242,6 +242,13 @@ watch(searchQuery, (newVal) => {
         padding-top: 0px;
     }
 
+    &.search-input-railed {
+        :deep(.v-field__field) {
+            width: 0px;
+        }
+    }
+    
+
     &-active {
         background: rgb(var(--v-theme-primary-light));
     }
@@ -294,6 +301,21 @@ watch(searchQuery, (newVal) => {
         gap: 32px;
         font-size: 12px;
         opacity: 0.7;
+    }
+}
+
+.search-input-railed {
+    width: 8ch;
+    transition: width 0.5s ease;
+
+    &.search-input-active {
+        transition: width 0.5s ease;
+        width: 72vw;
+
+        :deep(.v-field__field) {
+            transition: width 0.5s ease;
+            width: 100% !important;
+        }
     }
 }
 </style>

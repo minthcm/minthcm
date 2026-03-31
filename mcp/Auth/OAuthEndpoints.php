@@ -3,7 +3,7 @@
 namespace MintMCP\Auth;
 
 use Monolog\Logger as MonologLogger;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 use Throwable;
 
 /**

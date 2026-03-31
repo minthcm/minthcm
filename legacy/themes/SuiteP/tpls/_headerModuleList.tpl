@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -124,7 +124,7 @@
                                                                 <span class="{get_module_icon_class module_name=$item.module_name}"></span>
                                                                 <span aria-hidden="true">{$item.item_summary_short}</span>
                                                             </a>
-                                                            {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id }{/capture}
+                                                            {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id}{/capture}
                                                             {if $access}
                                                             <a href="{sugar_link module=$item.module_name action='EditView' record=$item.item_id link_only=1}" class="recent-links-edit"><span class=" glyphicon glyphicon-pencil"></a>
                                                             {/if}
@@ -152,7 +152,7 @@
                                                                                     <span class="{get_module_icon_class module_name=$item.module_name}"></span>
                                                                                     <span aria-hidden="true">{$item.item_summary_short}</span>
                                                                                 </a>
-                                                                                {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id }{/capture}
+                                                                                {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.id }{/capture}
                                                                                 {if $access}
                                                                                 <a href="{sugar_link module=$item.module_name action='EditView' record=$item.id link_only=1}" class="favorite-links-edit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></a>
                                                                                 {/if}
@@ -278,7 +278,7 @@
                                                                                                                     <span class="{get_module_icon_class module_name=$item.module_name}"></span>
                                                                                                                     <span aria-hidden="true">{$item.item_summary_short}</span>
                                                                                                                 </a>
-                                                                                                                {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id }{/capture}
+                                                                                                            {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.id }{/capture}
                                                                                                                 {if $access}
                                                                                                                 <a href="{sugar_link module=$item.module_name action='EditView' record=$item.id link_only=1}" class="favorite-links-edit"><span class=" glyphicon glyphicon-pencil" aria-hidden="true"></a>
                                                                                                                 {/if}
@@ -428,7 +428,7 @@
                                                                                                                                        href="{sugar_link module=$item.module_name action='DetailView' record=$item.id link_only=1}" class="favorite-links-detail">
                                                                                                                                         <span aria-hidden="true">{$item.item_summary_short}</span>
                                                                                                                                     </a>
-                                                                                                                                    {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id }{/capture}
+                                                                                                                                    {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.id }{/capture}
                                                                                                                                     {if $access}
                                                                                                                                     <a href="{sugar_link module=$item.module_name action='EditView' record=$item.id link_only=1}" class="favorite-links-edit"><span class=" glyphicon glyphicon-pencil" aria-hidden="true"></a>
                                                                                                                                     {/if}
@@ -542,7 +542,7 @@
                                                                                                                 <input type="hidden" class="form-control" name="advanced" value="false">
                                                                                                                 <div class="input-group">
                                                                                                                     <input type="text" class="form-control query_string" name="query_string" id="query_string"
-                                                                                                                           placeholder="{$APP.LBL_SEARCH_BUTTON}..." value="{$SEARCH}"/>
+                                                                                                                    placeholder="{$APP.LBL_SEARCH_BUTTON_TITLE}..." value="{$SEARCH}"/>
                                                                                                                     <span class="input-group-btn">
                                                                                                                         <button type="submit" class="btn btn-default suitepicon suitepicon-action-search"></button>
                                                                                                                     </span>
@@ -834,7 +834,7 @@
 
                                                                                             <a id="buttontoggle" class="buttontoggle"><span></span></a>
 
-                                                                                                <div {if $smarty.cookies.sidebartoggle|default:'' == 'collapsed'}style="display:none"{/if}
+                                                                                        <div {if isset($smarty.cookies.sidebartoggle) && $smarty.cookies.sidebartoggle == 'collapsed'}style="display:none"{/if}
                                                                                                                                                   class="sidebar">
 
                                                                                                 <div id="actionMenuSidebar" class="actionMenuSidebar">
@@ -890,7 +890,7 @@
                                                                                                                                             <span class="{get_module_icon_class module_name=$item.module_name}"></span>
                                                                                                                                             <span>{$item.item_summary_short}</span>
                                                                                                                                         </a>
-                                                                                                                                        {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.item_id }{/capture}
+                                                                                                                                        {capture assign='access'}{suite_check_access module=$item.module_name action='edit' record=$item.id }{/capture}
                                                                                                                                         {if $access}
                                                                                                                                         <a href="{sugar_link module=$item.module_name action='EditView' record=$item.item_id link_only=1}" class="recent-links-edit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                                                                                                                         {/if}

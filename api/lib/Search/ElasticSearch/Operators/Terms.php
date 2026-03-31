@@ -62,7 +62,7 @@ class Terms extends ElasticOperator
     {
         return [
             'terms' => [
-                $prefixer->modify($this->field) => $this->value,
+                $prefixer->modify($this->field) => array_values($this->value),
             ],
         ];
     }

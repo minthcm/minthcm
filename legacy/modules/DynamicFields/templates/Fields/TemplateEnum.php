@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 require_once('include/utils/array_utils.php');
+#[\AllowDynamicProperties]
 class TemplateEnum extends TemplateText
 {
     public $max_size = 100;
@@ -89,7 +90,8 @@ class TemplateEnum extends TemplateText
             $dependencies = array() ;
 
             if (is_array($this->trigger) && is_array($this->action)) {
-                for ($i = 0 ; $i < count($this->action) ; $i++) {
+                $actionCount = is_countable($this->action) ? count($this->action): 0;
+                for ($i = 0 ; $i < $actionCount ; $i++) {
                     $dependencies [ $this->trigger [ $i ] ] = $this->action [ $i ] ;
                 }
                 $this->dependency = $dependencies ;
@@ -105,6 +107,9 @@ class TemplateEnum extends TemplateText
     }
     public function get_xtpl_edit()
     {
+        global $app_list_strings;
+
+        $returnXTPL = [];
         $name = $this->name;
         $value = '';
         if (isset($this->bean->$name)) {
@@ -118,8 +123,6 @@ class TemplateEnum extends TemplateText
             $returnXTPL[strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
         }
 
-        global $app_list_strings;
-        $returnXTPL = array();
         $returnXTPL[strtoupper($this->name)] = $value;
         if (empty($this->ext1)) {
             $this->ext1 = $this->options;
@@ -154,7 +157,7 @@ class TemplateEnum extends TemplateText
         $def['studio'] = 'visible';
         // this class may be extended, so only do the unserialize for genuine TemplateEnums
         if (get_class($this) == 'TemplateEnum' && empty($def['dependency'])) {
-            $def['dependency'] = isset($this->ext4)? unserialize(html_entity_decode($this->ext4)) : null ;
+            $def['dependency'] = $this->ext4 !== null? unserialize(html_entity_decode((string) $this->ext4), ['allowed_classes' => false]) : null ;
         }
         if (!empty($this->visibility_grid)) {
             $def['visibility_grid'] = $this->visibility_grid;
@@ -177,8 +180,8 @@ class TemplateEnum extends TemplateText
         if (isset($this->bean->$name)) {
             $key = $this->bean->$name;
             global $app_list_strings;
-            if (preg_match('/&amp;/s', $key)) {
-                $key = str_replace('&amp;', '&', $key);
+            if (preg_match('/&amp;/s', (string) $key)) {
+                $key = str_replace('&amp;', '&', (string) $key);
             }
             if (isset($app_list_strings[$this->ext1])) {
                 if (isset($app_list_strings[$this->ext1][$key])) {

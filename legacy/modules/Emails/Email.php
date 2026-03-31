@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ require_once __DIR__ . '/../../include/UploadMultipleFiles.php';
 require_once __DIR__ . '/NonGmailSentFolderHandler.php';
 
 
+#[\AllowDynamicProperties]
 class Email extends Basic
 {
     /**
@@ -232,6 +233,16 @@ class Email extends Basic
      */
     public $bcc_addrs_emails;
 
+    /**
+     * @var string $contact_id
+     */
+    public $contact_id;
+
+    /**
+     * @var string $contact_name
+     */
+    public $contact_name;
+
     // Archive Email attributes
     /**
      * @var string $duration_hours
@@ -345,7 +356,11 @@ class Email extends Basic
      * @var array $relationshipMap
      */
     public $relationshipMap = array(
+        'Contacts' => 'emails_contacts_rel',
+        'Accounts' => 'emails_accounts_rel',
+        'Leads' => 'emails_leads_rel',
         'Users' => 'emails_users_rel',
+        'Prospects' => 'emails_prospects_rel',
     );
 
     /**
@@ -442,13 +457,13 @@ class Email extends Basic
      * @var string
      */
     public $assigned_user_name;
-    const NO_ERROR = 0;
-    const ERR_NOT_STORED_AS_SENT = 1;
-    const ERR_NO_IE = 2;
-    const ERR_NO_IE_MAIL_ID = 3;
-    const ERR_CODE_SHOULD_BE_INT = 4;
-    const ERR_IE_RETRIEVE = 5;
-    const UNHANDLED_LAST_ERROR = 6;
+    public const NO_ERROR = 0;
+    public const ERR_NOT_STORED_AS_SENT = 1;
+    public const ERR_NO_IE = 2;
+    public const ERR_NO_IE_MAIL_ID = 3;
+    public const ERR_CODE_SHOULD_BE_INT = 4;
+    public const ERR_IE_RETRIEVE = 5;
+    public const UNHANDLED_LAST_ERROR = 6;
 
     /**
      *
@@ -527,7 +542,7 @@ class Email extends Basic
 
     /**
      *
-     * @param Email $email
+     * @param \Email|null $email
      */
     protected function createTempEmailAtSend(Email $email = null)
     {
@@ -573,6 +588,9 @@ class Email extends Basic
             LoggerManager::getLogger()->error('Unhandled email save and store as sent error: ' . $err, self::UNHANDLED_LAST_ERROR);
         }
     }
+
+
+
 
     /**
      * assigns $this->ev with EmailUI
@@ -652,7 +670,7 @@ class Email extends Basic
 
         //check to see if this is a file with extension located in "badext"
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($file_ext) == strtolower($badExt)) {
+            if (strtolower($file_ext) === strtolower($badExt)) {
                 //if found, then append with .txt and break out of lookup
                 $filename = $filename . ".txt";
                 $badExtension = true;
@@ -678,7 +696,7 @@ class Email extends Basic
         if (!empty($matchs[0])) {
             $total = $matchs[0];
             foreach ($total as $match) {
-                $convertedPattern = str_replace(',', '::;::', $match);
+                $convertedPattern = str_replace(',', '::;::', (string) $match);
                 $addresses = str_replace($match, $convertedPattern, $addresses);
             } //foreach
         }
@@ -719,12 +737,12 @@ class Email extends Basic
     {
         $addresses = from_html($addresses);
         $pattern = '/@.*,/U';
-        preg_match_all($pattern, $addresses, $matchs);
+        preg_match_all($pattern, (string) $addresses, $matchs);
         if (!empty($matchs[0])) {
             $total = $matchs[0];
             foreach ($total as $match) {
-                $convertedPattern = str_replace(',', '::;::', $match);
-                $addresses = str_replace($match, $convertedPattern, $addresses);
+                $convertedPattern = str_replace(',', '::;::', (string) $match);
+                $addresses = str_replace($match, $convertedPattern, (string) $addresses);
             } //foreach
         }
 
@@ -798,7 +816,9 @@ class Email extends Basic
         $fromaddress,
         $toaddress,
         $mail_sendtype = 'smtp',
-        $fromname = ''
+        $fromname = '',
+        $authType = 'no_auth',
+        $externalOAuthConnectionId = ''
     ) {
         global $current_user, $app_strings;
         $mod_strings = return_module_language($GLOBALS['current_language'], 'Emails'); //Called from EmailMan as well.
@@ -807,22 +827,14 @@ class Email extends Basic
         if ($mail->Mailer == 'smtp') {
             $mail->Host = $mailserver_url;
             $mail->Port = $port;
-            if (isset($ssltls) && !empty($ssltls)) {
-                $mail->protocol = "ssl://";
-                if ($ssltls == 1) {
-                    $mail->SMTPSecure = 'ssl';
-                } // if
-                if ($ssltls == 2) {
-                    $mail->SMTPSecure = 'tls';
-                } // if
-            } else {
-                $mail->protocol = "tcp://";
-            }
-            if ($smtp_auth_req) {
-                $mail->SMTPAuth = true;
-                $mail->Username = $smtp_username;
-                $mail->Password = $smtppassword;
-            }
+
+            $mail->setSecureProtocol($ssltls ?? false);
+            $mail->initSMTPAuth(
+                $authType ?? '',
+                $externalOAuthConnectionId ?? '',
+                $smtp_username ?? '',
+                $smtppassword ?? ''
+            );
         } else {
             $mail->Mailer = 'sendmail';
         }
@@ -862,7 +874,7 @@ class Email extends Basic
      */
     public function decodeDuringSend($htmlData)
     {
-        $htmlData = str_replace("sugarLessThan", "&lt;", $htmlData);
+        $htmlData = str_replace("sugarLessThan", "&lt;", (string) $htmlData);
         $htmlData = str_replace("sugarGreaterThan", "&gt;", $htmlData);
 
         return $htmlData;
@@ -906,6 +918,7 @@ class Email extends Basic
         global $beanFiles;
 
         $OBCharset = $locale->getPrecedentPreference('default_email_charset');
+        $ie = null;
 
         /**********************************************************************
          * Sugar Email PREP
@@ -980,7 +993,7 @@ class Email extends Basic
             if (isset($request['parent_type']) && !empty($request['parent_type']) &&
                 isset($request['parent_id']) && !empty($request['parent_id']) &&
                 in_array($request['parent_type'], ['Cases', 'Contacts', 'Users', 'Prospects'])) {
-                    if (isset($beanList[$request['parent_type']]) && !empty($beanList[$request['parent_type']])) {
+                if (isset($beanList[$request['parent_type']]) && !empty($beanList[$request['parent_type']])) {
                     $className = $beanList[$request['parent_type']];
                     if (isset($beanFiles[$className]) && !empty($beanFiles[$className])) {
                         if (!class_exists($className)) {
@@ -1010,7 +1023,7 @@ class Email extends Basic
             $this->description_html = EmailTemplate::parse_template($this->description_html, $object_arr);
             $this->name = EmailTemplate::parse_template($this->name, $object_arr);
             $this->description = EmailTemplate::parse_template($this->description, $object_arr);
-            $this->description = html_entity_decode($this->description, ENT_COMPAT, 'UTF-8');
+            $this->description = html_entity_decode((string) $this->description, ENT_COMPAT, 'UTF-8');
             if ($this->type != 'draft' && $this->status != 'draft') {
                 $this->id = create_guid();
                 $this->date_entered = "";
@@ -1207,7 +1220,7 @@ class Email extends Basic
                     $docRev->retrieve($doc->document_revision_id);
 
                     $filename = $docRev->filename;
-                    $docGUID = preg_replace('/[^a-z0-9\-]/', "", $docRev->id);
+                    $docGUID = preg_replace('/[^a-z0-9\-]/', "", (string) $docRev->id);
                     $fileLocation = "upload/{$docGUID}";
                     $mime_type = $docRev->file_mime_type;
                     $mail->AddAttachment(
@@ -1248,7 +1261,7 @@ class Email extends Basic
                     $note->retrieve($noteId);
                     if (!empty($note->id)) {
                         $filename = $note->filename;
-                        $noteGUID = preg_replace('/[^a-z0-9\-]/', "", $note->id);
+                        $noteGUID = preg_replace('/[^a-z0-9\-]/', "", (string) $note->id);
                         $fileLocation = "upload/{$noteGUID}";
                         $mime_type = $note->file_mime_type;
                         if (!$note->embed_flag) {
@@ -1551,13 +1564,13 @@ class Email extends Basic
             $this->cc_addrs_names = $this->cleanEmails($this->cc_addrs_names);
             $this->bcc_addrs_names = $this->cleanEmails($this->bcc_addrs_names);
             $this->reply_to_addr = $this->cleanEmails($this->reply_to_addr);
-            $this->description = SugarCleaner::cleanHtml($this->description);
+            $this->description = SugarCleaner::cleanHtml($this->description ?? '');
             if (empty($this->description_html)) {
                 $this->description_html = $this->description;
                 $this->description_html = nl2br($this->description_html);
             }
-            $this->description_html = SugarCleaner::cleanHtml($this->description_html, true);
-            $this->raw_source = SugarCleaner::cleanHtml($this->raw_source, true);
+            $this->description_html = SugarCleaner::cleanHtml($this->description_html ?? '', true);
+            $this->raw_source = SugarCleaner::cleanHtml($this->raw_source ?? '', true);
             $this->saveEmailText();
             $this->saveEmailAddresses();
 
@@ -1672,7 +1685,7 @@ class Email extends Basic
 
         // to, multiple
         $replace = array(",", ";");
-        $toaddrs = str_replace($replace, "::", from_html($this->to_addrs));
+        $toaddrs = str_replace($replace, "::", (string) from_html($this->to_addrs));
         $exToAddrs = explode("::", $toaddrs);
 
         if (!empty($exToAddrs)) {
@@ -1687,7 +1700,7 @@ class Email extends Basic
         }
 
         // cc, multiple
-        $ccAddrs = str_replace($replace, "::", from_html($this->cc_addrs));
+        $ccAddrs = str_replace($replace, "::", (string) from_html($this->cc_addrs));
         $exccAddrs = explode("::", $ccAddrs);
 
         if (!empty($exccAddrs)) {
@@ -1702,7 +1715,7 @@ class Email extends Basic
         }
 
         // bcc, multiple
-        $bccAddrs = str_replace($replace, "::", from_html($this->bcc_addrs));
+        $bccAddrs = str_replace($replace, "::", (string) from_html($this->bcc_addrs));
         $exbccAddrs = explode("::", $bccAddrs);
         if (!empty($exbccAddrs)) {
             foreach ($exbccAddrs as $bccAddr) {
@@ -1751,7 +1764,7 @@ class Email extends Basic
         if (empty($emails)) {
             return '';
         }
-        $emails = str_replace(array(",", ";"), "::", from_html($emails));
+        $emails = str_replace(array(",", ";"), "::", (string) from_html($emails));
         $addrs = explode("::", $emails);
         $res = array();
         foreach ($addrs as $addr) {
@@ -1929,6 +1942,7 @@ class Email extends Basic
             $exRemoved = explode('::', $_REQUEST['removeAttachment']);
         }
 
+        $noteDupe = null;
         $noteArray = array();
         $q = "SELECT id FROM notes WHERE deleted = 0 AND parent_id = " . $this->db->quoted($id);
         $r = $this->db->query($q);
@@ -2239,7 +2253,7 @@ class Email extends Basic
 
             //// get the email to see if we're dealing with a dupe
             //// what crappy coding
-            preg_match("/[A-Z0-9._%-\']+@[A-Z0-9.-]+\.[A-Z]{2,}/i", $v, $match);
+            preg_match("/[A-Z0-9._%-\']+@[A-Z0-9.-]+\.[A-Z]{2,}/i", (string) $v, $match);
 
 
             if (!empty($match[0]) && !in_array(trim($match[0]), $knownEmails)) {
@@ -2247,7 +2261,7 @@ class Email extends Basic
                 $recipient['email'] = $match[0];
 
                 //// handle the Display name
-                $display = trim(str_replace($match[0], '', $v));
+                $display = trim(str_replace($match[0], '', (string) $v));
 
                 //// only trigger a "displayName" <email@address> when necessary
                 if (isset($addrs_names_arr[$i])) {
@@ -2773,18 +2787,14 @@ class Email extends Basic
             $mail->Mailer = "smtp";
             $mail->Host = $oe->mail_smtpserver;
             $mail->Port = $oe->mail_smtpport;
-            if ($oe->mail_smtpssl == 1) {
-                $mail->SMTPSecure = 'ssl';
-            } // if
-            if ($oe->mail_smtpssl == 2) {
-                $mail->SMTPSecure = 'tls';
-            } // if
 
-            if ($oe->mail_smtpauth_req) {
-                $mail->SMTPAuth = true;
-                $mail->Username = $oe->mail_smtpuser;
-                $mail->Password = $oe->mail_smtppass;
-            }
+            $mail->setSecureProtocol($oe->mail_smtpssl);
+            $mail->initSMTPAuth(
+                $oe->auth_type ?? '',
+                $oe->external_oauth_connection_id ?? '',
+                $oe->mail_smtpuser ?? '',
+                $oe->mail_smtppass ?? '',
+            );
         } else {
             $mail->Mailer = "sendmail";
         }
@@ -2826,18 +2836,14 @@ class Email extends Basic
             $mail->Mailer = "smtp";
             $mail->Host = $oe->mail_smtpserver;
             $mail->Port = $oe->mail_smtpport;
-            if ($oe->mail_smtpssl == 1) {
-                $mail->SMTPSecure = 'ssl';
-            } // if
-            if ($oe->mail_smtpssl == 2) {
-                $mail->SMTPSecure = 'tls';
-            } // if
 
-            if ($oe->mail_smtpauth_req) {
-                $mail->SMTPAuth = true;
-                $mail->Username = $oe->mail_smtpuser;
-                $mail->Password = $oe->mail_smtppass;
-            }
+            $mail->setSecureProtocol($oe->mail_smtpssl);
+            $mail->initSMTPAuth(
+                $oe->auth_type ?? '',
+                $oe->external_oauth_connection_id ?? '',
+                $oe->mail_smtpuser ?? '',
+                $oe->mail_smtppass ?? '',
+            );
         } else {
             $mail->Mailer = "sendmail";
         }
@@ -2924,8 +2930,8 @@ class Email extends Basic
      * @global User $current_user
      * @global array $sugar_config
      * @global Localization $locale
-     * @param SugarPHPMailer $mail
-     * @param NonGmailSentFolderHandler $nonGmailSentFolder
+     * @param SugarPHPMailer|null $mail
+     * @param \NonGmailSentFolderHandler|null $nonGmailSentFolder
      * @return boolean True on success
      */
     public function send(
@@ -3002,7 +3008,7 @@ class Email extends Basic
         isValidEmailAddress($mail->Sender);
         $mail->AddReplyTo($ReplyToAddr, $locale->translateCharsetMIME(trim($ReplyToName), 'UTF-8', $OBCharset));
 
-        $mail->Subject = html_entity_decode($this->name, ENT_QUOTES, 'UTF-8');
+        $mail->Subject = html_entity_decode((string) $this->name, ENT_QUOTES, 'UTF-8');
 
         $attachmentLabel = $mod_strings['LBL_EMAIL_ATTACHMENT'] ?? '';
 
@@ -3094,7 +3100,7 @@ class Email extends Basic
         $mail->Sender = $sender; /* set Return-Path field in header to reduce spam score in emails sent via Sugar's Email module */
         $mail->AddReplyTo($ReplyToAddr, $locale->translateCharsetMIME(trim($ReplyToName), 'UTF-8', $OBCharset));
 
-        $mail->Subject = html_entity_decode($this->name, ENT_QUOTES, 'UTF-8');
+        $mail->Subject = html_entity_decode((string) $this->name, ENT_QUOTES, 'UTF-8');
 
         $this->setupAttachments(
             $mod_strings['LBL_EMAIL_ATTACHMENT'],
@@ -3160,7 +3166,7 @@ class Email extends Basic
      *
      * @param SugarPHPMailer $mail
      * @param InboundEmail $ie
-     * @param NonGmailSentFolderHandler $nonGmailSentFolder
+     * @param \NonGmailSentFolderHandler|null $nonGmailSentFolder
      * @param bool $check_notify
      * @return string
      */
@@ -3279,15 +3285,12 @@ class Email extends Basic
      */
     public function getSystemDefaultEmail()
     {
-        $email = array();
 
-        $r1 = $this->db->query('SELECT config.value FROM config WHERE name=\'fromaddress\'');
-        $r2 = $this->db->query('SELECT config.value FROM config WHERE name=\'fromname\'');
-        $a1 = $this->db->fetchByAssoc($r1);
-        $a2 = $this->db->fetchByAssoc($r2);
+        $oe = new OutboundEmail();
+        $oe = $oe->getSystemMailerSettings();
 
-        $email['email'] = $a1['value'];
-        $email['name'] = $a2['value'];
+        $email['email'] = $oe->smtp_from_addr ?? '';
+        $email['name'] = $oe->smtp_from_name ?? '';
 
         return $email;
     }
@@ -3318,6 +3321,8 @@ class Email extends Basic
         $singleSelect = false,
         $ifListForExport = false
     ) {
+        $where_auto = '';
+
         if ($return_array) {
             return parent::create_new_list_query(
                 $order_by,
@@ -3378,31 +3383,30 @@ class Email extends Basic
      */
     public function fill_in_additional_list_fields()
     {
-        global $timedate, $mod_strings;
         $this->fill_in_additional_detail_fields();
 
         $this->link_action = 'DetailView';
-        ///////////////////////////////////////////////////////////////////////
-        //populate attachment_image, used to display attachment icon.
-        $query = "select 1 from notes where notes.parent_id = '$this->id' and notes.deleted = 0";
-        $result = $this->db->query($query, true, " Error filling in additional list fields: ");
+        $this->attachment_image = '';
 
-        $row = $this->db->fetchByAssoc($result);
+        if (!empty($this->id)) {
+            //populate attachment_image, used to display attachment icon.
+            $query = "select 1 from notes where notes.parent_id = '$this->id' and notes.deleted = 0";
+            $result = $this->db->query($query, true, " Error filling in additional list fields: ");
 
-        if ($row) {
-            $this->attachment_image = SugarThemeRegistry::current()->getImage(
-                'attachment',
-                '',
-                null,
-                null,
-                '.gif',
-                translate('LBL_ATTACHMENT', 'Emails')
-            );
-        } else {
-            $this->attachment_image = '';
+            $row = $this->db->fetchByAssoc($result);
+
+            if ($row) {
+                $this->attachment_image = SugarThemeRegistry::current()->getImage(
+                    'attachment',
+                    '',
+                    null,
+                    null,
+                    '.gif',
+                    translate('LBL_ATTACHMENT', 'Emails')
+                );
+            }
         }
 
-        ///////////////////////////////////////////////////////////////////////
         if (empty($this->contact_id) && !empty($this->parent_id) && !empty($this->parent_type) && $this->parent_type === 'Contacts' && !empty($this->parent_name)) {
             $this->contact_id = $this->parent_id;
             $this->contact_name = $this->parent_name;
@@ -3620,7 +3624,7 @@ class Email extends Basic
             $mod_strings = return_module_language($current_language, 'Emails');
         }
 
-        return $mod_strings['LBL_QUICK_CREATE'] . "&nbsp;<a id='$this->id' onclick='return quick_create_overlib(\"{$this->id}\", \"" . (string)SugarThemeRegistry::current() . "\", this);' href=\"#\" >" . SugarThemeRegistry::current()->getImage(
+        return $mod_strings['LBL_QUICK_CREATE'] . "&nbsp;<a id='$this->id' onclick='return quick_create_overlib(\"{$this->id}\", \"" . SugarThemeRegistry::current() . "\", this);' href=\"#\" >" . SugarThemeRegistry::current()->getImage(
             "advanced_search",
             "border='0' align='absmiddle'",
             null,
@@ -3718,8 +3722,8 @@ class Email extends Basic
             $temp['hasAttach'] = $this->doesImportedEmailHaveAttachment($a['id']);
             //To and from addresses may be stored in emails_text, if nothing is found, revert to
             //regular email addresses.
-            $temp['to_addrs'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['to_addrs']);
-            $temp['from'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['from_addr']);
+            $temp['to_addrs'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', (string) $a['to_addrs']);
+            $temp['from'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', (string) $a['from_addr']);
             isValidEmailAddress($temp['from']);
             if (empty($temp['from']) || empty($temp['to_addrs'])) {
                 //Retrieve email addresses seperatly.
@@ -4335,14 +4339,16 @@ eoq;
 
         // is from address in the request?
 
-        if (!isset($request['from_addr_name']) || !$request['from_addr_name']) {
-            $useDefaultFromAddressName = true;
-        }
+        if (!isset($request['from_addr'])) {
+            if (!isset($request['from_addr_name']) || !$request['from_addr_name']) {
+                $useDefaultFromAddressName = true;
+            }
 
-        // is from name in the request?
+            // is from name in the request?
 
-        if (!isset($request['from_addr_email']) || !$request['from_addr_email']) {
-            $useDefaultFromAddressEmail = true;
+            if (!isset($request['from_addr_email']) || !$request['from_addr_email']) {
+                $useDefaultFromAddressEmail = true;
+            }
         }
 
         // so, do we have to use any default data?
@@ -4386,14 +4392,14 @@ eoq;
         }
 
         if (isset($request['from_addr']) && $request['from_addr'] != $request['from_addr_name'] . ' &lt;' . $request['from_addr_email'] . '&gt;') {
-            if (false === strpos($request['from_addr'], '&lt;')) { // we have an email only?
+            if (false === strpos((string) $request['from_addr'], '&lt;')) { // we have an email only?
                 $bean->from_addr = $request['from_addr'];
                 isValidEmailAddress($bean->from_addr);
                 $bean->from_name = '';
                 $bean->reply_to_addr = $bean->from_addr;
                 $bean->reply_to_name = $bean->from_name;
             } else { // we have a compound string
-                $newFromAddr = str_replace($old, $new, $request['from_addr']);
+                $newFromAddr = str_replace($old, $new, (string) $request['from_addr']);
                 $bean->from_addr = substr(
                     $newFromAddr,
                     (1 + strpos($newFromAddr, '<')),
@@ -4418,20 +4424,20 @@ eoq;
 
 
         if (!empty($request['to_addrs_names'])) {
-            $bean->to_addrs_names = htmlspecialchars_decode($request['to_addrs_names']);
+            $bean->to_addrs_names = htmlspecialchars_decode((string) $request['to_addrs_names']);
         }
 
         if (!empty($bean->to_addrs_names)) {
-            $bean->to_addrs = htmlspecialchars_decode($bean->to_addrs_names);
+            $bean->to_addrs = htmlspecialchars_decode((string) $bean->to_addrs_names);
         }
 
 
-        $toEmailAddresses = preg_split('/[,;]/', $bean->to_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $toEmailAddresses = preg_split('/[,;]/', (string) $bean->to_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->to_addr_arr = array();
         foreach ($toEmailAddresses as $ea => $address) {
             preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
-                $address,
+                (string) $address,
                 $matches
             );
 
@@ -4439,14 +4445,14 @@ eoq;
             // eg Angel Mcmahon <sales.vegan@example.it>
             if (count($matches) > 3) {
                 $email = $matches[2];
-                $display = (str_replace($email, '', $address));
+                $display = (str_replace($email, '', (string) $address));
                 $display = (trim(str_replace('"', '', $display)));
             } else {
                 $email = $address;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
+            $email = str_ireplace('<', '', (string) $email);
             $email = str_ireplace('>', '', $email);
             $email = str_ireplace('&lt;', '', $email);
             $email = str_ireplace('&rt;', '', $email);
@@ -4461,22 +4467,22 @@ eoq;
 
         if (empty($bean->cc_addrs)) {
             if (!empty($request['cc_addrs_names'])) {
-                $bean->cc_addrs_names = htmlspecialchars_decode($request['cc_addrs_names']);
+                $bean->cc_addrs_names = htmlspecialchars_decode((string) $request['cc_addrs_names']);
             }
 
             if (!empty($bean->cc_addrs_names)) {
-                $bean->cc_addrs = htmlspecialchars_decode($bean->cc_addrs_names);
+                $bean->cc_addrs = htmlspecialchars_decode((string) $bean->cc_addrs_names);
             }
         }
 
-        $ccEmailAddresses = preg_split('/[,;]/', $bean->cc_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $ccEmailAddresses = preg_split('/[,;]/', (string) $bean->cc_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->cc_addrs_arr = array();
         foreach ($ccEmailAddresses as $ea => $address) {
             $email = '';
             $display = '';
             preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
-                $address,
+                (string) $address,
                 $matches
             );
 
@@ -4490,7 +4496,7 @@ eoq;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
+            $email = str_ireplace('<', '', (string) $email);
             $email = str_ireplace('>', '', $email);
             $email = str_ireplace('&lt;', '', $email);
             $email = str_ireplace('&rt;', '', $email);
@@ -4505,22 +4511,22 @@ eoq;
 
         if (empty($bean->bcc_addrs)) {
             if (!empty($request['bcc_addrs_names'])) {
-                $bean->bcc_addrs_names = htmlspecialchars_decode($request['bcc_addrs_names']);
+                $bean->bcc_addrs_names = htmlspecialchars_decode((string) $request['bcc_addrs_names']);
             }
 
             if (!empty($bean->bcc_addrs_names)) {
-                $bean->bcc_addrs = htmlspecialchars_decode($bean->bcc_addrs_names);
+                $bean->bcc_addrs = htmlspecialchars_decode((string) $bean->bcc_addrs_names);
             }
         }
 
-        $bccEmailAddresses = preg_split('/[,;]/', $bean->bcc_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $bccEmailAddresses = preg_split('/[,;]/', (string) $bean->bcc_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->bcc_addrs_arr = array();
         foreach ($bccEmailAddresses as $ea => $address) {
             $email = '';
             $display = '';
             preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
-                $address,
+                (string) $address,
                 $matches
             );
 
@@ -4534,7 +4540,7 @@ eoq;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
+            $email = str_ireplace('<', '', (string) $email);
             $email = str_ireplace('>', '', $email);
             $email = str_ireplace('&lt;', '', $email);
             $email = str_ireplace('&rt;', '', $email);
@@ -4596,7 +4602,7 @@ eoq;
         $this->description_html = '';
         $mail->IsHTML(false);
         $plainText = from_html($this->description);
-        $plainText = str_replace("&nbsp;", " ", $plainText);
+        $plainText = str_replace("&nbsp;", " ", (string) $plainText);
         $plainText = str_replace("</p>", "</p><br />", $plainText);
         $plainText = strip_tags(br2nl($plainText));
         $plainText = str_replace("&amp;", "&", $plainText);
@@ -4813,7 +4819,7 @@ eoq;
     {
         return ($mail->oe->type === 'system') && (!isset($sugar_config['email_allow_send_as_user']) || (!$sugar_config['email_allow_send_as_user']));
     }
-    
+
     /**
      * @param string $emailField eg from_name
      */
@@ -4828,7 +4834,6 @@ eoq;
         }
     }
 
-    
     /**
      * @param $LBL_EMAIL_ATTACHMENT
      * @param $upload_badext
@@ -4869,12 +4874,12 @@ eoq;
                 }
 
                 // strip out the "Email attachment label if exists
-                $filename = str_replace($LBL_EMAIL_ATTACHMENT . ': ', '', $filename);
+                $filename = str_replace($LBL_EMAIL_ATTACHMENT . ': ', '', (string) $filename);
                 $file_ext = pathinfo($filename, PATHINFO_EXTENSION);
                 //is attachment in our list of bad files extensions?  If so, append .txt to file location
                 //check to see if this is a file with extension located in "badext"
                 foreach ($upload_badext as $badExt) {
-                    if (strtolower($file_ext) == strtolower($badExt)) {
+                    if (strtolower($file_ext) === strtolower($badExt)) {
                         //if found, then append with .txt to filename and break out of lookup
                         //this will make sure that the file goes out with right extension, but is stored
                         //as a text in db.

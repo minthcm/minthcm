@@ -38,4 +38,8 @@ $ESListViewDefs['Offboardings'] = [
         'created_by_name' => [],
         'modified_by_name' => [],
     ],
+    'defaultSort' => [
+        'field' => 'date_start',
+        'order' => 'DESC'
+    ],
 ];

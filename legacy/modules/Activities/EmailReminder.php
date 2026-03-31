@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,6 +56,7 @@ require_once("include/utils.php");
  * Class for sending email reminders of meetings and call to invitees
  *
  */
+#[\AllowDynamicProperties]
 class EmailReminder
 {
     
@@ -171,7 +172,7 @@ class EmailReminder
         $tempBody = from_html(trim($xtpl->text($template_name)));
         $mail->msgHTML($tempBody);
 
-        $tempBody = preg_replace('/<a href=([\"\']?)(.*?)\1>(.*?)<\/a>/', "\\3 [\\2]", $tempBody);
+        $tempBody = preg_replace('/<a href=([\"\']?)(.*?)\1>(.*?)<\/a>/', "\\3 [\\2]", (string) $tempBody);
 
         $mail->AltBody = strip_tags($tempBody);
         $mail->Subject = strip_tags(from_html($xtpl->text($template_name . "_Subject")));

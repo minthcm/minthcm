@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -75,7 +75,7 @@ function runCheck($install_script, $mod_strings = array())
 
 // check IIS and FastCGI
     $server_software = $_SERVER["SERVER_SOFTWARE"];
-    if ((strpos($_SERVER["SERVER_SOFTWARE"],'Microsoft-IIS') !== false)
+    if ((strpos((string) $_SERVER["SERVER_SOFTWARE"],'Microsoft-IIS') !== false)
         && php_sapi_name() == 'cgi-fcgi'
         && ini_get('fastcgi.logging') != '0')
     {
@@ -88,9 +88,9 @@ function runCheck($install_script, $mod_strings = array())
     ';
     }
 
-    if(strpos($server_software,'Microsoft-IIS') !== false){
+    if(strpos((string) $server_software,'Microsoft-IIS') !== false){
         $iis_version = '';
-        if(preg_match_all("/^.*\/(\d+\.?\d*)$/",  $server_software, $out))
+        if(preg_match_all("/^.*\/(\d+\.?\d*)$/",  (string) $server_software, $out))
             $iis_version = $out[1][0];
 
         $check_iis_version_result = check_iis_version($iis_version);
@@ -241,7 +241,8 @@ if(check_php_version() === -1) {
     }
 
 
-// cache dir
+    // cache dir
+    $cache_files = [];
     $cache_files[] = '';
     $cache_files[] = 'images';
     $cache_files[] = 'layout';

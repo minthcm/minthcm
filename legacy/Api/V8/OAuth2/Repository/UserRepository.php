@@ -6,6 +6,7 @@ use Api\V8\OAuth2\Entity\UserEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 
+#[\AllowDynamicProperties]
 class UserRepository implements UserRepositoryInterface
 {
     /**
@@ -53,6 +54,7 @@ class UserRepository implements UserRepositoryInterface
 
         return new UserEntity($user->id);
     }
+
     protected function IsLdapOn(){
         return !empty($GLOBALS['system_config']->settings['system_ldap_enabled']) && $GLOBALS['system_config']->settings['system_ldap_enabled'] == true;
     }

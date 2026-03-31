@@ -49,35 +49,35 @@ class EmployeesController extends SugarController
 
     public function action_editview()
     {
-        global $current_user;
+      global $current_user;
         $has_access = $this->bean->ACLAccess('edit', $this->bean->isOwner($current_user->id), 'not_set');
         if ($has_access) {
-            $this->view = 'edit';
-        } else {
-            sugar_die("Unauthorized access to employees.");
-        }
-        return true;
-    }
+         $this->view = 'edit';
+      } else {
+         sugar_die("Unauthorized access to employees.");
+      }
+      return true;
+   }
 
     protected function action_delete()
     {
-        if ($_REQUEST['record'] != $GLOBALS['current_user']->id && $GLOBALS['current_user']->isAdminForModule('Users')) {
-            $u = new User();
-            $u->retrieve($_REQUEST['record']);
-            $u->status = 'Inactive';
-            $u->employee_status = 'Terminated';
-            $u->save();
-            $u->mark_deleted($u->id);
-            $GLOBALS['log']->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
+      if ( $_REQUEST['record'] != $GLOBALS['current_user']->id && $GLOBALS['current_user']->isAdminForModule('Users') ) {
+         $u = new User();
+         $u->retrieve($_REQUEST['record']);
+         $u->status = 'Inactive';
+         $u->employee_status = 'Terminated';
+         $u->save();
+         $u->mark_deleted($u->id);
+         $GLOBALS['log']->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
 
-            SugarApplication::redirect("index.php?module=Employees&action=index");
-        } else {
-            sugar_die("Unauthorized access to administration.");
-        }
-    }
+         SugarApplication::redirect("index.php?module=Employees&action=index");
+      } else {
+         sugar_die("Unauthorized access to administration.");
+      }
+   }
 
-    public function action_showduplicates()
-    {
-        $this->view = "showduplicates";
-    }
+   public function action_showduplicates()
+   {
+       $this->view = "showduplicates";
+   }
 }

@@ -2,14 +2,16 @@
 
 namespace MintMCP\Tools;
 
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\ToolValidation;
 
 use Mcp\Types\CallToolResult;
 use Mcp\Types\ToolInputSchema;
+use MintMCP\Tools\Utils\DateTimeConversion;
 use TimeDate;
 
 class CheckAvailability extends AbstractMCPTool
 {
+
     /**
      * Statuses that are excluded from busy slots (not considered as busy).
      */
@@ -39,12 +41,12 @@ class CheckAvailability extends AbstractMCPTool
                 ],
                 'start_date' => [
                     'type' => 'string',
-                    'description' => 'Start of the period in YYYY-MM-DDTHH:MM:SS format (ISO 8601).',
+                    'description' => 'Start of the period in YYYY-MM-DD HH:MM:SS format. If not provided, current date/time is used.',
                     'format' => 'datetime',
                 ],
                 'end_date' => [
                     'type' => 'string',
-                    'description' => 'End of the period in YYYY-MM-DDTHH:MM:SS format (ISO 8601).',
+                    'description' => 'End of the period in YYYY-MM-DD HH:MM:SS format.',
                     'format' => 'datetime',
                 ],
                 'modules' => [
@@ -72,21 +74,21 @@ class CheckAvailability extends AbstractMCPTool
             $this->checkPermissions('Meetings');
             $this->checkPermissions('Calls');
 
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->mint_user_id, 'mint_user_id')
+            ToolValidation::validateMany([
+                ToolValidation::make($arguments->mint_user_id, 'mint_user_id')
                     ->required()
                     ->string(),
-                ToolValidationMiddleware::make($arguments->end_date, 'end_date')
+                ToolValidation::make($arguments->end_date, 'end_date')
                     ->required()
                     ->string()
                     ->date(),
-                ToolValidationMiddleware::make($arguments->modules, 'modules')
+                ToolValidation::make($arguments->modules, 'modules')
                     ->required()
                     ->array(),
             ]);
             if (!empty($arguments->start_date)) {
-                ToolValidationMiddleware::validateOne(
-                    ToolValidationMiddleware::make($arguments->start_date, 'start_date')
+                ToolValidation::validateOne(
+                    ToolValidation::make($arguments->start_date, 'start_date')
                         ->string()
                         ->date()
                         ->isBefore($arguments->end_date, 'end_date')
@@ -94,8 +96,8 @@ class CheckAvailability extends AbstractMCPTool
             }
 
             $userId = $arguments->mint_user_id;
-            $startDate = $arguments->start_date ?? null;
-            $endDate = $arguments->end_date;
+            $startDate = DateTimeConversion::fromUserTZ($arguments->start_date) ?? null;
+            $endDate = DateTimeConversion::fromUserTZ($arguments->end_date) ?? null;
             $modules = $arguments->modules;
 
             chdir('../legacy');
@@ -156,10 +158,12 @@ class CheckAvailability extends AbstractMCPTool
         }
 
         // Get all meetings matching the date/status criteria
-        $meetings = $meetingBean->get_full_list(
+        $meetingsData = $meetingBean->get_list(
             '',
             implode(' AND ', $where)
         );
+
+        $meetings = $meetingsData['list'] ?? [];
 
         $busy = [];
         if ($meetings) {
@@ -169,8 +173,8 @@ class CheckAvailability extends AbstractMCPTool
                 $userIds = $meeting->users->get();
                 if (in_array($userId, $userIds)) {
                     $busy[] = [
-                        'start' => $meeting->date_start,
-                        'end' => $meeting->date_end,
+                        'start' => DateTimeConversion::formatDate($meeting->date_start),
+                        'end' => DateTimeConversion::formatDate($meeting->date_end),
                         'type' => 'meeting',
                         'name' => $meeting->name,
                     ];
@@ -204,10 +208,11 @@ class CheckAvailability extends AbstractMCPTool
         }
 
         // Get all calls matching the date/status criteria
-        $calls = $callBean->get_full_list(
+        $callsData = $callBean->get_list(
             '',
             implode(' AND ', $where)
         );
+        $calls = $callsData['list'] ?? [];
 
         $busy = [];
         if ($calls) {
@@ -217,8 +222,8 @@ class CheckAvailability extends AbstractMCPTool
                 $userIds = $call->users->get();
                 if (in_array($userId, $userIds)) {
                     $busy[] = [
-                        'start' => $call->date_start,
-                        'end' => $call->date_end,
+                        'start' => DateTimeConversion::formatDate($call->date_start),
+                        'end' => DateTimeConversion::formatDate($call->date_end),
                         'type' => 'call',
                         'name' => $call->name,
                     ];

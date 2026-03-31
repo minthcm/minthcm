@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -52,7 +52,7 @@
  */
 require_once('service/core/NusoapSoap.php');
 class SugarSoapService2 extends NusoapSoap{
-		
+
 	/**
 	 * This method registers all the functions which you want to be available for SOAP.
 	 *
@@ -66,5 +66,5 @@ class SugarSoapService2 extends NusoapSoap{
 		$this->excludeFunctions = array();
 		$GLOBALS['log']->info('End: SugarSoapService2->register');
 	} // fn
-			
+
 } // clazz

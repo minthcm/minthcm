@@ -11,6 +11,7 @@
                 :error="!isValidDate"
                 hide-details
                 density="compact"
+                :disabled="disabled"
             />
         </template>
         <VueDatePicker
@@ -21,30 +22,19 @@
             :locale="locale"
             :select-text="languages.label('LBL_ESLIST_SELECT_DATE')"
         />
-        <!-- <v-date-picker
-            v-model="input.value"
-            no-title
-            @input="menu = false"
-            locale="pl"
-            first-day-of-week="1"
-            show-week
-            locale-first-day-of-year="4"
-            color="rgba(0, 0, 0, 0.4)"
-
-        /> -->
     </v-menu>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import { defineProps, ref, computed, watch, defineEmits } from 'vue'
-import { useLanguagesStore } from '@/store/languages';
+import { ref, computed, watch } from 'vue'
+import { useLanguagesStore } from '@/store/languages'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const languages = useLanguagesStore();
 const emit = defineEmits(['update:modelValue'])
-const props = defineProps(['input'])
+const props = defineProps(['input', 'disabled'])
 const value = ref(props.input?.value)
 const menu = ref(false)
 const isValidDate = computed(() => {
@@ -78,19 +68,6 @@ watch(value, () => {
         emit('update:modelValue', value.value)
     }
 })
-// export default {
-//     props: {
-//         input: { type: Object }
-//     },
-//     data: () => ({
-//         menu: false
-//     }),
-//     computed: {
-//         isValidDate() {
-//             return !this.input.value || this.input.value.length === 10
-//         }
-//     }
-// }
 </script>
 
 <style></style>

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { favoritesApi } from '@/api/favorites.api'
 
 interface Favorite {
     id: string
@@ -14,7 +14,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
     const favorites = ref<Favorite[]>([])
 
     async function fetch() {
-        const response = await axios.get('api/Favorites')
+        const response = await favoritesApi.getList()
         favorites.value = response.data
     }
 
@@ -23,6 +23,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
         if (index > -1) {
             favorites.value.splice(index, 1)
         }
+        favoritesApi.remove(module, record)
     }
 
     function addToFavorites(module: string, record: string, name: string) {
@@ -33,6 +34,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
             module_name: module,
             image: false,
         })
+        favoritesApi.add(module, record)
     }
 
     function isFavorite(module: string, record: string): boolean {

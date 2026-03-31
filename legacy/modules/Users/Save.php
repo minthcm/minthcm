@@ -356,13 +356,6 @@ if (!$focus->is_group && !$focus->portal_only) {
         $focus->setPreference('default_export_charset', $_POST['default_export_charset'], 0, 'global');
     }
 
-    if (isset($_POST['use_real_names'])) {
-        $focus->setPreference('use_real_names', 'on', 0, 'global');
-    } elseif (!isset($_POST['use_real_names']) && !isset($_POST['from_dcmenu'])) {
-        // Make sure we're on the full form and not the QuickCreate.
-        $focus->setPreference('use_real_names', 'off', 0, 'global');
-    }
-
     if (isset($_POST['mail_smtpauth_req'])) {
         $focus->setPreference('mail_smtpauth_req', $_POST['mail_smtpauth_req'], 0, 'global');
     } else {
@@ -418,8 +411,12 @@ if (!$focus->is_group && !$focus->portal_only) {
         $focus->setPreference('default_email_charset', $_REQUEST['default_email_charset'], 0, 'global');
     }
 
-    if (isset($_POST['calendar_publish_key'])) {
+    $isValidator = new \SuiteCRM\Utility\SuiteValidator();
+
+    if (isset($_POST['calendar_publish_key']) && $isValidator->isValidKey($_POST['calendar_publish_key'])) {
         $focus->setPreference('calendar_publish_key', $_POST['calendar_publish_key'], 0, 'global');
+    } elseif (isset($_POST['calendar_publish_key'])) {
+        $_POST['calendar_publish_key'] = '';
     }
 
     if (isset($_POST['subtheme'])) {

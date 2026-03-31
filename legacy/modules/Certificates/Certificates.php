@@ -1,5 +1,6 @@
 <?PHP
 
+#[\AllowDynamicProperties]
 class Certificates extends Basic {
 
    public $new_schema = true;

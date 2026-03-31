@@ -1,8 +1,10 @@
+import relateInput from '../inputs/relate'
+
 export default {
     search: {
         label: 'LBL_ESLIST_EQUAL',
         inputs: [
-            { type: 'relate', label: 'LBL_ESLIST_VALUE' }
+            relateInput,
         ],
         filters: [
             { op: 'match', value: { query: '{0}', operator: 'and' } }
@@ -12,10 +14,29 @@ export default {
         label: 'LBL_ESLIST_NOT_EQUAL',
         not: true,
         inputs: [
-            { type: 'relate', label: 'LBL_ESLIST_VALUE' }
+            relateInput,
         ],
         filters: [
             { op: 'match', value: { query: '{0}', operator: 'and' } }
+        ]
+    },
+    one_of: {
+        label: 'LBL_ESLIST_ONE_OF',
+        inputs: [
+            { type: 'multirelate', label: 'LBL_ESLIST_VALUE' }
+        ],
+        filters: [
+            { op: 'terms', value: '{0}' }
+        ]
+    },
+    none_of: {
+        label: 'LBL_ESLIST_NONE_OF',
+        not: true,
+        inputs: [
+            { type: 'multirelate', label: 'LBL_ESLIST_VALUE' }
+        ],
+        filters: [
+            { op: 'terms', value: '{0}' }
         ]
     }
 }

@@ -10,9 +10,9 @@ if (! defined('sugarEntry') || ! sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('modules/ModuleBuilder/parsers/ParserFactory.php') ;
 require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;
 require_once 'modules/ModuleBuilder/parsers/constants.php' ;
 
+#[\AllowDynamicProperties]
 class ViewLayoutView extends SugarView
 {
     public function __construct()
@@ -71,6 +72,8 @@ class ViewLayoutView extends SugarView
             $this->type = $this->sm->getViewType($this->editLayout);
         }
     }
+
+
 
     /**
      * @see SugarView::_getModuleTitleParams()
@@ -254,7 +257,7 @@ class ViewLayoutView extends SugarView
         if (isset($labels [ strtolower($this->editLayout) ])) {
             $translatedViewType = translate($labels [ strtolower($this->editLayout) ], 'ModuleBuilder') ;
         } else {
-            if (isset($this->sm)) {
+            if (property_exists($this, 'sm') && $this->sm !== null) {
                 foreach ($this->sm->sources as $file => $def) {
                     if (!empty($def['view']) && $def['view'] == $this->editLayout && !empty($def['name'])) {
                         $translatedViewType = $def['name'];

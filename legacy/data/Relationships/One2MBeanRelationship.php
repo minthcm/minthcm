@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ require_once("data/Relationships/One2MRelationship.php");
  * Represents a one to many relationship that is table based.
  * @api
  */
+#[\AllowDynamicProperties]
 class One2MBeanRelationship extends One2MRelationship
 {
     //Type is read in sugarbean to determine query construction
@@ -347,7 +348,7 @@ class One2MBeanRelationship extends One2MRelationship
         $alias = empty($params['join_table_alias']) ? "{$link->name}_rel": $params['join_table_alias'];
         $alias = DBManagerFactory::getInstance()->getValidDBName($alias, false, 'alias');
 
-        $tableInRoleFilter = "";
+        $tableInRoleFilter = $startingTable;
         if (
             (
                 $startingTable == "meetings"
@@ -363,7 +364,7 @@ class One2MBeanRelationship extends One2MRelationship
                 || $targetTable == "tasks"
                 || $targetTable == "calls"
             )
-            && substr($alias, 0, 12 + strlen($targetTable)) == $targetTable . "_activities_"
+            && substr((string) $alias, 0, 12 + strlen((string) $targetTable)) == $targetTable . "_activities_"
         ) {
             $tableInRoleFilter = $linkIsLHS ? $alias : $startingTable;
         }
@@ -373,6 +374,7 @@ class One2MBeanRelationship extends One2MRelationship
         $targetTable = $alias;
 
         $query .= "$join_type $targetTableWithAlias ON $startingTable.$startingKey=$targetTable.$targetKey AND $targetTable.deleted=0\n"
+         . "AND $targetTable.$targetKey = '{$link->focus->id}' "  //MintHCM 172384 
         //Next add any role filters
                . $this->getRoleWhere($tableInRoleFilter) . "\n";
 
@@ -386,7 +388,7 @@ class One2MBeanRelationship extends One2MRelationship
                 'type' => $this->type,
                 'rel_key' => $targetKey,
                 'join_tables' => array($targetTable),
-                'where' => "WHERE $startingTable.$startingKey='{$link->focus->id}'",
+                'where' => "", //MintHCM 172384 
                 'select' => " ",
             );
         }

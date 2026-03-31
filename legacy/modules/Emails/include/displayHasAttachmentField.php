@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -79,7 +79,7 @@ function displayHasAttachmentField($focus, $field, $value, $view)
         $bean->load_relationship('notes');
         $attachmentIds = $bean->notes->get();
 
-        $bean->has_attachment = (count($attachmentIds) > 0);
+        $bean->has_attachment = ((is_countable($attachmentIds) ? count($attachmentIds) : 0) > 0);
         if (is_object($bean)) {
             $bean = get_object_vars($bean);
         }

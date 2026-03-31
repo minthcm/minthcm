@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, withDefaults, defineEmits, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 
 const searchQuery = ref<string | null>('')
 const standardizedQuery = computed(() => {

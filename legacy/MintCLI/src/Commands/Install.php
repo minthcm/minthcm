@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[\AllowDynamicProperties]
 class Install extends Command
 {
     protected static $defaultName = 'install';
@@ -92,6 +93,9 @@ class Install extends Command
 
         $io->section('Reindexing Elastic...');
         $installer->reindexElastic();
+
+        $io->section('Create OAuth2 keys and Frontend client...');
+        $installer->setupOAuth2();
 
         $io->success('Installation finished successfuly');
         return Command::SUCCESS;

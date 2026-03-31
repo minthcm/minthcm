@@ -3253,6 +3253,13 @@ Ext.define( "SpiceCRM.KReporter.Designer.model.bucket", {
                  hidden: !1,
                  width: 150,
                  editor: new Ext.form.TextField
+              }, {
+                 text: languageGetText( "LBL_FILTER_DESCRIPTION" ),
+                 dataIndex: "filter_description",
+                 sortable: !0,
+                 hidden: !1,
+                 width: 200,
+                 editor: new Ext.form.TextField
               } ],
            sm: new Ext.selection.RowModel,
            viewConfig: {

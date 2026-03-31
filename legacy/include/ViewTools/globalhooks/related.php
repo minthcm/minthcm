@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,14 +46,14 @@
 
 require_once 'include/ViewTools/ViewToolsQueue.php';
 
+#[\AllowDynamicProperties]
 class Related {
 
    /**
     * Method used as GlobalHook
-    * @global type $dictionary
     * @param SugarBean $bean
-    * @param type $event
-    * @param type $arguments
+    * @param string|bool $event
+    * @param array $arguments
     */
    public function relatedRecalculation(SugarBean &$bean, $event = false, $arguments = false) {
       if(file_exists('include/ViewTools/Expressions/cache.php')){

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
  * THIS CLASS IS FOR DEVELOPERS TO MAKE CUSTOMIZATIONS IN
  */
 require_once('modules/OutboundEmailAccounts/OutboundEmailAccounts_sugar.php');
+#[\AllowDynamicProperties]
 class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
 {
 
@@ -69,6 +70,13 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
      */
     public $mail_smtpuser;
 
+    public $mail_smtpauth_req;
+    public $mail_smtpssl;
+    public $mail_smtpport;
+    public $mail_smtpserver;
+    public $mail_smtptype;
+    public $mail_sendtype;
+
     /**
      * @var string
      */
@@ -89,6 +97,9 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
      */
     public $reply_to_name;
 
+    public $auth_type = 'no_auth'; // 'no_auth', 'basic', 'oauth'
+    public $external_oauth_connection_id = '';
+
     public function __construct()
     {
         parent::__construct();
@@ -96,7 +107,7 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
 
     public function save($check_notify = false)
     {
-        if (!$this->checkPersonalAccountAccess()) {
+        if (!$this->hasAccessToPersonalAccount()) {
             $this->logPersonalAccountAccessDenied('save');
             throw new RuntimeException('Access Denied');
         }
@@ -116,10 +127,33 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
         }
         $this->mail_smtppass = $this->mail_smtppass ? blowfishEncode(blowfishGetKey('OutBoundEmail'), $this->mail_smtppass) : null;
 
+        if ($this->auth_type === 'basic') {
+            $this->mail_smtpauth_req = 1;
+            $this->external_oauth_connection_id = '';
+        }
+
+        if ($this->auth_type === 'no_auth') {
+            $this->mail_smtppass = '';
+            $this->mail_smtpauth_req = 0;
+            $this->external_oauth_connection_id = '';
+        }
+
+        if ($this->auth_type === 'oauth') {
+            $this->mail_smtppass = '';
+            $this->mail_smtpauth_req = 0;
+        }
+
         $this->smtp_from_name = trim($this->smtp_from_name);
         $this->smtp_from_addr = trim($this->smtp_from_addr);
         $this->mail_smtpserver = trim($this->mail_smtpserver);
         $this->mail_smtpuser = trim($this->mail_smtpuser);
+
+        if ($this->type === 'system') {
+            /** @var Administration $admin */
+            $admin = BeanFactory::newBean('Administration');
+            $admin->saveSetting('notify', 'fromname', $this->smtp_from_name);
+            $admin->saveSetting('notify', 'fromaddress', $this->smtp_from_addr);
+        }
 
         $results = parent::save($check_notify);
         return $results;
@@ -132,9 +166,13 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
     {
         $results = parent::retrieve($id, $encode, $deleted);
 
-        if (!empty($results) && !$this->checkPersonalAccountAccess()) {
+        if (!empty($results) && !$this->hasAccessToPersonalAccount()) {
             $this->logPersonalAccountAccessDenied('retrieve');
             return null;
+        }
+
+        if (isTrue($this->mail_smtpauth_req) && $this->auth_type === 'no_auth') {
+            $this->auth_type = 'basic';
         }
 
         $this->mail_smtppass = $this->mail_smtppass ? blowfishDecode(blowfishGetKey('OutBoundEmail'), $this->mail_smtppass) : null;
@@ -221,7 +259,7 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
      * Check if user has access to personal account
      * @return bool
      */
-    public function checkPersonalAccountAccess() : bool {
+    public function hasAccessToPersonalAccount() : bool {
         global $current_user;
 
         if (is_admin($current_user)) {
@@ -265,20 +303,26 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
     {
         global $current_user;
 
-        $isNotAllowAction = $this->isNotAllowedAction($view);
+        $view = $view ?? '';
+
+        $isNotAllowAction = $this->isNotAllowedAction($view ?? '');
         if ($isNotAllowAction === true) {
             return false;
         }
 
-        if (!$this->checkPersonalAccountAccess()) {
+        if (!$this->hasAccessToPersonalAccount()) {
             $this->logPersonalAccountAccessDenied("ACLAccess-$view");
             return false;
+        }
+
+        if (empty($this->type) && $this->assigned_user_id === $current_user->id){
+            $this->type = 'user';
         }
 
         $isPersonal = $this->type === 'user';
         $isAdmin = is_admin($current_user);
 
-        if ($isPersonal === true && $this->checkPersonalAccountAccess()) {
+        if ($isPersonal === true && $this->hasAccessToPersonalAccount()) {
             return true;
         }
 
@@ -405,6 +449,7 @@ HTML;
         $adminNotifyFromAddress = $admin->settings['notify_fromaddress'];
         isValidEmailAddress($adminNotifyFromAddress);
         $adminNotifyFromName = $admin->settings['notify_fromname'];
+        $record = SuiteValidator::isValidId($_REQUEST['record'] ?? '') ? ($_REQUEST['record'] ?? '') : '';
         $html = <<<HTML
 			<input id="sendTestOutboundEmailSettingsBtn" type="button" class="button" value="{$APP['LBL_EMAIL_TEST_OUTBOUND_SETTINGS']}" onclick="testOutboundSettings();">
 			<script type="text/javascript" src="cache/include/javascript/sugar_grp_yui_widgets.js"></script>
@@ -430,6 +475,15 @@ HTML;
 				};
 
 				function testOutboundSettingsDialog() {
+                    
+                    var notifyFromAddress = document.getElementById('smtp_from_addr') && document.getElementById('smtp_from_addr').value;
+                    var notifyFromName = document.getElementById('smtp_from_name') && document.getElementById('smtp_from_name').value;
+                    
+                    if (!notifyFromAddress || !notifyFromName) {
+						overlay("{$APP['ERR_INVALID_REQUIRED_FIELDS']}", "{$APP['LBL_EMAIL_SETTINGS_FROM_ADDR_NOT_SET']}", 'alert');
+						return;
+					}
+                    
 					// lazy load dialogue
 					if(!EmailMan.testOutboundDialog) {
 						EmailMan.testOutboundDialog = new YAHOO.widget.Dialog("testOutboundDialog", {
@@ -506,7 +560,9 @@ HTML;
 					var smtpServer = document.getElementById('mail_smtpserver').value;
 					var smtpPort = document.getElementById('mail_smtpport').value;
 					var smtpssl  = document.getElementById('mail_smtpssl').value;
-					var mailsmtpauthreq = document.getElementById('mail_smtpauth_req');
+					var authType = document.getElementById('auth_type').value || 'no_auth';
+					var externalOauthConnectionId = document.getElementById('external_oauth_connection_id').value || '';
+                    var smtpPass = trim(document.getElementById('mail_smtppass').value);
 					var mail_sendtype = 'SMTP';
                                                                 var adminNotifyFromAddress = document.getElementById('smtp_from_addr').value ? document.getElementById('smtp_from_addr').value :'$adminNotifyFromName';
                                                                 var adminNotifyFromName = document.getElementById('smtp_from_name').value ? document.getElementById('smtp_from_name').value : '$adminNotifyFromAddress';
@@ -515,9 +571,12 @@ HTML;
 						'mail_sendtype=' + mail_sendtype + '&' +
 						'mail_smtpserver=' + smtpServer + "&" +
 						"mail_smtpport=" + smtpPort + "&mail_smtpssl=" + smtpssl + "&" +
-						"mail_smtpauth_req=" + mailsmtpauthreq.checked + "&" +
+						"mail_auth_type=" + authType + "&" +
+						"mail_external_oauth_connection_id=" + externalOauthConnectionId + "&" +
+						"mail_smtpauth_req=" + (authType === 'basic' ? 1 : 0) + "&" +
 						"mail_smtpuser=" + trim(document.getElementById('mail_smtpuser').value) + "&" +
-						"mail_smtppass=" + trim(document.getElementById('mail_smtppass').value) + "&" +
+						"mail_smtppass=" + smtpPass + "&" +
+						"record=" + '$record' + "&" +
 						"outboundtest_to_address=" + toAddress + '&' +
 						'outboundtest_from_address=' + adminNotifyFromAddress + '&' +
 						'mail_from_name=' + adminNotifyFromName;

@@ -1,6 +1,7 @@
 <?php
 
 
+#[\AllowDynamicProperties]
 class FilesApi
 {
     public function getFiles($args)

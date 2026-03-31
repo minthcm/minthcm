@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -43,6 +43,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+#[\AllowDynamicProperties]
 class CertificatesUpdater
 {
 
@@ -66,7 +67,7 @@ class CertificatesUpdater
     protected function fetchAllCertificatesForCandidate(): array
     {
         global $db;
-        $sql = "SELECT id FROM employeecertificates WHERE deleted=0 AND parent_id='{$this->candidate_bean->id}'";
+        $sql = "SELECT id FROM employeecertificates WHERE deleted=0 AND candidate_id='{$this->candidate_bean->id}'";
         $certificates = [];
         $result = $db->query($sql);
         while ($row = $db->fetchByAssoc($result)) {

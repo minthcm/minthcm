@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -139,7 +139,7 @@ class SugarCacheFile extends SugarCacheAbstract
         ) {
         // load up the external cache file
         if (is_file($cachedfile = sugar_cached($this->_cacheFileName))) {
-            $this->localCache = unserialize(file_get_contents($cachedfile));
+            $this->localCache = unserialize(file_get_contents($cachedfile), ['allowed_classes' => false]);
         }
 
         if (isset($this->_localStore[$key])) {

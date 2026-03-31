@@ -1,10 +1,11 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row">
-            <div>{{ parsedDate }}</div>
+        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+            <div :name="props.defs.name">{{ parsedDate }}</div>
             <Pencil
                 :defs="props.defs"
+                :hidePencil="hidePencil"
                 @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
             />
         </div>
@@ -13,31 +14,20 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { DateTime } from 'luxon'
-import { FieldVardef } from '@/store/modules'
 import Pencil from '../Pencil.vue'
-import { usePreferencesStore } from '@/store/preferences';
+import { FieldProps } from '../Field.model'
+import { MintDate } from '@/composables/useMintDate'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const preferences = usePreferencesStore()
-const props = defineProps<Props>()
+const props = defineProps<FieldProps<MintDate>>()
+const emit = defineEmits(['inlineEditBtnClicked'])
 const parsedDate = computed(() => {
-    const value = props.modelValue?.trim()
-    if (!value) {
-        return ''
-    }
-    const dt = DateTime.fromSQL(value)
-    if (!dt.isValid) {
-        return ''
-    }
-    return dt.toFormat(preferences.user?.date_format || 'dd.MM.yyyy')
+    return props.field.model.isValid ? props.field.formatted.user : ''
 })
+function startInlineEdit() {
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
+}
 </script>
 
 <style scoped lang="scss">

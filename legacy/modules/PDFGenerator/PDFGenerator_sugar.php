@@ -40,6 +40,7 @@
  * PLEASE DO NOT CHANGE THIS CLASS
  * PLACE ANY CUSTOMIZATIONS IN PDFGenerator
  */
+#[\AllowDynamicProperties]
 class PDFGenerator_sugar extends Basic {
 
    var $new_schema = true;

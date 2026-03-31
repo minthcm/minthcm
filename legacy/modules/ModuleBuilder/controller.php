@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('modules/ModuleBuilder/parsers/ParserFactory.php') ;
 require_once('modules/ModuleBuilder/Module/StudioModuleFactory.php');
 require_once 'modules/ModuleBuilder/parsers/constants.php' ;
 
+#[\AllowDynamicProperties]
 class ModuleBuilderController extends SugarController
 {
     public $action_remap = array( ) ;
@@ -150,6 +151,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_ViewTree()
     {
+        $mbt = null;
         require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;
         switch ($_REQUEST [ 'tree' ]) {
             case 'ModuleBuilder':
@@ -591,6 +593,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_DeleteField()
     {
+        $module = null;
         require_once('modules/DynamicFields/FieldCases.php') ;
         $field = get_widget($_REQUEST [ 'type' ]) ;
         $field->name = $_REQUEST [ 'name' ] ;

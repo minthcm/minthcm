@@ -5,8 +5,11 @@ require_once 'include/LastNextContacts/LastNextContactsBase.php';
 
 
 
+#[\AllowDynamicProperties]
 class LastNextContactsEmail extends LastNextContactsBase
 {
+    public $tmp_beans;
+    
     public function getEmailRelatedBeans($bean, $tmp_beans)
     {
         $this->tmp_beans = $tmp_beans;

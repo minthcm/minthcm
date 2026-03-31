@@ -26,6 +26,24 @@ $ESListViewDefs['Campaigns'] = [
             'link' => true,
             'default' => true,
         ],
+        'currency_id' => [
+            'default' => false,
+        ],
+        'budget' => [
+            'default' => false,
+        ],
+        'expected_cost' => [
+            'default' => false,
+        ],
+        'actual_cost' => [
+            'default' => false,
+        ],
+        'expected_revenue' => [
+            'default' => false,
+        ],
+        'impressions' => [
+            'default' => false,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -38,5 +56,11 @@ $ESListViewDefs['Campaigns'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'currency_id' => [],
+        'budget' => [],
+        'expected_cost' => [],
+        'actual_cost' => [],
+        'expected_revenue' => [],
+        'impressions' => [],
     ],
 ];

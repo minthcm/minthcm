@@ -43,4 +43,8 @@ $ESListViewDefs['Certificates'] = [
         'duration' => [],
         'pass_rate' => [],       
     ],
+    'defaultSort' => [
+        'field' => 'date_entered',
+        'order' => 'DESC'
+    ],
 ];

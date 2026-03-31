@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -47,6 +47,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class JsonRPCServerUtils
 {
     /**
@@ -93,26 +94,27 @@ class JsonRPCServerUtils
                     }
                     $cond_arr[] = $table . DBManagerFactory::getInstance()->getValidDBName($condition['name']) . " like '$like'";
                 } else { // starts_with
-               // MintHCM #59793 start
-               if ( in_array($module , ["Resources", "SecurityGroups"]) && ($condition['name'] == "first_name" || $condition['name'] == "last_name") ) {
+                // MintHCM #59793 start
+                if ( in_array($module , ["Resources", "SecurityGroups"]) && ($condition['name'] == "first_name" || $condition['name'] == "last_name") ) {
                   $cond_arr[] = $table . "name like '" . DBManagerFactory::getInstance()->quote($condition['value']) . "%'";
-               } else {
+                } else {
                     $cond_arr[] = $table . DBManagerFactory::getInstance()->getValidDBName($condition['name']) . " like '" . DBManagerFactory::getInstance()->quote($condition['value']) . "%'";
                 }
-               // MintHCM #59793 end
-            }
+                // MintHCM #59793 end
+                }
             }
         }
 
         if ($table === 'users.') {
             $cond_arr[] = $table . "status='Active'";
         }
-      // MintHCM #59793 start
-      elseif ( $module == "Resources" ) {
-         $cond_arr[] = $table . "type='for_reservation'";
-      }
-      // MintHCM #59793 end
-        $group = strtolower(trim($query_obj['group']));
+        // MintHCM #59793 start
+        elseif ( $module == "Resources" ) {
+            $cond_arr[] = $table . "type='for_reservation'";
+        }
+        // MintHCM #59793 end
+        $queryObject = $query_obj['group'] ?? '';
+        $group = strtolower(trim($queryObject));
         if ($group !== 'and' && $group !== 'or') {
             $group = 'and';
         }

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * predefined properties for a node are  id, label, target and href. label is required property.
  * set the target and href property for cases where target is an iframe.
  */
+#[\AllowDynamicProperties]
 class ExtNode
 {
     // predefined node properties.
@@ -115,7 +116,7 @@ class ExtNode
      * add a child node.
      * @param $node
      */
-    function add_node($node)
+    public function add_node($node)
     {
         $this->nodes[$node->uid] = $node;
     }
@@ -127,7 +128,7 @@ class ExtNode
      * nodes: definition of children nodes.
      *
      */
-    function get_definition()
+    public function get_definition()
     {
         $ret = array();
 

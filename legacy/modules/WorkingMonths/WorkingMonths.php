@@ -35,6 +35,7 @@
  * "Powered by SugarCRM".
  * ****************************************************************************** */
 
+#[\AllowDynamicProperties]
 class WorkingMonths extends Basic {
 
    public $new_schema = true;

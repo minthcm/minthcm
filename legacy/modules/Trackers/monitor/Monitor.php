@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('modules/Trackers/Trackable.php');
 
 define('MAX_SESSION_LENGTH', 36);
 
+#[\AllowDynamicProperties]
 class Monitor implements Trackable {
 
     var $metricsFile;
@@ -73,7 +74,10 @@ class Monitor implements Trackable {
     /**
      * Monitor constructor
      */
-    public function __construct($name='', $monitorId='', $metadata='', $store='') {
+    public function __construct($name='', $monitorId='', $metadata='', $store='') 
+	{
+		global $dictionary;
+        $dictionary = $dictionary ?? [];
 
     	if(empty($metadata) || !file_exists($metadata)) {
     	   $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");

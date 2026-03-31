@@ -8,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@ require_once 'include/DateFunctions/DateFormatter.php';
 include_once 'include/ViewTools/Expressions/VTFormulaParser.php';
 require_once 'modules/WorkSchedules/RelHooks.php';
 
+#[\AllowDynamicProperties]
 class SpentTime extends Basic
 {
 
@@ -95,7 +96,7 @@ class SpentTime extends Basic
         global $mod_strings;
 
         $other_worktime_count = $this->getCountOfSpendTimeRecordsInGivenFrame();
-
+        $this->updateDurationField();
         if (!$other_worktime_count) {
             $update_task_on_rel_del = null;
             $is_manual_save = false;
@@ -241,7 +242,8 @@ class SpentTime extends Basic
             case 'delete':
                 if (!$current_user->is_admin && $this->load_relationship('workschedules')) {
                     $beans = $this->workschedules->getBeans();
-                    if (count($beans) && array_shift(array_values($beans))->status === 'closed') {
+                    $beans_value_arr = array_values($beans);
+                    if ((is_countable($beans) ? count($beans) : 0) && array_shift($beans_value_arr)->status === 'closed') {
                         $result = false;
                     }
                 }
@@ -263,4 +265,14 @@ class SpentTime extends Basic
         $obj->afterSpentTimeEdit($this);
     }
 
+    private function updateDurationField()
+    {
+        $date_start  = getDateTimeObject($this->date_start);
+        $date_end  = getDateTimeObject($this->date_end);
+
+        $interval = $date_end->diff($date_start);
+
+        $this->duration_hours = $interval->format("%h");
+        $this->duration_minutes = $interval->format("%i");
+    }
 }

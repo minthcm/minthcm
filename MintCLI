@@ -3,11 +3,18 @@
 
 require 'legacy/MintCLI/vendor/autoload.php';
 
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error !== null && is_array($error) && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        echo "Fatal error: " . $error['message'] . " in " . $error['file'] . " on line " . $error['line'] . "\n";
+    }
+});
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-if (file_exists('legacy/config.php')) {
+if (file_exists('./legacy/config.php')) {
     define('sugarEntry', true);
     chdir('./legacy/');
     require_once 'include/entryPoint.php';
@@ -24,6 +31,9 @@ $application->add(new MintHCM\MintCLI\Commands\DemoDataInstallCommand());
 if (file_exists('legacy/config.php')) {
     $application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindex());
     $application->add(new MintHCM\MintCLI\Commands\ElasticSearchReindexModule());
+    $application->add(new MintHCM\MintCLI\Commands\RegenerateFrontendOAuth2ClientSecret());
+    $application->add(new MintHCM\MintCLI\Commands\CreateOAuth2Keys());
+    $application->add(new MintHCM\MintCLI\Commands\RepairAndRebuild());
 }
 
 $application->run();

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,12 +47,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 if (isset($_GET['DynamicAction']) && $_GET['DynamicAction'] == "saveImage") {
-    $filename = pathinfo($_POST['filename'], PATHINFO_BASENAME);
+    $filename = pathinfo((string) $_POST['filename'], PATHINFO_BASENAME);
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
     if (!in_array(strtolower($ext), array('jpg', 'png', 'jpeg'))) {
         return false;
     }
-    $image = str_replace(" ", "+", $_POST["imageStr"]);
+    $image = str_replace(" ", "+", (string) $_POST["imageStr"]);
     $data = substr($image, strpos($image, ","));
     if (sugar_mkdir(sugar_cached("images"), 0777, true)) {
         $filepath = sugar_cached("images/$filename");

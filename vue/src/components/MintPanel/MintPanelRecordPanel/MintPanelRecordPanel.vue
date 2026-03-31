@@ -4,16 +4,25 @@
             <h1>{{ title }}</h1>
         </div>
         <div class="fields-container">
-            <div v-for="(row, i) in props.data.fields" class="row" :key="i + store.view">
+            <div v-for="(row, i) in rows" class="row" :key="row">
                 <div v-for="n in store.columns" :key="n - 1">
                     <Field
                         v-if="row[n - 1] && !(row[n - 1].readonly && store.view === 'edit')"
                         :view="store.view"
                         :defs="row[n - 1]"
-                        :data="{ bean: store.bean.attributes }"
+                        :data="{ bean: store.bean }"
                         :label="languages.label(row[n - 1].label, modules.currentModule?.name)"
-                        v-model="store.bean.attributes[row[n - 1].name]"
-                        @update:modelValue="(additionalFields) => store.updateField(row[n - 1].name, additionalFields)"
+                        :options="store.bean.logic.fieldsOptions[row[n - 1].name]"
+                        :required="store.bean.logic.requiredFields.includes(row[n - 1].name)"
+                        :errorMessage="store.bean.errorMessages[row[n - 1].name]"
+                        :isDirty="store.bean.isDirty || store.bean.fields[row[n - 1].name]?.isDirty"
+                        :field="store.bean.fields[row[n - 1].name]"
+                        :modelValue="
+                            store.bean[store.view === 'detail' ? 'syncAttributes' : 'attributes'][row[n - 1].name]
+                        "
+                        @update:modelValue="
+                            (value, additionalFields) => store.updateField(row[n - 1].name, value, additionalFields)
+                        "
                     />
                 </div>
             </div>
@@ -22,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import Field from '@/components/Fields/Field.vue'
 import { FieldVardef } from '@/store/modules'
 import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
@@ -43,6 +52,11 @@ const modules = useModulesStore()
 const title = computed(() => {
     return languages.label(props.data?.title ?? 'LBL_DETAILS', modules.currentModule?.name)
 })
+
+const rows = computed(() => {
+    return props.data.fields.filter((row) => row.some((field) => !store.bean.logic.hiddenFields.includes(field.name)))
+})
+
 </script>
 
 <style scoped lang="scss">

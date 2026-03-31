@@ -3,6 +3,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class TrainingsViewDetail extends ViewDetail
 {
     public function preDisplay()

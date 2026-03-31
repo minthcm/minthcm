@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@
 SugarAutoLoader::requireWithCustom('include/ViewTools/Expressions/VTExpression.php');
 SugarAutoLoader::requireWithCustom('include/ViewTools/Expressions/VTFormulaParser.php');
 
+#[\AllowDynamicProperties]
 class VTFormulaInterpreter {
 
    public function calculateFields(SugarBean &$bean) {
@@ -55,7 +56,7 @@ class VTFormulaInterpreter {
       $ret = '';
       //If calculated definition is set to at least one field, 
       // eval calculated formula and set values
-      if ( count($moduleFields) > 0 ) {
+      if (is_countable($moduleFields) ? count($moduleFields) > 0 : 0) {
          foreach ( $moduleFields as $fieldName => $calculatedParams ) {
             //Eval formula as expression
             if ( isset($calculatedParams) && is_string($calculatedParams) ) {
@@ -73,7 +74,7 @@ class VTFormulaInterpreter {
       VTExpression::loadBeanValues($bean);
       $moduleFields = VTExpression::getDependencyFields($bean);
       $ret = array();
-      if ( count($moduleFields) > 0 ) {
+      if (is_countable($moduleFields) ? count($moduleFields) > 0 : 0) {
          foreach ( $moduleFields as $fieldName => $calculatedParams ) {
             //Eval formula as expression
             if ( isset($calculatedParams) && is_string($calculatedParams) ) {
@@ -96,7 +97,7 @@ class VTFormulaInterpreter {
       //If validation definition is set to at least one field, 
       //all fields has to pass positive validation before saving
       $saveAbort = false;
-      if ( count($moduleFields) > 0 ) {
+      if (is_countable($moduleFields) ? count($moduleFields) > 0 : 0) {
          $saveAbort = $this->validateAllVTValidationFields($moduleFields, $bean);
          if ( $saveAbort === true ) {
             $bean->vt_prevent_saving = true;

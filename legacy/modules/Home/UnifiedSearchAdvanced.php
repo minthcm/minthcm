@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2021 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * @deprecated since v7.12.0
  * Class UnifiedSearchAdvanced
  */
+#[\AllowDynamicProperties]
 class UnifiedSearchAdvanced
 {
     public $query_string = '';
@@ -280,7 +281,7 @@ class UnifiedSearchAdvanced
                             continue;
                         }
                         $innerJoins[$field] = $def;
-                        $def['innerjoin'] = str_replace('INNER', 'LEFT', $def['innerjoin']);
+                        $def['innerjoin'] = str_replace('INNER', 'LEFT', (string) $def['innerjoin']);
                     }
 
                     if (isset($seed->field_defs[$field]['type'])) {
@@ -319,7 +320,7 @@ class UnifiedSearchAdvanced
                     }
                 }
 
-                if (count($where_clauses) > 0) {
+                if ((is_countable($where_clauses) ? count($where_clauses) : 0) > 0) {
                     $where = '(('. implode(' ) OR ( ', $where_clauses) . '))';
                 } else {
                     /* Clear $where from prev. module
@@ -334,7 +335,7 @@ class UnifiedSearchAdvanced
                     }
                 }
 
-                if (count($displayColumns) > 0) {
+                if ((is_countable($displayColumns) ? count($displayColumns) : 0) > 0) {
                     $lv->displayColumns = $displayColumns;
                 } else {
                     $lv->displayColumns = $listViewDefs[$seed->module_dir];
@@ -422,7 +423,7 @@ class UnifiedSearchAdvanced
                 continue;
             }
 
-            $isCustomModule = preg_match('/^([a-z0-9]{1,5})_([a-z0-9_]+)$/i', $moduleName);
+            $isCustomModule = preg_match('/^([a-z0-9]{1,5})_([a-z0-9_]+)$/i', (string) $moduleName);
 
             //If the bean supports unified search or if it's a custom module bean and unified search is not defined
             if (!empty($dictionary[$beanName]['unified_search']) || $isCustomModule) {
@@ -432,12 +433,12 @@ class UnifiedSearchAdvanced
                     // the searchFields entry for 'email' doesn't correspond to any vardef entry. Instead it contains SQL to directly perform the search.
                     // So as a proxy we allow any field in the vardefs that has a name starting with 'email...' to be tagged with the 'unified_search' parameter
 
-                    if (strpos($field, 'email') !== false) {
+                    if (strpos((string) $field, 'email') !== false) {
                         $field = 'email' ;
                     }
 
                     //bug: 38139 - allow phone to be searched through Global Search
-                    if (strpos($field, 'phone') !== false) {
+                    if (strpos((string) $field, 'phone') !== false) {
                         $field = 'phone' ;
                     }
 
@@ -448,8 +449,7 @@ class UnifiedSearchAdvanced
 
                 foreach ($searchFields[$moduleName] as $field => $def) {
                     if (
-                        isset($def['force_unifiedsearch'])
-                        and $def['force_unifiedsearch']
+                        isset($def['force_unifiedsearch']) && $def['force_unifiedsearch']
                     ) {
                         $fields[$field] = $def;
                     }
@@ -569,6 +569,7 @@ class UnifiedSearchAdvanced
      */
     public function getUnifiedSearchModules()
     {
+        $unified_search_modules = [];
         //Make directory if it doesn't exist
         $cachedir = sugar_cached('modules');
         if (!file_exists($cachedir)) {
@@ -597,6 +598,7 @@ class UnifiedSearchAdvanced
      */
     public function getUnifiedSearchModulesDisplay()
     {
+        $unified_search_modules_display = [];
         if (!file_exists('custom/modules/unified_search_modules_display.php')) {
             $unified_search_modules = $this->getUnifiedSearchModules();
 

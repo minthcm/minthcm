@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -44,6 +44,7 @@
  */
 
 require_once('service/v3/SugarWebServiceUtilv3.php');
+#[\AllowDynamicProperties]
 class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
 {
     public function get_return_module_fields($value, $module, $fields, $translate=true)
@@ -145,6 +146,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
         $manager = new VardefManager();
         $manager->loadVardef($moduleName, $beanName) ;
 
+        $metafiles = [];
         // obtain the field definitions used by generateSearchWhere (duplicate code in view.list.php)
         if (file_exists('custom/modules/'.$moduleName.'/metadata/metafiles.php')) {
             require('custom/modules/'.$moduleName.'/metadata/metafiles.php');
@@ -152,6 +154,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
             require('modules/'.$moduleName.'/metadata/metafiles.php');
         }
 
+        $searchFields = [];
         if (!empty($metafiles[$moduleName]['searchfields'])) {
             require $metafiles[$moduleName]['searchfields'] ;
         } elseif (file_exists("modules/{$moduleName}/metadata/SearchFields.php")) {
@@ -160,12 +163,12 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
 
         $fields = array();
         foreach ($dictionary [ $beanName ][ 'fields' ] as $field => $def) {
-            if (strpos($field, 'email') !== false) {
+            if (strpos((string) $field, 'email') !== false) {
                 $field = 'email' ;
             }
 
             //bug: 38139 - allow phone to be searched through Global Search
-            if (strpos($field, 'phone') !== false) {
+            if (strpos((string) $field, 'phone') !== false) {
                 $field = 'phone' ;
             }
 
@@ -367,6 +370,8 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
 
     public function get_module_view_defs($module_name, $type, $view)
     {
+        $listViewDefs = [];
+        $viewdefs = [];
         require_once('include/MVC/View/SugarView.php');
         $metadataFile = null;
         $results = array();
@@ -406,7 +411,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
             $show_deleted = 1;
         }
         $order_by=$seed->process_order_by($order_by, null);
-        
+
         $params = array();
         if ($favorites) {
             $params['favorites'] = true;

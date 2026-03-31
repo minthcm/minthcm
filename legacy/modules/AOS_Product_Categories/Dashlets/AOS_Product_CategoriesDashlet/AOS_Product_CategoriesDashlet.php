@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,11 +56,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/AOS_Product_Categories/AOS_Product_Categories.php');
 
+#[\AllowDynamicProperties]
 class AOS_Product_CategoriesDashlet extends DashletGeneric
 {
     public function __construct($id, $def = null)
     {
-        global $current_user, $app_strings;
+        global $current_user, $app_strings, $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/AOS_Product_Categories/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
@@ -74,5 +78,6 @@ class AOS_Product_CategoriesDashlet extends DashletGeneric
 
         $this->seedBean = BeanFactory::newBean('AOS_Product_Categories');
     }
+
 
 }

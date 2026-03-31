@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { modulesApi } from '@/api/modules.api'
 
 const DEBOUNCE_DELAY_MS = 500
@@ -23,6 +23,7 @@ const DEBOUNCE_DELAY_MS = 500
 export interface Props {
     input: any
     fieldDefs: any
+    inputs?: any[]
 }
 
 const props = defineProps<Props>()
@@ -34,11 +35,22 @@ const items = ref([])
 const isLoading = ref(false)
 
 const activeItem = computed(() => items.value.find((item) => item.id === value.value))
+const otherInputs = computed(() => {
+    return props.inputs?.filter((input: any) => input.type !== 'relate') || []
+})
+
+const module = computed(() => {
+    if (props.fieldDefs?.type === 'parent') {
+        const parentTypeInput = otherInputs.value.find((input: any) => input.type === 'select')
+        return parentTypeInput?.value ?? null
+    }
+    return props.fieldDefs?.module ?? null
+})
 
 onMounted(async () => {
     if (props.input?.value) {
         isLoading.value = true
-        const response = await modulesApi.getListData(props.fieldDefs.module, '', {
+        const response = await modulesApi.getListData(module.value, '', {
             filter: [
                 {
                     equals: {
@@ -80,7 +92,7 @@ function fetchItems(query: string) {
             query += '*'
         }
         isLoading.value = true
-        const response = await modulesApi.getListData(props.fieldDefs.module, '', {
+        const response = await modulesApi.getListData(module.value, '', {
             must: [
                 {
                     [filterType]: {

@@ -2,6 +2,7 @@
 
 require_once 'include/KanbanView/KanbanViewController.php';
 
+#[\AllowDynamicProperties]
 class KanbanViewLogicHook
 {
 

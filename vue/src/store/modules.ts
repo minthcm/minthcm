@@ -4,6 +4,8 @@ import { useBackendStore } from './backend'
 import { useUrlStore } from './url'
 import { useLanguagesStore } from './languages'
 import { useRoute } from 'vue-router'
+import { filterDef } from '@/utils/qsOperatorsTypes'
+import { MenuListOnClickActionData } from '@/components/MintMenuList.vue'
 
 /** backend defs */
 export interface ModulesDefs {
@@ -37,11 +39,29 @@ export interface ModuleAction {
     action: string
     original_url: string
     icon: string
-    params: ModuleActionParams
+    params: ModuleActionParams,
+    onClickActionData: MenuListOnClickActionData,
 }
 
 export interface ModuleActionParams {
     view: string
+}
+
+interface SubpanelColumn {
+    name: string
+    label: string
+    type: string
+    usage?: string
+}
+
+export interface ModuleMetadata {
+    Subpanels: {
+        [key: string]: {
+            properties: { [key: string]: string | number }
+            columns: null | { [key: string]: SubpanelColumn }
+        }
+    }
+    RecordView: any
 }
 
 interface SubpanelColumn {
@@ -71,6 +91,14 @@ export interface FieldVardef {
     options_colors?: string
     default?: string
     readonly?: boolean
+    properties?: PropertiesObject
+    filters?: { [moduleName: string]: filterDef[] } | filterDef[]
+    comment?: string
+}
+
+interface PropertiesObject {
+    separator: string
+    fields: FieldVardef[]
 }
 
 export const useModulesStore = defineStore('modules', () => {
@@ -106,7 +134,7 @@ export const useModulesStore = defineStore('modules', () => {
         return modules
     })
 
-    const currentModule = computed(() => {        
+    const currentModule = computed(() => {
         const url = useUrlStore()
         const moduleName = route.params.module ?? url.module
         if (moduleName && typeof moduleName === 'string') {

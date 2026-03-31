@@ -1,4 +1,4 @@
-REPLACE INTO vcals (id, deleted, date_entered, date_modified, user_id, type, source, content) VALUES ('62c1a93f-31d6-bf33-6bcf-67b4ab1d2c51','0','2025-10-16 15:43:35','2025-10-21 15:47:19','1','vfb','sugar','BEGIN:VCALENDAR
+REPLACE INTO vcals (id, deleted, date_entered, date_modified, user_id, type, source, content) VALUES ('62c1a93f-31d6-bf33-6bcf-67b4ab1d2c51','0','2025-10-27 15:43:35','2025-11-01 15:47:19','1','vfb','sugar','BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//SugarCRM//SugarCRM Calendar//EN
 BEGIN:VFREEBUSY

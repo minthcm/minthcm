@@ -2,7 +2,7 @@
 
 namespace MintMCP\Tools;
 
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\ToolValidation;
 
 use Mcp\Types\ToolInputSchema;
 use Mcp\Types\CallToolResult;
@@ -50,11 +50,11 @@ class CreateRecord extends AbstractMCPTool
     {
         try {
 
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->module_name, 'module_name')
+            ToolValidation::validateMany([
+                ToolValidation::make($arguments->module_name, 'module_name')
                     ->required()
                     ->string(),
-                ToolValidationMiddleware::make($arguments->attributes ?? [], 'attributes')
+                ToolValidation::make($arguments->attributes ?? [], 'attributes')
                     ->required()
                     ->array(),
             ]);
@@ -74,23 +74,23 @@ class CreateRecord extends AbstractMCPTool
             $requiredValidators = [];
             foreach ($fieldDefs as $field => $def) {
                 if (!empty($def['required']) && $field !== 'id') {
-                    $requiredValidators[] = ToolValidationMiddleware::make($attributes[$field] ?? null, $field)->required();
+                    $requiredValidators[] = ToolValidation::make($attributes[$field] ?? null, $field)->required();
                 }
             }
-            ToolValidationMiddleware::validateMany($requiredValidators);
+            ToolValidation::validateMany($requiredValidators);
 
             $attributeValidators = [];
             foreach ($attributes as $field => $value) {
-                $fieldModuleValidator = ToolValidationMiddleware::make($value, $field)->fieldModule($fieldDefs, $moduleName);
+                $fieldModuleValidator = ToolValidation::make($value, $field)->fieldModule($fieldDefs, $moduleName);
                 if (!$fieldModuleValidator->isValid()) {
                     $attributeValidators[] = $fieldModuleValidator;
                 } else {
                     $def = $fieldDefs[$field];
                     $type = $def['type'] ?? ($def['dbType'] ?? 'unknown');
-                    $attributeValidators[] = ToolValidationMiddleware::validateByType($value, $field, $type);
+                    $attributeValidators[] = ToolValidation::make($value, $field)->fieldType($type);
                 }
             }
-            ToolValidationMiddleware::validateMany($attributeValidators);
+            ToolValidation::validateMany($attributeValidators);
            
             foreach ($attributes as $field => $value) {
                 if (array_key_exists($field, $fieldDefs)) {
@@ -101,12 +101,13 @@ class CreateRecord extends AbstractMCPTool
             $attributeValidators = [];
             foreach ($attributes as $field => $value) {
                 if (array_key_exists($field, $fieldDefs)) {
-                    $attributeValidators[] = ToolValidationMiddleware::make($value, $field)->filterField($fieldDefs);
+                    $attributeValidators[] = ToolValidation::make($value, $field)->filterField($fieldDefs);
                 }
             }
-            ToolValidationMiddleware::validateMany($attributeValidators);
+            ToolValidation::validateMany($attributeValidators);
             foreach ($attributes as $field => $value) {
                 if (array_key_exists($field, $fieldDefs)) {
+                    $value = $this->isDateField($fieldDefs[$field]['type'] ?? '') ? $this->fromUserTZ($value) : $value;
                     $bean->$field = $value;
                 }
             }

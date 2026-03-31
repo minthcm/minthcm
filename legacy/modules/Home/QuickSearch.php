@@ -12,7 +12,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -57,17 +57,18 @@ require_once('include/utils.php');
  * @license    http://www.sugarcrm.com/crm/products/sugar-professional-eula.html  SugarCRM Professional End User License
  * @since      Class available since Release 4.5.1
  */
+#[\AllowDynamicProperties]
 class quicksearchQuery {
 
    /**
     * Condition operators
     * @var string
     */
-   const CONDITION_CONTAINS = 'contains';
-   const CONDITION_LIKE_CUSTOM = 'like_custom';
-   const CONDITION_EQUAL = 'equal';
+   public const CONDITION_CONTAINS    = 'contains';
+   public const CONDITION_LIKE_CUSTOM = 'like_custom';
+   public const CONDITION_EQUAL       = 'equal';
    //MintHCM start #58349
-   const CONDITION_NOT_EQUAL = 'not_equal';
+   public const CONDITION_NOT_EQUAL = 'not_equal';
 
    //MintHCM end #58349
 
@@ -139,7 +140,7 @@ class quicksearchQuery {
       try {
          $api = ExternalAPIFactory::loadAPI($args['api']);
          $data['fields'] = $api->searchDoc($_REQUEST['query']);
-         $data['totalCount'] = count($data['fields']);
+         $data['totalCount'] = is_countable($data['fields']) ? count($data['fields']) : 0;
       } catch ( Exception $ex ) {
          $GLOBALS['log']->error($ex->getMessage());
       }
@@ -202,7 +203,7 @@ class quicksearchQuery {
                if ( $focus instanceof Person ) {
                   $nameFormat = $locale->getLocaleFormatMacro($current_user);
 
-                  if ( strpos($nameFormat, 'l') > strpos($nameFormat, 'f') ) {
+                  if (strpos((string) $nameFormat, 'l') > strpos((string) $nameFormat, 'f')) {
                      array_push(
                         $conditionArray, $db->concat($table, array('first_name', 'last_name')) . " like '$like'"
                      );
@@ -270,10 +271,12 @@ class quicksearchQuery {
       global $sugar_config;
 
       $app_list_strings = null;
+      $data = [];
       $data['totalCount'] = count($results);
-      $data['fields'] = array();
+      $data['fields']     = array();
+      $resultsCount = count($results);
 
-      for ( $i = 0; $i < count($results); $i++ ) {
+      for ($i = 0; $i < $resultsCount; $i++) {
          $data['fields'][$i] = array();
          $data['fields'][$i]['module'] = $results[$i]->object_name;
 
@@ -395,6 +398,7 @@ class quicksearchQuery {
     * @return array
     */
    protected function prepareResults($data, $args) {
+      $results = [];
       $results['totalCount'] = $count = count($data);
       $results['fields'] = array();
 
@@ -480,10 +484,12 @@ class quicksearchQuery {
     * @return array
     */
    protected function overrideContactId($result, $data, $args) {
-      foreach ( $args['field_list'] as $field ) {
-         $result[$field] = (preg_match('/reports_to_id$/s', $field) || preg_match('/contact_id$/s', $field)) ? $data->id // "reports_to_id" to "id"
-            : $data->$field;
-      }
+      foreach ($args['field_list'] as $field) {
+         $result[$field] = (preg_match('/reports_to_id$/s', (string) $field)
+                            || preg_match('/contact_id$/s', (string) $field))
+             ? $data->id // "reports_to_id" to "id"
+             : $data->$field;
+     }
 
       return $result;
    }

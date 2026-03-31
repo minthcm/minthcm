@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
+#[\AllowDynamicProperties]
 class AOK_KnowledgeBaseViewDetail extends ViewDetail
 {
     public function __construct()
@@ -61,6 +62,6 @@ class AOK_KnowledgeBaseViewDetail extends ViewDetail
 
     public function setDecodeHTML()
     {
-        $this->bean->description = html_entity_decode('<span data-open-links-in-new=true>'.str_replace('&nbsp;', ' ', $this->bean->description).'</span>');
+        $this->bean->description = html_entity_decode('<span data-open-links-in-new=true>'.str_replace('&nbsp;', ' ', (string) $this->bean->description).'</span>');
     }
 }

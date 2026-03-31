@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -98,7 +98,7 @@ if( is_file("config.php") ){
 ////	errors
 $errors = '';
 if( isset($validation_errors) ){
-    if( count($validation_errors) > 0 ){
+    if ((is_countable($validation_errors) ? count($validation_errors) : 0) > 0) {
         $errors  = '<div id="errorMsgs">';
         $errors .= '<p>'.$mod_strings['LBL_SITECFG_FIX_ERRORS'].'</p><ul>';
         foreach( $validation_errors as $error ){

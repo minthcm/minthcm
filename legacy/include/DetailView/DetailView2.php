@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ require_once('include/EditView/EditView2.php');
  * New implementation
  * @api
  */
+#[\AllowDynamicProperties]
 class DetailView2 extends EditView
 {
     /**
@@ -119,7 +120,7 @@ class DetailView2 extends EditView
             //Flag an error... we couldn't create the best guess meta-data file
             if (!file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
                 global $app_strings;
-                $error = str_replace("[file]", "modules/$this->module/metadata/$metadataFileName.php", $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']);
+                $error = str_replace("[file]", "modules/$this->module/metadata/$metadataFileName.php", (string) $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']);
                 $GLOBALS['log']->fatal($error);
                 echo $error;
                 die();

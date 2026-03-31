@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
-*
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ *
+* MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -146,7 +146,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                             require_once('include/dir_inc.php');
                         }
 
-                        mkdir_recursive(dirname($trgt));
+                        mkdir_recursive(dirname((string) $trgt));
                         //create and open target file
                         if (function_exists('sugar_fopen')) {
                             $trgt_handle = @sugar_fopen($trgt, 'w');
@@ -158,9 +158,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
                         //       warning to admin users and revert back to displaying all of the
                         //       Javascript files insted of displaying the minified versions.
                         if ($trgt_handle === false) {
-                            $target_directory = dirname($trgt);
+                            $target_directory = dirname((string) $trgt);
                             $base = dirname($target_directory);
-                            while (!is_dir($base) && !empty($base) && $base != dirname($base)) {
+                            while (!is_dir($base) && !empty($base) && $base !== dirname($base)) {
                                 $base = dirname($base);
                             }
                             sugar_die("Creating $target_directory failed: please make sure {$base} is writable\n");
@@ -170,7 +170,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
                     //make sure we have handles to both source and target file
                     if ($trgt_handle) {
-                        if ($already_minified || isset($excludedFiles[dirname($loc)])) {
+                        if ($already_minified || isset($excludedFiles[dirname((string) $loc)])) {
                             $buffer = file_get_contents($loc);
                         } else {
                             $buffer = SugarMin::minify(file_get_contents($loc));
@@ -213,7 +213,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
     function create_backup_folder($bu_path)
     {
-        $bu_path = str_replace('\\', '/', $bu_path);
+        $bu_path = str_replace('\\', '/', (string) $bu_path);
         //get path after root
         $jpos = strpos($bu_path, 'jssource');
         if ($jpos===false) {
@@ -329,8 +329,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
                 //minify javascript
                 //$jMin = new JSMin($from_path,$to_path,$lic_arr);
-                $min_file = str_replace('.js', '-min.js', $from_path);
-                if (strpos($from_path, '-min.js') !== false) {
+                $min_file = str_replace('.js', '-min.js', (string) $from_path);
+                if (strpos((string) $from_path, '-min.js') !== false) {
                     $min_file = $from_path;
                 }
 
@@ -362,11 +362,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
     function reverseScripts($from_path, $to_path='')
     {
-        $from_path = str_replace('\\', '/', $from_path);
+        $from_path = str_replace('\\', '/', (string) $from_path);
         if (empty($to_path)) {
             $to_path = $from_path;
         }
-        $to_path = str_replace('\\', '/', $to_path);
+        $to_path = str_replace('\\', '/', (string) $to_path);
 
         //check to see if provided paths are legit
 
@@ -440,7 +440,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             } // MintHCM
             return;
         } else {
-            $from_path = str_replace('\\', '/', $from_path);
+            $from_path = str_replace('\\', '/', (string) $from_path);
         }
 
         if (empty($to_path)) {
@@ -461,7 +461,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
                 //get correct path for backup
             $bu_path = $to_path.'/jssource/src_files';
-            $bu_path .= substr($from_path, strlen($to_path));
+            $bu_path .= substr($from_path, strlen((string) $to_path));
 
             //if this is a directory, then read it and process files
             if (is_dir((string)$from_path)) {

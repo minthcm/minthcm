@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -244,7 +243,11 @@ class User extends Person implements EmailInterface
      * @throws \RuntimeException
      */
     public function getSignatures(
-        $live = false, $defaultSig = '', $forSettings = false, $elementId = 'signature_id', $useRequestedRecord = false
+        $live = false,
+        $defaultSig = '',
+        $forSettings = false,
+        $elementId = 'signature_id',
+        $useRequestedRecord = false
     ) {
         $sig = $this->getSignaturesArray($useRequestedRecord);
         $sigs = array();
@@ -387,7 +390,10 @@ class User extends Person implements EmailInterface
      * @param string $category Name of the category to retrieve
      */
     public function setPreference(
-        $name, $value, $nosession = 0, $category = 'global'
+        $name,
+        $value,
+        $nosession = 0,
+        $category = 'global'
     ) {
         // for BC
         if (func_num_args() > 4) {
@@ -524,7 +530,8 @@ class User extends Person implements EmailInterface
      * @internal param bool $useRequestedRecord
      */
     public function getPreference(
-        $name, $category = 'global'
+        $name,
+        $category = 'global'
     ) {
         // for BC
         if (func_num_args() > 2) {
@@ -630,6 +637,8 @@ class User extends Person implements EmailInterface
 
         $isUpdate = $this->isUpdate();
 
+        $this->restrictAdminOnlyFields();
+
         //No SMTP server is set up Error.
         $admin = BeanFactory::newBean('Administration');
         $smtp_error = $admin->checkSmtpError();
@@ -651,8 +660,8 @@ class User extends Person implements EmailInterface
             } else {
                 if (
                     ($tmpUser instanceof User) &&
-                    ($this->factor_auth != $tmpUser->factor_auth ||
-                        $this->factor_auth_interface != $tmpUser->factor_auth_interface)) {
+                    ($this->factor_auth !== $tmpUser->factor_auth ||
+                        $this->factor_auth_interface !== $tmpUser->factor_auth_interface)) {
                     $msg .= 'Current user is not able to change two factor authentication settings.';
                     $GLOBALS['log']->warn($msg);
                     SugarApplication::appendErrorMessage($mod_strings['ERR_USER_FACTOR_CHANGE_DISABLED']);
@@ -723,6 +732,13 @@ class User extends Person implements EmailInterface
                 }
             }
             $set_new_password_after_save = true;
+        }
+
+        if (
+            $this->status === 'Inactive' &&
+            (!empty($this->fetched_row['status']) && $this->fetched_row['status'] !== 'Inactive')
+        ) {
+            $this->beforeDisable($this->id);
         }
 
         $retId = parent::save($check_notify);
@@ -838,7 +854,7 @@ class User extends Person implements EmailInterface
     public function encrypt_password($username_password)
     {
         // encrypt the password.
-        $salt = substr($this->user_name, 0, 2);
+        $salt = substr((string) $this->user_name, 0, 2);
         $encrypted_password = crypt($username_password, $salt);
 
         return $encrypted_password;
@@ -872,8 +888,14 @@ class User extends Person implements EmailInterface
      */
     public function retrieve($id = -1, $encode = true, $deleted = true)
     {
+        global $current_user;
         $ret = parent::retrieve($id, $encode, $deleted);
-        if ($ret && isset($_SESSION) && null !== $_SESSION) {
+        if (
+            $ret && isset($_SESSION) 
+            && null !== $_SESSION 
+            && !empty($current_user->id)
+            && $current_user->id === $ret->id
+        ) {
             $this->loadPreferences();
         }
         return $ret;
@@ -1155,7 +1177,7 @@ EOQ;
 
         $onespecial = $sugar_config['passwordsetting']['onespecial'];
 
-        if ($minpwdlength && strlen($newPassword) < $minpwdlength) {
+        if ($minpwdlength && strlen((string) $newPassword) < $minpwdlength) {
             $messages[] = sprintf($mod_strings['ERR_PASSWORD_MINPWDLENGTH'], $minpwdlength);
         }
 
@@ -1167,7 +1189,7 @@ EOQ;
             $messages[] = $mod_strings['ERR_PASSWORD_ONELOWER'];
         }
 
-        if ($onenumber && !preg_match('/[0-9]/', $newPassword)) {
+        if ($onenumber && !preg_match('/[0-9]/', (string) $newPassword)) {
             $messages[] = $mod_strings['ERR_PASSWORD_ONENUMBER'];
         }
 
@@ -1312,7 +1334,7 @@ EOQ;
             $user_fields['IS_ADMIN'] = '';
         }
         if ($this->is_group) {
-            $user_fields['IS_GROUP_IMAGE'] = SugarThemeRegistry::current()->getImage('check_inline', '', null, null, '.gif', $mod_strings['LBL_CHECKMARK']);
+            $user_fields['IS_GROUP_IMAGE'] = SugarThemeRegistry::current()->getImage('check_inline', '', null, null, '.gif', translate('LBL_CHECKMARK', 'Users'));
         } else {
             $user_fields['IS_GROUP_IMAGE'] = '';
         }
@@ -1593,6 +1615,7 @@ EOQ;
             }
         }
 
+        $ret = [];
         $ret['name'] = $fromName;
         $ret['email'] = $fromaddr;
 
@@ -1617,9 +1640,10 @@ EOQ;
         $emailLink = '';
 
         $emailUI = new EmailUI();
-        for ($i = 0; $i < count($focus->emailAddress->addresses); $i++) {
-            $emailField = 'email' . (string) ($i + 1);
-            $optOut = (bool) $focus->emailAddress->addresses[$i]['opt_out'];
+        $addressesCount = is_countable($focus->emailAddress->addresses) ? count($focus->emailAddress->addresses) : 0;
+        for ($i = 0; $i < $addressesCount; $i++) {
+            $emailField = 'email' . ($i + 1);
+            $optOut = (bool)$focus->emailAddress->addresses[$i]['opt_out'];
             if (!$optOut && $focus->emailAddress->addresses[$i]['email_address'] === $emailAddress) {
                 $focus->$emailField = $emailAddress;
                 $emailLink = $emailUI->populateComposeViewFields($focus, $emailField);
@@ -1687,11 +1711,13 @@ EOQ;
         global $mod_strings;
         global $app_strings;
 
+        $format = [];
         $format['f'] = $mod_strings['LBL_LOCALE_DESC_FIRST'];
         $format['l'] = $mod_strings['LBL_LOCALE_DESC_LAST'];
         $format['s'] = $mod_strings['LBL_LOCALE_DESC_SALUTATION'];
         $format['t'] = $mod_strings['LBL_LOCALE_DESC_TITLE'];
 
+        $name = [];
         $name['f'] = $app_strings['LBL_LOCALE_NAME_EXAMPLE_FIRST'];
         $name['l'] = $app_strings['LBL_LOCALE_NAME_EXAMPLE_LAST'];
         $name['s'] = $app_strings['LBL_LOCALE_NAME_EXAMPLE_SALUTATION'];
@@ -1701,7 +1727,7 @@ EOQ;
 
         $ret1 = '';
         $ret2 = '';
-        for ($i = 0, $iMax = strlen($macro); $i < $iMax; $i++) {
+        for ($i = 0, $iMax = strlen((string) $macro); $i < $iMax; $i++) {
             if (array_key_exists($macro[$i], $format)) {
                 $ret1 .= "<i>" . $format[$macro[$i]] . "</i>";
                 $ret2 .= "<i>" . $name[$macro[$i]] . "</i>";
@@ -1730,7 +1756,7 @@ EOQ;
         if ('ContractTypes' == $module) {
             $module = 'Contracts';
         }
-        if (preg_match('/Product[a-zA-Z]*/', $module)) {
+        if (preg_match('/Product[a-zA-Z]*/', (string) $module)) {
             $module = 'Products';
         }
 
@@ -1795,7 +1821,7 @@ EOQ;
      */
     public function isEnabled()
     {
-        return ($this->status !== 'Inactive') && (in_array($this->employee_status, ['Active', 'during_termination']));
+        return $this->status !== 'Inactive';
     }
 
     /**
@@ -1921,11 +1947,10 @@ EOQ;
     {
         global $locale;
         $localeFormat = $locale->getLocaleFormatMacro($this);
-        if (strpos($localeFormat, 'l') > strpos($localeFormat, 'f')) {
+        if (strpos((string) $localeFormat, 'l') > strpos((string) $localeFormat, 'f')) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     public function create_new_list_query(
@@ -2051,12 +2076,12 @@ EOQ;
         //replace instance variables in email templates
         $htmlBody = $emailTemp->body_html;
         $body = $emailTemp->body;
-        if (isset($additionalData['link']) && true == $additionalData['link']) {
-            $htmlBody = str_replace('$contact_user_link_guid', $additionalData['url'], $htmlBody);
-            $body = str_replace('$contact_user_link_guid', $additionalData['url'], $body);
+        if (isset($additionalData['link']) && $additionalData['link'] == true) {
+            $htmlBody = str_replace('$contact_user_link_guid', $additionalData['url'], (string) $htmlBody);
+            $body = str_replace('$contact_user_link_guid', $additionalData['url'], (string) $body);
         } else {
-            $htmlBody = str_replace('$contact_user_user_hash', $additionalData['password'], $htmlBody);
-            $body = str_replace('$contact_user_user_hash', $additionalData['password'], $body);
+            $htmlBody = str_replace('$contact_user_user_hash', $additionalData['password'], (string) $htmlBody);
+            $body = str_replace('$contact_user_user_hash', $additionalData['password'], (string) $body);
         }
         // Bug 36833 - Add replacing of special value $instance_url
         $htmlBody = str_replace('$config_site_url', $sugar_config['site_url'], $htmlBody);
@@ -2170,7 +2195,7 @@ EOQ;
      */
     public function isPrimaryEmail($email)
     {
-        if (!empty($this->email1) && !empty($email) && strcasecmp($this->email1, $email) == 0) {
+        if (!empty($this->email1) && !empty($email) && strcasecmp($this->email1, $email) === 0) {
             return true;
         }
         return false;
@@ -2240,7 +2265,39 @@ EOQ;
             $private_group = new PrivateGroup($user);
             $private_group->delete();
         }
+        $this->beforeDisable($id);
        parent::mark_deleted($id);
+    }
+
+    protected function restrictAdminOnlyFields(): void
+    {
+        global $current_user;
+
+        if (is_admin($current_user)){
+            return;
+        }
+
+        if (empty($this->id)) {
+            return;
+        }
+
+        $savedBean = BeanFactory::getBean('Users', $this->id);
+
+        if (empty($savedBean->id)) {
+            return;
+        }
+
+        $adminOnlyFields = [
+            'UserType',
+            'status',
+            'employee_status',
+        ];
+
+        foreach ($adminOnlyFields as $field) {
+            if (isset($this->$field) && $this->$field !== $savedBean->$field) {
+                $this->$field = $savedBean->$field;
+            }
+        }
     }
 
     public static function getUserSupervisiorID($id)
@@ -2307,6 +2364,10 @@ EOQ;
 
     }
 
+    protected function getCurrentPreference(string $key) {
+        return $_SESSION[$this->user_name.'_PREFERENCES']['global'][$key] ?? $this->getPreference($key);
+    }
+
     /**
      * @return bool
      */
@@ -2318,8 +2379,92 @@ EOQ;
     // MintHCM #122506 start
     public function getTokens()
     {
-        return array_values(json_decode(html_entity_decode($this->app_tokens), 1) ?? []);
+        return array_filter(
+            array_map(
+                fn($device_data) => $device_data['token'] ?? (is_string($device_data) ? $device_data : ''),
+                json_decode(html_entity_decode($this->app_tokens), 1) ?? []
+            )
+        );
     }
     // MintHCM #122506 end
+    
+    public function hasActionAccess(string $module, string $action): bool
+    {
+        if (is_admin($this) || !$this->bean_implements('ACL')) {
+            return true;
+        }
 
+        return ACLController::checkAccess($module, $action);
+    }
+
+    protected function beforeDisable(string $id): void
+    {
+        /** @var User $user */
+        $user = BeanFactory::getBean('Users', $id);
+        $user->deleteOAuthTokens();
+        $user->deletePersonalOAuthConnections();
+    }
+
+    protected function deleteOAuthTokens(): void
+    {
+        $bean = BeanFactory::newBean('OAuth2Tokens');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where assigned_user_id = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
+    }
+
+    public function deleteOAuthCodes(): void
+    {
+        $bean = BeanFactory::newBean('OAuth2AuthCodes');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where assigned_user_id = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
+    }
+
+    public function deletePersonalOAuthConnections(): void
+    {
+        $bean = BeanFactory::newBean('ExternalOAuthConnection');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where created_by = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
+    }
 }

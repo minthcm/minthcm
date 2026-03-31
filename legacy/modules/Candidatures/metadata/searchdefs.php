@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -95,16 +95,6 @@ $searchdefs[$module_name] = array(
                'params' => array( false )
             )
          ),
-         'recruitment_end_name' =>
-         array(
-            'type' => 'relate',
-            'link' => true,
-            'label' => 'LBL_CANDIDATURES_RECRUITMENTS_END_FROM_RECRUITMENTS_TITLE',
-            'id' => 'RECRUITMENT_END_ID',
-            'width' => '10%',
-            'default' => true,
-            'name' => 'recruitment_end_name',
-         ),
          'recruitment_name' =>
          array(
             'type' => 'relate',
@@ -124,7 +114,7 @@ $searchdefs[$module_name] = array(
          array(
             'type' => 'enum',
             'default' => true,
-            'label' => 'SCORING',
+            'label' => 'LBL_SCORING',
             'width' => '10%',
             'name' => 'scoring',
          ),
@@ -166,6 +156,22 @@ $searchdefs[$module_name] = array(
             'default' => true,
             'width' => '10%',
         ),
+        'route_of_acquisition' => array(
+            'type' => 'enum',
+            'default' => true,
+            'label' => 'LBL_ROUTE_OF_ACQUISITION',
+            'width' => '10%',
+            'name' => 'route_of_acquisition',
+        ),
+        'original_candidature_name' => array(
+            'type' => 'relate',
+            'link' => true,
+            'label' => 'LBL_ORIGINAL_CANDIDATURE_NAME',
+            'id' => 'ORIGINAL_CANDIDATURE_ID',
+            'width' => '10%',
+            'default' => true,
+            'name' => 'original_candidature_name',
+        )
       ),
    ),
 );

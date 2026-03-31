@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,47 +55,52 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
-class PredefinedChart
-{
-    public $params = array();
-
-    public function __construct()
-    {
-    }
-
-    public function predefinedChartQuery($chart, $params=array())
-    {
-        switch ($chart) {
-            case 'my_modules_used_last_30_days':
-                return $this->myModuleUsageLast30Days();
-            default:
-                return $this->customChartQuery($chart);
-        }
-        return;
-    }
-
-    public function myModuleUsageLast30Days()
-    {
-        global $current_user;
-        $dateValue = DBManagerFactory::getInstance()->convert("'".$timedate->getNow()->modify("-30 days")->asDb()."'", "datetime");
-
-        $query  = "SELECT tracker.module_name as module_name ";
-        $query .= ",COUNT(*) count FROM tracker ";
-        $query .= "WHERE tracker.user_id = '$current_user->id' AND tracker.module_name != 'UserPreferences' AND tracker.date_modified > $dateValue ";
-        $query .= "GROUP BY tracker.module_name ORDER BY count DESC";
-
-        return $query;
-    }
-
-
-    // This function will grab a query from the custom directory to be used for charting
-    public function customChartQuery($chart)
-    {
-        if (file_exists('custom/Charts/' . $chart . '.php')) {
-            require_once('custom/Charts/' . $chart . '.php');
-            return customChartQuery();
-        } else {
-            return false;
-        }
-    }
-}
+ #[\AllowDynamicProperties]
+ class PredefinedChart
+ {
+     public $params = array();
+ 
+     public function __construct()
+     {
+     }
+ 
+ 
+ 
+ 
+     public function predefinedChartQuery($chart, $params=array())
+     {
+         switch ($chart) {
+             case 'my_modules_used_last_30_days':
+                 return $this->myModuleUsageLast30Days();
+             default:
+                 return $this->customChartQuery($chart);
+         }
+         return;
+     }
+ 
+     public function myModuleUsageLast30Days()
+     {
+         global $current_user, $timedate;
+         $dateValue = DBManagerFactory::getInstance()->convert("'".$timedate->getNow()->modify("-30 days")->asDb()."'", "datetime");
+ 
+         $query  = "SELECT tracker.module_name as module_name ";
+         $query .= ",COUNT(*) count FROM tracker ";
+         $query .= "WHERE tracker.user_id = '$current_user->id' AND tracker.module_name != 'UserPreferences' AND tracker.date_modified > $dateValue ";
+         $query .= "GROUP BY tracker.module_name ORDER BY count DESC";
+ 
+         return $query;
+     }
+ 
+ 
+     // This function will grab a query from the custom directory to be used for charting
+     public function customChartQuery($chart)
+     {
+         if (file_exists('custom/Charts/' . $chart . '.php')) {
+             require_once('custom/Charts/' . $chart . '.php');
+             return customChartQuery();
+         } else {
+             return false;
+         }
+     }
+ }
+ 

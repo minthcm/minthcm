@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -60,6 +60,7 @@
  * PLEASE DO NOT CHANGE THIS CLASS
  * PLACE ANY CUSTOMIZATIONS IN Candidatures
  */
+#[\AllowDynamicProperties]
 class Candidatures_sugar extends Basic {
 
    public $new_schema = true;
@@ -91,8 +92,6 @@ class Candidatures_sugar extends Basic {
    public $favorite_link;
    public $reason_for_rejection;
    public $entry_interview;
-   public $recruitment_end_name;
-   public $recruitment_end_id;
 
    public function bean_implements($interface) {
       if ( $interface == 'ACL' ) {

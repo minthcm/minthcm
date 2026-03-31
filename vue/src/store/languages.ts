@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { mintApi } from '@/api/api'
 
 export interface Languages {
     app_strings: { [key: string]: string }
@@ -10,11 +10,7 @@ export interface Languages {
 }
 
 interface Placeholders {
-    [key: string]: string
-}
-
-interface Placeholders {
-    [key: string]: string
+    [key: string]: string | number
 }
 
 export const useLanguagesStore = defineStore('languages', () => {
@@ -55,7 +51,7 @@ export const useLanguagesStore = defineStore('languages', () => {
             return null
         }
         fetchedLanguages.value[module] = true
-        const response = await axios.get('api/languages', {
+        const response = await mintApi.get('languages', {
             params: {
                 modules: module,
             },

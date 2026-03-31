@@ -58,7 +58,7 @@
 			         <tr>
 						<td align="center">
 							<a class='studiolink' href="javascript:void(0)">
-								<span class="suitepicon suitepicon-module-{$button.icon}"></span>
+								<span style="font-size: 24px;" class="mdi mdi-{$icons[$button.icon]|default:'star'}"></span>
 							</a>
 						</td>
 					 </tr>

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -65,7 +65,7 @@ class SuiteEditorConnector
 {
     public static function getSuiteSettings($html, $width)
     {
-        return array(
+        $settings = [
             'contents' => $html,
             'textareaId' => 'body_text',
             'elementId' => 'email_template_editor',
@@ -73,7 +73,27 @@ class SuiteEditorConnector
             'clickHandler' => "function(e){
                 onClickTemplateBody();
             }",
-            'tinyMCESetup' => "{
+        ];
+
+        if($_REQUEST["module"] == "Campaigns"){
+            //use loadtemplate() to populate template body on TinyMCE initialisation rather than page load for campaigns
+                $settings['tinyMCESetup'] = "{
+                setup: function(editor) {
+                    editor.on('focus', function(e){
+                        onClickTemplateBody();
+                    });
+                    editor.on('init', function(e){
+                        loadtemplate();
+                    });
+                },
+                height : '480',
+                plugins: ['code', 'table', 'link', 'image'],
+                toolbar: ['fontselect | fontsizeselect | bold italic underline | forecolor backcolor | styleselect | outdent indent | link image'],
+                convert_urls: false,
+            }";
+        }else{
+            //default TinyMCESetup settings
+            $settings['tinyMCESetup'] = "{
                 setup: function(editor) {
                     editor.on('focus', function(e){
                         onClickTemplateBody();
@@ -83,8 +103,12 @@ class SuiteEditorConnector
                 plugins: ['code', 'table', 'link', 'image'],
                 toolbar: ['fontselect | fontsizeselect | bold italic underline | forecolor backcolor | styleselect | outdent indent | link image'],
                 convert_urls: false,
-            }"
-        );
+            }";
+        }
+
+
+
+        return $settings;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\InputValidators;
 
+#[\AllowDynamicProperties]
 class NoWhitespaceValidator extends RegExpValidator
 {
     protected $pattern = "/^[^\s]+$/";

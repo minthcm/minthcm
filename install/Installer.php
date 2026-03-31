@@ -3,6 +3,7 @@
 use MintHCM\MintCLI\Installer\Installer as CLIInstaller;
 use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
 
+#[\AllowDynamicProperties]
 class Installer extends CLIInstaller
 {
     const INSTANCE_DIR = '../legacy';

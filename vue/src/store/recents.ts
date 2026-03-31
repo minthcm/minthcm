@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { mintApi } from '@/api/api'
 
 interface Recent {
     item_id: string
@@ -12,7 +12,7 @@ export const useRecentsStore = defineStore('recents', () => {
     const recents = ref<Recent[]>([])
 
     async function fetch() {
-        const response = await axios.get('api/Trackers')
+        const response = await mintApi.get('Trackers')
         recents.value = response.data
     }
 

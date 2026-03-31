@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@
 require_once('modules/ModuleBuilder/MB/AjaxCompose.php');
 require_once('modules/ModuleBuilder/views/view.modulefield.php');
  
+#[\AllowDynamicProperties]
 class ViewModulefields extends SugarView
 {
     public $mbModule;
@@ -64,6 +65,7 @@ class ViewModulefields extends SugarView
 
     public function display()
     {
+        $titleLBL = [];
         $smarty = new Sugar_Smarty();
         global $mod_strings;
         $bak_mod_strings=$mod_strings;
@@ -110,7 +112,6 @@ class ViewModulefields extends SugarView
                     $customFieldsData[$def['name']] = $def['custom'];
                 }
             }
-
             $smarty->assign('module', $studioClass);
 
             $package = new stdClass;
@@ -154,7 +155,7 @@ class ViewModulefields extends SugarView
             foreach ($this->mbModule->mbvardefs->vardefs['fields'] as $k=>$v) {
                 if ($k != $this->mbModule->name) {
                     foreach ($v as $field => $def) {
-                        if (in_array($field, array_keys($this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name]))) {
+                        if (array_key_exists($field, $this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name])) {
                             $this->mbModule->mbvardefs->vardefs['fields'][$k][$field] = $this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name][$field];
 
                             unset($this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name][$field]);

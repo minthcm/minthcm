@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -139,7 +139,7 @@ function cleanMergeData($data)
 {
     $results = array();
     foreach ($data as $m => $layouts) {
-        if (count($layouts) > 0) {
+        if ((is_countable($layouts) ? count($layouts) : 0) > 0) {
             $results[$m] = $layouts;
         }
     }
@@ -204,19 +204,19 @@ function formatLayoutMergeDataForDisplay($layoutMergeData)
     foreach ($layoutMergeData as $k => $v) {
         $layouts = array();
         foreach ($v as $layoutPath => $isMerge) {
-            if (preg_match('/listviewdefs.php/i', $layoutPath)) {
+            if (preg_match('/listviewdefs.php/i', (string) $layoutPath)) {
                 $label = $module_builder_language['LBL_LISTVIEW'];
             } else {
-                if (preg_match('/detailviewdefs.php/i', $layoutPath)) {
+                if (preg_match('/detailviewdefs.php/i', (string) $layoutPath)) {
                     $label = $module_builder_language['LBL_DETAILVIEW'];
                 } else {
-                    if (preg_match('/editviewdefs.php/i', $layoutPath)) {
+                    if (preg_match('/editviewdefs.php/i', (string) $layoutPath)) {
                         $label = $module_builder_language['LBL_EDITVIEW'];
                     } else {
-                        if (preg_match('/quickcreatedefs.php/i', $layoutPath)) {
+                        if (preg_match('/quickcreatedefs.php/i', (string) $layoutPath)) {
                             $label = $module_builder_language['LBL_QUICKCREATE'];
                         } else {
-                            if (preg_match('/searchdefs.php/i', $layoutPath)) {
+                            if (preg_match('/searchdefs.php/i', (string) $layoutPath)) {
                                 $label = $module_builder_language['LBL_SEARCH_BUTTON'];
                             } else {
                                 continue;

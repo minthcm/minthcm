@@ -9,7 +9,7 @@ include 'modules/KReports/language/de_de.lang.php';
 $de_de = $mod_strings;
 $out = array();
 
-foreach($en_us as $label => $text){
+foreach ($en_us as $label => $text) {
     $out[$label] = $de_de[$label] ?: 'EN: ' . $text;
 }
 

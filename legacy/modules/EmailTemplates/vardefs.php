@@ -7,8 +7,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -87,7 +87,7 @@ $dictionary['EmailTemplate'] = array(
             'name' => 'modified_user_id',
             'rname' => 'user_name',
             'id_name' => 'modified_user_id',
-            'vname' => 'LBL_ASSIGNED_TO',
+            'vname' => 'LBL_MODIFIED_BY',
             'type' => 'assigned_user_name',
             'table' => 'users',
             'reportable' => true,
@@ -222,18 +222,18 @@ $dictionary['EmailTemplate'] = array(
             'name' => 'idx_email_template_name',
             'type' => 'index',
             'fields' => array('name'),
-        ),
+    ),
     ),
     'relationships' => array(
         'emailtemplates_assigned_user' => array(
-            'lhs_module' => 'Users',
-            'lhs_table' => 'users',
-            'lhs_key' => 'id',
-            'rhs_module' => 'EmailTemplates',
-            'rhs_table' => 'email_templates',
-            'rhs_key' => 'assigned_user_id',
+                'lhs_module' => 'Users',
+                'lhs_table' => 'users',
+                'lhs_key' => 'id',
+                'rhs_module' => 'EmailTemplates',
+                'rhs_table' => 'email_templates',
+                'rhs_key' => 'assigned_user_id',
             'relationship_type' => 'one-to-many',
-        ),
+    ),
     ),
 );
 

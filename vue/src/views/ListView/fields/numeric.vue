@@ -10,22 +10,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useAuthStore } from '@/store/auth'
+import { usePreferencesStore } from '@/store/preferences'
 
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps(['input'])
 const value = ref(props.input?.value)
 const debounceTimeout = ref<number | null>(null)
 
-const auth = useAuthStore()
-
+const preferences = usePreferencesStore()
 function convertValue(v: string) {
     return parseFloat(removeSeparators(v))
 }
 
 function removeSeparators(v: string): string {
-    const group_separator = auth.user.preferences.num_grp_sep
+    const group_separator = preferences.user?.num_grp_sep
     const without_spaces = v.replace(/\s+/g, '')
     return group_separator ? without_spaces.replaceAll(group_separator, '') : without_spaces
 }

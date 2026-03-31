@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\Services;
 
+#[\AllowDynamicProperties]
 class ServerService
 {
 

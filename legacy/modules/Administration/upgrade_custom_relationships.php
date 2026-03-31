@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -75,7 +75,7 @@ function upgrade_custom_relationships($modules = array())
                 }
                 //Find the extension file containing the vardefs for this relationship
                 foreach (scandir("custom/Extension/modules/$module/Ext/Vardefs") as $file) {
-                    if (substr($file, 0, 1) != "." && strtolower(substr($file, -4)) == ".php") {
+                    if (substr((string) $file, 0, 1) != "." && strtolower(substr((string) $file, -4)) == ".php") {
                         $dictionary = array($module => array("fields" => array()));
                         $filePath = "custom/Extension/modules/$module/Ext/Vardefs/$file";
                         include($filePath);
@@ -97,7 +97,7 @@ function upgrade_custom_relationships($modules = array())
                 }
                 //Find the extension file containing the subpanel definition for this relationship
                 foreach (scandir("custom/Extension/modules/$module/Ext/Layoutdefs") as $file) {
-                    if (substr($file, 0, 1) != "." && strtolower(substr($file, -4)) == ".php") {
+                    if (substr((string) $file, 0, 1) != "." && strtolower(substr((string) $file, -4)) == ".php") {
                         $layout_defs = array($module => array("subpanel_setup" => array()));
                         $filePath = "custom/Extension/modules/$module/Ext/Layoutdefs/$file";
                         include($filePath);

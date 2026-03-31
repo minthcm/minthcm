@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -96,7 +96,7 @@ $dictionary['CompetencyRatings'] = array(
         ),
         'competency_id' => array(
             'name' => 'competency_id',
-            'type' => 'link',
+            'type' => 'id',
             'relationship' => 'competencyratings_competencies',
             'reportable' => false,
             'vname' => 'LBL_COMPETENCY_ID',
@@ -130,6 +130,24 @@ $dictionary['CompetencyRatings'] = array(
             'group' => 'parent_name',
             'reportable' => false,
         ),
+        'employee_roles' => array(
+            'name' => 'employee_roles',
+            'type' => 'link',
+            'relationship' => 'competencyratings_roles',
+            'module' => 'EmployeeRoles',
+            'bean_name' => 'EmployeeRoles',
+            'source' => 'non-db',
+            'vname' => 'LBL_EMPLOYEE_ROLES',
+        ),
+        'positions' => array(
+            'name' => 'positions',
+            'type' => 'link',
+            'relationship' => 'competencyratings_positions',
+            'module' => 'Positions',
+            'bean_name' => 'Positions',
+            'source' => 'non-db',
+            'vname' => 'LBL_POSITIONS',
+        ),
     ),
     'relationships' => array(
         'competencyratings_competencies' => array(
@@ -140,17 +158,6 @@ $dictionary['CompetencyRatings'] = array(
             'rhs_table' => 'competencyratings',
             'rhs_key' => 'competency_id',
             'relationship_type' => 'one-to-many',
-        ),
-        'competencyratings_employee' => array(
-            'lhs_module' => 'Employees',
-            'lhs_table' => 'users',
-            'lhs_key' => 'id',
-            'rhs_module' => 'CompetencyRatings',
-            'rhs_table' => 'competencyratings',
-            'rhs_key' => 'parent_id',
-            'relationship_type' => 'one-to-many',
-            'relationship_role_column' => 'parent_type',
-            'relationship_role_column_value' => 'Employees',
         ),
         'competencyratings_positions' => array(
             'lhs_module' => 'Positions',

@@ -11,7 +11,7 @@
  */
 
 require_once 'modules/EAPM/views/Oauth2RedirectTrait.php';
-require_once 'include/externalAPI/GoogleEmail/ExtAPIMicrosoftEmail.php';
+require_once 'include/externalAPI/MicrosoftEmail/ExtAPIMicrosoftEmail.php';
 
 class EAPMViewMicrosoftOauth2Redirect extends SugarView
 {

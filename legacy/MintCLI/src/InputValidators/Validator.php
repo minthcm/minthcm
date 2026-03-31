@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\InputValidators;
 
+#[\AllowDynamicProperties]
 abstract class Validator
 {
     protected $message;

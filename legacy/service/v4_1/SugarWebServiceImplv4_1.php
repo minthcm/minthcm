@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -59,6 +59,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('service/v4/SugarWebServiceImplv4.php');
 require_once('service/v4_1/SugarWebServiceUtilv4_1.php');
 
+#[\AllowDynamicProperties]
 class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
 {
 
@@ -160,7 +161,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             $list = $result['rows'];
             $filterFields = $result['fields_set_on_rows'];
 
-            if (count($list) > 0) {
+            if ((is_countable($list) ? count($list) : 0) > 0) {
                 // get the related module name and instantiate a bean for that
                 $submodulename = $mod->$link_field_name->getRelatedModuleName();
                 $submoduletemp = BeanFactory::getBean($submodulename);

@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -70,6 +70,7 @@ include_once __DIR__ . '/../../../include/ListView/ListViewFacade.php';
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class ListViewSearchService
 {
     
@@ -91,7 +92,7 @@ class ListViewSearchService
         VarDefHelper $varDefHelper
     ) {
         $this->beanManager = $beanManager;
-        $this->varDefHelper = $varDefHelper;
+$this->varDefHelper = $varDefHelper;
     }
     
     /**
@@ -137,12 +138,12 @@ class ListViewSearchService
         //MintHCM Start #84951
         $bean = $this->beanManager->newBeanSafe($moduleName);
         $module_fields = $this->varDefHelper->getModuleVardefs($bean);
-         
+        
         // get list view defs
         // $displayColumns = ListViewFacade::getDisplayColumns($moduleName); MintHCM #84318
-         
+        
         // simplified data struct
-         
+        
         $data = [
             'module' => $moduleName,
             'templateMeta' => $searchDefs['searchdefs'][$moduleName]['templateMeta'],
@@ -150,7 +151,7 @@ class ListViewSearchService
             'advanced' => $this->mergeModuleFields(array_values($searchDefs['searchdefs'][$moduleName]['layout']['advanced_search']),$module_fields),
             'fields' => $searchDefs['searchFields'][$moduleName]
         ];
- 
+        
         //MintHCM End #84951
         
         /* MintHCM Start #84318
@@ -158,7 +159,7 @@ class ListViewSearchService
         
         $trans = new LangText(null, null, LangText::USING_ALL_STRINGS, true, false, $moduleName);
         
-
+        
         $data = $this->getDataTranslated($trans, $data, 'basic', 'label', $displayColumns);
         $data = $this->getDataTranslated($trans, $data, 'advanced', 'label', $displayColumns);
         $data = $this->getDataTranslated($trans, $data, 'fields', 'vname', $displayColumns);

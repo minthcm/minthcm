@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;
 require_once('modules/ModuleBuilder/Module/StudioModuleFactory.php') ;
 require_once('include/MVC/View/SugarView.php') ;
 
+#[\AllowDynamicProperties]
 class ModuleBuilderViewWizard extends SugarView
 {
     private $view = null ; // the wizard view to display
@@ -66,14 +67,14 @@ class ModuleBuilderViewWizard extends SugarView
         $this->editModule = (! empty($_REQUEST [ 'view_module' ])) ? $_REQUEST [ 'view_module' ] : null ;
         $this->buttons = array(); // initialize so that modules without subpanels for example don't result in this being unset and causing problems in the smarty->assign
     }
-    
+
     /**
      * @see SugarView::_getModuleTitleParams()
      */
     protected function _getModuleTitleParams($browserTitle = false)
     {
         global $mod_strings;
-        
+
         return array(
            translate('LBL_MODULE_NAME', 'Administration'),
            ModuleBuilderController::getModuleTitle(),
@@ -84,6 +85,17 @@ class ModuleBuilderViewWizard extends SugarView
     {
         $this->ajax = new AjaxCompose() ;
         $smarty = new Sugar_Smarty() ;
+        
+        $module_icons = include '../api/constants/module_icons.php';
+        $menu_icons = include '../api/constants/menu_icons.php';
+        $icons = array_merge($module_icons, $menu_icons);
+        $icons = array_combine(
+            array_map(function($key) {
+                return str_replace('_', '-', strtolower($key));
+            }, 
+            array_keys($icons)),
+            array_values($icons)
+        );
 
         if (isset($_REQUEST [ 'MB' ])) {
             $this->processMB($this->ajax) ;
@@ -91,6 +103,7 @@ class ModuleBuilderViewWizard extends SugarView
             $this->processStudio($this->ajax) ;
         }
 
+        $smarty->assign('icons', $icons);
         $smarty->assign('buttons', $this->buttons) ;
         $smarty->assign('image_path', $GLOBALS [ 'image_path' ]) ;
         $smarty->assign("title", $this->title) ;
@@ -159,7 +172,7 @@ class ModuleBuilderViewWizard extends SugarView
                     $this->ajax->addCrumb(translate('LBL_DASHLET'), '') ;
                     $this->help = 'dashletHelp' ;
                     break;
-                
+
                 case 'popup':
                     $this->generateStudioPopupButtons();
                     $this->title = $this->editModule ." " .translate('LBL_POPUP');
@@ -315,25 +328,25 @@ class ModuleBuilderViewWizard extends SugarView
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_DASHLETLISTVIEW' ] ] = array('action'=> "module=ModuleBuilder&MB=true&action=editLayout&view=dashlet&view_module={$this->editModule}&view_package={$this->package}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_DASHLETLISTVIEW'], 'imageName'=>'ListView', 'help'=>'DashletListViewBtn');
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_DASHLETSEARCHVIEW' ] ] = array('action'=> "module=ModuleBuilder&MB=true&action=editLayout&view=dashletsearch&view_module={$this->editModule}&view_package={$this->package}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_DASHLETSEARCHVIEW'], 'imageName'=>'BasicSearch','help'=> 'DashletSearchViewBtn');
     }
-    
+
     public function generateMBPopupButtons()
     {
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_POPUPLISTVIEW' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=popuplist&view_module={$this->editModule}&view_package={$this->package}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_POPUPLISTVIEW'], 'imageName'=>'ListView', 'help'=>'PopupListViewBtn');
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_POPUPSEARCH' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=popupsearch&view_module={$this->editModule}&view_package={$this->package}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_POPUPSEARCH'], 'imageName'=>'BasicSearch','help'=> 'PopupSearchViewBtn');
     }
-    
+
     public function generateStudioDashletButtons()
     {
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_DASHLETLISTVIEW' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=dashlet&view_module={$this->editModule}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_DASHLETLISTVIEW'], 'imageName'=>'ListView', 'help'=>'DashletListViewBtn');
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_DASHLETSEARCHVIEW' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=dashletsearch&view_module={$this->editModule}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_DASHLETSEARCHVIEW'], 'imageName'=>'BasicSearch','help'=> 'DashletSearchViewBtn');
     }
-    
+
     public function generateStudioPopupButtons()
     {
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_POPUPLISTVIEW' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=popuplist&view_module={$this->editModule}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_POPUPLISTVIEW'], 'imageName'=>'ListView', 'help'=>'PopupListViewBtn');
         $this->buttons [ $GLOBALS [ 'mod_strings' ][ 'LBL_POPUPSEARCH' ] ] = array('action'=> "module=ModuleBuilder&action=editLayout&view=popupsearch&view_module={$this->editModule}", 'imageTitle'=> $GLOBALS ['mod_strings']['LBL_POPUPSEARCH'], 'imageName'=>'BasicSearch','help'=> 'PopupSearchViewBtn');
     }
-    
+
     public function generateMBSearchButtons()
     {
         $this->buttons [ $GLOBALS [ 'mod_strings' ] [ 'LBL_BASIC' ] ] = array( 'action' => "module=ModuleBuilder&MB=true&action=editLayout&view_module={$this->editModule}&view_package={$this->package}&view=SearchView&searchlayout=basic_search" , 'imageTitle' => $GLOBALS [ 'mod_strings' ] [ 'LBL_BASIC_SEARCH' ] , 'imageName' => 'BasicSearch','help' => "BasicSearchBtn" ) ;

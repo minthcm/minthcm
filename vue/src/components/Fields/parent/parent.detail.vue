@@ -1,48 +1,58 @@
 <template>
-    <div class="parent-container">
-    <div>
+    <div class="d-flex align-center ga-3">
+        <div class="detail-field-assigned-module">
             <label>{{ languages.label('LBL_ASSIGNED_TO_MODULE') }}</label>
-        <div class="detail-field-row">
-                <router-link :to="urls.parent" class="relate-field">
-                    {{ props.data.bean.parent_type }}
+            <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+                <router-link :name="props.defs.name + '_module'" v-if="hasListAccess" :to="urls.parent" class="relate-field">
+                    {{ props.data.bean.fields.parent_type?.model ?? '' }}
                 </router-link>
+                <span :name="props.defs.name + '_module'"v-else>
+                    {{ props.data.bean.fields.parent_type?.model ?? '' }}
+                </span>
                 <Pencil :defs="props.defs" />
             </div>
         </div>
-        <div>
+        <div class="detail-field-assigned-record">
             <label>{{ languages.label('LBL_ASSIGNED_TO_RECORD') }}</label>
             <div class="detail-field-row">
-                <router-link :to="urls.record" class="relate-field">
-                {{ props.modelValue }}
-            </router-link>
-            <Pencil
-                :defs="props.defs"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
+                <router-link :name="props.defs.name" v-if="hasViewAccess" :to="urls.record" class="relate-field">
+                    {{ props.field.model }}
+                </router-link>
+                <span :name="props.defs.name" v-else>
+                    {{ props.field.model }}
+                </span>
+                <Pencil :defs="props.defs" :hidePencil="hidePencil"
+                    @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)" />
+            </div>
         </div>
-    </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
+import { computed } from 'vue'
 import Pencil from '../Pencil.vue'
 import { useLanguagesStore } from '@/store/languages'
+import { FieldProps } from '../Field.model';
+import { useACL } from '@/composables/useACL';
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 const languages = useLanguagesStore()
+const emit = defineEmits(['inlineEditBtnClicked'])
 const urls = computed(() => {
-    const recordModule = props.data.bean.parent_type
-    const recordId = props.data.bean[props.defs.id_name]
+    const recordModule = props.data.bean.fields.parent_type?.model || ''
+    const recordId = props.data.bean.fields[props.defs.id_name]?.model || ''
     return { record: `/modules/${recordModule}/DetailView/${recordId}`, parent: `/modules/${recordModule}/ESListView` }
+})
+function startInlineEdit() {
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
+}
+const hasListAccess = computed<boolean>(() => {
+    return useACL().hasAccess(props.data.bean.fields.parent_type?.model, 'list', true, true)
+})
+const hasViewAccess = computed<boolean>(() => {
+    return useACL().hasAccess(props.data.bean.fields.parent_type?.model, 'view', true, true)
 })
 </script>
 
@@ -51,11 +61,13 @@ label {
     font-size: 12px;
     color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+
 div {
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
 }
+
 .relate-field {
     text-decoration: none;
     color: rgb(var(--v-theme-secondary));
@@ -63,12 +75,10 @@ div {
     display: block;
     width: fit-content;
 }
-.parent-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-    padding-left: 16px;
-    border-left: 1px solid rgb(var(--v-theme-primary-light));
+.detail-field-assigned-module, .detail-field-assigned-record{
+    width: 40%;
+}
+.detail-label-related-to{
+    width: 20%;
 }
 </style>

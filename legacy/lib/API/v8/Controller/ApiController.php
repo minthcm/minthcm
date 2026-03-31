@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -64,17 +64,18 @@ use SuiteCRM\JsonApiErrorObject;
 use SuiteCRM\Utility\Paths;
 use SuiteCRM\Utility\SuiteLogger as Logger;
 
+#[\AllowDynamicProperties]
 class ApiController implements LoggerAwareInterface
 {
-    const CONTENT_TYPE = 'application/vnd.api+json';
-    const CONTENT_TYPE_JSON = 'application/vnd.api+json';
-    const CONTENT_TYPE_HEADER = 'Content-Type';
-    const LINKS = 'links';
+    public const CONTENT_TYPE = 'application/vnd.api+json';
+    public const CONTENT_TYPE_JSON = 'application/vnd.api+json';
+    public const CONTENT_TYPE_HEADER = 'Content-Type';
+    public const LINKS = 'links';
 
-    const VERSION_MAJOR = 8;
-    const VERSION_MINOR = 0;
-    const VERSION_PATCH = 0;
-    const VERSION_STABILITY = 'ALPHA';
+    public const VERSION_MAJOR = 8;
+    public const VERSION_MINOR = 0;
+    public const VERSION_PATCH = 0;
+    public const VERSION_STABILITY = 'ALPHA';
 
     /**
      * @var LoggerInterface $logger
@@ -114,6 +115,7 @@ class ApiController implements LoggerAwareInterface
      */
     protected function generateJsonApiResponse(Request $request, Response $response, $payload)
     {
+        $apiErrorObjectArrays = [];
         try {
             $negotiated = $this->negotiatedJsonApiContent($request, $response);
             if (in_array($negotiated->getStatusCode(), array(415, 406), true)) {
@@ -172,7 +174,7 @@ class ApiController implements LoggerAwareInterface
             throw new RuntimeException($errorMessage, $e->getCode(), $e);
         }
     }
-    
+
     /**
      *
      * @param Request $request
@@ -255,7 +257,7 @@ class ApiController implements LoggerAwareInterface
             $jsonAPI = $this->containers->get('JsonApi');
             $payload['jsonapi'] = $jsonAPI->toJsonApiResponse();
 
-            
+
             $payload = $this->handleExceptionIntoPayloadError($request, $exception, $payload);
 
             return $response

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -292,7 +292,7 @@ class DashletGeneric extends Dashlet
                 }
 
                 //bug 39170 - end
-                if ('enum' == $widgetDef['type']) {
+                if ($widgetDef['type']=='enum' || $widgetDef['type']=='multienum') {
                     $filterNotSelected = array(); // we need to have some value otherwise '' or null values make -none- to be selected by default
                 } else {
                     $filterNotSelected = '';
@@ -302,8 +302,8 @@ class DashletGeneric extends Dashlet
                 $currentSearchFields[$name]['label'] = !empty($params['label']) ? translate($params['label'], $this->seedBean->module_dir) : translate($widgetDef['vname'], $this->seedBean->module_dir);
                 $currentSearchFields[$name]['input'] = $this->layoutManager->widgetDisplayInput($widgetDef, true, (empty($this->filters[$name]) ? '' : $this->filters[$name]));
             } else { // ability to create spacers in input fields
-                $currentSearchFields['blank'+$count]['label'] = '';
-                $currentSearchFields['blank'+$count]['input'] = '';
+                $currentSearchFields['blank' . $count]['label'] = '';
+                $currentSearchFields['blank' . $count]['input'] = '';
                 $count++;
             }
         }
@@ -464,6 +464,7 @@ class DashletGeneric extends Dashlet
 
     protected function loadCustomMetadata()
     {
+        $dashletData = [];
         $customMetadate = 'custom/modules/' . $this->seedBean->module_dir . '/metadata/dashletviewdefs.php';
         if (file_exists($customMetadate)) {
             require $customMetadate;
@@ -555,7 +556,7 @@ class DashletGeneric extends Dashlet
                 $where = '(' . implode(') AND (', $whereArray) . ')';
             }
             $this->lvs->setup($this->seedBean, $this->displayTpl, $where, $lvsParams, 0, $this->displayRows/*, $filterFields*/, array(), 'id', $id);
-            if (in_array('CREATED_BY', array_keys($displayColumns))) { // handle the created by field
+            if (array_key_exists('CREATED_BY', $displayColumns)) { // handle the created by field
                 foreach ($this->lvs->data['data'] as $row => $data) {
                     $this->lvs->data['data'][$row]['CREATED_BY'] = get_assigned_user_name($data['CREATED_BY']);
                 }
@@ -563,12 +564,11 @@ class DashletGeneric extends Dashlet
             // assign a baseURL w/ the action set as DisplayDashlet
             foreach ($this->lvs->data['pageData']['urls'] as $type => $url) {
                 // awu Replacing action=DisplayDashlet with action=DynamicAction&DynamicAction=DisplayDashlet
-                if ('orderBy' == $type) {
-                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url);
+                if ($type == 'orderBy') {
+                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', (string) $url);
                 } else {
-                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url) . '&sugar_body_only=1&id=' . $this->id;
+                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', (string) $url) . '&sugar_body_only=1&id=' . $this->id;
                 }
-
             }
 
             $this->lvs->ss->assign('dashletId', $this->id);
@@ -669,7 +669,7 @@ class DashletGeneric extends Dashlet
         }
         $options['autoRefresh'] = empty($req['autoRefresh']) ? '0' : $req['autoRefresh'];
         if (!empty($req['dashletTitle'])) {
-            $options['title'] = $req['dashletTitle'];
+            $options['title'] = htmlentities(html_entity_decode($req['dashletTitle']));
         }
         return $options;
     }

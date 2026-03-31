@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
- if (!defined('sugarEntry') || !sugarEntry) {
+if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -73,7 +73,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("PRINT_URL", "index.php?".$GLOBALS['request_string']);
 $xtpl->assign("MODULE", $_REQUEST['module']);
-if ($error_msg != '') {
+if ($error_msg !== '') {
     $xtpl->assign("ERROR", $error_msg);
     $xtpl->parse("main.error");
 }
@@ -91,7 +91,7 @@ $GLOBALS['check_notify'] = false;
 
 $query = 'select contacts.id, first_name, last_name, title, primary_address_city from contacts where contacts.deleted=0 ';
 $duplicates = $_POST['duplicate'];
-$count = count($duplicates);
+$count = is_countable($duplicates) ? count($duplicates) : 0;
 $db = DBManagerFactory::getInstance();
 if ($count > 0) {
     $query .= "and (";
@@ -121,13 +121,13 @@ $xtpl->assign('FORMBODY', $contactForm->buildTableForm($duplicateContacts));
 $input = '';
 foreach ($contact->column_fields as $field) {
     if (!empty($_POST['Contacts'.$field])) {
-        $input .= "<input type='hidden' name='$field' value='${_POST['Contacts'.$field]}'>\n";
+        $input .= "<input type='hidden' name='$field' value='{$_POST['Contacts'.$field]}'>\n";
     }
 }
 
 foreach ($contact->additional_column_fields as $field) {
     if (!empty($_POST['Contacts'.$field])) {
-        $input .= "<input type='hidden' name='$field' value='${_POST['Contacts'.$field]}'>\n";
+        $input .= "<input type='hidden' name='$field' value='{$_POST['Contacts'.$field]}'>\n";
     }
 }
 

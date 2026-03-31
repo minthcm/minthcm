@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -93,24 +93,26 @@ class Spots extends Basic
      */
     public function save($check_notify = false)
     {
-        $type = $_REQUEST['type'];
-        $name = $_REQUEST['name'];
-        $config = htmlspecialchars_decode($_REQUEST['config']);
+        $type = $_REQUEST['type'] ?? '';
+        $name = $_REQUEST['name'] ?? '';
+        $configData = $_REQUEST['config'] ?? '';
+
+        $config = htmlspecialchars_decode((string) $configData);
         $jsonConfig = json_decode($config, true);
 
         $colsLabels = array();
         $rowsLabels = array();
-        if (isset($jsonConfig['cols']) && count($jsonConfig['cols']) > 0) {
+        if (isset($jsonConfig['cols']) && (is_countable($jsonConfig['cols']) ? count($jsonConfig['cols']) : 0) > 0) {
             $colsLabels = $this->getKeysForLabels($type, $jsonConfig['cols']);
             $jsonConfig['cols'] = $colsLabels;
         }
-        if (isset($jsonConfig['rows']) && count($jsonConfig['rows']) > 0) {
+        if (isset($jsonConfig['rows']) && (is_countable($jsonConfig['rows']) ? count($jsonConfig['rows']) : 0) > 0) {
             $rowsLabels = $this->getKeysForLabels($type, $jsonConfig['rows']);
             $jsonConfig['rows'] = $rowsLabels;
         }
 
         //Set the key value for the inclusions / exclusions
-        if (isset($jsonConfig['exclusions']) && count($jsonConfig['exclusions']) > 0) {
+        if (isset($jsonConfig['exclusions']) && (is_countable($jsonConfig['exclusions']) ? count($jsonConfig['exclusions']) : 0) > 0) {
             foreach ($jsonConfig['exclusions'] as $key => $value) {
                 $newKey = $this->getKeyForLabel($type, $key);
 
@@ -123,7 +125,7 @@ class Spots extends Basic
             }
         }
 
-        if (isset($jsonConfig['inclusions']) && count($jsonConfig['inclusions']) > 0) {
+        if (isset($jsonConfig['inclusions']) && (is_countable($jsonConfig['inclusions']) ? count($jsonConfig['inclusions']) : 0) > 0) {
             foreach ($jsonConfig['inclusions'] as $key => $value) {
                 $newKey = $this->getKeyForLabel($type, $key);
 
@@ -136,7 +138,7 @@ class Spots extends Basic
             }
         }
 
-        if (isset($jsonConfig['inclusionsInfo']) && count($jsonConfig['inclusionsInfo']) > 0) {
+        if (isset($jsonConfig['inclusionsInfo']) && (is_countable($jsonConfig['inclusionsInfo']) ? count($jsonConfig['inclusionsInfo']) : 0) > 0) {
             foreach ($jsonConfig['inclusionsInfo'] as $key => $value) {
                 $newKey = $this->getKeyForLabel($type, $key);
 
@@ -160,58 +162,52 @@ class Spots extends Basic
      *
      * @return string is the config file with the label values in place of the key names
      */
-     public function replaceKeyValueWithLabel($config)
+    public function replaceKeyValueWithLabel($config)
     {
         //Strings are loaded this way as the dashlet mod_strings was set to Home
-       $spotStrings = return_module_language($GLOBALS['current_language'], 'Spots');
+        $spotStrings = return_module_language($GLOBALS['current_language'], 'Spots');
 
         $jsonConfig = json_decode($config, true);
-        if (isset($jsonConfig['cols']) && count($jsonConfig['cols']) > 0) {
+        if (isset($jsonConfig['cols']) && (is_countable($jsonConfig['cols']) ? count($jsonConfig['cols']) : 0) > 0) {
             foreach ($jsonConfig['cols'] as $k => $v) {
                 $jsonConfig['cols'][$k] = $spotStrings[$v];
             }
         }
 
-        if (isset($jsonConfig['rows']) && count($jsonConfig['rows']) > 0) {
+        if (isset($jsonConfig['rows']) && (is_countable($jsonConfig['rows']) ? count($jsonConfig['rows']) : 0) > 0) {
             foreach ($jsonConfig['rows'] as $k => $v) {
                 $jsonConfig['rows'][$k] = $spotStrings[$v];
             }
         }
 
-        if (isset($jsonConfig['exclusions']) && count($jsonConfig['exclusions']) > 0) {
+        if (isset($jsonConfig['exclusions']) && (is_countable($jsonConfig['exclusions']) ? count($jsonConfig['exclusions']) : 0) > 0) {
             foreach ($jsonConfig['exclusions'] as $key => $value) {
                 $newKey = $spotStrings[$key];
 
                 $jsonConfig['exclusions'][$newKey] = $jsonConfig['exclusions'][$key];
                 unset($jsonConfig['exclusions'][$key]);
             }
-        }
-        elseif(isset($jsonConfig['exclusions']) && count($jsonConfig['exclusions']) == 0)
-        {
+        } elseif (isset($jsonConfig['exclusions']) && (is_countable($jsonConfig['exclusions']) ? count($jsonConfig['exclusions']) : 0) == 0) {
             $jsonConfig['exclusions'] = new stdClass();
         }
 
-        if (isset($jsonConfig['inclusions']) && count($jsonConfig['inclusions']) > 0) {
+        if (isset($jsonConfig['inclusions']) && (is_countable($jsonConfig['inclusions']) ? count($jsonConfig['inclusions']) : 0) > 0) {
             foreach ($jsonConfig['inclusions'] as $key => $value) {
                 $newKey = $spotStrings[$key];
                 $jsonConfig['inclusions'][$newKey] = $jsonConfig['inclusions'][$key];
                 unset($jsonConfig['inclusions'][$key]);
             }
-        }
-        elseif(isset($jsonConfig['inclusions']) && count($jsonConfig['inclusions']) == 0)
-        {
+        } elseif (isset($jsonConfig['inclusions']) && (is_countable($jsonConfig['inclusions']) ? count($jsonConfig['inclusions']) : 0) == 0) {
             $jsonConfig['inclusions'] = new stdClass();
         }
 
-        if (isset($jsonConfig['inclusionsInfo']) && count($jsonConfig['inclusionsInfo']) > 0) {
+        if (isset($jsonConfig['inclusionsInfo']) && (is_countable($jsonConfig['inclusionsInfo']) ? count($jsonConfig['inclusionsInfo']) : 0) > 0) {
             foreach ($jsonConfig['inclusionsInfo'] as $key => $value) {
                 $newKey = $spotStrings[$key];
                 $jsonConfig['inclusionsInfo'][$newKey] = $jsonConfig['inclusionsInfo'][$key];
                 unset($jsonConfig['inclusionsInfo'][$key]);
             }
-        }
-        elseif(isset($jsonConfig['inclusionsInfo']) && count($jsonConfig['inclusionsInfo']) == 0)
-        {
+        } elseif (isset($jsonConfig['inclusionsInfo']) && (is_countable($jsonConfig['inclusionsInfo']) ? count($jsonConfig['inclusionsInfo']) : 0) == 0) {
             $jsonConfig['inclusionsInfo'] = new stdClass();
         }
 

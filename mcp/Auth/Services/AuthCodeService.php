@@ -5,7 +5,7 @@ namespace MintMCP\Auth\Services;
 use BeanFactory;
 use Exception;
 use MintMCP\Auth\Utils\LegacyBridge;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 
 /**
  * Handles authorization code operations

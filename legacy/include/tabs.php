@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,15 +45,19 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-    /**
-     * Class SugarWidgetTabs
-     *
-     * Displays users subpanels in tabs
-     */
+/**
+* Class SugarWidgetTabs
+*
+* Displays users subpanels in tabs
+*/
+#[\AllowDynamicProperties]
 class SugarWidgetTabs
 {
     public $tabs;
     public $current_key;
+    // MintHCM #129887 START
+    public $jscallback;
+    // MintHCM #129887 END
 
     public function __construct(&$tabs, $current_key, $jscallback)
     {
@@ -66,7 +70,7 @@ class SugarWidgetTabs
     {
         $template = new Sugar_Smarty();
         $template->assign('subpanel_tabs', $this->tabs);
-        $template->assign('subpanel_tabs_count', count($this->tabs));
+        $template->assign('subpanel_tabs_count', is_countable($this->tabs) ? count($this->tabs) : 0);
         $template->assign('jscallback', $this->jscallback);
         $template->assign('subpanel_current_key', $this->current_key);
 

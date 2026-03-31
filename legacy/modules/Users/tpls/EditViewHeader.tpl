@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -93,6 +93,7 @@ var ERR_REENTER_PASSWORDS = '{$MOD.ERR_REENTER_PASSWORDS}';
 	<input type="hidden" name="edit_self" id="edit_self" value='{$EDIT_SELF}' >
 	<input type="hidden" name="required_email_address" id="required_email_address" value='{$REQUIRED_EMAIL_ADDRESS}' >
     <input type="hidden" name="isDuplicate" id="isDuplicate" value="{$isDuplicate}">
+    <input type="hidden" name="change_pwd" id="change_pwd" value="{$CHANGE_PWD}">
     <input type="hidden" name="systemGeneratedPasswordSetting" id="systemGeneratedPasswordSetting" value="{$SYSTEM_GENERATED_PASSWORD_SETTING}">
 	<div id="popup_window"></div>
 

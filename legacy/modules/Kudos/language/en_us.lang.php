@@ -86,4 +86,6 @@ $mod_strings = array(
    'LBL_DESCRIPTION' => 'Content',
    'LBL_PRIVATE' => 'Private',
    'LBL_ANNOUNCEMENT_DATE' => 'Announcement date',
+   'LBL_ALERTS' => 'Alerts',
+   'LBL_REACTIONS' => 'Reactions',
 );

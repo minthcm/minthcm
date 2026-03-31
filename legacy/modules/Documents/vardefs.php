@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -177,7 +177,6 @@ $dictionary['Document'] = array('table' => 'documents',
             'required' => true,
             'source' => 'non-db',
             'importable' => 'required',
-            'required' => true,
             'default' => '1',
         ),
         'last_rev_created_name' => array(
@@ -294,9 +293,9 @@ $dictionary['Document'] = array('table' => 'documents',
             'vname' => 'LBL_TEMPLATE_TYPE',
             'type' => 'enum',
             'len' => 100,
-            'function' => ['name' => 'getDictionary', 
-            'additional_params' => 'Documents-type',
-            'include' => 'include/utils/getDictionary.php'],
+            'function' => ['name' => 'getDictionary',
+                'additional_params' => 'Documents-type',
+                'include' => 'include/utils/getDictionary.php'],
             'reportable' => false,
         ),
 //BEGIN field used for contract document subpanel.
@@ -356,13 +355,12 @@ $dictionary['Document'] = array('table' => 'documents',
             'reportable' => false,
             'source' => 'non-db',
         ),
-        'filecontents' =>
-            array(
-                'name' => 'filecontents',
-                'vname' => 'LBL_FILE_CONTENTS',
-                'type' => 'varchar',
-                'source' => 'non-db',
-            ),
+        'filecontents' => array(
+            'name' => 'filecontents',
+            'vname' => 'LBL_FILE_CONTENTS',
+            'type' => 'varchar',
+            'source' => 'non-db',
+        ),
 //END fields used for contract documents subpanel.
         'aos_contracts' => array(
             'name' => 'aos_contracts',
@@ -376,7 +374,7 @@ $dictionary['Document'] = array('table' => 'documents',
             'name' => 'show_preview',
             'type' => 'bool',
             'source' => 'non-db',
-            'reportable' => false
+            'reportable' => false,
         ),
         "positions" => array(
             'name' => 'positions',
@@ -464,3 +462,44 @@ $dictionary['Document'] = array('table' => 'documents',
 VardefManager::createVardef('Documents', 'Document',
     array('default', 'assignable', 'security_groups',
     ));
+
+foreach ([
+    'document_name' => 'LBL_DOCUMENT_NAME_COMMENT',
+    'name' => 'LBL_NAME_COMMENT',
+    'doc_id' => 'LBL_DOC_ID_COMMENT',
+    'doc_type' => 'LBL_DOC_TYPE_COMMENT',
+    'doc_url' => 'LBL_DOC_URL_COMMENT',
+    'filename' => 'LBL_FILENAME_COMMENT',
+    'active_date' => 'LBL_DOC_ACTIVE_DATE_COMMENT',
+    'exp_date' => 'LBL_DOC_EXP_DATE_COMMENT',
+    'category_id' => 'LBL_SF_CATEGORY_COMMENT',
+    'subcategory_id' => 'LBL_SF_SUBCATEGORY_COMMENT',
+    'status_id' => 'LBL_DOC_STATUS_COMMENT',
+    'status' => 'LBL_DOC_STATUS_META_COMMENT',
+    'document_revision_id' => 'LBL_LATEST_REVISION_COMMENT',
+    'revision' => 'LBL_DOC_VERSION_COMMENT',
+    'last_rev_created_name' => 'LBL_LAST_REV_CREATOR_COMMENT',
+    'last_rev_mime_type' => 'LBL_LAST_REV_MIME_TYPE_COMMENT',
+    'latest_revision' => 'LBL_LATEST_REVISION_COMMENT',
+    'last_rev_create_date' => 'LBL_LAST_REV_CREATE_DATE_COMMENT',
+    'related_doc_id' => 'LBL_RELATED_DOCUMENT_ID_COMMENT',
+    'related_doc_name' => 'LBL_RELATED_DOCUMENT_NAME_COMMENT',
+    'related_doc_rev_id' => 'LBL_RELATED_DOCUMENT_REV_ID_COMMENT',
+    'related_doc_rev_number' => 'LBL_RELATED_DOCUMENT_REV_NUMBER_COMMENT',
+    'is_template' => 'LBL_IS_TEMPLATE_COMMENT',
+    'template_type' => 'LBL_TEMPLATE_TYPE_COMMENT',
+    'latest_revision_name' => 'LBL_LATEST_REVISION_NAME_COMMENT',
+    'selected_revision_name' => 'LBL_SELECTED_REVISION_NAME_COMMENT',
+    'contract_status' => 'LBL_CONTRACT_STATUS_COMMENT',
+    'contract_name' => 'LBL_CONTRACT_NAME_COMMENT',
+    'linked_id' => 'LBL_LINKED_ID_COMMENT',
+    'selected_revision_id' => 'LBL_SELECTED_REVISION_ID_COMMENT',
+    'latest_revision_id' => 'LBL_LATEST_REVISION_ID_COMMENT',
+    'selected_revision_filename' => 'LBL_SELECTED_REVISION_FILENAME_COMMENT',
+    'filecontents' => 'LBL_FILE_CONTENTS_COMMENT',
+    'show_preview' => 'LBL_SHOW_PREVIEW_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Document']['fields'][$field])) {
+        $dictionary['Document']['fields'][$field]['comment'] = $commentLabel;
+    }
+}

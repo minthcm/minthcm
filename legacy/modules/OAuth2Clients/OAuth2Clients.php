@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 /**
  * Class OAuth2Clients
  */
+#[\AllowDynamicProperties]
 class OAuth2Clients extends SugarBean
 {
     /**
@@ -103,12 +104,12 @@ class OAuth2Clients extends SugarBean
     public function save($check_notify = false)
     {
         if (!empty($_REQUEST['new_secret'])) {
-            $this->secret = hash('sha256', $_REQUEST['new_secret']);
+            $this->secret = hash('sha256', (string) $_REQUEST['new_secret']);
         }
         if (empty($this->duration_value)) { // MintHCM #159328
             $this->setDurationValue();
         }
-        return parent::save();
+        return parent::save($check_notify);
     }
 
     private function setDurationValue()

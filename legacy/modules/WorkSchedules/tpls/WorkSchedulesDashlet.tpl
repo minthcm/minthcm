@@ -49,6 +49,7 @@
 {* MintHCM #94842 END *}
 <script type="text/javascript" src="modules/WorkSchedules/tpls/Button.js"></script>
 <script type="text/javascript" src="modules/WorkSchedules/tpls/AcceptWorkPlanButton.js"></script>
+<script type="text/javascript" src="modules/WorkSchedules/tpls/RejectWorkPlanButton.js"></script>
 
 {assign var="alt_start" value=$navStrings.start}
 {assign var="alt_next" value=$navStrings.next}
@@ -216,6 +217,7 @@
 				{/if}                
                 {if isset($show_accept_button[$id]) && $show_accept_button[$id] == true}
                     <a class="list-view-data-icon" href="javascript:void(0)" onclick="acceptWorkPlanForDashlet('{$data[$id].ID}', '{$dashletId}', '{$pageData.urls.currentPage}');" title="{sugar_translate label="LBL_ACCEPT_INLINE"}"> <span class="suitepicon suitepicon-action-confirm"></span></a>
+                    <a class="list-view-data-icon" href="javascript:void(0)" onclick="rejectWorkPlanForDashlet('{$data[$id].ID}', '{$dashletId}', '{$pageData.urls.currentPage}');" title="{sugar_translate label="LBL_REJECT_INLINE"}"> <span class="suitepicon suitepicon-action-clear"></span></a>
                 {/if}
 			</td>
 			{/if}

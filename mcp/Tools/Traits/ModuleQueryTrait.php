@@ -2,13 +2,14 @@
 
 namespace MintMCP\Tools\Traits;
 
+use MintMCP\Tools\Utils\ToolValidation;
+use MintMCP\Tools\Utils\DateTimeConversion;
+
+/**
+ * Trait providing utilities for querying module metadata and building SQL WHERE clauses.
+ */
 trait ModuleQueryTrait
 {
-
-    const NOT_ALLOWED_RELATE_TYPES = [
-        'link',
-        'relate',
-    ];
 
     /**
      * Loads the bean, table name, and field definitions for a given module.
@@ -16,7 +17,7 @@ trait ModuleQueryTrait
      * @param string $moduleName
      * @return array [$bean, $tableName, $fieldDefs]
      */
-    protected function loadBeanAndDefs(string $moduleName)
+    private function loadBeanAndDefs(string $moduleName)
     {
         chdir('../legacy');
         $bean = \BeanFactory::getBean($moduleName);
@@ -27,35 +28,51 @@ trait ModuleQueryTrait
         if (empty($bean) || empty($tableName) || empty($fieldDefs)) {
             throw new \Exception("Module '{$moduleName}' not found or not accessible.");
         }
-        
+
         return [$bean, $tableName, $fieldDefs];
     }
 
-    protected function buildWhereClause(string $filtersJson, array $fieldDefs, string $tableName, string $operator): string {
-        $availableFields = array_keys($fieldDefs);
+    public function isDateField(string $fieldType): bool
+    {
+        return in_array($fieldType, ['date', 'datetime', 'datetimecombo']);
+    }
+
+    private function buildWhereClause(string $filtersJson, array $fieldDefs, string $tableName, string $operator): string
+    {
         $where = [];
+        $validators = [];
+        $validators[] = ToolValidation::make($operator, 'operator')->required()->enum(['and', 'or']);
 
         if ($filtersJson) {
-            $filtersArr = json_decode($filtersJson, true);
+            $queryFilters = json_decode($filtersJson, true) ?? [];
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \InvalidArgumentException("Invalid JSON in filters: " . json_last_error_msg());
             }
-            $queryFilters = $filtersArr['filters'] ?? [];
+
             foreach ($queryFilters as $field => $filter) {
-                if (!in_array($field, $availableFields)) {
-                    throw new \InvalidArgumentException(
-                        "Field {$field} is not available in the module. " .
-                            "Use get_module_fields to get list of fields available in the module."
-                    );
-                }
                 $op = strtoupper($filter['operator'] ?? '=');
                 $value = $filter['value'] ?? '';
 
-                $this->validateFieldValue($field, $value, $fieldDefs);
+                $type = $fieldDefs[$field]['type'] ?? '';
 
-                $where[] = $this->buildWhereCondition($tableName, $field, $op, $value);
+                $validators[] = ToolValidation::make(null, $field)->filterField($fieldDefs);
+
+                $values = $this->extractValues($value, $op);
+
+                foreach ($values as &$value) {
+                    $validator = ToolValidation::make($value, $field)->fieldType($type);
+                    $validators[] = $validator;
+                    if ($this->isDateField($type) && $validator->isValid()) {
+                        $value = DateTimeConversion::fromUserTZ($value);
+                    }
+                }
+
+                $where[] = $this->buildWhereCondition($tableName, $field, $op, $values);
             }
         }
+
+        ToolValidation::validateMany($validators);
 
         // Always exclude deleted records
         $where[] = "$tableName.deleted = 0";
@@ -74,24 +91,47 @@ trait ModuleQueryTrait
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function buildWhereCondition(string $tableName, string $field, string $op, $value): string
+    private function buildWhereCondition(string $tableName, string $field, string $op, array $values): string
     {
         // Handle IN and NOT IN operators
         if (in_array($op, ['IN', 'NOT IN'])) {
-            $valuesArr = is_array($value) ? array_map('trim', $value) : array_map('trim', explode(',', $value));
-            $valueStr = "'" . implode("','", $valuesArr) . "'";
-            return "$tableName.$field $op ($valueStr)";
+            return "$tableName.$field $op (" . implode(',', array_map(fn($v) => "'$v'", $values)) . ")";
         }
+
         // Handle BETWEEN operator
         if ($op === 'BETWEEN') {
-            $vals = is_array($value) ? array_map('trim', $value) : array_map('trim', explode(',', $value));
-            if (count($vals) !== 2) {
+            if (count($values) !== 2) {
                 throw new \InvalidArgumentException("BETWEEN operator requires two values.");
             }
-            return "$tableName.$field BETWEEN '{$vals[0]}' AND '{$vals[1]}'";
+            return "$tableName.$field BETWEEN '{$values[0]}' AND '{$values[1]}'";
+        }
+
+        // Handle LIKE operator
+        if ($op === 'LIKE') {
+            return "$tableName.$field LIKE '%{$values[0]}%'";
         }
 
         // Default: simple comparison
-        return "$tableName.$field $op '{$value}'";
+        return "$tableName.$field $op '{$values[0]}'";
+    }
+
+    /**
+     * Validates and extracts values from the filter input.
+     *
+     * @param array|string $value
+     * @param string $op
+     * @return array
+     */
+    private function extractValues(array|string $value, string $op): array
+    {
+        $values = [];
+        if (in_array($op, ['IN', 'NOT IN', 'BETWEEN'])) {
+            $values = array_map('trim', explode(',', $value));
+        } elseif (is_array($value)) {
+            $values = $value;
+        } else {
+            $values[] = $value;
+        }
+        return $values;
     }
 }

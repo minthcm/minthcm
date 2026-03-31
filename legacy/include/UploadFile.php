@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,6 +56,7 @@ use SuiteCRM\Utility\AntiMalware\AntiMalwareTrait;
  * @api
  * Manage uploaded files
  */
+#[\AllowDynamicProperties]
 class UploadFile
 {
     use AntiMalwareTrait;
@@ -69,6 +70,7 @@ class UploadFile
     public $file;
     public $file_ext;
     public $mime_type;
+    protected $is_http_upload = true; // MintHCM
     protected static $url = "upload/";
 
     /**
@@ -109,6 +111,17 @@ class UploadFile
         $this->use_soap = true;
         $this->file = $file;
     }
+
+    // MintHCM Start
+    /**
+     * Set if the upload is from HTTP request
+     * @param bool $is_http_upload
+     */
+    public function set_is_http_upload($is_http_upload)
+    {
+        $this->is_http_upload = $is_http_upload;
+    }
+    // MintHCM End
 
     /**
      * Get URL for a document
@@ -291,7 +304,9 @@ class UploadFile
             return false;
         }
 
-        if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name'])) {
+        // MintHCM Start
+        if ($this->is_http_upload && !is_uploaded_file($_FILES[$this->field_name]['tmp_name'])) {
+        // MintHCM End
             return false;
         } elseif ($_FILES[$this->field_name]['size'] > $sugar_config['upload_maxsize']) {
             $GLOBALS['log']->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
@@ -318,6 +333,11 @@ class UploadFile
         $this->stored_file_name = $this->create_stored_filename();
         $this->temp_file_location = $_FILES[$this->field_name]['tmp_name'];
         $this->uploaded_file_name = $_FILES[$this->field_name]['name'];
+
+        if (has_valid_image_mime_type($this->mime_type) && !verify_uploaded_image($this->temp_file_location)) {
+            LoggerManager::getLogger()->security("Image Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
+            return false;
+        }
 
         return true;
     }
@@ -347,9 +367,9 @@ class UploadFile
     {
         $filename = $_FILES_element['name'];
         $filetype = isset($_FILES_element['type']) ? $_FILES_element['type'] : null;
-        $file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $file_ext = pathinfo((string) $filename, PATHINFO_EXTENSION);
 
-        $is_image = strpos($filetype, 'image/') === 0;
+        $is_image = strpos((string) $filetype, 'image/') === 0;
         // if it's an image, or no file extension is available and the mime is octet-stream
         // try to determine the mime type
         $recheckMime = $is_image || (empty($file_ext) && $filetype == 'application/octet-stream');
@@ -433,20 +453,20 @@ class UploadFile
             if (is_windows()) {
                 // create a non UTF-8 name encoding
                 // 176 + 36 char guid = windows' maximum filename length
-                $end = (strlen($stored_file_name) > 176) ? 176 : strlen($stored_file_name);
-                $stored_file_name = substr($stored_file_name, 0, $end);
+                $end = (strlen((string) $stored_file_name) > 176) ? 176 : strlen((string) $stored_file_name);
+                $stored_file_name = substr((string) $stored_file_name, 0, $end);
                 $this->original_file_name = $_FILES[$this->field_name]['name'];
             }
-            $stored_file_name = str_replace("\\", "", $stored_file_name);
+            $stored_file_name = str_replace("\\", "", (string) $stored_file_name);
         } else {
             $stored_file_name = $this->stored_file_name;
             $this->original_file_name = $stored_file_name;
         }
 
-        $this->file_ext = pathinfo($stored_file_name, PATHINFO_EXTENSION);
+        $this->file_ext = pathinfo((string) $stored_file_name, PATHINFO_EXTENSION);
         // cn: bug 6347 - fix file extension detection
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($this->file_ext) == strtolower($badExt)) {
+            if (strtolower($this->file_ext) === strtolower($badExt)) {
                 $stored_file_name .= ".txt";
                 $this->file_ext = "txt";
                 break; // no need to look for more
@@ -475,14 +495,23 @@ class UploadFile
                 $log->fatal('Unable to save file to ' . $destination);
                 return false;
             }
-        } elseif (!UploadStream::move_uploaded_file($_FILES[$this->field_name]['tmp_name'], $destination)) {
+        // MintHCM Start
+        } elseif ($this->is_http_upload && !UploadStream::move_uploaded_file($_FILES[$this->field_name]['tmp_name'], $destination)) {
             $log->fatal(
                 'Unable to move move_uploaded_file to ' . $destination .
                 ' You should try making the directory writable by the webserver'
             );
 
             return false;
+        } elseif (!$this->is_http_upload && !rename($_FILES[$this->field_name]['tmp_name'], UploadStream::path($destination))) {
+            $log->fatal(
+                'Unable to rename file to ' . $destination .
+                ' You should try making the directory writable by the webserver'
+            );
+
+            return false;
         }
+        // MintHCM End
 
         return true;
     }
@@ -497,6 +526,7 @@ class UploadFile
      */
     public function upload_doc($bean, $bean_id, $doc_type, $file_name, $mime_type)
     {
+        $result = [];
         if (!empty($doc_type) && $doc_type != 'Sugar') {
             global $sugar_config;
             $destination = $this->get_upload_path($bean_id);
@@ -551,8 +581,8 @@ class UploadFile
         $file_name = $bean_id;
 
         // cn: bug 8056 - mbcs filename in urlencoding > 212 chars in Windows fails
-        $end = (strlen($file_name) > 212) ? 212 : strlen($file_name);
-        $ret_file_name = substr($file_name, 0, $end);
+        $end = (strlen((string) $file_name) > 212) ? 212 : strlen((string) $file_name);
+        $ret_file_name = substr((string) $file_name, 0, $end);
 
         return "upload://$ret_file_name";
     }

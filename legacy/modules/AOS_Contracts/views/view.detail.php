@@ -4,12 +4,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 
+#[\AllowDynamicProperties]
 class AOS_ContractsViewDetail extends ViewDetail
 {
     public function __construct()
     {
         parent::__construct();
     }
+
+
+
 
     public function display()
     {

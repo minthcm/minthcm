@@ -1,8 +1,10 @@
 <?php
 
+#[\AllowDynamicProperties]
 class KanbanViewController
 {
     protected $bean;
+    protected $defs;
 
     public function __construct($bean)
     {
@@ -41,7 +43,8 @@ class KanbanViewController
         if (!empty($assigned_user_ids)) {
             $assigned_users = $this->getUsersNames($assigned_user_ids);
             foreach ($items as &$item) {
-                for ($i = 0; $i < count($item); $i++) {
+                $item_count = is_countable($item) ? count($item) : 0;
+                for ($i = 0; $i < $item_count; $i++) {
                     if (!empty($item[$i]['assigned_user_id'])) {
                         $item[$i]['assigned_user_name'] = $assigned_users[$item[$i]['assigned_user_id']] ?? '';
                     }

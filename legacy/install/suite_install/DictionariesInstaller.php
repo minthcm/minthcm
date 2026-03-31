@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class DictionariesInstaller
 {
     public function run()

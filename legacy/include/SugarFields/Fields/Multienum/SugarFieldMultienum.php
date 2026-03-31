@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,10 @@ class SugarFieldMultienum extends SugarFieldEnum {
    function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass = true) {
       if ( !isset($vardef['options_list']) && isset($vardef['options']) && !is_array($vardef['options']) ) {
          $vardef['options_list'] = $GLOBALS['app_list_strings'][$vardef['options']];
+      }
+      
+      if ($_REQUEST['module'] === 'AOW_WorkFlow') {
+         $displayParams['isWorkFlowCall'] = true;
       }
       return parent::setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass);
    }

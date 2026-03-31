@@ -1,8 +1,8 @@
 <?php
 
-use Doctrine\ORM\EntityRepository;
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-class ProblemsRepository extends EntityRepository
+class ProblemsRepository extends MintEntityRepository
 {
 
 }

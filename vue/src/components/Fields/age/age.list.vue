@@ -1,31 +1,28 @@
 <template>
-    <span>{{ parsedDate }}</span>
+    <span :name="props.defs.name">
+        {{ parsedDate }}
+        <span v-if="props.modelValue"> - ({{ age }} {{ languages.label('LBL_YEARS')?.toLowerCase() }})</span>
+    </span>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-import { FieldVardef } from '@/store/modules'
-import { DateTime } from 'luxon'
-import { usePreferencesStore } from '@/store/preferences'
+import { computed } from 'vue'
+import { FieldProps } from '../Field.model'
+import { useLanguagesStore } from '@/store/languages';
+import { MintDate } from '@/composables/useMintDate';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
-
-const props = defineProps<Props>()
-const preferences = usePreferencesStore()
+const props = defineProps<FieldProps<MintDate>>()
+const languages = useLanguagesStore()
 
 const parsedDate = computed(() => {
-    const dateString = props.data.bean[props.defs.name].trim()
-    if (!dateString) {
+    return props.field.model.isValid ? props.field.formatted.user : ''
+})
+const age = computed(() => {
+    if (!props.field.model.isValid) {
         return ''
     }
-    let dateTime = DateTime.fromFormat(dateString, preferences.user?.date_format || 'dd.MM.yyyy')
-    if (!dateTime.isValid) {
-        dateTime = DateTime.fromSQL(dateString)
-    }
-    return dateTime.isValid ? dateTime.toFormat(preferences.user?.date_format || 'dd.MM.yyyy') : dateString
+    const age = props.field.model.instance.diffNow('years').years
+    return Math.floor(-age)
 })
 </script>
 

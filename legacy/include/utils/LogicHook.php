@@ -12,7 +12,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -70,6 +70,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  *
  * @api
  */
+#[\AllowDynamicProperties]
 class LogicHook {
 
    var $bean = null;
@@ -116,7 +117,7 @@ class LogicHook {
                   foreach ( $hook_array as $type => $hookg ) {
                      foreach ( $hookg as $index => $hook ) {
                         $this->hookscan[$type][] = $hook;
-                        $idx = count($this->hookscan[$type]) - 1;
+                        $idx = (is_countable($this->hookscan[$type]) ? count($this->hookscan[$type]) : 0)-1;
                         $this->hook_map[$type][$idx] = array("file" => $extpath . '/' . $entry, "index" => $index);
                      }
                   }

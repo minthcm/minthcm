@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,18 +50,22 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+#[\AllowDynamicProperties]
 class SugarWidgetFieldName extends SugarWidgetFieldVarchar
 {
     protected static $moduleSavePermissions = array();
+    protected $sugarWidgetFieldId;
 
     public function __construct(&$layout_manager)
     {
         parent::__construct($layout_manager);
         $this->reporter = $this->layout_manager->getAttribute('reporter');
+        $this->sugarWidgetFieldId = new SugarWidgetFieldId($layout_manager);
     }
 
     public function displayList(&$layout_def)
     {
+        $field_def = [];
         if (empty($layout_def['column_key'])) {
             return $this->displayListPlain($layout_def);
         }
@@ -95,7 +99,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $value = $this->displayListPlain($layout_def);
             $str .= $value;
             $field_name = $layout_def['name'];
-            $field_type = $field_def['type'];
+            $field_type = $field_def['type'] ?? '';
             $str .= "</a>";
             if ($field_name == 'name') {
                 $str .= "&nbsp;" .SugarThemeRegistry::current()->getImage("edit_inline", "border='0' alt='Edit Layout' align='bottom' onClick='SUGAR.reportsInlineEdit.inlineEdit(\"$div_id\",\"$value\",\"$module\",\"$record\",\"$field_name\",\"$field_type\");'");
@@ -144,7 +148,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             return $this->_get_normal_column_select($layout_def);
         }
         $localeNameFormat = $locale->getLocaleFormatMacro($current_user);
-        $localeNameFormat = trim(preg_replace('/s/i', '', $localeNameFormat));
+        $localeNameFormat = trim(preg_replace('/s/i', '', (string) $localeNameFormat));
 
         if (empty($field_def['fields']) || empty($field_def['fields'][0]) || empty($field_def['fields'][1])) {
             return parent::_get_column_select($layout_def);
@@ -188,8 +192,8 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $input_name0 = $current_user->id;
         }
 
-        return parent::_get_column_select($layout_def)."="
-			.$this->reporter->db->quoted($input_name0)."\n";
+        return $this->sugarWidgetFieldId->_get_column_select($layout_def)."="
+            .$this->reporter->db->quoted($input_name0)."\n";
     }
 
     public function queryFilteris_not($layout_def)
@@ -206,8 +210,8 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $input_name0 = $current_user->id;
         }
 
-        return parent::_get_column_select($layout_def) . "<>"
-            . $this->reporter->db->quoted($input_name0) . "\n";
+        return $this->sugarWidgetFieldId->_get_column_select($layout_def)."<>"
+            .$this->reporter->db->quoted($input_name0)."\n";
     }
 
     // $rename_columns, if true then you're coming from reports
@@ -230,8 +234,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
 
         $str = implode(",", $arr);
 
-        $sugarWidgetFieldId = new SugarWidgetFieldId($this->layout_manager);
-        return $sugarWidgetFieldId->_get_column_select($layout_def)." IN (".$str.")\n";
+        return $this->sugarWidgetFieldId->_get_column_select($layout_def)." IN (".$str.")\n";
     }
     // $rename_columns, if true then you're coming from reports
     public function queryFilternot_one_of($layout_def, $rename_columns = true)
@@ -253,7 +256,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
 
         $str = implode(",", $arr);
 
-        return parent::_get_column_select($layout_def)." NOT IN (".$str.")\n";
+        return $this->sugarWidgetFieldId->_get_column_select($layout_def)." NOT IN (".$str.")\n";
     }
 
     public function &queryGroupBy($layout_def)
@@ -262,7 +265,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             $layout_def['name'] = 'id';
             $layout_def['type'] = 'id';
 
-            $group_by =  parent::_get_column_select($layout_def)."\n";
+            $group_by =  $this->sugarWidgetFieldId->_get_column_select($layout_def)."\n";
         } else {
             // group by clause for user name passes through here.
             $group_by = $this->_get_column_select($layout_def)."\n";

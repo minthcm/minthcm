@@ -6,6 +6,7 @@ use MintHCM\MintCLI\InputValidators\NoWhitespaceValidator;
 use Symfony\Component\Console\Question\Question as BasicQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[\AllowDynamicProperties]
 class Question
 {
     protected $io;

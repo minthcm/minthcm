@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -442,7 +442,7 @@ $dictionary['Delegations'] = array(
       'other' => array(
          'required' => false,
          'name' => 'other',
-         'vname' => 'LBL_OTHER',
+         'vname' => 'LBL_OTHER_EXPENSES',
          'type' => 'currency',
          'massupdate' => 0,
          'comments' => '',
@@ -459,7 +459,7 @@ $dictionary['Delegations'] = array(
       'other_usdollar' => array(
          'required' => false,
          'name' => 'other_usdollar',
-         'vname' => 'LBL_OTHER_USDOLLAR',
+         'vname' => 'LBL_OTHER_EXPENSES_USDOLLAR',
          'type' => 'currency',
          'massupdate' => 0,
          'comments' => '',
@@ -477,7 +477,7 @@ $dictionary['Delegations'] = array(
          'required' => false,
          'source' => 'non-db',
          'name' => 'other_eur',
-         'vname' => 'LBL_OTHER',
+         'vname' => 'LBL_OTHER_EXPENSES',
          'type' => 'currency',
          'massupdate' => 0,
          'comments' => '',
@@ -863,7 +863,7 @@ $dictionary['Delegations'] = array(
          'required' => false,
          'source' => 'non-db',
          'name' => 'other_usd',
-         'vname' => 'LBL_OTHER',
+         'vname' => 'LBL_OTHER_EXPENSES',
          'type' => 'currency',
          'massupdate' => 0,
          'comments' => '',
@@ -1149,6 +1149,7 @@ $dictionary['Delegations'] = array(
          'module' => 'DelegationsLocale',
          'rname' => 'name',
          'audited' => true,
+         'required' => true,
       ),
       "delegation_locale_id" => array(
          'name' => 'delegation_locale_id',

@@ -1,10 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { useAuthStore, User } from '@/store/auth'
 import { MintReaction } from '@/components/MintReactions/MintReactions'
 import { useLanguagesStore, Languages } from '@/store/languages'
+import { mintApi } from '@/api/api'
 
 interface InitialResponse {
     user: User
@@ -21,7 +21,7 @@ interface MintCommentsAccess {
 
 interface MintCommentUser {
     id: string
-    name: string
+    full_name: string
     photo: string | null
     user_name: string
     status: string
@@ -62,8 +62,8 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
     })
 
     async function fetchInitialData() {
-        const response = await axios.get<InitialResponse>(
-            `api/comments/${route.params.module}/${route.params.record}/init`,
+        const response = await mintApi.get<InitialResponse>(
+            `comments/${route.params.module}/${route.params.record}/init`,
         )
         auth.user = response.data.user
         languages.languages = {
@@ -78,13 +78,13 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
     }
 
     async function fetchComments() {
-        const response = await axios.get(`api/comments/${route.params.module}/${route.params.record}`)
+        const response = await mintApi.get(`comments/${route.params.module}/${route.params.record}`)
         comments.value = response.data ?? []
     }
 
     async function addComment(description: string, replyTo?: string) {
         isLoading.value = true
-        await axios.post(`api/comments/${route.params.module}/${route.params.record}`, {
+        await mintApi.post(`comments/${route.params.module}/${route.params.record}`, {
             description,
             reply_to_id: replyTo,
         })
@@ -93,7 +93,7 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
 
     async function updateComment(id: string, attributes: { [field: string]: unknown }) {
         isLoading.value = true
-        await axios.patch(`api/comments/${route.params.module}/${route.params.record}/${id}`, {
+        await mintApi.patch(`comments/${route.params.module}/${route.params.record}/${id}`, {
             attributes,
         })
         isLoading.value = false
@@ -157,11 +157,11 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
                 type: reactionType,
                 user: {
                     id: auth.user.id,
-                    name: auth.user.full_name,
+                    full_name: auth.user.full_name,
                 },
             })
         }
-        await axios.post(`api/reactions/Comments/${id}`, {
+        await mintApi.post(`reactions/Comments/${id}`, {
             reaction_type: reactionType,
         })
     }
@@ -172,7 +172,7 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
             return
         }
         comment.reactions = comment.reactions.filter((reaction) => reaction.user.id !== auth.user?.id)
-        await axios.delete(`api/reactions/Comments/${id}`)
+        await mintApi.delete(`reactions/Comments/${id}`)
     }
 
     return {

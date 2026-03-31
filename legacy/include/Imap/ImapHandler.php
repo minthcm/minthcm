@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ require_once __DIR__ . '/ImapHandlerInterface.php';
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class ImapHandler implements ImapHandlerInterface
 {
 
@@ -155,7 +156,7 @@ class ImapHandler implements ImapHandlerInterface
     protected function logCall($func, $args)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper called: ' . __CLASS__ . "::$func(" . json_encode($args) . ')');
+            $this->logger->debug('IMAP wrapper called: ' . self::class . "::$func(" .  json_encode($args) . ')');
         }
     }
 
@@ -167,7 +168,7 @@ class ImapHandler implements ImapHandlerInterface
     protected function logReturn($func, $ret)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper return: ' . __CLASS__ . "::$func(...) => " . json_encode($ret));
+            $this->logger->debug('IMAP wrapper return: ' . self::class . "::$func(...) => " . json_encode($ret));
         }
     }
 
@@ -917,7 +918,8 @@ class ImapHandler implements ImapHandlerInterface
         int $offset,
         int $pageSize,
         array &$mailboxInfo,
-        array $columns
+        array $columns,
+        $auth_type
     ): array {
 
         if (empty($filterCriteria) && $sortCriteria === SORTDATE) {

@@ -60,7 +60,14 @@ $routes = array(
             "auth" => true,
         ),
         "pathParams" => array(),
-        "queryParams" => array(),
+        "queryParams" => array(
+            "listType" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "",
+                "example" => 'all',
+            ),
+        ),
         "bodyParams" => array(),
     ),
     "get_kudos" => array(

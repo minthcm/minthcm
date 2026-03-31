@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -41,6 +41,8 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+use SuiteCRM\Search\ElasticSearch\ElasticSearchHooks;
+
 class Favorites extends Basic
 {
     public $new_schema = true;
@@ -104,6 +106,31 @@ class Favorites extends Basic
                 $currentUserIdQuote . "' AND deleted = 0 ORDER BY date_entered DESC";
 
         return $db->getOne($query);
+    }
+
+    public function getFavoriteUsersIDs(SugarBean $bean): array
+    {
+        $db = DBManagerFactory::getInstance();
+
+        $recordIdQuote = $db->quote($bean->id);
+        $moduleQuote = $db->quote($bean->module_dir);
+
+        $query = "SELECT assigned_user_id FROM favorites WHERE parent_id= '" . $recordIdQuote .
+                "' AND parent_type = '" . $moduleQuote . "' AND deleted = 0";
+
+        $result = $db->query($query);
+        if (!$result) {
+            return [];
+        }
+        
+        $userIds = [];
+        while ($row = $db->fetchByAssoc($result)) {
+            if (!empty($row['assigned_user_id'])) {
+                $userIds[]['id'] = $row['assigned_user_id'];
+            }
+        }
+
+        return $userIds;
     }
 
     /**
@@ -216,7 +243,9 @@ class Favorites extends Basic
         if(empty($this->assigned_user_id)) {
             $this->assigned_user_id = $current_user->id;
         }
-        parent::save($notify);
+        $result = parent::save($notify);
+        $this->runElasticSearchHooks();
+        return $result;
     }
     /**
      * @param string $interface
@@ -230,5 +259,27 @@ class Favorites extends Basic
             default :
                 return false;
         }
+    }
+
+    protected function runElasticSearchHooks()
+    {
+        $related_bean = BeanFactory::getBean($this->parent_type, $this->parent_id);
+        if (empty($related_bean->id)) {
+            return;
+}
+
+        (new ElasticSearchHooks())->relationshipChange($related_bean, 'after_save', array(
+            'related_module' => $this->module_name,
+            'related_id' => $this->id,
+        ));
+    }
+
+    public function addFavorite($module, $id)
+    {
+        $this->name = $module . ' ' . $id . ' ' . $GLOBALS['current_user']->id;
+        $this->parent_type = $module;
+        $this->parent_id = $id;
+        $this->assigned_user_id = $GLOBALS['current_user']->id;
+        $this->save();
     }
 }

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,7 +52,6 @@
     }
 div.resultsTable {
     overflow: auto;
-    width: 1056px;
     padding-top: 20px;
     position: relative;
 }
@@ -101,7 +100,7 @@ div.resultsTable {
 </form>
 
 <br/>
-    
+
 <table width="100%" id="tabListContainerTable" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td nowrap id="tabListContainerTD">

@@ -125,6 +125,16 @@ div#searchResults {
   background: transparent;
   padding-left: 4px;
   border-left: 1px solid #dddddd;
+  
+  @media (max-width: 1279px) {
+    a {
+      font-size: 0;
+      
+      img {
+        font-size: initial;
+      }
+    }
+  }
 }
 
 #scheduler .schedulerInvitees .tabForm {
@@ -201,6 +211,69 @@ div#searchResults {
   text-align: left;
   width: 100%;
   border-collapse: collapse;
+  overflow: visible;
+  min-height: auto;
+  height: auto;
+
+  @media (max-width: 768px) {
+    height: auto !important;
+    min-height: fit-content;
+    padding: 15px;
+  }
+
+  table {
+    table-layout: auto;
+    height: auto;
+    
+    @media (max-width: 768px) {
+      display: block;
+      height: auto !important;
+    }
+    
+    tbody {
+      @media (max-width: 768px) {
+        display: block;
+        height: auto;
+      }
+    }
+    
+    td {
+      white-space: normal;
+      vertical-align: middle;
+      
+      @media (max-width: 768px) {
+        display: block;
+        width: 100% !important;
+        padding: 5px 0;
+        height: auto;
+        
+        label {
+          display: inline-block;
+          margin-right: 5px;
+        }
+        
+        input[type="text"] {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          margin-bottom: 8px;
+        }
+
+        input[type="submit"] {
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
+    
+    tr {
+      @media (max-width: 768px) {
+        display: block;
+        margin-bottom: 10px;
+        height: auto;
+      }
+    }
+  }
 }
 
 #create_invitee_as_lead {
@@ -3762,7 +3835,7 @@ select#sales_stage_advanced {
   }
 
   .col-sm-12 .col-sm-8.edit-view-field textarea {
-      width: 120%;
+    width: 120%;
   }
 
   [field=bool].col-sm-8.edit-view-field {
@@ -3865,7 +3938,7 @@ select#sales_stage_advanced {
   }
 
   .col-sm-12 .col-sm-8.edit-view-field textarea {
-      width: 120%;
+    width: 120%;
   }
 
   [field=bool].col-sm-8.edit-view-field {
@@ -4405,24 +4478,24 @@ tr:hover img.info {
 }
 
 #EditView div.action_buttons .button {
-    background-color: #fff;
+  background-color: #fff;
 }
 
-  #EditView div.action_buttons .button.primary {
-      background-color: #145D7B;
-  }
+#EditView div.action_buttons .button.primary {
+    background-color: #145D7B;
+}
   
-  #EditView div.action_buttons .button.primary:hover {
-      background-color: rgb(13, 60, 79);
-  }
-  
+#EditView div.action_buttons .button.primary:hover {
+    background-color: rgb(13, 60, 79);
+}
+
 #save_and_continue.button {
   background-color: $danger-btn-bg;
 }
 
 #EditView div.action_buttons .button:hover,
 #save_and_continue.button:hover {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .paginationWrapper {

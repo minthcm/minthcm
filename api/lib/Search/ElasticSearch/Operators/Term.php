@@ -69,6 +69,6 @@ class Term extends ElasticOperator
 
     protected function validateData(): bool
     {
-        return !empty($this->value);
+        return $this->value === '' || $this->value === null ? false : true;
     }
 }

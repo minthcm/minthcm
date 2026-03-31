@@ -10,7 +10,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 require_once('include/MVC/View/SugarView.php');
 require_once('modules/Import/Importer.php');
 
+#[\AllowDynamicProperties]
 class ImportViewStep4 extends SugarView
 {
     private $currentStep;
@@ -72,13 +73,13 @@ class ImportViewStep4 extends SugarView
         global $mod_strings, $sugar_config;
 
         // Check to be sure we are getting an import file that is in the right place
-        $uploadFile = "upload://".basename($_REQUEST['tmp_file']);
+        $uploadFile = "upload://".basename((string) $_REQUEST['tmp_file']);
         if(!file_exists($uploadFile)) {
             trigger_error($mod_strings['LBL_CANNOT_OPEN'],E_USER_ERROR);
         }
 
         // Open the import file
-        $importSource = new ImportFile($uploadFile, $_REQUEST['custom_delimiter'],html_entity_decode($_REQUEST['custom_enclosure'],ENT_QUOTES));
+        $importSource = new ImportFile($uploadFile, $_REQUEST['custom_delimiter'], html_entity_decode((string) $_REQUEST['custom_enclosure'], ENT_QUOTES));
 
         //Ensure we have a valid file.
         if ( !$importSource->fileExists() )

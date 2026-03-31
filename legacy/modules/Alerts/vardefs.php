@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -149,6 +149,15 @@ $dictionary['Alert'] = array(
          'studio' => array(
             'searchview' => false
          ),
+      ),
+      'kudos' => array(
+         'name' => 'kudos',
+         'type' => 'link',
+         'relationship' => 'kudos_alerts',
+         'module' => 'Kudos',
+         'bean_name' => 'Kudo',
+         'source' => 'non-db',
+         'vname' => 'LBL_KUDOS',
       ),
    ),
    'relationships' => array(),

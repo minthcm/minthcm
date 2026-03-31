@@ -91,10 +91,11 @@ class ElasticSearchIndexer extends AbstractIndexer
      * ElasticSearchIndexer constructor.
      *
      * @param Client|null $client
+     * @param int $level the minimum logging level to log to the console (Logger::DEBUG, Logger::INFO, etc.)
      */
-    public function __construct(Client $client = null)
+    public function __construct(Client $client = null, $level = Logger::ERROR) // Logger::ERROR dla cronicle
     {
-        parent::__construct();
+        parent::__construct($level);
         $this->client = !empty($client) ? $client : ElasticSearchClientBuilder::getClient();
     }
 
@@ -225,11 +226,13 @@ class ElasticSearchIndexer extends AbstractIndexer
         $GLOBALS['disable_date_format'] = true;
 
         $batchOffset = 0;
-        $maxBatchSize = $sugar_config['search']['ElasticSearch']['max_batch_size'] ?? 50000;
+        $maxBatchSize = $sugar_config['search']['ElasticSearch']['max_batch_size'] ?? intval(\BeanFactory::getMaxLoaded() / 2);
         $totalRecordsCount = 0;
         $oldIndexedRecordsCount = $this->indexedRecordsCount;
         $this->nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($seed->object_name);
         try {
+            $records_in_module_count = $this->getRecordsInModuleCount($seed, $tableName, $where, $showDeleted);
+            $memory_limit_bytes = \MintHCM\Utils\EnvironmentUtils::getMemoryLimitInBytes();
             do {
                 $batch = $seed->get_list("$tableName.date_entered", $where, $batchOffset, $maxBatchSize, $maxBatchSize, $showDeleted);
                 if (empty($batch['list'])) {
@@ -237,6 +240,9 @@ class ElasticSearchIndexer extends AbstractIndexer
                 }
                 $totalRecordsCount += count($batch['list']);
                 $this->indexBatch($module, $batch['list']);
+                $memory_free = ($memory_limit_bytes - memory_get_usage(true)) / 1024 / 1024;
+                $percentage = $records_in_module_count > 0 ? round($totalRecordsCount / $records_in_module_count * 100, 1) : 100;
+                $this->logger->info("Indexed {$totalRecordsCount}/{$records_in_module_count} - {$percentage}% records for module $module (free memory: $memory_free MB)");
                 $batchOffset += $maxBatchSize;
             } while (true);
         } catch (RuntimeException $exception) {
@@ -333,28 +339,16 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     protected function getNestedPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
     {
-        $link_field_name = $nested_config['link'] ?? $property_name;
-        if (!isset($bean->field_defs) || !is_array($bean->field_defs)) {
-            return [];
+        $nested_type = $nested_config['type'] ?? 'link';
+        switch($nested_type) {
+            case 'function':
+                return $this->getFunctionPropertyValues($bean, $property_name, $nested_config);
+                break;
+            case 'link':
+                return $this->getLinkPropertyValues($bean, $property_name, $nested_config);
+                break;
         }
-        if (is_array($link_field_name)) {
-            $link_field_name = $link_field_name[0];
-        }
-        if (!$bean->load_relationship($link_field_name)) {
-            return [];
-        }
-
-        $related_beans = $bean->$link_field_name->getBeans();
-        $nested_fields = $nested_config['fields'];
-        $nested_data = array_map(function ($related_bean) use ($nested_fields) {
-            $row = [];
-            foreach ($nested_fields as $nested_field) {
-                $row[$nested_field] = $related_bean->$nested_field;
-            }
-            return $row;
-        }, $related_beans);
-
-        return array_values($nested_data);
+        return [];
     }
 
     protected function setBeanInstantIndexingDate(SugarBean $bean)
@@ -509,9 +503,9 @@ class ElasticSearchIndexer extends AbstractIndexer
                 $body = $this->makeIndexParamsBodyFromBean($bean);
                 // TODO: optimize with single load from db before foreach
                 $this->fillAllNestedPropertyValues($bean, $body);
-
                 $this->removeErrorProneFields($module, $body);
                 $this->fixUpIndicesParams($body, $this->getDefaultMapParams($module), $module);
+                $this->restructureParams($body, $this->getDefaultMapParams($module));
                 $params['body'][] = ['index' => $head];
                 $params['body'][] = $body;
                 $this->indexedRecordsCount++;
@@ -557,6 +551,45 @@ class ElasticSearchIndexer extends AbstractIndexer
         }
     }
 
+    private function restructureParams(array &$params, array $mappings): void
+    {
+        if (is_array($mappings)) {
+            foreach($mappings as $key => $value) {
+                if ($key === 'properties' && is_array($value)) {
+                    $this->restructureParams($params, $value);
+                } else if (empty($params[$key])) {
+                    foreach ($params as $pkey => $pvalue) {
+                        if (is_array($pvalue) && $pkey != $key) {
+                            $keys = array_keys($pvalue);
+                            $keys_concatenated = [];
+
+                            foreach($keys as $k) {
+                               $name = explode('__', $k)[1];
+                               $keys_concatenated[$k] = $pkey . '_' . $name;
+                            }
+
+                            foreach ($keys_concatenated as $old_key => $new_key) {
+                                if ($key == $new_key) {
+                                    $params[$key] = $params[$pkey][$old_key];
+                                    unset($params[$pkey][$old_key]);
+                                }
+
+                                if (explode('__', $key)[1] == 'email1' && explode('__', $new_key)[1] == 'email_0') {
+                                    $params[$key] = $params[$pkey][$old_key];
+                                    unset($params[$pkey][$old_key]);
+                                }
+
+                                if (empty($params[$pkey])) {
+                                    unset($params[$pkey]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // MintHCM #121632 START
     /**
      * Retrieves the default params to set up an optimised default index for Elasticsearch.
@@ -579,7 +612,7 @@ class ElasticSearchIndexer extends AbstractIndexer
             return $this->mappings[$module] ?? [];
         } else {
             return [];
-        }
+    }
     }
     // MintHCM #121632 END
     /**
@@ -691,4 +724,60 @@ class ElasticSearchIndexer extends AbstractIndexer
     {
         return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
     }
+
+    protected function getFunctionPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
+    {
+        if (!empty($nested_config['function']) && !empty($nested_config['bean'])) {
+            $function = is_array($nested_config['function']) ? $nested_config['function'][0] : $nested_config['function'];
+            $nested_bean = is_array($nested_config['bean']) ? $nested_config['bean'][0] : $nested_config['bean'];
+            $nested_bean = \BeanFactory::getBean($nested_bean);
+            if (empty($nested_bean)) {
+                return [];
+            }
+            if (!method_exists($nested_bean, $function)) {
+                return [];
+            }
+            return $nested_bean->$function($bean);
+        }
+        return [];
+    }
+
+    protected function getLinkPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
+    {
+        $link_field_name = $nested_config['link'] ?? $property_name;
+        if (!isset($bean->field_defs) || !is_array($bean->field_defs)) {
+            return [];
+        }
+        if (is_array($link_field_name)) {
+            $link_field_name = $link_field_name[0];
+        }
+        if (!$bean->load_relationship($link_field_name)) {
+            return [];
+        }
+
+        $related_beans = $bean->$link_field_name->getBeans();
+        $nested_fields = $nested_config['fields'];
+        $nested_data = array_map(function ($related_bean) use ($nested_fields) {
+            $row = [];
+            foreach ($nested_fields as $nested_field) {
+                $row[$nested_field] = $related_bean->$nested_field;
+            }
+            return $row;
+        }, $related_beans);
+
+        return array_values($nested_data);
+    }
+
+    protected function getRecordsInModuleCount(SugarBean $seed, string $tableName, string $where, int $showDeleted): int
+    {
+        $db = \DBManagerFactory::getInstance();
+        $records_in_module = $seed->create_new_list_query(
+            "$tableName.date_entered", $where, array(), array(), $showDeleted, '', false, null, false
+        );
+        $records_in_module = $seed->create_list_count_query($records_in_module);
+        $records_in_module = $db->query($records_in_module, true, "Error running count query for $seed->object_name List: ");
+        $records_in_module = $db->fetchByAssoc($records_in_module);
+        return intval($records_in_module['c'] ?? 0);
+    }
+    
 }

@@ -10,8 +10,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,38 +38,32 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-
-
-
 
 global $timedate;
 global $current_user;
 
 $master = 'save';
 if (isset($_REQUEST['wiz_home_next_step']) && !empty($_REQUEST['wiz_home_next_step'])) {
-    if ($_REQUEST['wiz_home_next_step']==3) {
+    if ($_REQUEST['wiz_home_next_step'] == 3) {
         //user has chosen to save and schedule this campaign for email
         $master = 'send';
-    } elseif ($_REQUEST['wiz_home_next_step']==2) {
+    } elseif ($_REQUEST['wiz_home_next_step'] == 2) {
         //user has chosen to save and send this campaign in test mode
         $master = 'test';
     } else {
         //user has chosen to simply save
-        $master  = 'save';
+        $master = 'save';
     }
 } else {
     //default to just saving and exiting wizard
     $master = 'save';
 }
-
-
-
 
 $prefix = 'wiz_step3_';
 $marketing = BeanFactory::newBean('EmailMarketing');
@@ -91,19 +85,19 @@ if (!empty($_REQUEST['assigned_user_id']) && ($marketing->assigned_user_id != $_
     $check_notify = false;
 }
 
-    foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
-            $_REQUEST[$newkey] = $val;
-        }
+foreach ($_REQUEST as $key => $val) {
+    if ((strstr($key, $prefix)) && (strpos($key, $prefix) == 0)) {
+        $newkey = substr($key, strlen($prefix));
+        $_REQUEST[$newkey] = $val;
     }
+}
 
-    foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
-            $_REQUEST[$newkey] = $val;
-        }
+foreach ($_REQUEST as $key => $val) {
+    if ((strstr($key, $prefix)) && (strpos($key, $prefix) == 0)) {
+        $newkey = substr($key, strlen($prefix));
+        $_REQUEST[$newkey] = $val;
     }
+}
 
 if (!empty($_REQUEST['meridiem'])) {
     $_REQUEST['time_start'] = $timedate->merge_time_meridiem($_REQUEST['time_start'], $timedate->get_time_format(), $_REQUEST['meridiem']);
@@ -117,7 +111,7 @@ if (empty($_REQUEST['time_start'])) {
 
 foreach ($marketing->column_fields as $field) {
     if ($field == 'all_prospect_lists') {
-        if (isset($_REQUEST[$field]) && $_REQUEST[$field]='on') {
+        if (isset($_REQUEST[$field]) && $_REQUEST[$field] = 'on') {
             $marketing->$field = 1;
         } else {
             $marketing->$field = 0;
@@ -142,8 +136,8 @@ $marketing->save($check_notify);
 
 //add prospect lists to campaign.
 $marketing->load_relationship('prospectlists');
-$prospectlists=$marketing->prospectlists->get();
-if ($marketing->all_prospect_lists==1) {
+$prospectlists = $marketing->prospectlists->get();
+if ($marketing->all_prospect_lists == 1) {
     //remove all related prospect lists.
     if (!empty($prospectlists)) {
         $marketing->prospectlists->delete($marketing->id);
@@ -151,15 +145,15 @@ if ($marketing->all_prospect_lists==1) {
 } else {
     if (isset($_REQUEST['message_for']) && is_array($_REQUEST['message_for'])) {
         foreach ($_REQUEST['message_for'] as $prospect_list_id) {
-            $key=array_search($prospect_list_id, $prospectlists);
-            if ($key === null or $key === false) {
+            $key = array_search($prospect_list_id, $prospectlists, true);
+            if ($key === null || $key === false) {
                 $marketing->prospectlists->add($prospect_list_id);
             } else {
                 unset($prospectlists[$key]);
             }
         }
-        if (count($prospectlists) != 0) {
-            foreach ($prospectlists as $key=>$list_id) {
+        if ((is_countable($prospectlists) ? count($prospectlists) : 0) != 0) {
+            foreach ($prospectlists as $key => $list_id) {
                 $marketing->prospectlists->delete($marketing->id, $list_id);
             }
         }
@@ -170,15 +164,15 @@ if ($marketing->all_prospect_lists==1) {
 $mass[] = $marketing->id;
 //if sending an email was chosen, set all the needed variables for queuing campaign
 
-if ($master !='save') {
-    $_REQUEST['mass']= $mass;
-    $_POST['mass']=$mass;
-    $_REQUEST['record'] =$marketing->campaign_id;
-    $_POST['record']=$marketing->campaign_id;
+if ($master != 'save') {
+    $_REQUEST['mass'] = $mass;
+    $_POST['mass'] = $mass;
+    $_REQUEST['record'] = $marketing->campaign_id;
+    $_POST['record'] = $marketing->campaign_id;
     $_REQUEST['mode'] = $master;
     $_POST['mode'] = $master;
-    $_REQUEST['from_wiz']= 'true';
-    require_once('modules/Campaigns/QueueCampaign.php');
+    $_REQUEST['from_wiz'] = 'true';
+    require_once 'modules/Campaigns/QueueCampaign.php';
 }
 
 if (isset($_REQUEST['show_wizard_summary']) && $_REQUEST['show_wizard_summary']) {
@@ -214,7 +208,7 @@ if (isset($_REQUEST['show_wizard_summary']) && $_REQUEST['show_wizard_summary'])
 
     $header_URL = "Location: index.php?action=WizardMarketing&module=Campaigns&return_module=Campaigns&return_action=WizardHome&return_id=" . $marketing->campaign_id . "&campaign_id=" . $marketing->campaign_id . "&jump=3&marketing_id=" . $marketing->id;
 } else {
-    $header_URL = "Location: index.php?action=WizardHome&module=Campaigns&record=".$marketing->campaign_id;
+    $header_URL = "Location: index.php?action=WizardHome&module=Campaigns&record=" . $marketing->campaign_id;
 }
 
 $GLOBALS['log']->debug("about to post header URL of: $header_URL");

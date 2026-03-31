@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
  * THIS CLASS IS FOR DEVELOPERS TO MAKE CUSTOMIZATIONS IN
  */
 require_once('modules/AM_ProjectTemplates/AM_ProjectTemplates_sugar.php');
+#[\AllowDynamicProperties]
 class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
 {
     public function __construct()
@@ -62,8 +63,7 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
             (isset($_POST['return_action']) && $_POST['return_action'] == 'SubPanelViewer') && !empty($focus->id))||
              !isset($_POST['user_invitees']) // we need to check that user_invitees exists before processing, it is ok to be empty
         ) {
-            parent::save(true) ;
-            $return_id = $focus->id;
+            $return_id = parent::save($check_notify);
         } else {
             if (!empty($_POST['user_invitees'])) {
                 $userInvitees = explode(',', trim($_POST['user_invitees'], ','));

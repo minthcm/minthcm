@@ -156,7 +156,7 @@ function quote() {
     if (!props.comment?.description) {
         return
     }
-    let quoteBody = `<p style="padding-left:1em;"><em>${props.comment.assigned_user.name} ${languages.label(
+    let quoteBody = `<p style="padding-left:1em;"><em>${props.comment.assigned_user.full_name} ${languages.label(
         'LBL_MINT4_COMMENTS_QUOTE_SUFFIX',
     )}:</em></p>`
     const dom = document.createElement('div')

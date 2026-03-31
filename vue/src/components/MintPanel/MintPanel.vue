@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 
 interface Props {
     component: string

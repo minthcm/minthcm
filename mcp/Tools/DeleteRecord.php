@@ -2,7 +2,7 @@
 
 namespace MintMCP\Tools;
 
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\ToolValidation;
 
 use Mcp\Types\ToolInputSchema;
 use Mcp\Types\CallToolResult;
@@ -47,11 +47,11 @@ class DeleteRecord extends AbstractMCPTool
     public function execute(object $arguments): CallToolResult
     {
         try {
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->module_name, 'module_name')
+            ToolValidation::validateMany([
+                ToolValidation::make($arguments->module_name, 'module_name')
                     ->required()
                     ->string(),
-                ToolValidationMiddleware::make($arguments->id, 'id')
+                ToolValidation::make($arguments->id, 'id')
                     ->required()
                     ->string(),
             ]);

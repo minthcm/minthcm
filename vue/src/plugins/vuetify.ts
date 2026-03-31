@@ -4,7 +4,6 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as locales from 'vuetify/locale'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
-import { VTimePicker } from 'vuetify/labs/VTimePicker'
 
 const variables = {
     'top-nav-height': '72px',
@@ -18,9 +17,6 @@ if (!locales[locale]) {
 }
 
 export default createVuetify({
-    components: {
-        VTimePicker,
-    },
     locale: {
         locale,
         fallback: locale,
@@ -46,6 +42,14 @@ export default createVuetify({
                     'primary-lighter': '#f5fbfa',
                     secondary: '#145d7b',
                     'secondary-dark': '#08384B',
+                    'activity': '#7555D6',
+                    'on-activity': '#FFFFFF',
+                    'workschedule-default': '#000000',
+                    'workschedule-delegation': '#7555D6',
+                    'workschedule-office': '#00BF49',
+                    'workschedule-home': '#008CBF',
+                    'workschedule-holiday': '#C3BB00',
+                    'workschedule-sick': '#C40024',
                 },
                 variables,
             },
@@ -57,6 +61,14 @@ export default createVuetify({
                     'primary-lighter': '#f5fbfa',
                     secondary: '#145d7b',
                     'secondary-dark': '#08384B',
+                    'activity': '#7555D6',
+                    'on-activity': '#FFFFFF',
+                    'workschedule-default': '#FFFFFF',
+                    'workschedule-delegation': '#7555D6',
+                    'workschedule-office': '#00BF49',
+                    'workschedule-home': '#008CBF',
+                    'workschedule-holiday': '#C3BB00',
+                    'workschedule-sick': '#C40024',
                 },
                 variables,
             },

@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -100,7 +100,6 @@ $mod_strings = array(
     'LBL_MATRIX_NEITHER_TEXT' => 'Neither Satisfied nor Dissatisfied',
     'LBL_MATRIX_DISSATISFIED_TEXT' => 'Dissatisfied',
     'LBL_HIDE_RESPONSES' => 'Hide responses',
-    'LBL_SHOW_RESPONSES' => 'Show responses',
     'LBL_RESPONSES' => 'Responses',
     'LBL_SURVEYS_SENT' => 'Surveys Sent',
     'LBL_DISTINCT_SURVEYS_SENT' => 'Distinct Surveys Sent',
@@ -115,5 +114,7 @@ $mod_strings = array(
     //MintHCM #102681 END
     'LBL_DRAFT' => 'Draft',
     'LBL_SUBMIT' => 'Submit',
-    'LBL_STARS' => 'Stars'
+    'LBL_STARS' => 'Stars',
+    'LBL_SURVEY_CLOSE_RESPONSE' => 'Thanks for your interest but this survey is now closed.',
+    'LBL_SURVEY_QUESTIONS_DISPLAY' => 'Survey Questions',
 );

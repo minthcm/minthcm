@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2023 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,19 +36,21 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 namespace MintHCM\Api\Controllers;
 
 use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Employees;
 use MintHCM\Api\Entities\Kudos;
-use Slim\Psr7\Response;
+use MintHCM\Api\Entities\Users;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response;
 
 class KudosController
 {
@@ -64,45 +65,43 @@ class KudosController
     {
         global $current_user;
         $response = $response->withHeader('Content-type', 'application/json');
+        $list_type = $request->getAttribute('listType');
+        
+        /** @var Users[] */
+        $users = $this->entityManager->getRepository(Users::class)->getActiveEmployedUsers($current_user->id);
+        $users = array_map(fn(Users $user) => [
+            'id' => $user->id,
+            'user_name' => $user->user_name,
+            'full_name' => $user->getFullName(),
+            'status' => $user->status,
+            'photo' => $user->photo,
+        ], $users);
 
-        chdir('../legacy');
-        $db = \DBManagerFactory::getInstance();
-        $sql = "SELECT id,
-                CONCAT_WS(' ', first_name, last_name) full_name,
-                photo
-                FROM users
-                WHERE deleted = 0
-                    AND users.status = 'active'
-                    AND users.id != " . "'$current_user->id'
-                ORDER BY first_name ASC, last_name ASC";
-        $result = $db->query($sql);
-        $users = [];
-        while ($row = $db->fetchByAssoc($result)) {
-            $users[] = $row;
-        }
-        chdir('../api');
-
-        $kudos = $this->entityManager->getRepository(Kudos::class)->get(1, 'all');
+        $kudos = $this->getDrawerKudoses(1, $list_type);
 
         $response->getBody()->write(json_encode([
-        'kudos' => $kudos,
-        'users' => $users,]));
-        
+            'kudos' => $kudos,
+            'users' => $users
+        ]));
+
         return $response;
     }
+
     public function get(Request $request, Response $response, array $args): Response
     {
         $response = $response->withHeader('Content-type', 'application/json');
         $page = $request->getAttribute('page');
         $list_type = $request->getAttribute('listType');
 
-        $kudos = $this->entityManager->getRepository(Kudos::class)->get($page, $list_type);
+        $kudos = $this->getDrawerKudoses($page, $list_type);
 
         $response->getBody()->write(json_encode([
-        'kudos' => $kudos]));
-        
+            'kudos' => $kudos
+        ]));
+
         return $response;
     }
+
     public function post(Request $request, Response $response, array $args): Response
     {
         global $current_user;
@@ -120,8 +119,7 @@ class KudosController
             $kudos->employee_id = $gifted_user_id;
             $kudos->private = $private;
             $kudos->save(false);
-        }
-        else {
+        } else {
             $kudos = \BeanFactory::getBean('Kudos', $id);
             if (empty($kudos->id)) {
                 $response = $response->withStatus(404);
@@ -138,6 +136,7 @@ class KudosController
         chdir('../api');
         return $response;
     }
+
     public function delete(Request $request, Response $response, array $args): Response
     {
         $id = $request->getAttribute('id');
@@ -158,6 +157,74 @@ class KudosController
         }
         chdir('../api');
         return $response;
+    }
+
+    private function getDrawerKudoses(int $page, string $list_type): array
+    {
+        global $current_user;
+
+        /** @var Kudos[] */
+        $kudoses = $this->entityManager->getRepository(Kudos::class)->getDrawerKudoses($page, $list_type);
+
+        $parsed_kudoses = [];
+        foreach ($kudoses as $kudos) {
+            $parsed_kudos = [
+                'id' => $kudos->id,
+                'description' => $kudos->description,
+                'date_entered' => !empty($kudos->date_entered) ? $kudos->date_entered->format('Y-m-d H:i:s') : null,
+                'created_by' => $kudos->created_by,
+                'announced' => $kudos->announced,
+                'announcement_date' => !empty($kudos->announcement_date) ? $kudos->announcement_date->format('Y-m-d H:i:s') : null,
+                'private' => $kudos->private,
+                'is_read' => $kudos->alerts && count($kudos->alerts) > 0 ? $kudos->alerts[0]->is_read : null,
+            ];
+
+            if ($kudos->assigned_user_link instanceof Users) {
+                $parsed_kudos['assigned_user'] = [
+                    'id' => $kudos->assigned_user_link->id,
+                    'first_name' => $kudos->assigned_user_link->first_name,
+                    'full_name' => $kudos->assigned_user_link->getFullName(),
+                    'photo' => $kudos->assigned_user_link->photo,
+                ];
+                $parsed_kudos['current_user_is_author'] = $current_user->id === $kudos->assigned_user_link->id;
+            }
+
+            if ($kudos->employee_link instanceof Employees) {
+                $parsed_kudos['employee'] = [
+                    'id' => $kudos->employee_link->id,
+                    'first_name' => $kudos->employee_link->first_name,
+                    'full_name' => $kudos->employee_link->getFullName(),
+                    'photo' => $kudos->employee_link->photo,
+                ];
+                $parsed_kudos['current_user_is_gifted'] = $current_user->id === $kudos->employee_link->id;
+            }
+
+            foreach ($kudos->reactions as $reaction) {
+                if (!isset($parsed_kudos['reactions'])) {
+                    $parsed_kudos['reactions'] = [];
+                }
+                $parsed_reaction = [
+                    'type' => $reaction->reaction_type,
+                ];
+                if ($reaction->assigned_user_link instanceof Users) {
+                    $parsed_reaction['user'] = [
+                        'id' => $reaction->assigned_user_link->id,
+                        'name' => $reaction->assigned_user_link->getFullName(),
+                    ];
+                }
+                $parsed_kudos['reactions'][] = $parsed_reaction;
+            }
+            
+            $parsed_kudos['current_user_is_admin'] = $current_user->isAdmin();
+            $parsed_kudos['current_user_access'] = !empty($parsed_kudos['current_user_is_gifted']) || !empty($parsed_kudos['current_user_is_author']);
+            if ($parsed_kudos['private'] && !$parsed_kudos['current_user_access']) {
+                $parsed_kudos['description'] = '';
+            }
+
+            $parsed_kudoses[] = $parsed_kudos;
+        }
+
+        return $parsed_kudoses;
     }
 
 }

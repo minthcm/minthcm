@@ -1,7 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -11,7 +9,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,11 +43,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-
-
-
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
 // The history of upgrades on the system
+#[\AllowDynamicProperties]
 class UpgradeHistory extends SugarBean
 {
     public $new_schema = true;
@@ -84,6 +83,8 @@ class UpgradeHistory extends SugarBean
         parent::__construct();
         $this->disable_row_level_security = true;
     }
+
+
 
 
     public function getAllOrderBy($orderBy)
@@ -164,7 +165,7 @@ class UpgradeHistory extends SugarBean
 
     public function getList($query)
     {
-        return(parent::build_related_list($query, $this));
+        return(parent::build_related_list($query,$this));
     }
 
     public function findByMd5($var_md5)
@@ -193,12 +194,15 @@ class UpgradeHistory extends SugarBean
                 break;
             }
 
+            $patch_to_check->retrieve($patch_to_check->id);
+            $more_recent_patch->retrieve($more_recent_patch->id);
+
             //we will only resort to checking the files if we cannot find the unique_keys
             //or the unique_keys do not match
             $patch_to_check_backup_path    = clean_path(remove_file_extension(from_html($patch_to_check->filename))).'-restore';
             $more_recent_patch_backup_path = clean_path(remove_file_extension(from_html($more_recent_patch->filename))).'-restore';
-            $patch_to_check_timestamp = TimeDate::getInstance()->fromUser($patch_to_check->date_entered)->getTimestamp();
-            $more_resent_patch_timestamp = TimeDate::getInstance()->fromUser($more_recent_patch->date_entered)->getTimestamp();
+            $patch_to_check_timestamp = $this->getPackageTimestamp($this->getPackageDateString($patch_to_check));
+            $more_resent_patch_timestamp = $this->getPackageTimestamp($this->getPackageDateString($more_recent_patch));
             if (
                 $this->foundConflict($patch_to_check_backup_path, $more_recent_patch_backup_path) &&
                 ($more_resent_patch_timestamp >= $patch_to_check_timestamp)
@@ -252,10 +256,10 @@ class UpgradeHistory extends SugarBean
      */
     public function is_right_version_greater($left, $right, $equals_is_greater = true)
     {
-        if (count($left) == 0 && count($right) == 0) {
+        if ((is_countable($left) ? count($left) : 0) == 0 && (is_countable($right) ? count($right) : 0) == 0) {
             return $equals_is_greater;
         } else {
-            if (count($left) == 0 || count($right) == 0) {
+            if ((is_countable($left) ? count($left) : 0) == 0 || (is_countable($right) ? count($right) : 0) == 0) {
                 return true;
             } else {
                 if ($left[0] == $right[0]) {
@@ -288,7 +292,7 @@ class UpgradeHistory extends SugarBean
             $found = false;
             $query = "SELECT id FROM $this->table_name WHERE id_name = '".$dependent['id_name']."'";
             $matches = $this->getList($query);
-            if (0 != count($matches)) {
+            if (0 != (is_countable($matches) ? count($matches) : 0)) {
                 foreach ($matches as $match) {
                     if ($this->is_right_version_greater(explode('.', $match->version), explode('.', $dependent['version']))) {
                         $found = true;
@@ -305,5 +309,32 @@ class UpgradeHistory extends SugarBean
     public function retrieve($id = -1, $encode=true, $deleted=true)
     {
         return parent::retrieve($id, $encode, false);  //ignore the deleted filter. the table does not have the deleted column in it.
+    }
+
+    /**
+     * Returns correct string for getting timestamp if the package has just been installed;
+     * @param UpgradeHistory $bean
+     * @return string
+     */
+    protected function getPackageDateString(UpgradeHistory $bean): string
+    {
+        global $timedate;
+
+        if (!$bean->date_entered) {
+            return $timedate->to_display_date_time($bean->date_modified);
+        }
+
+        return $bean->date_entered;
+    }
+
+    /**
+     * Handler to get timestamp if the package has just been installed;
+     * @param $date
+     * @return int
+     */
+    protected function getPackageTimestamp($date): int
+    {
+        global $timedate;
+        return $timedate->fromUser($date)->getTimestamp();
     }
 }

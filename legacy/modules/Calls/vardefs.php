@@ -12,7 +12,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -148,7 +148,11 @@ $dictionary['Call'] = array(
          'dbType' => 'varchar',
          'len' => 100,
          'options' => 'call_status_dom',
-         'options_colors' => 'call_status_dom_colored',
+         'options_colors' => [
+            'Planned' => 'blue',
+            'Held' => 'green',
+            'Not Held' => 'red',
+         ],
          'comment' => 'The status of the call (Held, Not Held, etc.)',
          'required' => true,
          'importable' => 'required',
@@ -621,3 +625,37 @@ VardefManager::createVardef('Calls', 'Call', array('default', 'assignable', 'sec
 ));
 
 $dictionary['Call']['fields']['outlook_id']['audited'] = false;
+
+foreach ([
+    'name' => 'LBL_SUBJECT_COMMENT',
+    'duration_hours' => 'LBL_DURATION_HOURS_COMMENT',
+    'duration_minutes' => 'LBL_DURATION_MINUTES_COMMENT',
+    'date_start' => 'LBL_DATE_COMMENT',
+    'date_end' => 'LBL_DATE_END_COMMENT',
+    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
+    'parent_name' => 'LBL_PARENT_NAME_COMMENT',
+    'status' => 'LBL_STATUS_COMMENT',
+    'direction' => 'LBL_DIRECTION_COMMENT',
+    'parent_id' => 'LBL_LIST_RELATED_TO_ID_COMMENT',
+    'reminder_checked' => 'LBL_REMINDER_COMMENT',
+    'reminder_time' => 'LBL_REMINDER_TIME_COMMENT',
+    'email_reminder_checked' => 'LBL_EMAIL_REMINDER_COMMENT',
+    'email_reminder_time' => 'LBL_EMAIL_REMINDER_TIME_COMMENT',
+    'email_reminder_sent' => 'LBL_EMAIL_REMINDER_SENT_COMMENT',
+    'outlook_id' => 'LBL_OUTLOOK_ID_COMMENT',
+    'accept_status' => 'LBL_ACCEPT_STATUS_COMMENT',
+    'set_accept_links' => 'LBL_ACCEPT_LINK_COMMENT',
+    'repeat_type' => 'LBL_REPEAT_TYPE_COMMENT',
+    'repeat_interval' => 'LBL_REPEAT_INTERVAL_COMMENT',
+    'repeat_dow' => 'LBL_REPEAT_DOW_COMMENT',
+    'repeat_until' => 'LBL_REPEAT_UNTIL_COMMENT',
+    'repeat_count' => 'LBL_REPEAT_COUNT_COMMENT',
+    'repeat_parent_id' => 'LBL_REPEAT_PARENT_ID_COMMENT',
+    'recurring_source' => 'LBL_RECURRING_SOURCE_COMMENT',
+    'reschedule_history' => 'LBL_RESCHEDULE_HISTORY_COMMENT',
+    'reschedule_count' => 'LBL_RESCHEDULE_COUNT_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Call']['fields'][$field])) {
+        $dictionary['Call']['fields'][$field]['comment'] = $commentLabel;
+    }
+}

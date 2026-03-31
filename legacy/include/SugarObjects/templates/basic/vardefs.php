@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,7 +50,7 @@ $vardefs = array(
             'type' => 'id',
             'required' => true,
             'reportable' => true,
-            'comment' => 'Unique identifier',
+            'comment' => 'LBL_ID_COMMENT',
             'inline_edit' => false,
         ),
         'name' => array(
@@ -67,35 +67,39 @@ $vardefs = array(
             'duplicate_merge' => 'enabled',
             //'duplicate_merge_dom_value' => '3',
             'merge_filter' => 'selected',
+            'comment' => 'LBL_NAME_COMMENT',
         ),
         'date_entered' => array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
             'group' => 'created_by_name',
-            'comment' => 'Date record created',
+            'comment' => 'LBL_DATE_ENTERED_COMMENT',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
+            'readonly' => true,
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
             'group' => 'modified_by_name',
-            'comment' => 'Date record last modified',
+            'comment' => 'LBL_DATE_MODIFIED_COMMENT',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
+            'readonly' => true,
         ),
         'date_indexed' => array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'Date record last indexed',
+            'comment' => 'LBL_DATE_INDEXED_COMMENT',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
+            'readonly' => true,
         ),
         'modified_user_id' => array(
             'name' => 'modified_user_id',
@@ -108,9 +112,10 @@ $vardefs = array(
             'group' => 'modified_by_name',
             'dbType' => 'id',
             'reportable' => true,
-            'comment' => 'User who last modified record',
+            'comment' => 'LBL_MODIFIED_COMMENT',
             'massupdate' => false,
             'inline_edit' => false,
+            'readonly' => true,
         ),
         'modified_by_name' => array(
             'name' => 'modified_by_name',
@@ -126,6 +131,8 @@ $vardefs = array(
             'duplicate_merge' => 'disabled',
             'massupdate' => false,
             'inline_edit' => false,
+            'readonly' => true,
+            'comment' => 'LBL_MODIFIED_NAME_COMMENT',
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -137,9 +144,10 @@ $vardefs = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'group' => 'created_by_name',
-            'comment' => 'User who created record',
             'massupdate' => false,
             'inline_edit' => false,
+            'readonly' => true,
+            'comment' => 'LBL_CREATED_COMMENT',
         ),
         'created_by_name' => array(
             'name' => 'created_by_name',
@@ -156,14 +164,16 @@ $vardefs = array(
             'importable' => 'false',
             'massupdate' => false,
             'inline_edit' => false,
+            'readonly' => true,
+            'comment' => 'LBL_CREATED_COMMENT',
         ),
         'description' => array(
             'name' => 'description',
             'vname' => 'LBL_DESCRIPTION',
             'type' => 'text',
-            'comment' => 'Full text of the note',
             'rows' => 6,
             'cols' => 80,
+            'comment' => 'LBL_DESCRIPTION_COMMENT',
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -171,7 +181,7 @@ $vardefs = array(
             'type' => 'bool',
             'default' => '0',
             'reportable' => false,
-            'comment' => 'Record deletion indicator'
+            'comment' => 'LBL_DELETED_COMMENT',
         ),
 
         /////////////////RELATIONSHIP LINKS////////////////////////////
@@ -220,5 +230,16 @@ $vardefs = array(
             'relationship_type' => 'one-to-many'
         )
     ),
-
+    'elasticsearch' => [
+        'nested' => [
+            'users_favorite' => [
+                'bean' => 'Favorites',
+                'function' => 'getFavoriteUsersIDs',
+                'field_type' => ['type' => 'string'],
+                'fields' => ['id'],
+                'type' => 'function',
+            ],
+        ],
+    ],
+    'doctrineEntity' => [],
 );

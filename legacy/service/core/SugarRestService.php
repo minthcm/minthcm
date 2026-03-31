@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -54,6 +54,7 @@ require_once('service/core/SugarRestServiceImpl.php');
  * Base class for rest services
  *
  */
+#[\AllowDynamicProperties]
 class SugarRestService extends SugarWebService{
 	protected $implementationClass = 'SugarRestServiceImpl';
 	protected $restURL = "";
@@ -94,7 +95,7 @@ class SugarRestService extends SugarWebService{
 	 *
 	 * @param String $url - REST url
 	 */
-	function __construct($url){
+	public function __construct($url){
 		$GLOBALS['log']->info('Begin: SugarRestService->__construct');
 		$this->restURL = $url;
 
@@ -121,7 +122,7 @@ class SugarRestService extends SugarWebService{
   	 * @param Array $output - assoc array of output values: key = param name, value = param type
 	 * @access public
   	 */
-	function registerFunction($function, $input, $output){
+	public function registerFunction($function, $input, $output){
 		if(in_array($function, $this->excludeFunctions))return;
 		$this->registeredFunc[$function] = array('input'=> $input, 'output'=>$output);
 	} // fn
@@ -130,7 +131,7 @@ class SugarRestService extends SugarWebService{
 	 * It passes request data to REST server and sends response back to client
 	 * @access public
 	 */
-	function serve(){
+	public function serve(){
 		$GLOBALS['log']->info('Begin: SugarRestService->serve');
 		require_once('service/core/REST/'. $this->responseClass . '.php');
 		$response  = $this->responseClass;
@@ -147,7 +148,7 @@ class SugarRestService extends SugarWebService{
 	 *
 	 * @param Array $excludeFunctions - All the functions you don't want to register
 	 */
-	function register($excludeFunctions = array()){
+	public function register($excludeFunctions = array()){
 
 	} // fn
 
@@ -177,7 +178,7 @@ class SugarRestService extends SugarWebService{
 	 * @param String $registryClass
 	 * @access public
 	 */
-	function registerClass($registryClass){
+	public function registerClass($registryClass){
 		$this->registryClass = $registryClass;
 	}
 
@@ -188,7 +189,7 @@ class SugarRestService extends SugarWebService{
 	 * @param String $implementationClass
 	 * @access public
 	 */
-	function registerImplClass($className){
+	public function registerImplClass($className){
 		$GLOBALS['log']->info('Begin: SugarRestService->registerImplClass');
 		$this->implementationClass = $className;
 		$this->implementation = new $this->implementationClass();
@@ -203,7 +204,7 @@ class SugarRestService extends SugarWebService{
 	 * @param SoapError $errorObject - This is an object of type SoapError
 	 * @access public
 	 */
-	function error($errorObject){
+	public function error($errorObject){
 		$GLOBALS['log']->info('Begin: SugarRestService->error');
 		$this->server->fault($errorObject);
 		$GLOBALS['log']->info('End: SugarRestService->error');
@@ -215,7 +216,7 @@ class SugarRestService extends SugarWebService{
 	 * @return String - server
 	 * @access public
 	 */
-	function getServer(){
+	public function getServer(){
 		return $this->server;
 	} // fn
 

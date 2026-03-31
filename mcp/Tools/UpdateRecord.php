@@ -2,10 +2,11 @@
 
 namespace MintMCP\Tools;
 
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\ToolValidation;
 
 use Mcp\Types\ToolInputSchema;
 use Mcp\Types\CallToolResult;
+use MintMCP\Tools\Utils\DateTimeConversion;
 use MintMCP\Tools\Traits\ModuleQueryTrait;
 
 class UpdateRecord extends AbstractMCPTool
@@ -53,14 +54,14 @@ class UpdateRecord extends AbstractMCPTool
     public function execute(object $arguments): CallToolResult
     {
         try {
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->module_name, 'module_name')
+            ToolValidation::validateMany([
+                ToolValidation::make($arguments->module_name, 'module_name')
                     ->required()
                     ->string(),
-                ToolValidationMiddleware::make($arguments->id, 'id')
+                ToolValidation::make($arguments->id, 'id')
                     ->required()
                     ->string(),
-                ToolValidationMiddleware::make($arguments->attributes ?? [], 'attributes')
+                ToolValidation::make($arguments->attributes ?? [], 'attributes')
                     ->required()
                     ->array(),
             ]);
@@ -80,19 +81,20 @@ class UpdateRecord extends AbstractMCPTool
             $attributeValidators = [];
             $changed = false;
             foreach ($attributes as $field => $value) {
-                $fieldModuleValidator = ToolValidationMiddleware::make($value, $field)->fieldModule($fieldDefs, $moduleName);
+                $fieldModuleValidator = ToolValidation::make($value, $field)->fieldModule($fieldDefs, $moduleName);
                 if (!$fieldModuleValidator->isValid()) {
                     $attributeValidators[] = $fieldModuleValidator->required();
                 } else {
                     $def = $fieldDefs[$field];
                     $type = $def['type'] ?? ($def['dbType'] ?? 'unknown');
-                    $attributeValidators[] = ToolValidationMiddleware::validateByType($value, $field, $type);
+                    $attributeValidators[] = ToolValidation::make($value, $field)->fieldType($type);
                 }
             }
-            ToolValidationMiddleware::validateMany($attributeValidators);
+            ToolValidation::validateMany($attributeValidators);
           
             foreach ($attributes as $field => $value) {
                 if (array_key_exists($field, $fieldDefs) && $record->$field !== $value) {
+                    $value = $this->isDateField($fieldDefs[$field]['type'] ?? '') ? DateTimeConversion::fromUserTZ($value) : $value;
                     $record->$field = $value;
                     $changed = true;
                 }

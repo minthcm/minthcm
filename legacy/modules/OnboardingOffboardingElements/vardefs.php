@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -235,6 +235,19 @@ $dictionary['OnboardingOffboardingElements'] = array(
             'module' => 'Trainings',
             'bean_name' => 'Trainings',
             'vname' => 'LBL_RELATIONSHIP_TRAININGS_NAME',
+        ),
+        "checklist"  => array(
+            'name' => 'checklist',
+            'vname' => 'LBL_CHECKLIST',
+            'label' => 'LBL_CHECKLIST',
+            'dbType' => 'text',
+            'type' => 'checklist',
+            'rows' => 6,
+            'cols' => 80,
+            'importable' => 'true',
+            'audited' => true,
+            'reportable' => true,
+            'vt_dependency' => "equals(\$type,'task')",
         ),
     ),
     'relationships' => array(

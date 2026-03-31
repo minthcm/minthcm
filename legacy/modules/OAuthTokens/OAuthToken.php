@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once 'modules/OAuthKeys/OAuthKey.php';
 /**
  * OAuth token
  */
+#[\AllowDynamicProperties]
 class OAuthToken extends SugarBean
 {
     public $module_dir = 'OAuthTokens';
@@ -71,9 +72,9 @@ class OAuthToken extends SugarBean
     // so it's an extension point for the future
     public $authdata;
 
-    const REQUEST = 1;
-    const ACCESS = 2;
-    const INVALID = 3;
+    public const REQUEST = 1;
+    public const ACCESS = 2;
+    public const INVALID = 3;
 
     public function __construct($token='', $secret='')
     {
@@ -145,7 +146,7 @@ class OAuthToken extends SugarBean
             $this->new_with_id = true;
             $this->id = $this->token;
         }
-        return parent::save();
+        return parent::save($check_notify);
     }
 
     /**
@@ -308,9 +309,9 @@ class OAuthToken extends SugarBean
 function displayDateFromTs($focus, $field, $value, $view='ListView')
 {
     $field = strtoupper($field);
-    if (!isset($focus[$field])) {
+    if (!isset($focus->$field)) {
         return '';
     }
     global $timedate;
-    return $timedate->asUser($timedate->fromTimestamp($focus[$field]));
+    return $timedate->asUser($timedate->fromTimestamp($focus->$field));
 }

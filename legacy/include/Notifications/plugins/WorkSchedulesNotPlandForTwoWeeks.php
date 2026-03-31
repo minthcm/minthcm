@@ -112,7 +112,7 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
         $non_working_days = $this->getNonWorkingDays();
         $work_days = array();
         $shift = 0;
-        while (count($work_days) < self::PLAN_FOR_DAYS) {
+        while (is_countable($work_days) ? count($work_days) < self::PLAN_FOR_DAYS : 0) {
             $date = date("Y-m-d", strtotime("+ $shift days"));
             if (date('w', strtotime($date)) == 0 || date('w', strtotime($date)) == 6 || in_array($date, $non_working_days)) {
                 $shift++;

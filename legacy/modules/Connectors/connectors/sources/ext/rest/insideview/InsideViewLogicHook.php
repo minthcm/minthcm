@@ -10,9 +10,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,9 +47,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
+#[\AllowDynamicProperties]
 class InsideViewLogicHook
 {
-    const URL_BASE = 'https://my.insideview.com/iv/crm/';
+    public const URL_BASE = 'https://my.insideview.com/iv/crm/';
 
     protected function handleFieldMap($bean, $mapping)
     {
@@ -76,7 +77,7 @@ class InsideViewLogicHook
 
         $outStr = '';
         foreach ($outArray as $k => $v) {
-            $outStr .= $k.'='.rawurlencode(html_entity_decode($v, ENT_QUOTES)).'&';
+            $outStr .= $k.'='.rawurlencode(html_entity_decode((string) $v, ENT_QUOTES)).'&';
         }
         
         $outStr = rtrim($outStr, '&');

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -59,8 +59,8 @@ foreach ($beanFiles as $classname => $filename){
 		sugar_file_put_contents($filename,$data);
 		
 		// Rename the SugarBean file into SugarCore.SugarBean (Ex: SugarCore.Call.php)
-		$pos=strrpos($filename,"/");
-		$newfilename=substr_replace($filename, 'SugarCore.', $pos+1, 0);
+        $pos=strrpos((string) $filename, "/");
+        $newfilename=substr_replace($filename, 'SugarCore.', $pos+1, 0);
 		sugar_rename($filename,$newfilename);
 		
 		//Create a new SugarBean that extends CoreBean
@@ -77,7 +77,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the

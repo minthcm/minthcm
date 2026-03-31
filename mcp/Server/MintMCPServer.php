@@ -3,7 +3,6 @@
 namespace MintMCP\Server;
 
 use Mcp\Server\Server;
-use MintMCP\Handlers\MCPRequestHandler;
 use MintMCP\Tools\AbstractMCPTool;
 
 class MintMCPServer

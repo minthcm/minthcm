@@ -19,7 +19,7 @@
                         <div class="mint-comments-message-header-info">
                             <span
                                 class="mint-comments-message-user"
-                                v-text="comment.assigned_user.name"
+                                v-text="comment.assigned_user.full_name"
                                 @click="openEmployeeDetailView(comment.assigned_user.id)"
                             />
                             <span
@@ -192,7 +192,7 @@ const contentHtml = computed(() => {
         if (user.id === auth.user?.id) {
             className += ' mint-comments-message-content-user-highlight-owner'
         }
-        content = content.replace(regex, `<span class="${className}" data-user-id="${user.id}">${user.name}</span>`)
+        content = content.replace(regex, `<span class="${className}" data-user-id="${user.id}">${user.full_name}</span>`)
     })
     return content
 })

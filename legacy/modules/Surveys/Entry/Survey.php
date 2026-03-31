@@ -17,11 +17,12 @@ if (!empty($_REQUEST['id']) && $isValidator->isValidId($_REQUEST['id'])) {
 }
 
 $survey = BeanFactory::getBean('Surveys', $surveyId);
+
 if (empty($survey->id)) {
     header('HTTP/1.0 404 Not Found');
     exit();
 }
-if ($survey->status == 'Closed') {
+if ($survey->status === 'Closed') {
     displayClosedPage($survey);
     exit();
 }
@@ -90,7 +91,6 @@ if (!empty($_REQUEST['tracker']) && $isValidator->isValidId($_REQUEST['tracker']
 } else {
     LoggerManager::getLogger()->warn('Invalid tracker ID in survey.');
 }
-
 
 $themeObject = SugarThemeRegistry::current();
 $companyLogoURL = $themeObject->getImageURL('company_logo.png');
@@ -207,7 +207,7 @@ EOF;
 function displaySurvey($survey, $employeeId, $trackerId)
 {
     ?>
-    <form method="post">
+    <form method="post" onsubmit="disableSubmitButton(this)">
         <input type="hidden" name="entryPoint" value="surveySubmit">
         <input type="hidden" name="id" value="<?=$survey->id;?>">
         <!-- MintHCM #74238 START -->
@@ -228,6 +228,11 @@ $questions = $survey->get_linked_beans('surveys_surveyquestions', 'SurveyQuestio
     ?>
         <button class="btn btn-primary send-button" type="submit"><?php echo $survey->getSubmitText(); ?></button>
     </form>
+    <script>
+        function disableSubmitButton(form) {
+            form.querySelector('button[type="submit"]').disabled = true; 
+        }
+    </script>    
     <?php
 }
 
@@ -456,42 +461,34 @@ function displayDateField($question)
 
 function displayClosedPage($survey)
 {
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
+    $ss = new Sugar_Smarty();
+
+    $header = <<<EOF
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title><?=$survey->name;?></title>
-
+        <title>$survey->name</title>
         <link href="themes/SuiteP/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-    <div class="container">
-        <div class="row">
-            <!-- MintHCM #102681 START -->
-            <div class="col-md-12" style="text-align:center;margin-bottom: 10px;">
-                <div class="text-center">
-                    <img src="<?php echo SugarThemeRegistry::current()->getImageURL('company_logo.png'); ?>" style="max-width: 100%; max-height: 100px;"/>
-            </div>
-        </div>
-            <!-- MintHCM #102681 END -->
-        </div>
-        <div class="row well">
-            <!-- MintHCM #102681 START -->
-            <div class="text-center col-md-12">
-                <h1><?=$survey->name;?></h1>
-                <p style="font-size:16px;"><?php echo translate('LBL_SURVEY_CLOSED', 'Surveys') ?></p>
-            </div>
-            <!-- MintHCM #102681 END -->
-        </div>
-    </div>
-    <script src="include/javascript/jquery/jquery-min.js"></script>
-    </body>
-    </html>
-    <?php
+</head>
+<body>
+EOF;
+
+    $footer = <<<EOF
+<script src="include/javascript/jquery/jquery-min.js"></script>
+</body>
+</html>
+EOF;
+
+    $ss->assign('MESSAGE', translate('LBL_SURVEY_CLOSE_RESPONSE', $survey->module_name));
+    $ss->assign('HEADER', $header);
+    $ss->assign('SURVEY', $survey);
+    $ss->assign('LOGO', SugarThemeRegistry::current()->getImageURL('company_logo.png') );
+    $ss->assign('FOOTER', $footer);
+
+    echo $ss->fetch('modules/Surveys/tpls/closeSurvey.tpl');
 }
 //MintHCM #102681 START
 function displayAlreadyFilledPage($survey)

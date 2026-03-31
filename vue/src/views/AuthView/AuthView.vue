@@ -1,7 +1,7 @@
 <template>
     <div class="auth-view">
         <div class="auth-view-container">
-            <img :src="logoSrc" @error="handleLogoError" height="32" />
+            <img :src="logoSrc" @error="handleLogoError" height="32" alt="" aria-hidden="true" />
             <router-view v-slot="{ Component }" class="form-content">
                 <v-slide-x-transition hide-on-leave>
                     <component :is="Component" />
@@ -9,13 +9,13 @@
             </router-view>
 
             <div class="auth-footer">
-                <v-slide-x-transition hide-on-leave>
-                    <div
-                        v-if="store.footerNavAction"
-                        @click="$router.push({ name: store.footerNavAction.routeName })"
-                        v-text="store.footerNavAction.label"
-                    />
-                </v-slide-x-transition>
+                <RouterLink
+                    v-if="store.footerNavAction"
+                    :to="{ name: store.footerNavAction.routeName }"
+                    class="auth-footer-link"
+                    >
+                    {{ store.footerNavAction.label }}
+                </RouterLink>
                 <v-menu offset="16" v-if="languagesList.length > 1">
                     <template v-slot:activator="{ props, isActive }">
                         <MintButton
@@ -151,6 +151,13 @@ async function changeLanguage(lang = 'en_us') {
             }
         }
     }
+}
+.auth-footer-link{
+    color: rgb(20,93,123);
+    text-decoration: none;
+}
+.auth-footer-link:hover{
+    color: rgb(8,56,75);
 }
 </style>
 

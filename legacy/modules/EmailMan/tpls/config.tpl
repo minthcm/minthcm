@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -114,9 +114,9 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 						</tr>
 						<tr class="{$OUTBOUND_TYPE_CLASS}">
 							<td width="20%" scope="row">{$MOD.LBL_MAIL_SENDTYPE}</td>
-							<td width="30%">
+                                <td width="30%">
 								<select id="mail_sendtype" name="mail_sendtype" onChange="notify_setrequired(document.ConfigureSettings); SUGAR.user.showHideGmailDefaultLink(this);" tabindex="1">{$mail_sendtype_options}</select>
-							</td>
+                                </td>
 							<td scope="row">&nbsp;</td>
 							<td >&nbsp;</td>
 						</tr>
@@ -182,8 +182,8 @@ var authInfo = {/literal}{$js_authinfo}{literal}
                                     </span>
                                     <!-- MintHCM #110041 END -->
 								</div>
-							</td>
-						</tr>
+                                </td>
+                        </tr>
                         <!-- MintHCM #110041 START -->
                         <tr id="auth_block" style="display:none">
                             <td colspan="4">
@@ -239,33 +239,34 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 											<td width="30%">&nbsp;</td>
 										</tr>
 										</table>
-										<table width="100%" cellpadding="0" cellspacing="0">
+									<table width="100%" cellpadding="0" cellspacing="0">
 										<tr id="mail_allow_user">
-											<td width="20%" scope="row">
+											<td width="25%" scope="row">
 												{$MOD.LBL_ALLOW_DEFAULT_SELECTION}&nbsp;
 												<img border="0" class="inlineHelpTip" onclick="return SUGAR.util.showHelpTips(this,'{$MOD.LBL_ALLOW_DEFAULT_SELECTION_HELP}','','','dialogHelpPopup')" src="index.php?entryPoint=getImage&themeName={$THEME}&imageName=helpInline.gif">
 											</td>
 											<td width="30%">
 												<input type='hidden' id="notify_allow_default_outbound_hidden_input" name='notify_allow_default_outbound' value='0'>
-												<input id="notify_allow_default_outbound" name='notify_allow_default_outbound' value="2" tabindex='1' class="checkbox" type="checkbox" {$notify_allow_default_outbound_on}>
+												<input id="notify_allow_default_outbound" name='notify_allow_default_outbound' value="2" tabindex='1' class="checkbox" type="checkbox" style="margin-top: 10px;" {$notify_allow_default_outbound_on}>
 											</td>
 										</tr>
-									<tr class="legacy-compose-option" {if isset($legacyEmailConfigEnabled)}style="display:none"{/if}>
-                                                                                <td width="20%" scope="row">
-                                                                                    {$MOD.LBL_ALLOW_SEND_AS_USER}&nbsp;
-                                                                                    <img border="0" class="inlineHelpTip" onclick="return SUGAR.util.showHelpTips(this,'{$MOD.LBL_ALLOW_SEND_AS_USER_DESC}','','','dialogHelpPopup')" src="index.php?entryPoint=getImage&themeName={$THEME}&imageName=helpInline.gif">
-                                                                                </td>
-                                                                                <td width="30%">
-                                                                                    <input type='hidden' id="mail_allowusersend_hidden_input" name='mail_allowusersend' value='0'>
-                                                                                    <input id='mail_allowusersend' name='mail_allowusersend' type="checkbox" class="checkbox" value="1" tabindex='1' {$mail_allow_user_send}>
-                                                                                </td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                            </tr>
-                                                                        </table>
+										<tr class="legacy-compose-option" {if isset($legacyEmailConfigEnabled)}style="display:none"{/if}>
+											<td width="20%" scope="row">
+												{$MOD.LBL_ALLOW_SEND_AS_USER}&nbsp;
+												<img border="0" class="inlineHelpTip" onclick="return SUGAR.util.showHelpTips(this,'{$MOD.LBL_ALLOW_SEND_AS_USER_DESC}','','','dialogHelpPopup')" src="index.php?entryPoint=getImage&themeName={$THEME}&imageName=helpInline.gif">
+											</td>
+											<td width="30%">
+												<input type='hidden' id="mail_allowusersend_hidden_input" name='mail_allowusersend' value='0'>
+												<input id='mail_allowusersend' name='mail_allowusersend' type="checkbox" class="checkbox" value="1" tabindex='1' {$mail_allow_user_send}>
+											</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</table>
 								</div>
 							</td>
 						</tr>
+						<!-- MintHCM #110041 START -->
 						<tr><td colspan="4">&nbsp;</tr>
 						<tr>
 							<td width="15%"><input type="button" class="btn btn-info" value="{$APP.LBL_EMAIL_TEST_OUTBOUND_SETTINGS}" onclick="testOutboundSettings();">&nbsp;</td>
@@ -273,6 +274,7 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 							<td width="40%">&nbsp;</td>
 							<td width="40%">&nbsp;</td>
 						</tr>
+						<!-- MintHCM #110041 END -->
 					</table>
 				</div>
 			</div>
@@ -299,8 +301,7 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 							<td scope="row" width="17%"></td>
 							<td></td>
 						</tr>
-                        <!-- MintHCM #110041 START -->
-                        <tr>
+						<tr>
 							<td width="20%" scope="row" valign='top'>
 								{$MOD.LBL_EMAIL_WARNING_NOTIFICATIONS}:&nbsp;
 							</td>
@@ -308,15 +309,12 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 								<input type='checkbox' class='checkbox' name='email_warning_notifications' value="1" {$LBL_EMAIL_WARNING_NOTIFICATIONS}>
 							</td>
 						</tr>
-                        <!-- MintHCM #110041 END -->
 						<tr>
 							<td width="20%" scope="row" valign='top'>
 								{$MOD.LBL_EMAIL_DEFAULT_DELETE_ATTACHMENTS}:&nbsp;
 							</td>
 							<td width="30%"  valign='top'>
-                                <!-- MintHCM #110041 START -->
 								<input type='checkbox' class='checkbox' name='email_default_delete_attachments' value="1" {$DEFAULT_EMAIL_DELETE_ATTACHMENTS}>
-                                <!-- MintHCM #110041 END -->
 							</td>
 
 							<td scope="row" width="20%">
@@ -351,14 +349,16 @@ var authInfo = {/literal}{$js_authinfo}{literal}
 							<td width="30%"  valign='top'>
 								<select name="email_template_id_opt_in">{$EMAIL_OPT_IN_TEMPLATES}</select>
 							</td>
+
 						</tr>
-						<tr>
+                        <tr>
 							<td width="20%" scope="row" valign='top'>
 								{$MOD.LBL_LEGACY_EMAIL_COMPOSE_BEHAVIOR}:&nbsp;
 							</td>
 							<td width="30%"  valign='top'>
 								<input id="legacy_email_behaviour" name='legacy_email_behaviour' value="true" tabindex='1' class="checkbox" type="checkbox" {if !empty($legacyEmailConfigEnabled)}checked="checked{/if}">
 							</td>
+
 						</tr>
 					</table>
 				</div>
@@ -743,10 +743,10 @@ function notify_setrequired(f) {
 	document.getElementById("smtp_settings").style.visibility = (f.mail_sendtype.value == "SMTP") ? "visible" : "hidden";
     // MintHCM #110041 START
     if (document.getElementById('EditView').mail_authtype.value !== 'oauth2') {
-        document.getElementById("smtp_auth1").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
-        document.getElementById("smtp_auth1").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
-        document.getElementById("smtp_auth2").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
-        document.getElementById("smtp_auth2").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
+	document.getElementById("smtp_auth1").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
+	document.getElementById("smtp_auth1").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
+	document.getElementById("smtp_auth2").style.display = (document.getElementById('mail_smtpauth_req').checked) ? "" : "none";
+	document.getElementById("smtp_auth2").style.visibility = (document.getElementById('mail_smtpauth_req').checked) ? "visible" : "hidden";
     }
     // MintHCM #110041 END
 

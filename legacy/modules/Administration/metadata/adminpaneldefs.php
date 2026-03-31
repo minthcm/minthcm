@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2021 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-global $current_user, $admin_group_header;
+global $current_user, $admin_group_header, $sugar_config;
 
 //users and security.
 $admin_option_defs = [];
@@ -537,7 +537,20 @@ $admin_option_defs['Administration']['configs'] = array(
     'index.php?entryPoint=CalculateDLNC',
 );
 $admin_group_header[] = array('LBL_ADD_LAST_NEXT_CONTACT_PANEL', '', false, $admin_option_defs, '');
-# DateLastNextContact Administration Definition begin
+# DateLastNextContact Administration Definition end
+
+# MCP Administration Definition begin
+$admin_option_defs = array();
+$admin_option_defs['Administration']['MCPSettings'] = array(
+    'MCPSettings',
+    'LBL_MCP_SETTINGS_NAME',
+    'LBL_MCP_SETTINGS_DESCRIPTION',
+    'index.php?module=MCPSettings&action=EditView&record=1',
+);
+
+$admin_group_header[] = array('LBL_MCP_SETTINGS_NAME', '', false, $admin_option_defs, 'LBL_MCP_SETTINGS_DESCRIPTION');
+
+# MCP Administration Definition end
 
 if (file_exists('custom/modules/Administration/Ext/Administration/administration.ext.php')) {
     include 'custom/modules/Administration/Ext/Administration/administration.ext.php';
@@ -583,6 +596,19 @@ foreach ($admin_group_header as $key => $values) {
         } else {
             //hide the link
             unset($admin_group_header[$key][3][$mod_val]);
+        }
+    }
+}
+
+if(isset($sugar_config['system_mode']) && $sugar_config['system_mode'] !== 'normal'){
+    foreach ($admin_group_header as $key => $values) {
+        $module_index = array_keys($values[3]);
+        foreach ($module_index as $mod_key => $mod_val) {
+            foreach($admin_group_header[$key][3][$mod_val] as $option_key => $defs){
+                if(in_array($option_key, $sugar_config['system_mode_restriced_panel_defs'])){
+                    unset($admin_group_header[$key][3][$mod_val][$option_key]);
+                }
+            }
         }
     }
 }

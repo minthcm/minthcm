@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -52,14 +52,15 @@
  * All type of web services should provide proper implementation of all the abstract methods
  * @api
  */
+#[\AllowDynamicProperties]
 abstract class SugarWebService{
 	protected $server = null;
 	protected $excludeFunctions = array();
-	abstract function register($excludeFunctions = array());
-	abstract function registerImplClass($class);
-	abstract function getRegisteredImplClass();
-	abstract function registerClass($class);
-	abstract function getRegisteredClass();
-	abstract function serve();
-	abstract function error($errorObject);
+	abstract public function register($excludeFunctions = array());
+	abstract public function registerImplClass($class);
+	abstract public function getRegisteredImplClass();
+	abstract public function registerClass($class);
+	abstract public function getRegisteredClass();
+	abstract public function serve();
+	abstract public function error($errorObject);
 }

@@ -24,6 +24,7 @@ $ESListViewDefs['Users'] = [
         'email1' => [
             'link' => true,
             'default' => true,
+            'sortable' => false,
         ],
         'phone_work' => [
             'link' => true,

@@ -11,6 +11,7 @@ use Api\V8\Param\UploadFileParams;
 use Slim\Http\Request;
 use UploadFile;
 
+#[\AllowDynamicProperties]
 class FileService
 {
     protected $beanManager;

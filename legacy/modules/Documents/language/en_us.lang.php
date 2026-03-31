@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -170,4 +170,37 @@ $mod_strings = array(
     'LBL_CERTIFICATES' => 'Certificates',
     'LBL_DELEGATIONS' => 'Delegations',
     'LBL_DOCUMENTS' => 'Documents',
+    'LBL_DOCUMENT_NAME_COMMENT' => 'Name of the document.',
+    'LBL_NAME_COMMENT' => 'Alternate non-db field for document name.',
+    'LBL_DOC_ID_COMMENT' => 'Document ID from external documents provider.',
+    'LBL_DOC_TYPE_COMMENT' => 'Type of the document (Google, Box, IBM SmartCloud, etc.).',
+    'LBL_DOC_URL_COMMENT' => 'URL of the document on the external documents server.',
+    'LBL_FILENAME_COMMENT' => 'The filename of the document attachment.',
+    'LBL_DOC_ACTIVE_DATE_COMMENT' => 'Date the document becomes active.',
+    'LBL_DOC_EXP_DATE_COMMENT' => 'Date the document expires.',
+    'LBL_SF_CATEGORY_COMMENT' => 'Category of the document.',
+    'LBL_SF_SUBCATEGORY_COMMENT' => 'Subcategory of the document.',
+    'LBL_DOC_STATUS_COMMENT' => 'Status of the document.',
+    'LBL_DOC_STATUS_META_COMMENT' => 'Document status for Meta-Data framework.',
+    'LBL_LATEST_REVISION_COMMENT' => 'ID of the latest revision of the document.',
+    'LBL_DOC_VERSION_COMMENT' => 'Current revision number of the document.',
+    'LBL_LAST_REV_CREATOR_COMMENT' => 'User who created the last revision.',
+    'LBL_LAST_REV_MIME_TYPE_COMMENT' => 'MIME type of the last revision.',
+    'LBL_LAST_REV_CREATE_DATE_COMMENT' => 'Creation date of the last revision.',
+    'LBL_RELATED_DOCUMENT_ID_COMMENT' => 'ID of the related document.',
+    'LBL_RELATED_DOCUMENT_NAME_COMMENT' => 'Name of the related document (Meta-Data).',
+    'LBL_RELATED_DOCUMENT_REV_ID_COMMENT' => 'ID of the related document revision.',
+    'LBL_RELATED_DOCUMENT_REV_NUMBER_COMMENT' => 'Revision number of the related document.',
+    'LBL_IS_TEMPLATE_COMMENT' => 'Indicates if the document is a template.',
+    'LBL_TEMPLATE_TYPE_COMMENT' => 'Type of template for the document.',
+    'LBL_LATEST_REVISION_NAME_COMMENT' => 'Name of the latest revision (contract subpanel).',
+    'LBL_SELECTED_REVISION_NAME_COMMENT' => 'Name of the selected revision (contract subpanel).',
+    'LBL_CONTRACT_STATUS_COMMENT' => 'Status of the contract for contract document.',
+    'LBL_CONTRACT_NAME_COMMENT' => 'Name of the related contract.',
+    'LBL_LINKED_ID_COMMENT' => 'Linked ID for contract document framework.',
+    'LBL_SELECTED_REVISION_ID_COMMENT' => 'ID of the selected revision.',
+    'LBL_LATEST_REVISION_ID_COMMENT' => 'ID of the latest revision.',
+    'LBL_SELECTED_REVISION_FILENAME_COMMENT' => 'Filename of the selected revision.',
+    'LBL_FILE_CONTENTS_COMMENT' => 'Contents of the document file (non-db).',
+    'LBL_SHOW_PREVIEW_COMMENT' => 'Flag indicating if document preview is shown.',
 );

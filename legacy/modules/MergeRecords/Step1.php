@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,13 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-/*********************************************************************************
 
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
 
 
 
@@ -69,9 +63,11 @@ $json = new JSON();
 
 $current_module_strings = return_module_language($current_language, 'MergeRecords');
 
-if (!isset($where)) $where = "";
+if (!isset($where)) {
+    $where = "";
+}
 
-$focus = new MergeRecord();
+$focus = BeanFactory::newBean('MergeRecords');
 
 ////////////////////////////////////////////////////////////
 //get instance of master record and retrieve related record
@@ -87,30 +83,28 @@ $avail_fields=array();
 $sel_fields=array();
 $temp_field_array = $focus->merge_bean->field_defs;
 $bean_data=array();
-foreach($temp_field_array as $field_array)
-{
-	if (isset($field_array['merge_filter']) 
-	) {
-		if (strtolower($field_array['merge_filter'])=='enabled' or strtolower($field_array['merge_filter'])=='selected') {
-			$col_name = $field_array['name'];
+foreach ($temp_field_array as $field_array) {
+    if (isset($field_array['merge_filter'])
+    ) {
+        if (strtolower($field_array['merge_filter'])=='enabled' || strtolower($field_array['merge_filter'])=='selected') {
+            $col_name = $field_array['name'];
 
                             
-			if(!isset($focus->merge_bean_strings[$field_array['vname']])) {
-				$col_label = $col_name;
-			}
-			else {
-				$col_label = str_replace(':', '', $focus->merge_bean_strings[$field_array['vname']]);
-			}
-			
-			if (strtolower($field_array['merge_filter'])=='selected') {
-				$sel_fields[$col_name]=$col_label;
-			} else {
+            if (!isset($focus->merge_bean_strings[$field_array['vname']])) {
+                $col_label = $col_name;
+            } else {
+                $col_label = str_replace(':', '', (string) $focus->merge_bean_strings[$field_array['vname']]);
+            }
+            
+            if (strtolower($field_array['merge_filter'])=='selected') {
+                $sel_fields[$col_name]=$col_label;
+            } else {
                 $avail_fields[$col_name] = $col_label;
             }
-			
-			$bean_data[$col_name]=$focus->merge_bean->$col_name;
-		}
-	}
+            
+            $bean_data[$col_name]=$focus->merge_bean->$col_name;
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -122,10 +116,10 @@ $params[] = $mod_strings['LBL_LBL_MERGE_RECORDS_STEP_1'];
 $params[] = $focus->merge_bean->name;
 echo getClassicModuleTitle($focus->merge_bean->module_dir, $params, true);
 
-$xtpl = new XTemplate ('modules/MergeRecords/Step1.html');
+$xtpl = new XTemplate('modules/MergeRecords/Step1.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("BEANDATA",$json->encode($bean_data));
+$xtpl->assign("BEANDATA", $json->encode($bean_data));
 //This is for the implemetation of finding all dupes for a module, not just
 //dupes for a particular record
 //commenting this out for now
@@ -135,16 +129,19 @@ $xtpl->assign("BEANDATA",$json->encode($bean_data));
 $xtpl->assign("MERGE_MODULE", $focus->merge_module);
 $xtpl->assign("ID", $focus->merge_bean->id);
 
-$xtpl->assign("FIELD_AVAIL_OPTIONS", get_select_options_with_id($avail_fields,''));
+$xtpl->assign("FIELD_AVAIL_OPTIONS", get_select_options_with_id($avail_fields, ''));
 $xtpl->assign("LBL_ADD_BUTTON", translate('LBL_ADD_BUTTON'));
 
-if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-$xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_id'])) {
+    $xtpl->assign("RETURN_ID", validate_input($_REQUEST['return_id']));
+}
+
+$xtpl->assign("RETURN_ACTION", validate_input($_REQUEST['return_action']));
+$xtpl->assign("RETURN_MODULE", validate_input($_REQUEST['return_module']));
 
 //set the url
 $port=null;
-if(isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) {
+if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) {
     $port = $_SERVER['SERVER_PORT'];
 }
 $xtpl->assign("URL", appendPortToHost($sugar_config['site_url'], $port));
@@ -155,10 +152,10 @@ $xtpl->assign("DELETE_INLINE_IMAGE", SugarThemeRegistry::current()->getImageURL(
 //process preloaded filter.
 $pre_loaded=null;
 foreach ($sel_fields as $colName=>$colLabel) {
-    $pre_loaded.=addFieldRow($colName,$colLabel,$bean_data[$colName]);
+    $pre_loaded.=addFieldRow($colName, $colLabel, $bean_data[$colName]);
 }
-$xtpl->assign("PRE_LOADED_FIELDS",$pre_loaded);
-$xtpl->assign("OPERATOR_OPTIONS",$json->encode($app_list_strings['merge_operators_dom']));
+$xtpl->assign("PRE_LOADED_FIELDS", $pre_loaded);
+$xtpl->assign("OPERATOR_OPTIONS", $json->encode($app_list_strings['merge_operators_dom']));
 
 
 $xtpl->parse("main.field_select_block");
@@ -168,16 +165,26 @@ $xtpl->out("main");
 
 
 /**
+ * @param string $requestData
+ * @return string
+ */
+function validate_input($requestData)
+{
+    return htmlspecialchars((string) remove_xss($requestData), ENT_QUOTES | ENT_HTML5);
+}
+
+/**
  * This function is equivalent of AddFieldRow in merge.js. is being used to
  * preload the filter criteria based on the vardef.
  * <span><table><tr><td></td><td></td><td></td></tr></table></span>
  */
-function addFieldRow($colName,$colLabel,$colValue) {
+function addFieldRow($colName, $colLabel, $colValue)
+{
     global $theme, $app_list_strings;
     
     static $operator_options;
     if (empty($operator_options)) {
-        $operator_options= get_select_options_with_id($app_list_strings['merge_operators_dom'],'');
+        $operator_options= get_select_options_with_id($app_list_strings['merge_operators_dom'], '');
     }
 
     $LBL_REMOVE = translate('LBL_REMOVE');

@@ -1,9 +1,10 @@
 <?php
 
+#[\AllowDynamicProperties]
 class AcceptWorkScheduleValidator
 {
     protected $workschedule;
-    protected $employee;
+    public $employee;
     protected $date_start;
     protected $date_end;
     protected $response;
@@ -98,7 +99,7 @@ class AcceptWorkScheduleValidator
     protected function setEmployee()
     {
         $employee = BeanFactory::getBean('Employees', $this->workschedule->assigned_user_id);
-        if (empty($employee->id)) {
+        if (empty($employee->id) || !empty($this->employee)) {
             return;
         }
         $this->employee = $employee;

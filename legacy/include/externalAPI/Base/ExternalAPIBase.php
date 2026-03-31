@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ require_once('include/connectors/sources/SourceFactory.php');
  * Base implementation for external API
  * @api
  */
+#[\AllowDynamicProperties]
 abstract class ExternalAPIBase implements ExternalAPIPlugin
 {
     public $account_name;
@@ -59,7 +60,7 @@ abstract class ExternalAPIBase implements ExternalAPIPlugin
     public $useAuth = true;
     public $requireAuth = true;
 
-    const APP_STRING_ERROR_PREFIX = 'ERR_EXTERNAL_API_';
+    public const APP_STRING_ERROR_PREFIX = 'ERR_EXTERNAL_API_';
     protected $_appStringErrorPrefix = self::APP_STRING_ERROR_PREFIX;
 
     /**
@@ -140,6 +141,7 @@ abstract class ExternalAPIBase implements ExternalAPIPlugin
 
     protected function postData($url, $postfields, $headers)
     {
+        $proxy_settings = [];
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -160,7 +160,7 @@ class SugarFieldFile extends SugarFieldBase {
         } else if ( ! empty($old_id) ) {
             // It's a duplicate, I think
 
-            if ( empty($params[$prefix . $vardef['docUrl'] ]) ) {
+            if (empty($params[$prefix . ($vardef['docUrl'] ?? '') ])) {
                 $upload_file->duplicate_file($old_id, $bean->id, $bean->$field);
             } else {
                 $docType = $vardef['docType'];

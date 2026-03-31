@@ -46,58 +46,15 @@
 
 namespace {$entityNamespace};
 
-use Doctrine\ORM\Mapping as ORM;
-{if !empty($additionalUseStatements)}
-{foreach from=$additionalUseStatements item=useStatement}
-{$useStatement};
-{/foreach}
-{/if}
+{include file="$sectionuse"}
 
-/**
-{if $repositorySet}
- * @ORM\Entity(repositoryClass="{$repositoryClassPath}")
-{else}
- * @ORM\Entity
-{/if}
- * @ORM\Table(name="{$table}"{if !empty($indexes)}, indexes={ldelim}
-{foreach from=$indexes item=index}
- *   @ORM\Index(name="{$index.name}", columns={ldelim}"{$index.columns}"{rdelim}){if !$index@last}, {"\n"}{/if}
-{/foreach}
-{rdelim}{/if})
- */
-class {$className}
+{include file="$sectionrepository"}
+
+class {$className} extends MintEntity
 {
-{foreach from=$fields item=field}
-    /**
-    {if $field.isId}
-    * @ORM\Id
-    {/if}
-    {if $field.columnAttributes}
-    * @ORM\Column({$field.columnAttributes})
-    {/if}
-    {if $field.attributes}
-    {foreach from=$field.attributes item=attribute}
-    * {$attribute}
-    {/foreach}
-    {/if}
-    */
-    public ${$field.name};
 
-{/foreach}
-{foreach from=$relationshipFields item=relationshipField}
-    /**
-    {foreach from=$relationshipField.attributes item=attribute}
-    * {$attribute}
-    {/foreach}
-    */
-    public {if $relationshipField.isCollection}Collection {/if}${$relationshipField.name};
+    {include file="$sectionproperties"}
 
-{/foreach}
+    {include file="$sectionmethods"}
 
-public function __construct()
-{ldelim}
-    {foreach from=$constructorFields item=constructedField}
-    {$constructedField}
-    {/foreach}
-{rdelim}
 }

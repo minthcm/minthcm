@@ -7,9 +7,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,11 +55,11 @@ require_once('modules/DynamicFields/templates/Fields/TemplateField.php');
 
 class TemplateWysiwyg extends TemplateField
 {
-	var $type = 'wysiwyg';
-	var $len = '';
-    var $inline_edit = 0;
+	public $type = 'wysiwyg';
+	public $len = '';
+    public $inline_edit = 0;
 
-	function get_field_def()
+	public function get_field_def()
 	{
 		$def = parent::get_field_def();
 

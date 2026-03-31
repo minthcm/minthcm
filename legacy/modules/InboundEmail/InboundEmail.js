@@ -7,7 +7,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,7 +48,7 @@ function getEncryptedPassword(login,password,mailbox){var words=new Array(login,
 if(word.indexOf('+')>0){fragment1=word.substr(0,word.indexOf('+'));fragment2=word.substr(word.indexOf('+')+1,word.length);newWord=fragment1+'::plus::'+fragment2;words[i]=newWord;word=newWord;fragment1='';fragment2='';}
 if(word.indexOf('%')>0){fragment1=word.substr(0,word.indexOf('%'));fragment2=word.substr(word.indexOf('%')+1,word.length);newWord=fragment1+'::percent::'+fragment2;words[i]=newWord;word=newWord;fragment1='';fragment2='';}}
 return words;}
-function ie_test_open_popup_with_submit(module_name,action,pageTarget,width,height,mail_server,protocol,port,login,password,mailbox,ssl,personal,formName,ie_id,eapm_id,connectionString=null){if(!formName)formName="testSettingsView";var words=getEncryptedPassword(login,password,mailbox);var isPersonal=(personal)?'true':'false';if(!isDataValid(formName,true)){return;}
+function ie_test_open_popup_with_submit(module_name,action,pageTarget,width,height,mail_server,protocol,port,login,password,mailbox,ssl,personal,formName,ie_id,eapm_id,connectionString=null,auth_type,externalOauthConnectionName,externalOauthConnectionId){if(!formName)formName="testSettingsView";var words=getEncryptedPassword(login,password,mailbox);var isPersonal=(personal)?'true':'false';if(!isDataValid(formName,true)){return;}
 if(typeof(ie_id)=='undefined'||ie_id=='')
 ie_id=(typeof document.getElementById(formName).ie_id!='undefined')?document.getElementById(formName).ie_id.value:'';URL='index.php?'
 +'module='+module_name
@@ -65,7 +65,10 @@ ie_id=(typeof document.getElementById(formName).ie_id!='undefined')?document.get
 +'&ssl='+ssl
 +'&ie_id='+ie_id
 +'&personal='+isPersonal
-+'&eapm_id='+eapm_id;if(connectionString){URL+='&connection_string='+encodeURIComponent(connectionString);}
++'&auth_type='+auth_type
++'&eapm_id='+eapm_id;if(externalOauthConnectionName&&externalOauthConnectionId){URL+='&externalOauthConnectionName='+externalOauthConnectionName
++'&externalOauthConnectionId='+externalOauthConnectionId;}
+if(connectionString){URL+='&connection_string='+encodeURIComponent(connectionString);}
 var SI=SUGAR.inboundEmail;if(!SI.testDlg){SI.testDlg=new YAHOO.widget.SimpleDialog("testSettingsDiv",{fixedcenter:true,width:width+"px",draggable:true,dragOnly:true,close:true,constraintoviewport:true,modal:true,loadingText:SUGAR.language.get("app_strings","LBL_EMAIL_LOADING")});SI.testDlg._updateContent=function(o){var w=this.cfg.config.width.value+"px";this.setBody(o.responseText);if(this.evalJS)
 SUGAR.util.evalScript(o.responseText);if(!SUGAR.isIE)
 this.body.style.width=w}}
@@ -75,6 +78,10 @@ function isDataValid(formName,validateMonitoredFolder){var formObject=document.g
 if(trim(formObject.email_user.value)==""){errors.push(SUGAR.language.get('app_strings','LBL_EMAIL_ERROR_USER'));}
 if(formObject.protocol.protocol==""){errors.push(SUGAR.language.get('app_strings','LBL_EMAIL_ERROR_PROTOCOL'));}
 if(formObject.protocol.value=='imap'&&validateMonitoredFolder){if(trim(formObject.mailbox.value)==""){errors.push(SUGAR.language.get('app_strings','LBL_EMAIL_ERROR_MONITORED_FOLDER'));}}
+if(formObject.auth_type&&formObject.email_password){if(formObject.auth_type.value==='oauth'){if(!formObject.external_oauth_connection_name.value||!formObject.external_oauth_connection_id.value){errors.push(SUGAR.language.get('app_strings','LBL_OAUTH_CONNECTION_NOT_SET'));}}
+if(formObject.auth_type.value==='basic'){if(formObject.external_oauth_connection_name){formObject.external_oauth_connection_name='';}
+if(formObject.external_oauth_connection_id){formObject.external_oauth_connection_id='';}
+if(formObject.email_password.value===''&&!formObject.email_password.dataset.isValueSet){errors.push(SUGAR.language.get('app_strings','LBL_EMAIL_PASSWORD_NOT_SET'));}}}
 if(formObject.port.value==""){errors.push(SUGAR.language.get('app_strings','LBL_EMAIL_ERROR_PORT'));}
 if(errors.length>0){out=SUGAR.language.get('app_strings','LBL_EMAIL_ERROR_DESC');for(i=0;i<errors.length;i++){if(out!=""){out+="\n";}
 out+=errors[i];}

@@ -4,6 +4,9 @@
         <MintStatusBox v-if="loginError" type="error">{{
             languages.label('LBL_MINT4_AUTH_LOGIN_ERROR')
         }}</MintStatusBox>
+        <MintStatusBox v-if="route.query.reset === 'success'" type="success">
+            {{ languages.label('LBL_MINT4_AUTH_RESET_SUCCESS') }}
+        </MintStatusBox>
         <v-form class="login-form" @submit.prevent="handleSubmit">
             <v-text-field
                 class="login-input"
@@ -28,10 +31,23 @@
                 :label="languages.label('LBL_MINT4_AUTH_PASSWORD')"
                 variant="outlined"
                 hide-details
-                :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                @click:append-inner="showPassword = !showPassword"
                 :disabled="isSubmiting"
-            />
+                >
+                <template #append-inner>
+                <v-btn
+                    icon 
+                    variant="text"
+                    density="compact"
+                    class="login-password-toggle"
+                    :aria-label="showPassword ? languages.label('LBL_MINT4_AUTH_HIDE_PASSWORD') : languages.label('LBL_MINT4_AUTH_SHOW_PASSWORD')"
+                    @click="showPassword = !showPassword"
+                >
+                    <v-icon size="20">
+                    {{ showPassword ? 'mdi-eye-off' : 'mdi-eye' }}
+                    </v-icon>
+                </v-btn>
+                </template>
+            </v-text-field>
             <MintButton variant="primary" :text="languages.label('LBL_MINT4_AUTH_LOGIN_BTN')" @click="handleSubmit" />
         </v-form>
     </div>
@@ -44,9 +60,9 @@ import { useBackendStore } from '@/store/backend'
 import { useLanguagesStore } from '@/store/languages'
 import { useAuthStore } from '@/store/auth'
 import { usePreferencesStore } from '@/store/preferences'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import MintButton from '@/components/MintButtons/MintButton.vue'
-import MintStatusBox from '@/components/MintStatusBox.vue'
+import MintStatusBox from '@/components/MintStatusBoxes/MintStatusBox.vue'
 
 const authViewStore = useAuthViewStore()
 const backend = useBackendStore()
@@ -87,6 +103,7 @@ const showPassword = ref(false)
 const isSubmiting = ref(false)
 const loginError = ref(false)
 const router = useRouter()
+const route = useRoute()
 
 async function handleSubmit() {
     loginError.value = false
@@ -126,5 +143,9 @@ async function handleSubmit() {
 .login-form .login-input input:-webkit-autofill:focus,
 .login-form .login-input input:-webkit-autofill:active {
     transition: background-color 9999s ease-in-out 0s;
+}
+.login-password-toggle {
+    min-width: 0;
+    padding: 0;
 }
 </style>

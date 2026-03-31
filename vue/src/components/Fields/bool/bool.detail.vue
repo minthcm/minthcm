@@ -11,16 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 </script>
 
 <style scoped lang="scss">

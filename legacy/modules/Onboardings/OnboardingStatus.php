@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class OnboardingStatus
 {
     protected $focus;
@@ -59,6 +60,9 @@ class OnboardingStatus
 
     protected function close()
     {
+        if($this->focus->status == 'held') {
+            return;
+        }
         $this->focus->status = 'held';
         $this->focus->save();
     }

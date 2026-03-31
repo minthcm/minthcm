@@ -4,7 +4,7 @@ namespace MintMCP;
 
 use MintMCP\Auth\AuthManager;
 use MintMCP\Auth\OAuth2Server;
-use MintMCP\Handlers\Logger;
+use MintMCP\Server\Logger;
 use MintMCP\Server\MintMCPServer;
 
 class MCPApp

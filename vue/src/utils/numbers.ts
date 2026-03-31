@@ -1,18 +1,20 @@
 import { useAuthStore } from '@/store/auth'
 import { useBackendStore } from '@/store/backend'
+import { usePreferencesStore } from '@/store/preferences'
 
 
 export default class NumberUtils {
     public static formatNumber(n, num_grp_sep = null, dec_sep = null, round = null, precision = null) {
         const auth = useAuthStore()
+        const preferences = usePreferencesStore()
 
         if (n == '') {
             return n
         }
-        num_grp_sep = num_grp_sep ?? auth.user.preferences.num_grp_sep ?? ','
-        dec_sep = dec_sep ?? auth.user.preferences.dec_sep ?? '.'
-        round = round ?? auth.user.preferences.default_currency_significant_digits
-        precision = precision ?? auth.user.preferences.default_currency_significant_digits
+        num_grp_sep = num_grp_sep ?? preferences.user?.num_grp_sep ?? ','
+        dec_sep = dec_sep ?? preferences.user?.dec_sep ?? '.'
+        round = round ?? preferences.user?.default_currency_significant_digits
+        precision = precision ?? preferences.user?.default_currency_significant_digits
         n = n ? n.toString() : ''
         if (n.split) n = n.split('.')
         else return n

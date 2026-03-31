@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,12 +50,12 @@ require_once('include/externalAPI/ExternalAPIFactory.php');
 
 global $app_strings;
 
-$checkList = ExternalAPIFactory::listAPI('',true);
+$checkList = ExternalAPIFactory::listAPI('', true);
 
-if ( !empty($_REQUEST['api']) ) {
+if (!empty($_REQUEST['api'])) {
     // Check just one login type
     $newCheckList = array();
-    if ( isset($checkList[$_REQUEST['api']]) ) {
+    if (isset($checkList[$_REQUEST['api']])) {
         $newCheckList[$_REQUEST['api']] = $checkList[$_REQUEST['api']];
     }
     
@@ -64,28 +64,28 @@ if ( !empty($_REQUEST['api']) ) {
 
 $failList = array();
 
-if ( is_array($checkList) ) {
-    foreach ( $checkList as $apiName => $apiOpts ) {
-        if ( $apiOpts['authMethod'] == 'oauth' ) {
+if (is_array($checkList)) {
+    foreach ($checkList as $apiName => $apiOpts) {
+        if ($apiOpts['authMethod'] == 'oauth') {
             $api = ExternalAPIFactory::loadAPI($apiName);
-            if ( is_object($api) ) {
+            if (is_object($api)) {
                 $loginCheck = $api->quickCheckLogin();
             } else {
                 $loginCheck['success'] = false;
             }
-            if ( ! $loginCheck['success'] ) {
+            if (! $loginCheck['success']) {
                 $thisFail = array();
                 
                 $thisFail['checkURL'] = 'index.php?module=EAPM&closeWhenDone=1&action=QuickSave&application='.$apiName;
 
                 $translateKey = 'LBL_EXTAPI_'.strtoupper($apiName);
-                if ( ! empty($app_strings[$translateKey]) ) {
+                if (! empty($app_strings[$translateKey])) {
                     $apiLabel = $app_strings[$translateKey];
                 } else {
                     $apiLabel = $apiName;
                 }
 
-                $thisFail['label'] = str_replace('{0}',$apiLabel,translate('LBL_ERR_FAILED_QUICKCHECK','EAPM'));
+                $thisFail['label'] = str_replace('{0}', $apiLabel, (string) translate('LBL_ERR_FAILED_QUICKCHECK', 'EAPM'));
                 
                 $failList[$apiName] = $thisFail;
             }

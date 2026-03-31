@@ -16,6 +16,8 @@ use Api\V8\Param\GetRelationshipParams;
 use Slim\Http\Request;
 use \SugarBean;
 use \DomainException;
+
+#[\AllowDynamicProperties]
 class RelationshipService
 {
     /**

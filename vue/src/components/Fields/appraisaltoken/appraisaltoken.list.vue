@@ -7,16 +7,11 @@
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
 import { useLanguagesStore } from '@/store/languages'
 import MintButton from '@/components/MintButtons/MintButton.vue'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 const languages = useLanguagesStore()
 const openForm = () => {
     window.open(

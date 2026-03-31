@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 function checkDBSettings($silent=false) {
 
+    $sugar_db_version = '';
     installLog("Begin DB Check Process *************");
     global $mod_strings;
     $errors = array();
@@ -119,7 +120,7 @@ function checkDBSettings($silent=false) {
         switch (strtolower($db->dbType)) {
 
             case 'mysql':
-                if (preg_match("![/\\.]+!i", $_SESSION['setup_db_database_name']) ) {
+                if (preg_match("![/\\.]+!i", (string) $_SESSION['setup_db_database_name'])) {
                     $errors['ERR_DB_MYSQL_DB_NAME'] = $mod_strings['ERR_DB_MYSQL_DB_NAME_INVALID'];
                     installLog("ERROR::  {$errors['ERR_DB_MYSQL_DB_NAME']}");
                 }
@@ -128,7 +129,7 @@ function checkDBSettings($silent=false) {
             case 'mssql':
             default:
                 // Bug 29855 - Check to see if given db name is valid
-                if (preg_match("![\"'*/\\?:<>-]+!i", $_SESSION['setup_db_database_name']) ) {
+                if (preg_match("![\"'*/\\?:<>-]+!i", (string) $_SESSION['setup_db_database_name'])) {
                     $errors['ERR_DB_MSSQL_DB_NAME'] = $mod_strings['ERR_DB_MSSQL_DB_NAME_INVALID'];
                     installLog("ERROR::  {$errors['ERR_DB_MSSQL_DB_NAME']}");
                 }
@@ -222,39 +223,40 @@ function checkDBSettings($silent=false) {
         installLog("End DB Check Process *************");
 }
 
-function printErrors($errors ){
-
-global $mod_strings;
-    if(count($errors) == 0){
+function printErrors($errors)
+{
+    global $mod_strings;
+    if ((is_countable($errors) ? count($errors) : 0) == 0) {
         echo 'dbCheckPassed';
         installLog("SUCCESS:: no errors detected!");
-    }else if((count($errors) == 1 && (isset($errors["ERR_DB_EXISTS_PROCEED"])||isset($errors["ERR_DB_EXISTS_WITH_CONFIG"])))  ||
-    (count($errors) == 2 && isset($errors["ERR_DB_EXISTS_PROCEED"]) && isset($errors["ERR_DB_EXISTS_WITH_CONFIG"])) ){
-        ///throw alert asking to overwwrite db
-        echo 'preexeest';
-        installLog("WARNING:: no errors detected, but DB tables will be dropped!, issuing warning to user");
-    }else{
-        installLog("FATAL:: errors have been detected!  User will not be allowed to continue.  Errors are as follow:");
-         //print out errors
-        $validationErr  = "<p><b>{$mod_strings['ERR_DBCONF_VALIDATION']}</b></p>";
-        $validationErr .= '<ul>';
+    } else {
+        if (((is_countable($errors) ? count($errors) : 0) == 1 && (isset($errors["ERR_DB_EXISTS_PROCEED"])||isset($errors["ERR_DB_EXISTS_WITH_CONFIG"])))  ||
+    ((is_countable($errors) ? count($errors) : 0) == 2 && isset($errors["ERR_DB_EXISTS_PROCEED"]) && isset($errors["ERR_DB_EXISTS_WITH_CONFIG"]))) {
+            ///throw alert asking to overwwrite db
+            echo 'preexeest';
+            installLog("WARNING:: no errors detected, but DB tables will be dropped!, issuing warning to user");
+        } else {
+            installLog("FATAL:: errors have been detected!  User will not be allowed to continue.  Errors are as follow:");
+            //print out errors
+            $validationErr  = "<p><b>{$mod_strings['ERR_DBCONF_VALIDATION']}</b></p>";
+            $validationErr .= '<ul>';
 
-        foreach($errors as $key =>$erMsg){
-            if($key != "ERR_DB_EXISTS_PROCEED" && $key != "ERR_DB_EXISTS_WITH_CONFIG"){
-                if($_SESSION['dbUSRData'] == 'same' && $key == 'ERR_DB_ADMIN'){
+            foreach ($errors as $key =>$erMsg) {
+                if ($key != "ERR_DB_EXISTS_PROCEED" && $key != "ERR_DB_EXISTS_WITH_CONFIG") {
+                    if ($_SESSION['dbUSRData'] == 'same' && $key == 'ERR_DB_ADMIN') {
+                        installLog(".. {$erMsg}");
+                        break;
+                    }
+                    $validationErr .= '<li class="error">' . $erMsg . '</li>';
                     installLog(".. {$erMsg}");
-                    break;
                 }
-                $validationErr .= '<li class="error">' . $erMsg . '</li>';
-                installLog(".. {$erMsg}");
             }
+            $validationErr .= '</ul>';
+            $validationErr .= '</div>';
+
+            echo $validationErr;
         }
-        $validationErr .= '</ul>';
-        $validationErr .= '</div>';
-
-         echo $validationErr;
     }
-
 }
 
 

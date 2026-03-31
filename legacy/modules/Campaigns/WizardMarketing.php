@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -107,6 +107,7 @@ $ss->assign("DEC_SEP", $seps[1]);
 //$campaign_focus->load_relationship('emailmarketing');
 //$mrkt_ids = $campaign_focus->emailmarketing->get();
 
+$mrkt_lists = [];
 $mrkt_focus = BeanFactory::newBean('EmailMarketing');
 
 //override marketing by session stored selection earlier..
@@ -136,18 +137,20 @@ if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMark
     }
 }
 
+$mrktListsCount = is_countable($mrkt_lists) ? count($mrkt_lists) : 0;
+
 //if record param exists and it is not empty, then retrieve this bean
-if (isset($_REQUEST['record']) and !empty($_REQUEST['record'])) {
+if (isset($_REQUEST['record']) && !empty($_REQUEST['record'])) {
     $mrkt_focus->retrieve($_REQUEST['record']);
     $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_focus->id;
 } else {
-    if (isset($_REQUEST['marketing_id']) and !empty($_REQUEST['marketing_id'])) {
+    if (isset($_REQUEST['marketing_id']) && !empty($_REQUEST['marketing_id'])) {
         $mrkt_focus->retrieve($_REQUEST['marketing_id']);
         $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_focus->id;
     } else {
         if (!isset($mrkt_lists) || !$mrkt_lists) {
             unset($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']);
-        } elseif (count($mrkt_lists) == 1) {
+        } elseif ($mrktListsCount == 1) {
             if (empty($_REQUEST['func']) || (isset($_REQUEST['func']) && $_REQUEST['func'] != 'createEmailMarketing')) {
                 $mrkt_focus->retrieve($mrkt_lists[0]);
                 $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_lists[0];
@@ -160,7 +163,7 @@ if (isset($_REQUEST['record']) and !empty($_REQUEST['record'])) {
                 $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_focus->id;
             }
         } else {
-            if (count($mrkt_lists) > 1) {
+            if ($mrktListsCount > 1) {
                 if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']) && in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
                     if (!isset($_REQUEST['func']) || (empty($_REQUEST['func']) && $_REQUEST['func'] != 'createEmailMarketing')) {
                         $mrkt_focus->retrieve($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']);
@@ -597,7 +600,7 @@ $ss->assign('link_to_sender_details', 'index.php?return_module=Campaigns&module=
 require_once 'include/SuiteEditor/SuiteEditorConnector.php';
 $templateWidth = 600;
 $ss->assign('template_width', $templateWidth);
-$ss->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? html_entity_decode($focus->body_html) : '', $templateWidth)));
+$ss->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? html_entity_decode((string) $focus->body_html) : '', $templateWidth)));
 $ss->assign('hide_width_set', $current_user->getEditorType() != 'mozaik');
 
 // ---------------------------------
@@ -749,7 +752,8 @@ if (!empty($etid)) {
     if (!isset($notes_list)) {
         $notes_list = array();
     }
-    for ($i = 0; $i < count($notes_list); $i++) {
+    $notes_listCount = is_countable($notes_list) ? count($notes_list): 0;
+    for ($i = 0; $i < $notes_listCount; $i++) {
         $the_note = $notes_list[$i];
         if (empty($the_note->filename)) {
             continue;

@@ -11,7 +11,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,7 +47,7 @@
 
 //change directories to where this file is located.
 //this is to make sure it can find dce_config.php
-chdir(dirname(__FILE__));
+chdir(__DIR__);
 
 require_once('include/entryPoint.php');
 
@@ -61,7 +61,7 @@ if (!is_windows()) {
     $cronUser = getRunningUser();
  
     if ($cronUser == '') {
-        $GLOBALS['log']->warning('cron.php: can\'t determine running user. No cron user checks will occur.');
+        $GLOBALS['log']->warn('cron.php: can\'t determine running user. No cron user checks will occur.');
     } elseif (array_key_exists('cron', $sugar_config) && array_key_exists('allowed_cron_users', $sugar_config['cron'])) {
         if (!in_array($cronUser, $sugar_config['cron']['allowed_cron_users'])) {
             $GLOBALS['log']->fatal("cron.php: running as $cronUser is not allowed in allowed_cron_users ".
@@ -74,7 +74,7 @@ if (!is_windows()) {
             sugar_die('cron.php running with user that is not in allowed_cron_users in config.php');
         }
     } else {
-        $GLOBALS['log']->warning('cron.php: missing expected allowed_cron_users entry in config.php. ' .
+        $GLOBALS['log']->warn('cron.php: missing expected allowed_cron_users entry in config.php. ' .
                                  'No cron user checks will occur.');
     }
 }

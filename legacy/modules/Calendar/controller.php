@@ -1,7 +1,7 @@
 <?php
 
-if ( !defined('sugarEntry') || !sugarEntry ) {
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
 }
 /* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -41,351 +41,387 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  * ****************************************************************************** */
 
+require_once "modules/Calendar/CalendarUtils.php";
 
-require_once("modules/Calendar/CalendarUtils.php");
+#[\AllowDynamicProperties]
+class CalendarController extends SugarController
+{
 
-class CalendarController extends SugarController {
+    /**
+     * Bean that is being handled by the Calendar's current action.
+     * @var SugarBean $currentBean
+     */
+    protected $currentBean = null;
 
-   /**
-    * Bean that is being handled by the Calendar's current action.
-    * @var SugarBean $currentBean 
-    */
-   protected $currentBean = null;
+    /**
+     * Action SaveActivity
+     */
+    protected function action_saveactivity()
+    {
+        $this->view = 'json';
 
-   /**
-    * Action SaveActivity
-    */
-   protected function action_saveactivity() {
-      $this->view = 'json';
-
-      if ( !$this->retrieveCurrentBean('Save') ) {
-         return;
-      }
-
-      $module = $this->currentBean->module_dir;
-      $bean = $this->currentBean;
-
-      if ( empty($_REQUEST['edit_all_recurrences']) ) {
-
-         $repeat_fields = array( 'type', 'interval', 'count', 'until', 'dow', 'parent_id' );
-         foreach ( $repeat_fields as $suffix ) {
-            unset($_POST['repeat_' . $suffix]);
-         }
-      } elseif ( !empty($_REQUEST['repeat_type']) && !empty($_REQUEST['date_start']) ) {
-
-         $params = array(
-            'type' => $_REQUEST['repeat_type'],
-            'interval' => $_REQUEST['repeat_interval'],
-            'count' => $_REQUEST['repeat_count'],
-            'until' => $_REQUEST['repeat_until'],
-            'dow' => $_REQUEST['repeat_dow'],
-         );
-
-         $repeatArr = CalendarUtils::build_repeat_sequence($_REQUEST['date_start'], $params);
-         $limit = SugarConfig::getInstance()->get('calendar.max_repeat_count', 1000);
-
-         if ( count($repeatArr) > ($limit - 1) ) {
-            ob_clean();
-            $jsonData = array(
-               'access' => 'yes',
-               'limit_error' => 'true',
-               'limit' => $limit,
-            );
-            $this->view_object_map['jsonData'] = $jsonData;
+        if (!$this->retrieveCurrentBean('Save')) {
             return;
-         }
-      }
-
-
-
-      $path = "modules/{$bean->module_dir}/{$bean->object_name}FormBase.php";
-      if ( !file_exists($path) ) {
-         $GLOBALS['log']->fatal("File {$bean->object_name}FormBase.php doesn't exist");
-         sugar_cleanup(true);
-      }
-
-      require_once($path);
-
-      $FBObjectName = "{$bean->object_name}FormBase";
-
-      if ( !class_exists($FBObjectName) ) {
-         $GLOBALS['log']->fatal("Class {$bean->object_name}FormBase doesn't exist");
-         sugar_cleanup(true);
-      }
-
-      $formBase = new $FBObjectName();
-      $bean = $formBase->handleSave('', false, false);
-      unset($_REQUEST['send_invites'], $_POST['send_invites']); // prevent invites sending for recurring activities
-
-      if ( $record = $bean->id ) {
-
-         // Mint - begin
-         require_once 'include/CalendarActivities/CalendarActivities.php';
-         $cal_modules = array_keys(CalendarActivities::getDefs());
-         array_push($cal_modules, 'Calls', 'Meetings');
-         if ( in_array($module, $cal_modules) ) {
-            //if ($module == "Meetings" || $module == "Calls") {
-            // Mint - end
-
-            if ( !empty($_REQUEST['edit_all_recurrences']) ) {
-               CalendarUtils::markRepeatDeleted($bean);
-            }
-            if ( isset($repeatArr) && is_array($repeatArr) && count($repeatArr) > 0 ) {
-               $repeatCreated = CalendarUtils::save_repeat_activities($bean, $repeatArr);
-            }
-         }
-
-         $bean->retrieve($record);
-         $jsonData = CalendarUtils::get_sendback_array($bean);
-
-         if ( isset($repeatCreated) && is_array($repeatCreated) ) {
-            $jsonData = array_merge($jsonData, array( 'repeat' => $repeatCreated ));
-         }
-
-         if ( !empty($_REQUEST['edit_all_recurrences']) ) {
-            $jsonData['edit_all_recurrences'] = 'true';
-         }
-         if (!empty($jsonData['duration_hours']) && $jsonData['duration_hours'] %24 === 0) {
-            $jsonData['allDay'] = 'true';
         }
-      } else {
-         $jsonData = array(
-            'access' => 'no',
-         );
-      }
 
-      $this->view_object_map['jsonData'] = $jsonData;
-   }
+        $module = $this->currentBean->module_dir;
+        $bean = $this->currentBean;
 
-   /**
-    * Action QuickEdit
-    */
-   protected function action_quickedit() {
-      $this->view = 'quickedit';
+        if (empty($_REQUEST['edit_all_recurrences'])) {
 
-      if ( !$this->retrieveCurrentBean('Detail') ) {
-         return;
-      }
+            $repeat_fields = array('type', 'interval', 'count', 'until', 'dow', 'parent_id');
+            foreach ($repeat_fields as $suffix) {
+                unset($_POST['repeat_' . $suffix]);
+            }
+        } elseif (!empty($_REQUEST['repeat_type']) && !empty($_REQUEST['date_start'])) {
 
-      $this->view_object_map['currentModule'] = $this->currentBean->module_dir;
-      $this->view_object_map['currentBean'] = $this->currentBean;
-   }
-
-   protected function action_getUser() {
-      $bean = BeanFactory::getBean("Users", $_REQUEST['record']);
-      echo json_encode(array( "user_name" => $bean->user_name, "full_name" => $bean->full_name ));
-      die();
-   }
-
-   /**
-    * Action Reschedule
-    * Used for drag & drop
-    */
-   protected function action_reschedule() {
-      $this->view = 'json';
-
-      $commit = true;
-
-      if ( !$this->retrieveCurrentBean('Save') ) {
-         return;
-      }
-
-      $_REQUEST['parent_name'] = $this->currentBean->parent_name;
-
-      $dateField = "date_start";
-      if ( $this->currentBean->module_dir == "Tasks" ) {
-         $dateField = "date_due";
-      }
-      if ( $_REQUEST['allDay'] == true ) {
-         $endDateField = "date_end";
-         list($tmp, $time) = explode(" ", $this->currentBean->$endDateField);
-         list($date, $tmp) = explode(" ", $_REQUEST['enddatetime']);
-         $_REQUEST[$endDateField] = $date . " " . $tmp;
-         $_POST[$endDateField] = $_REQUEST[$endDateField];
-      }
-
-      if ( !empty($_REQUEST['calendar_style']) && $_REQUEST['calendar_style'] == "basic" ) {
-         list($tmp, $time) = explode(" ", $this->currentBean->$dateField);
-         list($date, $tmp) = explode(" ", $_REQUEST['datetime']);
-         $_POST['datetime'] = $date . " " . $tmp;
-      }
-      $_POST[$dateField] = $_REQUEST['datetime'];
-
-      if ( $this->currentBean->module_dir == "Tasks" && !empty($this->currentBean->date_start) ) {
-         if ( $GLOBALS['timedate']->fromUser($_POST['date_due'])->ts < $GLOBALS['timedate']->fromUser($this->currentBean->date_start)->ts ) {
-            $this->view_object_map['jsonData'] = array(
-               'access' => 'no',
-               'errorMessage' => $GLOBALS['mod_strings']['LBL_DATE_END_ERROR'],
+            $params = array(
+                'type' => $_REQUEST['repeat_type'],
+                'interval' => $_REQUEST['repeat_interval'],
+                'count' => $_REQUEST['repeat_count'],
+                'until' => $_REQUEST['repeat_until'],
+                'dow' => $_REQUEST['repeat_dow'],
             );
-            $commit = false;
-         }
-      }
 
-      if ( $commit ) {
-         require_once('include/formbase.php');
-         $this->currentBean = populateFromPost("", $this->currentBean);
-         $this->currentBean->save();
-         $this->currentBean->retrieve($_REQUEST['record']);
+            $repeatArr = CalendarUtils::build_repeat_sequence($_REQUEST['date_start'], $params);
+            $limit = SugarConfig::getInstance()->get('calendar.max_repeat_count', 1000);
 
-         $this->view_object_map['jsonData'] = CalendarUtils::get_sendback_array($this->currentBean);
-      }
-   }
+            if (count($repeatArr) > ($limit - 1)) {
+                ob_clean();
+                $jsonData = array(
+                    'access' => 'yes',
+                    'limit_error' => 'true',
+                    'limit' => $limit,
+                );
+                $this->view_object_map['jsonData'] = $jsonData;
+                return;
+            }
+        }
 
-   /**
-    * Action Remove
-    */
-   protected function action_remove() {
-      $this->view = 'json';
+        $path = "modules/{$bean->module_dir}/{$bean->object_name}FormBase.php";
+        if (!file_exists($path)) {
+            $GLOBALS['log']->fatal("File {$bean->object_name}FormBase.php doesn't exist");
+            sugar_cleanup(true);
+        }
 
-      if ( !$this->retrieveCurrentBean('Delete') ) {
-         return;
-      }
+        require_once $path;
 
-      if ( $this->currentBean->module_dir == "Meetings" || $this->currentBean->module_dir == "Calls" ) {
-         if ( !empty($_REQUEST['remove_all_recurrences']) && $_REQUEST['remove_all_recurrences'] ) {
-            CalendarUtils::markRepeatDeleted($this->currentBean);
-         }
-      }
+        $FBObjectName = "{$bean->object_name}FormBase";
 
-      $this->currentBean->mark_deleted($_REQUEST['record']);
+        if (!class_exists($FBObjectName)) {
+            $GLOBALS['log']->fatal("Class {$bean->object_name}FormBase doesn't exist");
+            sugar_cleanup(true);
+        }
 
-      $this->view_object_map['jsonData'] = array(
-         'access' => 'yes',
-      );
-   }
+        $formBase = new $FBObjectName();
+        $bean = $formBase->handleSave('', false, false);
+        unset($_REQUEST['send_invites'], $_POST['send_invites']); // prevent invites sending for recurring activities
 
-   /**
-    * Action Resize
-    * Used for drag & drop resizing
-    */
-   protected function action_resize() {
-      $this->view = 'json';
+        if ($record = $bean->id) {
 
-      if ( !$this->retrieveCurrentBean('Save') ) {
-         return;
-      }
+            // Mint - begin
+            require_once 'include/CalendarActivities/CalendarActivities.php';
+            $cal_modules = array_keys(CalendarActivities::getDefs());
+            array_push($cal_modules, 'Calls', 'Meetings');
+            if (in_array($module, $cal_modules)) {
+                //if ($module == "Meetings" || $module == "Calls") {
+                // Mint - end
 
-      require_once('include/formbase.php');
-      $this->currentBean = populateFromPost("", $this->currentBean);
-      $this->currentBean->save();
+                if (!empty($_REQUEST['edit_all_recurrences'])) {
+                    CalendarUtils::markRepeatDeleted($bean);
+                }
+                if (isset($repeatArr) && is_array($repeatArr) && count($repeatArr) > 0) {
+                    $repeatCreated = CalendarUtils::save_repeat_activities($bean, $repeatArr);
+                }
+            }
 
-      $this->view_object_map['jsonData'] = array(
-         'access' => 'yes',
-      );
-   }
+            $bean->retrieve($record);
+            $jsonData = CalendarUtils::get_sendback_array($bean);
 
-   /**
-    * Retrieves current activity bean and checks access to action
-    * 
-    * @param string $actionToCheck
-    * @return bool Result of check
-    */
-   protected function retrieveCurrentBean($actionToCheck = false) {
-      $module = $_REQUEST['current_module'];
-      $record = null;
-      if ( !empty($_REQUEST['record']) ) {
-         $record = $_REQUEST['record'];
-      }
+            if (isset($repeatCreated) && is_array($repeatCreated)) {
+                $jsonData = array_merge($jsonData, array('repeat' => $repeatCreated));
+            }
 
-      require_once("data/BeanFactory.php");
-      $this->currentBean = BeanFactory::getBean($module, $record);
-
-      if ( !empty($actionToCheck) ) {
-         if ( !$this->currentBean->ACLAccess($actionToCheck) ) {
-            $this->view = 'json';
+            if (!empty($_REQUEST['edit_all_recurrences'])) {
+                $jsonData['edit_all_recurrences'] = 'true';
+            }
+            if (!empty($jsonData['duration_hours']) && $jsonData['duration_hours'] % 24 === 0) {
+                $jsonData['allDay'] = 'true';
+            }
+        } else {
             $jsonData = array(
-               'access' => 'no',
+                'access' => 'no',
             );
-            $this->view_object_map['jsonData'] = $jsonData;
-            return false;
-         }
-      }
+        }
 
-      return true;
-   }
+        $this->view_object_map['jsonData'] = $jsonData;
+    }
 
-   protected function action_getActivities() {
-      $this->view = 'json';
+    /**
+     * Action QuickEdit
+     */
+    protected function action_quickedit()
+    {
+        $this->view = 'quickedit';
 
-      if ( !ACLController::checkAccess('Calendar', 'list', true) ) {
-         ACLController::displayNoAccess(true);
-      }
+        if (!$this->retrieveCurrentBean('Detail')) {
+            return;
+        }
 
-      require_once('modules/Calendar/Calendar.php');
-      //Mint start - to prevent warrning logs when view is not set
-      $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : 'week';
-      $cal = new Calendar($view);
+        $this->view_object_map['currentModule'] = $this->currentBean->module_dir;
+        $this->view_object_map['currentBean'] = $this->currentBean;
+    }
+
+    protected function action_getUser()
+    {
+        $bean = BeanFactory::getBean("Users", $_REQUEST['record']);
+        echo json_encode(array("user_name" => $bean->user_name, "full_name" => $bean->full_name));
+        die();
+    }
+
+    /**
+     * Action Reschedule
+     * Used for drag & drop
+     */
+    protected function action_reschedule()
+    {
+        $this->view = 'json';
+
+        $commit = true;
+
+        if (!$this->retrieveCurrentBean('Save')) {
+            return;
+        }
+
+        $_REQUEST['parent_name'] = $this->currentBean->parent_name;
+
+        $dateField = "date_start";
+        if ("Tasks" == $this->currentBean->module_dir) {
+            $dateField = "date_due";
+        }
+        if (true == $_REQUEST['allDay']) {
+            $endDateField = "date_end";
+            list($tmp, $time) = explode(" ", $this->currentBean->$endDateField);
+            list($date, $tmp) = explode(" ", $_REQUEST['enddatetime']);
+            $_REQUEST[$endDateField] = $date . " " . $tmp;
+            $_POST[$endDateField] = $_REQUEST[$endDateField];
+        }
+
+        if (!empty($_REQUEST['calendar_style']) && "basic" == $_REQUEST['calendar_style']) {
+            list($tmp, $time) = explode(" ", $this->currentBean->$dateField);
+            list($date, $tmp) = explode(" ", $_REQUEST['datetime']);
+            $_POST['datetime'] = $date . " " . $tmp;
+        }
+        $_POST[$dateField] = $_REQUEST['datetime'];
+
+        if ("Tasks" == $this->currentBean->module_dir && !empty($this->currentBean->date_start)) {
+            if ($GLOBALS['timedate']->fromUser($_POST['date_due'])->ts < $GLOBALS['timedate']->fromUser($this->currentBean->date_start)->ts) {
+                $this->view_object_map['jsonData'] = array(
+                    'access' => 'no',
+                    'errorMessage' => $GLOBALS['mod_strings']['LBL_DATE_END_ERROR'],
+                );
+                $commit = false;
+            }
+        }
+
+        if (isset($this->currentBean->duration_hours)) {
+            $date_start = $GLOBALS['timedate']->to_db($_POST['datetime']);
+            $td = $GLOBALS['timedate']->fromDb($date_start);
+            if ($td) {
+                if (isset($this->currentBean->duration_hours) && '' != $this->currentBean->duration_hours) {
+                    $td->modify("+{$this->currentBean->duration_hours} hours");
+                }
+                if (isset($this->currentBean->duration_minutes) && '' != $this->currentBean->duration_minutes) {
+                    $td->modify("+{$this->currentBean->duration_minutes} mins");
+                }
+                $_POST['date_end'] = $GLOBALS['timedate']->asUser($td);
+            }
+        }
+
+        if ($commit) {
+            require_once 'include/formbase.php';
+            $this->currentBean = populateFromPost("", $this->currentBean);
+            $this->currentBean->save();
+            $this->currentBean->retrieve($_REQUEST['record']);
+
+            $this->view_object_map['jsonData'] = CalendarUtils::get_sendback_array($this->currentBean);
+        }
+    }
+
+    /**
+     * Action Remove
+     */
+    protected function action_remove()
+    {
+        $this->view = 'json';
+
+        if (!$this->retrieveCurrentBean('Delete')) {
+            return;
+        }
+
+        if ("Meetings" == $this->currentBean->module_dir || "Calls" == $this->currentBean->module_dir) {
+            if (!empty($_REQUEST['remove_all_recurrences']) && $_REQUEST['remove_all_recurrences']) {
+                CalendarUtils::markRepeatDeleted($this->currentBean);
+            }
+        }
+
+        $this->currentBean->mark_deleted($_REQUEST['record']);
+
+        $this->view_object_map['jsonData'] = array(
+            'access' => 'yes',
+        );
+    }
+
+    /**
+     * Action Resize
+     * Used for drag & drop resizing
+     */
+    protected function action_resize()
+    {
+        $this->view = 'json';
+
+        if (!$this->retrieveCurrentBean('Save')) {
+            return;
+        }
+        $date_start = $GLOBALS['timedate']->to_db($this->currentBean->date_start);
+        $td = $GLOBALS['timedate']->fromDb($date_start);
+        $_POST['date_start'] = $GLOBALS['timedate']->asUser($td);
+        if ($td) {
+            if (isset($_POST['duration_hours']) && '' != $_POST['duration_hours']) {
+                $td->modify("+{$_POST['duration_hours']} hours");
+            }
+            if (isset($_POST['duration_minutes']) && '' != $_POST['duration_minutes']) {
+                $td->modify("+{$_POST['duration_minutes']} mins");
+            }
+            $_POST['date_end'] = $GLOBALS['timedate']->asUser($td);
+        }
+        require_once 'include/formbase.php';
+        $this->currentBean = populateFromPost("", $this->currentBean);
+        $this->currentBean->save();
+
+        $this->view_object_map['jsonData'] = array(
+            'access' => 'yes',
+        );
+    }
+
+    /**
+     * Retrieves current activity bean and checks access to action
+     *
+     * @param string $actionToCheck
+     * @return bool Result of check
+     */
+    protected function retrieveCurrentBean($actionToCheck = false)
+    {
+        $module = $_REQUEST['current_module'];
+        $record = null;
+        if (!empty($_REQUEST['record'])) {
+            $record = $_REQUEST['record'];
+        }
+
+        require_once "data/BeanFactory.php";
+        $this->currentBean = BeanFactory::getBean($module, $record);
+
+        if (!empty($actionToCheck)) {
+            if (!$this->currentBean->ACLAccess($actionToCheck)) {
+                $this->view = 'json';
+                $jsonData = array(
+                    'access' => 'no',
+                );
+                $this->view_object_map['jsonData'] = $jsonData;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function action_getActivities()
+    {
+        $this->view = 'json';
+
+        if (!ACLController::checkAccess('Calendar', 'list', true)) {
+            ACLController::displayNoAccess(true);
+        }
+
+        require_once 'modules/Calendar/Calendar.php';
+        //Mint start - to prevent warrning logs when view is not set
+        $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : 'week';
+        $cal = new Calendar($view);
 //      $cal = new Calendar($_REQUEST['view']);
-      //Mint stop
+        //Mint stop
 
-      if ( in_array($cal->view, array( 'day', 'week', 'month' )) ) {
-         $cal->add_activities($GLOBALS['current_user']);
-      } elseif ( $cal->view == 'shared' ) {
-         $cal->init_shared();
-         $sharedUser = BeanFactory::newBean('Users');
-         foreach ( $cal->shared_ids as $member ) {
-            $sharedUser->retrieve($member);
-            $cal->add_activities($sharedUser);
-         }
-      }
-      $cal->load_activities();
-      $this->view_object_map['jsonData'] = $cal->items;
-   }
+        if (in_array($cal->view, array('day', 'week', 'month'))) {
+            $cal->add_activities($GLOBALS['current_user']);
+        } elseif ('shared' == $cal->view) {
+            $cal->init_shared();
+            $sharedUser = BeanFactory::newBean('Users');
+            foreach ($cal->shared_ids as $member) {
+                $sharedUser->retrieve($member);
+                $cal->add_activities($sharedUser);
+            }
+        }
+        $cal->load_activities();
+        $this->view_object_map['jsonData'] = $cal->items;
+    }
 
-   protected function action_createUpdateGroup() {
-      $group_name = $_REQUEST['group_name'];
-      $user_ids = $_REQUEST['user_ids'];
-      global $current_user;
-      $user_ids_groups = $current_user->getPreference('shared_ids_groups') ?? [];
-      $create = true;
-      foreach($user_ids_groups as $key => $value) {
-         if (array_key_exists($group_name, $value)) {
-            $user_ids_groups[$key] = [$group_name => $user_ids];
-            $create = false;
-            break;
-         }
-      }
-      if ($create) {
-         $user_ids_groups[] = [$group_name => $user_ids];
-      }
-      $current_user->setPreference('shared_ids_groups', $user_ids_groups);
-      $current_user->setPreference('shared_ids_last_group', $group_name);
-      $current_user->setPreference('shared_ids', $user_ids);
-      echo true;
-   }
+    protected function action_createUpdateGroup()
+    {
+        $group_name = $_REQUEST['group_name'];
+        $user_ids = $_REQUEST['user_ids'];
+        global $current_user;
+        $user_ids_groups = $current_user->getPreference('shared_ids_groups') ?? [];
+        $create = true;
+        foreach ($user_ids_groups as $key => $value) {
+            if (array_key_exists($group_name, $value)) {
+                $user_ids_groups[$key] = [$group_name => $user_ids];
+                $create = false;
+                break;
+            }
+        }
+        if ($create) {
+            $user_ids_groups[] = [$group_name => $user_ids];
+        }
+        $current_user->setPreference('shared_ids_groups', $user_ids_groups);
+        $current_user->setPreference('shared_ids_last_group', $group_name);
+        $current_user->setPreference('shared_ids', $user_ids);
+        echo true;
+    }
 
-   protected function action_selectGroup() {
-      $group_name = $_REQUEST['group_name'];
-      global $current_user;
-      $user_ids_groups = $current_user->getPreference('shared_ids_groups');
-      foreach($user_ids_groups as $key => $value) {
-         if (array_key_exists($group_name, $value)) {
-            $current_user->setPreference('shared_ids', $value[$group_name]);
-         }
-      }
-      $current_user->setPreference('shared_ids_last_group', $group_name);
-      echo true;
-   }
+    protected function action_selectGroup()
+    {
+        $group_name = $_REQUEST['group_name'];
+        global $current_user;
+        $user_ids_groups = $current_user->getPreference('shared_ids_groups');
+        foreach ($user_ids_groups as $key => $value) {
+            if (array_key_exists($group_name, $value)) {
+                $current_user->setPreference('shared_ids', $value[$group_name]);
+            }
+        }
+        $current_user->setPreference('shared_ids_last_group', $group_name);
+        echo true;
+    }
 
-   protected function action_deleteGroup() {
-      $group_name = $_REQUEST['group_name'];
-      global $current_user;
-      $user_ids_groups = $current_user->getPreference('shared_ids_groups');
-      foreach($user_ids_groups as $key => $value) {
-         if (array_key_exists($group_name, $value)) {
-            unset($user_ids_groups[$key]);
-         }
-      }
-      $current_user->setPreference('shared_ids_groups', $user_ids_groups);
-      echo true;
-   }
+    protected function action_deleteGroup()
+    {
+        $group_name = $_REQUEST['group_name'];
+        global $current_user;
+        $user_ids_groups = $current_user->getPreference('shared_ids_groups');
+        foreach ($user_ids_groups as $key => $value) {
+            if (array_key_exists($group_name, $value)) {
+                unset($user_ids_groups[$key]);
+            }
+        }
+        $current_user->setPreference('shared_ids_groups', $user_ids_groups);
+        echo true;
+    }
 
-   protected function action_unselectGroup() {
+    protected function action_unselectGroup()
+    {
         global $current_user;
         $user_ids = $_REQUEST['user_ids'];
         $current_user->setPreference('shared_ids_last_group', '');
         $current_user->setPreference('shared_ids', $user_ids);
         echo true;
-   }
+    }
 
 }

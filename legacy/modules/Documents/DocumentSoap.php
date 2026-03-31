@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ require_once('include/upload_file.php');
 
 require_once('include/upload_file.php');
 
+#[\AllowDynamicProperties]
 class DocumentSoap
 {
     public $upload_file;
@@ -57,6 +58,9 @@ class DocumentSoap
     {
         $this->upload_file = new UploadFile('filename_file');
     }
+
+
+
 
     public function saveFile($document, $portal = false)
     {
@@ -79,8 +83,8 @@ class DocumentSoap
             $decodedFile = base64_decode($document['file']);
             $this->upload_file->set_for_soap($document['filename'], $decodedFile);
 
-            $ext_pos = strrpos($this->upload_file->stored_file_name, ".");
-            $this->upload_file->file_ext = substr($this->upload_file->stored_file_name, $ext_pos + 1);
+            $ext_pos = strrpos((string) $this->upload_file->stored_file_name, ".");
+            $this->upload_file->file_ext = substr((string) $this->upload_file->stored_file_name, $ext_pos + 1);
             if (in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
                 $this->upload_file->stored_file_name .= ".txt";
                 $this->upload_file->file_ext = "txt";

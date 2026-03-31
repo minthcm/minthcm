@@ -23,6 +23,12 @@ $ESListViewDefs['Project'] = [
         'estimated_end_date' => [
             'default' => true,
         ],
+        'am_projecttemplates_project_1_name' => [
+            'default' => false,
+        ],
+        'override_business_hours' => [
+            'default' => false,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -35,5 +41,7 @@ $ESListViewDefs['Project'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'am_projecttemplates_project_1_name' => [],
+        'override_business_hours' => [],
     ],
 ];

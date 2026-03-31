@@ -2,8 +2,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useModulesStore } from '@/store/modules'
-import axios from 'axios'
 import { useLanguagesStore } from '@/store/languages'
+import { useBean } from '@/composables/useBean'
+import { useACL } from '@/composables/useACL'
+import { useBackendStore } from '@/store/backend'
+import { MintInlineButton } from '@/components/MintPanel/MintPanelSubpanels/MintSubpanelsInlineButtons.vue'
 
 interface Panel {
     component: string
@@ -25,85 +28,48 @@ export interface Bean {
     dirtyFields: Set<string>
 }
 
-export const useRecordViewStore = defineStore('recordview', () => {
-    const route = useRoute()
+interface RouteParams {
+    module: string
+    id: string
+}
 
-    const defs = computed<RecordViewDefs | []>(() => {
-        const modules = useModulesStore()
-        const module = modules.currentModule
-        if (!module) {
+export const useRecordViewStore = defineStore('recordview', () => {
+    const modulesStore = useModulesStore()
+    const backendStore = useBackendStore()
+    const route = useRoute()
+    const acl = useACL()
+
+    const defs = computed<RecordViewDefs>(() => {
+        if (!modulesStore.currentModule) {
             return []
         }
-        const recordViewDefs = module.metadata.RecordView
+        const recordViewDefs = modulesStore.currentModule.metadata.RecordView
         if (!recordViewDefs || typeof recordViewDefs !== 'object') {
             return []
         }
         return recordViewDefs
     })
 
-    const bean = ref<Bean>({
-        id: '',
-        module_name: '',
-        acl_access: {},
-        attributes: {},
-        syncAttributes: {},
-        dirtyFields: new Set(),
+    const module = computed(() => {
+        if (typeof route.params.module === 'string') {
+            return route.params.module
+        }
+        return ''
     })
 
-    const isBeanChanged = computed(() => {
-        return Array.from(bean.value.dirtyFields).some((f) => bean.value.attributes[f] !== bean.value.syncAttributes[f])
+    const recordId = computed(() => {
+        if (typeof route.params.id === 'string') {
+            return route.params.id
+        }
+        return ''
     })
+
+    const bean = ref<ReturnType<typeof useBean>>(useBean(module.value, recordId.value))
 
     function resetBean() {
-        bean.value = {
-            id: '',
-            module_name: '',
-            acl_access: {},
-            attributes: {},
-            syncAttributes: {},
-            dirtyFields: new Set(),
-        }
+        bean.value = useBean(module.value, recordId.value)
+        view.value = 'detail'
         subpanelsData.value = null
-    }
-
-    async function fetchBean() {
-        const response = await axios.get(`api/${route.params.module}/Get/${route.params.id}`)
-        if (response.status === 200 && response.data) {
-            bean.value = {
-                id: response.data.id,
-                module_name: response.data.module_name,
-                acl_access: response.data.acl_access,
-                attributes: { ...response.data },
-                syncAttributes: { ...response.data },
-                dirtyFields: new Set(),
-            }
-        }
-    }
-
-    async function saveBean() {
-        const response = await axios.patch(`api/${bean.value.module_name}/Update/${bean.value.id}`, {
-            record_data: Object.fromEntries(
-                Array.from(bean.value.dirtyFields)
-                    .filter((f) => bean.value.attributes[f] !== bean.value.syncAttributes[f])
-                    .map((f) => [f, bean.value.attributes[f]]),
-            ),
-        })
-
-        if ([200, 201].includes(response.status) && response.data) {
-            bean.value = {
-                id: response.data.id,
-                module_name: response.data.module_name,
-                acl_access: response.data.acl_access,
-                attributes: { ...response.data },
-                syncAttributes: { ...response.data },
-                dirtyFields: new Set(),
-            }
-        }
-        return response
-    }
-
-    async function deleteBean() {
-        return await axios.delete(`api/${bean.value.module_name}/${bean.value.id}`)
     }
 
     const view = ref<'detail' | 'edit' | 'list'>('detail')
@@ -126,12 +92,11 @@ export const useRecordViewStore = defineStore('recordview', () => {
         return panels
     })
 
-    //DEV: defs - (await axios.get('api/init')).data.modules.Candidates.metadata.Subpanels
-    //DEV: data - (await axios.get('api/Candidates/subpanel/meetings/5ad6d7fd-e141-0a2c-4944-6449a8e50ad3')).data
+    //DEV: defs - (await mintApi.get('init')).data.modules.Candidates.metadata.Subpanels
+    //DEV: data - (await mintApi.get('Candidates/subpanel/meetings/5ad6d7fd-e141-0a2c-4944-6449a8e50ad3')).data
     const subpanels = computed(() => {
-        const modules = useModulesStore()
         const languages = useLanguagesStore()
-        const module = modules.currentModule
+        const module = modulesStore.currentModule
         if (!module) {
             return []
         }
@@ -139,54 +104,111 @@ export const useRecordViewStore = defineStore('recordview', () => {
         if (!subpanelDefs || typeof subpanelDefs !== 'object') {
             return []
         }
-        return Object.keys(subpanelDefs).map((key) => ({
-            properties: subpanelDefs[key].properties,
-            key,
-            module: subpanelDefs[key].properties?.module?.toString() || '',
-            label: subpanelDefs[key].properties?.title_key || '',
-            columns: Object.entries(subpanelDefs[key].columns ?? {})
-                .filter(([col, props]) => props.usage !== 'query_only')
-                .map(([col, props]) => ({
-                    ...(props || {}),
-                    name: col,
-                    label:
-                        languages.label(props.label || '', subpanelDefs[key].properties?.module?.toString() || '') ||
-                        '',
-                    type: props.type || '',
-                })),
-            records: Object.keys(subpanelsData.value?.[key] ?? {}).map((id) => ({
-                ...(subpanelsData.value?.[key][id] || {}),
-                id,
-                parent_module: subpanelDefs[key].properties?.module?.toString() || '',
-            })),
-        }))
+        return Object.keys(subpanelDefs)
+            .filter((key) => {
+                const moduleType = subpanelDefs[key].properties?.module?.toString() || ''
+                return acl.hasAccess(moduleType, 'list', true, true)
+            })
+            .map((key) => ({
+                properties: subpanelDefs[key].properties,
+                key,
+                module: subpanelDefs[key].properties?.module?.toString() || '',
+                label: subpanelDefs[key].properties?.title_key || '',
+                inlineButtons: Object.entries(subpanelDefs[key].columns ?? {})
+                    .filter(([col, props]) => props.usage !== 'query_only' && !props?.type)
+                    .map(([col, props]) => ({
+                        ...(props || {}),
+                        name: col,
+                        widget_class: props?.widget_class || '',
+                } as MintInlineButton)),
+                sortBy: subpanelDefs[key].properties?.sort_by || '',
+                sortOrder: subpanelDefs[key].properties?.sort_order || '',
+                filters: subpanelDefs[key].properties?.filters && Object.keys(subpanelDefs[key].properties?.filters).length ? subpanelDefs[key].properties?.filters : {},
+                columns: Object.entries(subpanelDefs[key].columns ?? {})
+                    .filter(([col, props]) => props.usage !== 'query_only')
+                    .map(([col, props]) => ({
+                        ...(props || {}),
+                        name: col,
+                        label:
+                            languages.label(
+                                props.label || '',
+                                subpanelDefs[key].properties?.module?.toString() || '',
+                            ) || '',
+                        type: props.type || '',
+                    })),
+                records: subpanelsData.value?.[key]?.records ?? [],
+                page: subpanelsData.value?.[key]?.page ?? 0,
+                total: subpanelsData.value?.[key]?.total ?? 0,
+                paginateBy: backendStore.initData.global.list_max_entries_per_subpanel
+                    ? parseInt(backendStore.initData.global.list_max_entries_per_subpanel, 10)
+                    : 10,
+            }))
     })
 
+    const getSubpanelByKey = (subpanelKey: string) => {
+        return subpanels.value.find(sp => sp.key === subpanelKey)
+    }
+
     async function fetchSubpanelsData() {
-        const route = useRoute()
-        const data = await Promise.all(
-            subpanels.value.map((subpanel) =>
-                axios.get(`api/${route.params.module}/subpanel/${subpanel.key}/${route.params.id}`, {
-                    validateStatus: () => true,
-                }),
-            ),
+        if (!subpanels.value || subpanels.value.length === 0) return
+
+        await Promise.all(
+            subpanels.value.map(async (subpanel) => {
+                let link = bean.value.loadRelationship(subpanel.properties?.get_subpanel_data.toString())
+
+                if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
+                    link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
+                }
+                
+                if (link) {
+                    await link.fetchRelatedRecords(subpanel.key, subpanel.paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder)
+                    
+                    if (!subpanelsData.value) {
+                        subpanelsData.value = {}
+                    }
+                    subpanelsData.value[subpanel.key] = {
+                        records: link.beansArray,
+                        page: link.currentPage,
+                        total: link.total
+                    }
+                }
+            })
         )
-        subpanelsData.value = subpanels.value.reduce((prev, curr, index) => {
-            prev[curr.key] = data[index]?.data
-            return prev
-        }, {} as SubpanelsData)
+    }
+
+    async function fetchSubpanelRecords(subpanelKey: string, paginateBy: number, page: number, sortBy: string = '', sortOrder: string = '') {
+        const subpanel = getSubpanelByKey(subpanelKey)
+        const getSubpanelData = subpanel?.properties?.get_subpanel_data?.toString()
+
+        let link = bean.value.loadRelationship(getSubpanelData)
+        if (!link && getSubpanelData?.includes('function:')) {
+            link = bean.value.createFakeLink(getSubpanelData)
+        }
+        if (!link) {
+            return
+        }
+        await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder)
+        
+        if (!subpanelsData.value) {
+            subpanelsData.value = {}
+        }
+        subpanelsData.value[subpanelKey] = {
+            records: link.beansArray,
+            page: link.currentPage,
+            total: link.total
+        }
     }
 
     interface SubpanelsData {
         [key: string]: {
-            [id: string]: {
-                [property: string]: any
-            }
+            records: ReturnType<typeof useBean>[]
+            page: any
+            total: any
         }
     }
 
     const subpanelsData = ref<SubpanelsData | null>(null)
-    const columns = ref<number>(3)
+
 
     async function fetchLanguagesForSubpanels() {
         const languages = useLanguagesStore()
@@ -195,11 +217,9 @@ export const useRecordViewStore = defineStore('recordview', () => {
         })
     }
 
-    function updateField(field: string, additionalFields: string[]) {
-        bean.value.dirtyFields.add(field)
-        if (Array.isArray(additionalFields)) {
-            additionalFields.forEach((field) => bean.value.dirtyFields.add(field))
-        }
+    function updateField(field: string, value: any, additionalFields: { [fieldName: string]: any }) {
+        const updatedValues = { [field]: value, ...(additionalFields || {}) }
+        bean.value.updateFields(updatedValues)
     }
 
     return {
@@ -208,16 +228,12 @@ export const useRecordViewStore = defineStore('recordview', () => {
         inlineEditField,
         inlineEditFieldSaving,
         bean,
-        isBeanChanged,
         resetBean,
-        fetchBean,
-        saveBean,
-        deleteBean,
         panels,
         subpanels,
         fetchSubpanelsData,
         fetchLanguagesForSubpanels,
-        columns,
         updateField,
+        fetchSubpanelRecords,
     }
 })

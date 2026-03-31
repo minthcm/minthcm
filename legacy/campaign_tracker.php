@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -63,19 +63,18 @@ require_once('include/entryPoint.php');
 
 require_once('modules/Campaigns/utils.php');
 
-if(!empty($_REQUEST['identifier'])) {
-	$keys=log_campaign_activity($_REQUEST['identifier'],'link');
+if (!empty($_REQUEST['identifier'])) {
+    $keys=log_campaign_activity($_REQUEST['identifier'], 'link');
 }
 
-if(empty($_REQUEST['track'])) {
+if (empty($_REQUEST['track'])) {
     $track = "";
 } else {
     $track = $_REQUEST['track'];
 }
 $track = $db->quote($track);
 
-if(preg_match('/^[0-9A-Za-z\-]*$/', $track))
-{
+if (preg_match('/^[0-9A-Za-z\-]*$/', (string) $track)) {
     $query = "SELECT refer_url FROM campaigns WHERE tracker_key='$track'";
     $res = $db->query($query);
 
@@ -84,8 +83,7 @@ if(preg_match('/^[0-9A-Za-z\-]*$/', $track))
     $redirect_URL = $row['refer_url'];
     sugar_cleanup();
     header("Location: $redirect_URL");
-} else
-{
+} else {
     sugar_cleanup();
 }
 exit;

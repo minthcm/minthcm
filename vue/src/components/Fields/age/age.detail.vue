@@ -2,9 +2,11 @@
     <div>
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
-            <div>
+            <div :name="props.defs.name">
                 {{ parsedDate }}
-                <span v-if="props.modelValue"> - ({{ age }} {{ languages.label('LBL_YEARS')?.toLowerCase() }})</span>
+                <span v-if="props.field.model.isValid">
+                    - ({{ age }} {{ languages.label('LBL_YEARS')?.toLowerCase() }})
+                </span>
             </div>
             <Pencil :defs="props.defs" />
         </div>
@@ -12,42 +14,26 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-import { DateTime } from 'luxon'
-import { FieldVardef } from '@/store/modules'
+import { computed } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
 import Pencil from '../Pencil.vue'
-import { usePreferencesStore } from '@/store/preferences'
+import { FieldProps } from '../Field.model'
+import { MintDate } from '@/composables/useMintDate'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps<MintDate>>()
 const languages = useLanguagesStore()
-const preferences = usePreferencesStore()
 
 const parsedDate = computed(() => {
-    const value = props.modelValue?.trim()
-    if (!value) {
+    if (!props.field.model.isValid) {
         return ''
     }
-    const dt = DateTime.fromSQL(value)
-    if (!dt.isValid) {
-        return ''
-    }
-    return dt.toFormat(preferences.user?.date_format || 'dd.MM.yyyy')
+    return props.field.model.formatted.user_date
 })
 const age = computed(() => {
-    const value = props.modelValue?.trim()
-    if (!value) {
+    if (!props.field.model.isValid) {
         return ''
     }
-    const birthDate = DateTime.fromSQL(value)
-    const age = birthDate.diffNow('years').years
+    const age = props.field.model.instance.diffNow('years').years
     return Math.floor(-age)
 })
 </script>

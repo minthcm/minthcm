@@ -40,6 +40,7 @@
  * PLEASE DO NOT CHANGE THIS CLASS
  * PLACE ANY CUSTOMIZATIONS IN PDFTemplates
  */
+#[\AllowDynamicProperties]
 class PDFTemplates_sugar extends Basic {
 
    public $new_schema = true;

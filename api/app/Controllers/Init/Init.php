@@ -8,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -49,14 +49,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Controllers\Init\Languages;
 use MintHCM\Api\Controllers\Init\Module;
 use MintHCM\Api\Controllers\Init\Preferences;
+use MintHCM\Utils\ConstantsLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use User;
-use MintHCM\Utils\ConstantsLoader;
 
+#[\AllowDynamicProperties]
 class Init
 {
-    protected $preferences_controller, $languages_controller, $module_init_controller, $mintRebuildID, $request_language, $user_id;
+    protected $preferences_controller, $languages_controller, $module_init_controller, $mintRebuildID, $request_language, $user_id, $all_modules;
 
     const VIEW_META = [
         "DetailView",
@@ -105,17 +106,20 @@ class Init
             in_array('reload_module_menu', $rebuild_array)
             || (!$only_minimum_data && empty($rebuild_array))
             || $response_body['user']['id'] !== $this->user_id
-            || false !== $response_body['user']['preferences']['reload_module_menu'] 
+            || false !== $response_body['preferences']['reload_module_menu']
             || $this->request_language !== $_SESSION["authenticated_user_language"]
         ) {
-            [$modules_menu, $modules_data] = $this->getModules();
+            $this->all_modules = $this->getAllModules();
+            $modules_menu = $this->getModules();
+            $modules_data = $this->getModulesData();
             $response_body['menu_modules'] = $modules_menu;
             $response_body['modules'] = $modules_data;
-        $response_body['quick_create'] = $this->getQuickCreate($modules_menu);
+            $response_body['quick_create'] = $this->getQuickCreate();
             $response_body['legacy_views'] = $this->getLegacyViews($modules_data);
         }
         if ($only_minimum_data) {
-            $response_body['acls'] = $this->module_init_controller->getACLs();
+            $this->all_modules = $this->getAllModules();
+            $response_body['acls'] = $this->module_init_controller->getACLs($this->all_modules);
         }
 
         if (!empty($rebuild_array)) {
@@ -125,6 +129,9 @@ class Init
         }
         $response_body['mintRebuildID'] = $this->mintRebuildID;
         $response_body['system_name'] = $GLOBALS['system_config']->settings['system_name'];
+        global $sugar_config;
+        $response_body['upload_maxsize'] = $sugar_config['upload_maxsize'] ?? '3000000';
+        $response_body['field_variables']['ColoredEnum']['options_colors'] = ConstantsLoader::getConstants('colored_enum');
         return $response_body;
     }
 
@@ -137,17 +144,6 @@ class Init
         if (empty($current_user->id)) {
             return array();
         }
-        $preferences = [];
-        $preferences['date_time_preferences'] = $current_user->getUserDateTimePreferences();
-        $preferences['first_day_of_week'] = $current_user->getPreference('fdow');
-        $preferences['timezone'] = $current_user->getPreference('timezone');
-        $preferences['name_format'] = $current_user->getPreference('default_locale_name_format');
-        $preferences['dec_sep'] = $current_user->getPreference('dec_sep');
-        $preferences['num_grp_sep'] = $current_user->getPreference('num_grp_sep');
-        $preferences['reload_module_menu'] = $current_user->getPreference('reload_module_menu');
-        $current_user->setPreference('reload_module_menu', false, 0, 'global');
-        $preferences['default_currency_significant_digits'] = $current_user->getPreference('default_currency_significant_digits');
-        $preferences['language'] = $_SESSION['authenticated_user_language'];
         return array(
             "id" => $current_user->id,
             "is_admin" => "1" === $current_user->is_admin ? true : false,
@@ -156,7 +152,6 @@ class Init
             "full_name" => $current_user->full_name,
             "email" => $current_user->email1,
             "photo" => $current_user->photo,
-            "preferences" => $preferences,
             "show_login_wizard" => empty($current_user->getPreference('ut')),
         );
     }
@@ -164,23 +159,46 @@ class Init
     private function getModules()
     {
         global $current_user;
+
         chdir('../legacy');
-        $modules = query_module_access_list($current_user);
+        require_once 'modules/MySettings/TabController.php';
+        $controller = new \TabController();
+        $tabArray = $controller->get_tabs($current_user);
         chdir('../api');
-        $modules_data = array();
-        if (!is_array($modules)) {
-            return $modules_data;
-        }
-        foreach ($modules as $module) {
-            $modules_data[$module] = $this->module_init_controller->getModuleData($module);
-        }
-        return $this->getMenuForAllModules($modules_data, $modules);
+        return array_keys($tabArray[0]);
     }
 
-    private function getQuickCreate($modules_menu)
+    private function getModulesData()
+    {
+        $modules_data = array();
+        if (!is_array($this->all_modules)) {
+            return $modules_data;
+        }
+        foreach ($this->all_modules as $module) {
+            $modules_data[$module] = $this->module_init_controller->getModuleData($module);
+        }
+        return $modules_data;
+    }
+
+    private function getALLModules()
+    {
+        global $beanList, $moduleList, $current_user;
+        
+        $modules = $moduleList;
+        if ($current_user->isAdmin()) {
+            $modules = array_unique(array_merge($modules, array_keys($beanList)));
+        }
+        chdir('../legacy');
+        require_once 'modules/ACL/ACLController.php';
+        \ACLController::filterModuleList($modules);
+        chdir('../api');
+        return array_merge(['Users', 'EAPM'], $modules );
+    }
+
+    private function getQuickCreate()
     {
         chdir('../api');
-        $modules = ConstantsLoader::getConstants('quick_create');
+        $modules = ConstantsLoader::getConstants('quick_create', true);
         $response = array();
 
         if (!is_array($modules)) {
@@ -188,7 +206,7 @@ class Init
         }
 
         foreach ($modules as $module => $name) {
-            if(!in_array($module, $modules_menu)) {
+            if (!in_array($module, $this->all_modules)) {
                 continue;
             }
             $response[] = array(

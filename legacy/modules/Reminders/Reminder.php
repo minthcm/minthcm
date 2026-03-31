@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,9 +46,10 @@
  * Reminder class
  *
  */
+#[\AllowDynamicProperties]
 class Reminder extends Basic
 {
-    const UPGRADE_VERSION = '7.4.3';
+    public const UPGRADE_VERSION = '7.4.3';
 
     public $name;
 
@@ -462,7 +463,7 @@ class Reminder extends Basic
     private static function unQuoteTime($timestr)
     {
         $ret = '';
-        for ($i = 0; $i < strlen($timestr); $i++) {
+        for ($i = 0; $i < strlen((string) $timestr); $i++) {
             if ($timestr[$i] != "'") {
                 $ret .= $timestr[$i];
             }
@@ -482,7 +483,7 @@ class Reminder extends Basic
         if ($acceptStats = self::getEventPersonAcceptStatus($event, $person)) {
             $acceptStatusLower = strtolower($acceptStatus);
             foreach ((array)$acceptStats as $acceptStat) {
-                if (strtolower($acceptStat) == $acceptStatusLower) {
+                if (strtolower($acceptStat) === $acceptStatusLower) {
                     return true;
                 }
             }
@@ -524,7 +525,7 @@ class Reminder extends Basic
 
     private static function getEventPersonQuery(SugarBean $event, SugarBean $person)
     {
-        $eventIdField = array_search($event->table_name, $event->relationship_fields);
+        $eventIdField = array_search($event->table_name, $event->relationship_fields, true);
         if (!$eventIdField) {
             $eventIdField = strtolower($event->object_name . '_id');
         }

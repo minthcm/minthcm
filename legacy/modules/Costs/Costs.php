@@ -41,6 +41,7 @@ require_once('modules/Costs/Costs_sugar.php');
 require_once 'modules/Transportations/Transportations.php';
 require_once('modules/Costs/SugarFeeds/CostsFeed.php');
 
+#[\AllowDynamicProperties]
 class Costs extends Costs_sugar
 {
 

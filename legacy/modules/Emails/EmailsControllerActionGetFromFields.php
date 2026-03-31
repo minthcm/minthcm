@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ require_once __DIR__ . '/EmailsDataAddressCollector.php';
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class EmailsControllerActionGetFromFields
 {
 
@@ -92,10 +93,10 @@ class EmailsControllerActionGetFromFields
         $ie->email = $email;
         $ieAccounts = $ie->retrieveAllByGroupIdWithGroupAccounts($this->currentUser->id);
         $accountSignatures = $this->currentUser->getPreference('account_signatures', 'Emails');
-        $showFolders = sugar_unserialize(base64_decode($this->currentUser->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(base64_decode($this->currentUser->getPreference('showFolders', 'Emails'))) ?: [];
         $emailSignatures = $this->getEmailSignatures($accountSignatures);
         $defaultEmailSignature = $this->getDefaultSignatures();
-        $prependSignature = $this->currentUser->getPreference('signature_prepend');
+        $prependSignature = $this->currentUser->getPreference('signature_prepend') ?? false;
         $dataAddresses = $this->collector->collectDataAddressesFromIEAccounts(
             $ieAccounts,
             $showFolders,
@@ -106,10 +107,10 @@ class EmailsControllerActionGetFromFields
 
         $dataAddresses = $dataAddresses ?? [];
 
-        $this->addOutboundEmailAccounts($dataAddresses);
+        $this->addOutboundEmailAccounts($dataAddresses, $prependSignature, $defaultEmailSignature);
 
         $dataEncoded = json_encode(array('data' => $dataAddresses), JSON_UNESCAPED_UNICODE);
-        $results = utf8_decode($dataEncoded);
+        $results = mb_convert_encoding($dataEncoded, 'ISO-8859-1');
         return $results;
     }
 
@@ -137,7 +138,7 @@ class EmailsControllerActionGetFromFields
             $log->fatal('getOutboundFromFields | unable to json encode the addresses for from fields | message: ' . $e->getMessage() ?? '');
         }
 
-        return utf8_decode($dataEncoded);
+        return mb_convert_encoding($dataEncoded, 'ISO-8859-1');
     }
 
     /**
@@ -181,7 +182,7 @@ class EmailsControllerActionGetFromFields
      * @param array $dataAddresses
      * @return void
      */
-    protected function addOutboundEmailAccounts(array &$dataAddresses): void
+    protected function addOutboundEmailAccounts(array &$dataAddresses, bool $prependSignature = false, array $defaultEmailSignature = []): void
     {
         /** @var OutboundEmailAccounts $outboundAccount */
         $outboundAccount = BeanFactory::newBean('OutboundEmailAccounts');
@@ -198,7 +199,7 @@ class EmailsControllerActionGetFromFields
             $replyToAddress = $userOutboundAccount->getReplyToAddress();
             $replyToName = $userOutboundAccount->getReplyToName();
             $type = $userOutboundAccount->type ?? '';
-            $signature = $userOutboundAccount->signature ?? '';
+            $signature = $defaultEmailSignature['signature_html'] ?? $userOutboundAccount->signature ?? '';
             $isPersonal = $type === 'user';
             $isGroup = $type === 'group';
             $entry = [
@@ -212,11 +213,11 @@ class EmailsControllerActionGetFromFields
                     'reply_to' => $replyToAddress,
                     'reply_to_name' => $replyToName
                 ],
-                'prepend' => false,
+                'prepend' => $prependSignature,
                 'isPersonalEmailAccount' => $isPersonal,
                 'isGroupEmailAccount' => $isGroup,
                 'emailSignatures' => [
-                    'html' => utf8_encode(html_entity_decode($signature)),
+                    'html' => mb_convert_encoding(html_entity_decode((string) $signature), 'UTF-8', 'ISO-8859-1'),
                     'plain' => ''
                 ]
             ];

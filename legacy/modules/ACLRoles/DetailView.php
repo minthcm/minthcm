@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+global $mod_strings, $app_strings, $app_list_strings;
+
 $sugar_smarty = new Sugar_Smarty();
 $sugar_smarty->assign('MOD', $mod_strings);
 $sugar_smarty->assign('APP', $app_strings);
@@ -56,7 +58,7 @@ $categories = $role->getRoleActions($_REQUEST['record']);
 $role->retrieve($_REQUEST['record']);
 $names = ACLAction::setupCategoriesMatrix($categories);
 if (!empty($names)) {
-    $tdWidth = 100 / count($names);
+    $tdWidth = 100 / (is_countable($names) ? count($names) : 0);
 }
 $sugar_smarty->assign('ROLE', $role->toArray());
 $sugar_smarty->assign('CATEGORIES', $categories);

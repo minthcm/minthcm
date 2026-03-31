@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -63,7 +63,7 @@ VardefManager::clearVardef();
 // SugarBean::createRelationshipMeta just takes the relationship definition in a file and inserts it as is into the Relationships table
 // It does not override or recreate existing relationships
 foreach ($GLOBALS['beanFiles'] as $bean => $file) {
-    if (strlen($file) > 0 && file_exists($file)) {
+    if (strlen((string) $file) > 0 && file_exists($file)) {
         if (!class_exists($bean)) {
             require $file;
         }

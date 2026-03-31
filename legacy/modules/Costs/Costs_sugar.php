@@ -40,6 +40,7 @@
  * PLEASE DO NOT CHANGE THIS CLASS
  * PLACE ANY CUSTOMIZATIONS IN Costs
  */
+#[\AllowDynamicProperties]
 class Costs_sugar extends Basic {
 
    public $new_schema = true;

@@ -41,6 +41,7 @@ require_once('modules/Delegations/Delegations_sugar.php');
 require_once('include/SequenceUtils.php');
 require_once('modules/Delegations/SugarFeeds/DelegationsFeed.php');
 
+#[\AllowDynamicProperties]
 class Delegations extends Delegations_sugar
 {
 

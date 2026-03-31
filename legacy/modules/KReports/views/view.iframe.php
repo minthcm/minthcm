@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,86 +36,91 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if ( !defined('sugarEntry') || !sugarEntry )
-   die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
-require_once('include/MVC/View/views/view.detail.php');
+require_once 'include/MVC/View/views/view.detail.php';
 
-class KReportsViewIframe extends ViewDetail {
+#[\AllowDynamicProperties]
+class KReportsViewIframe extends ViewDetail
+{
 
-   public function __construct() {
-      $this->options = array(
-         'show_header' => false,
-         'show_title' => false,
-         'show_subpanels' => false,
-         'show_search' => false,
-         'show_footer' => false,
-         'show_javascript' => true,
-         'view_print' => false
-      );
+    public function __construct()
+    {
+        $this->options = array(
+            'show_header' => false,
+            'show_title' => false,
+            'show_subpanels' => false,
+            'show_search' => false,
+            'show_footer' => false,
+            'show_javascript' => true,
+            'view_print' => false,
+        );
 
-      parent::__construct();
-   }
+        parent::__construct();
+    }
 
-   public function display() {
-      $this->ss->assign("report_id", $_REQUEST['record']);
-      $where_conditions = json_decode(html_entity_decode($this->bean->whereconditions), true);
-      $this->ss->assign("use_autofilter", false);
+    public function display()
+    {
+        $this->ss->assign("report_id", $_REQUEST['record']);
+        $where_conditions = json_decode(html_entity_decode($this->bean->whereconditions), true);
+        $this->ss->assign("use_autofilter", false);
 
-      if ( isset($_REQUEST['use_autofilter']) && $_REQUEST['use_autofilter'] == '1' ) {
-         $filter_module = $_REQUEST['filter_module'];
-         foreach ( $where_conditions as $where_condition ) {
-            $paths = explode('::', $where_condition['path']);
-            foreach ( $paths as $path ) {
-               $track = explode(':', $path);
-               switch ( $track[0] ) {
-                  case 'root':
-                     $module = $track[1];
-                     break;
-                  case 'link':
-                     $module = $track[1];
-                     $link = $track[2];
-                     break;
-                  case 'field':
-                     $field = $track[1];
-                     break;
-               }
+        if (isset($_REQUEST['use_autofilter']) && '1' == $_REQUEST['use_autofilter']) {
+            $filter_module = $_REQUEST['filter_module'];
+            foreach ($where_conditions as $where_condition) {
+                $paths = explode('::', $where_condition['path']);
+                foreach ($paths as $path) {
+                    $track = explode(':', $path);
+                    switch ($track[0]) {
+                        case 'root':
+                            $module = $track[1];
+                            break;
+                        case 'link':
+                            $module = $track[1];
+                            $link = $track[2];
+                            break;
+                        case 'field':
+                            $field = $track[1];
+                            break;
+                    }
+                }
+                if (isset($link)) {
+                    $bean = BeanFactory::getBean($module);
+                    if ($bean && $bean->field_defs[$link]) {
+                        $module = $bean->field_defs[$link]['module'];
+                    }
+                }
+                if ('id' === $field && $module == $filter_module) {
+                    $this->ss->assign("use_autofilter", true);
+                    $this->ss->assign('autofilter_fieldid', $where_condition['fieldid']);
+                    $this->ss->assign('autofilter_value', $_REQUEST['filter_record']);
+                    break;
+                }
             }
-            if ( isset($link) ) {
-               $bean = BeanFactory::getBean($module);
-               if ( $bean && $bean->field_defs[$link] ) {
-                  $module = $bean->field_defs[$link]['module'];
-               }
-            }
-            if ( $field === 'id' && $module == $filter_module ) {
-               $this->ss->assign("use_autofilter", true);
-               $this->ss->assign('autofilter_fieldid', $where_condition['fieldid']);
-               $this->ss->assign('autofilter_value', $_REQUEST['filter_record']);
-               break;
-            }
-         }
-      }
+        }
 
-      $show_options = '';
-      if ( $_REQUEST['show_data'] != '1' ) {
-         $show_options .= 'kreporterView.getComponent(3).destroy();';
-      }
-      if ( $_REQUEST['show_chart'] != '1' ) {
-         $show_options .= ' kreporterView.getComponent(2).destroy();';
-      }
-      if ( $_REQUEST['show_filters'] != '1' ) {
-         $show_options .= ' kreporterView.getComponent(1).destroy();';
-      }
+        $show_options = '';
+        if ('1' != $_REQUEST['show_data']) {
+            $show_options .= 'kreporterView.getComponent(3).destroy();';
+        }
+        if ('1' != $_REQUEST['show_chart']) {
+            $show_options .= ' kreporterView.getComponent(2).destroy();';
+        }
+        if ('1' != $_REQUEST['show_filters']) {
+            $show_options .= ' kreporterView.getComponent(1).destroy();';
+        }
 
-      $this->ss->assign("show_options", $show_options);
-      $this->ss->display("modules/KReports/tpls/view.iframe.tpl");
-   }
+        $this->ss->assign("show_options", $show_options);
+        $this->ss->display("modules/KReports/tpls/view.iframe.tpl");
+    }
 
 }

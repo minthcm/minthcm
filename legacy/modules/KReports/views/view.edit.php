@@ -2,13 +2,17 @@
 
 require_once 'include/MVC/View/views/view.edit.php';
 
-class KReportsViewEdit extends ViewEdit {
+#[\AllowDynamicProperties]
+class KReportsViewEdit extends ViewEdit
+{
 
-   public function display() {
-      parent::display();
-      echo '<script type="text/javascript">'
-      . '$(\'div.buttons\').hide();'
-      . '</script>';
-   }
+    public function display()
+    {
+        $this->ev->ss->assign('SCRIPT_ID', rand(100, 900));
+        parent::display();
+        echo '<script type="text/javascript">'
+            . '$(\'div.buttons\').hide();'
+            . '</script>';
+    }
 
 }

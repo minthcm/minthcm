@@ -12,7 +12,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -194,6 +194,7 @@ $dictionary['Meeting'] = array(
          'options' => 'date_range_search_dom',
          'validation' => array('type' => 'isbefore', 'compareto' => 'date_end', 'blank' => false),
          'audited' => true,
+         'massupdate' => true,
       ),
       'date_end' =>
      array(
@@ -228,7 +229,11 @@ $dictionary['Meeting'] = array(
          'dbType' => 'varchar',
          'len' => 100,
          'options' => 'meeting_status_dom',
-         'options_colors' => 'meeting_status_dom_colored',
+         'options_colors' => [
+            'Planned' => 'blue',
+            'Held' => 'green',
+            'Not Held' => 'red',
+         ],
          'comment' => 'Meeting status (ex: Planned, Held, Not held)',
          'default' => 'Planned',
          'massupdate' => 1,
@@ -405,84 +410,6 @@ $dictionary['Meeting'] = array(
          'source' => 'non-db',
          'vname' => 'LBL_NOTES',
       ),
-      'repeat_type' =>
-     array(
-         'name' => 'repeat_type',
-         'vname' => 'LBL_REPEAT_TYPE',
-         'type' => 'enum',
-         'len' => 36,
-         'options' => 'repeat_type_dom',
-         'comment' => 'Type of recurrence',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-         'audited' => true,
-      ),
-      'repeat_interval' =>
-     array(
-         'name' => 'repeat_interval',
-         'vname' => 'LBL_REPEAT_INTERVAL',
-         'type' => 'int',
-         'len' => 3,
-         'default' => 1,
-         'comment' => 'Interval of recurrence',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-         'audited' => true,
-      ),
-      'repeat_dow' =>
-     array(
-         'name' => 'repeat_dow',
-         'vname' => 'LBL_REPEAT_DOW',
-         'type' => 'varchar',
-         'len' => 7,
-         'comment' => 'Days of week in recurrence',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-         'audited' => true,
-      ),
-      'repeat_until' =>
-     array(
-         'name' => 'repeat_until',
-         'vname' => 'LBL_REPEAT_UNTIL',
-         'type' => 'date',
-         'comment' => 'Repeat until specified date',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-         'audited' => true,
-      ),
-      'repeat_count' =>
-     array(
-         'name' => 'repeat_count',
-         'vname' => 'LBL_REPEAT_COUNT',
-         'type' => 'int',
-         'len' => 7,
-         'comment' => 'Number of recurrence',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-         'audited' => true,
-      ),
-      'repeat_parent_id' =>
-     array(
-         'name' => 'repeat_parent_id',
-         'vname' => 'LBL_REPEAT_PARENT_ID',
-         'type' => 'id',
-         'len' => 36,
-         'comment' => 'Id of the first element of recurring records',
-         'importable' => 'false',
-         'massupdate' => false,
-         'reportable' => false,
-         'studio' => 'false',
-      ),
       'recurring_source' =>
      array(
          'name' => 'recurring_source',
@@ -547,12 +474,11 @@ $dictionary['Meeting'] = array(
          'additional_params' => 'Meetings-type',
          'include' => 'include/utils/getDictionary.php'],
       ),
-      'repeat_pane' =>array(
-         'name' => 'repeat_pane',
-         'vname' => 'LBL_REPEAT_PANE',
-         'type' => 'varchar',
+      'repeat' =>array(
+         'name' => 'repeat',
+         'vname' => 'LBL_REPEAT_TYPE',
+         'type' => 'repeat',
          'source' => 'non-db',
-         'comment' => 'Repeat Pane',
          'importable' => 'false',
          'massupdate' => false,
          'reportable' => false,
@@ -750,3 +676,42 @@ VardefManager::createVardef('Meetings', 'Meeting',array( 'default', 'assignable'
 
 $dictionary['Meeting']['fields']['assigned_user_id']['audited'] = false;
 $dictionary['Meeting']['fields']['assigned_user_name']['audited'] = true;
+
+foreach ([
+    'name' => 'LBL_SUBJECT_COMMENT',
+    'accept_status' => 'LBL_ACCEPT_STATUS_COMMENT',
+    'set_accept_links' => 'LBL_ACCEPT_LINK_COMMENT',
+    'location' => 'LBL_LOCATION_COMMENT',
+    'password' => 'LBL_PASSWORD_COMMENT',
+    'duration_hours' => 'LBL_DURATION_HOURS_COMMENT',
+    'duration_minutes' => 'LBL_DURATION_MINUTES_COMMENT',
+    'date_start' => 'LBL_DATE_COMMENT',
+    'date_end' => 'LBL_DATE_END_COMMENT',
+    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
+    'status' => 'LBL_STATUS_COMMENT',
+    'direction' => 'LBL_DIRECTION_COMMENT',
+    'parent_id' => 'LBL_PARENT_ID_COMMENT',
+    'reminder_checked' => 'LBL_REMINDER_COMMENT',
+    'reminder_time' => 'LBL_REMINDER_TIME_COMMENT',
+    'email_reminder_checked' => 'LBL_EMAIL_REMINDER_COMMENT',
+    'email_reminder_time' => 'LBL_EMAIL_REMINDER_TIME_COMMENT',
+    'email_reminder_sent' => 'LBL_EMAIL_REMINDER_SENT_COMMENT',
+    'reminders' => 'LBL_REMINDERS_COMMENT',
+    'outlook_id' => 'LBL_OUTLOOK_ID_COMMENT',
+    'sequence' => 'LBL_SEQUENCE_COMMENT',
+    'recurring_source' => 'LBL_RECURRING_SOURCE_COMMENT',
+    'duration' => 'LBL_DURATION_COMMENT',
+    'gsync_id' => 'LBL_GSYNC_ID_COMMENT',
+    'gsync_lastsync' => 'LBL_GSYNC_LASTSYNC_COMMENT',
+    'type' => 'LBL_TYPE_COMMENT',
+    'repeat_type' => 'LBL_REPEAT_TYPE_COMMENT',
+    'repeat_interval' => 'LBL_REPEAT_INTERVAL_COMMENT',
+    'repeat_dow' => 'LBL_REPEAT_DOW_COMMENT',
+    'repeat_until' => 'LBL_REPEAT_UNTIL_COMMENT',
+    'repeat_count' => 'LBL_REPEAT_COUNT_COMMENT',
+    'repeat_parent_id' => 'LBL_REPEAT_PARENT_ID_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Meeting']['fields'][$field])) {
+        $dictionary['Meeting']['fields'][$field]['comment'] = $commentLabel;
+    }
+}

@@ -7,8 +7,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -35,122 +35,106 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
 $module_name = 'AOK_KnowledgeBase';
-$viewdefs [$module_name] =
+$viewdefs[$module_name] =
 array(
-  'DetailView' =>
-  array(
-    'templateMeta' =>
-    array(
-      'form' =>
-      array(
-        'buttons' =>
-        array(
-          0 => 'EDIT',
-          1 => 'DUPLICATE',
-          2 => 'DELETE',
-          3 => 'FIND_DUPLICATES',
+    'DetailView' => array(
+        'templateMeta' => array(
+            'form' => array(
+                'buttons' => array(
+                    'EDIT',
+                    'DUPLICATE',
+                    'DELETE',
+                    'FIND_DUPLICATES',
+                ),
+            ),
+            'maxColumns' => '2',
+            'widths' => array(
+                array(
+                    'label' => '10',
+                    'field' => '30',
+                ),
+                array(
+                    'label' => '10',
+                    'field' => '30',
+                ),
+            ),
+            'useTabs' => true,
+            'tabDefs' => array(
+                'DEFAULT' => array(
+                    'newTab' => true,
+                    'panelDefault' => 'expanded',
+                ),
+            ),
+            'syncDetailEditViews' => true,
         ),
-      ),
-      'maxColumns' => '2',
-      'widths' =>
-      array(
-        0 =>
-        array(
-          'label' => '10',
-          'field' => '30',
+        'panels' => array(
+            'default' => array(
+                array(
+                    'name',
+                ),
+                array(
+                    array(
+                        'name' => 'status',
+                        'studio' => 'visible',
+                        'label' => 'LBL_STATUS',
+                    ),
+                    array(
+                        'name' => 'revision',
+                        'label' => 'LBL_REVISION',
+                    ),
+                ),
+                array(
+                    array(
+                        'name' => 'description',
+                        'label' => 'LBL_DESCRIPTION',
+                        'customCode' => '{$fields.description.value}',
+                    ),
+                ),
+                array(
+                    array(
+                        'name' => 'additional_info',
+                        'comment' => 'Full text of the note',
+                        'studio' => 'visible',
+                        'label' => 'LBL_ADDITIONAL_INFO',
+                    ),
+                ),
+                array(
+                    array(
+                        'name' => 'author',
+                        'studio' => 'visible',
+                        'label' => 'LBL_AUTHOR',
+                    ),
+                    array(
+                        'name' => 'approver',
+                        'studio' => 'visible',
+                        'label' => 'LBL_APPROVER',
+                    ),
+                ),
+                array(
+                    'assigned_user_name',
+                    '',
+                ),
+                array(
+                    array(
+                        'name' => 'date_entered',
+                        'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
+                        'label' => 'LBL_DATE_ENTERED',
+                    ),
+                    array(
+                        'name' => 'date_modified',
+                        'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
+                        'label' => 'LBL_DATE_MODIFIED',
+                    ),
+                ),
+            ),
         ),
-        1 =>
-        array(
-          'label' => '10',
-          'field' => '30',
-        ),
-      ),
-      'useTabs' => true,
-      'tabDefs' =>
-      array(
-        'DEFAULT' =>
-        array(
-          'newTab' => true,
-          'panelDefault' => 'expanded',
-        ),
-      ),
-      'syncDetailEditViews' => true,
     ),
-    'panels' =>
-    array(
-      'default' =>
-      array(
-        0 =>
-        array(
-          0 => 'name',
-        ),
-        1 =>
-        array(
-          0 =>
-          array(
-            'name' => 'status',
-            'studio' => 'visible',
-            'label' => 'LBL_STATUS',
-          ),
-          1 =>
-          array(
-            'name' => 'revision',
-            'label' => 'LBL_REVISION',
-          ),
-        ),
-        2 =>
-        array(
-          0 =>
-          array(
-            'name' => 'description',
-            'label' => 'LBL_DESCRIPTION',
-            'customCode' => '{$fields.description.value}',
-          ),
-        ),
-        3 =>
-        array(
-          0 =>
-          array(
-            'name' => 'additional_info',
-            'comment' => 'Full text of the note',
-            'studio' => 'visible',
-            'label' => 'LBL_ADDITIONAL_INFO',
-          ),
-        ),
-        4 =>
-        array (
-          0 =>
-          array (
-            'name' => 'author',
-            'studio' => 'visible',
-            'label' => 'LBL_AUTHOR',
-          ),
-          1 => 
-          array (
-            'name' => 'approver',
-            'studio' => 'visible',
-            'label' => 'LBL_APPROVER',
-          ),
-        ),
-        5 => 
-        array (
-          0 => 'assigned_user_name',
-          1 => '',
-        ),
-        6 => 
-        array (
-          0 => 'date_entered',
-          1 => 'date_modified',
-        ),
-      ),
-    ),
-  ),
 );

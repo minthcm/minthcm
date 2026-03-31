@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
+ #[\AllowDynamicProperties]
 class ViewBackups extends SugarView
 {
     /**
@@ -98,7 +99,7 @@ class ViewBackups extends SugarView
         
             $backup_dir = $_REQUEST['backup_dir'];
             $backup_zip = $_REQUEST['backup_zip'];
-            if (strpos($backup_dir, 'phar://') !== false) {
+            if (strpos((string) $backup_dir, 'phar://') !== false) {
                 $errors[] = $mod_strings['LBL_BACKUP_DIRECTORY_WRITABLE'];
 
                 return $errors;

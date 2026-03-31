@@ -18,6 +18,7 @@
  *
  * //TODO : Add setLogger($logger) and getLogger() method
  */
+#[\AllowDynamicProperties]
 class SugarMetric_Provider_Log implements SugarMetric_Provider_Interface
 {
     /**

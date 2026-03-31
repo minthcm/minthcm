@@ -23,13 +23,13 @@ class VTExpression_isNumeric extends VTExpression
 
     /**
      * Warning! if backend is not set, return false
-     * @param Array
-     * @return boolean
+     * @param array
+     * @return bool
      * Please set input params as Array
      */
     public function backend($arguments = array())
     {
-        $seps = get_number_seperators();
+        $seps = get_number_separators();
         $arguments['value'] = trim(str_replace(array($seps[0], $seps[1]), array('', '.'), $arguments['value']));
         if (is_numeric($arguments['value'])) {
             return true;
@@ -39,7 +39,7 @@ class VTExpression_isNumeric extends VTExpression
 
     /**
      * Warning! if frontend is not set, return false
-     * @return type
+     * @return string
      */
     public function frontend()
     {

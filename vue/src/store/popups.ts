@@ -47,10 +47,10 @@ export const usePopupsStore = defineStore('popups', () => {
         })
     }
 
-    function alert(text: string) {
+    function alert(text: string, titleLabel: string = 'LBL_ALERT', titleLabelModule: string = '') {
         return new Promise((resolve) => {
             showPopup({
-                title: languages.label('LBL_ALERT'),
+                title: languages.label(titleLabel, titleLabelModule),
                 unclosable: true,
                 component: markRaw(MintPopupAlert),
                 data: {

@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,24 +50,31 @@ chdir('../legacy/');
 require_once 'include/entryPoint.php';
 chdir('../api/');
 
+$BASE_DIR = __DIR__;
 require __DIR__ . '/vendor/autoload.php';
 
 use MintHCM\Api\ApiManager;
 use MintHCM\Api\Config\AppConfig;
-use MintHCM\Api\Containers\Doctrine\DoctrineContainerBuilder;
+use MintHCM\Data\ORM\Doctrine\DoctrineContainerBuilder;
 use MintHCM\Utils\CustomLoader;
 use Slim\Factory\AppFactory;
+use Slim\App;
 
-global $app;
+/** @var App */
+global $mint_app;
 
-$config = CustomLoader::getObject(AppConfig::class);
+/** @var string */
+global $api_client;
 
+/** @var DoctrineContainerBuilder */
 $doctrineContainerBuilder = new DoctrineContainerBuilder();
 $doctrineContainer = $doctrineContainerBuilder->build();
-$app = AppFactory::createFromContainer($doctrineContainer);
-$app->setBasePath($config::getBasePath());
+$mint_app = AppFactory::createFromContainer($doctrineContainer);
+
+$config = CustomLoader::getObject(AppConfig::class);
+$mint_app->setBasePath($config::getBasePath());
 
 $manager = ApiManager::getInstance();
 $manager->execute();
 
-$app->run();
+$mint_app->run();

@@ -7,6 +7,7 @@ use MintHCM\MintCLI\InputValidators\YesNoValidator;
 use Symfony\Component\Console\Question\ConfirmationQuestion as BasicConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[\AllowDynamicProperties]
 class ConfirmationQuestion extends Question
 {
     protected $defaultDisplayValue;

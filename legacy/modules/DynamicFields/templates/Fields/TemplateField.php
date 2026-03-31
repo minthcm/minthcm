@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 $GLOBALS['studioReadOnlyFields'] = array('date_entered'=>1, 'date_modified'=>1, 'created_by'=>1, 'id'=>1, 'modified_user_id'=>1);
+#[\AllowDynamicProperties]
 class TemplateField
 {
     /*
@@ -264,7 +265,7 @@ class TemplateField
     public function get_db_default($modify=false)
     {
         $GLOBALS['log']->debug('get_db_default(): default_value='.$this->default_value);
-        if (!$modify or empty($this->new_field_definition['default_value']) or $this->new_field_definition['default_value'] != $this->default_value) {
+        if (!$modify || empty($this->new_field_definition['default_value']) || $this->new_field_definition['default_value'] != $this->default_value) {
             if (!is_null($this->default_value)) { // add a default value if it is not null - we want to set a default even if default_value is '0', which is not null, but which is empty()
                 if (null == trim($this->default_value)) {
                     return " DEFAULT NULL";
@@ -292,14 +293,14 @@ class TemplateField
 
         if ($modify) {
             if (!empty($this->new_field_definition['required'])) {
-                if ($this->required and $this->new_field_definition['required'] != $this->required) {
+                if ($this->required && $this->new_field_definition['required'] != $this->required) {
                     $req = " NULL ";
                 }
             } else {
                 $req = ($this->required) ? " NOT NULL " : ''; // bug 17184 tyoung - set required correctly when modifying custom field in Studio
             }
         } else {
-            if (empty($this->new_field_definition['required']) or $this->new_field_definition['required'] != $this->required) {
+            if (empty($this->new_field_definition['required']) || $this->new_field_definition['required'] != $this->required) {
                 if (!empty($this->required) && $this->required) {
                     $req = " NOT NULL";
                 }
@@ -531,11 +532,11 @@ class TemplateField
 
                 //Remove potential xss code from help field
                 if ($field == 'help' && !empty($this->$vardef)) {
-                    $help = htmlspecialchars_decode($this->$vardef, ENT_QUOTES);
+                    $help = htmlspecialchars_decode((string) $this->$vardef, ENT_QUOTES);
 
                     // Fix for issue #1170 - text in studio can't accept the special language characters.
                     //$this->$vardef = htmlentities(remove_xss($help));
-                    $this->$vardef = htmlspecialchars(remove_xss($help));
+                    $this->$vardef = htmlspecialchars((string) remove_xss($help));
                 }
 
 

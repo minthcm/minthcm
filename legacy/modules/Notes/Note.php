@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ require_once __DIR__ . '/../../include/upload_file.php';
 require_once __DIR__ . '/../../include/SugarObjects/templates/file/File.php';
 
 // Note is used to store customer information.
+#[\AllowDynamicProperties]
 class Note extends File
 {
     public $field_name_map;
@@ -100,17 +101,17 @@ class Note extends File
         global $sugar_config;
 
         //get position of last "." in file name
-        $file_ext_beg = strrpos($this->filename, ".");
+        $file_ext_beg = strrpos((string) $this->filename, ".");
         $file_ext = "";
 
         //get file extension
         if ($file_ext_beg !== false) {
-            $file_ext = substr($this->filename, $file_ext_beg + 1);
+            $file_ext = substr((string) $this->filename, $file_ext_beg + 1);
         }
 
         //check to see if this is a file with extension located in "badext"
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($file_ext) == strtolower($badExt)) {
+            if (strtolower($file_ext) === strtolower($badExt)) {
                 //if found, then append with .txt and break out of lookup
                 $this->name = $this->name . ".txt";
                 $this->file_mime_type = 'text/';

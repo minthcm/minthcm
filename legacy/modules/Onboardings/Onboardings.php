@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,6 +42,7 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+#[\AllowDynamicProperties]
 class Onboardings extends Basic
 {
 
@@ -89,6 +90,30 @@ class Onboardings extends Basic
         $feed = new $sugar_feed_class_name;
         $feed->pushFeed($this, null, null);
         return $id;
+    }
+
+    protected function postSave()
+    {
+        if(
+            $this->status === 'held' 
+            && $this->status !== $this->fetched_row['status']
+        ){
+            $this->closeRelatedRecords();
+        }
+    }
+
+    protected function closeRelatedRecords()
+    {
+        foreach(['tasks' => 'Completed', 'trainings' => 'held'] as $relate_link => $held_status_key){
+            if($this->load_relationship($relate_link)){
+                foreach($this->$relate_link->getBeans() as $related_bean){
+                    if($related_bean->status !== $held_status_key){
+                        $related_bean->status = $held_status_key;
+                        $related_bean->save();
+                    }
+                }
+            }
+        }
     }
 
     protected function concatName()

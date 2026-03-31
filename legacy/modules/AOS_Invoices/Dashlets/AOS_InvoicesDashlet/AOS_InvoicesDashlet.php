@@ -38,11 +38,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/AOS_Invoices/AOS_Invoices.php');
 
+#[\AllowDynamicProperties]
 class AOS_InvoicesDashlet extends DashletGeneric
 {
     public function __construct($id, $def = null)
     {
-        global $current_user, $app_strings;
+        global $current_user, $app_strings, $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/AOS_Invoices/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
@@ -56,5 +60,6 @@ class AOS_InvoicesDashlet extends DashletGeneric
 
         $this->seedBean = BeanFactory::newBean('AOS_Invoices');
     }
+
 
 }

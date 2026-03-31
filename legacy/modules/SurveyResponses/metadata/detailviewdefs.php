@@ -5,19 +5,19 @@ $viewdefs[$module_name] = array(
         'templateMeta' => array(
             'form' => array(
                 'buttons' => array(
-                    0 => 'EDIT',
-                    1 => 'DUPLICATE',
-                    2 => 'DELETE',
-                    3 => 'FIND_DUPLICATES',
+                    'EDIT',
+                    'DUPLICATE',
+                    'DELETE',
+                    'FIND_DUPLICATES',
                 ),
             ),
             'maxColumns' => '2',
             'widths' => array(
-                0 => array(
+                array(
                     'label' => '10',
                     'field' => '30',
                 ),
-                1 => array(
+                array(
                     'label' => '10',
                     'field' => '30',
                 ),
@@ -25,26 +25,34 @@ $viewdefs[$module_name] = array(
         ),
         'panels' => array(
             'default' => array(
-                0 => array(
-                    0 => 'name',
-                    1 => 'assigned_user_name',
+                array(
+                    'name',
+                    'assigned_user_name',
                 ),
-                1 => array(
-                    0 => 'date_entered',
-                    1 => 'date_modified',
+                array(
+                    array(
+                        'name' => 'date_entered',
+                        'customCode' => '{$fields.date_entered.value} {$APP.LBL_BY} {$fields.created_by_name.value}',
+                        'label' => 'LBL_DATE_ENTERED',
+                    ),
+                    array(
+                        'name' => 'date_modified',
+                        'customCode' => '{$fields.date_modified.value} {$APP.LBL_BY} {$fields.modified_by_name.value}',
+                        'label' => 'LBL_DATE_MODIFIED',
+                    ),
                 ),
-                2 => array(
-                    0 => 'description',
-                    1 => array(
+                array(
+                    'description',
+                    array(
                         'name' => 'survey_name',
                     ),
                 ),
-                3 => array(
-                    0 => 'campaign_name',
-                    1 => 'employee_name',
+                array(
+                    'campaign_name',
+                    'employee_name',
                 ),
-                4 => array(
-                    0 => array(
+                array(
+                    array(
                         'name' => 'question_responses_display',
                     ),
                 ),

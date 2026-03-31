@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -74,7 +74,7 @@ function clearCacheSU($thedir, $extension)
             if ($children != "." && $children != "..") {
                 if (is_dir($thedir . "/" . $children)) {
                     clearCacheSU($thedir . "/" . $children, $extension);
-                } elseif (is_file($thedir . "/" . $children) && substr_count($children, $extension)) {
+                } elseif (is_file($thedir . "/" . $children) && substr_count($children, (string) $extension)) {
                     unlink($thedir . "/" . $children);
                 }
             }
@@ -114,7 +114,7 @@ function checkLoggerSettings()
             'file' =>
              array(
               'ext' => '.log',
-		      'name' => 'minthcm',
+              'name' => 'minthcm',
               'dateFormat' => '%c',
               'maxSize' => '10MB',
               'maxLogs' => 10,
@@ -288,9 +288,9 @@ function verifyArguments($argv, $usage_dce, $usage_regular)
         $upgradeType = constant('DCE_INSTANCE');
         //now that this is dce instance we want to make sure that there are
         // 7 arguments
-        if (count($argv) < 7) {
+        if ((is_countable($argv) ? count($argv) : 0) < 7) {
             echo "*******************************************************************************\n";
-            echo "*** ERROR: Missing required parameters.  Received ".count($argv)." argument(s), require 7.\n";
+            echo "*** ERROR: Missing required parameters.  Received ".(is_countable($argv) ? count($argv) : 0)." argument(s), require 7.\n";
             echo $usage_dce;
             echo "FAILURE\n";
             exit(1);
@@ -315,9 +315,9 @@ function verifyArguments($argv, $usage_dce, $usage_regular)
             echo "FAILURE\n";
             exit(1);
         }
-            if (count($argv) < 5) {
+            if ((is_countable($argv) ? count($argv) : 0) < 5) {
                 echo "*******************************************************************************\n";
-                echo "*** ERROR: Missing required parameters.  Received ".count($argv)." argument(s), require 5.\n";
+                echo "*** ERROR: Missing required parameters.  Received ".(is_countable($argv) ? count($argv) : 0)." argument(s), require 5.\n";
                 echo $usage_regular;
                 echo "FAILURE\n";
                 exit(1);
@@ -345,8 +345,8 @@ function upgradeDCEFiles($argv, $instanceUpgradePath)
         $srcFile = clean_path("{$instanceUpgradePath}/$file");
         $destFile = clean_path("{$argv[3]}/$file");
         if (file_exists($srcFile)) {
-            if (!is_dir(dirname($destFile))) {
-                mkdir_recursive(dirname($destFile)); // make sure the directory exists
+            if (!is_dir(dirname((string) $destFile))) {
+                mkdir_recursive(dirname((string) $destFile)); // make sure the directory exists
             }
             copy_recursive($srcFile, $destFile);
             $_GET['TEMPLATE_PATH'] = $destFile;
@@ -519,7 +519,7 @@ if ($upgradeType == constant('DCE_INSTANCE')) {
     $configOptions = $sugar_config['dbconfig'];
 
     $GLOBALS['log']	= LoggerManager::getLogger();
-    $db				= &DBManagerFactory::getInstance();
+    $db				= DBManagerFactory::getInstance();
     ///////////////////////////////////////////////////////////////////////////////
     ////	MAKE SURE PATCH IS COMPATIBLE
 
@@ -596,7 +596,7 @@ if ($upgradeType == constant('DCE_INSTANCE')) {
             foreach ($customFiles as $file) {
                 $srcFile = clean_path($file);
                 //$targetFile = clean_path(getcwd() . '/' . $srcFile);
-                if (strpos($srcFile, ".svn") !== false) {
+                if (strpos((string) $srcFile, ".svn") !== false) {
                     //do nothing
                 } else {
                     $existsCustomFile = true;

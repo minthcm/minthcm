@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('include/SugarCharts/SugarChartFactory.php');
 
+#[\AllowDynamicProperties]
 class campaign_charts
 {
     /**
@@ -69,7 +70,10 @@ class campaign_charts
      */
     public function campaign_response_by_activity_type($datay= array(), $targets=array(), $campaign_id= null, $cache_file_name='a_file', $refresh=false, $marketing_id='')
     {
+
         global $app_strings, $mod_strings, $charset, $lang, $barChartColors,$app_list_strings;
+
+        $targeted = [];
 
         if ($campaign_id) {
             $sugarChart = SugarChartFactory::getInstance('', 'Reports');

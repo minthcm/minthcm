@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
  require_once("include/SugarTheme/cssmin.php");
 
+ #[\AllowDynamicProperties]
  class SugarSpriteBuilder
  {
      public $isAvailable = false;
@@ -147,8 +148,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
                          if ($info = $this->getFileInfo($dir, $file)) {
  
                              // skip excluded files
-                             if (isset($this->sprites_config[$dir]['exclude']) && array_search($file, $this->sprites_config[$dir]['exclude']) !== false) {
-                                 global $mod_strings;
+                             if (isset($this->sprites_config[$dir]['exclude']) && array_search($file, $this->sprites_config[$dir]['exclude'], true) !== false) {
+                                global $mod_strings;
                                  $msg = string_format($mod_strings['LBL_SPRITES_EXCLUDING_FILE'], array("{$dir}/{$file}"));
                                  $GLOBALS['log']->debug($msg);
                                  $this->logMessage($msg);
@@ -284,12 +285,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
              }
  
              // setup config for sprite placement algorithm
-             if (substr($name, 0, 6) == 'repeat') {
-                 $isRepeat = true;
-                 $type = substr($name, 7, 10) == 'horizontal' ? 'horizontal' : 'vertical';
-                 $config = array(
-                     'type' => $type,
-                 );
+             if (substr((string) $name, 0, 6) == 'repeat') {
+                $isRepeat = true;
+                $type = substr((string) $name, 7, 10) == 'horizontal' ? 'horizontal' : 'vertical';
+                $config = array(
+                    'type' => $type,
+                );
              } else {
                  $isRepeat = false;
                  $config = array(
@@ -507,6 +508,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
   * SpritePlacement
   *
   */
+  #[\AllowDynamicProperties]
  class SpritePlacement
  {
  
@@ -598,8 +600,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  break;
  
              default:
-                 $GLOBALS['log']->warn(__CLASS__.": Unknown sprite placement algorithm -> {$this->config['type']}");
-                 break;
+                $GLOBALS['log']->warn(self::class.": Unknown sprite placement algorithm -> {$this->config['type']}");
+                break;
          }
  
          return $result;

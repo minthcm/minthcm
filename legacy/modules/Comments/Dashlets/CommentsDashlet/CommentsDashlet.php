@@ -7,6 +7,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/Comments/Comments.php');
 
+#[\AllowDynamicProperties]
 class CommentsDashlet extends DashletGeneric {
     function __construct($id, $def = null)
     {

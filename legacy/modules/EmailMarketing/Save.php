@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,7 +44,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-
 
 
 
@@ -134,14 +133,14 @@ if ($marketing->all_prospect_lists==1) {
 } else {
     if (is_array($_REQUEST['message_for'])) {
         foreach ($_REQUEST['message_for'] as $prospect_list_id) {
-            $key=array_search($prospect_list_id, $prospectlists);
-            if ($key === null or $key === false) {
+            $key=array_search($prospect_list_id, $prospectlists, true);
+            if ($key === null || $key === false) {
                 $marketing->prospectlists->add($prospect_list_id);
             } else {
                 unset($prospectlists[$key]);
             }
         }
-        if (count($prospectlists) != 0) {
+        if ((is_countable($prospectlists) ? count($prospectlists) : 0) != 0) {
             foreach ($prospectlists as $key=>$list_id) {
                 $marketing->prospectlists->delete($marketing->id, $list_id);
             }

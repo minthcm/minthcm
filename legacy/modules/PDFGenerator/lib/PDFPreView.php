@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
 
 require_once('modules/PDFGenerator/lib/BasePDFGenerator.php');
 
+#[\AllowDynamicProperties]
 class PDFPreView extends BasePDFGenerator {
     
     
@@ -219,7 +220,7 @@ class PDFPreView extends BasePDFGenerator {
             $taxRates = $field_name['function']['name']();
             $return = key(array_slice($taxRates, rand(0, count($taxRates)), 1));
         } else if (isset($field_name['options']) && isset($app_list_strings[$field_name['options']])) {
-            $list_count = count($app_list_strings[$field_name['options']]);
+            $list_count = is_countable($app_list_strings[$field_name['options']]) ? count($app_list_strings[$field_name['options']]) : 0;
             $loop = 0;
             foreach ((array) $app_list_strings[$field_name['options']] as $list_key => $list_value) {
                 if ($list_count > 1 && $loop == 1) {

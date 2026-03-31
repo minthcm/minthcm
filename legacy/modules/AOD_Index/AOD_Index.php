@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ require_once('modules/AOD_Index/LuceneUtils.php');
  * @deprecated since v7.12.0
  * Class AOD_Index
  */
+#[\AllowDynamicProperties]
 class AOD_Index extends AOD_Index_sugar
 {
     /**
@@ -277,8 +278,9 @@ class AOD_Index extends AOD_Index_sugar
         $indexEvents = $indexEventBean->get_full_list('', "aod_indexevent.record_id = '".$beanId."' AND aod_indexevent.record_module = '".$module."'");
         if ($indexEvents) {
             $indexEvent = $indexEvents[0];
-            if (count($indexEvents) > 1) {
-                for ($x = 1; $x < count($indexEvents); $x++) {
+            if ((is_countable($indexEvents) ? count($indexEvents) : 0) > 1) {
+                $indexEventsCount = is_countable($indexEvents) ? count($indexEvents) : 0;
+                for ($x = 1; $x < $indexEventsCount; $x++) {
                     $duplicateIE = $indexEvents[$x];
                     $duplicateIE->mark_deleted($duplicateIE->id);
                 }

@@ -33,4 +33,9 @@ class ElasticSearchVardefsReader
 
         return $related_module_name;
     }
+    
+    public function areBeanAndFunctionSet(array $nested_config): bool
+    {
+        return !empty($nested_config['bean']) && !empty($nested_config['function']);
+    }
 }

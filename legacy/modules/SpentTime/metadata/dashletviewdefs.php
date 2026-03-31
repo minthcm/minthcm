@@ -41,6 +41,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 global $current_user;
 
 $dashletData['SpentTimeDashlet']['searchFields'] = array(
+    'type' => array( 'default' => '' ),
+    'date_start' => array( 'default' => '' ),
     'assigned_user_id' => array(
         'type' => 'assigned_user_name',
         'default' => $current_user->name,
@@ -51,6 +53,11 @@ $dashletData['SpentTimeDashlet']['columns'] = array(
         'width' => '20',
         'label' => 'LBL_LIST_NAME',
         'link' => true,
+        'default' => true,
+    ),
+    'category' => array(
+        'label' => 'LBL_SPENT_TIME_CATEGORY',
+        'width' => '10%',
         'default' => true,
     ),
     'date_start' => array(

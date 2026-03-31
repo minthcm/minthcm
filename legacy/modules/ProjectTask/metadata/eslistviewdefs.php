@@ -26,6 +26,39 @@ $ESListViewDefs['ProjectTask'] = [
         'percent_complete' => [
             'default' => true,
         ],
+        'status' => [
+            'default' => false,
+        ],
+        'task_number' => [
+            'default' => false,
+        ],
+        'estimated_effort' => [
+            'default' => false,
+        ],
+        'actual_effort' => [
+            'default' => false,
+        ],
+        'predecessors' => [
+            'default' => false,
+        ],
+        'relationship_type' => [
+            'default' => false,
+        ],
+        'order_number' => [
+            'default' => false,
+        ],
+        'milestone_flag' => [
+            'default' => false,
+        ],
+        'utilization' => [
+            'default' => false,
+        ],
+        'duration' => [
+            'default' => false,
+        ],
+        'duration_unit' => [
+            'default' => false,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -39,5 +72,16 @@ $ESListViewDefs['ProjectTask'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'status' => [],
+        'task_number' => [],
+        'estimated_effort' => [],
+        'actual_effort' => [],
+        'predecessors' => [],
+        'relationship_type' => [],
+        'order_number' => [],
+        'milestone_flag' => [],
+        'utilization' => [],
+        'duration' => [],
+        'duration_unit' => [],
     ],
 ];

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,6 +44,7 @@
 
 require_once 'modules/AOP_Case_Updates/util.php';
 
+#[\AllowDynamicProperties]
 class SurveyResponses extends Basic
 {
     public $new_schema = true;
@@ -69,6 +70,8 @@ class SurveyResponses extends Basic
     public $assigned_user_name;
     public $assigned_user_link;
     public $SecurityGroups;
+    public $email_response_sent;
+    public $contact_id;
 
     public function __construct()
     {
@@ -108,6 +111,8 @@ class SurveyResponses extends Basic
         if (!$email) {
             return $res;
         }
+
+        $case = null;
 
         if ($this->happiness > 7 || $this->happiness == -1) {
             $templateId = $sugar_config['survey_positive_confirmation_email'];
@@ -152,13 +157,13 @@ class SurveyResponses extends Basic
     {
         require_once "include/SugarPHPMailer.php";
         $mailer = new SugarPHPMailer();
-        $admin = new Administration();
+        $admin = BeanFactory::newBean('Administration');
         $admin->retrieveSettings();
 
         $mailer->prepForOutbound();
         $mailer->setMailerForSystem();
 
-        $email_template = new EmailTemplate();
+        $email_template = BeanFactory::newBean('EmailTemplates');
         $email_template = $email_template->retrieve($emailTemplateId);
 
         if (!$email_template) {
@@ -198,14 +203,14 @@ class SurveyResponses extends Basic
         $ret = array();
         $ret['subject'] = from_html(aop_parse_template($template->subject, $beans));
         $ret['body'] =
-            from_html(
-            aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], $template->body_html), $beans)
+        from_html(
+            aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], (string) $template->body_html), $beans)
         );
         $ret['body_alt'] =
             strip_tags(
-            from_html(
-                aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], $template->body), $beans)
-            )
+                from_html(
+                    aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], (string) $template->body), $beans)
+                )
         );
 
         return $ret;
@@ -215,7 +220,7 @@ class SurveyResponses extends Basic
     {
 
         require_once 'modules/Emails/Email.php';
-        $emailObj = new Email();
+        $emailObj = BeanFactory::newBean('Emails');
         $emailObj->to_addrs = $email;
         $emailObj->type = 'out';
         $emailObj->deleted = '0';

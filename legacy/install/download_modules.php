@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -116,7 +116,7 @@ if(isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActio
             $file = new UploadFile('language_pack');
             if($file->confirm_upload()){
             $perform = true;
-             if(strpos($file->mime_type, 'zip') !== false) { // only .zip files
+            if (strpos((string) $file->mime_type, 'zip') !== false) {  // only .zip files
 					$tempFile = $file->get_stored_filename();
 					if($file->final_move($tempFile)) {
                         $perform = true;
@@ -178,7 +178,7 @@ $availablePatches = getLangPacks(true);
 $installedLanguagePacks = getInstalledLangPacks();
 $errs = '';
 if(isset($validation_errors)) {
-    if(count($validation_errors) > 0) {
+    if ((is_countable($validation_errors) ? count($validation_errors) : 0) > 0) {
         $errs  = '<div id="errorMsgs">';
         $errs .= "<p>{$mod_strings['LBL_SYSOPTS_ERRS_TITLE']}</p>";
         $errs .= '<ul>';

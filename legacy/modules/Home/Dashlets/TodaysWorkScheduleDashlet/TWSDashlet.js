@@ -79,10 +79,11 @@ if (!window.TWSDashlet) {
                     // MT: do czego ten delay 500ms?
                     // _this.delay(500).then(_this.timeline.displayTimeline.bind(_this.timeline));
                 }
+                _this.$showPlanButton.show();
                 _this.$showPlanButton.parent().show();
-                _this.$editPlanButton.parent().show();
-                _this.$logTimeButton.parent()[isClosed ? 'hide' : 'show']();
-                _this.$CloseButton.parent()[isClosed ? 'hide' : 'show']();
+                _this.$editPlanButton[isClosed ? 'hide' : 'show']();
+                _this.$logTimeButton[isClosed ? 'hide' : 'show']();
+                _this.$CloseButton[isClosed ? 'hide' : 'show']();
                 _this.$listBody.droppable('option', 'disabled', isClosed);
                 _this.$listBody.sortable('option', 'disabled', isClosed);
             }

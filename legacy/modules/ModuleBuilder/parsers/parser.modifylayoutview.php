@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
 
+#[\AllowDynamicProperties]
 class ParserModifyLayoutView extends ModuleBuilderParser
 {
     public $maxColumns; // number of columns in this layout
@@ -309,8 +310,8 @@ class ParserModifyLayoutView extends ModuleBuilderParser
             }
 
             $panel = $this->_viewdefs ['panels'] [$panelID];
-            $lastrow = count($panel) - 1; // index starts at 0
-            $lastcol = count($panel [$lastrow]);
+            $lastrow = (is_countable($panel) ? count($panel) : 0) - 1; // index starts at 0
+            $lastcol = is_countable($panel [$lastrow]) ? count($panel [$lastrow]) : 0;
 
             // if we're on the last column of the last row, start a new row
             //          print "lastrow=$lastrow lastcol=$lastcol";
@@ -362,6 +363,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
     public function _parseData($panels)
     {
+        $displayData = [];
         $fields = array();
         if (empty($panels)) {
             return $fields;
@@ -369,7 +371,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
         // Fix for a flexibility in the format of the panel sections - if only one panel, then we don't have a panel level defined, it goes straight into rows
         // See EditView2 for similar treatment
-        if (! empty($panels) && count($panels) > 0) {
+        if (! empty($panels) && (is_countable($panels) ? count($panels) : 0) > 0) {
             $keys = array_keys($panels);
             if (is_numeric($keys [0])) {
                 $defaultPanel = $panels;
@@ -416,6 +418,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
     public function _getOrigFieldViewDefs()
     {
+        $viewdefs = [];
         $origFieldDefs = array();
         $GLOBALS['log']->debug("Original File = ".$this->_originalFile);
         if (file_exists($this->_originalFile)) {
@@ -424,7 +427,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 //          $GLOBALS['log']->debug($origdefs);
             // Fix for a flexibility in the format of the panel sections - if only one panel, then we don't have a panel level defined, it goes straight into rows
             // See EditView2 for similar treatment
-            if (! empty($origdefs) && count($origdefs) > 0) {
+            if (! empty($origdefs) && (is_countable($origdefs) ? count($origdefs) : 0) > 0) {
                 $keys = array_keys($origdefs);
                 if (is_numeric($keys [0])) {
                     $defaultPanel = $origdefs;

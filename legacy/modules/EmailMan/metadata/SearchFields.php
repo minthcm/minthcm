@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,4 +49,52 @@ $searchFields['EmailMan'] =
     array(
         'campaign_name' => array( 'query_type'=>'default','db_field'=>array('campaigns.name')),
         'current_user_only'=> array('query_type'=>'default','db_field'=>array('assigned_user_id'),'my_items'=>true, 'vname' => 'LBL_CURRENT_USER_FILTER', 'type' => 'bool'),
+        'message_name' => array( 'query_type'=>'default','db_field'=>array('email_marketing.name')),
+        'send_attempts' => array( 'query_type'=>'default','db_field'=>array('emailman.send_attempts')),
+        'in_queue' => array( 'query_type'=>'default','db_field'=>array('emailman.in_queue')),
+        'range_send_date_time' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'start_range_send_date_time' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'end_range_send_date_time' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),   
+        'range_date_entered' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'start_range_date_entered' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'end_range_date_entered' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),   
+        'range_date_modified' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'start_range_date_modified' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),
+        'end_range_date_modified' => array(
+            'query_type' => 'default',
+            'enable_range_search' => true,
+            'is_date_field' => true,
+        ),             
     );

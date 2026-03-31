@@ -46,111 +46,65 @@
 
 namespace MintHCM\Api\Repositories;
 
-use Doctrine\ORM\EntityRepository;
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-class KudosRepository extends EntityRepository
+class KudosRepository extends MintEntityRepository
 {
-    public function get($page, $list_type)
+    public function getDrawerKudoses($page, $list_type)
     {
         global $current_user;
-        $list_type_where = 'AND ((kudos.announced IS NULL OR kudos.announced = 0) AND kudos.assigned_user_id = ' ."'$current_user->id'" .')
-                                                       OR kudos.announced = 1';
-        if($list_type === 'received') {
-            $list_type_where = 'AND kudos.announced = 1 AND kudos.employee_id = ' ."'$current_user->id'" .'';
-        } elseif($list_type === 'given') {
-            $list_type_where = 'AND kudos.assigned_user_id = ' ."'$current_user->id'" .'';
-        }
-        $rows_to_skip = $page == 1 ? 0 : 20 * ($page - 1);
-        $sql = "SELECT kudos.id
-                    , kudos.description
-                    , kudos.date_entered
-                    , kudos.created_by
-                    , kudos.announced
-                    , kudos.announcement_date
-                    , kudos.private
-                    , alerts.is_read
-                    , JSON_OBJECT(
-                        'id', assigned_user_data.id,
-                        'first_name', assigned_user_data.first_name,
-                        'full_name', CONCAT_WS(' ', assigned_user_data.first_name, assigned_user_data.last_name),
-                        'photo', assigned_user_data.photo
-                    ) assigned_user
-                    , JSON_OBJECT(
-                        'id', employee_user_data.id,
-                        'first_name', employee_user_data.first_name,
-                        'full_name', CONCAT_WS(' ', employee_user_data.first_name, employee_user_data.last_name),
-                        'photo', employee_user_data.photo
-                    ) employee
-                    , IF(reactions.id IS NULL, NULL, JSON_ARRAYAGG(JSON_OBJECT(
-                        'type', reactions.reaction_type,
-                        'user', JSON_OBJECT(
-                            'id', reactions.assigned_user_id,
-                            'name', CONCAT_WS(' ', reaction_user.first_name, reaction_user.last_name)
-                        )
-                    ))) reactions
-                FROM kudos
-                INNER JOIN users employee_user_data
-                    ON employee_user_data.id = kudos.employee_id
-                    AND employee_user_data.deleted = 0
-                    AND employee_user_data.status = 'active'
-                INNER JOIN users assigned_user_data
-                    ON assigned_user_data.id = kudos.assigned_user_id
-                    AND assigned_user_data.deleted = 0
-                    AND assigned_user_data.status = 'active'
-                LEFT JOIN reactions
-                    ON reactions.parent_type = 'Kudos'
-                    AND reactions.parent_id = kudos.id
-                    AND reactions.deleted = 0
-                LEFT JOIN users reaction_user
-                    ON reaction_user.id = reactions.assigned_user_id
-                    AND reaction_user.deleted = 0
-                LEFT JOIN alerts
-                    ON alerts.parent_id = kudos.id
-                    AND alerts.parent_type = 'Kudos'
-                    AND alerts.assigned_user_id = '{$current_user->id}'
-                WHERE kudos.deleted = 0
-                $list_type_where
-                GROUP BY kudos.id
-                ORDER BY
-                    CASE
-                        WHEN alerts.is_read = 0 THEN 1
-                        ELSE 2 
-                    END,
-                    CASE
-                        WHEN kudos.announcement_date IS NULL THEN 1
-                        ELSE 2
-                    END,
-                    CASE
-                        WHEN kudos.announcement_date IS NULL THEN kudos.date_entered
-                        ELSE kudos.announcement_date
-                    END DESC,
-                    employee_user_data.last_name ASC
-                LIMIT 20
-                OFFSET $rows_to_skip
-        ";
+
+        $basic_select = 'CASE
+                            WHEN kudos.announcement_date IS NULL THEN 1
+                            ELSE 2
+                        END AS HIDDEN announcement_order,
+                        CASE
+                            WHEN kudos.announcement_date IS NULL THEN kudos.date_entered
+                            ELSE kudos.announcement_date
+                        END AS HIDDEN date_order';
         
-        $em = $this->getEntityManager();
-        $stmt = $em->getConnection()->prepare($sql);
-        $result = $stmt->executeQuery();
-        $kudos = $result->fetchAllAssociative();
+        $select_string = $list_type !== 'all' 
+                        ? 'CASE
+                                WHEN (alerts.is_read = 0 OR alerts.id IS NULL) THEN 1
+                                ELSE 2 
+                            END AS HIDDEN alert_order,' . $basic_select 
+                        : $basic_select;
+        
+        $qb = $this->createQueryBuilder('kudos')
+            ->addSelect('employee')
+            ->innerJoin('kudos.employee_link', 'employee', 'WITH', 'employee.deleted = 0 AND employee.status = \'active\'')
+            ->addSelect('assigned_user')
+            ->innerJoin('kudos.assigned_user_link', 'assigned_user', 'WITH', 'assigned_user.deleted = 0 AND assigned_user.status = \'active\'')
+            ->addSelect('reactions')
+            ->leftJoin('kudos.reactions', 'reactions', 'WITH', 'reactions.deleted = 0')
+            ->addSelect('alerts')
+            ->leftJoin('kudos.alerts', 'alerts', 'WITH', "alerts.assigned_user_id = '{$current_user->id}'")
+            ->addSelect($select_string)
+        ;
 
-        foreach ($kudos as $index => $kudos_item) {
-            $kudos[$index]['announced'] = boolval($kudos_item['announced']);
-            $kudos[$index]['private'] = boolval($kudos_item['private']);
-            $kudos[$index]['assigned_user'] = json_decode($kudos_item['assigned_user'], true);
-            $kudos[$index]['employee'] = json_decode($kudos_item['employee'], true);
-            $kudos[$index]['reactions'] = json_decode($kudos_item['reactions'], true);
-            $kudos[$index]['current_user_is_gifted'] = $current_user->id === $kudos[$index]['employee']['id'];
-            $kudos[$index]['current_user_is_author'] = $current_user->id === $kudos[$index]['assigned_user']['id'];
-            $kudos[$index]['current_user_is_admin'] = $current_user->isAdmin();
-            $kudos[$index]['current_user_access'] = $kudos[$index]['current_user_is_gifted'] || $kudos[$index]['current_user_is_author'];
-  
-
-            if($kudos[$index]['private'] && !$kudos[$index]['current_user_access']) 
-            {
-                $kudos[$index]['description'] = null;
-            }
+        switch ($list_type) {
+            case 'received':
+                $qb->andWhere('kudos.announced = 1 AND kudos.employee_id = :current_user_id')
+                    ->orderBy('alert_order', 'ASC');
+                break;
+            case 'given':
+                $qb->andWhere('kudos.assigned_user_id = :current_user_id')
+                    ->orderBy('alert_order', 'ASC');
+                break;
+            default:
+                $qb->andWhere('((kudos.announced IS NULL OR kudos.announced = 0) AND kudos.assigned_user_id = :current_user_id) OR kudos.announced = 1');
+                break;
         }
-        return $kudos;
+
+        $qb->addOrderBy('announcement_order', 'ASC')
+            ->addOrderBy('date_order', 'DESC')
+            ->addOrderBy('employee.last_name', 'ASC')
+            ->setFirstResult($page == 1 ? 0 : 20 * ($page - 1))
+            ->setMaxResults(20)
+        ;
+        
+        $qb->setParameter('current_user_id', $current_user->id);
+
+        return $qb->getQuery()->getResult();
     }
 }

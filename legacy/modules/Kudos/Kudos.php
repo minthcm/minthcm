@@ -98,7 +98,7 @@ class Kudos extends Basic
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
         global $current_user;
-        
+
         if (!parent::ACLAccess($view, $is_owner, $in_group)) {
             return false;
         }
@@ -116,5 +116,59 @@ class Kudos extends Basic
             return true;
         }
         return false;
+    }
+
+    public function getOwnerWhere($user_id)
+    {
+        include 'modules/Employees/access_config.php';
+
+        $owners_array = [];
+        if (isset($this->field_defs['assigned_user_id'])) {
+            $owners_array[] = " $this->table_name.assigned_user_id ='$user_id' ";
+        }
+
+        if (isset($GLOBALS["dictionary"][$this->object_name]["templates"]['employee_related']) && !in_array($this->module_dir, $employee_related_exclude_modules)) {
+            $owners_array[] = " $this->table_name.employee_id ='$user_id' ";
+        }
+
+        if (count($owners_array)) {
+            return " (" . join(") OR (", $owners_array) . ") ";
+        }
+
+        if (isset($this->field_defs['created_by'])) {
+            return " $this->table_name.created_by ='$user_id' ";
+        }
+
+        return '';
+    }
+
+    public function isOwner(?string $user_id)
+    {
+        // MintHCM Begin #70311 - whole isOwner function redesigned
+        $is_owner = false;
+        include 'modules/Employees/access_config.php';
+
+        //if we don't have an id we must be the owner as we are creating it
+        if (!isset($this->id) || "[SELECT_ID_LIST]" == $this->id) {
+            return true;
+        }
+        //if there is an assigned_user that is the owner
+        if (!empty($this->fetched_row['assigned_user_id']) && $this->fetched_row['assigned_user_id'] == $user_id) {
+            return true;
+        } elseif (!empty($this->assigned_user_id) && $this->assigned_user_id == $user_id) {
+            $is_owner = true;
+        } elseif (isset($GLOBALS["dictionary"][$this->object_name]["templates"]['employee_related']) && !in_array($this->module_dir, $employee_related_exclude_modules)
+            && !empty($this->employee_id) && $this->employee_id == $user_id
+        ) {
+            $is_owner = true;
+        } else {
+            //other wise if there is a created_by that is the owner
+            if (!$is_owner && !empty($this->created_by) && $this->created_by == $user_id) {
+                $is_owner = true;
+            }
+        }
+
+        return $is_owner;
+        // MintHCM End #70311
     }
 }

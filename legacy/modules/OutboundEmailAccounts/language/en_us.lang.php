@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -71,10 +71,10 @@ $mod_strings = array(
 
     'LNK_LIST_CREATE_NEW_PERSONAL' => 'New Personal Outbound Email Account',
     'LNK_LIST_CREATE_NEW_GROUP' => 'New Group Outbound Email Account',
+    'LNK_LIST_CREATE_SYSTEM_OVERRIDE_GROUP' => 'New System Override Outbound Email Account',
 
     'LNK_LIST' => 'Outbound Email Accounts',
     'LNK_LIST_INBOUND_EMAIL_ACCOUNTS' => 'Inbound Email Accounts',
-
     'LBL_SEARCH_FORM_TITLE' => 'Search Outbound Email Accounts',
     'LBL_HISTORY_SUBPANEL_TITLE' => 'View History',
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
@@ -122,5 +122,14 @@ $mod_strings = array(
     'LBL_OWNER' => 'Owner',
     'LBL_OWNER_NAME' => 'Owner',
 
-    'LNK_EXTERNAL_OAUTH_CONNECTIONS' => 'External OAuth Connections'
+    'LBL_AUTH_TYPE' => 'Auth Type',
+
+    'LBL_EXTERNAL_OAUTH_CONNECTION' => 'External OAuth Connection',
+    'LBL_EXTERNAL_OAUTH_CONNECTION_ID' => 'External OAuth Connection id',
+    'LBL_EXTERNAL_OAUTH_CONNECTION_NAME' => 'External OAuth Connection',
+    'LNK_EXTERNAL_OAUTH_CONNECTIONS' => 'External OAuth Connections',
+
+    'LBL_ERROR_OUTBOUND_EMAIL_SYSTEM_EXISTS' => 'System Outbound Email Account already exists. Please remove it before creating a new one.',
+    'LBL_ERROR_OUTBOUND_EMAIL_SYSTEM_IS_NOT_GROUP' => 'When configuring the System Outbound account using OAuth, you must select a Group-Type External Oauth Connection',
+    'LBL_ERROR_OUTBOUND_EMAIL_CONNECTION_TYPE_MISMATCH' => 'When configuring the Outbound account using OAuth, you must select a External Oauth Connection the same type as the Outbound Email Account (Group or Personal)',
 );

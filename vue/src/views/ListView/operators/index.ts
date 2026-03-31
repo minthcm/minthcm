@@ -5,12 +5,14 @@ export { default as multienum } from './multienum'
 export { default as text } from './text'
 export { default as numeric } from './numeric'
 export { default as relate } from './relate'
+export { default as parent } from './parent'
+export { default as datetime } from './datetime'
 
 export const defaultOperator = 'text'
 
 export const typeMap = {
-    datetime: 'date',
-    datetimecombo: 'date',
+    datetime: 'datetime',
+    datetimecombo: 'datetime',
     boolean: 'bool',
     int: 'numeric',
     float: 'numeric',
@@ -18,6 +20,7 @@ export const typeMap = {
     currency: 'numeric',
     ColoredActivityStatus: 'enum',
     ColoredEnum: 'enum',
+    name: 'text',
 }
 
 export function getAllTypesMatchingTo(baseType: string) {

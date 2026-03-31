@@ -1,16 +1,32 @@
 <template>
-    <h2>{{ props.data.bean[defs.name] }}</h2>
+    <span>{{ value }}</span>
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
+import { useLanguagesStore } from '@/store/languages'
+import { FieldProps } from '../Field.model'
+import { computed } from 'vue'
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
+const props = defineProps<FieldProps>()
+const languages = useLanguagesStore()
 
-const props = defineProps<Props>()
+const value = computed(() => {
+    if (!props.modelValue) {
+        return ''
+    }
+    let value: string[] = Array.isArray(props.modelValue)
+        ? props.modelValue
+        : props.modelValue.replaceAll('^', '').split(',')
+    if (!props.defs?.options) {
+        return value.join(', ')
+    }
+    const options =
+        Object.fromEntries(languages.getList(props.defs.options)?.map((item) => [item.key, item.value])) || {}
+    return value
+        .filter((val) => val in options)
+        .map((val) => languages.translateListValue(val, props.defs.options))
+        .join(', ')
+})
 </script>
 
 <style scoped lang="scss"></style>

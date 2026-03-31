@@ -51,29 +51,29 @@ SugarAutoLoader::requireWithCustom('include/Notifications/NotificationFactory.ph
 class MassConfirmation
 {
 
-    protected $user_id = '';
-    protected $ids = [];
-    protected $errors = [];
-    protected $success = [];
+   protected $user_id = '';
+   protected $ids = [];
+   protected $errors = [];
+   protected $success = [];
 
     public function setIDs(array $ids)
     {
-        $this->ids = $ids;
-    }
+      $this->ids = $ids;
+   }
 
     public function setUserId($id)
     {
-        $this->user_id = $id;
-    }
+      $this->user_id = $id;
+   }
 
     public function confirm()
     {
         $this->success = [];
         $this->errors = [];
-        foreach ($this->ids as $id) {
-            $work_schedule = BeanFactory::getBean('WorkSchedules', $id);
+        foreach ( $this->ids as $id ) {
+        $work_schedule = BeanFactory::getBean('WorkSchedules', $id);
             if ($work_schedule->canBeConfirmed() == 1) {
-                if ($work_schedule->confirm()) {
+                if ( $work_schedule->confirm() ) {
                     $this->success[] = $work_schedule;
                 } else {
                     $this->errors[] = $work_schedule;
@@ -89,35 +89,35 @@ class MassConfirmation
     {
         $notification = NotificationFactory::getNotification('MassConfirmationNotification');
         $notification->setUserId($this->user_id);
-        $notification->setDescription($this->getAlertDescription());
+      $notification->setDescription($this->getAlertDescription());
         $notification->run();
-    }
+   }
 
     protected function getAlertDescription()
     {
         $success_count = is_countable($this->success) ? count($this->success) : 0;
-        $total_count = $success_count + count($this->errors);
-        $ret = $GLOBALS['app_strings']['LBL_WSMASSCONFIRMATION_ALERT'];
-        $ret .= ' (' . $success_count . '/' . $total_count . ')';
-        return $ret;
-    }
+      $total_count = $success_count + count($this->errors);
+      $ret = $GLOBALS['app_strings']['LBL_WSMASSCONFIRMATION_ALERT'];
+      $ret .= ' (' . $success_count . '/' . $total_count . ')';
+      return $ret;
+   }
 
     public static function schedule($ids, $encoded_query, $entire_list)
     {
-        global $current_user;
-        $data = base64_encode(json_encode(
+      global $current_user;
+      $data = base64_encode(json_encode(
             array(
-                'ids' => $ids,
-                'encoded_query' => $encoded_query,
-                'entire_list' => $entire_list,
+               'ids' => $ids,
+               'encoded_query' => $encoded_query,
+               'entire_list' => $entire_list,
             )
-        ));
-        $job = new SchedulersJob();
-        $job->name = "Mass Confirmation";
-        $job->target = "class::MassConfirmationJob";
-        $job->assigned_user_id = $current_user->id;
-        $job->data = $data;
-        $jq = new SugarJobQueue();
-        $jq->submitJob($job);
-    }
+      ));
+      $job = new SchedulersJob();
+      $job->name = "Mass Confirmation";
+      $job->target = "class::MassConfirmationJob";
+      $job->assigned_user_id = $current_user->id;
+      $job->data = $data;
+      $jq = new SugarJobQueue();
+      $jq->submitJob($job);
+   }
 }

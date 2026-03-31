@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
 
 interface Props {

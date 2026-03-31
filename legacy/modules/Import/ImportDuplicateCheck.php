@@ -12,7 +12,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * All Rights Reserved.
  */
 
+#[\AllowDynamicProperties]
 class ImportDuplicateCheck
 {
     /**
@@ -129,10 +130,12 @@ class ImportDuplicateCheck
                         continue;
                     }
                     $fieldDef = $this->_focus->getFieldDefinition($field);
-                    if (isset($fieldDef['vname']) && isset($super_language_pack[$fieldDef['vname']])) {
-                        $labelsArray[$fieldDef['name']] = $super_language_pack[$fieldDef['vname']];
-                    } else {
-                        $labelsArray[$fieldDef['name']] = $fieldDef['name'];
+                    if ($fieldDef) {
+                        if (isset($fieldDef['vname']) && isset($super_language_pack[$fieldDef['vname']])) {
+                            $labelsArray[$fieldDef['name']] = $super_language_pack[$fieldDef['vname']];
+                        } else {
+                            $labelsArray[$fieldDef['name']] = $fieldDef['name'];
+                        }
                     }
                 }
                 $index_array[$index['name']] = str_replace(":", "", implode(", ", $labelsArray));
@@ -164,11 +167,11 @@ class ImportDuplicateCheck
                         if ($tmpField == 'deleted') {
                             continue;
                         }
-                        if (strlen($this->_focus->$tmpField) > 0) {
+                        if (strlen((string) $this->_focus->$tmpField) > 0) {
                             $index_fields[$tmpField] = $this->_focus->$tmpField;
                         }
                     }
-                } elseif ($field != 'deleted' && strlen($this->_focus->$field) > 0) {
+                } elseif ($field != 'deleted' && strlen((string) $this->_focus->$field) > 0) {
                     $index_fields[$field] = $this->_focus->$field;
                 }
 
@@ -280,7 +283,7 @@ class ImportDuplicateCheck
                         continue;
                     }
                     if (!in_array($field, $index_fields)) {
-                        if (isset($this->_focus->$field) && strlen($this->_focus->$field) > 0) {
+                        if (isset($this->_focus->$field) && strlen((string) $this->_focus->$field) > 0) {
                             $index_fields[$field] = $this->_focus->$field;
                         }
                     }

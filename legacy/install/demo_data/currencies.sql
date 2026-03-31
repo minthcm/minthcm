@@ -1,1 +1,0 @@
-REPLACE INTO currencies (id, name, symbol, iso4217, conversion_rate, status, deleted, date_entered, date_modified, created_by, currency_on_right, hidden) VALUES ('228f24a9-fd3c-2540-9b60-68b1823b7c9f','Polskie Złocisze','zł','PLN','42','Active','0','2067-05-30 10:33:54','2067-05-30 10:33:54','1','1','0');

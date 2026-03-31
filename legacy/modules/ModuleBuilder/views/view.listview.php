@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once 'modules/ModuleBuilder/parsers/constants.php' ;
 require_once('include/SubPanel/SubPanel.php') ;
 
+#[\AllowDynamicProperties]
 class ViewListView extends SugarView
 {
     /**
@@ -210,8 +211,8 @@ class ViewListView extends SugarView
         foreach ($groups as $groupKey => $group) {
             foreach ($group as $fieldKey => $field) {
                 if (isset($field [ 'width' ])) {
-                    if (substr($field [ 'width' ], - 1, 1) == '%') {
-                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = substr($field [ 'width' ], 0, strlen($field [ 'width' ]) - 1) ;
+                    if (substr((string) $field [ 'width' ], - 1, 1) == '%') {
+                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = substr((string) $field [ 'width' ], 0, strlen((string) $field [ 'width' ]) - 1) ;
                     }
                 }
             }

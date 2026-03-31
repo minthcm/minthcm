@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -89,13 +89,4 @@ $layout_defs["Workplaces"]["subpanel_setup"]['workplaces_allocations'] = array (
     'get_subpanel_data' => 'workplaces_workschedules',            
     'top_buttons' => array (
     ),
- );
-
- $layout_defs["Workplaces"]["subpanel_setup"]['files'] = array (
-    'order' => 100,
-    'module' => 'Files',
-    'subpanel_name' => 'default',
-    'title_key' => 'LBL_FILES',
-    'get_subpanel_data' => 'files',
-    'dropzone' => true
  );

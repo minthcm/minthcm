@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -120,12 +120,9 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => true,
-            'len' => '5',
-            'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
-            'default' => '0',
             'min' => 0,
             'max' => 1000,
             'validation' => array(
@@ -164,12 +161,9 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => true,
-            'len' => '18',
-            'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
-            'default' => '0',
             'min' => 0,
             'max' => 1000,
             'validation' => array(
@@ -177,6 +171,7 @@ $dictionary['SpentTime'] = array(
                 'min' => 0,
                 'max' => 1000,
             ),
+            'default' => '0.00',
         ),
         'current_done_ratio' => array(
             'importable' => 'required',
@@ -208,12 +203,9 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => true,
-            'len' => '18',
-            'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
-            'default' => '0',
         ),
         'estimated_task_time' => array(
             'importable' => 'required',
@@ -228,12 +220,9 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => true,
-            'len' => '18',
-            'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
-            'default' => '0',
         ),
         'worked_task_time' => array(
             'importable' => 'required',
@@ -248,12 +237,9 @@ $dictionary['SpentTime'] = array(
             'duplicate_merge_dom_value' => '0',
             'audited' => true,
             'reportable' => false,
-            'len' => '18',
-            'precision' => '2',
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
-            'default' => '0',
         ),
         'employees' => array(
             'name' => 'employees',

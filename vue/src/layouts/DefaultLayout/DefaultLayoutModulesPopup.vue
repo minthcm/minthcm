@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { useModulesStore, Module } from '@/store/modules'
 

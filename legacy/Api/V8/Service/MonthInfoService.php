@@ -7,6 +7,7 @@ use Api\V8\JsonApi\Helper\RelationshipObjectHelper;
 use Api\V8\Param\MonthInfoParams;
 use Slim\Http\Request;
 
+#[\AllowDynamicProperties]
 class MonthInfoService
 {
     protected $beanManager;
@@ -59,11 +60,11 @@ class MonthInfoService
                     $row['id']
                 );
                 $attributes = array_map(function ($value) {
-                    return is_string($value)
-                    ? (\DateTime::createFromFormat('Y-m-d H:i:s', $value)
-                        ? date(\DateTime::ATOM, strtotime($value))
-                        : html_entity_decode(htmlspecialchars_decode($value), ENT_QUOTES))
-                    : $value;
+                        return is_string($value)
+                        ? (\DateTime::createFromFormat('Y-m-d H:i:s', $value)
+                            ? date(\DateTime::ATOM, strtotime($value))
+                            : html_entity_decode(htmlspecialchars_decode($value), ENT_QUOTES))
+                        : $value;
                 }, array_slice($row, 1));
                 $attributes['acl_access'] = [
                     'edit' => $bean->ACLAccess('edit'),

@@ -104,6 +104,34 @@ function deleteGroup(group_name) {
     });
 }
 
+function unselectGroup(group_name) {
+    viewTools.GUI.statusBox.showStatus(
+        SUGAR.language.get("app_strings", "LBL_SAVING"),
+        "info"
+    );
+    viewTools.api.callController({
+        module: "Calendar",
+        action: "unselectGroup",
+        dataType: "json",
+        async: false,
+        callback: function (call_constroller_data) {
+            if (
+                call_constroller_data == false ||
+                call_constroller_data == null
+            ) {
+                console.error(call_constroller_data);
+                viewTools.GUI.statusBox.showStatus(
+                    SUGAR.language.get("app_strings", "LBL_ERROR"),
+                    "error",
+                    3000
+                );
+            } else {
+                location.reload();
+            }
+        },
+    });
+}
+
 function selectGroup(group_name) {
     showLoadingScreen(viewTools.language.get("app_strings", "LBL_SELECT_BUTTON_LABEL"), viewTools.language.get("app_strings", "LBL_LOADING"));
     viewTools.api.callController({

@@ -63,8 +63,8 @@ array(
         array(
           0 =>
           array(
-            'name' => 'aos_contrac_accounts_name',
-            'label' => 'LBL_AOS_CONTRACTS_ACCOUNTS_FROM_ACCOUNTS_TITLE',
+              'name' => 'contract_account',
+              'label' => 'LBL_CONTRACT_ACCOUNT',
           ),
           1 =>
           array(

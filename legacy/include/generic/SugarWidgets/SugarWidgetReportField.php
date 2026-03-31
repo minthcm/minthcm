@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $used_aliases = array();
 $alias_map = array();
 
+#[\AllowDynamicProperties]
 class SugarWidgetReportField extends SugarWidgetField
 {
     /**
@@ -151,7 +152,7 @@ class SugarWidgetReportField extends SugarWidgetField
             }
 
             // for a field with type='currency' conversion of values into a user-preferred currency
-            if ($layout_def['type'] == 'currency' && strpos($layout_def['name'], '_usdoll') === false) {
+            if ($layout_def['type'] == 'currency' && strpos((string) $layout_def['name'], '_usdoll') === false) {
                 $currency = $this->reporter->currency_obj;
                 $currency_alias = isset($layout_def['currency_alias'])
                 ? $layout_def['currency_alias'] : $currency->table_name;

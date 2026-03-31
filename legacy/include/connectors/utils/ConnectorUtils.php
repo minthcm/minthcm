@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -69,6 +69,7 @@ function sources_sort_function($a, $b)
  * Connector utilities
  * @api
  */
+#[\AllowDynamicProperties]
 class ConnectorUtils
 {
     /**
@@ -118,6 +119,7 @@ class ConnectorUtils
     public static function getSearchDefs(
         $refresh = false
         ) {
+        $searchdefs = [];
         if ($refresh || !file_exists('custom/modules/Connectors/metadata/searchdefs.php')) {
             require('modules/Connectors/metadata/searchdefs.php');
 
@@ -199,6 +201,7 @@ class ConnectorUtils
     public static function getMergeViewDefs(
         $refresh = false
         ) {
+        $viewdefs = [];
         if ($refresh || !file_exists('custom/modules/Connectors/metadata/mergeviewdefs.php')) {
 
             //Go through all connectors and get their mapping keys and merge them across each module
@@ -353,9 +356,9 @@ class ConnectorUtils
             $sources_ordering = array();
             foreach ($files as $file) {
                 require($file);
-                $end = strrpos($file, '/') - $start;
+                $end = strrpos((string) $file, '/') - $start;
                 $source = array();
-                $source['id'] = str_replace('/', '_', substr($file, $start, $end));
+                $source['id'] = str_replace('/', '_', substr((string) $file, $start, $end));
                 $source['name'] = !empty($config['name']) ? $config['name'] : $source['id'];
                 $source['enabled'] = true;
                 $source['directory'] = $directory . '/' . str_replace('_', '/', $source['id']);
@@ -391,6 +394,7 @@ class ConnectorUtils
     public static function getDisplayConfig(
         $refresh = false
         ) {
+        $modules_sources = [];
         if (!file_exists(CONNECTOR_DISPLAY_CONFIG_FILE) || $refresh) {
             $sources = self::getConnectors();
             $modules_sources = array();

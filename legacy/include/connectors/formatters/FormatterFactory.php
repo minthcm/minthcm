@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Formatter factory
  * @api
  */
+#[\AllowDynamicProperties]
 class FormatterFactory
 {
     public static $formatter_map = array();
@@ -74,7 +75,7 @@ class FormatterFactory
             }
 
             //split the wrapper name to find the path to the file.
-            $dir = str_replace('_', '/', $formatter_name);
+            $dir = str_replace('_', '/', (string) $formatter_name);
             $parts = explode("/", $dir);
             $file = $parts[count($parts)-1];
 

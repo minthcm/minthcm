@@ -7,9 +7,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,6 +42,7 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
+#[\AllowDynamicProperties]
 class AOR_Field extends Basic
 {
     public $new_schema = true;
@@ -82,6 +83,9 @@ class AOR_Field extends Basic
         parent::__construct();
     }
 
+
+
+
     public function save_lines($post_data, $parent, $key = '')
     {
         require_once('modules/AOW_WorkFlow/aow_utils.php');
@@ -90,7 +94,7 @@ class AOR_Field extends Basic
             $line_count = 0;
             LoggerManager::getLogger()->warn('AOR Field trying to save lines but post data key not found: ' . $key . 'field');
         } else {
-            $line_count = count($post_data[$key . 'field']);
+            $line_count = is_countable($post_data[$key . 'field']) ? count($post_data[$key . 'field']) : 0;
         }
         for ($i = 0; $i < $line_count; ++$i) {
             if (!isset($post_data[$key . 'deleted'][$i])) {

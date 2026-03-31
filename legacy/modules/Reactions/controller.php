@@ -1,6 +1,7 @@
 <?php
 require_once 'include/MVC/Controller/SugarController.php';
 
+#[\AllowDynamicProperties]
 class ReactionsController extends SugarController
 {
 

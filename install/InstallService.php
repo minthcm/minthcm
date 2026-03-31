@@ -2,6 +2,7 @@
 
 use MintHCM\MintCLI\Services\DatabaseService;
 
+#[\AllowDynamicProperties]
 class InstallService
 {
     const STATUSFILE = __DIR__ . '/assets/status.json';

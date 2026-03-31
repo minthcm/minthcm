@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -116,8 +116,8 @@ $mod_strings = array(
     'LBL_TOTAL_ACCOMMODATION_USDOLLAR' => 'Total Accommodation Cost',
     'LBL_ACCOMMODATION_LUMP_SUM' => 'Accommodation Lump Sum in Foreign Currency',
     'LBL_ACCOMMODATION_LUMP_SUM_USDOLLAR' => 'Accommodation Lump Sum',
-    'LBL_OTHER' => 'Other Expenses',
-    'LBL_OTHER_USDOLLAR' => 'Other Expenses',
+    'LBL_OTHER_EXPENSES' => 'Other Expenses',
+    'LBL_OTHER_EXPENSES_USDOLLAR' => 'Other Expenses',
     'LBL_TOTAL_EXPENSES' => 'Total Delegation Cost',
     'LBL_TOTAL_EXPENSES_USDOLLAR' => 'Total Delegation Cost',
     'LBL_OBTAINED_SUM' => 'Prepaid by the Employer',
@@ -152,4 +152,12 @@ $mod_strings = array(
     'LBL_WORKSCHEDULES' => 'Work Schedules',
     'LBL_DELEGATIONS' => 'Delegations',
     'LBL_DOCUMENTS' => 'Documents',
+    'LBL_DETAILVIEW_PANEL1'=>'Other',
+    'ERR_DELEGATION_EXISTS' => 'This delegation already exists.',
+    'LBL_CALCULATIONS' => 'Calculations',
+    'LBL_REGIMENTS_USDOLLAR' => 'Per Diem',
+    'LBL_REGIMENTS' => 'Per Diem',
+
+    'LBL_REGIMEN_VALUE' => 'Regimen Value',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

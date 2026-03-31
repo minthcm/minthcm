@@ -2,7 +2,7 @@
 
 namespace MintMCP\Tools;
 
-use MintMCP\Tools\Middleware\ToolValidationMiddleware;
+use MintMCP\Tools\Utils\ToolValidation;
 
 use DBManagerFactory;
 use Mcp\Types\CallToolResult;
@@ -54,7 +54,7 @@ class CountRecords extends AbstractMCPTool
                         {"status": {"operator": "IN", "value": "active,pending"}}
                         {"created_date": {"operator": "BETWEEN", "value": "2022-01-01,2022-01-31"}}
 
-Important: Use get_module_fields to get available fields in the module. You cannot use fields of type "link" or "relate" in filters, instead use the ID of the related record.',
+Important: Use get_module_fields to get available fields in the module. You cannot use fields of type "link" or "relate" in filters, instead use the ID of the related record. You also cannot use fields of source "non-db" in filters.',
                 ],
                 'operator' => [
                     'type' => 'string',
@@ -76,29 +76,17 @@ Important: Use get_module_fields to get available fields in the module. You cann
     public function execute(object $arguments): CallToolResult
     {
         try {
-            ToolValidationMiddleware::validateMany([
-                ToolValidationMiddleware::make($arguments->module_name, 'module_name')
+            ToolValidation::validateOne(
+                ToolValidation::make($arguments->module_name, 'module_name')
                     ->required()
-                    ->string(),
-                ToolValidationMiddleware::make($arguments->operator ?? 'and', 'operator')
-                    ->enum(['and', 'or'])
-            ]);
+                    ->string()
+            );
             $this->checkPermissions($arguments->module_name);
             $operator = $arguments->operator ?? 'and';
 
             [$bean, $tableName, $fieldDefs] = $this->loadBeanAndDefs($arguments->module_name);
 
             $filters = $arguments->filters ?? '';
-
-            // Validate filters structure and operators
-            if (!empty($filters) && is_array($filters)) {
-                foreach ($filters as $field => $filter) {
-                    ToolValidationMiddleware::validateMany([
-                        ToolValidationMiddleware::make(null, $field)->fieldModule($fieldDefs, $arguments->module_name),
-                        ToolValidationMiddleware::make($filter['operator'] ?? null, 'operator')->required()->enum(['=', '<>', '>', '<', '>=', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN']),
-                    ]);
-                }
-            }
 
             $where = $this->buildWhereClause($filters, $fieldDefs, $tableName, $operator);
 

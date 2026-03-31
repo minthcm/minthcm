@@ -6,6 +6,8 @@
             variant="outlined"
             density="compact"
             hide-details
+            :name="props.defs.name"
+            :error="props.state === 'error'"
             v-model="parsedValue"
         />
         <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
@@ -20,66 +22,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
+import { FieldProps } from '../Field.model'
+import { MintDate } from '@/composables/useMintDate'
 import { DateTime } from 'luxon'
-import { FieldVardef } from '@/store/modules'
-import { usePreferencesStore } from '@/store/preferences';
+import { usePreferencesStore } from '@/store/preferences'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-const preferences = usePreferencesStore()
-const props = defineProps<Props>()
+const props = defineProps<FieldProps<MintDate>>()
+
 const emit = defineEmits(['update:modelValue'])
 
 const datePickerMenu = ref(false)
 const model = ref(props.modelValue)
+const preferences = usePreferencesStore()
 
 const parsedValue = computed({
     get() {
-        const dt = DateTime.fromSQL(model.value)
-        if (dt.isValid) {
-            return dt.toFormat(preferences.user?.date_format || 'dd.MM.yyyy') || ''
-        }
-        return ''
-    },
-    async set(newVal) {
-        datePickerMenu.value = false
-        if (!newVal?.trim()) {
-            model.value = ''
-        }
-        const dt = DateTime.fromFormat(newVal, preferences.user?.date_format || 'dd.MM.yyyy')
-        if (dt.isValid) {
-            model.value = dt.toSQLDate()
-        }
-    },
-})
-const pickerValue = computed({
-    get() {
-        if (!model.value?.trim()) {
-            return new Date()
-        }
-        return new Date(model.value)
+        return model.value.formatted?.user_date || ''
     },
     set(newVal) {
-        const dt = DateTime.fromJSDate(newVal)
+        datePickerMenu.value = false
+        if (!newVal?.trim()) {
+            model.value.clear()
+            return
+        }
+        const dt = DateTime.fromFormat(newVal, preferences.userDateFormat || 'yyyy-MM-dd', { zone: 'utc' })
         if (dt.isValid) {
-            model.value = dt.toSQLDate()
+            model.value.set(dt)
         }
     },
 })
 
-watch(model, (newVal) => {
-    datePickerMenu.value = false
-    const dt = DateTime.fromSQL(newVal?.toString())
-    if (dt.isValid) {
+const pickerValue = computed({
+    get() {
+        return model.value.isValid ? model.value.formatted.js_date : new Date()
+    },
+    set(newVal) {
+        const year = newVal.getFullYear()
+        const month = String(newVal.getMonth() + 1).padStart(2, '0')
+        const day = String(newVal.getDate()).padStart(2, '0')
+        const dateString = `${year}-${month}-${day}`
+        
+        model.value.set(dateString)
         emit('update:modelValue', model.value)
-    } else {
-        emit('update:modelValue', '')
-    }
+        datePickerMenu.value = false
+    },
 })
 </script>
 
@@ -96,44 +83,6 @@ watch(model, (newVal) => {
         &:hover {
             color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
         }
-    }
-}
-.v-input {
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        opacity: 1;
-    }
-
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        border-color: #dbdbdb;
-    }
-
-    &:hover {
-        :deep(.v-field__outline__start),
-        :deep(.v-field__outline__notch)::before,
-        :deep(.v-field__outline__notch)::after,
-        :deep(.v-field__outline__end) {
-            border-color: rgb(var(--v-theme-primary));
-        }
-    }
-
-    :deep(.v-field--focused .v-field__outline__start),
-    :deep(.v-field--focused .v-field__outline__notch)::before,
-    :deep(.v-field--focused .v-field__outline__notch)::after,
-    :deep(.v-field--focused .v-field__outline__end) {
-        border-color: rgb(var(--v-theme-primary));
-    }
-
-    :deep(.v-field-label.v-field-label--floating) {
-        background: rgb(var(--v-theme-surface));
-        color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-        opacity: 1;
-        padding: 0px 2px;
     }
 }
 </style>

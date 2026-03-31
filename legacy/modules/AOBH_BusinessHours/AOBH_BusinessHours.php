@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@
 /**
  * Class AOBH_BusinessHours
  */
+#[\AllowDynamicProperties]
 class AOBH_BusinessHours extends Basic
 {
     public $new_schema = true;
@@ -92,7 +93,7 @@ class AOBH_BusinessHours extends Basic
     public function areBusinessHoursSet()
     {
         if ($this->businessHoursSet === null) {
-            $this->businessHoursSet = count($this->get_full_list());
+            $this->businessHoursSet = is_countable($this->get_full_list()) ? count($this->get_full_list()) : 0;
         }
 
         return $this->businessHoursSet;

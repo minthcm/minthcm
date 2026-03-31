@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\Services;
 
+#[\AllowDynamicProperties]
 class ConfigOverrideService
 {
     public function writeConfigOverride(string $file_path, array $config): void

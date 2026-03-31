@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,19 @@ use MintHCM\Api\Middlewares\Params\ParamTypes\EmailType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 
 $routes = array(
+    "getInternalFrontendToken" => array(
+        "method" => "POST",
+        "path" => "/getInternalFrontendToken",
+        "class" => AuthController::class,
+        "function" => 'getInternalFrontendToken',
+        "desc" => "Get internal frontend token",
+        "options" => array(
+            'auth' => false,
+        ),
+        "pathParams" => array(),
+        "queryParams" => array(),
+        "bodyParams" => array(),
+    ),
     "login" => array(
         "method" => "POST",
         "path" => "/login",
@@ -61,6 +74,12 @@ $routes = array(
         "pathParams" => array(),
         "queryParams" => array(),
         "bodyParams" => array(
+            "client_secret" => array(
+                "type" => StringType::class,
+                "required" => true,
+                "desc" => "OAuth client secret",
+                "example" => '12asd32131231asd23213',
+            ),
             "username" => array(
                 "type" => StringType::class,
                 "required" => true,

@@ -1,19 +1,14 @@
 <template>
-    <a class="mint-email-list-field" :href="`mailto:${props.data.bean[props.defs.name]}`">
-        <v-icon size="x-small" v-if="props.data.bean[props.defs.name]">mdi-email</v-icon>
-        <span>{{ props.data.bean[props.defs.name] }}</span>
+    <a class="mint-email-list-field" :href="`mailto:${props.modelValue}`">
+        <v-icon size="x-small" v-if="props.modelValue">mdi-email</v-icon>
+        <span>{{ props.modelValue }}</span>
     </a>
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 </script>
 
 <style scoped lang="scss">

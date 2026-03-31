@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\InputValidators;
 
+#[\AllowDynamicProperties]
 class NumericalValidator extends RegExpValidator
 {
     protected $pattern = "/^\d+$/";

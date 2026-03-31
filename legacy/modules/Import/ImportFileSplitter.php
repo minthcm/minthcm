@@ -10,7 +10,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  * All Rights Reserved.
  */
 
+ #[\AllowDynamicProperties]
  class ImportFileSplitter
  {
      /**
@@ -150,8 +151,8 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
              $enclosure = trim($enclosure);
              if (!empty($enclosure)) {
                  foreach ($row as $key => $v) {
-                     $row[$key] = str_replace($enclosure, $enclosure.$enclosure, $v);
-                 }
+                    $row[$key] = str_replace($enclosure, $enclosure.$enclosure, (string) $v);
+                }
              }
              $line = $enclosure.implode($enclosure.$delimiter.$enclosure, $row).$enclosure.PHP_EOL;
              //Would normally use fputcsv() here. But when enclosure character is used and the field value doesn't include delimiter, enclosure, escape character, "\n", "\r", "\t", or " ", php default function 'fputcsv' will not use enclosure for this string.

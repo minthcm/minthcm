@@ -12,7 +12,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,18 +54,19 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * All Rights Reserved.
  */
 
+#[\AllowDynamicProperties]
 class ImportCacheFiles
 {
     /**#@+
      * Cache file names
      */
-    const FILE_MISCELLANEOUS      = 'misc';
-    const FILE_DUPLICATES         = 'dupes';
-    const FILE_DUPLICATES_DISPLAY = 'dupesdisplay';
-    const FILE_ERRORS             = 'error';
-    const FILE_ERROR_RECORDS      = 'errorrecords';
-    const FILE_ERROR_RECORDS_ONLY = 'errorrecordsonly';
-    const FILE_STATUS             = 'status';
+    public const FILE_MISCELLANEOUS      = 'misc';
+    public const FILE_DUPLICATES         = 'dupes';
+    public const FILE_DUPLICATES_DISPLAY = 'dupesdisplay';
+    public const FILE_ERRORS             = 'error';
+    public const FILE_ERROR_RECORDS      = 'errorrecords';
+    public const FILE_ERROR_RECORDS_ONLY = 'errorrecordsonly';
+    public const FILE_STATUS             = 'status';
     /**#@-*/
 
     /**

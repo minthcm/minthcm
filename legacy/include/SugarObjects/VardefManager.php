@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -161,10 +161,19 @@ class VardefManager {
          }
          // MintHCM #122704 START
          if ( !empty($templates[$template]['elasticsearch']) ) {
-            $GLOBALS['dictionary'][$object]['elasticsearch'] = array_merge_recursive($templates[$template]['elasticsearch'], $GLOBALS['dictionary'][$object]['elasticsearch']);
+            foreach(array_keys($templates[$template]['elasticsearch']) as $key) {
+                if (!empty($GLOBALS['dictionary'][$object]['elasticsearch'][$key])) {
+                    $GLOBALS['dictionary'][$object]['elasticsearch'][$key] = array_merge($templates[$template]['elasticsearch'][$key], $GLOBALS['dictionary'][$object]['elasticsearch'][$key]);
+                } else {
+                    $GLOBALS['dictionary'][$object]['elasticsearch'][$key] = $templates[$template]['elasticsearch'][$key];
+                }
+            }
          }
          // MintHCM #122704 END
-
+         if(isset($templates[$template]['doctrineEntity']) && empty($GLOBALS['dictionary'][$object]['doctrineEntity'])){
+            $GLOBALS['dictionary'][$object]['doctrineEntity'] = array_merge([], $templates[$template]['doctrineEntity']);
+         }
+         
          // maintain a record of this objects inheritance from the SugarObject templates...
          $GLOBALS['dictionary'][$object]['templates'][$template] = $template;
       }

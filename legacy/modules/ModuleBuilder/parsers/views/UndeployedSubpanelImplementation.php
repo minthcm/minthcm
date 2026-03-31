@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -58,10 +58,11 @@ require_once 'modules/ModuleBuilder/parsers/constants.php' ;
  * For subpanels we must make use of the SubPanelDefinitions class to do this; this also means that the history mechanism,
  * which tracks files, not objects, needs us to create an intermediate file representation of the definition that it can manage and restore
  */
+#[\AllowDynamicProperties]
 class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation implements MetaDataImplementationInterface
 {
-    const HISTORYFILENAME = 'restored.php' ;
-    const HISTORYVARIABLENAME = 'layout_defs' ;
+    public const HISTORYFILENAME = 'restored.php' ;
+    public const HISTORYVARIABLENAME = 'layout_defs' ;
 
     /**
      * Constructor
@@ -91,6 +92,8 @@ class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation im
                 $template_def = $template;
             }
         }
+
+        $subpanel_layout = [];
         $template_subpanel_def = 'include/SugarObjects/templates/'.$template_def. '/metadata/subpanels/default.php';
         if (file_exists($template_subpanel_def)) {
             include($template_subpanel_def);
@@ -102,7 +105,7 @@ class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation im
         $subpanel_layout = $this->module->getAvailibleSubpanelDef($this->_subpanelName) ;
         $this->_viewdefs = & $subpanel_layout [ 'list_fields' ] ;
         $this->_mergeFielddefs($this->_fielddefs, $this->_viewdefs);
-        
+
         // Set the global mod_strings directly as Sugar does not automatically load the language files for undeployed modules (how could it?)
         $selected_lang = 'en_us';
         if (isset($GLOBALS['current_language']) &&!empty($GLOBALS['current_language'])) {

@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -386,7 +386,7 @@ function portal_get_entry_list_limited($session, $module_name, $where, $order_by
     $output_list = filter_return_list($output_list, $select_fields, $module_name);
     $field_list = filter_field_list($field_list, $select_fields, $module_name);
 
-    return array('result_count'=>count($output_list), 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
+    return array('result_count'=>is_countable($output_list) ? count($output_list) : 0, 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
 }
 
 $invalid_contact_fields = array('portal_password'=>1, 'portal_active'=>1);

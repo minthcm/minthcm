@@ -46,8 +46,8 @@
 namespace MintHCM\Api\Controllers\Module;
 
 use MintHCM\Data\MassActions\Actions as MassActions;
-use MintHCM\Data\MassActions\MassActionLoader;
 use MintHCM\Utils\ConstantsLoader;
+use MintHCM\Data\MassActions\MassActionLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
@@ -65,6 +65,14 @@ class ListInitController
         MassActions\Delete::class,
         MassActions\Export::class,
         MassActions\Merge::class,
+        MassActions\Update::class,
+    ];
+
+    const DEFAULT_COLUMNS = [
+        'date_modified',
+        'date_entered',
+        'created_by_name',
+        'modified_by_name',
     ];
     private $request;
     private $module, $metadata, $bean;
@@ -129,7 +137,7 @@ class ListInitController
         global $current_user;
         chdir('../legacy/');
         $preferences = (new \UserPreference($current_user))->getPreference($this->module, 'eslist');
-        if (!$preferences) {
+        if(!$preferences) {
             $preferences = [];
         }
         chdir('../api/');
@@ -182,13 +190,48 @@ class ListInitController
         return [
             'columns' => $this->prepareDefsType("columns"),
             'search' => $this->prepareSearchDefs(),
+            'massupdate' => $this->prepareMassUpdateDefs(),
+            'defaultSort' => $this->prepareDefaultSort(),
         ];
+    }
+
+    protected function prepareMassUpdateDefs()
+    {
+        global $mod_strings, $app_strings, $current_language;
+        $massupdate_fields = [];
+        foreach($this->bean->field_name_map as $field => $defs) {
+            if (empty($defs['massupdate']) || $defs['massupdate'] === false) {
+                continue;
+            }
+            if (
+                !empty($defs['has_access']['function'])
+                && function_exists($defs['has_access']['function'])
+                && !$defs['has_access']['function']()
+            ) {
+                continue;
+            }
+            $massupdate_field = $defs;
+            $massupdate_field['name'] = $field;
+            $massupdate_field['key'] = $this->eslistmap[$field] ?? $field;
+            $massupdate_field['options'] = $this->getParsedOptions($defs);
+            $mod_strings = return_module_language($current_language, $this->module);
+            $label = $defs['label'] ?? $defs['vname'];
+            $massupdate_field['label'] = $this->prepareLabel($mod_strings[$label] ?? $app_strings[$label] ?? $label);
+            $massupdate_fields[$massupdate_field['name']] = $massupdate_field;
+        }
+        return $massupdate_fields;
+    }
+
+    protected function prepareDefaultSort()
+    {
+        return $this->metadata["defaultSort"] ?? [];
     }
 
     protected function prepareSearchDefs()
     {
         global $mod_strings, $app_strings, $current_language;
         $mod_strings = return_module_language($current_language, $this->module);
+        $this->addDefaultFields('search');
         $search = $this->metadata["search"];
         if (empty($search)) {
             return false;
@@ -231,9 +274,10 @@ class ListInitController
 
     function prepareDefsType($type)
     {
+        $this->addDefaultFields($type);
         $columns = $this->metadata[$type];
 
-        global $mod_strings, $app_strings, $current_language;
+        global $mod_strings, $app_strings, $current_language, $app_list_strings;
         chdir('../legacy/');
         $mod_strings = return_module_language($current_language, $this->module);
         chdir('../api/');
@@ -257,6 +301,7 @@ class ListInitController
                 unset($columns[$field]);
                 continue;
             }
+
             $columns[$field] = array_merge($field_defs, $columns[$field]);
             $columns[$field]['name'] = $defs['name'] ?? $field;
             $columns[$field]['key'] = $defs['key'] ?? $this->eslistmap[$field] ?? $field;
@@ -269,6 +314,13 @@ class ListInitController
             $label = $defs['label'] ?? $field_defs['label'] ?? $field_defs['vname'];
             $columns[$field]['label'] = $this->prepareLabel($mod_strings[$label] ?? $app_strings[$label] ?? $label);
         }
+        $columns['favorites'] = [
+            'name' => 'favorites',
+            'key' => 'favorites',
+            'type' => 'bool',
+            'label' => $this->prepareLabel($app_strings['LBL_FAVORITES']),
+            'default' => false,
+        ];
         return $columns;
     }
     protected function getMappedFieldProps($key)
@@ -304,14 +356,27 @@ class ListInitController
         }
         if (!empty($field_defs['function']['include'])) {
             if (file_exists($field_defs['function']['include'])) {
-                require_once $field_defs['function']['include'];
+            require_once $field_defs['function']['include'];
             } else if (file_exists('../legacy/' . $field_defs['function']['include'])) {
                 require_once '../legacy/' . $field_defs['function']['include'];
-            }
+        }
         }
         $function = $field_defs['function']['name'] ?? $field_defs['function'];
         $additional_params = $field_defs['function']['additional_params'] ?? null;
 
         return call_user_func($function, null, null, null, 'eslist', $additional_params);
+    }
+
+    protected function addDefaultFields($metadata_type)
+    {
+        foreach (static::DEFAULT_COLUMNS as $field) {
+            if (!isset($this->metadata[$metadata_type][$field]) && !empty($this->bean->field_name_map[$field])) {
+                if ($metadata_type == 'columns' && in_array($field, ['created_by_name', 'modified_by_name'])) {
+                    $this->metadata[$metadata_type][$field] = [ 'link' => true ];
+                    continue;
+                }
+                $this->metadata[$metadata_type][$field] = [];
+            }
+        }
     }
 }

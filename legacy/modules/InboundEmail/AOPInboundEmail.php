@@ -1,10 +1,10 @@
 <?php
  /**
- * 
- * 
- * @package 
+ *
+ *
+ * @package
  * @copyright SalesAgility Ltd http://www.salesagility.com
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -24,6 +24,7 @@
  */
 require_once 'modules/InboundEmail/InboundEmail.php';
 require_once 'include/clean.php';
+#[\AllowDynamicProperties]
 class AOPInboundEmail extends InboundEmail
 {
     public $job_name = 'function::pollMonitoredInboxesAOP';
@@ -41,7 +42,7 @@ class AOPInboundEmail extends InboundEmail
             return $string;
         }
         $matches = array();
-        preg_match('/cid:([[:alnum:]-]*)/', $string, $matches);
+        preg_match('/cid:([[:alnum:]-]*)/', (string) $string, $matches);
         if (!$matches) {
             return $string;
         }
@@ -49,7 +50,7 @@ class AOPInboundEmail extends InboundEmail
         $matches = array_unique($matches);
         foreach ($matches as $match) {
             if (in_array($match, $noteIds)) {
-                $string = str_replace('cid:'.$match, $sugar_config['site_url']."/index.php?entryPoint=download&id={$match}&type=Notes&", $string);
+                $string = str_replace('cid:'.$match, $sugar_config['site_url']."/index.php?entryPoint=download&id={$match}&type=Notes&", (string) $string);
             }
         }
         return $string;
@@ -63,6 +64,8 @@ class AOPInboundEmail extends InboundEmail
         $GLOBALS['log']->debug('In handleCreateCase in AOPInboundEmail');
         $c = BeanFactory::newBean('Cases');
         $this->getCaseIdFromCaseNumber($email->name, $c);
+
+        $to = [];
 
         if (!$this->handleCaseAssignment($email) && $this->isMailBoxTypeCreateCase()) {
             // create a case
@@ -123,12 +126,12 @@ class AOPInboundEmail extends InboundEmail
             $email->parent_id = $c->id;
             // assign the email to the case owner
             $email->assigned_user_id = $c->assigned_user_id;
-            $email->name = str_replace('%1', $c->case_number, $c->getEmailSubjectMacro()) . " ". $email->name;
+            $email->name = str_replace('%1', $c->case_number, (string) $c->getEmailSubjectMacro()) . " ". $email->name;
             $email->save();
             $GLOBALS['log']->debug('InboundEmail created one case with number: '.$c->case_number);
             $createCaseTemplateId = $this->get_stored_options('create_case_email_template', "");
             if (!empty($this->stored_options)) {
-                $storedOptions = unserialize(base64_decode($this->stored_options));
+                $storedOptions = unserialize(base64_decode($this->stored_options), ['allowed_classes' => false]);
             }
             if (!empty($createCaseTemplateId)) {
                 $fromName = "";
@@ -180,7 +183,7 @@ class AOPInboundEmail extends InboundEmail
 
                 $email = $email->et->handleReplyType($email, "reply");
                 $ret = $email->et->displayComposeEmail($email);
-                $ret['description'] = empty($email->description_html) ?  str_replace("\n", "\n<BR/>", $email->description) : $email->description_html;
+                $ret['description'] = empty($email->description_html) ?  str_replace("\n", "\n<BR/>", (string) $email->description) : $email->description_html;
 
                 $reply = BeanFactory::newBean('Emails');
                 $reply->type				= 'out';

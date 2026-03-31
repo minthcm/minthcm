@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, withDefaults, computed } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
     icon?: string
@@ -109,7 +109,7 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
 }
 
 .mint-button-primary {
-    color: #f5fbfa;
+    color: #f5fbfa !important;
     background: rgb(var(--v-theme-secondary));
     &:hover {
         background: rgb(var(--v-theme-secondary-dark));
@@ -142,6 +142,11 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
 .mint-button-icon {
     padding: 8px;
     border-radius: 50%;
+    color: rgb(var(--v-theme-secondary));
+    
+    &:hover {
+        color: rgb(var(--v-theme-secondary-dark));
+    }
 }
 
 .mint-button-small {

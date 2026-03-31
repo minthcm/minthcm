@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -90,7 +90,6 @@ class SuiteEditorMozaik implements SuiteEditorInterface
             $this->settings->elementId,
             $this->settings->width,
             $this->settings->group,
-            $this->settings->tinyMCESetup
         ));
         return $smarty->fetch(get_custom_file_if_exists('include/SuiteEditor/tpls/SuiteEditorMozaik.tpl'));
     }

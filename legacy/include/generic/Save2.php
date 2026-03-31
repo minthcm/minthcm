@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -76,7 +76,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
 } else {
     if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'addtoprospectlist') {
         $GLOBALS['log']->debug(print_r($_REQUEST, true));
-        if (!empty($_REQUEST['prospect_list_id']) and !empty($_REQUEST['prospect_ids'])) {
+        if (!empty($_REQUEST['prospect_list_id']) && !empty($_REQUEST['prospect_ids'])) {
             add_prospects_to_prospect_list(
             $_REQUEST['prospect_list_id'],
             $_REQUEST['prospect_ids']
@@ -132,7 +132,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
             if (!empty($_REQUEST['select_entire_list']) &&  $_REQUEST['select_entire_list'] != 'undefined' && isset($_REQUEST['current_query_by_page'])) {
                 $order_by = '';
                 $current_query_by_page = $_REQUEST['current_query_by_page'];
-                $current_query_by_page_array = json_decode(html_entity_decode($current_query_by_page), true);
+                $current_query_by_page_array = json_decode(html_entity_decode((string) $current_query_by_page), true, 512, JSON_THROW_ON_ERROR);
                 //viewTools start #46476 - Błąd podczas powiązywania większej liczby kontrahentów z kampanią sprzedażową
                 if ( $current_query_by_page_array === null ) {
                     $current_query_by_page_array = sugar_unserialize(base64_decode($current_query_by_page));
@@ -170,7 +170,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
                     $searchForm->setup($searchdefs, $searchFields, 'SearchFormGeneric.tpl');
                     $searchForm->populateFromArray($current_query_by_page_array, 'advanced');
                     $where_clauses_arr = $searchForm->generateSearchWhere(true, $module);
-                    if (count($where_clauses_arr) > 0) {
+                    if ((is_countable($where_clauses_arr) ? count($where_clauses_arr) : 0) > 0) {
                         $where_clauses = '('. implode(' ) AND ( ', $where_clauses_arr) . ')';
                     }
                 }

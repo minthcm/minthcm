@@ -592,6 +592,7 @@ abstract class AbstractGrant implements GrantTypeInterface
         return (
             \array_key_exists('grant_type', $requestParameters)
             && $requestParameters['grant_type'] === $this->getIdentifier()
+            && (!array_key_exists('client_id', $requestParameters) || $requestParameters['client_id'] != 'mobile') // MintHCM #131001
         );
     }
 

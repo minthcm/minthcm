@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -62,7 +62,7 @@ if(isset($_REQUEST['ie_error']) && $_REQUEST['ie_error'] == 'true') {
         echo getAppString($_REQUEST['error_string']);
     } else {
         LoggerManager::getLogger()->warn('Passing error string in request is deprecated. Please update your code.');
-        echo isset($request) ? getAppString($request['error_string']) : null;
+        echo isset($request['error_string']) ? getAppString($request['error_string']) : null;
     } ?>
 <br><br>
 <?php echo $app_strings['NTC_CLICK_BACK']; }?>

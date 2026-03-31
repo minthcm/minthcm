@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\Services;
 
+#[\AllowDynamicProperties]
 class HtaccessService
 {
     const INSTANCE_DIR = './legacy';

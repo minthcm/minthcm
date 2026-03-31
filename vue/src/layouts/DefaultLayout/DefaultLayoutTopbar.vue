@@ -1,13 +1,20 @@
 <template>
     <nav class="top-bar">
-        <div class="img-logo" @click="navigateToDashboard">
-            <img src="../../assets/mint_logo_white.svg" />
+        <div 
+            :class="{
+                'img-logo': true,
+                'img-logo-railed': mdAndDown && !ux.sideMenu,
+            }" 
+            @click="logoOnClick"
+        >
+            <img v-if="(mdAndDown && ux.sideMenu) || !mdAndDown" src="../../assets/mint_logo_white.svg" />
+            <v-icon v-else>mdi-menu</v-icon>
         </div>
-        <DefaultLayoutSearch />
+        <DefaultLayoutSearch v-if="!mdAndDown || !ux.sideMenu" />
         <div class="flex-grow-1" />
         <v-menu offset="16">
             <template v-slot:activator="{ props, isActive }">
-                <MintButton v-bind="props" variant="nav" icon="mdi-plus" :active="isActive" />
+                <MintButton v-bind="props" variant="nav" icon="mdi-plus" :active="isActive" v-if="!mdAndDown || !ux.sideMenu" />
             </template>
             <MintMenuList :items="quickCreateMenu" />
         </v-menu>
@@ -16,9 +23,10 @@
             variant="nav"
             @click="showModulesPopup"
             :active="!!popups.popups.find((p) => p.component === DefaultLayoutModulesPopup)"
+            v-if="!mdAndDown"
         />
 
-        <v-menu v-model="alertsMenu" offset="16" :close-on-content-click="false">
+        <v-menu v-model="alertsMenu" offset="16" :close-on-content-click="false" v-if="!mdAndDown || !ux.sideMenu">
             <template v-slot:activator="{ props, isActive }">
                 <v-badge
                     v-bind="props"
@@ -32,18 +40,19 @@
             </template>
             <DefaultLayoutAlerts @close="alertsMenu = false" />
         </v-menu>
-        <DefaultLayoutUser />
+        <DefaultLayoutUser v-if="!mdAndDown || !ux.sideMenu" />
         <div />
     </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useBackendStore } from '@/store/backend'
 import { useAlertsStore } from '@/store/alerts'
 import { usePopupsStore } from '@/store/popups'
 import { useModulesStore } from '@/store/modules'
 import { useLanguagesStore } from '@/store/languages'
+import { useUxStore } from '@/store/ux'
 import DefaultLayoutAlerts from './DefaultLayoutAlerts.vue'
 import DefaultLayoutUser from './DefaultLayoutUser.vue'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
@@ -52,6 +61,7 @@ import DefaultLayoutModulesPopup from './DefaultLayoutModulesPopup.vue'
 import DefaultLayoutSearch from './DefaultLayoutSearch.vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
+import { useDisplay } from 'vuetify'
 
 const backend = useBackendStore()
 const alerts = useAlertsStore()
@@ -59,6 +69,8 @@ const popups = usePopupsStore()
 const modules = useModulesStore()
 const languages = useLanguagesStore()
 const route = useRoute();
+const ux = useUxStore();
+const { mdAndDown } = useDisplay();
 
 const alertsMenu = ref(false)
 
@@ -97,6 +109,14 @@ function navigateToDashboard() {
         router.push({ name: 'dashboard' });
     }
 }
+
+const logoOnClick = () => {
+    if (mdAndDown.value) {
+        ux.showHideSideMenu();
+    } else {
+        navigateToDashboard();
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -125,12 +145,42 @@ function navigateToDashboard() {
     background: rgb(var(--v-theme-primary));
     min-height: var(--v-top-nav-height);
     height: var(--v-top-nav-height);
+    min-width: 260px;
+    max-width: 260px;
     width: 260px;
     z-index: 1000;
     cursor: pointer;
+    overflow: hidden;
+
+    transition: width 0.2s ease, min-width 0.2s ease, max-width 0.2s ease;
+
     img {
         padding: 12px 24px;
         height: 58px;
+        transition: opacity 0.2s ease;
+        opacity: 1;
+    }
+
+    i {
+        transition: opacity 0.2s ease;
+        opacity: 0;
+    }
+
+    &.img-logo-railed {
+        max-width: 76px;
+        min-width: 76px;
+        width: 76px;
+        i {
+            padding: 12px 38px;
+            font-size: 42px;
+            color: white;
+            opacity: 1;
+        }
+
+        img {
+            opacity: 0;
+            pointer-events: none;
+        }
     }
 }
 </style>

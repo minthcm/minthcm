@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,9 +52,10 @@ require_once('include/externalAPI/ExternalAPIFactory.php');
  * @internal
  * Upload file stream handler
  */
+#[\AllowDynamicProperties]
 class UploadStream
 {
-    const STREAM_NAME = "upload";
+    public const STREAM_NAME = "upload";
     protected static $upload_dir;
 
     /**
@@ -151,7 +152,7 @@ class UploadStream
      */
     public static function register()
     {
-        stream_wrapper_register(self::STREAM_NAME, __CLASS__);
+        stream_wrapper_register(self::STREAM_NAME, self::class);
     }
 
     /**

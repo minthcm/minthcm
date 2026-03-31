@@ -7,10 +7,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/jjwg_Areas/jjwg_Areas.php');
 
+#[\AllowDynamicProperties]
 class jjwg_AreasDashlet extends DashletGeneric
 {
     public function __construct($id, $def = null)
     {
+
+        global $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/jjwg_Areas/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
@@ -24,5 +30,6 @@ class jjwg_AreasDashlet extends DashletGeneric
 
         $this->seedBean = BeanFactory::newBean('jjwg_Areas');
     }
+
 
 }

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+#[\AllowDynamicProperties]
 class SugarWidgetFieldInt extends SugarWidgetReportField
 {
     public function displayList(&$layout_def)
@@ -91,6 +92,7 @@ class SugarWidgetFieldInt extends SugarWidgetReportField
  
     public function display($layout_def)
     {
+        $obj = null;
         //Bug40995
         if (isset($obj->layout_manager->defs['reporter']->focus->field_name_map[$layout_def['name']]['precision'])) {
             $precision=$obj->layout_manager->defs['reporter']->focus->field_name_map[$layout_def['name']]['precision'];

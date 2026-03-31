@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ require_once 'include/clean.php';
 /**
  * Class AOP_Case_Updates.
  */
+#[\AllowDynamicProperties]
 class AOP_Case_Updates extends Basic
 {
     public $new_schema = true;
@@ -86,6 +87,8 @@ class AOP_Case_Updates extends Basic
         parent::__construct();
     }
 
+
+
     /**
      * @param $interface
      *
@@ -109,7 +112,7 @@ class AOP_Case_Updates extends Basic
     {
         $this->name = SugarCleaner::cleanHtml($this->name);
         $this->parseDescription();
-        parent::save($check_notify);
+        $result = parent::save($check_notify);
         if (file_exists('custom/modules/AOP_Case_Updates/CaseUpdatesHook.php')) {
             require_once 'custom/modules/AOP_Case_Updates/CaseUpdatesHook.php';
         } else {
@@ -122,7 +125,7 @@ class AOP_Case_Updates extends Basic
         }
         $hook->sendCaseUpdate($this);
 
-        return $this->id;
+        return $result;
     }
 
     /**
@@ -132,7 +135,7 @@ class AOP_Case_Updates extends Basic
     {
         $description = SugarCleaner::cleanHtml($this->description);
 
-        if (preg_match('/<[^<]+>/', $description, $matches) !== 0) {
+        if (preg_match('/<[^<]+>/', (string) $description, $matches) !== 0) {
             // remove external warning, if HTML is not valid
             libxml_use_internal_errors(true);
             $dom = new DOMDocument();
@@ -151,7 +154,7 @@ class AOP_Case_Updates extends Basic
             libxml_clear_errors();
         }
 
-        $this->description = trim(preg_replace('/\s\s+/', ' ', $description));
+        $this->description = trim(preg_replace('/\s\s+/', ' ', (string) $description));
     }
 
     /**
@@ -234,8 +237,8 @@ class AOP_Case_Updates extends Basic
         $beans = array('Contacts' => $contactId, 'Cases' => $this->getCase()->id, 'Users' => $user->id, 'AOP_Case_Updates' => $this->id);
         $ret = array();
         $ret['subject'] = from_html(aop_parse_template($template->subject, $beans));
-        $body = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], $template->body_html), $beans);
-        $bodyAlt = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], $template->body), $beans);
+        $body = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], (string) $template->body_html), $beans);
+        $bodyAlt = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], (string) $template->body), $beans);
         if ($addDelimiter) {
             $body = $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER'].$body;
             $bodyAlt = $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER'].$bodyAlt;

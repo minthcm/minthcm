@@ -1,24 +1,25 @@
 <?php
 namespace Api\V8\JsonApi\Repository;
 
+#[\AllowDynamicProperties]
 class Filter
 {
     // operators so far
-    const OP_EQ = '=';
-    const OP_NEQ = '<>';
-    const OP_GT = '>';
-    const OP_GTE = '>=';
-    const OP_LT = '<';
-    const OP_LTE = '<=';
-    const OP_LIKE = 'LIKE';
+    public const OP_EQ = '=';
+    public const OP_NEQ = '<>';
+    public const OP_GT = '>';
+    public const OP_GTE = '>=';
+    public const OP_LT = '<';
+    public const OP_LTE = '<=';
+    public const OP_LIKE = 'LIKE';
     // MintHCM Start #84318
-    const OP_NOT_LIKE = 'NOT LIKE';
-    const OP_IN = 'IN';
-    const OP_NOT_IN = 'NOT IN';
+    public const OP_NOT_LIKE = 'NOT LIKE';
+    public const OP_IN = 'IN';
+    public const OP_NOT_IN = 'NOT IN';
     // MintHCM End #84318
 
-    const OP_AND = 'AND';
-    const OP_OR = 'OR';
+    public const OP_AND = 'AND';
+    public const OP_OR = 'OR';
 
     /**
      * @var \DBManager

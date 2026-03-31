@@ -21,11 +21,11 @@ export const useUrlStore = defineStore('url', () => {
     })
 
     const action = computed(() => {
-        return path.value?.[2]
+        return path.value?.[3]
     })
 
     const record = computed(() => {
-        return path.value?.[3]
+        return path.value?.[4]
     })
 
     function toLegacyUrl(url: string | URL) {

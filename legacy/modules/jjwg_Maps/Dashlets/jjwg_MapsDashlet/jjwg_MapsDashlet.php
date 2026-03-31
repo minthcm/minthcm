@@ -5,10 +5,15 @@
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/jjwg_Maps/jjwg_Maps.php');
 
+#[\AllowDynamicProperties]
 class jjwg_MapsDashlet extends DashletGeneric
 {
     public function __construct($id, $def = null)
     {
+        global $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/jjwg_Maps/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
@@ -22,5 +27,6 @@ class jjwg_MapsDashlet extends DashletGeneric
 
         $this->seedBean = BeanFactory::newBean('jjwg_Maps');
     }
+
 
 }

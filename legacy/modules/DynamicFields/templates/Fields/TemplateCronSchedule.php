@@ -4,6 +4,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once('modules/DynamicFields/templates/Fields/TemplateText.php');
+#[\AllowDynamicProperties]
 class TemplateCronSchedule extends TemplateText
 {
     public $type='CronSchedule';
@@ -12,6 +13,9 @@ class TemplateCronSchedule extends TemplateText
     {
         parent::__construct();
     }
+
+
+
 
     public function get_field_def()
     {

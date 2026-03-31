@@ -1,93 +1,102 @@
 <template>
     <div class="parent-container">
         <v-autocomplete
-            :items="languages.getList(props.defs?.options)"
+            class="flex-grow-1"
+            :items="parentTypeOptions"
             :label="languages.label('LBL_ASSIGNED_TO_MODULE')"
+            :title="parentModel"
             variant="outlined"
             density="compact"
             hide-details
+            :error="props.state === 'error'"
             v-model="parentModel"
-            item-value="value"
-            item-title="key"
-            @keyup.enter="$emit('inlineEditSave')"
-            @keyup.esc="$emit('inlineEditCancel')"
-        />
+            v-bind="$attrs"
+            item-value="key"
+            item-title="value"
+            :name="props.defs.name + '_module'"
+        /> 
         <v-menu v-model="menuOpen" :location="'bottom'">
             <template v-slot:activator="val">
-                <v-text-field
-                    :label="languages.label('LBL_ASSIGNED_TO_RECORD')"
-                    variant="outlined"
-                    density="compact"
-                    hide-details
-                    v-model="recordModel.name"
-                    v-bind="val.props"
-                    @input="(event) => fetchRecordItems(event)"
-                    @click="menuOpen = false"
-                >
-                    <template #append-inner>
-                        <v-fab-transition class="search-prepend-icon">
-                            <v-icon
-                                v-if="recordModel.name"
-                                icon="mdi-close"
-                                @click="recordModel = { id: '', name: '' }"
-                            />
-                            <v-icon v-else icon="mdi-magnify" />
-                        </v-fab-transition>
-                    </template>
-                </v-text-field>
-            </template>
-            <v-list>
-                <v-list-item v-if="isLoading">
-                    <v-progress-circular color="primary" indeterminate></v-progress-circular>
-                </v-list-item>
-                <v-list-item
-                    v-if="!isLoading && !items.length"
-                    class="text-caption"
-                    v-text="
-                        !items || recordModel.name.length < 3
-                            ? languages.label('LBL_MINT4_GS_HELP_TIP')
-                            : languages.label('LBL_MINT4_GS_NO_RECORDS_FOUND')
-                    "
-                />
-                <div v-if="!isLoading">
-                    <v-list-item @click="clickOnMenuItem(item)" v-for="(item, index) in items" :key="index">
-                        <span v-html="getHighlightedText(item.name, recordModel.name)"></span>
-                    </v-list-item>
-                </div>
-                <v-divider />
-                <v-list-item>
-                    <MintButton
-                        variant="text"
-                        :text="languages.label('LBL_ADVANCED_SEARCH_BUTTON')"
-                        @click="openRelatePopup"
-                        icon="mdi-text-search"
-                        color="primary"
+            <v-text-field
+                class="flex-grow-1"
+                :label="languages.label('LBL_ASSIGNED_TO_RECORD')"
+                variant="outlined"
+                density="compact"
+                hide-details
+                :name="props.defs.name"
+                :title="recordModel.name"
+                v-model="recordModel.name"
+                v-bind="val.props"
+                @input="(event) => fetchRecordItems(event)"
+                @click="menuOpen = true"
+            >
+                <template #append-inner>
+                <v-fab-transition class="search-prepend-icon">
+                    <v-icon
+                    v-if="recordModel.name"
+                    icon="mdi-close"
+                    @click="recordModel = { id: '', name: '' }"
                     />
+                    <v-icon v-else icon="mdi-magnify" @click.stop="openRelatePopup" />
+                </v-fab-transition>
+                </template>
+            </v-text-field>
+            </template>
+
+            <v-list>
+            <v-list-item v-if="isLoading">
+                <v-progress-circular color="primary" indeterminate></v-progress-circular>
+            </v-list-item>
+
+            <v-list-item
+                v-if="!isLoading && !items.length"
+                class="text-caption"
+                v-text="
+                !items || recordModel.name.length < 3
+                    ? languages.label('LBL_MINT4_GS_HELP_TIP')
+                    : languages.label('LBL_MINT4_GS_NO_RECORDS_FOUND')
+                "
+            />
+
+            <div v-if="!isLoading">
+                <v-list-item
+                @click="clickOnMenuItem(item)"
+                v-for="(item, index) in items"
+                :key="index"
+                >
+                <span v-html="getHighlightedText(item.name, recordModel.name)"></span>
                 </v-list-item>
+            </div>
+
+            <v-divider />
+            <v-list-item>
+                <MintButton
+                variant="text"
+                :text="languages.label('LBL_ADVANCED_SEARCH_BUTTON')"
+                @click="openRelatePopup"
+                icon="mdi-text-search"
+                color="primary"
+                />
+            </v-list-item>
             </v-list>
         </v-menu>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, ref, defineEmits } from 'vue'
-import axios from 'axios'
-import { FieldVardef } from '@/store/modules'
+import { computed, ref, watch } from 'vue'
+import { useModulesStore } from '@/store/modules'
 import { useLanguagesStore } from '@/store/languages'
 import { usePopupsStore } from '@/store/popups'
 import MintPopupRelate from '@/components/MintPopups/MintPopupRelate.vue'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import { modulesApi } from '@/api/modules.api'
 import he from 'he'
+import getFilters from '@/utils/qsOperators'
+import { FieldProps } from '../Field.model'
+import { provideSSRWidth } from '@vueuse/core'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 const emit = defineEmits(['update:modelValue'])
 
 const DEBOUNCE_TIME = 500
@@ -95,43 +104,54 @@ let debounceTimeout: number | null = null
 
 const languages = useLanguagesStore()
 const popupsStore = usePopupsStore()
+const modulesStore = useModulesStore()
 const menuOpen = ref(false)
+
+const parentTypeOptions = computed(() => {
+    if (!Array.isArray(props.options) && typeof props.options === 'object') {
+        return Object.entries(props.options).map(([key, value]) => ({
+            key,
+            value,
+        }))
+    }
+    return props.options
+})
+
 const items = ref(
-    props.data.bean[props.defs.id_name]
+    props.data?.bean.fields[props.defs.id_name]?.model
         ? [
               {
-                  id: props.data.bean[props.defs.id_name],
-                  name: props.modelValue,
+                  id: props.data.bean.fields[props.defs.id_name]?.model || '',
+                  name: props.field.model || '',
               },
           ]
         : [],
 )
-const currentRecordItem = ref({ id: props.data.bean[props.defs.id_name], name: props.data.bean[props.defs.name] })
+const currentRecordItem = ref({
+    id: props.data?.bean.fields[props.defs.id_name]?.model ?? '',
+    name: props.data?.bean.fields[props.defs.name]?.model ?? '',
+})
 const recordModel = computed({
     get() {
         return currentRecordItem.value
     },
     set(newVal) {
-        props.data.bean[props.defs.id_name] = newVal.id
         currentRecordItem.value = newVal
-        emit('update:modelValue', [props.defs.id_name])
+        emit('update:modelValue', currentRecordItem.value?.name ?? '', {
+            [props.defs.type_name]: currentTypeItem.value,
+            [props.defs.id_name]: currentRecordItem.value?.id ?? '',
+        })
     },
 })
-const currentTypeItem = ref('')
+const currentTypeItem = ref(props.data?.bean.fields[props.defs.type_name]?.model ?? '')
 const parentModel = computed({
     get() {
-        return languages.translateListValue(
-            props.data.bean.parent_type ?? props.defs?.default ?? '',
-            props.defs?.options,
-        )
+        return currentTypeItem.value
     },
     set(newValue) {
-        let optionKeys = languages.languages.app_list_strings[props.defs?.options]
-        let selectedKey = Object.keys(optionKeys).find((key) => optionKeys[key] === newValue)
-        props.data.bean[props.defs.type_name] = selectedKey
-        currentTypeItem.value = selectedKey
+        currentTypeItem.value = newValue
         recordModel.value = { id: '', name: '' }
-        emit('update:modelValue', [props.defs.type_name])
+        emit('update:modelValue', '', { [props.defs.type_name]: newValue, [props.defs.id_name]: '' })
     },
 })
 const isLoading = ref(false)
@@ -140,39 +160,59 @@ async function fetchRecordItems(e) {
         items.value = []
         isLoading.value = true
         menuOpen.value = true
-        const val = e?.target?.value ?? props.data.bean[props.defs.name] ?? ''
+        const val = e?.target?.value ?? props.data?.bean.fields[props.defs.name]?.model ?? ''
+        const predefinedFilters = getFilters(
+            modulesStore.modules[currentTypeItem.value].vardefs,
+            props.defs.filters && typeof props.defs.filters === 'object' && !Array.isArray(props.defs.filters)
+                ? props.defs.filters[currentTypeItem.value]
+                : [],
+        )
+        const filters = {
+            ...predefinedFilters,
+            must: [
+                ...(predefinedFilters.must || []),
+                {
+                    wildcard: {
+                        name: val + '*',
+                    },
+                },
+            ],
+        }
+
         if (debounceTimeout) {
             clearTimeout(debounceTimeout)
         }
         debounceTimeout = window.setTimeout(async () => {
-            const response = await modulesApi.getListData(props.data.bean.parent_type, '', {
-                must: [
-                    {
-                        wildcard: {
-                            name: val + '*',
-                        },
-                    },
-                ],
-            })
-            if (response.data?.results?.length) {
-                items.value = response.data.results.sort((a, b) => a.name.localeCompare(b.name, 'pl'))
-            }
+            const response = await modulesApi.getListData(
+                currentTypeItem.value,
+                '',
+                filters,
+                0,
+                100,
+                false,
+                null,
+                'asc',
+            )
+            items.value = response.data.results
             isLoading.value = false
         }, DEBOUNCE_TIME)
     } else {
         items.value = []
     }
 }
-
 function openRelatePopup() {
     popupsStore.showPopup({
         component: MintPopupRelate,
-        title: useLanguagesStore().translateListValue(props.data.bean.parent_type, 'moduleList'),
+        title: useLanguagesStore().translateListValue(currentTypeItem.value, 'moduleList'),
         icon: 'mdi-view-list',
         data: {
-            moduleName: props.data.bean.parent_type,
+            moduleName: currentTypeItem.value,
             popupMode: 'single',
             fieldToNameArray: { id: props.defs.id_name, name: props.defs.name },
+            filterDefs:
+                props.defs.filters && typeof props.defs.filters === 'object' && !Array.isArray(props.defs.filters)
+                    ? props.defs.filters[currentTypeItem.value] || []
+                    : [],
             onConfirm: (data: string | string[]) => {
                 recordModel.value = {
                     id: data.nameToValueArray[props.defs.id_name],
@@ -211,6 +251,17 @@ function getHighlightedText(text: string, query: string) {
         return text
     }
 }
+
+watch(
+    () => props.data?.bean.fields[props.defs.id_name]?.model,
+    (newVal) => {
+        currentRecordItem.value = {
+            id: newVal ?? '',
+            name: props.data?.bean.fields[props.defs.name]?.model ?? '',
+        }
+        currentTypeItem.value = props.data?.bean.fields[props.defs.type_name].model ?? ''
+    }
+)
 </script>
 
 <style scoped lang="scss">
@@ -223,10 +274,16 @@ function getHighlightedText(text: string, query: string) {
 }
 .parent-container {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-    padding-left: 16px;
-    border-left: 1px solid rgb(var(--v-theme-primary-light));
+    align-items: center;
+    gap: 12px;
+    .v-input {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    .v-field__input, .v-select__selection-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 </style>

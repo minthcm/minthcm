@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,6 +56,7 @@ require_once('include/SugarObjects/templates/person/Person.php');
 require_once __DIR__ . '/../../include/EmailInterface.php';
 
 // Contact is used to store customer information.
+#[\AllowDynamicProperties]
 class Contact extends Person implements EmailInterface
 {
     public $field_name_map;
@@ -205,7 +206,7 @@ class Contact extends Person implements EmailInterface
             );
         }
         //any other action goes to parent function in sugarbean
-        if (strpos($order_by, 'sync_contact') !== false) {
+        if (strpos((string) $order_by, 'sync_contact') !== false) {
             //we have found that the user is ordering by the sync_contact field, it would be troublesome to sort by this field
             //and perhaps a performance issue, so just remove it
             $order_by = '';
@@ -260,6 +261,7 @@ class Contact extends Person implements EmailInterface
 				$this->table_name.*,
                 users.user_name as assigned_user_name ";
         $select_query .= $custom_join['select'];
+        $ret_array = [];
         $ret_array['select'] = $select_query;
 
         $from_query = "

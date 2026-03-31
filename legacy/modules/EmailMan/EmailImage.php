@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,7 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
-if (empty($_REQUEST['id']) || !preg_match("/^[\w\d\-]+$/", $_REQUEST['id'])) {
+if (empty($_REQUEST['id']) || !preg_match("/^[\w\d\-]+$/", (string) $_REQUEST['id'])) {
     die("Not a Valid Entry Point");
 }
 
@@ -54,7 +54,7 @@ require_once('modules/Notes/Note.php');
 $note = BeanFactory::newBean('Notes');
 //check if file is an email image
 if (!$note->retrieve_by_string_fields(array('id' => $_REQUEST['id'], 'parent_type' => "Emails"))) {
-    //die("Not a Valid Entry Point");
+    die("Not a Valid Entry Point");
 }
 
 $location = $GLOBALS['sugar_config']['upload_dir']."/" . $_REQUEST['id'];

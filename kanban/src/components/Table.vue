@@ -1,13 +1,15 @@
 <template>
-  <VContainer fluid>
-    <VRow no-gutters>
+  <VContainer fluid class="kanban-table">
+    <div class="table-wrapper">
+    <VRow no-gutters class="header-row">
       <VCol
         v-for="(name, key) in defs.columns"
         :key="key"
         :class="{
           'column-name': true,
-          'px-2': true,
+          'pa-2': true,
           'pt-1': true,
+          'pb-0': true,
           'd-flex': true,
           'justify-center': true,
           'align-center': true,
@@ -17,7 +19,7 @@
         <p class="ma-0 font-weight-bold text-center">{{ name }}</p>
       </VCol>
     </VRow>
-    <VRow no-gutters>
+    <VRow no-gutters class="content-row">
       <VCol
         v-for="(name, key) in defs.columns"
         :key="key"
@@ -69,6 +71,7 @@
         </VCard>
       </VCol>
     </VRow>
+    </div>
   </VContainer>
 </template>
 
@@ -192,5 +195,28 @@ export default {
 .ghost {
   opacity: 0.5;
   background-color: #eeeeee !important;
+}
+
+.kanban-table {
+    padding: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 20px;
+}
+
+.header-row,
+.content-row {
+  min-width: max-content;
+  flex-wrap: nowrap;
+}
+
+.header-row .col,
+.content-row .col {
+  min-width: 250px;
+  max-width: 300px;
+  flex: 0 0 280px;
 }
 </style>

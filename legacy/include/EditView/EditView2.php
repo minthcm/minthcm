@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ require_once('include/EditView/SugarVCR.php');
  * New EditView
  * @api
  */
+#[\AllowDynamicProperties]
 class EditView {
 
    /**
@@ -241,7 +242,9 @@ class EditView {
             global $app_strings;
 
             $error = str_replace(
-                    '[file]', "modules/$this->module/metadata/$metadataFileName.php", $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']
+                  '[file]',
+                  "modules/$this->module/metadata/$metadataFileName.php",
+                  (string) $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']
             );
             $GLOBALS['log']->fatal($error);
             echo $error;
@@ -374,7 +377,7 @@ class EditView {
 
       $this->sectionPanels = array();
       $this->sectionLabels = array();
-      if ( !empty($this->defs['panels']) && count($this->defs['panels']) > 0 ) {
+      if (!empty($this->defs['panels']) && (is_countable($this->defs['panels']) ? count($this->defs['panels']) : 0) > 0) {
          $keys = array_keys($this->defs['panels']);
          if ( is_numeric($keys[0]) ) {
             $defaultPanel = $this->defs['panels'];
@@ -399,7 +402,7 @@ class EditView {
             $this->sectionPanels[strtoupper($key)] = $p;
          } else {
             foreach ( $p as $row => $rowDef ) {
-               $columnsInRows = count($rowDef);
+               $columnsInRows = is_countable($rowDef) ? count($rowDef) : 0;
                $columnsUsed = 0;
                foreach ( $rowDef as $col => $colDef ) {
                   $panel[$row][$col] = is_array($p[$row][$col]) ? array( 'field' => $p[$row][$col] ) : array( 'field' => array( 'name' => $p[$row][$col] ) );
@@ -446,16 +449,17 @@ class EditView {
    protected function getPanelWithFillers($panel) {
       $addFiller = true;
       foreach ( $panel as $row ) {
-         if ( count($row) == $this->defs['templateMeta']['maxColumns'] || 1 == count($panel)
+         if ((is_countable($row) ? count($row) : 0) == $this->defs['templateMeta']['maxColumns']
+            || 1 == count($panel)
          ) {
-            $addFiller = false;
-            break;
+               $addFiller = false;
+               break;
          }
       }
 
       if ( $addFiller ) {
          $rowCount = count($panel);
-         $filler = count($panel[$rowCount - 1]);
+         $filler = is_countable($panel[$rowCount - 1]) ? count($panel[$rowCount - 1]) : 0;
          while ( $filler < $this->defs['templateMeta']['maxColumns'] ) {
             $panel[$rowCount - 1][$filler++] = array( 'field' => array( 'name' => '' ) );
          }
@@ -486,7 +490,7 @@ class EditView {
       }
 
       if ( isset($_REQUEST['offset']) ) {
-         $this->offset = $_REQUEST['offset'] - 1;
+         $this->offset = (int)$_REQUEST['offset'] - 1;
       }
 
       if ( $this->showVCRControl ) {
@@ -551,7 +555,9 @@ class EditView {
             foreach ( array( "formula", "default", "comments", "help" ) as $toEscape ) {
                if ( !empty($this->fieldDefs[$name][$toEscape]) ) {
                   $this->fieldDefs[$name][$toEscape] = htmlentities(
-                          $this->fieldDefs[$name][$toEscape], ENT_QUOTES, 'UTF-8'
+                     (string) $this->fieldDefs[$name][$toEscape], 
+                     ENT_QUOTES, 
+                     'UTF-8'
                   );
                }
             }
@@ -574,8 +580,19 @@ class EditView {
                // the list's name, but the list itself (the developper comment show us that developper expected to
                // retrieve list's name and not the options array)
                $this->fieldDefs[$name]['options'] = $app_list_strings[$this->fieldDefs[$name]['options']];
-                if(isset($this->fieldDefs[$name]['options_colors'])){
-                    $this->fieldDefs[$name]['options_colors'] = $app_list_strings[$this->fieldDefs[$name]['options_colors']];
+                if (isset($this->fieldDefs[$name]['options_colors'])) {
+                     include 'include/ColoredEnum/ColoredEnumVariables.php';
+                     foreach ($this->fieldDefs[$name]['options'] as $key => $value) {
+                        if (empty($this->fieldDefs[$name]['options_colors'][$key])) {
+                           $this->fieldDefs[$name]['options_colors'][$key] = '-default-';
+                        }
+                     }
+
+                     foreach ($this->fieldDefs[$name]['options_colors'] as $key => $value) {
+                        if (! empty($colored_enum_variables[$value])) {
+                           $this->fieldDefs[$name]['options_colors'][$key] = $colored_enum_variables[$value];
+                        }
+                     }
                 }
 
             }
@@ -841,12 +858,12 @@ class EditView {
 
       $date_format = $timedate->get_cal_date_format();
       $time_separator = ':';
-      if ( preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match) ) {
+      if (preg_match('/\d+([^\d])\d+([^\d]*)/s', (string) $time_format, $match)) {
          $time_separator = $match[1];
       }
 
       // Create Smarty variables for the Calendar picker widget
-      $t23 = strpos($time_format, '23') !== false ? '%H' : '%I';
+      $t23 = strpos((string) $time_format, '23') !== false ? '%H' : '%I';
       if ( !isset($match[2]) || empty($match[2]) ) {
          $this->th->ss->assign('CALENDAR_FORMAT', $date_format . ' ' . $t23 . $time_separator . '%M');
       } else {
@@ -899,7 +916,7 @@ class EditView {
 
             require_once 'modules/SecurityGroups/SecurityGroup.php';
             $security_modules = SecurityGroup::getSecurityModules();
-            if (in_array($this->focus->module_dir, array_keys($security_modules))) {
+            if(array_key_exists($this->focus->module_dir,$security_modules)) {
                 global $current_user;
 
                 $group_count = SecurityGroup::getMembershipCount($current_user->id);
@@ -928,10 +945,10 @@ class EditView {
                     $smarty->assign('SECURITY_GROUP_OPTIONS', $group_options);
                     $smarty->assign('SECURITY_GROUP_COUNT', $group_count);
                     $group_panel = $smarty->fetch('include/EditView/SecurityGroups.tpl');
-                    $group_panel = preg_replace("/[\r\n]+/", '', $group_panel);
+                    $group_panel = preg_replace("/[\r\n]+/", '', (string) $group_panel);
                     $group_panel_append = <<<EOQ
             <script>
-                $('#${form_name}_tabs .panel-content').append($('${group_panel}'));
+               $('#{$form_name}_tabs .panel-content').append($('{$group_panel}'));
             </script>
         EOQ;
                     $str .= $group_panel_append;

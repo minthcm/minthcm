@@ -12,7 +12,7 @@ $ESListViewDefs['AOS_PDF_Templates'] = [
         ],
         'created_by_name' => [
             'link' => true,
-            'default' => true,
+            'default' => true, 
         ],
         'modified_by_name' => [
         ],
@@ -21,6 +21,15 @@ $ESListViewDefs['AOS_PDF_Templates'] = [
         ],
         'date_modified' => [
             'default' => true,
+        ],
+        'active' => [
+            'default' => false,
+        ],
+        'page_size' => [
+            'default' => false,
+        ],
+        'orientation' => [
+            'default' => false,
         ],
     ],
     'search' => [
@@ -31,5 +40,8 @@ $ESListViewDefs['AOS_PDF_Templates'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'active' => [],
+        'page_size' => [],
+        'orientation' => [],
     ],
 ];

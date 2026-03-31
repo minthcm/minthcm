@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -219,7 +219,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  break;
              default:
                  //echo "Skipping field {$meta['name']} since the type is not supported<BR>";
-                 continue;
+                 break;
          }
              echo "<$tag $size name=\"$name\" $multi>\n$extra";
              echo "<BR>\n";
@@ -343,12 +343,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
                              }
                              $in_string .= "'$onevalue', ";
                          }
-                         $in_string = substr($in_string, 0, count($in_string) - 3);
+                         $in_string = substr($in_string, 0, (is_countable($in_string) ? count($in_string) : 0) - 3);
                          $q_where .= " and ({$tableName}{$addcstm}.{$meta['dbname']} in ($in_string) $empty_check)";
                          break;
                      default:
-                         //echo "Skipping field {$meta['name']} since the type is not supported<BR>";
-                         continue;
                          break;
                  }
              }

@@ -40,6 +40,7 @@
  */
 require_once('modules/PDFGenerator/PDFGenerator_sugar.php');
 
+#[\AllowDynamicProperties]
 class PDFGenerator extends PDFGenerator_sugar {
 
    function retrieve($id = -1, $encode = true, $deleted = true) {

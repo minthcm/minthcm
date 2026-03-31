@@ -5,6 +5,7 @@ use Api\V8\BeanDecorator\BeanManager;
 use Api\V8\OAuth2\Entity\ClientEntity;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
+#[\AllowDynamicProperties]
 class ClientRepository implements ClientRepositoryInterface
 {
     /**
@@ -48,6 +49,11 @@ class ClientRepository implements ClientRepositoryInterface
         /** @var \OAuth2Clients $client */
         $client = $this->beanManager->getBeanSafe(\OAuth2Clients::class, $clientIdentifier);
 
-        return hash('sha256', $clientSecret) === $client->secret && $grantType === $client->allowed_grant_type;
+        if ($grantType === $client->allowed_grant_type || $grantType === 'refresh_token')
+        {
+            return hash('sha256', $clientSecret) === $client->secret;
+        }
+
+        return false;
     }
 }

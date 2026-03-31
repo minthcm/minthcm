@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ require_once 'modules/SecurityGroups/PrivateGroup.php';
 // MintHCM #77675 end
 
 // Employee is used to store customer information.
+#[\AllowDynamicProperties]
 class Employee extends Person implements EmailInterface
 {
     // Stored fields
@@ -365,7 +366,20 @@ class Employee extends Person implements EmailInterface
 
     public function fetchAllSubordinates()
     {
-        $query = "SELECT users.* FROM users WHERE users.deleted=0 AND users.reports_to_id='{$this->id}'";
+        $query = "
+            SELECT users.*,
+            CONCAT(users.first_name, ' ', users.last_name) AS full_name,
+            positions.name AS position_name,
+            securitygroups.name AS securitygroup_name
+            FROM users
+            LEFT JOIN positions
+                ON positions.id = users.position_id
+                    AND positions.deleted = 0
+            LEFT JOIN securitygroups
+                ON securitygroups.id = users.securitygroup_id
+                    AND securitygroups.deleted = 0
+                WHERE users.deleted=0
+                    AND users.reports_to_id='{$this->id}'";
         return $query;
     }
 

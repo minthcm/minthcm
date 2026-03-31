@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class VTExpression
 {
 
@@ -32,11 +33,12 @@ class VTExpression
     * defined inside "duplicate(formula(defined(inside)))"
     */
    public $sqlBackendFormula = false;
+   public $interpreted_columns = [];
 
    /**
     * Warning! if backend is not set, return false
-    * @param Array 
-    * @return boolean
+    * @param array 
+    * @return mixed
     * Please set input params as Array
     */
     public function backend($arguments = array())
@@ -46,8 +48,7 @@ class VTExpression
 
    /**
     * Warning! if frontend is not set, return false
-    * @param Array 
-    * @return type
+    * @return mixed
     * Please set input params as Array
     */
     public function frontend()
@@ -57,8 +58,8 @@ class VTExpression
 
    /**
     * Warning! if sqlbackend section is not set, return false
-    * @param Array 
-    * @return boolean
+    * @param array 
+    * @return bool
     * Please set input params as Array
     */
     public function sqlbackend($arguments = array())
@@ -95,8 +96,8 @@ class VTExpression
 
    /**
     * Get argument values from multi-level array
-    * @param Array - multi-level array of arguments
-    * @return Array - multi-level array of argument values
+    * @param array - multi-level array of arguments
+    * @return array - multi-level array of argument values
     */
     protected function retrieveValuesFromArray($array)
     {
@@ -197,7 +198,7 @@ class VTExpression
 
    /**
     * QA - refactor needed
-    * @param type $bean
+    * @param SugarBean $bean
     */
     public static function loadBeanValues(&$bean)
     {
@@ -244,9 +245,8 @@ class VTExpression
 
    /**
     * 
-    * @global type $dictionary
-    * @param reference $bean
-    * @return Array
+    * @param SugarBean $bean
+    * @return array
     */
     public static function getValidationFields(&$bean)
     {
@@ -267,9 +267,8 @@ class VTExpression
 
    /**
     * 
-    * @global type $dictionary
-    * @param reference $bean
-    * @return Array
+    * @param SugarBean $bean
+    * @return array
     */
     public static function getRequiredFields(&$bean)
     {
@@ -287,9 +286,8 @@ class VTExpression
 
    /**
     * 
-    * @global type $dictionary
-    * @param reference $bean
-    * @return Array
+    * @param SugarBean $bean
+    * @return array
     */
     public static function getReadonlyFields(&$bean)
     {
@@ -307,9 +305,8 @@ class VTExpression
 
    /**
     * 
-    * @global type $dictionary
-    * @param type $bean
-    * @return Array
+    * @param SugarBean $bean
+    * @return array
     */
     public static function getCalculatedFields(&$bean)
     {

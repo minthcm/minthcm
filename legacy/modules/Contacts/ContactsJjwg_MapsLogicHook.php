@@ -6,6 +6,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class ContactsJjwg_MapsLogicHook
 {
     public $jjwg_Maps;
@@ -13,6 +14,9 @@ class ContactsJjwg_MapsLogicHook
     {
         $this->jjwg_Maps = get_module_info('jjwg_Maps');
     }
+
+
+
 
     public function updateGeocodeInfo(&$bean, $event, $arguments)
     {

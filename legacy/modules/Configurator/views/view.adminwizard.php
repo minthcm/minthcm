@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -57,6 +57,7 @@ require_once('modules/Configurator/Forms.php');
 require_once('modules/Administration/Forms.php');
 require_once('modules/Configurator/Configurator.php');
 
+#[\AllowDynamicProperties]
 class ViewAdminwizard extends SugarView
 {
     public function __construct($bean = null, $view_object_map = array())
@@ -68,18 +69,18 @@ class ViewAdminwizard extends SugarView
         $this->options['show_javascript'] = false;
     }
     
-        /**
-         * @see SugarView::display()
-         */
-        public function display()
-        {
-            global $current_user, $mod_strings, $app_list_strings, $sugar_config, $locale, $sugar_version;
+    /**
+     * @see SugarView::display()
+     */
+    public function display()
+    {
+        global $current_user, $mod_strings, $app_list_strings, $sugar_config, $locale, $sugar_version;
             
-            if(!is_admin($current_user)){
-            sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']); 
+        if (!is_admin($current_user)) {
+            sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']);
         }
                 
-                $themeObject = SugarThemeRegistry::current();
+        $themeObject = SugarThemeRegistry::current();
         
         $configurator = new Configurator();
         $sugarConfig = SugarConfig::getInstance();
@@ -87,25 +88,25 @@ class ViewAdminwizard extends SugarView
         $focus->retrieveSettings();
         
         $ut = $GLOBALS['current_user']->getPreference('ut');
-        if(empty($ut)) {
-            $this->ss->assign('SKIP_URL','index.php?module=Users&action=Wizard&skipwelcome=1');
+        if (empty($ut)) {
+            $this->ss->assign('SKIP_URL', 'index.php?module=Users&action=Wizard&skipwelcome=1');
         } else {
-            $this->ss->assign('SKIP_URL','index.php?module=Home&action=index');
+            $this->ss->assign('SKIP_URL', 'index.php?module=Home&action=index');
         }
+
         $silentInstall = $GLOBALS['current_user']->getPreference('silentInstall');
         //If not set, show the configuration
-        if($silentInstall === null)
-        {
+        if ($silentInstall === null) {
             $silentInstall = false;
         }
 
         // Always mark that we have got past this point
-        $focus->saveSetting('system','adminwizard',1);
+        $focus->saveSetting('system', 'adminwizard', 1);
         $css = $themeObject->getCSS();
-        $favicon = $themeObject->getImageURL('sugar_icon.ico',false);
-        $this->ss->assign('FAVICON_URL',getJSPath($favicon));
+        $favicon = $themeObject->getImageURL('sugar_icon.ico', false);
+        $this->ss->assign('FAVICON_URL', getJSPath($favicon));
         $this->ss->assign('SUGAR_CSS', $css);
-        $this->ss->assign('MOD_USERS',return_module_language($GLOBALS['current_language'], 'Users'));
+        $this->ss->assign('MOD_USERS', return_module_language($GLOBALS['current_language'], 'Users'));
         $this->ss->assign('CSS', '<link rel="stylesheet" type="text/css" href="'.SugarThemeRegistry::current()->getCSSURL('wizard.css').'" />');
         $this->ss->assign('LANGUAGES', get_languages());
         $this->ss->assign('config', $sugar_config);
@@ -114,7 +115,7 @@ class ViewAdminwizard extends SugarView
         $this->ss->assign('exportCharsets', get_select_options_with_id($locale->getCharsetSelect(), $sugar_config['default_export_charset']));
         $this->ss->assign('getNameJs', $locale->getNameJs());
         $this->ss->assign('NAMEFORMATS', $locale->getUsableLocaleNameOptions($sugar_config['name_formats']));
-        $this->ss->assign('JAVASCRIPT',get_set_focus_js(). get_configsettings_js());
+        $this->ss->assign('JAVASCRIPT', get_set_focus_js(). get_configsettings_js());
         $this->ss->assign('company_logo', SugarThemeRegistry::current()->getImageURL('company_logo.png'));
         $this->ss->assign('mail_smtptype', $focus->settings['mail_smtptype']);
         $this->ss->assign('mail_smtpserver', $focus->settings['mail_smtpserver']);
@@ -133,7 +134,7 @@ class ViewAdminwizard extends SugarView
         $this->options['show_javascript'] = true;
         $this->renderJavascript();
         $this->options['show_javascript'] = false;
-        $this->ss->assign("SUGAR_JS",ob_get_contents().$themeObject->getJS());
+        $this->ss->assign("SUGAR_JS", ob_get_contents().$themeObject->getJS());
         ob_end_clean();
 
         $this->ss->assign('langHeader', get_language_header());
@@ -141,22 +142,18 @@ class ViewAdminwizard extends SugarView
 
         //Start of scenario block
         require_once('install/suite_install/scenarios.php');
-        if(isset($installation_scenarios))
-        {
-
-            for($i = 0; $i < count($installation_scenarios); $i++)
-            {
-                $installation_scenarios[$i]['moduleOverview']='( '.implode(', ',$installation_scenarios[$i]['modules']).')';
+        if (isset($installation_scenarios)) {
+            $installation_scenariosCount = is_countable($installation_scenarios) ? count($installation_scenarios) : 0;
+            for ($i = 0; $i < $installation_scenariosCount; $i++) {
+                $installation_scenarios[$i]['moduleOverview']='( '.implode(', ', $installation_scenarios[$i]['modules']).')';
             }
 
             $this->ss->assign('scenarios', $installation_scenarios);
-        }
-        else
-        {
+        } else {
             $this->ss->assign('scenarios', []);
         }
         //End of scenario block
                 
         $this->ss->display('modules/Configurator/tpls/adminwizard.tpl');
-        }
+    }
 }

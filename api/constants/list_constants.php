@@ -123,6 +123,10 @@ return array(
         'primary_address_postalcode' => 'address.primary.postalcode',
         'primary_address_street' => 'address.primary.street',
         'primary_address_country' => 'address.primary.country',
+        'employee_id' => 'employee_id',
+        'employee_name' => 'employee_name',
+        'offboarding_id' => 'offboarding_id',
+        'offboarding_name' => 'offboarding_name',
     ),
     "sort_mappings" => array(
         "name" => "name.name",
@@ -142,5 +146,9 @@ return array(
         "primary_address_postalcode" => "address.primary.postalcode",
         "primary_address_street" => "address.primary.street",
         "primary_address_country" => "address.primary.country",
+        'employee_id' => 'employee_id.keyword',
+        'employee_name' => 'employee_name.keyword',
+        'offboarding_id' => 'offboarding_id.keyword',
+        'offboarding_name' => 'offboarding_name.keyword',
     ),
 );

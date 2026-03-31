@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -58,6 +58,7 @@ require_once 'include/OutboundEmail/OutboundEmail.php';
  * Sugar mailer
  * @api
  */
+#[\AllowDynamicProperties]
 class SugarPHPMailer extends PHPMailer
 {
     // MintHCM #110041 START
@@ -152,21 +153,26 @@ class SugarPHPMailer extends PHPMailer
             $this->Mailer = 'smtp';
             $this->Host = $oe->mail_smtpserver;
             $this->Port = $oe->mail_smtpport;
-            if ($oe->mail_smtpssl == 1) {
-                $this->SMTPSecure = 'ssl';
-            } // if
-            if ($oe->mail_smtpssl == 2) {
-                $this->SMTPSecure = 'tls';
-            } // if
-
-            if ($oe->mail_smtpauth_req) {
-                $this->SMTPAuth = true;
-                $this->Username = $oe->mail_smtpuser;
-                $this->Password = $oe->mail_smtppass;
-            }
+            $this->setSecureProtocol($oe->mail_smtpssl);
+            $this->initSMTPAuth(
+                $oe->mail_authtype ?? $oe->auth_type ?? '',
+                $oe->eapm_id ?? $oe->external_oauth_connection_id ?? '',
+                $oe->mail_smtpuser ?? '',
+                $oe->mail_smtppass ?? '',
+            );
         } else {
             $this->Mailer = 'sendmail';
         }
+    }
+
+    public function setSystemFromAddress(): void
+    {
+        require_once 'include/OutboundEmail/OutboundEmail.php';
+        $oe = new OutboundEmail();
+        $oe = $oe->getSystemMailerSettings();
+
+        $this->From = $oe->smtp_from_addr ?? '';
+        $this->FromName = $oe->smtp_from_name ?? '';
     }
 
     /**
@@ -186,20 +192,94 @@ class SugarPHPMailer extends PHPMailer
             $this->Mailer = 'smtp';
             $this->Host = $oe->mail_smtpserver;
             $this->Port = $oe->mail_smtpport;
-            if ($oe->mail_smtpssl == 1) {
-                $this->SMTPSecure = 'ssl';
-            } // if
-            if ($oe->mail_smtpssl == 2) {
-                $this->SMTPSecure = 'tls';
-            } // if
-            if ($oe->mail_smtpauth_req) {
-                $this->SMTPAuth = true;
-                $this->Username = $oe->mail_smtpuser;
-                $this->Password = $oe->mail_smtppass;
-            }
+            $this->setSecureProtocol($oe->mail_smtpssl);
+            $this->initSMTPAuth(
+                $oe->mail_authtype ?? $oe->auth_type ?? '',
+                $oe->eapm_id ?? $oe->external_oauth_connection_id ?? '',
+                $oe->mail_smtpuser ?? '',
+                $oe->mail_smtppass ?? '',
+            );
         } else {
             $this->Mailer = 'sendmail';
         }
+    }
+
+    public function initSMTPAuth(
+        string $authType,
+        string $externalOAuthConnectionId,
+        string $smtpUser,
+        string $smtpPass,
+    ): void {
+
+        if ($authType === 'oauth') {
+            $this->initOAuth(
+                $authType,
+                $externalOAuthConnectionId,
+                $smtpUser,
+            );
+            return;
+        }
+
+        // MintHCM #110041 START
+        if ($authType === 'oauth2') {
+            $this->isSMTP();
+            $this->SMTPAuth = true;
+            $this->AuthType = 'XOAUTH2';
+            $oauthConfig = $this->getOAuth2Config($externalOAuthConnectionId);
+            if ($oauthConfig === null) {
+                $GLOBALS['log']->error('SugarPHPMailer: OAuth2 config not available for eapm_id: ' . $externalOAuthConnectionId);
+                return;
+            }
+            $this->setOAuth($oauthConfig);
+            return;
+        }
+        // MintHCM #110041 END
+
+        if ($authType === 'basic') {
+            $this->SMTPAuth = true;
+            $this->Username = $smtpUser;
+            $this->Password = $smtpPass;
+        }
+    }
+
+    public function initOAuth(
+        string $authType,
+        string $externalOAuthConnectionId,
+        string $smtpUser
+    ): void
+    {
+        if ($authType !== 'oauth') {
+            return;
+        }
+
+        $this->isSMTP();
+        $this->SMTPAuth = true;
+
+        $this->AuthType = 'XOAUTH2';
+
+        $oAuthConnectionId = $externalOAuthConnectionId;
+
+        require_once 'modules/ExternalOAuthConnection/services/OAuthAuthorizationService.php';
+        $oAuth = new OAuthAuthorizationService();
+
+        $oAuth->refreshExpiredOAuthToken($oAuthConnectionId);
+
+        /** @var ExternalOAuthConnection $oauthConnection */
+        $oauthConnection = BeanFactory::getBean('ExternalOAuthConnection', $oAuthConnectionId);
+        $providerId = $oauthConnection->external_oauth_provider_id;
+
+        $oauthConfig = new \PHPMailer\PHPMailer\OAuth([
+            'provider' => $oAuth?->getProvider($providerId)?->getProvider($oauthConnection->client_id, $oauthConnection->client_secret),
+            'clientId' => $oauthConnection->client_id,
+            'refreshToken' => $oauthConnection->refresh_token,
+            'clientSecret' => $oauthConnection->client_secret,
+            'userName' => $smtpUser
+        ]);
+
+        $this->setOAuth(
+            $oauthConfig
+        );
+
     }
 
     /**
@@ -228,7 +308,7 @@ class SugarPHPMailer extends PHPMailer
             $this->Subject = $locale->translateCharset($subjectUTF8, 'UTF-8', $OBCharset);
 
             // HTML email RFC compliance
-            if ($this->ContentType === 'text/html' && strpos($this->Body, '<html') === false) {
+            if ($this->ContentType === 'text/html' && strpos((string) $this->Body, '<html') === false) {
                 $langHeader = get_language_header();
 
                 $head = <<<eoq
@@ -275,7 +355,7 @@ eoq;
                 continue;
             }
             if ($object) {
-                if (preg_match('#&(?:amp;)?type=([\w]+)#i', $matches[0][$i], $typematch)) {
+                if (preg_match('#&(?:amp;)?type=([\w]+)#i', (string) $matches[0][$i], $typematch)) {
                     switch (strtolower($typematch[1])) {
                         case 'documents':
                             $beanname = 'DocumentRevisions';
@@ -320,7 +400,7 @@ eoq;
         $this->clearAttachments();
 
         //replace references to cache/images with cid tag
-        $this->Body = preg_replace(';=\s*"' . preg_quote(sugar_cached('images/'), ';') . ';', '="cid:', $this->Body);
+        $this->Body = preg_replace(';=\s*"' . preg_quote((string) sugar_cached('images/'), ';') . ';', '="cid:', $this->Body);
 
         $this->replaceImageByRegex("(?:{$sugar_config['site_url']})?/?cache/images/", sugar_cached('images/'));
 
@@ -357,7 +437,7 @@ eoq;
             }
 
             $filename =
-                substr($filename, 36, strlen($filename)); // strip GUID	for PHPMailer class to name outbound file
+                substr((string) $filename, 36, strlen((string) $filename)); // strip GUID	for PHPMailer class to name outbound file
             if (!$note->embed_flag) {
                 $this->addAttachment($file_location, $filename, 'base64', $mime_type);
             } // else
@@ -489,7 +569,7 @@ eoq;
             $ret = parent::send();
             $this->exceptions =  $saveExceptionsState;
         } catch (Exception $e) {
-            $phpMailerExceptionMsg=$e->errorMessage(); //Pretty error messages from PHPMailer
+            $phpMailerExceptionMsg =$e->getMessage(); //Pretty error messages from PHPMailer
             if ($phpMailerExceptionMsg) {
                 $GLOBALS['log']->error("send: PHPMailer Exception: { $phpMailerExceptionMsg }");
             }
@@ -511,6 +591,19 @@ eoq;
         return $ret;
     }
 
+    public function setSecureProtocol($smtpSsl): void
+    {
+        $this->protocol = ($smtpSsl) ? "ssl://" : "tcp://";
+        if ($smtpSsl == 1) {
+            $this->protocol = "ssl://";
+            $this->SMTPSecure = 'ssl';
+        }
+        if ($smtpSsl == 2) {
+            $this->protocol = "ssl://";
+            $this->SMTPSecure = 'tls';
+        }
+    }
+
     // MintHCM #110041 START
     protected function getOAuth2Config($eapm_id)
     {
@@ -519,35 +612,26 @@ eoq;
         }
 
         $eapm = BeanFactory::getBean('EAPM', $eapm_id);
+        /** @var ExtAPIGoogleEmail|ExtAPIMicrosoftEmail $api */
         $api = $this->getExternalApi($eapm->application);
         if (empty($api)) {
             return null;
         }
 
-        $client = $api->getClient();
-        $client_id = $client->getClientId();
-        $client_secret = $client->getClientSecret();
-        $redirect_uri = $client->getRedirectUri();
+        $settings = $api->getSettings();
 
         $api_data = json_decode(html_entity_decode($eapm->api_data), true);
         $refresh_token = $api_data['refresh_token'];
         $email_addr = $api->getEmailAddress($eapm_id);
 
         $providerClass = $api->getPHPMailerOAuth2ProviderClass();
-        $provider = new $providerClass([
-            'clientId' => $client_id,
-            'clientSecret' => $client_secret,
-            'redirectUri' => $redirect_uri,
-            'accessType' => 'offline'
-        ]);
+        $provider = new $providerClass(array_merge($settings, ['accessType' => 'offline']));
 
-        return new OAuth([
+        return new OAuth(array_merge($settings, [
             'provider' => $provider,
-            'clientId' => $client_id,
-            'clientSecret' => $client_secret,
             'refreshToken' => $refresh_token,
             'userName' => $email_addr,
-        ]);
+        ]));
     }
 
     protected function getExternalApi($application)

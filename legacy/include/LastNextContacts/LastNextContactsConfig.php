@@ -5,6 +5,7 @@
 
  require_once 'modules/Import/ImportFileSplitter.php';
 
+#[\AllowDynamicProperties]
 class LastNextContactsConfig
 {
     const BASE_PATH = 'include/config/last_next_contact_config_base.php';

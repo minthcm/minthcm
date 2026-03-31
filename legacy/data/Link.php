@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ********************************************************************************/
 
 
+#[\AllowDynamicProperties]
 class Link
 {
 
@@ -270,6 +271,10 @@ class Link
 
     public function getJoin($params, $return_array =false)
     {
+        $table_with_alias = '';
+        $rel_table_with_alias = '';
+        $rel_table = '';
+        $table = '';
         $join_type= ' INNER JOIN ';
         if (isset($params['join_type'])) {
             $join_type = $params['join_type'];
@@ -278,8 +283,11 @@ class Link
         $join = '';
         $bean_is_lhs=$this->_get_bean_position();
 
-        if ($this->_relationship->relationship_type=='one-to-one' or $this->_relationship->relationship_type=='many-to-one' or
-            ($this->_relationship->relationship_type=='one-to-many' && !$bean_is_lhs)) {
+        if (
+            $this->_relationship->relationship_type === 'one-to-one' ||
+            $this->_relationship->relationship_type === 'many-to-one' ||
+            ($this->_relationship->relationship_type === 'one-to-many' && !$bean_is_lhs)
+        ) {
             if ($bean_is_lhs) {
                 $table = $this->_relationship->rhs_table;
                 $key = $this->_relationship->rhs_key;
@@ -415,6 +423,7 @@ class Link
 
     public function getQuery($return_as_array=false, $sort_array = array(), $deleted=0, $optional_where="", $return_join = false, $bean_filter="", $role="", $for_subpanels = false)
     {
+        $query_as_array = [];
         $select='';
         $from='';
         $join = '';
@@ -440,8 +449,11 @@ class Link
         $GLOBALS['log']->debug("getQuery, Relationship type=".$this->_relationship->relationship_type);
         $GLOBALS['log']->debug("getQuery, Relationship role column name=".$this->_relationship->relationship_role_column);
 
-        if ($this->_relationship->relationship_type=='one-to-one' or $this->_relationship->relationship_type=='many-to-one' or
-             ($this->_relationship->relationship_type=='one-to-many' && !$bean_is_lhs)) {
+        if (
+            $this->_relationship->relationship_type === 'one-to-one' ||
+            $this->_relationship->relationship_type === 'many-to-one' ||
+            ($this->_relationship->relationship_type === 'one-to-many' && !$bean_is_lhs)
+        ) {
             $GLOBALS['log']->debug("Processing one-to-one,many-to-one,one-to-many.");
 
             if ($this->add_distinct) {
@@ -465,7 +477,7 @@ class Link
                 }
 
                 //add deleted clause - but not if we're dealing with a Custom table which will lack the 'deleted' field
-                if (substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
+                if (substr_count((string) $this->_relationship->rhs_table, '_cstm') == 0) {
                     $where.=$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->rhs_table);
                 }
 
@@ -507,7 +519,7 @@ class Link
             }
 
             //add deleted clause - but not if we're dealing with a Custom table which will lack the 'deleted' field
-            if (substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
+            if (substr_count((string) $this->_relationship->rhs_table, '_cstm') == 0) {
                 $where.=$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->rhs_table);
             }
 
@@ -547,7 +559,7 @@ class Link
 
 
                 //add deleted clause.
-                if ($deleted == 0 or $deleted==1) {
+                if ($deleted == 0 || $deleted==1) {
                     $where.=' WHERE '.$this->_add_deleted_clause($deleted, '', $this->_relationship->join_table).$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->rhs_table);
                 }
 
@@ -580,7 +592,7 @@ class Link
                 $join .= $subjoin;
                 $from .= $subjoin;
                 //add deleted clause.
-                if ($deleted == 0 or $deleted==1) {
+                if ($deleted == 0 || $deleted==1) {
                     $where.=' WHERE '.$this->_add_deleted_clause($deleted, '', $this->_relationship->join_table).$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->lhs_table);
                 }
 
@@ -668,7 +680,8 @@ class Link
      */
     public function add($rel_keys, $additional_values=array())
     {
-        if (!isset($rel_keys) or empty($rel_keys)) {
+        $keys = [];
+        if (!isset($rel_keys) || empty($rel_keys)) {
             $GLOBALS['log']->fatal("Link.add, Null key passed, no-op, returning... ");
             return;
         }
@@ -692,9 +705,10 @@ class Link
         }
         //if multiple keys are passed then check for unsupported relationship types.
         if (count($keys) > 1) {
-            if (($this->_relationship->relationship_type == 'one-to-one')
-                or ($this->_relationship->relationship_type == 'one-to-many' and !$bean_is_lhs)
-                or ($this->_relationship->relationship_type == 'many-to-one')) {
+            if (
+                $this->_relationship->relationship_type === 'one-to-one' ||
+                ($this->_relationship->relationship_type === 'one-to-many' && !$bean_is_lhs) ||
+                $this->_relationship->relationship_type === 'many-to-one') {
                 $GLOBALS['log']->fatal("Invalid parameters passed to function, the relationship does not support addition of multiple records.");
                 return;
             }
@@ -885,7 +899,7 @@ class Link
             $GLOBALS['log']->debug("Invalid relationship parameters. Exiting..");
             return null;
         }
-        if ($_relationship->relationship_type=='one-to-many' or $_relationship->relationship_type=='one-to-one') {
+        if ($_relationship->relationship_type=='one-to-many' || $_relationship->relationship_type=='one-to-one') {
             if ($bean_is_lhs) {
                 //update rhs_table set rhs_key = null, relation_column_name = null where rhs_key= this_bean_id
                 $query='UPDATE '.$_relationship->rhs_table.' SET '.$_relationship->rhs_key."=NULL, date_modified='".$GLOBALS['timedate']->nowDb()."'";
@@ -921,7 +935,7 @@ class Link
             $use_bean_is_lhs = isset($_REQUEST['ajaxSubpanel']) || $this->_swap_sides !== true;
             $query='UPDATE '.$_relationship->join_table." SET deleted=1, date_modified='".$GLOBALS['timedate']->nowDb()."'";
             if ($bean_is_lhs && $use_bean_is_lhs) {
-                if (!empty($this->_relationship->reverse) && ($this->_relationship->reverse == true or $this->_relationship->reverse == 1)) {
+                if (!empty($this->_relationship->reverse) && ($this->_relationship->reverse == true || $this->_relationship->reverse == 1)) {
                     if (empty($related_id)) {
                         $query.=" WHERE (".$_relationship->join_key_lhs."= '". $id ."' or ".$_relationship->join_key_rhs."='". $id ."')" ;
                     } else {
@@ -935,7 +949,7 @@ class Link
                     }
                 }
             } else {
-                if (!empty($this->_relationship->reverse) && ($this->_relationship->reverse == true or $this->_relationship->reverse == 1)) {
+                if (!empty($this->_relationship->reverse) && ($this->_relationship->reverse == true || $this->_relationship->reverse == 1)) {
                     if (empty($related_id)) {
                         $query.=" WHERE (".$_relationship->join_key_rhs."= '". $id ."' or ".$_relationship->join_key_lhs."='". $id ."')" ;
                     } else {
@@ -1077,7 +1091,7 @@ class Link
                 return ($dictionary[$this->_relationship_name][$def_name]);
             }
             // custom metadata is found in custom/metadata (naturally) and the naming follows the convention $relationship_name_c, and $relationship_name = $table_name$locations = array( 'metadata/' , 'custom/metadata/' ) ;
-            $relationshipName = preg_replace('/_c$/', '', $table_name) ;
+            $relationshipName = preg_replace('/_c$/', '', (string) $table_name) ;
 
             $locations = array( 'metadata/' , 'custom/metadata/' ) ;
 
@@ -1108,7 +1122,7 @@ class Link
         if (!empty($varDefs)) {
             $role_field = '';
             foreach ($varDefs as $v) {
-                if (strpos($v['name'], '_role') !== false) {
+                if (strpos((string) $v['name'], '_role') !== false) {
                     $role_field = $v['name'];
                 }
             }

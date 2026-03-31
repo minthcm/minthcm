@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ require_once('include/EditView/QuickCreate.php');
 
 
 
+#[\AllowDynamicProperties]
 class MeetingsQuickCreate extends QuickCreate {
     
     public $javascript;
@@ -97,10 +98,10 @@ class MeetingsQuickCreate extends QuickCreate {
         }
 
 		$this->ss->assign("DATE_START", $focus->date_start);
-		$this->ss->assign("TIME_START", substr($focus->time_start,0,5));
-		$time_start_hour = (int)(substr($focus->time_start, 0, 2));
-		$time_start_minutes = substr($focus->time_start, 3, 5);
-		
+        $this->ss->assign("TIME_START", substr((string) $focus->time_start, 0, 5));
+        $time_start_hour = (int)substr((string) $focus->time_start, 0, 2);
+        $time_start_minutes = substr((string) $focus->time_start, 3, 5);
+        
 		if ($time_start_minutes > 0 && $time_start_minutes < 15) {
 			$time_start_minutes = "15";
 		} else
@@ -122,10 +123,10 @@ class MeetingsQuickCreate extends QuickCreate {
 		$start_at = 0;
 
 		$time_pref = $timedate->get_time_format();
-		if(strpos($time_pref, 'a') || strpos($time_pref, 'A')) {
-		   $num_of_hours = 13;
-		   $start_at = 1;	
-		} 
+        if (strpos((string) $time_pref, 'a') || strpos((string) $time_pref, 'A')) {
+            $num_of_hours = 13;
+            $start_at = 1;
+        }
 		
 		/*
 		// Seems to be problematic... $time_meridiem is always empty
@@ -150,9 +151,8 @@ class MeetingsQuickCreate extends QuickCreate {
         // Test to see if time format is 11:00am; otherwise it's 11:00AM 
         if($num_of_hours == 13) {    
         		
-		   if (strpos($time_pref, 'a')) {
-		   	   
-               if(!isset($focus->meridiem_am_values)) {
+            if (strpos((string) $time_pref, 'a')) {
+                if(!isset($focus->meridiem_am_values)) {
                   $focus->meridiem_am_values = array('am'=>'am', 'pm'=>'pm');
                } 		
                

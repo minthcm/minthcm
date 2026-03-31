@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@
 require_once 'modules/Recruitments/Recruitments_sugar.php';
 require_once 'modules/Recruitments/SugarFeeds/RecruitmentsFeed.php';
 
+#[\AllowDynamicProperties]
 class Recruitments extends Recruitments_sugar {
 
    public $counted = false;
@@ -58,9 +59,9 @@ class Recruitments extends Recruitments_sugar {
       }
 
       if ( !$this->counted ) {
-         $this->load_relationship('candidatures_end');
+         $this->load_relationship('candidatures');
          $employees_number = 0;
-         $candidatures = $this->candidatures_end->getBeans();
+         $candidatures = $this->candidatures->getBeans();
          foreach ( $candidatures as $candidature ) {
             if ( $candidature->status == 'Hired' ) {
                $employees_number++;
@@ -78,7 +79,7 @@ class Recruitments extends Recruitments_sugar {
 
       $this->calculateCurrencies();
 
-      parent::save($check_notify);
+      $result = parent::save($check_notify);
 
       //name is a calculated field so it could be change due to change of the position name after save
       if ( ($curr_name != $this->name || $old_bean_name != $this->name) && $this->load_relationship('candidatures') ) {
@@ -91,6 +92,7 @@ class Recruitments extends Recruitments_sugar {
       }
 
       $this->pushFeed();
+      return $result;
    }
 
    protected function pushFeed() {

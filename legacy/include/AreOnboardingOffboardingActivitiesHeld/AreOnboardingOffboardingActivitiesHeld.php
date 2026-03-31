@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class AreOnboardingOffboardingActivitiesHeld
 {
     public function areTrainingsHeld($offboarding)

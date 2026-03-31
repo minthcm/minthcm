@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@
 /**
  * Class CaseEventsHook.
  */
+#[\AllowDynamicProperties]
 class CaseEventsHook
 {
     private static $diffFields = array(
@@ -75,8 +76,8 @@ class CaseEventsHook
                 (isset($new->$fieldName) ? $new->$fieldName : null)
             ) {
                 $event = BeanFactory::newBean('AOP_Case_Events');
-                $oldDisplay = $old->$displayField;
-                $newDisplay = $new->$displayField;
+                $oldDisplay = $old->$displayField ?? '';
+                $newDisplay = $new->$displayField ?? '';
                 $desc = $name . ' changed from ' . $oldDisplay . ' to ' . $newDisplay . '.';
                 $event->name = $desc;
                 $event->description = $desc;

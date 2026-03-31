@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,6 +44,7 @@
 
  require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
  require_once('ModuleInstall/PackageManager/PackageManager.php');
+ #[\AllowDynamicProperties]
  class PackageController
  {
      public $_pm;
@@ -246,7 +247,7 @@
          }
          //patches
          $filter = array(array('name' => 'type', 'value' => "'patch'"));
-         $releases = $pm->getReleases('', '', $filter);
+         $releases = PackageManager::getReleases('', '', $filter);
          if (!empty($releases['packages'])) {
              foreach ($releases['packages'] as $update) {
                  $update = PackageManager::fromNameValueList($update);
@@ -323,7 +324,7 @@
          if (!empty($username) && !empty($password)) {
              $password = md5($password);
              $result = PackageManager::authenticate($username, $password, $servername, $terms_checked);
-             if (!is_array($result) && $result == true) {
+             if (!is_array($result) && $result === true) {
                  $status  = 'success';
              } else {
                  $status  = $result['faultstring'];

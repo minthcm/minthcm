@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,7 +52,7 @@
             {{if isset($displayParams.javascript)}}{{$displayParams.javascript}}{{/if}}
             {{include file='include/SugarFields/include/formulaInclude.tpl'}}>
 
-        {if isset({{sugarvar key='value' string=true}}) && {{sugarvar key='value' string=true}} != ''}
+        {if isset({{sugarvar key='value' string=true}})}
             {html_options options={{sugarvar key='options' string=true}} selected={{sugarvar key='value' string=true}}}
         {else}
             {html_options options={{sugarvar key='options' string=true}} selected={{sugarvar key='default' string=true}}}
@@ -72,7 +72,7 @@
                     {{if !empty($displayParams.accesskey)}} accesskey='{{$displayParams.accesskey}}' {{/if}} {{$displayParams.field}}
                     {{if isset($displayParams.javascript)}}{{$displayParams.javascript}}{{/if}}>
 
-                {if isset({{sugarvar key='value' string=true}}) && {{sugarvar key='value' string=true}} != ''}
+                {if isset({{sugarvar key='value' string=true}})}
                     {html_options options={{sugarvar key='options' string=true}} selected={{sugarvar key='value' string=true}}}
                 {else}
                     {html_options options={{sugarvar key='options' string=true}} selected={{sugarvar key='default' string=true}}}

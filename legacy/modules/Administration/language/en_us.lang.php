@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -594,8 +594,8 @@ $mod_strings = array(
    'LBL_QUICK_REPAIR_TITLE' => 'Please select Module(s) to repair:',
    'LBL_QUICK_REPAIR_AND_REBUILD_DESC' => 'Repairs and rebuilds DB, Extensions, Vardefs, MintHCM Dashlets etc.',
    'LBL_ALL_MODULES' => 'All Modules',
-   'LBL_REPAIR_ELASTICSEARCH_INDEX' => 'Repair ElasticSearch Index',
-   'LBL_REPAIR_ELASTICSEARCH_INDEX_DONE' => 'ElasticSearch Indexing has been repaired',
+   'LBL_REPAIR_ELASTICSEARCH_INDEX' => 'Repair Elasticsearch Index',
+   'LBL_REPAIR_ELASTICSEARCH_INDEX_DONE' => 'Elasticsearch Indexing has been repaired',
    'LBL_CAMPAIGN_CONFIG_TITLE' => 'Campaign Email Settings',
    'LBL_CAMPAIGN_CONFIG_DESC' => 'Configure email settings for campaigns',
    'LBL_REPAIR_ORACLE_FULLTEXT' => 'Rebuild fulltext indices',
@@ -645,6 +645,7 @@ $mod_strings = array(
    'ML_SUITE_DZ' => 'MintHCM Developer Zone',
    'ML_AVAIL_RESTRICTION' => 'The available restrictions and exceptions are detailed in the',
    'ML_OVERRIDE_CORE_FILES' => 'Overriding of core MintHCM files is not allowed ',
+   'ML_INVALID_PHP_FILE' => 'Invalid file',
    'ML_PATH_MAY_NOT_CONTAIN' => 'File path may not contain',
    'ML_INVALID_ACTION_IN_MANIFEST' => 'Invalid action in your manifest:',
    'ML_NO_MANIFEST' => 'This package does not contain a manifest',
@@ -741,6 +742,9 @@ $mod_strings = array(
    'LBL_SPRITES_PROCESSING_DIR' => 'Processing directory {0}',
    'LBL_SPRITES_ADDED' => 'Added sprite {0}',
    'LBL_SPRITES_EXCLUDING_FILE' => 'Excluding file: {0}',
+   
+   'LBL_CANNOT_DISABLE_CURRENT_LANGUAGE' => 'The language being actively used cannot be disabled. Please change to another language in order to disable it.',
+   
    //FTS
    'LBL_REPAIR_UPLOAD_FOLDER' => 'Remove missed files from upload directory',
    'LBL_REPAIR_UPLOAD_FOLDER_DESC' => 'Please note that removal can take a lot of time',
@@ -861,25 +865,27 @@ $mod_strings = array(
    'LBL_ELASTIC_SEARCH_TEST_CONNECTION' => 'Test connection',
    'LBL_ELASTIC_SEARCH_TEST_CONNECTION_SUCCESS' => 'Connection successful.',
    'LBL_ELASTIC_SEARCH_TEST_CONNECTION_FAIL' => 'Connection failed.',
-   'LBL_SETUP_ELASTICSEARCH' => 'Please enable ElasticSearch before repairing Indexes',
+   'LBL_SETUP_ELASTICSEARCH' => 'Please enable Elasticsearch before repairing Indexes',
    'LBL_ELASTIC_SEARCH_TEST_CONNECTION_ERROR' => 'Failed perform ping request.',
    'LBL_ELASTIC_SEARCH_SERVER' => 'Server',
    'LBL_ELASTIC_SEARCH_HOST' => 'Host',
    'LBL_ELASTIC_SEARCH_USER' => 'Username',
    'LBL_ELASTIC_SEARCH_PASS' => 'Password',
    'LBL_ELASTIC_SEARCH_SCHEDULERS' => 'Schedulers',
-   'LBL_ELASTIC_SEARCH_SCHEDULERS_HELP' => 'The following ElasticSearch schedulers were detected:',
+   'LBL_ELASTIC_SEARCH_SCHEDULERS_HELP' => 'The following Elasticsearch schedulers were detected:',
    'LBL_ELASTIC_SEARCH_SCHEDULERS_LAST_RUN' => 'last run:',
    'LBL_ELASTIC_SEARCH_SCHEDULERS_NEVER_RUN' => 'This job has never run',
    'LBL_ELASTIC_SEARCH_SCHEDULERS_NOT_FOUND' => 'No schedulers found. Consider creating one.',
-   'LBL_ELASTIC_SEARCH_SCHEDULERS_DESC' => 'The ElasticSearch module uses schedulers to keep the database and the indexing engine synchronised.',
+   'LBL_ELASTIC_SEARCH_SCHEDULERS_DESC' => 'The Elasticsearch module uses schedulers to keep the database and the indexing engine synchronised.',
    'LBL_ELASTIC_SEARCH_INDEX' => 'Index',
    'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_HELP' => 'Schedule an indexing',
    'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL' => 'Schedule full indexing',
+   'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL_FAIL_NO_SUCCESS' => 'Full indexing was not scheduled. Are you still logged in?',
    'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL_SUCCESS' => 'A full indexing has been scheduled and will start in the next 60 seconds. Search results might be inconsistent until the process is complete.',
    'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL_FAIL' => 'Failed to start full index.',
+   'LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_PART_FAIL_NO_SUCCESS' => 'Partial indexing was not scheduled. Are you still logged in?',
+
    // SearchWrapper Settings
-   'LBL_SEARCH_INTERFACE' => 'Search Interface',
    'LBL_SEARCH_ENGINE' => 'Search Engine',
    'LBL_SEARCH_ENGINE_HELP' => 'Configure the default search engine used by the search.',
    'LBL_SEARCH_ENGINE_TOOLTIP' => 'Select a search engine for the Global Search.',
@@ -972,5 +978,10 @@ $mod_strings = array(
    'LBL_CALCULATE_DLNC' => 'Calculate Date Last Next Contact',
    'LBL_CALCULATE_DLNC_CANDIDATES' => 'Candidates',
    // DLNC end
-   'LBL_LOCALE_DISPLAY_WEEK_NUMBER' => 'Display week number in calendar'
+   'LBL_LOCALE_DISPLAY_WEEK_NUMBER' => 'Display week number in calendar',
+
+   # MCP Administration Start
+   'LBL_MCP_SETTINGS_NAME' => 'MCP Settings',
+   'LBL_MCP_SETTINGS_DESCRIPTION' => 'Manage MCP Settings',
+   # MCP Administration End
 );

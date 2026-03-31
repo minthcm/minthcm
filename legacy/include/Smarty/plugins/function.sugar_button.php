@@ -299,7 +299,7 @@ function smarty_function_sugar_button($params, &$smarty)
    $formName = $params['form_id'] ?? '';
 
    $output = '';
-
+   
    if(!is_array($type)) {
    	  $module = $params['module'];
    	  $view = $params['view'];
@@ -310,7 +310,7 @@ function smarty_function_sugar_button($params, &$smarty)
 
 			case "CANCEL":
                 //If the return action is not empty and the return action is detail view and the id is not empty
-                /* MintHCM #128807 START */
+                /* MintHCM #128807 #176343 START */
                 $cancelButton = "
                 {literal}
                     <script type='text/javascript'>
@@ -320,7 +320,7 @@ function smarty_function_sugar_button($params, &$smarty)
                                 window.onbeforeunload=null;
                                 e.preventDefault();
                                 if (window.confirm('" . $app_strings['WARN_UNSAVED_CHANGES'] . " ')) {
-                                    window.location.replace(cancelHref);
+                                    top.location.replace(top.location.origin + top.location.pathname + cancelHref);
                                 }
                             });
                     </script>
@@ -328,28 +328,29 @@ function smarty_function_sugar_button($params, &$smarty)
                 ";
                 /* MintHCM #128807 END */
                 $cancelButton .= '{if !empty($smarty.request.return_action) && ($smarty.request.return_action == "DetailView" && !empty($smarty.request.return_id))}';
-                $cancelButton .= '<a href="index.php?action=DetailView&module={$smarty.request.return_module|escape:"url"}&record={$smarty.request.return_id|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/{$smarty.request.return_module|escape:"url"}/DetailView/{$smarty.request.return_id|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
                 //If the return action is not empty and the return action is detail view and the id (from fields) is not empty
                 $cancelButton .= '{elseif !empty($smarty.request.return_action) && ($smarty.request.return_action == "DetailView" && !empty($fields.id.value))}';
-                $cancelButton .= '<a href="index.php?action=DetailView&module={$smarty.request.return_module|escape:"url"}&record={$fields.id.value}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/{$smarty.request.return_module|escape:"url"}/DetailView/{$fields.id.value}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
                 //Bug 1057 If the return action is not empty and the return action is detail view and the id (from both locations) are empty, go to the modules listview
                 $cancelButton .= '{elseif !empty($smarty.request.return_action) && ($smarty.request.return_action == "DetailView" && empty($fields.id.value)) && empty($smarty.request.return_id)}';
-                $cancelButton .= '<a href="index.php?module={$smarty.request.return_module|escape:"url"}&action=ListView" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/{$smarty.request.return_module|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
 
                 //Bug 893 if the return action is not empty and the return module is not empty, go back to that page
                 $cancelButton .= '{elseif !empty($smarty.request.return_action) && !empty($smarty.request.return_module)}';
-                $cancelButton .= '<a href="index.php?action={$smarty.request.return_action}&module={$smarty.request.return_module|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/{$smarty.request.return_module|escape:"url"}/{$smarty.request.return_action}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
                 //If the return action is empty but the return id is in fields
                 $cancelButton .= '{elseif empty($smarty.request.return_action) || empty($smarty.request.return_id) && !empty($fields.id.value)}';
-                $cancelButton .= '<a href="index.php?action=index&module='.$module.'" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/'.$module.'" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
 
                 $cancelButton .= '{else}';
-                $cancelButton .= '<a href="index.php?action=index&module={$smarty.request.return_module|escape:"url"}&record={$smarty.request.return_id|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
+                $cancelButton .= '<a href="#/modules/{$smarty.request.return_module|escape:"url"}/index/{$smarty.request.return_id|escape:"url"}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="button" name="button" id="'.$type.$location.'">{$APP.LBL_CANCEL_BUTTON_LABEL}</a> ';
                 $cancelButton .= '{/if}';
+                /* MintHCM #176343 END */
 
                 //$cancelButton = '{$smarty.request.return_action}'.'{$smarty.request.return_module}';              
                 $output = $cancelButton;

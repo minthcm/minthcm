@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -54,6 +54,7 @@ require('include/nusoap/nusoap.php');
  * all NUSOAP call by passing the client's request to NUSOAP server and seding response back to client
  * @api
  */
+#[\AllowDynamicProperties]
 abstract class NusoapSoap extends SugarSoapService{
 	/**
 	 * This is the constructor. It creates an instance of NUSOAP server.
@@ -127,7 +128,7 @@ abstract class NusoapSoap extends SugarSoapService{
   	 * @param Array $output - assoc array of output values: key = param name, value = param type
 	 * @access public
   	 */
-	function registerFunction($function, $input, $output){
+	public function registerFunction($function, $input, $output){
 		if(in_array($function, $this->excludeFunctions))return;
 		$use = false;
 		$style = false;
@@ -147,7 +148,7 @@ abstract class NusoapSoap extends SugarSoapService{
 	 * @param String $implementationClass
 	 * @access public
 	 */
-	function registerImplClass($implementationClass){
+	public function registerImplClass($implementationClass){
 		$GLOBALS['log']->info('Begin: NusoapSoap->registerImplClass');
 		if (empty($implementationClass)) {
 			$implementationClass = $this->implementationClass;
@@ -162,7 +163,7 @@ abstract class NusoapSoap extends SugarSoapService{
 	 * @param String $registryClass
 	 * @access public
 	 */
-	function registerClass($registryClass){
+	public function registerClass($registryClass){
 		$GLOBALS['log']->info('Begin: NusoapSoap->registerClass');
 		$this->registryClass = $registryClass;
 		$GLOBALS['log']->info('End: NusoapSoap->registerClass');

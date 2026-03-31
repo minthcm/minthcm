@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
 
 SugarAutoLoader::requireWithCustom('SetAppraisalRelatedModulesRelations.php');
 
+#[\AllowDynamicProperties]
 class CreateNewAppraisalRecord {
 
    public $transformed_module_name = '';
@@ -108,7 +109,7 @@ class CreateNewAppraisalRecord {
       if ( $this->transformed_module_name == static::$EMPLOYEES_MODULE_NAME ) {
          $position_id = $transformed_record_bean->position_id;
       } elseif ( $this->transformed_module_name == static::$CANDIDATURES_MODULE_NAME ) {
-         $recruitement_id = (empty($transformed_record_bean->recruitment_end_id) ? $transformed_record_bean->recruitment_id: $transformed_record_bean->recruitment_end_id);
+         $recruitement_id = $transformed_record_bean->recruitment_id;
          $recruitement_bean = BeanFactory::getBean(static::$RECRUITEMENT_MODULE_NAME, $recruitement_id);
          $position_id = $recruitement_bean->position_id;
       }

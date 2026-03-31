@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/SugarObjects/templates/person/Person.php');
 require_once __DIR__ . '/../../include/EmailInterface.php';
 
+#[\AllowDynamicProperties]
 class Prospect extends Person implements EmailInterface
 {
     public $field_name_map;
@@ -184,13 +185,13 @@ class Prospect extends Person implements EmailInterface
         if (empty($module)) {
             //The call to retrieveTargetList contains a query that may contain a pound token
             $pattern = '/AND related_type = [\'#]([a-zA-Z]+)[\'#]/i';
-            if (preg_match($pattern, $query, $matches)) {
+            if (preg_match($pattern, (string) $query, $matches)) {
                 $module_name = $matches[1];
-                $query = preg_replace($pattern, "", $query);
+                $query = preg_replace($pattern, "", (string) $query);
             }
         }
 
-        $count = count($fields);
+        $count = is_countable($fields) ? count($fields) : 0;
         $index = 1;
         $sel_fields = "";
         if (!empty($fields)) {

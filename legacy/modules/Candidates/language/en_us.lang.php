@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -144,6 +144,7 @@ $mod_strings = array(
     'LBL_NOTES_TITLE' => 'Notes',
     'LBL_TASKS_TITLE' => 'Tasks',
     'LBL_GITHUB' => 'Github',
+    'LBL_LINKEDIN_ACCOUNT' => 'Linkedin',
     'LBL_BIRTHDATE' => 'Birthdate',
     'LBL_X_SERVICE' => 'X Platform',
     'LBL_RECORDVIEW_PANEL2' => 'Other',
@@ -167,5 +168,37 @@ $mod_strings = array(
     'LBL_EMPLOYEES_MODULE_DUP' => 'Employees',
     'MSG_SHOW_DUPLICATES' => 'The record you are about to create might be a duplicate of a Candidates or Employees record that already exists. Candidates and Employees records containing similar names are listed below.<br>Click Create to continue creating this new Candidate, or select an existing listed below.',
     'LBL_LIST_TITLE' => 'Candidate',
+    'LBL_PROSPECT_LIST' => 'Prospect List',
     'LBL_LINKEDIN_ACCOUNT' => 'LinkedIn',
+    'LBL_RECR_CONTACT_AGREE_COMMENT' => 'Indicates whether the candidate has agreed to be contacted for recruitment purposes.',
+    'LBL_FIRST_NAME_COMMENT' => 'First name of the candidate.',
+    'LBL_LAST_NAME_COMMENT' => 'Last name of the candidate.',
+    'LBL_PHONE_MOBILE_COMMENT' => 'Mobile phone number provided by the candidate.',
+    'LBL_COLLABORATION_COMMENT' => 'Indicates whether the candidate is open to collaboration.',
+    'LBL_RELOCATION_COMMENT' => 'Indicates whether the candidate is willing to relocate.',
+    'LBL_PRIMARY_ADDRESS_STREET_COMMENT' => 'Street name and house number of the candidate\'s primary address.',
+    'LBL_PRIMARY_ADDRESS_CITY_COMMENT' => 'City of the candidate\'s primary address.',
+    'LBL_PRIMARY_ADDRESS_STATE_COMMENT' => 'State or region of the candidate\'s primary address.',
+    'LBL_PRIMARY_ADDRESS_POSTALCODE_COMMENT' => 'Postal or ZIP code of the candidate\'s primary address.',
+    'LBL_PRIMARY_ADDRESS_COUNTRY_COMMENT' => 'Country of the candidate\'s primary address.',
+    'LBL_ALT_ADDRESS_STREET_COMMENT' => 'Street name and house number of the candidate\'s alternative address.',
+    'LBL_ALT_ADDRESS_CITY_COMMENT' => 'City of the candidate\'s alternative address.',
+    'LBL_ALT_ADDRESS_STATE_COMMENT' => 'State or region of the candidate\'s alternative address.',
+    'LBL_ALT_ADDRESS_POSTALCODE_COMMENT' => 'Postal or ZIP code of the candidate\'s alternative address.',
+    'LBL_ALT_ADDRESS_COUNTRY_COMMENT' => 'Country of the candidate\'s alternative address.',
+    'LBL_BIRTHDATE_COMMENT' => 'Date of birth of the candidate.',
+    'LBL_GITHUB_COMMENT' => 'Link to the candidate\'s GitHub profile.',
+    'LBL_LINKEDIN_COMMENT' => 'Link to the candidate\'s LinkedIn profile.',
+    'LBL_X_SERVICE_COMMENT' => 'Link to the candidate\'s X (formerly Twitter) profile.',
+    'LBL_FACEBOOK_COMMENT' => 'Link to the candidate\'s Facebook profile.',
+    'LBL_POTENTIAL_COMMENT' => 'Assessment of the candidate\'s potential.',
+    'LBL_LIST_ACCEPT_STATUS_M_COMMENT' => 'Acceptance status related to meetings.',
+    'LBL_LIST_ACCEPT_STATUS_C_COMMENT' => 'Acceptance status related to calls.',
+    'LBL_LIST_ACCEPT_STATUS_ID_COMMENT' => 'Internal identifier of the acceptance status.',
+    'LBL_LIST_ACCEPT_STATUS_COMMENT' => 'Acceptance status value.',
+    'LBL_EMPLOYEE_NAME_COMMENT' => 'Name of the employee assigned to the candidate.',
+    'LBL_DO_NOT_CALL_COMMENT' => 'Indicates that the candidate should not be contacted by phone.',
+    'LBL_LAST_TIME_CONTACT_COMMENT' => 'Date and time when the candidate was last contacted.',
+    'LBL_DATE_PLANNED_CONTACT_COMMENT' => 'Planned date and time for the next contact with the candidate.',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

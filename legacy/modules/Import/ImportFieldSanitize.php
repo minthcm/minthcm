@@ -10,7 +10,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
  */
 require_once('modules/Import/sources/ImportFile.php');
 
+#[\AllowDynamicProperties]
 class ImportFieldSanitize
 {
     /**
@@ -169,7 +170,7 @@ class ImportFieldSanitize
             $sea = new SugarEmailAddress;
         }
         
-        if (!empty($value) && !preg_match($sea->regex, $value)) {
+        if (!empty($value) && !preg_match($sea->regex, (string) $value)) {
             return false;
         }
 
@@ -281,7 +282,7 @@ class ImportFieldSanitize
 
         $dateparts = array();
         $reg = $timedate->get_regular_expression($format);
-        preg_match('@'.$reg['format'].'@', $value, $dateparts);
+        preg_match('@'.$reg['format'].'@', (string) $value, $dateparts);
 
         if (empty($dateparts)) {
             return false;

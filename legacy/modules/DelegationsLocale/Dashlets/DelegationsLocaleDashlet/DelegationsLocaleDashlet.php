@@ -41,6 +41,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/DelegationsLocale/DelegationsLocale.php');
 
+#[\AllowDynamicProperties]
 class DelegationsLocaleDashlet extends DashletGeneric {
 
    public function __construct($id, $def = null) {

@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,21 +47,18 @@
 namespace MintHCM\Api\Repositories;
 
 use MintHCM\Api\Entities\UsersPasswordLink;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-class UsersPasswordLinkRepository extends EntityRepository
+#[\AllowDynamicProperties]
+class UsersPasswordLinkRepository extends MintEntityRepository
 {
     public function markAllAsDeletedByUsername($username): int
     {
-        $query = 'UPDATE MintHCM\Api\Entities\UsersPasswordLink upl
-            SET upl.deleted = 1
-            WHERE upl.username = :username
-        ';
-
-        return $this->getEntityManager()
-            ->createQuery($query)
-            ->setParameter('username', $username)
-            ->execute();
+        $qb = $this->createQueryBuilder('upl');
+        $qb->update(UsersPasswordLink::class, 'upl')
+            ->set('upl.deleted', '1')
+            ->where('upl.username = :username')
+            ->setParameter('username', $username);
+        return $qb->getQuery()->execute();
     }
 }

@@ -29,11 +29,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/AOW_Processed/AOW_Processed.php');
 
+#[\AllowDynamicProperties]
 class AOW_ProcessedDashlet extends DashletGeneric
 {
     public function __construct($id, $def = null)
     {
-        global $current_user, $app_strings;
+        global $current_user, $app_strings, $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/AOW_Processed/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
@@ -47,5 +51,6 @@ class AOW_ProcessedDashlet extends DashletGeneric
 
         $this->seedBean = BeanFactory::newBean('AOW_Processed');
     }
+
 
 }

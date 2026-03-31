@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
    die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class GoogleCalendarSettingsHandler extends BaseHandler
 {
     /**
@@ -129,7 +130,10 @@ class GoogleCalendarSettingsHandler extends BaseHandler
      */
     public function handleDisplay()
     {
+        global $app_strings;
         $this->ss->assign('PAGE_TITLE', $this->getPageTitle());
+        $this->ss->assign('APP', $app_strings);
+        $this->ss->assign('MOD', $this->modStrings);
 
         $this->getJavascript();
         $this->getGoogleCalendarAuthState();
@@ -166,7 +170,7 @@ class GoogleCalendarSettingsHandler extends BaseHandler
 
         // Check for Google Sync JSON
         $json = base64_decode($this->configurator->config['google_auth_json']);
-        $gcConfig = json_decode($json, true);
+        $gcConfig = json_decode($json);
 
         $googleJsonConfState = array(
             'status' => 'UNCONFIGURED',

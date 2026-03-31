@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -136,7 +136,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
             CASE_UPPER
         )); // force the field names back to upper case so the list view will work correctly
         $this->view = "eslistview";
-        $this->implementation->deploy($this->_eslistviewdefs, true);
+        $this->implementation->deploy($this->_eslistviewdefs, MB_ESLISTVIEW);
     }
 
     /**
@@ -360,7 +360,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
                 }
 
                 if (isset($_REQUEST [strtolower($fieldname) . 'width'])) {
-                    $width = substr($_REQUEST [$fieldname . 'width'], 6, 3);
+                    $width = substr((string) $_REQUEST [$fieldname . 'width'], 6, 3);
                     if (strpos($width, "%") != false) {
                         $width = substr($width, 0, 2);
                     }
@@ -414,7 +414,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
      * @param string $class class name
      * @return array view definitions by field definitions
      */
-    public static function createViewDefsByFieldDefs(array $fieldDefs, $class = __CLASS__)
+    public static function createViewDefsByFieldDefs(array $fieldDefs, $class = self::class)
     {
         $rejectTypes = array(
             'html' => 'html',

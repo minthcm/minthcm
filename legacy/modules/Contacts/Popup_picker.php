@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/Contacts/ContactFormBase.php');
 
+#[\AllowDynamicProperties]
 class Popup_Picker
 {
     /*
@@ -98,7 +99,7 @@ class Popup_Picker
         // TODO: cleanup the construction of $addform
         $formbody = $formBase->getFormBody('', '', 'EmailEditView');
         $addform = '<table><tr><td nowrap="nowrap" valign="top">'
-            .str_replace('<br>', '</td><td nowrap="nowrap" valign="top">&nbsp;', $formbody)
+            .str_replace('<br>', '</td><td nowrap="nowrap" valign="top">&nbsp;', (string) $formbody)
             . '</td></tr></table>'
             . '<input type="hidden" name="action" value="Popup" />';
         $formSave = <<<EOQ
@@ -151,7 +152,7 @@ EOQ;
         $button .= "<input type='hidden' name='close_window' value='true'>";
         $button .= "<input type='hidden' name='html' value='change_address'>";
         // Added ID attribute to each element to use getElementById. To give ID attribute to an element is a good practice.
-        $button .= "<span style='display: none'><textarea name='primary_address_street' id='primary_address_street'>" . str_replace("&lt;br&gt;", "\n", $_REQUEST["primary_address_street"]) . "</textarea></span>";
+        $button .= "<span style='display: none'><textarea name='primary_address_street' id='primary_address_street'>" . str_replace("&lt;br&gt;", "\n", (string) $_REQUEST["primary_address_street"]) . "</textarea></span>";
         $button .= "<input type='hidden' name='primary_address_city' id='primary_address_city' value='". $_REQUEST["primary_address_city"] ."'>";
         $button .= "<input type='hidden' name='primary_address_state' id='primary_address_state' value='". $_REQUEST["primary_address_state"] ."'>";
         $button .= "<input type='hidden' name='primary_address_postalcode' id='primary_address_postalcode' value='". $_REQUEST["primary_address_postalcode"] ."'>";
@@ -159,7 +160,7 @@ EOQ;
         // Adding an onclick event to remove address for alternate address, as user has selected copy address to primary address
         $button .= "<input title='".$mod_strings['LBL_COPY_ADDRESS_CHECKED_PRIMARY']."'  class='button' LANGUAGE=javascript type='submit' name='button' value='  ".$mod_strings['LBL_COPY_ADDRESS_CHECKED_PRIMARY']."  ' onclick='clearAddress(\"alt\");'>\n";
         // Adding a new block of code copy the address to alternate address for contacts
-        $button .= "<span style='display: none'><textarea name='alt_address_street' id='alt_address_street'>" . str_replace("&lt;br&gt;", "\n", $_REQUEST["primary_address_street"]) . "</textarea></span>";
+        $button .= "<span style='display: none'><textarea name='alt_address_street' id='alt_address_street'>" . str_replace("&lt;br&gt;", "\n", (string) $_REQUEST["primary_address_street"]) . "</textarea></span>";
         $button .= "<input type='hidden' name='alt_address_city' id='alt_address_city' value='". $_REQUEST["primary_address_city"] ."'>";
         $button .= "<input type='hidden' name='alt_address_state' id='alt_address_state' value='". $_REQUEST["primary_address_state"] ."'>";
         $button .= "<input type='hidden' name='alt_address_postalcode' id='alt_address_postalcode' value='". $_REQUEST["primary_address_postalcode"] ."'>";

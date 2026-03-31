@@ -1,13 +1,14 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row">
-            <a class="mint-url-detail-field" target="_blank" :href="props.modelValue">
-                <span>{{ props.modelValue }}</span>
-                <v-icon v-if="props.modelValue" size="x-small">mdi-open-in-new</v-icon>
+        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+            <a class="mint-url-detail-field" target="_blank" :href="props.field.model">
+                <span>{{ props.field.model }}</span>
+                <v-icon v-if="props.field.model" size="x-small">mdi-open-in-new</v-icon>
             </a>
             <Pencil
                 :defs="props.defs"
+                :hidePencil="hidePencil"
                 @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
             />
         </div>
@@ -15,17 +16,16 @@
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
 import Pencil from '../Pencil.vue'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
+const props = defineProps<FieldProps>()
+const emit = defineEmits(['inlineEditBtnClicked'])
+function startInlineEdit() {
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
 }
-
-const props = defineProps<Props>()
 </script>
 
 <style scoped lang="scss">

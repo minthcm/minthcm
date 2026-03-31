@@ -8,8 +8,8 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -36,73 +36,73 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
- * If the display of the logos is not reasonably feasible for technical reasons, the
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
+ * If the display of the logos is not reasonably feasible for technical reasons, the 
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-class AllocationsApi
-{
+#[\AllowDynamicProperties]
+class AllocationsApi {
 
     public function checkWorkplacePeriods($args)
     {
-        $result = true;
+      $result = true;  
         if ('permanent' == $args['mode']) {
             $result = $this->checkConcurrentPeriods($args['id'], $args['workplace_id'], $args['date_from'], $args['date_to']);
-        }
-        return $result;
-    }
+      }
+      return $result;
+   }
     public function checkWorkplaceStatus($args)
-    {
+   {
         $workplace = BeanFactory::getBean('Workplaces', $args['workplace_id']);
         if ('active' != $workplace->availability) {
-            return false;
+         return false;
         } else if ('permanent' == $workplace->mode && 'permanent' != $args['mode']) {
-            return false;
+         return false;
         } else if ('rotational' == $args['mode'] && 'permanent' == $workplace->mode) {
-            return false;
+         return false;
         } else {
-            return true;
-        }
+         return true;
+   }
 
     }
     protected function checkConcurrentPeriods($id, $workplace_id, $date_from, $date_to)
     {
-        $workplace = BeanFactory::getBean('Workplaces', $workplace_id);
-        $workplace->load_relationship('workplaces_allocations');
-        $allocations = $workplace->workplaces_allocations->getBeans();
+    $workplace = BeanFactory::getBean('Workplaces',$workplace_id);
+    $workplace->load_relationship('workplaces_allocations');
+    $allocations = $workplace->workplaces_allocations->getBeans();
 
         foreach($allocations as $allocation){
             if ($allocation->id === $id) {
-                continue;
+         continue;
             }
 
-            $start_date = strtotime($allocation->date_from);
-            $end_date = strtotime($allocation->date_to);
-            $from_date = strtotime($date_from);
-            $to_date = strtotime($date_to);
-            if (empty($end_date) && empty($to_date)) {
-                return false;
-            } else if (empty($end_date) && !empty($to_date)) {
+       $start_date = strtotime($allocation->date_from);
+       $end_date = strtotime($allocation->date_to);
+       $from_date = strtotime($date_from);
+       $to_date = strtotime($date_to);
+       if(empty($end_date)&&empty($to_date)){
+           return false;
+       } else if (empty($end_date)&&!empty($to_date)){
                 if ($from_date > $start_date || $to_date > $start_date) {
-                    return false;
+                return false;
                 }
 
-            } else if (!empty($end_date) && empty($to_date)) {
+       } else if (!empty($end_date)&&empty($to_date)){
                 if ($from_date <= $end_date) {
-                    return false;
+                return false;
                 }
 
-            } else {
-                if (($end_date >= $from_date && $start_date <= $from_date) ||
+       } else {
+            if(($end_date>=$from_date&&$start_date<=$from_date)||
                     ($end_date <= $from_date && $start_date >= $from_date)) {
-                    return false;
-                }
+                return false;
+       }
 
-            }
-        }
-        return true;
     }
+        }
+    return true;
+   }
 }

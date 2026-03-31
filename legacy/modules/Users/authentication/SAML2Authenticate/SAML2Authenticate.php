@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -93,6 +93,7 @@ class SAML2Authenticate extends SugarAuthenticate
      */
     public function pre_login()
     {
+        $settingsInfo = [];
         require_once __DIR__ . '/../SAML2Authenticate/lib/onelogin/settings.php';
         $auth = new OneLogin_Saml2_Auth($settingsInfo);
 
@@ -191,7 +192,8 @@ class SAML2Authenticate extends SugarAuthenticate
      */
     public function preLogout()
     {
-        require_once dirname(dirname(__FILE__)) . '/SAML2Authenticate/lib/onelogin/settings.php';
+        $settingsInfo = [];
+        require_once dirname(__FILE__, 2) . '/SAML2Authenticate/lib/onelogin/settings.php';
         $auth = new OneLogin_Saml2_Auth($settingsInfo);
 
         $returnTo = null;

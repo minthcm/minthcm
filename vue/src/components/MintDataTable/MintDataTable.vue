@@ -5,12 +5,28 @@
                 <th v-for="column in props.columns" :key="column.name">
                     {{ column.label }}
                 </th>
+                <th v-if="props.subpanel && props.subpanel.inlineButtons && props.module"></th>
             </tr>
-        </thead>
+        </thead> 
         <tbody>
             <tr v-for="record in props.records" :key="record.id">
                 <td v-for="column in columns" :key="column.name">
-                    <Field view="list" :data="{ bean: record }" :defs="column" />
+                    <Field 
+                        view="list" 
+                        :data="{ bean: { ...record, aclAccess: record.acl_access } }" 
+                        :defs="column.name === 'name' 
+                            ? Object.assign(column, { type: 'name' })
+                            : column"
+                        :label="languages.label(column.label, record.module)"
+                        :modelValue="record.attributes[column.name]"
+                    />
+                </td>
+                <td v-if="props.subpanel && props.subpanel.inlineButtons && props.module">
+                    <MintSubpanelsInlineButtons
+                        :module="props.module"
+                        :recordId="record.id"
+                        :subpanel="props.subpanel"
+                    />
                 </td>
             </tr>
         </tbody>
@@ -18,12 +34,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import Field from '@/components/Fields/Field.vue'
+import { useLanguagesStore } from '@/store/languages';
+import MintSubpanelsInlineButtons from '../MintPanel/MintPanelSubpanels/MintSubpanelsInlineButtons.vue';
+
+const languages = useLanguagesStore()
 
 interface Props {
-    columns: []
-    records: []
+    columns: Array<Object>
+    records: Array<Object>
+    module?: string
+    subpanel?: Object
 }
 
 const props = defineProps<Props>()

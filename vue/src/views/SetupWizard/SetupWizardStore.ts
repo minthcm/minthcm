@@ -4,8 +4,8 @@ import SetupWizardCookies from './SetupWizardSteps/SetupWizardCookies.vue'
 import SetupWizardUserProfile from './SetupWizardSteps/SetupWizardUserProfile.vue'
 import SetupWizardLocaleSettings from './SetupWizardSteps/SetupWizardLocaleSettings.vue'
 import { useAuthStore } from '@/store/auth'
-import axios from 'axios'
 import { useBackendStore } from '@/store/backend'
+import { mintApi } from '@/api/api'
 
 export const useSetupWizardStore = defineStore('setup-wizard', () => {
     const auth = useAuthStore()
@@ -18,12 +18,12 @@ export const useSetupWizardStore = defineStore('setup-wizard', () => {
         first_name: auth.user?.first_name ?? '',
         last_name: auth.user?.last_name ?? '',
         email: auth.user?.email ?? '',
-        time_zone: auth.user?.preferences.timezone ?? 'Europe/Warsaw',
+        time_zone: backend.initData?.global?.timezone ?? 'Europe/Warsaw',
         time_format:
-            auth.user?.preferences.date_time_preferences.time ?? backend.initData?.global?.time_format ?? 'H:i',
+            backend.initData?.global?.time_format ?? 'H:i',
         date_format:
-            auth.user?.preferences.date_time_preferences.date ?? backend.initData?.global?.date_format ?? 'd.m.Y',
-        display_name_format: auth.user?.preferences.name_format ?? backend.initData?.global?.name_format ?? 's f l',
+            backend.initData?.global?.date_format ?? 'd.m.Y',
+        display_name_format: backend.initData?.global?.name_format ?? 's f l',
     })
 
     const steps = [
@@ -71,7 +71,7 @@ export const useSetupWizardStore = defineStore('setup-wizard', () => {
     async function finish() {
         isLoading.value = true
         try {
-            const response = await axios.post('api/confirm_login_wizard', setupData.value)
+            const response = await mintApi.post('confirm_login_wizard', setupData.value)
             if (response.status === 200) {
                 if (auth.user) {
                     auth.user.show_login_wizard = false

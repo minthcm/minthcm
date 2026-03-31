@@ -5,9 +5,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Class ArrayMapper maps an array using a mapping definition.
  */
+#[\AllowDynamicProperties]
 class ArrayMapper
 {
     /** @var array|object */
@@ -127,7 +128,7 @@ class ArrayMapper
     }
 
     /**
-     * @param array|null $regexMappings
+     * @param mixed[] $regexMappings
      *
      * @return ArrayMapper fluent setter
      */
@@ -365,19 +366,19 @@ class ArrayMapper
      */
     private function handleRegex($value, $path)
     {
-      // The following module includes custom address fields:
-      // one of them has exact name 'address'
-      // other fields are of format address_<suffix>
-      if ($this->mappable->module_name === 'FP_Event_Locations') {
-         return false;
-      }
+        // The following module includes custom address fields:
+        // one of them has exact name 'address'
+        // other fields are of format address_<suffix>
+        if ($this->mappable->module_name === 'FP_Event_Locations') {
+            return false;
+        }
 
-      // The following module includes custom address fields:
-      // one of them has exact name 'address'
-      // other fields are of format address_<suffix>
-      if ($this->mappable->module_name === 'FP_Event_Locations') {
-         return false;
-      }
+        // The following module includes custom address fields:
+        // one of them has exact name 'address'
+        // other fields are of format address_<suffix>
+        if ($this->mappable->module_name === 'FP_Event_Locations') {
+            return false;
+        }
 
         foreach ($this->regexMappings as $regex => $mappedPath) {
             if (!preg_match($regex, $path, $matches)) {
@@ -385,7 +386,7 @@ class ArrayMapper
             }
 
             foreach ($matches as $key => $match) {
-                $mappedPath = str_replace("@$key", $match, $mappedPath);
+                $mappedPath = str_replace("@$key", $match, (string) $mappedPath);
             }
 
             $this->handleValue($value, $mappedPath);
@@ -534,8 +535,8 @@ class ArrayMapper
      */
     private function handleValue($value, $mappedPath)
     {
-        if (strpos($mappedPath, '+') === 0) {
-            $mappedPath = substr($mappedPath, 1);
+        if (strpos((string) $mappedPath, '+') === 0) {
+            $mappedPath = substr((string) $mappedPath, 1);
             $this->appendInPath($value, $mappedPath);
         } else {
             $this->putInPath($value, $mappedPath);

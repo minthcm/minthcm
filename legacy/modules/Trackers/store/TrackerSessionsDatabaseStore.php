@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,16 +53,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
  ********************************************************************************/
 
 require_once('modules/Trackers/store/Store.php');
+#[\AllowDynamicProperties]
 class TrackerSessionsDatabaseStore implements Store {
 
     public function flush($monitor) {
         $db = DBManagerFactory::getInstance();
        $metrics = $monitor->getMetrics();
 
-       if(isset($monitor->client_ip) && strlen($monitor->client_ip) > 45)
-       {
-          $monitor->client_ip = substr($monitor->client_ip, 0, 45);
-       }
+        if (isset($monitor->client_ip) && strlen((string) $monitor->client_ip) > 45) {
+            $monitor->client_ip = substr((string) $monitor->client_ip, 0, 45);
+        }
 
        $columns = array();
        $values = array();

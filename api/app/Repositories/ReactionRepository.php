@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,41 +46,38 @@
 
 namespace MintHCM\Api\Repositories;
 
-use Doctrine\ORM\EntityRepository;
+use MintHCM\Api\Entities\Reactions;
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-class ReactionRepository extends EntityRepository
+#[\AllowDynamicProperties]
+class ReactionRepository extends MintEntityRepository
 {
-    public function getUserReactionId($parent_type, $parent_id, $user_id)
+    /*
+        * Get a user's reaction to a specific parent entity
+    */
+    public function getUserReactionToParent(string $parent_type, string $parent_id, string $user_id): Reactions|null
     {
-        $sql = "SELECT id
-                FROM reactions
-                WHERE deleted = 0
-                    AND parent_type = :parent_type
-                    AND parent_id = :parent_id
-                    AND assigned_user_id = :assigned_user_id";
-        $em = $this->getEntityManager();
-        $stmt = $em->getConnection()->prepare($sql);
-        $result = $stmt->executeQuery([
+        return $this->findOneBy([
             'parent_type' => $parent_type,
             'parent_id' => $parent_id,
             'assigned_user_id' => $user_id,
+            'deleted' => 0,
         ]);
-        return $result->fetchOne();
     }
 
     public function deleteUserReaction($parent_type, $parent_id, $user_id)
     {
-        $sql = "DELETE
-                FROM reactions
-                WHERE parent_type = :parent_type
-                    AND parent_id = :parent_id
-                    AND assigned_user_id = :assigned_user_id";
-        $em = $this->getEntityManager();
-        $stmt = $em->getConnection()->prepare($sql);
-        $stmt->executeQuery([
-            'parent_type' => $parent_type,
-            'parent_id' => $parent_id,
-            'assigned_user_id' => $user_id,
-        ]);
+        $qb = $this->createQueryBuilder('r');
+        $qb->delete(Reactions::class, 'r')
+            ->where('r.parent_type = :parent_type')
+            ->andWhere('r.parent_id = :parent_id')
+            ->andWhere('r.assigned_user_id = :assigned_user_id')
+            ->setParameters([
+                'parent_type' => $parent_type,
+                'parent_id' => $parent_id,
+                'assigned_user_id' => $user_id,
+            ])
+        ;
+        $qb->getQuery()->execute();
     }
 }

@@ -12,7 +12,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -68,7 +68,7 @@ $dictionary['Employee']['fields']['status']['required'] = false;
 $dictionary["Employee"]["fields"]["employeecertificates"] = array(
     'name' => 'employeecertificates',
     'type' => 'link',
-    'relationship' => 'employeecertificates_employees',
+    'relationship' => 'employeecertificates_employee',
     'source' => 'non-db',
     'side' => 'right',
     'vname' => 'LBL_EMPLOYEECERTIFICATES',
@@ -287,17 +287,7 @@ $dictionary["Employee"]["fields"]["tasks"] = array(
 $dictionary['Employee']['fields']['candidatures'] = array(
     'name' => 'candidatures',
     'type' => 'link',
-    'relationship' => 'employee_candidatures',
-    'source' => 'non-db',
-    'module' => 'Candidatures',
-    'bean_name' => 'Candidatures',
-    'vname' => 'LBL_CANDIDATURES',
-    'label' => 'LBL_CANDIDATURES',
-);
-$dictionary['Employee']['fields']['candidatures'] = array(
-    'name' => 'candidatures',
-    'type' => 'link',
-    'relationship' => 'employee_candidatures',
+    'relationship' => 'candidatures_employee',
     'source' => 'non-db',
     'module' => 'Candidatures',
     'bean_name' => 'Candidatures',
@@ -365,7 +355,7 @@ $dictionary['Employee']['fields']['files'] = [
 
 $dictionary['Employee']['elasticsearch']['nested']['security_groups'] = [
     'link' => 'SecurityGroups',
-    'fields' => array('id'),
+    'fields' => array('id', 'name'),
 ];
 
 $dictionary["Employee"]["fields"]["SecurityGroups"] = array(

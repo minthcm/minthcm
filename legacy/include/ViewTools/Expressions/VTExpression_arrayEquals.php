@@ -16,8 +16,8 @@ class VTExpression_arrayEquals extends VTExpression
 
     /**
      * Warning! if backend is not set, return false
-     * @param Array
-     * @return boolean
+     * @param array
+     * @return bool
      * Please set input params as Array
      */
     public function backend($arguments = array())
@@ -30,7 +30,8 @@ class VTExpression_arrayEquals extends VTExpression
             }
         }
         $second_array = array();
-        for ($i = 1; $i < count($arguments); $i++) {
+        $arguments_count = is_countable($arguments) ? count($arguments) : 0;
+        for ($i = 1; $i < $arguments_count; $i++) {
             $second_array[] = $arguments[$i];
         }
         $is_diff = false;
@@ -53,7 +54,7 @@ class VTExpression_arrayEquals extends VTExpression
 
     /**
      * Warning! if frontend is not set, return false
-     * @return type
+     * @return string
      */
     public function frontend()
     {

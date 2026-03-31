@@ -13,12 +13,13 @@ $ESListViewDefs[$module_name] = [
         ],
         'phone_mobile' => [
             'default' => true,
-            'type' => 'varchar',
+            'type' => 'phone',
         ],
         'potential' => [
             'default' => true,
         ],
         'birthdate' => [
+            'type' => 'age',
             'default' => true,
         ],
         'relocation' => [],
@@ -43,6 +44,12 @@ $ESListViewDefs[$module_name] = [
         'primary_address_state' => [],
         'primary_address_country' => [],
         'primary_address_postalcode' => [],
+        'email1' => [
+            'type' => 'email',
+        ],
+        'recr_contact_agree' => [
+            'default' => false,
+        ],
     ],
     'search' => [
         'last_time_contact' => [],
@@ -56,5 +63,13 @@ $ESListViewDefs[$module_name] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'email1' => [],
+        'first_name' => [],
+        'last_name' => [],
+        'recr_contact_agree' => [],
+        'linkedin' => [],
+        'github' => [],
+        'facebook' => [],
+        'x_service' => [],
     ],
 ];

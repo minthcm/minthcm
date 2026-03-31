@@ -29,6 +29,7 @@
  */
 require_once('modules/AOS_Contracts/AOS_Contracts_sugar.php');
 
+#[\AllowDynamicProperties]
 class AOS_Contracts extends AOS_Contracts_sugar
 {
     public function __construct()
@@ -56,6 +57,9 @@ class AOS_Contracts extends AOS_Contracts_sugar
             }
         }
     }
+
+
+
 
     public function save($check_notify = false)
     {
@@ -95,18 +99,14 @@ class AOS_Contracts extends AOS_Contracts_sugar
 
     public function createReminder()
     {
+        global $mod_strings;
         require_once('modules/Calls/Call.php');
         $call = new call();
 
-      //View Tools start #36857 - add translation
-      global $sugar_config;
-      $language_shortcut = $sugar_config['default_language'];
-      $app_strings = return_application_language($language_shortcut);
-      $reminder_label = $app_strings['LBL_REMINDER'];
-      //View Tools end #36857 - add translation
+        
 
-      if ( $this->renewal_reminder_date != 0 ) {
-         if ( !isset($this->call_id) ) {
+        if ($this->renewal_reminder_date != 0) {
+            if (!isset($this->call_id)) {
                 LoggerManager::getLogger()->warn('Call is not set for reminder creation.');
                 $call->id = null;
             } else {
@@ -115,10 +115,7 @@ class AOS_Contracts extends AOS_Contracts_sugar
             $call->parent_id = $this->id;
             $call->parent_type = 'AOS_Contracts';
             $call->date_start = $this->renewal_reminder_date;
-         //View Tools start #36857 - add translation
-         //$call->name = $this->name . ' Contract Renewal Reminder';
-         $call->name = "$this->name - $reminder_label";
-         //View Tools end #36857 - add translation
+            $call->name = $this->name . $mod_strings['LBL_RENEWAL_REMINDER'];
             $call->assigned_user_id = $this->assigned_user_id;
             $call->status = 'Planned';
             $call->direction = 'Outbound';

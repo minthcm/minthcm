@@ -1,33 +1,27 @@
-import axios, { AxiosInstance } from 'axios'
-import { useRouter } from 'vue-router'
-
-export abstract class MintApi {
-    protected instance: AxiosInstance
-
-    constructor() {
-        this.instance = axios.create({
-            baseURL: 'api',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-
-        this.instance.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                if (error.response.status === 401) {
-                    this.redirectToLogin()
-                }
-                return Promise.reject(error)
-            },
-        )
-    }
-
-    protected async redirectToLogin() {
-        const router = useRouter()
-        await router.push({
-            name: 'auth-login',
-        })
-        router.go(0) //refresh
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { responseHandler } from './interceptors/response-handler'
+import { responseErrorHandler } from './interceptors/response-error-handler'
+declare module 'axios' {
+    export interface AxiosRequestConfig {
+        rawError?: boolean
+        skipRefreshToken?: boolean
     }
 }
+
+function createMintApi() {
+    const instance = axios.create({
+        baseURL: 'api/',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+    instance.interceptors.response.use(
+        responseHandler,
+        async (error: any) => await responseErrorHandler(error)
+    )
+
+    return instance
+}
+
+export const mintApi: AxiosInstance = createMintApi()

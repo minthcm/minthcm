@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ require_once('include/connectors/sources/SourceFactory.php');
  * Main features are to list available external API's by supported features, modules and which ones have access for the user.
  * @api
  */
+#[\AllowDynamicProperties]
 class ExternalAPIFactory
 {
     /**
@@ -104,6 +105,7 @@ class ExternalAPIFactory
                 $beenHereBefore = true;
             }
         }
+        $fullAPIList = [];
         $cached=sugar_cached('include/externalAPI.cache.php');
         if (!$forceRebuild && file_exists($cached)) {
             // Already have a cache file built, no need to rebuild
@@ -124,7 +126,7 @@ class ExternalAPIFactory
                     continue;
                 }
 
-                $apiName = str_replace($baseDir, '', $dir);
+                $apiName = str_replace($baseDir, '', (string) $dir);
                 if (file_exists($dir.'/ExtAPI'.$apiName.'.php')) {
                     $apiFullList[$apiName]['className'] = 'ExtAPI'.$apiName;
                     $apiFullList[$apiName]['file'] = $dir.'/'.$apiFullList[$apiName]['className'].'.php';

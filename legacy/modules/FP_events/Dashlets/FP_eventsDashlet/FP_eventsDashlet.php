@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,19 +56,28 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/FP_events/FP_events.php');
 
-class FP_eventsDashlet extends DashletGeneric {
-    function __construct($id, $def = null) {
-        global $current_user, $app_strings;
+#[\AllowDynamicProperties]
+class FP_eventsDashlet extends DashletGeneric
+{
+    public function __construct($id, $def = null)
+    {
+        global $current_user, $app_strings, $dashletData;
+
+        $dashletData = $dashletData ?? [];
+
         require('modules/FP_events/metadata/dashletviewdefs.php');
 
         parent::__construct($id, $def);
 
-        if(empty($def['title'])) $this->title = translate('LBL_HOMEPAGE_TITLE', 'FP_events');
+        if (empty($def['title'])) {
+            $this->title = translate('LBL_HOMEPAGE_TITLE', 'FP_events');
+        }
 
         $this->searchFields = $dashletData['FP_eventsDashlet']['searchFields'];
         $this->columns = $dashletData['FP_eventsDashlet']['columns'];
 
-        $this->seedBean = new FP_events();
+        $this->seedBean = BeanFactory::newBean('FP_events');
     }
+
 
 }

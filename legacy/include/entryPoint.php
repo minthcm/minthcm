@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,7 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $GLOBALS['starttTime'] = microtime(true);
 
 set_include_path(
-    dirname(__FILE__).'/..'.PATH_SEPARATOR.
+    __DIR__.'/..'.PATH_SEPARATOR.
     get_include_path()
 );
 
@@ -146,7 +146,7 @@ UploadStream::register();
 ///////////////////////////////////////////////////////////////////////////////
 ////    Handle loading and instantiation of various Sugar* class
 if (!defined('SUGAR_PATH')) {
-    define('SUGAR_PATH', realpath(dirname(__FILE__).'/..'));
+    define('SUGAR_PATH', realpath(__DIR__.'/..'));
 }
 require_once 'include/SugarObjects/SugarRegistry.php';
 
@@ -211,3 +211,6 @@ if (empty($GLOBALS['installing'])) {
 
 ////	END SETTING DEFAULT VAR VALUES
 ///////////////////////////////////////////////////////////////////////////////
+
+//It does a check to see if the host is valid
+check_trusted_hosts();

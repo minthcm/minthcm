@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -86,7 +86,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  function &create_field_lang_pak_contents($old_contents, $key, $value, $language, $module)
  {
      if (!empty($old_contents)) {
-         $old_contents = preg_replace("'[^\[\n\r]+\[\'{$key}\'\][^\;]+;[\ \r\n]*'i", '', $old_contents);
+         $old_contents = preg_replace("'[^\[\n\r]+\[\'{$key}\'\][^\;]+;[\ \r\n]*'i", '', (string) $old_contents);
          $contents = str_replace("\n?>", "\n\$mod_strings['{$key}'] = '$value';\n?>", $old_contents);
      } else {
          $contents = "<?php\n"
@@ -323,7 +323,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          if ($contents == '') {
              $new_contents = "<?php\n\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>";
          } else {
-             $new_contents = str_replace('?>', "\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>", $contents);
+             $new_contents = str_replace('?>', "\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>", (string) $contents);
          }
  
          // save the new contents to file
@@ -387,7 +387,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
      $app_list_strings_to_edit = return_app_list_strings_language($language);
      $dropdown_array =$app_list_strings_to_edit[$dropdown_type];
  
-     if ($index > 0 && $index < count($dropdown_array)) {
+     if ($index > 0 && $index < (is_countable($dropdown_array) ? count($dropdown_array) : 0)) {
          $key = '';
          $value = '';
          $i = 0;
@@ -423,7 +423,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
      $app_list_strings_to_edit = return_app_list_strings_language($language);
      $dropdown_array =$app_list_strings_to_edit[$dropdown_type];
  
-     if ($index >= 0 && $index < count($dropdown_array) - 1) {
+     if ($index >= 0 && $index < (is_countable($dropdown_array) ? count($dropdown_array) : 0) - 1) {
          $key = '';
          $value = '';
          $i = 0;
@@ -477,7 +477,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
      if ($index <= 0) {
          $dropdown_array = array_merge($pair, $dropdown_array);
      }
-     if ($index >= count($dropdown_array)) {
+     if ($index >= (is_countable($dropdown_array) ? count($dropdown_array) : 0)) {
          $dropdown_array = array_merge($dropdown_array, $pair);
      } else {
          $sliced_off_array = array_splice($dropdown_array, $index);
@@ -532,7 +532,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          if ($new_contents == $file_contents) {
              // replace failed, append to end of file
-             $new_contents = str_replace("?>", '', $file_contents);
+             $new_contents = str_replace("?>", '', (string) $file_contents);
              $new_contents .= "\n$new_entry\n?>";
          }
      }
@@ -567,7 +567,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  
          if ($new_contents == $file_contents) {
              // replace failed, append to end of file
-             $new_contents = str_replace("?>", '', $file_contents);
+             $new_contents = str_replace("?>", '', (string) $file_contents);
              $new_contents .= "\n$new_entry\n?>";
          }
      }
@@ -584,11 +584,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
              '\'\][\ ]*=[\ ]*array[\ ]*\([^\)]*\)[\ ]*;/';
  
          $result = array();
-         preg_match_all($pattern, $file_contents, $result);
+         preg_match_all($pattern, (string) $file_contents, $result);
  
-         if (count($result[0]) > 1) {
+         if ((is_countable($result[0]) ? count($result[0]) : 0) > 1) {
              $new_entry = $result[0][0];
-             $new_contents = preg_replace($pattern, '', $file_contents);
+             $new_contents = preg_replace($pattern, '', (string) $file_contents);
  
              // Append the new entry.
              $new_contents = str_replace("?>", '', $new_contents);
@@ -619,7 +619,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
              $dropdown_type,
              $dropdown_array
          );
-         $new_contents = preg_replace($pattern, $replacement, $file_contents, 1);
+         $new_contents = preg_replace($pattern, $replacement, (string) $file_contents, 1);
      }
  
      return $new_contents;
@@ -641,7 +641,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
              $name,
              $value
          );
-         $new_contents = preg_replace($pattern, $replacement, $file_contents, 1);
+         $new_contents = preg_replace($pattern, $replacement, (string) $file_contents, 1);
      }
  
      return $new_contents;
@@ -654,11 +654,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $pattern = '/\$app_strings\[\''. $name .'\'\][\ ]*=[\ ]*\'[^\']*\'[\ ]*;/';
  
          $result = array();
-         preg_match_all($pattern, $file_contents, $result);
+         preg_match_all($pattern, (string) $file_contents, $result);
  
-         if (count($result[0]) > 1) {
+         if ((is_countable($result[0]) ? count($result[0]) : 0) > 1) {
              $new_entry = $result[0][0];
-             $new_contents = preg_replace($pattern, '', $file_contents);
+             $new_contents = preg_replace($pattern, '', (string) $file_contents);
  
              // Append the new entry.
              $new_contents = str_replace("?>", '', $new_contents);

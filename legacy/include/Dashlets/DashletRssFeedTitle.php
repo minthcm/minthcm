@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,6 +47,7 @@
  * Class for parsing title from RSS feed, and keep default encoding (UTF-8)
  * Created: Sep 12, 2011
  */
+#[\AllowDynamicProperties]
 class DashletRssFeedTitle
 {
     public $defaultEncoding = "UTF-8";
@@ -82,7 +83,7 @@ class DashletRssFeedTitle
     public function readFeed()
     {
         if ($this->url) {
-            if (!in_array(strtolower(parse_url($this->url, PHP_URL_SCHEME)), array("http", "https"), true)) {
+            if (!in_array(strtolower(parse_url((string) $this->url, PHP_URL_SCHEME)), array("http", "https"), true)) {
                 return false;
             }
             $fileOpen = @fopen($this->url, 'rb');
@@ -102,7 +103,7 @@ class DashletRssFeedTitle
     public function getTitle()
     {
         $matches = array();
-        preg_match("/<title>(.*?)<\/title>/i", $this->contents, $matches);
+        preg_match("/<title>(.*?)<\/title>/i", (string) $this->contents, $matches);
         if (isset($matches[0])) {
             $match = $matches[0];
             if (isset($matches[1])) {
@@ -122,7 +123,7 @@ class DashletRssFeedTitle
     private function _identifyXmlEncoding()
     {
         $matches = array();
-        preg_match('/encoding\=*\".*?\"/', $this->contents, $matches);
+        preg_match('/encoding\=*\".*?\"/', (string) $this->contents, $matches);
         if (isset($matches[0])) {
             $this->xmlEncoding = trim(str_replace('encoding="', '"', $matches[0]), '"');
         }

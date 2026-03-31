@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Connector component
  * @api
  */
+#[\AllowDynamicProperties]
 class component
 {
     protected $_has_testing_enabled = false;
@@ -118,7 +119,7 @@ class component
         $list = $filter->getList($args, $module);
 
         if (!empty($list)) {
-            $resultSize = count($list);
+            $resultSize = is_countable($list) ? count($list) : 0;
             if (!empty($beans)) {
                 if (count($beans) != $resultSize) {
                     throw new Exception($GLOBALS['app_strings']['ERR_CONNECTOR_FILL_BEANS_SIZE_MISMATCH']);
@@ -262,7 +263,7 @@ class component
             $mapping = $map['beans'][$bean->module_dir];
 
             //Check for situation where nothing was mapped or the only field mapped was id
-            if (empty($mapping) || (count($mapping) == 1 && isset($mapping['id']))) {
+            if (empty($mapping) || ((is_countable($mapping) ? count($mapping) : 0) == 1 && isset($mapping['id']))) {
                 $GLOBALS['log']->error($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
                 throw new Exception($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
             }

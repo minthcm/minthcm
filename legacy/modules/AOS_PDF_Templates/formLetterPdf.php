@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -7,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,8 +45,8 @@
 use SuiteCRM\PDF\Exceptions\PDFException;
 use SuiteCRM\PDF\PDFWrapper;
 
-require_once('modules/AOS_PDF_Templates/templateParser.php');
-require_once('modules/AOS_PDF_Templates/AOS_PDF_Templates.php');
+require_once 'modules/AOS_PDF_Templates/templateParser.php';
+require_once 'modules/AOS_PDF_Templates/AOS_PDF_Templates.php';
 
 global $sugar_config, $current_user;
 
@@ -61,7 +60,7 @@ $recordIds = array();
 
 if (isset($_REQUEST['current_post']) && $_REQUEST['current_post'] != '') {
     $order_by = '';
-    require_once('include/MassUpdate.php');
+    require_once 'include/MassUpdate.php';
     $mass = new MassUpdate();
     $mass->generateSearchWhere($_REQUEST['module'], $_REQUEST['current_post']);
     $ret_array = create_export_query_relate_link_patch($_REQUEST['module'], $mass->searchFields, $mass->where_clauses);
@@ -75,14 +74,13 @@ if (isset($_REQUEST['current_post']) && $_REQUEST['current_post'] != '') {
     $recordIds = explode(',', $_REQUEST['uid']);
 }
 
-
 $template = BeanFactory::getBean('AOS_PDF_Templates', $_REQUEST['templateID']);
 
 if (!$template) {
     sugar_die("Invalid Template");
 }
 
-$file_name = str_replace(" ", "_", $template->name) . ".pdf";
+$file_name = str_replace(" ", "_", (string) $template->name) . ".pdf";
 
 $pdfConfig = [
     'mode' => 'en',
@@ -94,7 +92,7 @@ $pdfConfig = [
     'margin_bottom' => $template->margin_bottom,
     'margin_header' => $template->margin_header,
     'margin_footer' => $template->margin_footer,
-    'orientation' => $template->orientation
+    'orientation' => $template->orientation,
 ];
 
 try {
@@ -118,16 +116,16 @@ foreach ($recordIds as $recordId) {
     $object_arr[$bean->module_dir] = $bean->id;
 
     $search = array(
-        '@<script[^>]*?>.*?</script>@si',        // Strip out javascript
-        '@<[\/\!]*?[^<>]*?>@si',        // Strip out HTML tags
-        '@([\r\n])[\s]+@',            // Strip out white space
-        '@&(quot|#34);@i',            // Replace HTML entities
+        '@<script[^>]*?>.*?</script>@si', // Strip out javascript
+        '@<[\/\!]*?[^<>]*?>@si', // Strip out HTML tags
+        '@([\r\n])[\s]+@', // Strip out white space
+        '@&(quot|#34);@i', // Replace HTML entities
         '@&(amp|#38);@i',
         '@&(lt|#60);@i',
         '@&(gt|#62);@i',
         '@&(nbsp|#160);@i',
         '@&(iexcl|#161);@i',
-        '@<address[^>]*?>@si'
+        '@<address[^>]*?>@si',
     );
 
     $replace = array(
@@ -140,10 +138,10 @@ foreach ($recordIds as $recordId) {
         '>',
         ' ',
         chr(161),
-        '<br>'
+        '<br>',
     );
 
-    $text = preg_replace($search, $replace, $template->description);
+    $text = preg_replace($search, $replace, (string) $template->description);
     $text = preg_replace_callback(
         '/{DATE\s+(.*?)}/',
         function ($matches) {
@@ -151,14 +149,14 @@ foreach ($recordIds as $recordId) {
         },
         $text
     );
-    $header = preg_replace($search, $replace, $template->pdfheader);
-    $footer = preg_replace($search, $replace, $template->pdffooter);
+    $header = preg_replace($search, $replace, (string) $template->pdfheader);
+    $footer = preg_replace($search, $replace, (string) $template->pdffooter);
 
     $converted = templateParser::parse_template($text, $object_arr);
     $header = templateParser::parse_template($header, $object_arr);
     $footer = templateParser::parse_template($footer, $object_arr);
 
-    $printable = str_replace("\n", "<br />", $converted);
+    $printable = str_replace("\n", "<br />", (string) $converted);
 
     try {
         $note = BeanFactory::newBean('Notes');

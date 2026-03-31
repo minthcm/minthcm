@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -45,6 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+#[\AllowDynamicProperties]
 class EmailMarketing extends SugarBean
 {
     public $field_name_map;
@@ -152,8 +153,8 @@ class EmailMarketing extends SugarBean
         }
 
         //mode is set by schedule.php from campaigns module.
-        if (!isset($this->mode) or empty($this->mode) or $this->mode != 'test') {
-            $this->mode = 'rest';
+        if (!isset($this->mode) || empty($this->mode) || $this->mode!='test') {
+            $this->mode='rest';
         }
 
         if ($temp_array['ALL_PROSPECT_LISTS'] == 1) {

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,7 +50,10 @@ class SugarFieldText extends SugarFieldBase {
         if(!isset($displayParams['nl2br'])){
             $displayParams['nl2br'] = true;
         }
-        if(!isset($displayParams['htmlescape']) && $vardef['editor'] != "html") {
+
+        $editor = $vardef['editor'] ?? '';
+
+        if (!isset($displayParams['htmlescape']) && $editor != "html") {
             $displayParams['htmlescape'] = true;
         }
         if(!isset($displayParams['url2html'])) {
@@ -88,22 +91,42 @@ class SugarFieldText extends SugarFieldBase {
 		return $this->ss->fetch($this->findTemplate('ClassicEditView'));
     }
 
-    function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass = true) {
+    function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass = true)
+    {
         parent::setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass);
-        $editor = "";
-        if (isset($vardef['editor']) && $vardef['editor'] == "html") {
+        $initiate = "";
+
+        if (isset($vardef['editor']) && $vardef['editor'] === "html") {
             if (!isset($displayParams['htmlescape'])) {
                 $displayParams['htmlescape'] = false;
             }
-            if ($_REQUEST['action'] == "EditView") {
-                require_once ("include/SugarTinyMCE.php");
-                $tiny = new SugarTinyMCE();
-                $editor = $tiny->getInstance($vardef['name'], 'email_compose_light');
+
+            if ($_REQUEST['action'] === "EditView") {
+                $form_name = $displayParams['formName'] ?? '';
+
+                if (!empty($this->ss->_tpl_vars['displayParams']['formName'])) {
+                    $form_name = $this->ss->_tpl_vars['displayParams']['formName'];
+                }
+
+                $config = [];
+                $config['height'] = 250;
+                $config['menubar'] = false;
+                $config['plugins'] = 'code, table, link, image, wordcount';
+
+                if ($form_name !== '') {
+                    $config['selector'] = "#{$form_name} " . "#" . $vardef['name'];
+                } else {
+                    $config['selector'] = "#" . $vardef['name'];
+                }
+
+                $config['toolbar1'] = 'fontselect | fontsizeselect | bold italic underline | forecolor backcolor | styleselect | outdent indent | link image | code table';
+
+                $jsConfig = json_encode($config);
+                $initiate = '<script type="text/javascript"> tinyMCE.init(' . $jsConfig . ')</script>';
             }
-            $this->ss->assign("tinymce", $editor);
-        } else {
-            $this->ss->assign("tinymce", $editor);
         }
+
+        $this->ss->assign("tinymce", $initiate);
     }
 
 }

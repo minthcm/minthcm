@@ -5,9 +5,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -53,6 +53,7 @@ use Monolog\Logger;
 /**
  * CliLoggerFormatter for CliLoggerHandler.
  */
+#[\AllowDynamicProperties]
 class CliLoggerFormatter implements FormatterInterface
 {
     /**  @var array a list of the available colours for quicker usage */
@@ -118,7 +119,7 @@ class CliLoggerFormatter implements FormatterInterface
             $message = $color . $message . $this->colors['reset'];
         }
 
-        $message = preg_replace("/\n\s*/", $this->padding . $color, $message);
+        $message = preg_replace("/\n\s*/", $this->padding . $color, (string) $message);
 
         $time = (new \DateTime())->format('H:i:s');
 

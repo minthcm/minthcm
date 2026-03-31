@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,9 +51,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * @author gyula
  */
+#[\AllowDynamicProperties]
 class EmailValidatorException extends Exception
 {
-    const EMAIL_IS_NOT_SET = 1;
-    const PREG_MATCH_ERROR_AT_FROMADDRNAME = 2;
-    const EMAIL_ISNT_EMAILOBJ = 3;
+    public const EMAIL_IS_NOT_SET = 1;
+    public const PREG_MATCH_ERROR_AT_FROMADDRNAME = 2;
+    public const EMAIL_ISNT_EMAILOBJ = 3;
 }

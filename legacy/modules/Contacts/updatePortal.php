@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'modules/AOP_Case_Updates/util.php';
 
+#[\AllowDynamicProperties]
 class updatePortal
 {
     /**
@@ -55,6 +56,7 @@ class updatePortal
      */
     public function updateUser($bean)
     {
+        $object_arr = [];
         if (!isAOPEnabled()) {
             return;
         }
@@ -69,10 +71,10 @@ class updatePortal
 
             $object_arr['Contacts'] = $bean->id;
             $body_html = aop_parse_template($template->body_html, $object_arr);
-            $body_html = str_replace($search, $replace, $body_html);
+            $body_html = str_replace($search, $replace, (string) $body_html);
 
             $body_plain = aop_parse_template($template->body, $object_arr);
-            $body_plain = str_replace($search, $replace, $body_plain);
+            $body_plain = str_replace($search, $replace, (string) $body_plain);
 
             $this->sendEmail($bean->email1, $template->subject, $body_html, $body_plain, $bean);
         }

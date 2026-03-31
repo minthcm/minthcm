@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,6 +44,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+#[\AllowDynamicProperties]
 class CalendarActivities {
 
    private static $initialized = false;
@@ -225,11 +226,11 @@ class CalendarActivities {
     * This method should be called only for hard coded injection activities
     * into $act_list in CalendarActivity->get_activities just before
     * return statement. All params must be passed.
-    * @param type $act_list
-    * @param type $user_id
-    * @param type $view_start_time
-    * @param type $view_end_time
-    * @param type $view
+    * @param $act_list
+    * @param $user_id
+    * @param $view_start_time
+    * @param $view_end_time
+    * @param $view
     */
    public static function pushCalendarActivityList(&$act_list, $user_id, $view_start_time, $view_end_time, $view) {
 

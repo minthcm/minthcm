@@ -4,6 +4,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
    die('Not A Valid Entry Point');
 }
 
+#[\AllowDynamicProperties]
 class afterRelationshipAdd {
     public function after_relationship_add($bean, $event, $arguments)
     {

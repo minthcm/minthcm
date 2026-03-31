@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -57,13 +57,13 @@ if(isset($page['columns']) && isset($page['numColumns']) && is_array($page['colu
     $page['numColumns'] = count($page['columns']);
 }
 
-if(!isset($_POST['dashName'])){
+if (!isset($_POST['dashName'])) {
     $html  ='<form method="post" name="addpageform" id="addpageform" action="index.php?module=Home&action=AddDashboardPages"/>';
     $html .='<table>';
     $html .='<tr>';
     $html .='<td><label for="dashName">'.$GLOBALS['app_strings']['LBL_ENTER_DASHBOARD_NAME'].'</label></td>';
     if (empty($page)) {
-        $html .= '<td><input type="text" name="dashName" id="dashName"/></td>';
+    $html .='<td><input type="text" name="dashName" id="dashName"/></td>';
     } else if($page && $_POST['page_id'] == 0 && empty($page['pageTitle'])) {
         $html .= '<td><input type="text" name="dashName" id="dashName" value="' . $GLOBALS['app_strings']['LBL_SUITE_DASHBOARD'] . '"/></td>';
     } else {
@@ -89,37 +89,40 @@ if(!isset($_POST['dashName'])){
     echo $html;
  
 } else {
+
+    global $current_language;
+
     $numberColumns = $_POST['numColumns'];
     $pageName = $_POST['dashName'];
 
     
     if(empty($page)){
-        switch ($numberColumns) {
-            case 1:
-                $pagecolumns[0] = array();
-                $pagecolumns[0]['dashlets'] = array();
-                $pagecolumns[0]['width'] = '100%';
-                break;
-            case 2:
-                $pagecolumns[0] = array();
-                $pagecolumns[0]['dashlets'] = array();
-                $pagecolumns[0]['width'] = '60%';
-                $pagecolumns[1] = array();
-                $pagecolumns[1]['dashlets'] = array();
-                $pagecolumns[1]['width'] = '40%';
-                break;
-            case 3:
-                $pagecolumns[0] = array();
-                $pagecolumns[0]['dashlets'] = array();
-                $pagecolumns[0]['width'] = '30%';
-                $pagecolumns[1] = array();
-                $pagecolumns[1]['dashlets'] = array();
-                $pagecolumns[1]['width'] = '30%';
-                $pagecolumns[2] = array();
-                $pagecolumns[2]['dashlets'] = array();
-                $pagecolumns[2]['width'] = '30%';
-                break;
-        }
+    switch ($numberColumns) {
+        case 1:
+            $pagecolumns[0] = array();
+            $pagecolumns[0]['dashlets'] = array();
+            $pagecolumns[0]['width'] = '100%';
+            break;
+        case 2:
+            $pagecolumns[0] = array();
+            $pagecolumns[0]['dashlets'] = array();
+            $pagecolumns[0]['width'] = '60%';
+            $pagecolumns[1] = array();
+            $pagecolumns[1]['dashlets'] = array();
+            $pagecolumns[1]['width'] = '40%';
+            break;
+        case 3:
+            $pagecolumns[0] = array();
+            $pagecolumns[0]['dashlets'] = array();
+            $pagecolumns[0]['width'] = '30%';
+            $pagecolumns[1] = array();
+            $pagecolumns[1]['dashlets'] = array();
+            $pagecolumns[1]['width'] = '30%';
+            $pagecolumns[2] = array();
+            $pagecolumns[2]['dashlets'] = array();
+            $pagecolumns[2]['width'] = '30%';
+            break;
+    }
     } else if($page['numColumns'] == $numberColumns){
         $pagecolumns = $page['columns'];
     } else {
@@ -175,17 +178,17 @@ if(!isset($_POST['dashName'])){
 
     if(empty($page)){
         $dashboardPage = array();
-        $dashboardPage['columns'] = $pagecolumns;
-        $dashboardPage['pageTitle'] = $pageName;
-        $dashboardPage['numColumns'] = $numberColumns;
+    $dashboardPage['columns'] = $pagecolumns;
+    $dashboardPage['pageTitle'] = $pageName;
+    $dashboardPage['numColumns'] = $numberColumns;
 
         array_push($pages, $dashboardPage);
     } else {
         $dashboardPage = $page;
         $dashboardPage['columns'] = $pagecolumns;
-        
+
         $dashboardPage['pageTitle'] = $pageName;
-        
+
         $dashboardPage['numColumns'] = $numberColumns;
         
         $pages[$_POST['page_id']] = $dashboardPage;
@@ -195,18 +198,19 @@ if(!isset($_POST['dashName'])){
 
     $display = array();
 
-    foreach($dashboardPage['columns'] as $colNum => $column) {
+    foreach ($dashboardPage['columns'] as $colNum => $column) {
         $display[$colNum]['width'] = $column['width'];
     }
 
     $home_mod_strings = return_module_language($current_language, $type);
 
+    require_once("include/MySugar/retrieve_dash_page.php");
+
     $sugar_smarty = new Sugar_Smarty();
     $sugar_smarty->assign('columns', $display);
-    $sugar_smarty->assign('selectedPage', count($pages) - 1);
-    $sugar_smarty->assign('mod',$home_mod_strings);
-    $sugar_smarty->assign('app',$GLOBALS['app_strings']);
+    $sugar_smarty->assign('selectedPage', (is_countable($pages) ? count($pages) : 0) - 1);
+    $sugar_smarty->assign('mod', $home_mod_strings);
+    $sugar_smarty->assign('app', $GLOBALS['app_strings']);
     $sugar_smarty->assign('lblAddDashlets', $home_mod_strings['LBL_ADD_DASHLETS']);
     $sugar_smarty->assign('numCols', $dashboardPage['numColumns']);
-
 }

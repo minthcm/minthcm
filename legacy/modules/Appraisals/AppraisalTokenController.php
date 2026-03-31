@@ -2,6 +2,7 @@
 
 require_once 'modules/Appraisals/AppraisalToken.php';
 
+#[\AllowDynamicProperties]
 class AppraisalTokenController
 {
 

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -78,11 +78,13 @@ $dictionary['ProspectList'] = array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
+            'readonly' => true,
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
+            'readonly' => true,
         ),
         'date_indexed' => array(
             'name' => 'date_indexed',
@@ -92,6 +94,7 @@ $dictionary['ProspectList'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
+            'readonly' => true,
         ),
         'modified_user_id' => array(
             'name' => 'modified_user_id',
@@ -103,6 +106,7 @@ $dictionary['ProspectList'] = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'reportable' => true,
+            'readonly' => true,
         ),
         'modified_by_name' => array(
             'name' => 'modified_by_name',
@@ -114,6 +118,7 @@ $dictionary['ProspectList'] = array(
             'id_name' => 'modified_user_id',
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
+            'readonly' => true,
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -123,7 +128,8 @@ $dictionary['ProspectList'] = array(
             'type' => 'assigned_user_name',
             'table' => 'created_by_users',
             'isnull' => 'false',
-            'dbType' => 'id'
+            'dbType' => 'id',
+            'readonly' => true,
         ),
         'created_by_name' => array(
             'name' => 'created_by_name',
@@ -135,6 +141,7 @@ $dictionary['ProspectList'] = array(
             'id_name' => 'created_by',
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
+            'readonly' => true,
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -160,6 +167,7 @@ $dictionary['ProspectList'] = array(
                 'type' => 'int',
                 'source' => 'non-db',
                 'vname' => 'LBL_LIST_ENTRIES',
+                'readonly' => true,
             ),
         'prospects' =>
             array(

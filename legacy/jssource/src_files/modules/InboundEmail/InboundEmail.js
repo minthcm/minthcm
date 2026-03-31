@@ -7,7 +7,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -120,7 +120,7 @@ function getEncryptedPassword(login, password, mailbox) {
 } // fn
 
 // MintHCM #110041 START
-function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, formName, ie_id, eapm_id, connectionString = null)
+function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, height, mail_server, protocol, port, login, password, mailbox, ssl, personal, formName, ie_id, eapm_id, connectionString = null, auth_type, externalOauthConnectionName, externalOauthConnectionId)
 // MintHCM #110041 END
 {
 	if (!formName) formName = "testSettingsView";
@@ -149,11 +149,16 @@ function ie_test_open_popup_with_submit(module_name, action, pageTarget, width, 
 		+ '&mailbox=' + words[2]
 		+ '&ssl=' + ssl
 		+ '&ie_id=' + ie_id
-        // MintHCM #110041 START
         + '&personal=' + isPersonal
+        + '&auth_type=' + auth_type
+        // MintHCM #110041 START
         + '&eapm_id=' + eapm_id;
         // MintHCM #110041 END
-		
+
+	if (externalOauthConnectionName && externalOauthConnectionId){
+        URL += '&externalOauthConnectionName=' + externalOauthConnectionName
+        + '&externalOauthConnectionId=' + externalOauthConnectionId;
+    }
 	if(connectionString) {
 		URL += '&connection_string=' + encodeURIComponent(connectionString);
 	}
@@ -211,6 +216,30 @@ function isDataValid(formName, validateMonitoredFolder) {
     		errors.push(SUGAR.language.get('app_strings', 'LBL_EMAIL_ERROR_MONITORED_FOLDER'));
     	} // if
     }
+    if(formObject.auth_type && formObject.email_password){
+		if(formObject.auth_type.value === 'oauth'){
+
+			if (!formObject.external_oauth_connection_name.value || !formObject.external_oauth_connection_id.value){
+				errors.push(SUGAR.language.get('app_strings', 'LBL_OAUTH_CONNECTION_NOT_SET'));
+			}
+
+		}
+
+		if(formObject.auth_type.value === 'basic'){
+			if (formObject.external_oauth_connection_name){
+				formObject.external_oauth_connection_name = '';
+			}
+
+			if (formObject.external_oauth_connection_id){
+				formObject.external_oauth_connection_id = '';
+			}
+
+			if (formObject.email_password.value === '' && !formObject.email_password.dataset.isValueSet){
+				errors.push(SUGAR.language.get('app_strings', 'LBL_EMAIL_PASSWORD_NOT_SET'));
+			}
+
+		}
+	}
     if(formObject.port.value == "") {
         errors.push(SUGAR.language.get('app_strings', 'LBL_EMAIL_ERROR_PORT'));
     }

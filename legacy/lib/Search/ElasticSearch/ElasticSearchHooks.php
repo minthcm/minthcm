@@ -108,12 +108,17 @@ class ElasticSearchHooks
     public function relationshipChange(SugarBean $bean, $event, $arguments)
     {
         $esv_reader = new \ElasticSearchVardefsReader;
-
-        $nested_properties = $esv_reader->getModuleNestedProperties($bean->module_name);
+        $nested_properties = $esv_reader->getModuleNestedProperties($bean->object_name);
         foreach ($nested_properties as $property_name => $nested_config) {
+            $fields_set = $esv_reader->areBeanAndFunctionSet($nested_config);
+            if ($fields_set) {
+                $this->beanSaved($bean, $event, $arguments);
+                continue;
+            }
+            
             $link_field_name = $esv_reader->getLinkFieldName($property_name, $nested_config);
             if (!$bean->load_relationship($link_field_name)) {
-               continue;
+                continue;
             }
 
             $related_module_name = $esv_reader->getRelatedModuleName($bean, $link_field_name);

@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class LastNextContactsBase
 {
     public $debug = false;
@@ -12,10 +13,10 @@ class LastNextContactsBase
         return DBManagerFactory::getInstance();
     }
 
-    protected function log()
+    protected function log(string $message)
     {
         if ($this->debug) {
-            $GLOBALS['log']->{$this->debug}(print_r([ basename(__FILE__), __METHOD__, __FUNCTION__], 1));
+            $GLOBALS['log']->fatal($message);
         }
     }
 

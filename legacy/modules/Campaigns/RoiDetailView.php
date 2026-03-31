@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,142 +50,142 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
-require_once('include/DetailView/DetailView.php');
-require_once('modules/Campaigns/Charts.php');
-
-
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-global $sugar_version, $sugar_config;
-
-$focus = BeanFactory::newBean('Campaigns');
-
-$detailView = new DetailView();
-$offset = 0;
-$offset=0;
-if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
-    $result = $detailView->processSugarBean("CAMPAIGN", $focus, $offset);
-    if ($result == null) {
-        sugar_die($app_strings['ERROR_NO_RECORD']);
-    }
-    $focus=$result;
-} else {
-    $header_URL = "Location: index.php?module=Accounts&action=index";
-    SugarApplication::headerRedirect($header_URL);
-}
-
-// For all campaigns show the same ROI interface
-// ..else default to legacy detail view
-/*
-if(!$focus->campaign_type == "NewsLetter"){
-    include ('modules/Campaigns/NewsLetterTrackDetailView.php');
-} else{
-
-*/
-    echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->name), true);
+ require_once('include/DetailView/DetailView.php');
+ require_once('modules/Campaigns/Charts.php');
+ 
+ 
+ global $mod_strings;
+ global $app_strings;
+ global $app_list_strings;
+ global $sugar_version, $sugar_config;
+ 
+ $focus = BeanFactory::newBean('Campaigns');
+ 
+ $detailView = new DetailView();
+ $offset = 0;
+ $offset=0;
+ if (isset($_REQUEST['offset']) || isset($_REQUEST['record'])) {
+     $result = $detailView->processSugarBean("CAMPAIGN", $focus, $offset);
+     if ($result == null) {
+         sugar_die($app_strings['ERROR_NO_RECORD']);
+     }
+     $focus=$result;
+ } else {
+     $header_URL = "Location: index.php?module=Accounts&action=index";
+     SugarApplication::headerRedirect($header_URL);
+ }
+ 
+ // For all campaigns show the same ROI interface
+ // ..else default to legacy detail view
+ /*
+ if(!$focus->campaign_type == "NewsLetter"){
+     include ('modules/Campaigns/NewsLetterTrackDetailView.php');
+ } else{
+ 
+ */
+     echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->name), true);
+     
+     $GLOBALS['log']->info("Campaign detail view");
+     
+     $smarty = new Sugar_Smarty();
+     $smarty->assign("MOD", $mod_strings);
+     $smarty->assign("APP", $app_strings);
+     
+     $smarty->assign("THEME", $theme);
+     $smarty->assign("GRIDLINE", $gridline);
+     $smarty->assign("PRINT_URL", "index.php?".$GLOBALS['request_string']);
+     $smarty->assign("ID", $focus->id);
+     $smarty->assign("ASSIGNED_TO", $focus->assigned_user_name);
+     $smarty->assign("STATUS", $app_list_strings['campaign_status_dom'][$focus->status]);
+     $smarty->assign("NAME", $focus->name);
+     $smarty->assign("TYPE", $app_list_strings['campaign_type_dom'][$focus->campaign_type]);
+     $smarty->assign("START_DATE", $focus->start_date);
+     $smarty->assign("END_DATE", $focus->end_date);
+     
+     $smarty->assign("BUDGET", $focus->budget);
+     $smarty->assign("ACTUAL_COST", $focus->actual_cost);
+     $smarty->assign("EXPECTED_COST", $focus->expected_cost);
+     $smarty->assign("EXPECTED_REVENUE", $focus->expected_revenue);
+     
+     
+     $smarty->assign("OBJECTIVE", nl2br($focus->objective));
+     $smarty->assign("CONTENT", nl2br($focus->content));
+     $smarty->assign("DATE_MODIFIED", $focus->date_modified);
+     $smarty->assign("DATE_ENTERED", $focus->date_entered);
+     
+     $smarty->assign("CREATED_BY", $focus->created_by_name);
+     $smarty->assign("MODIFIED_BY", $focus->modified_by_name);
+     $smarty->assign("TRACKER_URL", $sugar_config['site_url'] . '/campaign_tracker.php?track=' . $focus->tracker_key);
+     $smarty->assign("TRACKER_COUNT", (int)$focus->tracker_count);
+     $smarty->assign("TRACKER_TEXT", $focus->tracker_text);
+     $smarty->assign("REFER_URL", $focus->refer_url);
+     $smarty->assign("IMPRESSIONS", $focus->impressions);
+    $roi_vals = array();
+    $roi_vals['budget']= $focus->budget;
+    $roi_vals['actual_cost']= $focus->actual_cost;
+    $roi_vals['Expected_Revenue']= $focus->expected_revenue;
+    $roi_vals['Expected_Cost']= $focus->expected_cost;
     
-    $GLOBALS['log']->info("Campaign detail view");
-    
-    $smarty = new Sugar_Smarty();
-    $smarty->assign("MOD", $mod_strings);
-    $smarty->assign("APP", $app_strings);
-    
-    $smarty->assign("THEME", $theme);
-    $smarty->assign("GRIDLINE", $gridline);
-    $smarty->assign("PRINT_URL", "index.php?".$GLOBALS['request_string']);
-    $smarty->assign("ID", $focus->id);
-    $smarty->assign("ASSIGNED_TO", $focus->assigned_user_name);
-    $smarty->assign("STATUS", $app_list_strings['campaign_status_dom'][$focus->status]);
-    $smarty->assign("NAME", $focus->name);
-    $smarty->assign("TYPE", $app_list_strings['campaign_type_dom'][$focus->campaign_type]);
-    $smarty->assign("START_DATE", $focus->start_date);
-    $smarty->assign("END_DATE", $focus->end_date);
-    
-    $smarty->assign("BUDGET", $focus->budget);
-    $smarty->assign("ACTUAL_COST", $focus->actual_cost);
-    $smarty->assign("EXPECTED_COST", $focus->expected_cost);
-    $smarty->assign("EXPECTED_REVENUE", $focus->expected_revenue);
-    
-    
-    $smarty->assign("OBJECTIVE", nl2br($focus->objective));
-    $smarty->assign("CONTENT", nl2br($focus->content));
-    $smarty->assign("DATE_MODIFIED", $focus->date_modified);
-    $smarty->assign("DATE_ENTERED", $focus->date_entered);
-    
-    $smarty->assign("CREATED_BY", $focus->created_by_name);
-    $smarty->assign("MODIFIED_BY", $focus->modified_by_name);
-    $smarty->assign("TRACKER_URL", $sugar_config['site_url'] . '/campaign_tracker.php?track=' . $focus->tracker_key);
-    $smarty->assign("TRACKER_COUNT", (int)$focus->tracker_count);
-    $smarty->assign("TRACKER_TEXT", $focus->tracker_text);
-    $smarty->assign("REFER_URL", $focus->refer_url);
-    $smarty->assign("IMPRESSIONS", $focus->impressions);
-   $roi_vals = array();
-   $roi_vals['budget']= $focus->budget;
-   $roi_vals['actual_cost']= $focus->actual_cost;
-   $roi_vals['Expected_Revenue']= $focus->expected_revenue;
-   $roi_vals['Expected_Cost']= $focus->expected_cost;
-               
-   if (unformat_number($focus->impressions) > 0) {
-       $cost_per_impression= unformat_number($focus->actual_cost)/unformat_number($focus->impressions);
-   } else {
-       $cost_per_impression = format_number(0);
-   }
-   $smarty->assign("COST_PER_IMPRESSION", currency_format_number($cost_per_impression));
-   if (empty($camp_data1['click_thru_link'])) {
-       $camp_data1['click_thru_link']=0;
-   }
-   $click_thru_links = $camp_data1['click_thru_link'];
-   
-   if ($click_thru_links >0) {
-       $cost_per_click_thru= unformat_number($focus->actual_cost)/unformat_number($click_thru_links);
-   } else {
-       $cost_per_click_thru = format_number(0);
-   }
-   $smarty->assign("COST_PER_CLICK_THROUGH", currency_format_number($cost_per_click_thru));
-    
-    
-        $currency  = BeanFactory::newBean('Currencies');
-    if (isset($focus->currency_id) && !empty($focus->currency_id)) {
-        $currency->retrieve($focus->currency_id);
-        if ($currency->deleted != 1) {
-            $smarty->assign("CURRENCY", $currency->iso4217 .' '.$currency->symbol);
-        } else {
-            $smarty->assign("CURRENCY", $currency->getDefaultISO4217() .' '.$currency->getDefaultCurrencySymbol());
-        }
+    if (unformat_number($focus->impressions) > 0) {
+        $cost_per_impression= unformat_number($focus->actual_cost)/unformat_number($focus->impressions);
     } else {
-        $smarty->assign("CURRENCY", $currency->getDefaultISO4217() .' '.$currency->getDefaultCurrencySymbol());
+        $cost_per_impression = format_number(0);
     }
-    global $current_user;
-    if (is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty($_SESSION['editinplace'])) {
-        $smarty->assign("ADMIN_EDIT", "<a href='index.php?action=index&module=DynamicLayout&from_action=".$_REQUEST['action'] ."&from_module=".$_REQUEST['module'] ."&record=".$_REQUEST['record']. "'>".SugarThemeRegistry::current()->getImage("EditLayout", "border='0' align='bottom'", null, null, '.gif', $mod_strings['LBL_EDIT_LAYOUT'])."</a>");
+    $smarty->assign("COST_PER_IMPRESSION", currency_format_number($cost_per_impression));
+    if (empty($camp_data1['click_thru_link'])) {
+        $camp_data1['click_thru_link']=0;
     }
+    $click_thru_links = $camp_data1['click_thru_link'];
     
-    $detailView->processListNavigation($xtpl, "CAMPAIGN", $offset, $focus->is_AuditEnabled());
-    // adding custom fields:
-    global $xtpl;
-    $xtpl = $smarty;
-    require_once('modules/DynamicFields/templates/Files/DetailView.php');
-    
-
-    
-    
-    
-    //add chart
-    $seps				= array("-", "/");
-    $dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
-    $dateFileNameSafe	= str_replace($seps, "_", $dates);
-    //$cache_file_name	= $current_user->getUserPrivGuid()."_campaign_response_by_activity_type_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
-    $cache_file_name_roi	= $current_user->getUserPrivGuid()."_campaign_response_by_roi_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
-    $chart= new campaign_charts();
-    $smarty->assign("MY_CHART_ROI", $chart->campaign_response_roi($app_list_strings['roi_type_dom'], $app_list_strings['roi_type_dom'], $focus->id, true, true));
-    //end chart
-    //custom chart code
-    require_once('include/SugarCharts/SugarChartFactory.php');
-    $sugarChart = SugarChartFactory::getInstance();
-    if ($sugarChart) {
-        $resources = $sugarChart->getChartResources();
-        $smarty->assign('chartResources', $resources);
+    if ($click_thru_links >0) {
+        $cost_per_click_thru= unformat_number($focus->actual_cost)/unformat_number($click_thru_links);
+    } else {
+        $cost_per_click_thru = format_number(0);
     }
-
-echo $smarty->fetch('modules/Campaigns/RoiDetailView.tpl');
+    $smarty->assign("COST_PER_CLICK_THROUGH", currency_format_number($cost_per_click_thru));
+     
+     
+         $currency  = BeanFactory::newBean('Currencies');
+     if (isset($focus->currency_id) && !empty($focus->currency_id)) {
+         $currency->retrieve($focus->currency_id);
+         if ($currency->deleted != 1) {
+             $smarty->assign("CURRENCY", $currency->iso4217 .' '.$currency->symbol);
+         } else {
+             $smarty->assign("CURRENCY", $currency->getDefaultISO4217() .' '.$currency->getDefaultCurrencySymbol());
+         }
+     } else {
+         $smarty->assign("CURRENCY", $currency->getDefaultISO4217() .' '.$currency->getDefaultCurrencySymbol());
+     }
+     global $current_user;
+     if (is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty($_SESSION['editinplace'])) {
+         $smarty->assign("ADMIN_EDIT", "<a href='index.php?action=index&module=DynamicLayout&from_action=".$_REQUEST['action'] ."&from_module=".$_REQUEST['module'] ."&record=".$_REQUEST['record']. "'>".SugarThemeRegistry::current()->getImage("EditLayout", "border='0' align='bottom'", null, null, '.gif', $mod_strings['LBL_EDIT_LAYOUT'])."</a>");
+     }
+     global $xtpl;
+     $detailView->processListNavigation($xtpl, "CAMPAIGN", $offset, $focus->is_AuditEnabled());
+     // adding custom fields:
+     $xtpl = $smarty;
+     require_once('modules/DynamicFields/templates/Files/DetailView.php');
+     
+ 
+     
+     
+     
+     //add chart
+     $seps				= array("-", "/");
+     $dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
+     $dateFileNameSafe	= str_replace($seps, "_", $dates);
+     //$cache_file_name	= $current_user->getUserPrivGuid()."_campaign_response_by_activity_type_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
+     $cache_file_name_roi	= $current_user->getUserPrivGuid()."_campaign_response_by_roi_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
+     $chart= new campaign_charts();
+     $smarty->assign("MY_CHART_ROI", $chart->campaign_response_roi($app_list_strings['roi_type_dom'], $app_list_strings['roi_type_dom'], $focus->id, true, true));
+     //end chart
+     //custom chart code
+     require_once('include/SugarCharts/SugarChartFactory.php');
+     $sugarChart = SugarChartFactory::getInstance();
+     if ($sugarChart) {
+         $resources = $sugarChart->getChartResources();
+         $smarty->assign('chartResources', $resources);
+     }
+ 
+ echo $smarty->fetch('modules/Campaigns/RoiDetailView.tpl');
+ 

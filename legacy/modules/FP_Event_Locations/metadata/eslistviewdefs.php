@@ -7,14 +7,11 @@ $ESListViewDefs['FP_Event_Locations'] = [
             'link' => true,
             'default' => true,
         ],
-        /*
-         TODO: rozwiązać problem z legacy/lib/Utility/ArrayMapper.php
         'address' => [],
         'address_city' => [],
         'address_country' => [],
         'address_postalcode' => [],
         'address_state' => [],
-        */
         'capacity' => [
             'default' => true,
         ],
@@ -31,14 +28,11 @@ $ESListViewDefs['FP_Event_Locations'] = [
     'search' => [
         'name' => [],
         'capacity' => [],
-        /*
-         TODO: rozwiązać problem z legacy/lib/Utility/ArrayMapper.php
         'address' => [],
         'address_city' => [],
         'address_country' => [],
         'address_postalcode' => [],
         'address_state' => [],
-        */
         'assigned_user_name' => [],
         'date_entered' => [],
         'date_modified' => [],

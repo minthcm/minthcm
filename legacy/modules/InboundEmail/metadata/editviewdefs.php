@@ -166,10 +166,25 @@ $viewdefs ['InboundEmail'] = [
                         'customCode' => '<div style="display: flex; align-items:baseline;"><input id="sentFolder" name="sentFolder" tabindex="95" size="30" maxlength="100" type="text" value="{$fields.sentFolder.value}"/> <input type="button" id="sentFolderButton" class="button" onclick="openSentMailboxPopup()" value="{$MOD.LBL_SELECT}"/></div>',
                     ]
                 ],
+                [
+                    'email_body_filtering',
+                ],
             ],
             'lbl_outbound_configuration' => [
                 [
-                    'outbound_email_name',
+                    [
+                        'name' => 'outbound_email_name',
+                        'displayParams' => [
+                            'field_to_name_array'=> [
+                                'name' => 'outbound_email_name',
+                                'id' => 'outbound_email_id',
+                                'smtp_from_name' => 'from_name',
+                                'reply_to_name' => 'reply_to_name',
+                                'smtp_from_addr' => 'from_addr',
+                                'reply_to_addr' => 'reply_to_addr',
+                            ]
+                        ]
+                    ],
                     'account_signature_id'
                 ],
                 [

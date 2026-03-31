@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -186,7 +186,7 @@ if (!defined('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
     define('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES', 6 * 1024 * 1024);
 }
 
-if ($upload_max_filesize_bytes > constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
+if ($upload_max_filesize_bytes >= constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
     $fileMaxStatus = "{$mod_strings['LBL_CHECKSYS_OK']}</font>";
 } else {
     $fileMaxStatus = "<span class='stop'><b>{$mod_strings['ERR_UPLOAD_MAX_FILESIZE']}</font></b></span>";
@@ -203,7 +203,7 @@ if (function_exists('imagecreatetruecolor')) {
 $envString .= '<p><b>' . $mod_strings['LBL_SPRITE_SUPPORT'] . '</b> ' . $spriteSupportStatus . '</p>';
 
 // Suhosin allow to use upload://
-if (UploadStream::getSuhosinStatus() == true || (strpos(ini_get('suhosin.perdir'), 'e') !== false && strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false)) {
+if (UploadStream::getSuhosinStatus() == true || (strpos(ini_get('suhosin.perdir'), 'e') !== false && strpos((string) $_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false)) {
     $suhosinStatus = (string)($mod_strings['LBL_CHECKSYS_OK']);
 } else {
     $suhosinStatus = "<span class='stop'><b>{$app_strings['ERR_SUHOSIN']}</b></span>";
@@ -255,7 +255,7 @@ if (!isset($_SERVER['Path'])) {
 }
 if (is_windows()) {
     if (isset($_SERVER['Path']) && !empty($_SERVER['Path'])) { // IIS IUSR_xxx may not have access to Path or it is not set
-        if (!strpos($_SERVER['Path'], 'php')) {
+        if (!strpos((string) $_SERVER['Path'], 'php')) {
 //        $error = '<em>'.$mod_strings_scheduler['LBL_NO_PHP_CLI'].'</em>';
         }
     }
@@ -266,7 +266,7 @@ if (is_windows()) {
 			   ';
 } else {
     if (isset($_SERVER['Path']) && !empty($_SERVER['Path'])) { // some Linux servers do not make this available
-        if (!strpos($_SERVER['PATH'], 'php')) {
+        if (!strpos((string) $_SERVER['Path'], 'php')) {
 //        $error = '<em>'.$mod_strings_scheduler['LBL_NO_PHP_CLI'].'</em>';
         }
     }

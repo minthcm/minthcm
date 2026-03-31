@@ -1,5 +1,6 @@
 <?PHP
 
+#[\AllowDynamicProperties]
 class Applications extends Basic {
 
    public $new_schema = true;

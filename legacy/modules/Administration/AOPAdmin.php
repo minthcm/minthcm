@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -136,7 +136,8 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'save') {
 $distribStrings = $app_list_strings['dom_email_distribution_for_auto_create'];
 unset($distribStrings['AOPDefault']);
 $distributionMethod = get_select_options_with_id($distribStrings, $cfg->config['aop']['distribution_method']);
-$distributionOptions = getAOPAssignField('distribution_options', $cfg->config['aop']['distribution_options']);
+$distributionOptionsValue = $cfg->config['aop']['distribution_options'] ?? '';
+$distributionOptions = getAOPAssignField('distribution_options', $distributionOptionsValue);
 
 if (!empty($cfg->config['aop']['distribution_user_id'])) {
   $distributionUserName = BeanFactory::getBean("Users", $cfg->config['aop']['distribution_user_id'])->name;
@@ -159,7 +160,8 @@ $closureEmailTemplateDropdown =
 $joomlaEmailTemplateDropdown =
   get_select_options_with_id($emailTemplateList, $cfg->config['aop']['joomla_account_creation_email_template_id']);
 
-$inboundEmailCaseMacro = $cfg->config['inbound_email_case_subject_macro'] ?? '';
+$case = BeanFactory::newBean('Cases');
+$inboundEmailCaseMacro = $cfg->config['inbound_email_case_subject_macro'] ?? $case->getEmailSubjectMacro();
 
 $sugar_smarty->assign('inbound_email_case_macro', $inboundEmailCaseMacro);
 $sugar_smarty->assign('USER_EMAIL_TEMPLATES', $userEmailTemplateDropdown);
@@ -183,7 +185,7 @@ $statusDropdown = get_select_options($app_list_strings[$cBean->field_name_map['s
 $currentStatuses = '';
 
 if ($cfg->config['aop']['case_status_changes']) {
-  foreach (json_decode($cfg->config['aop']['case_status_changes'], true) as $if => $then) {
+  foreach (json_decode((string) $cfg->config['aop']['case_status_changes']) as $if => $then) {
       $ifDropdown = get_select_options($app_list_strings[$cBean->field_name_map['status']['options']], $if);
       $thenDropdown = get_select_options($app_list_strings[$cBean->field_name_map['status']['options']], $then);
       $currentStatuses .= getStatusRowTemplate($mod_strings, $ifDropdown, $thenDropdown) . "\n";
@@ -374,7 +376,7 @@ function getStatusRowTemplate($mod_strings, $ifDropdown, $thenDropdown)
       <td width="100">
           <select id='then_status_select[]' name='then_status[]'>{$thenDropdown}</select>
       </td>
-      <td><button class="removeStatusButton" type="button">{$mod_strings['LBL_AOP_REMOVE_STATUS']}</button></td>
+      <td><button class="removeStatusButton button" type="button">{$mod_strings['LBL_AOP_REMOVE_STATUS']}</button></td>
   </tr>
 EOF;
 

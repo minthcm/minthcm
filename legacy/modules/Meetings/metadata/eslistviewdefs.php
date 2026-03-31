@@ -35,19 +35,10 @@ $ESListViewDefs[$module_name] = [
             'default' => true,
             'ACLTag' => 'CONTACT',
         ],
-        'PARENT_NAME' => [
-            'width' => '15%',
-            'label' => 'LBL_LIST_RELATED_TO',
-            'dynamic_module' => 'PARENT_TYPE',
-            'id' => 'PARENT_ID',
+        'parent_name' => [
             'link' => true,
             'default' => true,
-            'sortable' => false,
             'ACLTag' => 'PARENT',
-            'related_fields' => [
-                'parent_id',
-                'parent_type',
-            ],
         ],
         'DATE_START' => [
             'width' => '10%',
@@ -81,6 +72,9 @@ $ESListViewDefs[$module_name] = [
             'default' => true,
         ],
         'date_modified' => [],
+        'location' => [
+            'default' => false
+        ]
     ],
     'search' => [
         'name' => [],
@@ -91,7 +85,12 @@ $ESListViewDefs[$module_name] = [
         'date_start' => [],
         'date_end' => [],
         'duration' => [],
-        'related_to' => [],
+        'parent_name' => [],
         'assigned_user_name' => [],
+        'location' => [],
+    ],
+    'defaultSort' => [
+        'field' => 'date_start',
+        'order' => 'DESC'
     ],
 ];

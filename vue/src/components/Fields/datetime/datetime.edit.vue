@@ -1,6 +1,14 @@
 <template>
     <div class="mint-date-field-detail" @keyup.enter="$emit('inlineEditSave')" @keyup.esc="$emit('inlineEditCancel')">
-        <v-text-field :label="label" variant="outlined" density="compact" hide-details v-model="dateValue">
+        <v-text-field
+            :label="label"
+            variant="outlined"
+            density="compact"
+            hide-details
+            v-model="dateValue"
+            :error="props.state === 'error'"
+            :name="props.defs.name"
+        >
             <template #append-inner>
                 <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
                     <template v-slot:activator="{ props }">
@@ -12,16 +20,18 @@
                 </v-menu>
             </template>
         </v-text-field>
-        <v-text-field :disabled="!dateValue" variant="outlined" density="compact" hide-details v-model="timeValue">
+        <v-text-field :disabled="!dateValue" variant="outlined" density="compact" hide-details v-model="timeValue" :name="props.defs.name+'_time'">
             <template #append-inner>
                 <v-menu v-model="timePickerMenu" offset="16" :close-on-content-click="false">
                     <template v-slot:activator="{ props }">
                         <v-icon class="mint-date-field-btn" v-bind="props">mdi-clock-time-eight-outline</v-icon>
                     </template>
                     <v-time-picker
-                        v-model="timePickerValue"
+                        v-model="timeValue"
                         :format="timeFormat"
                         :ampm-in-title="timeFormat === 'ampm'"
+                        :allowed-minutes="allowedMinutesStep"
+                        scrollable
                     >
                         <template #header></template>
                     </v-time-picker>
@@ -32,26 +42,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { defineProps, ref, computed, watch, defineEmits } from 'vue'
 import { DateTime } from 'luxon'
-import { FieldVardef } from '@/store/modules'
-import { usePreferencesStore } from '@/store/preferences';
+import { FieldProps } from '../Field.model'
+import { usePreferencesStore } from '@/store/preferences'
 import DateUtils from '@/utils/dates'
+import { MintDate } from '@/composables/useMintDate'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps<MintDate>>()
 const emit = defineEmits(['update:modelValue'])
 
 const datePickerMenu = ref(false)
 const timePickerMenu = ref(false)
-const model = ref(props.modelValue)
+const model = ref(props.field.model)
 const preferences = usePreferencesStore()
+
+const allowedMinutesStep = (m: number) => m % (props.minuteStep || 5) === 0
 
 const timeFormat = computed(() => {
     return DateUtils.getTimeFormatGeneralized()
@@ -59,95 +65,80 @@ const timeFormat = computed(() => {
 
 const dateValue = computed({
     get() {
-        const dt = DateTime.fromSQL(model.value)
-        if (dt.isValid) {
-            return dt.toFormat(preferences.user?.date_format || 'yyyy-MM-dd') || ''
-        }
-        return ''
+        if (!model.value.isValid) return ''
+        const userDt = model.value.instance.setZone(preferences.userTimezone || 'utc')
+        return userDt.toFormat(preferences.userDateFormat)
     },
-    async set(newVal) {
+    set(newVal) {
         datePickerMenu.value = false
         if (!newVal?.trim()) {
-            model.value = ''
+            model.value.clear()
+            return
         }
-        const dt = DateTime.fromFormat(newVal, preferences.user?.date_format || 'yyyy-MM-dd')
+        const dt = DateTime.fromFormat(
+            `${newVal} ${timeValue.value}`,
+            `${preferences.userDateFormat} HH:mm`,
+            { zone: preferences.userTimezone || 'utc' }
+        )
         if (dt.isValid) {
-            model.value = dt.toSQLDate()
+            model.value.set(dt)
         }
     },
 })
 
 const timeValue = computed({
     get() {
-        const dt = DateTime.fromSQL(model.value, { zone: 'UTC' })
-        if (dt.isValid) {
-            return dt.toLocal().toFormat('HH:mm') || '00:00'
-        }
-        return '00:00'
+        return model.value.isValid ? model.value.formatted.user_time_normal.slice(0, -3) : '12:00'
     },
     set(newVal) {
-        timePickerMenu.value = false
-        newVal = DateTime.fromSQL(newVal).setZone('UTC').toFormat('HH:mm')
-        const modelDt = DateTime.fromSQL(model.value, { zone: 'UTC' })
-        if (modelDt.isValid) {
-            model.value = `${modelDt.toFormat('yyyy-MM-dd')} ${newVal}:00`
-        } else {
-            model.value = ''
+        const dt = DateTime.fromFormat(
+            `${dateValue.value} ${newVal}`,
+            `${preferences.userDateFormat} HH:mm`,
+            { zone: preferences.userTimezone || 'utc' }
+        )
+        if (dt.isValid) {
+            model.value.set(dt)
         }
     },
 })
 
 const datePickerValue = computed({
     get() {
-        if (!model.value?.trim()) {
-            return new Date()
-        }
-        return new Date(model.value)
+        if (!model.value.isValid) return new Date()
+        const userDt = model.value.instance.setZone(preferences.userTimezone || 'utc')
+        return new Date(userDt.year, userDt.month - 1, userDt.day)
     },
     set(newVal) {
-        const dt = DateTime.fromJSDate(newVal)
-        if (dt.isValid) {
-            const modelDt = DateTime.fromSQL(model.value)
-            if (!modelDt.isValid) {
-                model.value = dt.toFormat('yyyy-MM-dd HH:mm:ss')
-            } else {
-                model.value = `${dt.toFormat('yyyy-MM-dd')} ${modelDt.toFormat('HH:mm:ss')}`
-            }
-        }
-    },
-})
+        const year = newVal.getFullYear()
+        const month = String(newVal.getMonth() + 1).padStart(2, '0')
+        const day = String(newVal.getDate()).padStart(2, '0')
+        const dateStr = `${year}-${month}-${day}`
 
-const timePickerValue = computed({
-    get() {
-        const dt = DateTime.fromSQL(model.value, { zone: 'UTC' })
-        if (dt.isValid) {
-            return dt.toLocal().toFormat('HH:mm') || '00:00'
-        }
-        return '00:00'
-    },
-    set(newVal) {
-        newVal = DateTime.fromFormat(newVal, 'HH:mm').setZone('UTC').toFormat('HH:mm')
-        const modelDt = DateTime.fromSQL(model.value, { zone: 'UTC' })
-        if (modelDt.isValid) {
-            model.value = `${modelDt.toFormat('yyyy-MM-dd')} ${newVal}:00`
+        let timeStr: string
+        if (timeFormat.value === 'ampm') {
+            timeStr = model.value.isValid ? model.value.formatted.user_time.replace('.', ':') : '12:00 PM'
         } else {
-            model.value = ''
+            timeStr = model.value.isValid ? model.value.formatted.user_time_normal.slice(0, -3) : '12:00'
         }
+
+        const formatedDatetime = DateTime.fromFormat(
+            `${dateStr} ${timeStr}`,
+            `yyyy-MM-dd ${timeFormat.value == 'ampm' ? 'hh:mm a' : 'HH:mm'}`,
+            { zone: preferences.userTimezone || 'utc' }
+        )
+        if (formatedDatetime.isValid) {
+            model.value.set(formatedDatetime)
+        }
+        datePickerMenu.value = false
     },
 })
 
-watch(model, (newVal) => {
-    datePickerMenu.value = false
-    timePickerMenu.value = false
-    const dt = DateTime.fromSQL(newVal?.toString())
-    if (dt.isValid) {
-        console.log('new val', model.value)
-        emit('update:modelValue', model.value)
-    } else {
-        console.log('new val empty')
-        emit('update:modelValue', '')
-    }
-})
+watch(
+    () => props.field.model,
+    () => {
+        model.value = props.field.model
+    },
+)
 </script>
 
 <style scoped lang="scss">
@@ -162,44 +153,6 @@ watch(model, (newVal) => {
         &:hover {
             color: rgb(var(--v-theme-on-surface));
         }
-    }
-}
-.v-input {
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        opacity: 1;
-    }
-
-    :deep(.v-field__outline__start),
-    :deep(.v-field__outline__notch)::before,
-    :deep(.v-field__outline__notch)::after,
-    :deep(.v-field__outline__end) {
-        border-color: #dbdbdb;
-    }
-
-    &:hover {
-        :deep(.v-field__outline__start),
-        :deep(.v-field__outline__notch)::before,
-        :deep(.v-field__outline__notch)::after,
-        :deep(.v-field__outline__end) {
-            border-color: rgb(var(--v-theme-primary));
-        }
-    }
-
-    :deep(.v-field--focused .v-field__outline__start),
-    :deep(.v-field--focused .v-field__outline__notch)::before,
-    :deep(.v-field--focused .v-field__outline__notch)::after,
-    :deep(.v-field--focused .v-field__outline__end) {
-        border-color: rgb(var(--v-theme-primary));
-    }
-
-    :deep(.v-field-label.v-field-label--floating) {
-        background: rgb(var(--v-theme-surface));
-        color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-        opacity: 1;
-        padding: 0px 2px;
     }
 }
 </style>

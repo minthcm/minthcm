@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -59,8 +59,8 @@ if(!isset($_REQUEST['guid']) || !isset($_REQUEST['time']))
 {
 	die('Did not receive a filename to download');
 }
-$time = str_replace(array('.', '/', '\\'), '', $_REQUEST['time']);
-$guid = str_replace(array('.', '/', '\\'), '', $_REQUEST['guid']);
+$time = str_replace(array('.', '/', '\\'), '', (string) $_REQUEST['time']);
+$guid = str_replace(array('.', '/', '\\'), '', (string) $_REQUEST['guid']);
 $path = sugar_cached("diagnostic/{$guid}/diagnostic{$time}.zip");
 $filesize = filesize($path);
 ob_clean();

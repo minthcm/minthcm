@@ -16,6 +16,7 @@
  * Loads SugarMetric_Manager with depending objects such as sugar configuration
  * Used to take all loading logic in one place
  */
+#[\AllowDynamicProperties]
 class SugarMetric_Helper
 {
     /**

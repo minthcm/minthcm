@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -101,4 +101,18 @@ $mod_strings = array(
     'LBL_LIST_TITLE' => 'Task',
     'LBL_KANBAN_REQUIRED_FIELDS_ERROR' => "To change the entry status, complete the required fields: ",
     'LNK_NEW_RECORD' => ' Create Task',  // MintHCM
+    'LBL_CHECKLIST' => 'Checklist',
+    'LBL_SUBJECT_COMMENT' => 'Short description or subject of the task.',
+    'LBL_STATUS_COMMENT' => 'Current status of the task.',
+    'LBL_DATE_DUE_FLAG_COMMENT' => 'Indicates whether a due date is set for this task.',
+    'LBL_DUE_DATE_COMMENT' => 'Date and time when the task should be completed.',
+    'LBL_DUE_TIME_COMMENT' => 'Time component of the task due date.',
+    'LBL_DATE_START_FLAG_COMMENT' => 'Indicates whether a start date is set for this task.',
+    'LBL_START_DATE_COMMENT' => 'Date and time when work on the task begins.',
+    'LBL_PARENT_TYPE_COMMENT' => 'Type of record this task is related to.',
+    'LBL_PARENT_NAME_COMMENT' => 'Name of the record this task is related to.',
+    'LBL_PARENT_ID_COMMENT' => 'Identifier of the related parent record.',
+    'LBL_PRIORITY_COMMENT' => 'Priority level assigned to this task.',
+    'LBL_CHECKLIST_COMMENT' => 'Checklist of steps or requirements associated with this task.',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ use Api\Core\Config\ApiConfig;
 
 require_once 'lib/Search/ElasticSearch/MappingsGenerator.php';
 
+#[\AllowDynamicProperties]
 class RepairAndClear
 {
     public $module_list;
@@ -127,6 +128,7 @@ class RepairAndClear
                 $this->repairDatabase();
                 updateMintRebuildFile();
                 $this->createEntities();
+                $this->clearNewApiCache();
                 break;
         }
         }
@@ -387,7 +389,7 @@ class RepairAndClear
         $search_dir=sugar_cached('');
         $src_file = $search_dir . 'modules/unified_search_modules.php';
         if (file_exists($src_file)) {
-            unlink((string)$src_file);
+            unlink($src_file);
         }
     }
     public function clearExternalAPICache()
@@ -453,7 +455,7 @@ class RepairAndClear
                 $focus->create_audit_table();
             } else {
                 if ($this->show_output) {
-                    $echo=str_replace('%1$', $focus->object_name, $mod_strings['LBL_REBUILD_AUDIT_SKIP']);
+                    $echo=str_replace('%1$', $focus->object_name, (string) $mod_strings['LBL_REBUILD_AUDIT_SKIP']);
                     echo $echo;
                 }
             }
@@ -488,7 +490,7 @@ class RepairAndClear
                 if ($children != "." && $children != "..") {
                     if (is_dir($thedir . "/" . $children)) {
                         $this->_clearCache($thedir . "/" . $children, $extension);
-                    } elseif (is_file($thedir . "/" . $children) && (substr_count($children, $extension))) {
+                    } elseif (is_file($thedir . "/" . $children) && (substr_count($children, (string) $extension))) {
                         unlink($thedir . "/" . $children);
                     }
                 }
@@ -515,5 +517,10 @@ class RepairAndClear
     {
         require_once 'include/EntityCreator/EntityCreatorManager.php';
         EntityCreatorManager::createEntities();
+    }
+
+    private function clearNewApiCache() {
+        $cacheDir = '../api/cache';
+        exec('rm -rf ' . $cacheDir . '/*');
     }
 }

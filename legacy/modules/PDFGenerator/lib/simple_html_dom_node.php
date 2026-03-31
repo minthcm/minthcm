@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -46,6 +46,7 @@
 
 // simple html dom node
 // -----------------------------------------------------------------------------
+#[\AllowDynamicProperties]
 class simple_html_dom_node {
 
    public $nodetype = HDOM_TYPE_TEXT;
@@ -105,7 +106,7 @@ function children($idx = -1) {
 
 // returns the first child of node
 function first_child() {
-   if ( count($this->children) > 0 ) {
+   if ( is_countable($this->children) ? count($this->children) > 0 : 0 ) {
       return $this->children[0];
    }
    return null;
@@ -113,7 +114,8 @@ function first_child() {
 
 // returns the last child of node
 function last_child() {
-   if ( ($count = count($this->children)) > 0 ) {
+   $count = is_countable($this->children) ? count($this->children) : 0;
+   if ( $count > 0 ) {
       return $this->children[$count - 1];
    }
    return null;
@@ -125,7 +127,7 @@ function next_sibling() {
       return null;
    }
    $idx = 0;
-   $count = count($this->parent->children);
+   $count = is_countable($this->parent->children) ? count($this->parent->children) : 0;
    while ( $idx < $count && $this !== $this->parent->children[$idx] ) {
       ++$idx;
    }
@@ -141,7 +143,7 @@ function prev_sibling() {
       return null;
    }
    $idx = 0;
-   $count = count($this->parent->children);
+   $count = is_countable($this->parent->children) ? count($this->parent->children) : 0;
    while ( $idx < $count && $this !== $this->parent->children[$idx] ) {
       ++$idx;
    }
@@ -270,14 +272,16 @@ function makeup() {
 // find elements by css selector
 function find($selector, $idx = null) {
    $selectors = $this->parse_selector($selector);
-   if ( ($count = count($selectors)) === 0 ) {
+   $count = is_countable($selectors) ? count($selectors) : 0;
+   if ($count === 0) {
       return array();
    }
    $found_keys = array();
 
    // find each selector
    for ( $c = 0; $c < $count; ++$c ) {
-      if ( ($levle = count($selectors[0])) === 0 ) {
+      $levle = is_countable($selectors[0]) ? count($selectors[0]) : 0;
+      if ( $levle === 0 ) {
          return array();
       }
       if ( !isset($this->_[HDOM_INFO_BEGIN]) ) {
@@ -314,7 +318,7 @@ function find($selector, $idx = null) {
    if ( is_null($idx) ) {
       return $found;
    } else if ( $idx < 0 ) {
-      $idx = count($found) + $idx;
+      $idx = (is_countable($found) ? count($found) : 0) + $idx;
    }
    return (isset($found[$idx])) ? $found[$idx] : null;
 }
@@ -468,7 +472,7 @@ protected function parse_selector($selector_string) {
          $result = array();
       }
    }
-   if ( count($result) > 0 ) {
+   if (is_countable($result) ? count($result) > 0 : 0) {
       $selectors[] = $result;
    }
    return $selectors;

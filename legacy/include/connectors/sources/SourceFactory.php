@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,6 +51,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * with the name ext_soap_hoovers would be ext/soap/hoovers.php
  * @api
  */
+#[\AllowDynamicProperties]
 class SourceFactory
 {
 
@@ -61,7 +62,12 @@ class SourceFactory
      */
     public static function getSource($class, $call_init = true)
     {
-        $dir = str_replace('_', '/', $class);
+        $dir = str_replace('_', '/', (string) $class);
+
+        if (strpos($dir, '..') !== false) {
+            return null;
+        }
+
         $parts = explode("/", $dir);
         $file = $parts[count($parts)-1];
         $pos = strrpos($file, '/');

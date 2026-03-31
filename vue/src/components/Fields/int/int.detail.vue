@@ -1,10 +1,11 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row">
-            <div>{{ props.modelValue }}</div>
+        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+            <div>{{ props.field.model }}</div>
             <Pencil
                 :defs="props.defs"
+                :hidePencil="hidePencil"
                 @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
             />
         </div>
@@ -12,17 +13,16 @@
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
 import Pencil from '../Pencil.vue'
+import { FieldProps } from '../Field.model'
 
-interface Props {
-    defs: FieldVardef
-    label: string
-    modelValue?: any
-    data?: any
+const props = defineProps<FieldProps<string | number>>()
+const emit = defineEmits(['inlineEditBtnClicked'])
+function startInlineEdit() {
+    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
+        emit('inlineEditBtnClicked', props.defs.name)
+    }
 }
-
-const props = defineProps<Props>()
 </script>
 
 <style scoped lang="scss">

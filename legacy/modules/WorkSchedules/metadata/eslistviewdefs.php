@@ -61,4 +61,8 @@ $ESListViewDefs['WorkSchedules'] = [
         'Merge',
         'MassConfirmation',
     ],
+    'defaultSort' => [
+        'field' => 'date_start',
+        'order' => 'DESC'
+    ],
 ];

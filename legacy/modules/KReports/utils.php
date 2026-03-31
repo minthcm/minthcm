@@ -11,10 +11,9 @@
  * You can contact us at info@kreporter.org
  * ****************************************************************************** */
 
-
-
-
-if (!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
 if (!function_exists("randomstring")) {
 
@@ -26,8 +25,9 @@ if (!function_exists("randomstring")) {
         $returnstring = '';
         //2013-09-06 BUG #496 removed ... causing issues in higher php releases
         //mt_srand((double)microtime()*1000000);
-        while (strlen($returnstring) < $len + 1)
+        while (strlen($returnstring) < $len + 1) {
             $returnstring .= $base[mt_rand(0, $max)];
+        }
 
         return $returnstring;
     }
@@ -37,25 +37,38 @@ if (!function_exists("json_decode_kinamu")) {
 
     function json_decode_kinamu($json)
     {
-        if (function_exists('json_decode')) return json_decode($json, true);
+        if (function_exists('json_decode')) {
+            return json_decode($json, true);
+        }
 
         // bugfix 2010-8-23: problem with json in AJAX call
-        if ($json != '') {
+        if ('' != $json) {
             // Author: walidator.info 2009
             $comment = false;
             $out = '$x=';
 
             for ($i = 0; $i < strlen($json); $i++) {
                 if (!$comment) {
-                    if ($json[$i] == '{' or $json[$i] == '[') $out .= ' array(';
-                    else if ($json[$i] == '}' or $json[$i] == ']') $out .= ')';
-                    else if ($json[$i] == ':') $out .= '=>';
-                    else $out .= $json[$i];
-                } else $out .= $json[$i];
-                if ($json[$i] == '"') $comment = !$comment;
+                    if ('{' == $json[$i] or '[' == $json[$i]) {
+                        $out .= ' array(';
+                    } else if ('}' == $json[$i] or ']' == $json[$i]) {
+                        $out .= ')';
+                    } else if (':' == $json[$i]) {
+                        $out .= '=>';
+                    } else {
+                        $out .= $json[$i];
+                    }
+
+                } else {
+                    $out .= $json[$i];
+                }
+
+                if ('"' == $json[$i]) {
+                    $comment = !$comment;
+                }
+
             }
-            eval($out.';');
-            return $x;
+            return eval($out . ';');
         } else {
             return array();
         }
@@ -66,27 +79,29 @@ if (!function_exists("jarray_encode_kinamu")) {
 
     function jarray_encode_kinamu($inArray)
     {
-        if (!is_array($inArray)) return '';
+        if (!is_array($inArray)) {
+            return '';
+        }
 
         // so we have an array
         foreach ($inArray as $thisKey => $thisValue) {
-            $resArray[] = "['".$thisKey."','".$thisValue."']";
+            $resArray[] = "['" . $thisKey . "','" . $thisValue . "']";
         }
-        return htmlentities('['.implode(',', $resArray).']', ENT_QUOTES);
+        return htmlentities('[' . implode(',', $resArray) . ']', ENT_QUOTES);
     }
 }
 if (!function_exists("json_encode_kinamu")) {
 
     function json_encode_kinamu($input)
     {
-        if (function_exists('json_encode')) return json_encode($input);
-        else {
+        if (function_exists('json_encode')) {
+            return json_encode($input);
+        } else {
             $json = new Services_JSON();
             return $json->encode($input);
         }
     }
 }
-
 
 // since this was moved with 5.5.1
 if (!function_exists('html_entity_decode_utf8')) {
@@ -100,8 +115,10 @@ if (!function_exists('html_entity_decode_utf8')) {
         // replace literal entities
         if (!isset($trans_tbl)) {
             $trans_tbl = array();
-            foreach (get_html_translation_table(HTML_ENTITIES) as $val => $key)
-                $trans_tbl[$key] = utf8_encode($val);
+            foreach (get_html_translation_table(HTML_ENTITIES) as $val => $key) {
+                $trans_tbl[$key] = mb_convert_encoding($val, 'UTF-8', 'ISO-8859-1');
+            }
+
         }
         return strtr($string, $trans_tbl);
     }
@@ -118,8 +135,9 @@ function calculate_trendline($values, $offset = true)
     }
 
     // get the averages
-    $avgX = $sumX / count($values);
-    $avgY = $sumY / count($values);
+    $values_count = is_countable($values) ? count($values) : 0;
+    $avgX = $sumX / $values_count;
+    $avgY = $sumY / $values_count;
 
     // get the alpha
     $sumNalpha = 0;
@@ -132,21 +150,22 @@ function calculate_trendline($values, $offset = true)
     // calculate the alpha value
     $alpha = $sumZalpha > 0 ? $sumNalpha / $sumZalpha : 0;
 
-    $startValue = $avgY - (((count($values) / 2) + 1) * $alpha);
-    $endValue = $avgY + (((count($values) / 2) + 1) * $alpha);
+    $startValue = $avgY - ((($values_count / 2) + 1) * $alpha);
+    $endValue = $avgY + ((($values_count / 2) + 1) * $alpha);
 
     return array(
         'start' => round($startValue, 0),
-        'end' => round($endValue, 0)
+        'end' => round($endValue, 0),
     );
 }
 
-function multisort($array, $sort_by, $key1, $key2 = NULL, $key3 = NULL, $key4 = NULL, $key5
-    = NULL, $key6 = NULL)
-{
+function multisort($array, $sort_by, $key1, $key2 = null, $key3 = null, $key4 = null, $key5
+    = null, $key6 = null) {
     // sort by ?
-    foreach ($array as $pos => $val)
+    foreach ($array as $pos => $val) {
         $tmp_array[$pos] = $val[$sort_by];
+    }
+
     asort($tmp_array);
 
     // display however you want
@@ -179,7 +198,7 @@ function sortFieldArrayBySequence($first, $second)
 
 function getLastDayOfMonth($month, $year)
 {
-    return date('Y-m-d', strtotime('-1 second', strtotime('+1 month', strtotime($month.'/01/'.$year.' 00:00:00'))));
+    return date('Y-m-d', strtotime('-1 second', strtotime('+1 month', strtotime($month . '/01/' . $year . ' 00:00:00'))));
 }
 if (!function_exists("formatEnumArray")) {
 
@@ -199,7 +218,7 @@ if (!function_exists("formatEnumArray")) {
         if ($parse_array) {
             $new_array = array();
             foreach ($a as $value => $text) {
-                $new_array [] = array(
+                $new_array[] = array(
                     'text' => $text,
                     'value' => $value,
                 );
@@ -210,5 +229,6 @@ if (!function_exists("formatEnumArray")) {
     }
 }
 
-if (file_exists('custom/modules/KReports/utils.php'))
-        include('custom/modules/KReports/utils.php');
+if (file_exists('custom/modules/KReports/utils.php')) {
+    include 'custom/modules/KReports/utils.php';
+}

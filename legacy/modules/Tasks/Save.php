@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -64,8 +64,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
  global $timedate;
  $time_format = $timedate->get_user_time_format();
  $time_separator = ":";
- if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
-	 $time_separator = $match[1];
+ if (preg_match('/\d+([^\d])\d+([^\d]*)/s', (string) $time_format, $match)) {
+	$time_separator = $match[1];
  }
  
  if (!empty($_POST[$prefix.'due_meridiem'])) {

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -120,7 +120,7 @@
                                     </td>
                                     <td>
                                         <input name='old_password' id='old_password' type='password' tabindex='2'
-                                        onkeyup="password_confirmation();" autocomplete="new-password">
+                                               onkeyup="password_confirmation();" autocomplete="new-password">
                                     </td>
                                     <td width='40%'>
                                     </td>
@@ -278,11 +278,6 @@
             </tr>
             <tr>
                 <td scope="row" valign="top">
-                    <slot>{$MOD.LBL_USE_REAL_NAMES}:</slot>&nbsp;{sugar_help text=$MOD.LBL_USE_REAL_NAMES_DESC }</td>
-                <td>
-                    <slot><input tabindex='12' type="checkbox" name="use_real_names" {$USE_REAL_NAMES}></slot>
-                </td>
-                <td scope="row" valign="top">
                     <slot>{$MOD.LBL_MAILMERGE}:</slot>&nbsp;{sugar_help text=$MOD.LBL_MAILMERGE_TEXT }
                 </td>
                 <td valign="top" nowrap>
@@ -380,7 +375,7 @@
                         <slot>{$MOD.LBL_PROMPT_TIMEZONE}:</slot>&nbsp;{sugar_help text=$MOD.LBL_PROMPT_TIMEZONE_TEXT }
                     </td>
                     <td>
-                        <slot><input type="checkbox" tabindex='14' class="checkbox" name="ut" value="0" {$PROMPTTZ}>
+                        <slot><input type="checkbox" tabindex='14' class="checkbox" name="ut" {$PROMPTTZ}>
                         </slot>
                     </td>
                 {else}
@@ -483,7 +478,7 @@
                     <slot>{$MOD.LBL_GOOGLE_API_TOKEN}:</slot>&nbsp;{sugar_help text=$MOD.LBL_GOOGLE_API_TOKEN_HELP}
                 </td>
                     <td width="20%">
-                    <slot>Current API Token is: <span style="color:{$GOOGLE_API_TOKEN_COLOR}">{$GOOGLE_API_TOKEN}</span> &nbsp;&nbsp;<input style="display:{$GOOGLE_API_TOKEN_ENABLE_NEW}" class="btn btn-primary btn-sm" id="google_gettoken" type="button" value="{$GOOGLE_API_TOKEN_BTN}" onclick="window.open('{$GOOGLE_API_TOKEN_NEW_URL}', '_self')" /></slot>
+                    <slot>Current API Token is: <span style="color:{$GOOGLE_API_TOKEN_COLOR}">{$GOOGLE_API_TOKEN}</span> &nbsp;&nbsp;<input style="display:{$GOOGLE_API_TOKEN_ENABLE_NEW}" class="btn btn-primary btn-sm" id="google_gettoken" type="button" value="{$GOOGLE_API_TOKEN_BTN}" onclick="window.open('{$GOOGLE_API_TOKEN_NEW_URL}', '_blank')" /></slot>
                 </td>
                 <td width="63%">
                     <slot>&nbsp;</slot>
@@ -607,12 +602,23 @@
 
   $(document).ready(function () {
     var checkKey = function (key) {
-      if (key != '') {
+      var validation = /^[A-Z0-9\-_.]*$/i;
+      if (key != '' && validation.test(key)) {
+
+        var encodedKey = key.replace(/[&<>'"]/g, function(tag) {
+          return ({
+              '&': '&amp;',
+              '<': '&lt;',
+              '>': '&gt;',
+              "'": '&#39;',
+              '"': '&quot;'
+            }[tag]);
+        })
         $(".calendar_publish_ok").css('display', 'inline');
         $(".calendar_publish_none").css('display', 'none');
-        $('#cal_pub_key_span').html(key);
-        $('#ical_pub_key_span').html(key);
-        $('#search_pub_key_span').html(key);
+        $('#cal_pub_key_span').html(encodedKey);
+        $('#ical_pub_key_span').html(encodedKey);
+        $('#search_pub_key_span').html(encodedKey);
       } else {
         $(".calendar_publish_ok").css('display', 'none');
         $(".calendar_publish_none").css('display', 'inline');

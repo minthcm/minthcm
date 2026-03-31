@@ -152,7 +152,7 @@
                     {{counter name="fieldCount" print=false}}
                 {{/foreach}}
                 </div>
-                {{if $col%2==1}}
+                {{if intval($col)%2==1}}
                 <div class="clear"></div>
                 {{/if}}
             {{/foreach}}

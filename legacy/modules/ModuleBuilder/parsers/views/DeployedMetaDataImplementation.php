@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -62,6 +62,7 @@ require_once 'modules/ModuleBuilder/parsers/constants.php';
 /**
  * Class DeployedMetaDataImplementation
  */
+#[\AllowDynamicProperties]
 class DeployedMetaDataImplementation extends AbstractMetaDataImplementation implements MetaDataImplementationInterface
 {
     /**
@@ -292,7 +293,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     public function save($layoutDefinitions)
     {
         //If we are pulling from the History Location, that means we did a restore, and we need to save the history for the previous file.
-        if ($this->_sourceFilename == $this->getFileName(
+        if ($this->_sourceFilename === $this->getFileName(
             $this->_view,
             $this->_moduleName,
             null,
@@ -322,37 +323,13 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
      * Deploy a layout
      * @param array $layoutDefinitions Layout definition in the same format as received by the constructor
      */
-    public function deploy($layoutDefinitions, $ESList = false)
+    public function deploy($layoutDefinitions, $view = null)
     {
-        //MintHCM start #117539        
-        if($ESList == true){
-            $this->_view = "eslistview";
-            $this->_sourceFilename = "custom/history/modules/".$this->_moduleName."/metadata/eslistviewdefs.php";           
-            $custom_file = $this->getFileName($this->_view, $this->_moduleName, null, MB_CUSTOMMETADATALOCATION);
-
-            if(file_exists($custom_file)){ // Check if there's an existing custom eslistview file
-                $filename = $custom_file;
-            } else { // If there isn't one, refer to the base eslistview
-                $filename = $this->getFileName($this->_view, $this->_moduleName, null, MB_BASEMETADATALOCATION);
-            }
-
-            // Read the file contents into an array
-            $fileLines = file($filename);
-    
-            // Remove the first line from the array
-            $fileLines = array_slice($fileLines, 1);
-    
-            // Join the remaining lines into a single string
-            $fileContent = implode('', $fileLines);
-    
-            // Evaluate the string as PHP code to create the variable
-            eval($fileContent);
-    
-            // Extract the desired array from the evaluated code
-            $ESListViewDefs = $ESListViewDefs[$module_name];
+        if (!empty($view) && in_array($view, [MB_ESLISTVIEW, MB_RECORDVIEW])) {
+            $mint4viewdefs = $this->parseMint4ViewsVariables($view);
         }
-        //MintHCM end #117539
-        if ($this->_sourceFilename == $this->getFileName(
+        
+        if ($this->_sourceFilename === $this->getFileName(
             $this->_view,
             $this->_moduleName,
             null,
@@ -377,16 +354,59 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         }
         $filename = $this->getFileName($this->_view, $this->_moduleName, null, MB_CUSTOMMETADATALOCATION);
         $GLOBALS ['log']->debug(get_class($this) . "->deploy(): writing to " . $filename);
-        //MintHCM start #117539
-        if($ESList == true){
-            $this->_saveToFileESList($filename, $layoutDefinitions, $ESListViewDefs);
-        } else {
-            $this->_saveToFile($filename, $layoutDefinitions);
-        } //MintHCM end
+        
+        switch ($view) {
+            case MB_ESLISTVIEW:
+                $this->_saveToFileESList($filename, $layoutDefinitions, $mint4viewdefs);
+                break;
+            case MB_RECORDVIEW:
+                $this->_saveToFileRecordView($filename, $layoutDefinitions, $mint4viewdefs);
+                break;
+            default:
+                $this->_saveToFile($filename, $layoutDefinitions);
+                break;
+        }
 
         // now clear the cache so that the results are immediately visible
         include_once('include/TemplateHandler/TemplateHandler.php');
         TemplateHandler::clearCache($this->_moduleName);
+    }
+
+    protected function parseMint4ViewsVariables($view)
+    {
+        $this->_view = $view;
+        $template_file = '';
+        switch ($view) {
+            case MB_ESLISTVIEW:
+                $this->_sourceFilename = "custom/history/modules/".$this->_moduleName."/metadata/eslistviewdefs.php"; 
+                $template_file = "modules/ModuleBuilder/viewTemplates/eslistviewdefs.php";
+                break;
+            case MB_RECORDVIEW:
+                $this->_sourceFilename = "custom/history/modules/".$this->_moduleName."/metadata/recordviewdefs.php";
+                $template_file = "modules/ModuleBuilder/viewTemplates/recordviewdefs.php";
+                break;
+        }
+
+        $custom_file = $this->getFileName($this->_view, $this->_moduleName, null, MB_CUSTOMMETADATALOCATION);
+        $base_file = $this->getFileName($this->_view, $this->_moduleName, null, MB_BASEMETADATALOCATION);
+        $module_name = $this->_moduleName;
+        if(file_exists($custom_file)) {
+            $filename = $custom_file;
+        } else if (file_exists($base_file)) {
+            $filename = $base_file;
+        } else {
+            $filename = $template_file;
+            $module_name = '';
+        }
+
+        include $filename;
+
+        switch ($view) {
+            case MB_ESLISTVIEW:
+                return $ESListViewDefs[$module_name];
+            case MB_RECORDVIEW:
+                return $viewdefs[$module_name];
+        }
     }
 
     /**
@@ -419,14 +439,15 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
             MB_EDITVIEW => 'editviewdefs',
             MB_DETAILVIEW => 'detailviewdefs',
             MB_QUICKCREATE => 'quickcreatedefs',
-            'eslistview' => 'eslistviewdefs',  //CR zdefiniuj stałą
+            MB_ESLISTVIEW => 'eslistviewdefs',
+            MB_RECORDVIEW => 'recordviewdefs',
         );
 
         //In a deployed module, we can check for a studio module with file name overrides.
         $sm = StudioModuleFactory::getStudioModule($moduleName);
         foreach ($sm->sources as $file => $def) {
             if (!empty($def['view'])) {
-                $filenames[$def['view']] = substr($file, 0, strlen($file) - 4);
+                $filenames[$def['view']] = substr((string) $file, 0, strlen((string) $file) - 4);
             }
         }
 
@@ -492,7 +513,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
                 if (is_string($val)) {
                     foreach ($replacements as $var => $rep) {
                         $newkey = str_replace($var, $rep, $newkey);
-                        $newval = str_replace($var, $rep, $newval);
+                        $newval = str_replace($var, $rep, (string) $newval);
                     }
                 }
                 $ret[$newkey] = $newval;

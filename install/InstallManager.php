@@ -2,6 +2,7 @@
 
 require 'InstallController.php';
 
+#[\AllowDynamicProperties]
 class InstallManager
 {
     private $route;

@@ -24,6 +24,7 @@
  */
 require_once 'modules/AOW_WorkFlow/aow_utils.php';
 require_once 'modules/AOR_Reports/aor_utils.php';
+#[\AllowDynamicProperties]
 class AOR_ReportsViewDetail extends ViewDetail
 {
     private function getReportParameters()
@@ -37,9 +38,9 @@ class AOR_ReportsViewDetail extends ViewDetail
             if (!$condition->parameter) {
                 continue;
             }
-            $condition->module_path = implode(":", unserialize(base64_decode($condition->module_path)));
+            $condition->module_path = implode(":", unserialize(base64_decode($condition->module_path),['allowed_classes' => false]));
             if ($condition->value_type == 'Date') {
-                $condition->value = unserialize(base64_decode($condition->value));
+                $condition->value = unserialize(base64_decode($condition->value),['allowed_classes' => false]);
             }
             $condition_item = $condition->toArray();
             $display = getDisplayForField($condition->module_path, $condition->field, $this->bean->report_module);

@@ -23,6 +23,7 @@
  *
  * @author SalesAgility Ltd <support@salesagility.com>
  */
+#[\AllowDynamicProperties]
 class AOS_Invoices_sugar extends Basic
 {
     public $new_schema = true;
@@ -105,8 +106,8 @@ class AOS_Invoices_sugar extends Basic
         return false;
     }
 
-        public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
-            return false;
-        }
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set') {
+        return false;
+    }
 
 }

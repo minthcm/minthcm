@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -85,8 +85,7 @@ if (isset($admin->settings['massemailer_email_copy'])) {
 $emailsPerSecond = 10;
 
 $mail->setMailerForSystem();
-$mail->From = "no-reply@example.com";
-$mail->FromName = "no-reply";
+$mail->setSystemFromAddress();
 $mail->ContentType = "text/html";
 
 $campaign_id = null;
@@ -230,32 +229,29 @@ do {
                 $mail->Mailer = 'smtp';
                 $mail->Host = $outboundEmailAccount->mail_smtpserver;
                 $mail->Port = $outboundEmailAccount->mail_smtpport;
-                if ($outboundEmailAccount->mail_smtpssl == 1) {
-                    $mail->SMTPSecure = 'ssl';
-                } elseif ($outboundEmailAccount->mail_smtpssl == 2) {
-                    $mail->SMTPSecure = 'tls';
-                } else {
-                    $mail->SMTPSecure = '';
-                }
-                if ($outboundEmailAccount->mail_smtpauth_req) {
-                    $mail->SMTPAuth = true;
-                    $mail->Username = $outboundEmailAccount->mail_smtpuser;
-                    $mail->Password = $outboundEmailAccount->mail_smtppass;
-                } else {
-                    $mail->SMTPAuth = false;
-                    $mail->Username = '';
-                    $mail->Password = '';
-                }
+
+                $mail->setSecureProtocol($ssltls ?? false);
+                $mail->initSMTPAuth(
+                    $outboundEmailAccount->auth_type ?? '',
+                    $outboundEmailAccount->external_oauth_connection_id ?? '',
+                    $outboundEmailAccount->mail_smtpuser ?? '',
+                    $outboundEmailAccount->mail_smtppass ?? '',
+                );
             } else {
                 $mail->Mailer = 'sendmail';
             }
 
-            $mail->oe->mail_smtpauth_req = $outboundEmailAccount->mail_smtpauth_req;
-            $mail->oe->mail_smtpuser = $outboundEmailAccount->mail_smtpuser;
-            $mail->oe->mail_smtppass = $outboundEmailAccount->mail_smtppass;
-            $mail->oe->mail_smtpserver = $outboundEmailAccount->mail_smtpserver;
-            $mail->oe->mail_smtpport = $outboundEmailAccount->mail_smtpport;
-            $mail->oe->mail_smtpssl = $outboundEmailAccount->mail_smtpssl;
+            $mail->oe->auth_type = $outboundEmailAccount->auth_type ?? '';
+            $mail->oe->external_oauth_connection_id = $outboundEmailAccount->external_oauth_connection_id ?? '';
+            $mail->oe->mail_smtpauth_req = $outboundEmailAccount->mail_smtpauth_req ?? '';
+            $mail->oe->mail_smtpuser = $outboundEmailAccount->mail_smtpuser ?? '';
+            $mail->oe->mail_smtppass = $outboundEmailAccount->mail_smtppass ?? '';
+            $mail->oe->mail_smtpserver = $outboundEmailAccount->mail_smtpserver ?? '';
+            $mail->oe->mail_smtpport = $outboundEmailAccount->mail_smtpport ?? '';
+            $mail->oe->mail_smtpssl = $outboundEmailAccount->mail_smtpssl ?? '';
+
+            $mail->FromName = $outboundEmailAccount->smtp_from_name ?? $outboundEmailAccount->mail_smtpuser;
+            $mail->From = $outboundEmailAccount->smtp_from_address ?? $outboundEmailAccount->mail_smtpuser;
         }
 
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0')) {
@@ -268,9 +264,9 @@ do {
             if ($confirmOptInEnabled) {
                 $emailAddress = BeanFactory::newBean('EmailAddresses');
                 $emailAddress->email_address = $emailAddress->getAddressesByGUID($row['related_id'], $row['related_type']);
-                
+
                 $now = TimeDate::getInstance()->nowDb();
-                    
+
                 if (!$emailman->sendOptInEmail($emailAddress, $row['related_type'], $row['related_id'])) {
                     $GLOBALS['log']->fatal("Confirm Opt In Email delivery FAILURE:" . print_r($row, true));
                     $emailAddress->confirm_opt_in_fail_date = $now;
@@ -285,7 +281,7 @@ do {
                         $log->fatal('Incorrect Email Address');
                         return false;
                     }
-                    
+
                     $emailAddress->retrieve($emailAddressString);
                     $emailAddress->confirm_opt_in_sent_date = $now;
                     $emailAddress->save();

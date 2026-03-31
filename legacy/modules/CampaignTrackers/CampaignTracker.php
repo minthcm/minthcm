@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@
 
 
 
+#[\AllowDynamicProperties]
 class CampaignTracker extends SugarBean
 {
     /* Foreach instance of the bean you will need to access the fields in the table.
@@ -158,7 +159,7 @@ class CampaignTracker extends SugarBean
         }
         $admin=BeanFactory::newBean('Administration');
         $admin->retrieveSettings('massemailer'); //retrieve all admin settings.
-        if (isset($admin->settings['massemailer_tracking_entities_location_type']) and $admin->settings['massemailer_tracking_entities_location_type']=='2'  and isset($admin->settings['massemailer_tracking_entities_location'])) {
+        if (isset($admin->settings['massemailer_tracking_entities_location_type']) && $admin->settings['massemailer_tracking_entities_location_type']=='2' && isset($admin->settings['massemailer_tracking_entities_location'])) {
             $this->message_url=$admin->settings['massemailer_tracking_entities_location'];
         } else {
             $this->message_url=$sugar_config['site_url'];

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -140,7 +140,7 @@ $mod_strings = array(
     'LBL_TO_ADDRS' => 'To',
     'LBL_USERS_SUBPANEL_TITLE' => 'Users',
     'LBL_USERS' => 'Users',
-
+    'LBL_TO_ADDRS_NAMES' => 'Recipient Names',
     'LNK_CALL_LIST' => 'Calls',
     'LBL_EMAIL_RELATE' => 'Related To',
     'LNK_EMAIL_TEMPLATE_LIST' => 'View Email Templates',
@@ -165,7 +165,8 @@ $mod_strings = array(
     'LBL_LIST_FORM_SENT_TITLE' => 'Sent Emails',
     'LBL_LIST_FORM_TITLE' => 'Email List',
     'LBL_LIST_FROM_ADDR' => 'From',
-    'LBL_LIST_RELATED_TO' => 'Recipient Type',
+    //'LBL_LIST_RELATED_TO' => 'Recipient Type' (previous value)
+    'LBL_LIST_RELATED_TO' => 'Related To',
     'LBL_LIST_SUBJECT' => 'Subject',
     'LBL_LIST_TO_ADDR' => 'To',
     'LBL_LIST_TYPE' => 'Type',
@@ -263,7 +264,6 @@ $mod_strings = array(
     'LBL_HAS_ATTACHMENT_INDICATOR' => 'Has Attachments',
     'ERR_MISSING_REQUIRED_FIELDS' => 'Missing required field',
     'ERR_INVALID_REQUIRED_FIELDS' => 'Invalid required field',
-    'LBL_FILTER_BY_RELATED_BEAN' => 'Only show recipients related to',
     'LBL_ADD_INBOUND_ACCOUNT' => 'Add',
     'LBL_ADD_OUTBOUND_ACCOUNT' => 'Add',
     'LBL_EMAIL_ACCOUNTS_INBOUND' => 'Mail Account Properties',
@@ -286,9 +286,7 @@ $mod_strings = array(
     'LBL_MAILBOX_TYPE_PERSONAL' => 'Personal',
     'LBL_MAILBOX_TYPE_GROUP' => 'Group',
     'LBL_MAILBOX_TYPE_GROUP_FOLDER' => 'Group - Auto-Import',
-    'LBL_SEARCH_FOR' => 'Search For',
     'LBL_EMAIL_INBOUND_TYPE_HELP' => '<b>Personal</b>: Email account accessible by you. Only you can manage and import emails from this account.<br><b>Group</b>: Email account accessible by members of specified teams. Team members can manage and import emails from this account.<br><b>Group - auto-import</b>: Email account accessible by members of specified teams. Emails are automatically imported as records.',
-    'LBL_ADDRESS_BOOK_SEARCH_HELP' => 'Enter an email address, First Name, Last Name or Account Name to find recipients.',
     'LBL_TEST_SETTINGS' => 'Test Settings',
     'LBL_EMPTY_EMAIL_BODY' => '<p><span style="color: #888888;"><em>This Message Has No Content</em></span></p>',
     'LBL_HAS_EMPTY_EMAIL_SUBJECT' => 'Please specify the subject',
@@ -400,5 +398,40 @@ $mod_strings = array(
    'LBL_CANDIDATES_TITLE' => 'Activities:Candidates',
    'LBL_RECRUITMENTS_TITLE' => 'Activities:Recruitments',
 
-   'LBL_FROM_ADDR_NAME' => 'From Address'
+   'LBL_FROM_ADDR_NAME' => 'From Address',
+   'LBL_EMAILS_EMPLOYEES_REL' => 'Emails:Employees',
+   'LBL_ORPHANED_COMMENT' => 'Emails that exist in MintHCM but were deleted from the email server.',
+   'LBL_LAST_SYNCED_COMMENT' => 'Date and time when the email was last synced with the server.',
+   'LBL_FROM_ADDR_NAME_COMMENT' => 'Name of the sender of the email.',
+   'LBL_REPLY_TO_ADDR_COMMENT' => 'Email address for replies.',
+   'LBL_TO_ADDRS_NAMES_COMMENT' => 'Comma-separated list of recipient names in the To field.',
+   'LBL_CC_ADDRS_NAMES_COMMENT' => 'Comma-separated list of recipient names in the CC field.',
+   'LBL_BCC_ADDRS_NAMES_COMMENT' => 'Comma-separated list of recipient names in the BCC field.',
+   'LBL_IMAP_KEYWORDS_COMMENT' => 'IMAP flags or keywords associated with the email.',
+   'LBL_RAW_SOURCE_COMMENT' => 'Raw source of the email message.',
+   'LBL_DESCRIPTION_HTML_COMMENT' => 'HTML body of the email message.',
+   'LBL_DESCRIPTION_COMMENT' => 'Plain text body of the email message.',
+   'LBL_DATE_SENT_RECEIVED_COMMENT' => 'Date and time when the email was sent or received.',
+   'LBL_MESSAGE_ID_COMMENT' => 'Unique message ID of the email from the transport system.',
+   'LBL_SUBJECT_COMMENT' => 'Subject of the email message.',
+   'LBL_LIST_TYPE_COMMENT' => 'Type of email (e.g., draft, inbound, outbound).',
+   'LBL_STATUS_COMMENT' => 'Current status of the email (sent, archived, read, etc.).',
+   'LBL_EMAIL_FLAGGED_COMMENT' => 'Indicates if the email is flagged.',
+   'LBL_EMAIL_REPLY_TO_STATUS_COMMENT' => 'If replying to this email, this field stores the original email\'s reply-to status.',
+   'LBL_INTENT_COMMENT' => 'Target of action used for inbound email assignment.',
+   'LBL_MAILBOX_ID_COMMENT' => 'ID of the mailbox associated with this email.',
+   'LBL_UID_COMMENT' => 'Unique identifier of the email within the mailbox.',
+   'LBL_MSGNO_COMMENT' => 'Message sequence number within the mailbox.',
+   'LBL_FOLDER_COMMENT' => 'Mailbox folder in which the email is stored.',
+   'LBL_FOLDER_TYPE_COMMENT' => 'Type of folder (Inbox, Sent, Draft, etc.).',
+   'LBL_INBOUND_EMAIL_RECORD_COMMENT' => 'Reference to the inbound email record.',
+   'LBL_IS_IMPORTED_COMMENT' => 'Indicates if the email was imported from an external system.',
+   'LBL_IS_ONLY_PLAIN_TEXT_COMMENT' => 'Indicates if the email contains only plain text (no HTML).',
+   'LBL_CATEGORY_COMMENT' => 'Category of the email.',
+   'LBL_PARENT_NAME_COMMENT' => 'Related record the email is associated with (module and name).',
+   'LBL_HAS_ATTACHMENT_COMMENT' => 'Indicates whether the email has any file attachments.',
+    // Address book (not in current use)
+    'LBL_ADDRESS_BOOK_SEARCH_HELP' => 'Enter an email address, First Name, Last Name or Account Name to find recipients.',
+    'LBL_SEARCH_FOR' => 'Search For',
+    'LBL_FILTER_BY_RELATED_BEAN' => 'Only show recipients related to',
 );

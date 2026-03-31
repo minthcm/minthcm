@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,19 +54,20 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('include/MVC/View/SugarView.php');
         
-class ImportViewError extends SugarView 
-{	
+#[\AllowDynamicProperties]
+class ImportViewError extends SugarView
+{
     /**
      * @see SugarView::getMenu()
      */
     public function getMenu(
         $module = null
-        )
-    {
+        ) {
         global $mod_strings, $current_language;
         
-        if ( empty($module) )
+        if (empty($module)) {
             $module = $_REQUEST['import_module'];
+        }
         
         $old_mod_strings = $mod_strings;
         $mod_strings = return_module_language($current_language, $module);
@@ -76,37 +77,51 @@ class ImportViewError extends SugarView
         return $returnMenu;
     }
     
- 	/**
+    /**
      * @see SugarView::_getModuleTab()
      */
- 	protected function _getModuleTab()
+    protected function _getModuleTab()
     {
         global $app_list_strings, $moduleTabMap;
         
- 		// Need to figure out what tab this module belongs to, most modules have their own tabs, but there are exceptions.
-        if ( !empty($_REQUEST['module_tab']) )
+        // Need to figure out what tab this module belongs to, most modules have their own tabs, but there are exceptions.
+        if (!empty($_REQUEST['module_tab'])) {
             return $_REQUEST['module_tab'];
-        elseif ( isset($moduleTabMap[$_REQUEST['import_module']]) )
+        } elseif (isset($moduleTabMap[$_REQUEST['import_module']])) {
             return $moduleTabMap[$_REQUEST['import_module']];
+        }
         // Default anonymous pages to be under Home
-        elseif ( !isset($app_list_strings['moduleList'][$_REQUEST['import_module']]) )
+        elseif (!isset($app_list_strings['moduleList'][$_REQUEST['import_module']])) {
             return 'Home';
-        else
+        } else {
             return $_REQUEST['import_module'];
- 	}
- 	
- 	/** 
+        }
+    }
+    
+    /**
      * @see SugarView::display()
      */
- 	public function display()
+    public function display()
     {
-        $this->ss->assign("IMPORT_MODULE", $_REQUEST['import_module']);
+        $module = $_REQUEST['import_module'] ?? '';
+        if (!empty($module) && !isAllowedModuleName($module)) {
+            throw new InvalidArgumentException('Invalid target_module');
+        }
+
+        $source = $_REQUEST['source'] ?? '';
+        $result = preg_match("/^[\w\-\_\.\:]+$/", $source);
+        if (!empty($source) && empty($result)) {
+            throw new InvalidArgumentException('Invalid source');
+        }
+
+        $this->ss->assign("IMPORT_MODULE", $module);
         $this->ss->assign("ACTION", 'Step1');
-        $this->ss->assign("MESSAGE",$_REQUEST['message']);
-        $this->ss->assign("SOURCE","");
-        if ( isset($_REQUEST['source']) )
-            $this->ss->assign("SOURCE", $_REQUEST['source']);
-        
+        $this->ss->assign("MESSAGE", $_REQUEST['message'] ?? '');
+        $this->ss->assign("SOURCE", "");
+        if (isset($_REQUEST['source'])) {
+            $this->ss->assign("SOURCE", $source);
+        }
+
         $this->ss->display('modules/Import/tpls/error.tpl');
     }
 }

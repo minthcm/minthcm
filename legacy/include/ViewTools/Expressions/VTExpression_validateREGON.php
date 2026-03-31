@@ -23,8 +23,8 @@ class VTExpression_validateREGON extends VTExpression {
 
    /**
     * Warning! if backend is not set, return false
-    * @param Array 
-    * @return boolean
+    * @param array 
+    * @return bool
     * Please set input params as Array
     */
    public function backend($arguments = array()) {
@@ -42,7 +42,7 @@ class VTExpression_validateREGON extends VTExpression {
 
    protected function countChecksum($regon_array) {
       $sum = 0;
-      $lenght = count($regon_array);
+      $lenght = is_countable($regon_array) ? count($regon_array) : 0;
       if ( $lenght == 9 ) {
          $weight_array = array( '8', '9', '2', '3', '4', '5', '6', '7' );
       } else {
@@ -58,7 +58,7 @@ class VTExpression_validateREGON extends VTExpression {
 
    /**
     * Warning! if frontend is not set, return false
-    * @return type
+    * @return string
     */
    public function frontend() {
       return <<<EOQ

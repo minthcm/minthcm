@@ -143,6 +143,9 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
    $( document ).on( 'change', 'select.vt_formulaSelector', function () {
       viewTools.form.fieldChangeEvent( this );
    } );
+   $( document ).on( 'click', 'input[type="checkbox"].vt_formulaSelector', function () {
+    viewTools.form.fieldChangeEvent( this );
+   } );
    new MutationObserver(() => {
       //Init save events
       if ( viewTools.cache.form_save !== undefined ) {

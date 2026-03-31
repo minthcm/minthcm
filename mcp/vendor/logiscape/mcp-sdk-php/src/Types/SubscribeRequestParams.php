@@ -48,3 +48,4 @@ class SubscribeRequestParams implements McpModel {
     public function jsonSerialize(): mixed {
         return array_merge(['uri' => $this->uri], $this->extraFields);
     }
+}

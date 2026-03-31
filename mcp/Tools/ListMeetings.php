@@ -3,9 +3,13 @@
 namespace MintMCP\Tools;
 
 use Mcp\Types\ToolInputSchema;
+use MintMCP\Tools\Utils\DateTimeConversion;
+use MintMCP\Tools\Traits\PaginationTrait;
 
 class ListMeetings extends AbstractMCPTool
 {
+    use PaginationTrait;
+
     public function getName(): string
     {
         return 'list_meetings';
@@ -18,34 +22,28 @@ class ListMeetings extends AbstractMCPTool
 
     public function getInputSchema(): ToolInputSchema
     {
+        $properties = $this->getPaginationSchemaProperties();
+        
+        $properties['search'] = [
+            'type' => 'string',
+            'description' => 'Search phrase in meeting name'
+        ];
+        
+        $properties['date_from'] = [
+            'type' => 'string',
+            'description' => 'Start date (YYYY-MM-DD)',
+            'format' => 'date'
+        ];
+        
+        $properties['date_to'] = [
+            'type' => 'string',
+            'description' => 'End date (YYYY-MM-DD)',
+            'format' => 'date'
+        ];
+        
         return ToolInputSchema::fromArray([
             'type' => 'object',
-            'properties' => [
-                'limit' => [
-                    'type' => 'integer',
-                    'description' => 'Maximum number of meetings to retrieve',
-                    'default' => 20
-                ],
-                'offset' => [
-                    'type' => 'integer',
-                    'description' => 'Offset for pagination',
-                    'default' => 0
-                ],
-                'search' => [
-                    'type' => 'string',
-                    'description' => 'Search phrase in meeting name'
-                ],
-                'date_from' => [
-                    'type' => 'string',
-                    'description' => 'Start date (YYYY-MM-DD)',
-                    'format' => 'date'
-                ],
-                'date_to' => [
-                    'type' => 'string',
-                    'description' => 'End date (YYYY-MM-DD)',
-                    'format' => 'date'
-                ]
-            ]
+            'properties' => $properties
         ]);
     }
 
@@ -63,9 +61,8 @@ class ListMeetings extends AbstractMCPTool
             chdir('../legacy');
             $searchParams = $this->buildSearchParams($arguments);
             $meetings = $this->getMeetingsList($searchParams);
-            $result = $this->formatMeetings($meetings['list'] ?? []);
+            $result = $this->formatMeetings($meetings, $arguments);
             chdir('../mcp');
-
 
             return $this->createResult([
                 $this->createJsonContent($result)
@@ -79,11 +76,13 @@ class ListMeetings extends AbstractMCPTool
 
     private function buildSearchParams($arguments): array
     {
+        [$offset, $limit] = $this->processPaginationParams($arguments);
+        
         return [
             'module' => 'Meetings',
-            'limit' => $arguments->limit ?? 20,
-            'offset' => $arguments->offset ?? 0,
-            'where' => $this->buildWhereString($arguments)
+            'limit' => $limit,
+            'offset' => $offset,
+            'where' => $this->buildWhereString($arguments),
         ];
     }
 
@@ -108,10 +107,10 @@ class ListMeetings extends AbstractMCPTool
             $where[] = "meetings.name LIKE '%" . $db->quote($arguments->search) . "%'";
         }
         if (!empty($arguments->date_from)) {
-            $where[] = "meetings.date_start >= '" . $db->quote($arguments->date_from) . " 00:00:00'";
+            $where[] = "meetings.date_start >= '" . $db->quote(DateTimeConversion::fromUserTZ($arguments->date_from)) . " 00:00:00'";
         }
         if (!empty($arguments->date_to)) {
-            $where[] = "meetings.date_start <= '" . $db->quote($arguments->date_to) . " 23:59:59'";
+            $where[] = "meetings.date_start <= '" . $db->quote(DateTimeConversion::fromUserTZ($arguments->date_to)) . " 23:59:59'";
         }
 
         return $where;
@@ -127,20 +126,25 @@ class ListMeetings extends AbstractMCPTool
     {
         try {
             $bean = \BeanFactory::getBean('Meetings');
-            $limit = $searchParams['limit'] ?? 20;
+            $limit = $searchParams['limit'] ?? -1;
             $offset = $searchParams['offset'] ?? 0;
             $where = $searchParams['where'] ?? '';
 
-            $list = $bean->get_full_list('', $where, $offset, $limit);
-
-            return [
-                'list' => $list ?? [],
-                'total_count' => count($list ?? [])
-            ];
+            $result = $bean->get_list(
+                '',
+                $where,
+                $offset,
+                $limit,
+                $this->getMaxPaginationLimit($limit)
+            );
+            
+            return $result;
         } catch (\Exception $e) {
             return [
                 'list' => [],
-                'total_count' => 0
+                'row_count' => 0,
+                'next_offset' => -1,
+                'current_offset' => $offset ?? 0,
             ];
         }
     }
@@ -148,48 +152,56 @@ class ListMeetings extends AbstractMCPTool
     /**
      * Formats the list of meetings into a readable array.
      *
-     * @param array $meetings
+     * @param array $meetingsData
+     * @param object $arguments Original arguments
      * @return array
      */
-    private function formatMeetings(array $meetings): array
+    private function formatMeetings(array $meetingsData, $arguments): array
     {
+        $meetings = $meetingsData['list'] ?? [];
+        $offset = $meetingsData['current_offset'] ?? 0;
+        
         if (empty($meetings)) {
             return [
+                'status' => 'success',
                 'message' => 'No meetings found',
-                'count' => 0,
+                'total_count' => 0,
+                'current_offset' => $meetingsData['current_offset'] ?? 0,
+                'next_offset' => -1,
+                'records_returned' => 0,
                 'meetings' => []
             ];
         }
 
-        $result = [
-            'message' => 'Meetings retrieved successfully',
-            'count' => count($meetings),
-            'meetings' => []
-        ];
-
+        $formattedMeetings = [];
         foreach ($meetings as $meeting) {
             $participants = $this->getParticipants($meeting);
 
-            $result['meetings'][] = [
+            $formattedMeetings[] = [
                 'id' => $meeting->id,
                 'name' => $meeting->name,
                 'description' => $meeting->description,
                 'assigned_user_id' => $meeting->assigned_user_id,
-                'assigned_user' => $meeting->assigned_user_name ?? '',
+                'assigned_user_name' => $meeting->assigned_user_name ?? '',
                 'location' => $meeting->location,
-                'date_start' => $meeting->date_start,
-                'date_end' => $meeting->date_end,
+                'date_start' => DateTimeConversion::formatDate($meeting->date_start),
+                'date_end' => DateTimeConversion::formatDate($meeting->date_end),
                 'duration_hours' => $meeting->duration_hours ?? 0,
                 'duration_minutes' => $meeting->duration_minutes ?? 0,
                 'status' => $meeting->status ?? '',
                 'join_url' => $meeting->join_url ?? '',
                 'creator' => $meeting->creator ?? '',
-                'date_modified' => $meeting->date_modified,
+                'date_modified' => DateTimeConversion::formatDate($meeting->date_modified),
                 'participants' => $participants
             ];
         }
 
-        return $result;
+        return $this->formatPaginationData($meetingsData, $offset, [
+            'status' => 'success',
+            'message' => 'Meetings retrieved successfully',
+            'records_returned' => count($formattedMeetings),
+            'meetings' => $formattedMeetings
+        ], $arguments->limit ?? -1);
     }
 
     /**
@@ -202,19 +214,15 @@ class ListMeetings extends AbstractMCPTool
     {
         $participants = [];
 
-        // Assigned user
         if (!empty($meeting->assigned_user_id)) {
-
             $assignedUser = \BeanFactory::getBean('Users', $meeting->assigned_user_id);
-            if (empty($assignedUser->id)) {
-                throw new \Exception("Assigned user to meeting with ID {$meeting->id} not found.");
+            if (!empty($assignedUser->id)) {
+                $participants[] = [
+                    'id' => $assignedUser->id,
+                    'name' => $assignedUser->full_name ?? '',
+                    'module' => 'Users'
+                ];
             }
-
-            $participants[] = [
-                'id' => $assignedUser->id,
-                'name' => $assignedUser->full_name ?? '',
-                'module' => 'Users'
-            ];
         }
 
         // Add related participants

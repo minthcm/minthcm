@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -99,16 +99,6 @@
             <td  scope="row" nowrap>{$MOD.MAX_DASHLETS}: </td>
             <td>
                 <input type='text' size='4' name='max_dashlets_homepage' value='{$config.max_dashlets_homepage}'>
-            </td>
-            <td  scope="row" nowrap>{$MOD.LBL_USE_REAL_NAMES}: &nbsp;{sugar_help text=$MOD.LBL_USE_REAL_NAMES_DESC}</td>
-            {if !empty($config.use_real_names)}
-                {assign var='use_real_names' value='CHECKED'}
-            {else}
-                {assign var='use_real_names' value=''}
-            {/if}
-            <td >
-                <input type='hidden' name='use_real_names' value='false'>
-                <input name='use_real_names'  type="checkbox" value="true" {$use_real_names}>
             </td>
         </tr>
         <tr>

@@ -11,7 +11,7 @@
         <MintButton
             @click="store.activeView = 'user-list'"
             icon="mdi-plus"
-            :text="languages.label('LBL_GIVE_KUDOS')"
+            :text="$vuetify.display.mdAndDown ? '' : languages.label('LBL_GIVE_KUDOS')"
             variant="primary"
             size="medium"
             class="ml-auto"

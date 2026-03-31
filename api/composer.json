@@ -26,7 +26,8 @@
         "php-di/php-di": "^6.3",
         "symfony/cache": "^5.4",
         "doctrine/annotations": "^2.0",
-        "ramsey/uuid-doctrine": "^1.8"
+        "ramsey/uuid-doctrine": "^1.8",
+        "league/oauth2-server": "^8.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5"

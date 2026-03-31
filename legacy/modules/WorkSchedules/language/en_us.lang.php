@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -85,7 +85,7 @@ $mod_strings = array(
     'LBL_NAME' => 'Name',
     'LBL_NEW_FORM_TITLE' => 'Create Daily Work Schedule',
     'LBL_NOT_EMPTY_WORK_SCHEDULES' => 'The work schedule plan is linked to logged send time. Delete releated log entries first',
-    'LBL_OCCASIONAL_LEAVE_TYPE' => 'Type of Occasional Leave',
+    'LBL_TYPE_OF_SPECIAL_LEAVE' => 'Type of Special Leave',
     'LBL_REMOVE' => 'Remove',
     'LBL_REMOVE_ALL_RECURRENCES' => 'Delete all cycles',
     'LBL_REPEAT_COUNT' => 'Cycles Count',
@@ -139,6 +139,7 @@ $mod_strings = array(
     'LBL_ERR_DELEGATION_DURATION_NOT_VALID' => 'Delegation Duration (h) can\'t be a negative number',
     'LBL_DEPUTY' => 'Deputy',
     'LBL_DEPUTY_NAME' => 'Deputy',
+    'LBL_DEPUTY_ID' => 'Deputy (ID)',
     'LBL_LEAVE_ALERT' => "%s added a/an %s on %s.",  
     'LBL_ACCEPT' => 'Accept',
     'LBL_PERIODICITY_ERROR' => 'Please select days on which the Work Schedule should be repeated.',
@@ -146,4 +147,7 @@ $mod_strings = array(
 
     'LBL_MASSCONFIRMATION_POPUP_TEXT' => 'Mass confirmation has been arranged and will be completed shortly',
     'LBL_MASSCONFIRMATION_POPUP_ERROR' => 'Mass confirmation could not be completed',
+    'LBL_ACCEPTANCE_ACTION_ERROR' => 'An error occured while trying to accept this work schedule',
+    'LBL_UNDO_ACCEPTANCE_ACTION_ERROR' => 'An error occured while trying to undo acceptance for this work schedule',
+    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

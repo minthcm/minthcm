@@ -56,7 +56,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('keydown', handleKeyDown)
 })
 
-function handleKeyDown(event) {
+async function handleKeyDown(event) {
     if (store.isLoading || document.querySelectorAll('.v-menu .v-list').length > 0) {
         return
     }
@@ -65,15 +65,15 @@ function handleKeyDown(event) {
             router.push({ name: 'dashboard' })
             return
         }
-        handleNextStep()
+        await handleNextStep()
     }
     if ((event.key === 'Escape' || event.key === 'Esc') && store.currentStepNumber !== 0 && !store.isFinished) {
         store.prevStep()
     }
 }
 
-function handleNextStep() {
-    if (!setupWizardStepComponent.value?.validate || setupWizardStepComponent.value.validate()) {
+async function handleNextStep() {
+    if (!setupWizardStepComponent.value?.validate || await setupWizardStepComponent.value.validate()) {
         store.nextStep()
     }
 }

@@ -10,9 +10,9 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * formatting in the SugarCRM application.
  *
  */
+#[\AllowDynamicProperties]
 class Currency extends SugarBean {
 
    // Stored fields
@@ -359,7 +360,7 @@ function currency_format_number($amount, $params = array()) {
  *        String  $params['type'] - pass in 'pdf' for pdf currency symbol conversion
  *        String  $params['currency_id'] - currency_id to retreive, defaults to current user
  *        String  $params['human'] - formatting that truncates the first thousands and appends "k"
- * @return String formatted currency value
+ * @return string formatted currency value
  * @see include/Localization/Localization.php
  */
 function format_number($amount, $round = null, $decimals = null, $params = array()) {
@@ -433,14 +434,16 @@ function format_number($amount, $round = null, $decimals = null, $params = array
       $symbol = $locale->translateCharset($symbol, 'UTF-8', $locale->getExportCharset());
    }
 
+   $checkAmount = 0;
+
    if ( empty($params['human']) ) {
       $amount = number_format(round($amount, $round), $decimals, $dec_sep, $num_grp_sep);
       $amount = format_place_symbol($amount, $symbol, (empty($params['symbol_space']) ? false : true), $currency); // View Tools #40674 ($currency)
    } else {
       // If amount is more greater than a thousand(positive or negative)
-      if ( strpos($amount, '.') > 0 ) {
-         $checkAmount = strlen(substr($amount, 0, strpos($amount, '.')));
-      }
+      if (strpos((string) $amount, '.') > 0) {
+         $checkAmount = strlen(substr((string) $amount, 0, strpos((string) $amount, '.')));
+     }
 
       if ( $checkAmount >= 1000 || $checkAmount <= -1000 ) {
          $amount = round(($amount / 1000), 0);
@@ -491,20 +494,20 @@ function unformat_number($string) {
    if ( !isset($currency) ) {
       global $current_user;
       $currency = BeanFactory::newBean('Currencies');
-      if ( !empty($current_user->id) ) {
+      if ( !empty($current_user->id) && !empty($currency) ) {
          if ( $current_user->getPreference('currency') ) {
             $currency->retrieve($current_user->getPreference('currency'));
          } else {
             $currency->retrieve('-99'); // use default if none set
          }
-      } else {
+      } else if(!empty($currency)) {
          $currency->retrieve('-99'); // use default if none set
       }
    }
 
    $seps = get_number_separators();
    // remove num_grp_sep and replace decimal separator with decimal
-   $string = trim(str_replace(array( $seps[0], $seps[1], $currency->symbol ), array( '', '.', '' ), $string));
+   $string = trim(str_replace(array( $seps[0], $seps[1], $currency->symbol ?? '' ), array( '', '.', '' ), $string));
    if ( preg_match('/^[+-]?\d(\.\d+)?[Ee]([+-]?\d+)?$/', $string) ) {
       $string = sprintf("%.0f", $string);
    }//for scientific number format. After round(), we may get this number type.
@@ -654,9 +657,15 @@ function getCurrencyDropDown($focus, $field = 'currency_id', $value = '', $view 
          $html .= $currency->getJavascript();
       }
       return $html;
-   } 
-      $currency = BeanFactory::newBean('Currencies');
+   }
+   if($view === 'Eslist'){
+      chdir('../legacy');
+   }
+   $currency = BeanFactory::newBean('Currencies');
    $currency->retrieve($value);
+   if($view === 'Eslist'){
+      chdir('../api');
+   }
    return $currency->name;
 }
 

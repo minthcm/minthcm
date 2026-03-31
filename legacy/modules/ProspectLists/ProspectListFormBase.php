@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,6 +54,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  ********************************************************************************/
 
 
+#[\AllowDynamicProperties]
 class ProspectListFormBase
 {
     public function getForm($prefix, $mod='', $form='')
@@ -78,10 +79,10 @@ class ProspectListFormBase
 
         $the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
         $the_form .= <<<EOQ
-		<form name="${prefix}ProspectListSave" onSubmit="return check_form('${prefix}ProspectListSave');" method="POST" action="index.php">
-			<input type="hidden" name="${prefix}module" value="ProspectLists">
-			<input type="hidden" name="${prefix}action" value="Save">
-			<input type="hidden" name="assigned_user_id" value='${user_id}'>
+		<form name="{$prefix}ProspectListSave" onSubmit="return check_form('{$prefix}ProspectListSave');" method="POST" action="index.php">
+			<input type="hidden" name="{$prefix}module" value="ProspectLists">
+			<input type="hidden" name="{$prefix}action" value="Save">
+			<input type="hidden" name="assigned_user_id" value='{$user_id}'>
 EOQ;
 
         $the_form .= $this->getFormBody($prefix, $mod, $prefix."ProspectListSave");

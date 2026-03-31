@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -562,7 +562,7 @@ class SugarApplication
             if ($dieIfInvalid) {
                 header("Cache-Control: no-cache, must-revalidate");
                 $ss = new Sugar_Smarty;
-                $ss->assign('host', $http_host[0]);
+                $ss->assign('host', securexss($http_host[0]));
                 $ss->assign('action', $this->controller->action);
                 $ss->assign('whiteListString', $whiteListString);
                 $ss->display('include/MVC/View/tpls/xsrf.tpl');
@@ -581,7 +581,7 @@ class SugarApplication
                         $whiteListString = "'" . implode("', '", $whiteListActions) . "'";
 
                         $ss = new Sugar_Smarty;
-                        $ss->assign('host', $http_ref['host']);
+                        $ss->assign('host', securexss($http_ref['host']));
                         $ss->assign('action', $this->controller->action);
                         $ss->assign('whiteListString', $whiteListString);
                         $ss->display('include/MVC/View/tpls/xsrf.tpl');
@@ -819,7 +819,7 @@ EOF;
         }
         if ($domain === null) {
             if (isset($_SERVER["HTTP_HOST"])) {
-                $domain = $_SERVER["HTTP_HOST"];
+                $domain = preg_replace('/(\:\d+)$/', '', $_SERVER["HTTP_HOST"]); // Fix #9898 Invalid cookie domain when using non-standard HTTP Port.
             } else {
                 $domain = 'localhost';
             }

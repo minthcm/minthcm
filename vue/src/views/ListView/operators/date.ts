@@ -1,13 +1,16 @@
+import dateInput from '../inputs/date'
+import numericInput from '../inputs/numeric'
+
 export default {
     equal: {
         label: 'LBL_ESLIST_EQUAL',
-        inputs: [{ type: 'date', label: 'LBL_ESLIST_DATE' }],
+        inputs: [dateInput],
         filters: [{ op: 'range', value: { gte: '{0}', lte: '{0}' } }],
     },
     not_equal: {
         label: 'LBL_ESLIST_NOT_EQUAL',
         not: true,
-        inputs: [{ type: 'date', label: 'LBL_ESLIST_DATE' }],
+        inputs: [dateInput],
         filters: [{ op: 'range', value: { gte: '{0}', lte: '{0}' } }],
     },
 
@@ -66,28 +69,32 @@ export default {
     },
     above_n_month_ago: {
         label: 'LBL_ESLIST_ABOVE_N_MONTHS_AGO',
-        inputs: [{ type: 'numeric', label: 'LBL_ESLIST_N_MONTHS' }],
+        inputs: [{ ...numericInput, label: 'LBL_ESLIST_N_MONTHS' }],
         filters: [{ op: 'range', value: { lt: 'now-{0}M/M' } }],
     },
     in_the_past: {
         label: 'LBL_ESLIST_IN_THE_PAST',
         filters: [{ op: 'range', value: { lt: 'now' } }],
     },
+    in_the_future: {
+        label: 'LBL_ESLIST_IN_THE_FUTURE',
+        filters: [{ op: 'range', value: { gt: 'now' } }],
+    },
     after: {
         label: 'LBL_ESLIST_AFTER',
-        inputs: [{ type: 'date', label: 'LBL_ESLIST_DATE' }],
+        inputs: [dateInput],
         filters: [{ op: 'range', value: { gte: '{0}' } }],
     },
     before: {
         label: 'LBL_ESLIST_BEFORE',
-        inputs: [{ type: 'date', label: 'LBL_ESLIST_DATE' }],
+        inputs: [dateInput],
         filters: [{ op: 'range', value: { lte: '{0}' } }],
     },
     between: {
         label: 'LBL_ESLIST_BETWEEN',
         inputs: [
-            { type: 'date', label: 'LBL_ESLIST_FROM' },
-            { type: 'date', label: 'LBL_ESLIST_TO' },
+            { ...dateInput, label: 'LBL_ESLIST_FROM' },
+            { ...dateInput, label: 'LBL_ESLIST_TO' },
         ],
         filters: [{ op: 'range', value: { gte: '{0}', lte: '{1}' } }],
     },

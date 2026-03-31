@@ -9,7 +9,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -86,7 +86,8 @@ $dictionary['Email'] = array(
       'to_addrs_names' => array(
          'name' => 'to_addrs_names',
          'type' => 'varchar',
-         'vname' => 'to_addrs_names',
+         'label' => 'LBL_TO_ADDRS_NAMES',
+         'vname' => 'LBL_TO_ADDRS_NAMES',
          'source' => 'non-db',
          'inline_edit' => false,
       ),
@@ -175,7 +176,16 @@ $dictionary['Email'] = array(
          'dbType' => 'varchar',
          'len' => 100,
          'options' => 'dom_email_status',
-         'options_colors' => 'dom_email_status_colored',
+         'options_colors' => [
+            'archived' => 'yellow',
+            'closed' => 'green',
+            'draft' => 'gray',
+            'read' => 'green',
+            'replied' => 'blue',
+            'sent' => 'green',
+            'send_error' => 'red',
+            'unread' => 'yellow',
+         ],
          'inline_edit' => false,
       ),
       'flagged' => array(
@@ -762,4 +772,42 @@ if(isset($dictionary["Email"]['fields']['date_sent'])) {
 }
 else if(isset($dictionary["Email"]['fields']['date_sent_received'])) {
     $dictionary["Email"]['indices']['dlnc_email']['fields'][] = 'date_sent_received';
+}
+
+foreach ([
+    'orphaned' => 'LBL_ORPHANED_COMMENT',
+    'last_synced' => 'LBL_LAST_SYNCED_COMMENT',
+    'from_addr_name' => 'LBL_FROM_ADDR_NAME_COMMENT',
+    'reply_to_addr' => 'LBL_REPLY_TO_ADDR_COMMENT',
+    'to_addrs_names' => 'LBL_TO_ADDRS_NAMES_COMMENT',
+    'cc_addrs_names' => 'LBL_CC_ADDRS_NAMES_COMMENT',
+    'bcc_addrs_names' => 'LBL_BCC_ADDRS_NAMES_COMMENT',
+    'imap_keywords' => 'LBL_IMAP_KEYWORDS_COMMENT',
+    'raw_source' => 'LBL_RAW_SOURCE_COMMENT',
+    'description_html' => 'LBL_DESCRIPTION_HTML_COMMENT',
+    'description' => 'LBL_DESCRIPTION_COMMENT',
+    'date_sent_received' => 'LBL_DATE_SENT_RECEIVED_COMMENT',
+    'message_id' => 'LBL_MESSAGE_ID_COMMENT',
+    'name' => 'LBL_SUBJECT_COMMENT',
+    'type' => 'LBL_LIST_TYPE_COMMENT',
+    'status' => 'LBL_STATUS_COMMENT',
+    'flagged' => 'LBL_EMAIL_FLAGGED_COMMENT',
+    'reply_to_status' => 'LBL_EMAIL_REPLY_TO_STATUS_COMMENT',
+    'intent' => 'LBL_INTENT_COMMENT',
+    'mailbox_id' => 'LBL_MAILBOX_ID_COMMENT',
+    'uid' => 'LBL_UID_COMMENT',
+    'msgno' => 'LBL_MSGNO_COMMENT',
+    'folder' => 'LBL_FOLDER_COMMENT',
+    'folder_type' => 'LBL_FOLDER_TYPE_COMMENT',
+    'inbound_email_record' => 'LBL_INBOUND_EMAIL_RECORD_COMMENT',
+    'is_imported' => 'LBL_IS_IMPORTED_COMMENT',
+    'is_only_plain_text' => 'LBL_IS_ONLY_PLAIN_TEXT_COMMENT',
+    'category_id' => 'LBL_CATEGORY_COMMENT',
+    'parent_name' => 'LBL_PARENT_NAME_COMMENT',
+    'subject' => 'LBL_SUBJECT_COMMENT',
+    'has_attachment' => 'LBL_HAS_ATTACHMENT_COMMENT',
+] as $field => $commentLabel) {
+    if (isset($dictionary['Email']['fields'][$field])) {
+        $dictionary['Email']['fields'][$field]['comment'] = $commentLabel;
+    }
 }

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,6 +55,7 @@ if (file_exists(__DIR__ . '/../../modules/ACLActions/actiondefs.override.php')) 
 
 /* END - SECURITY GROUPS */
 
+#[\AllowDynamicProperties]
 class ACLAction extends SugarBean
 {
     public $module_dir = 'ACLActions';
@@ -204,7 +205,7 @@ class ACLAction extends SugarBean
     {
         global $ACLActionAccessLevels;
         if (isset($ACLActionAccessLevels[$access])) {
-            $label = preg_replace('/(LBL_ACCESS_)(.*)/', '$2', $ACLActionAccessLevels[$access]['label']);
+            $label = preg_replace('/(LBL_ACCESS_)(.*)/', '$2', (string) $ACLActionAccessLevels[$access]['label']);
 
             return strtolower($label);
         }
@@ -470,14 +471,14 @@ class ACLAction extends SugarBean
          * }
          */
         if ($access != 0 && (
-                $access == ACL_ALLOW_ALL
+                $access == ACL_ALLOW_ALL || $access == ACL_ALLOW_ADMIN
                 || ($is_owner && ($access == ACL_ALLOW_OWNER || $access == ACL_ALLOW_GROUP))  //if owner that's better than in group so count it...better way to clean this up?
                 || ($in_group && $access == ACL_ALLOW_GROUP) //need to pass if in group with access somehow
             )) {
             return true;
         }
         if (!is_null($action) && isset($action->aclaccess)) {
-            if ($action->aclaccess == ACL_ALLOW_ALL
+            if ($action->aclaccess == ACL_ALLOW_ALL || $action->aclaccess == ACL_ALLOW_ADMIN
                 || ($is_owner && $action->aclaccess == ($access == ACL_ALLOW_OWNER || $access == ACL_ALLOW_GROUP))
                 || ($in_group && $access == ACL_ALLOW_GROUP) //need to pass if in group with access somehow
             ) {

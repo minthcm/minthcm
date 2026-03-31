@@ -81,11 +81,11 @@ abstract class AbstractIndexer
     /** @var string where the log files are going to be stored */
     protected $logFile = 'search_index.log';
 
-    public function __construct()
+    public function __construct($level = Logger::DEBUG)
     {
         $this->documentifier = new JsonSerializerDocumentifier();
         $this->modulesToIndex = SearchWrapper::getModules();
-        $this->setupLogger();
+        $this->setupLogger($level);
     }
 
     /**
@@ -293,7 +293,7 @@ abstract class AbstractIndexer
     /**
      * Sets up the internal logger.
      */
-    protected function setupLogger()
+    protected function setupLogger($level = Logger::DEBUG)
     {
         $this->logger = new Logger($this->getIndexerName());
 
@@ -310,7 +310,7 @@ abstract class AbstractIndexer
 
         // Set up Monolog CLI handler
         try {
-            $this->logger->pushHandler(new CliLoggerHandler());
+            $this->logger->pushHandler(new CliLoggerHandler($level));
         } catch (\Exception $exception) {
             $this->logger->error('Failed to create CLI logger handler.');
             $this->logger->error($exception);

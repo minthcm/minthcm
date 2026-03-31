@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -103,6 +103,35 @@ $mod_strings = array(
     'LBL_LAWFUL_BASIS_SOURCE' => 'Lawful Basis Source',
     'LBL_CONSENT' => 'Consent',
     //End Lawful Basis labels
+    'LBL_NAME_COMMENT' => 'Full name',
+    'LBL_SALUTATION_COMMENT' => 'Salutation used to address the contact, for example Mister or Miss',
+    'LBL_FIRST_NAME_COMMENT' => 'First name of the contact',
+    'LBL_LAST_NAME_COMMENT' => 'Last name of the contact',
+    'LBL_TITLE_COMMENT' => 'Job title or position of the contact',
+    'LBL_PHOTO_COMMENT' => 'Profile photo of the contact',
+    'LBL_DEPARTMENT_COMMENT' => 'Department where the contact works',
+    'LBL_DO_NOT_CALL_COMMENT' => 'Indicates whether the contact should not be called',
+    'LBL_PHONE_HOME_COMMENT' => 'Home phone number of the contact',
+    'LBL_PHONE_MOBILE_COMMENT' => 'Mobile phone number of the contact',
+    'LBL_PHONE_WORK_COMMENT' => 'Work phone number of the contact',
+    'LBL_PHONE_OTHER_COMMENT' => 'Additional phone number of the contact',
+    'LBL_PHONE_FAX_COMMENT' => 'Fax number of the contact',
+    'LBL_EMAIL_ADDRESS_COMMENT' => 'Email address widget of the contact',
+    'LBL_LAWFUL_BASIS_COMMENT' => 'Legal basis for processing the contact\'s personal data',
+    'LBL_DATE_REVIEWED_COMMENT' => 'Date when the legal basis was last reviewed',
+    'LBL_LAWFUL_BASIS_SOURCE_COMMENT' => 'Source of the legal basis for data processing',
+    'LBL_PRIMARY_ADDRESS_STREET_COMMENT' => 'Street address of the primary residence',
+    'LBL_PRIMARY_ADDRESS_CITY_COMMENT' => 'City of the primary residence',
+    'LBL_PRIMARY_ADDRESS_STATE_COMMENT' => 'State or region of the primary residence',
+    'LBL_PRIMARY_ADDRESS_POSTALCODE_COMMENT' => 'Postal code of the primary residence',
+    'LBL_PRIMARY_ADDRESS_COUNTRY_COMMENT' => 'Country of the primary residence',
+    'LBL_ALT_ADDRESS_STREET_COMMENT' => 'Street address of the alternate residence',
+    'LBL_ALT_ADDRESS_CITY_COMMENT' => 'City of the alternate residence',
+    'LBL_ALT_ADDRESS_STATE_COMMENT' => 'State or region of the alternate residence',
+    'LBL_ALT_ADDRESS_POSTALCODE_COMMENT' => 'Postal code of the alternate residence',
+    'LBL_ALT_ADDRESS_COUNTRY_COMMENT' => 'Country of the alternate residence',
+    'LBL_ASSISTANT_COMMENT' => 'Name of the contact\'s assistant',
+    'LBL_ASSISTANT_PHONE_COMMENT' => 'Phone number of the contact\'s assistant',
 );
 
 

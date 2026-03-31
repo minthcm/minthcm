@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+#[\AllowDynamicProperties]
 class SugarWidgetSubPanelTopArchiveEmailButton extends SugarWidgetSubPanelTopButton
 {
     public function display($defines, $additionalFormFields = null, $nonbutton = false)
@@ -79,11 +80,11 @@ class SugarWidgetSubPanelTopArchiveEmailButton extends SugarWidgetSubPanelTopBut
             $additionalFormFields['to_email_addrs'] = $defines['focus']->email1;
         }
         if (ACLController::moduleSupportsACL($defines['module'])  && !ACLController::checkAccess($defines['module'], 'edit', true)) {
-            $button = "<input id='".preg_replace('[ ]', '', $value)."_button'  title='$title' class='button' type='button' name='".preg_replace('[ ]', '', mb_strtolower($value, 'UTF-8'))."_button' value='$value' disabled/>\n";
+            $button = "<input id='".preg_replace('[ ]', '', (string) $value)."_button'  title='$title' class='button' type='button' name='".preg_replace('[ ]', '', mb_strtolower($value, 'UTF-8'))."_button' value='$value' disabled/>\n";
             return $button;
         }
         $button = $this->_get_form($defines, $additionalFormFields);
-        $button .= "<input id='".preg_replace('[ ]', '', $value)."_button' title='$title' class='button' type='submit' name='".preg_replace('[ ]', '', mb_strtolower($value, 'UTF-8'))."_button' value='$value'/>\n";
+        $button .= "<input id='".preg_replace('[ ]', '', (string) $value)."_button' title='$title' class='button' type='submit' name='".preg_replace('[ ]', '', mb_strtolower($value, 'UTF-8'))."_button' value='$value'/>\n";
         $button .= "</form>";
         return $button;
     }

@@ -12,7 +12,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 require_once('modules/Users/UserViewHelper.php');
 require_once 'include/Notifications/NotificationManager.php';
 
+#[\AllowDynamicProperties]
 class UsersViewEdit extends ViewEdit 
 {
 
@@ -211,6 +212,7 @@ class UsersViewEdit extends ViewEdit
 
         $minpwdlength = !empty($PWDSETTINGS['minpwdlength']) ? $PWDSETTINGS['minpwdlength'] : '';
         $maxpwdlength =  !empty($PWDSETTINGS['maxpwdlength']) ? $PWDSETTINGS['maxpwdlength'] : '';
+        $action_button_header = [];
         $action_button_header[] = <<<EOD
                     <input type="button" id="SAVE_HEADER" title="{$APP['LBL_SAVE_BUTTON_TITLE']}" accessKey="{$APP['LBL_SAVE_BUTTON_KEY']}"
                           class="button primary" onclick="var _form = $('#EditView')[0]; if (!set_password(_form,newrules('{$minpwdlength}','{$maxpwdlength}','{$REGEX}'))) return false; if (!Admin_check()) return false; _form.action.value='Save'; {$CHOOSER_SCRIPT} {$REASSIGN_JS} if(verify_data(EditView)) _form.submit();"
@@ -242,6 +244,7 @@ EOD
         $action_button_header = array_merge($action_button_header, $this->ss->get_template_vars('BUTTONS_HEADER'));
         $this->ss->assign('ACTION_BUTTON_HEADER', $action_button_header);
 
+        $action_button_footer = [];
         $action_button_footer[] = <<<EOD
                     <input type="button" id="SAVE_FOOTER" title="{$APP['LBL_SAVE_BUTTON_TITLE']}" accessKey="{$APP['LBL_SAVE_BUTTON_KEY']}"
                           class="button primary" onclick="var _form = $('#EditView')[0]; if (!set_password(_form,newrules('{$minpwdlength}','{$maxpwdlength}','{$REGEX}'))) return false; if (!Admin_check()) return false; _form.action.value='Save'; {$CHOOSER_SCRIPT} {$REASSIGN_JS} if(verify_data(EditView)) _form.submit();"
@@ -283,6 +286,7 @@ EOD
       $this->ev->process($processSpecial, $processFormName);
 
       echo $this->ev->display($this->showTitle);
+      unset($_SESSION[$this->dv->bean->user_name . "_PREFERENCES"]);
    }
 
    /**

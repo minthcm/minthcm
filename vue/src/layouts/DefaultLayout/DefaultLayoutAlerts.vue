@@ -49,7 +49,7 @@
                     <MintButton
                         v-bind="props"
                         @click="alerts.markAllAsRead"
-                        variant="text"
+                        variant="nav"
                         icon="mdi-email-open"
                         size="small"
                     />
@@ -64,7 +64,7 @@
                     <MintButton
                         v-bind="props"
                         @click="alerts.cancelCloseAll"
-                        variant="text"
+                        variant="nav"
                         icon="mdi-window-close"
                         size="small"
                     />
@@ -75,7 +75,7 @@
                     <MintButton
                         v-bind="props"
                         @click="alerts.closeAll"
-                        variant="text"
+                        variant="nav"
                         icon="mdi-delete-sweep"
                         size="small"
                     />

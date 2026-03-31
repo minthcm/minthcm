@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class TrainingsApi
 {
     const MODULE_NAME = "Trainings";

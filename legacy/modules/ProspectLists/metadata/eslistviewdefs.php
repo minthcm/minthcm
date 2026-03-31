@@ -22,13 +22,20 @@ $ESListViewDefs['ProspectLists'] = [
         'date_entered' => [
             'default' => true,
         ],
+        'entry_count' => [
+            'default' => false,
+        ],
+        'automatic_update' => [
+            'default' => false,
+        ],
     ],
     'search' => [
-        'name' => [
-        ],
-        'list_type' => [
-        ],
-        'current_user_only' => [
-        ],
+        'name' => [],
+        'list_type' => [],
+        'report_name' => [],
+        'assigned_user_name' => [],
+        'date_entered' => [],
+        'entry_count' => [],
+        'automatic_update' => [],
     ],
 ];

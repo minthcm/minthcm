@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -56,35 +56,6 @@
     <input type="hidden" name="module" value="Administration">
     <input type='hidden' name='enabled_modules' value=''>
 
-    <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading">{$MOD.LBL_SEARCH_INTERFACE}</div>
-            <div class="panel-body tab-content text-center">
-                <div class="col-md-6">
-                    <div class="form-check">
-                        <div class="td-container">
-                            <div>
-                                <label for="search-engine">{sugar_translate label="LBL_SEARCH_ENGINE"}</label>
-                                {sugar_help text=$MOD.LBL_SEARCH_ENGINE_TOOLTIP}
-                            </div>
-                            <div>
-                                <small class="form-text text-muted">{sugar_translate label="LBL_SEARCH_ENGINE_HELP"}</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    {html_options
-                    options=$engines
-                    selected=$selectedEngine
-                    id="search-engine"
-                    name="search-engine"
-                    class="form-control"
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 
     {include file='modules/Administration/Search/GlobalSearchSettings.tpl'}
 

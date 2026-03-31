@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
 *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -77,7 +77,7 @@ function get_form_header(
     $keywords = array("/class=\"button\"/","/class='button'/","/class=button/","/<\/form>/");
     $match = false;
     foreach ($keywords as $left) {
-        if (preg_match($left, $other_text)) {
+        if (preg_match($left, (string) $other_text)) {
             $match = true;
         }
     }
@@ -134,7 +134,7 @@ function get_module_title(
     global $app_strings;
 
     $the_title = "<div class='moduleTitle'>\n";
-    $module = preg_replace("/ /", "", $module);
+    $module = preg_replace("/ /", "", (string) $module);
     $iconPath = "";
     if (is_file(SugarThemeRegistry::current()->getImageURL('icon_'.$module.'_32.png', false))) {
         $iconPath = SugarThemeRegistry::current()->getImageURL('icon_'.$module.'_32.png');
@@ -210,7 +210,7 @@ function getClassicModuleTitle($module, $params, $show_create=false, $index_url_
     $module_title = '';
     $index = 0;
 
-    $module = preg_replace("/ /", "", $module);
+    $module = preg_replace("/ /", "", (string) $module);
     $iconPath = "";
     $the_title = "<div class='moduleTitle'>\n";
 

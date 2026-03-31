@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -58,7 +58,7 @@ function get_body(&$ss, $vardef)
     
     global $timedate;
     $user_time_format = $timedate->get_user_time_format();
-    $show_meridiem = preg_match('/pm$/i', $user_time_format) ? true : false;
+    $show_meridiem = preg_match('/pm$/i', (string) $user_time_format) ? true : false;
     if ($show_meridiem) {
         $ss->assign('default_hours_values', array_flip($td->hoursStrings));
     } else {
@@ -68,7 +68,7 @@ function get_body(&$ss, $vardef)
     $ss->assign('show_meridiem', $show_meridiem);
     $ss->assign('default_minutes_values', array_flip($td->minutesStrings));
     $ss->assign('default_meridiem_values', array_flip($td->meridiemStrings));
-    if (isset($vardef['display_default']) && strstr($vardef['display_default'], '&')) {
+    if (isset($vardef['display_default']) && strstr((string) $vardef['display_default'], '&')) {
         $dt = explode("&", $vardef['display_default']); //+1 day&06:00pm
         $date = $dt[0];
         $defaultTime = $dt[1];

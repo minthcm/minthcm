@@ -9,9 +9,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -57,7 +57,7 @@ function get_node_data($params, $get_array=false)
     $subcat_id=$params['NODES'][$click_level]['id'];
     $cat_id=$params['NODES'][$click_level-1]['id'];
     $href=true;
-    if (isset($params['TREE']['caller']) and $params['TREE']['caller']=='Documents') {
+    if (isset($params['TREE']['caller']) && $params['TREE']['caller']=='Documents') {
         $href=false;
     }
     $nodes=get_documents($cat_id, $subcat_id, $href);
@@ -90,7 +90,7 @@ function get_node_data($params, $get_array=false)
              $cat_id=$row['category_id'];
              $cat_name=$app_list_strings['document_category_dom'][$row['category_id']];
          }
-         if (empty($current_cat_id) or $current_cat_id != $cat_id) {
+         if (empty($current_cat_id) || $current_cat_id != $cat_id) {
              $current_cat_id = $cat_id;
              if (!empty($cat_node)) {
                  $nodes[]=$cat_node;
@@ -129,13 +129,13 @@ function get_documents($cat_id, $subcat_id, $href=true)
     $href_string = "javascript:select_document('doctree')";
     $query="select * from documents where deleted=0";
     if ($cat_id != 'null') {
-        $query.=" and category_id='$cat_id'";
+        $query.=" and category_id='" . DBManagerFactory::getInstance()->quote($cat_id) . "'";
     } else {
         $query.=" and category_id is null";
     }
         
     if ($subcat_id != 'null') {
-        $query.=" and subcategory_id='$subcat_id'";
+        $query.=" and subcategory_id='" . DBManagerFactory::getInstance()->quote($subcat_id) . "'";
     } else {
         $query.=" and subcategory_id is null";
     }

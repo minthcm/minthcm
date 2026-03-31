@@ -2,6 +2,7 @@
 
 require_once 'include/SugarObjects/templates/file/File.php';
 
+#[\AllowDynamicProperties]
 class Files extends File
 {
     public $new_schema = true;

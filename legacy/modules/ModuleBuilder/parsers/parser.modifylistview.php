@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -52,6 +52,7 @@ require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
 /**
  * Class ParserModifyListView
  */
+#[\AllowDynamicProperties]
 class ParserModifyListView extends ModuleBuilderParser
 {
     /**
@@ -254,7 +255,7 @@ class ParserModifyListView extends ModuleBuilderParser
         }
 
         //Dont ever show the "deleted" fields or "_name" fields
-        if (strcmp($key, 'deleted') == 0 || (isset($def ['name']) && strpos($def ['name'], "_name") !== false)) {
+        if (strcmp($key, 'deleted') == 0 || (isset($def ['name']) && strpos((string) $def ['name'], "_name") !== false)) {
             return false;
         }
 
@@ -324,7 +325,7 @@ class ParserModifyListView extends ModuleBuilderParser
                     //check if we have the case wrong for custom fields
                     if (!isset($this->module->field_defs [$fieldname])) {
                         foreach ($this->module->field_defs as $key => $value) {
-                            if (strtoupper($key) == $fieldname) {
+                            if (strtoupper($key) === $fieldname) {
                                 $fields [$fieldname] = array(
                                     'width' => 10,
                                     'label' => $this->module->field_defs [$key] ['vname']
@@ -353,7 +354,7 @@ class ParserModifyListView extends ModuleBuilderParser
                     }
                 }
                 if (isset($_REQUEST [strtolower($fieldname) . 'width'])) {
-                    $width = substr($_REQUEST [strtolower($fieldname) . 'width'], 6, 3);
+                    $width = substr((string) $_REQUEST [strtolower($fieldname) . 'width'], 6, 3);
                     if (strpos($width, "%") !== false) {
                         $width = substr($width, 0, 2);
                     }

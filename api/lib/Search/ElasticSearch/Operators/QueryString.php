@@ -60,9 +60,11 @@ class QueryString extends ElasticOperator
 
     protected function getDataArray(ModulePrefixer $prefixer): array
     {
+        $words = preg_split('/\s+/', trim($this->value), -1, PREG_SPLIT_NO_EMPTY);
+        $query = implode('* ', $words) . '*';
         return array(
             'query_string' => array(
-                    "query" => $this->value.'*',
+                    "query" => $query,
                     "fields" => array("*__last^5", "*__first^4", "*__name.*^3", "*"),
             ),
         );

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -51,7 +51,7 @@ $mod_strings = array(
     'LBL_ACCESS_NONE' => 'None',
     'LBL_ACCESS_OWNER' => 'Owner',
     'LBL_ACCESS_GROUP' => 'Group',
-    'LBL_ACCESS_NORMAL' => 'Normal',
+    'LBL_ACCESS_NORMAL' => 'Standard',
     'LBL_ACCESS_ADMIN' => 'Admin',
     'LBL_ACCESS_ENABLED' => 'Enabled',
     'LBL_ACCESS_DISABLED' => 'Disabled',
@@ -74,4 +74,6 @@ $mod_strings = array(
     'LBL_ACTION_ACCESS' => 'Access',
     'LBL_ACTION_ADMIN' => 'Access Type',
     'LBL_ACCESS_DEFAULT' => 'Not Set',
+    'LBL_ACCESS' => 'Access',
+    'LBL_TYPE' => 'Type',
 );

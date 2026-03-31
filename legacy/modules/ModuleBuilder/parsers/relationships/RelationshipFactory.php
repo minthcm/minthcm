@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -48,6 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once 'modules/ModuleBuilder/parsers/constants.php' ;
 
+#[\AllowDynamicProperties]
 class RelationshipFactory
 {
 
@@ -61,25 +62,25 @@ class RelationshipFactory
         if (! isset($definition [ 'relationship_type' ])) {
             $definition [ 'relationship_type' ] = MB_MANYTOMANY ;
         }
-            
+
         if (!empty($definition['for_activities']) && $definition['for_activities'] == true) {
             require_once 'modules/ModuleBuilder/parsers/relationships/ActivitiesRelationship.php';
             return new ActivitiesRelationship($definition);
         }
-        
+
         switch (strtolower($definition [ 'relationship_type' ])) {
             case strtolower(MB_ONETOONE):
                 require_once 'modules/ModuleBuilder/parsers/relationships/OneToOneRelationship.php' ;
                 return new OneToOneRelationship($definition) ;
-            
+
             case strtolower(MB_ONETOMANY):
                 require_once 'modules/ModuleBuilder/parsers/relationships/OneToManyRelationship.php' ;
                 return new OneToManyRelationship($definition) ;
-                
+
             case strtolower(MB_MANYTOONE):
                 require_once 'modules/ModuleBuilder/parsers/relationships/ManyToOneRelationship.php' ;
                 return new ManyToOneRelationship($definition) ;
-            
+
             // default case is Many-To-Many as this was the only type ModuleBuilder could create and so much of the MB code assumes Many-To-Many
             default:
                 $definition [ 'relationship_type' ] = MB_MANYTOMANY ;

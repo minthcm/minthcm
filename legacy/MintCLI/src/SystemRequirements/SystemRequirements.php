@@ -2,6 +2,7 @@
 
 namespace MintHCM\MintCLI\SystemRequirements;
 
+#[\AllowDynamicProperties]
 class SystemRequirements
 {
     public static $sysRequirements = [

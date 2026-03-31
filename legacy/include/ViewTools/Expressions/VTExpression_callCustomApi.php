@@ -25,7 +25,7 @@ class VTExpression_callCustomApi extends VTExpression
     {
         $result = false;
 
-        if (count($arguments) >= 2) {
+        if (is_countable($arguments) ? count($arguments) >= 2 : 0) {
             $module_name = $this->cleanValue($arguments[0]);
             $method_name = $this->cleanValue($arguments[1]);
             array_shift($arguments);

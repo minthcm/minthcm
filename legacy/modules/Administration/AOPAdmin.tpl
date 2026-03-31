@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -186,7 +186,7 @@
             <th align="left" scope="row" colspan="4"><h4>{$MOD.LBL_AOP_CASE_STATUS_SETTINGS}</h4></th>
         </tr>
         {$currentStatuses}
-        <tr><td><button type='button' id="addStatusButton">{$MOD.LBL_AOP_ADD_STATUS}</button></td></tr>
+        <tr><td><button class="button" type='button' id="addStatusButton">{$MOD.LBL_AOP_ADD_STATUS}</button></td></tr>
     </table>
     <table id='email_settings' width="100%" border="0" cellspacing="1" cellpadding="0" class="edit view">
         <tr><th align="left" scope="row" colspan="4"><h4>{$MOD.LBL_AOP_EMAIL_SETTINGS}</h4></th>

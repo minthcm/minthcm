@@ -6,6 +6,7 @@ use MintHCM\Modules\Alerts\api\helpers\DataHelper;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
+#[\AllowDynamicProperties]
 class MassActionController
 {
     public function readAlerts(Request $request, Response $response, array $args): Response

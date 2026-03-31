@@ -9,25 +9,13 @@ class UsersApi
         || ACLController::checkAccess('Calls', 'edit');
     }
 
-    public function checkUserDuplicate($args)
+    public function passwordValidationCheck($args)
     {
-        if (empty($args['login'])) {
+        $userBean = BeanFactory::getBean('Users');
+        if (empty($args['password'])) {
             return false;
         }
-        $db = DBManagerFactory::getInstance();
-        $login = $db->quote($args['login']);
-
-        $userBean = BeanFactory::getBean('Users');
-        $userDuplicate = $userBean->retrieve_by_string_fields(
-            array(
-                'user_name' => "$login",
-            )
-        );
-
-        if (!empty($userDuplicate)) {
-            return true;
-        }
-        return false;
+        return [ 'message' => $userBean->passwordValidationCheck($args['password']) ];
     }
 
 }

@@ -7,9 +7,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -60,6 +60,7 @@ use SuiteCRM\Utility\SuiteValidator;
  * @author Benjamin Long <ben@offsite.guru>
  */
 
+#[\AllowDynamicProperties]
 class GoogleSyncBase
 {
     /** @var User The MintHCM User Bean we're currently working with */
@@ -154,7 +155,7 @@ class GoogleSyncBase
         if (!$isValidator->isValidId($id)) {
             throw new GoogleSyncException('Google Sync Base trying to set Client but given an invalid ID: ' . $id, GoogleSyncException::INVALID_CLIENT_ID);
         }
-        
+
         if (!$gClient_local = $this->getClient($id)) {
             return false;
         }
@@ -374,7 +375,7 @@ class GoogleSyncBase
     }
 
     /**
-     * find the id of the 'SuiteCRM' calendar ... in the future, this will return the calendar of the users choosing.
+     * find the id of the 'MintHCM' calendar ... in the future, this will return the calendar of the users choosing.
      *
      * @param \Google\Service\Calendar\CalendarList $calendarList
      *
@@ -383,7 +384,7 @@ class GoogleSyncBase
     protected function getSuiteCRMCalendar(Google\Service\Calendar\CalendarList $calendarList)
     {
         foreach ($calendarList->getItems() as $calendarListEntry) {
-            if ($calendarListEntry->getSummary() == $this->suiteCalendarName) {
+            if ($calendarListEntry->getSummary() === $this->suiteCalendarName) {
                 return $calendarListEntry->getId();
                 break;
             }
@@ -395,7 +396,7 @@ class GoogleSyncBase
      * Get events in users google calendar
      *
      *
-     * @return bool|array Array of Google_Service_Calendar_Event Objects
+     * @return bool|array Array of Google\Service\Calendar\Event Objects
      */
     protected function getUserGoogleEvents()
     {
@@ -423,9 +424,9 @@ class GoogleSyncBase
         if (empty($results)) {
             $this->logger->info(__FILE__ . ':' . __LINE__ . ' ' . __METHOD__ . ' - ' . 'No events found.');
         } else {
-            $this->logger->info(__FILE__ . ':' . __LINE__ . ' ' . __METHOD__ . ' - ' . 'Found ' . count($results) . ' Google Events');
+            $this->logger->info(__FILE__ . ':' . __LINE__ . ' ' . __METHOD__ . ' - ' . 'Found ' . (is_countable($results) ? count($results) : 0) . ' Google Events');
         }
-        
+
         return $results;
     }
 
@@ -462,7 +463,7 @@ class GoogleSyncBase
      *
      * @param string $event_id Google Event ID
      *
-     * @return \Google_Service_Calendar_Event|null Google_Service_Calendar_Event if found, null if not found
+     * @return \Google\Service\Calendar\Event|null Google\Service\Calendar\Event if found, null if not found
      * @throws GoogleSyncException if $event_id is empty
      * @throws GoogleSyncException if Google Service not set up
      */
@@ -502,7 +503,7 @@ class GoogleSyncBase
         $eventIdQuoted = $this->db->quoted($event_id);
         $query = "SELECT id FROM meetings WHERE gsync_id = {$eventIdQuoted}";
         $result = $this->db->query($query);
-        
+
         if (!$result) {
             throw new GoogleSyncException('Meeting not found with specified gsync_id: ' . $eventIdQuoted, GoogleSyncException::MEETING_NOT_FOUND);
         }
@@ -537,7 +538,7 @@ class GoogleSyncBase
         }
 
         // create new calendar service
-        $this->gService = new Google_Service_Calendar($this->gClient);
+        $this->gService = new \Google\Service\Calendar($this->gClient);
         if ($this->isServiceExists()) {
             return true;
         }
@@ -551,12 +552,12 @@ class GoogleSyncBase
      * and inserted. If one is provided, the existing Google Event will
      * be updated.
      *
-     * @param Meeting $event_local : MintHCM Meeting Bean
-     * @param \Google\Service\Calendar\Event $event_remote (optional) \Google\Service\Calendar\Event Object
+     * @param Meeting|null $event_local : MintHCM Meeting Bean
+     * @param \Google\Service\Calendar\Event|null $event_remote (optional) \Google\Service\Calendar\Event Object
      *
      * @return string|bool Meeting Id on success, false on failure
      */
-    protected function pushEvent(Meeting $event_local = null, Google_Service_Calendar_Event $event_remote = null)
+    protected function pushEvent(Meeting $event_local = null, Google\Service\Calendar\Event $event_remote = null)
     {
         if (!$event_local instanceof Meeting) {
             throw new InvalidArgumentException('Argument 1 passed to GoogleSyncBase::pushEvent() must be an instance of Meeting, ' . getType($event_local) . ' given.');
@@ -567,7 +568,7 @@ class GoogleSyncBase
         if (!$this->gService->events instanceof Google\Service\Calendar\Resource\Events) {
             throw new GoogleSyncException('GooleSyncBase is trying to push event but Google\Service\Calendar\Resource\Events is not set.', GoogleSyncException::NO_GRESOURCE_SET);
         }
-        
+
         if (!isset($event_remote) || empty($event_remote)) {
             $event = $this->createGoogleCalendarEvent($event_local);
             $return = $this->gService->events->insert($this->calendarId, $event);
@@ -625,8 +626,8 @@ class GoogleSyncBase
      * If the MintHCM Meeting is not provided, a new one will be created
      * and inserted. If one is provided, the existing meeting will be updated.
      *
-     * @param \Google\Service\Calendar\Event $event_remote \Google\Service\Calendar\Event Object
-     * @param Meeting $event_local Meeting (optional) \Meeting Bean
+     * @param \Google\Service\Calendar\Event|null $event_remote \Google\Service\Calendar\Event Object
+     * @param Meeting|null $event_local Meeting (optional) \Meeting Bean
      *
      * @return bool Success/Failure of setLastSync, since that's what saves the record
      * @throws GoogleSyncException if returned event invalid
@@ -636,7 +637,7 @@ class GoogleSyncBase
         if (!$event_remote instanceof Google\Service\Calendar\Event) {
             throw new InvalidArgumentException('Argument 1 passed to GoogleSyncBase::pullEvent() must be an instance of Google\Service\Calendar\Event, ' . getType($event_local) . ' given.');
         }
-        
+
         if (!isset($event_local) || empty($event_local)) {
             $event = $this->createSuitecrmMeetingEvent($event_remote);
         } elseif (isset($event_local)) {
@@ -667,7 +668,7 @@ class GoogleSyncBase
     /**
      * Delete MintHCM Meeting
      *
-     * @param Meeting $meeting MintHCM Meeting Bean
+     * @param Meeting|null $meeting MintHCM Meeting Bean
      *
      * @return string|bool Meeting Id on success, false on failure (from setLastSync, since that's what saves the record)
      */
@@ -676,7 +677,7 @@ class GoogleSyncBase
         if (!$meeting instanceof Meeting) {
             throw new InvalidArgumentException('Argument 1 passed to GoogleSyncBase::delMeeting() must be an instance of Meeting, ' . getType($meeting) . ' given.');
         }
-        
+
         $meeting->deleted = '1';
         $meeting->gsync_id = '';
         return $this->setLastSync($meeting);
@@ -685,7 +686,7 @@ class GoogleSyncBase
     /**
      * Delete Google Event
      *
-     * @param \Google\Service\Calendar\Event $event \Google\Service\Calendar\Event Object
+     * @param \Google\Service\Calendar\Event|null $event \Google\Service\Calendar\Event Object
      * @param String $meeting_id MintHCM Meeting Id
      *
      * @return string Meeting Id on success
@@ -699,7 +700,7 @@ class GoogleSyncBase
         if (!$event instanceof Google\Service\Calendar\Event) {
             throw new InvalidArgumentException('Argument 1 passed to GoogleSyncBase::delEvent() must be an instance of Google\Service\Calendar\Event, ' . gettype($event) . ' given');
         }
-        
+
         // Make sure the calendar service is set up
         if (!$this->isServiceExists()) {
             throw new GoogleSyncException('The Google Service is not set up. See setGService Method.', GoogleSyncException::NO_GSERVICE_SET);
@@ -928,9 +929,9 @@ class GoogleSyncBase
     {
 
         //We're creating a new event
-        $event_remote_empty = new Google_Service_Calendar_Event;
+        $event_remote_empty = new Google\Service\Calendar\Event;
 
-        $extendedProperties = new Google_Service_Calendar_EventExtendedProperties;
+        $extendedProperties = new Google\Service\Calendar\EventExtendedProperties;
         $extendedProperties->setPrivate(array());
 
         $event_remote_empty->setExtendedProperties($extendedProperties);

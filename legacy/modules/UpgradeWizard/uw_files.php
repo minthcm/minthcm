@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -55,7 +55,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $uwFilesCurrent = findAllFiles('modules/UpgradeWizard/', array());
 
 // handle 4.x to 4.5.x+ (no UpgradeWizard module)
-if (count($uwFilesCurrent) < 5) {
+if ((is_countable($uwFilesCurrent) ? count($uwFilesCurrent) : 0) < 5) {
     $uwFiles = array(
         'modules/UpgradeWizard/language/en_us.lang.php',
         'modules/UpgradeWizard/cancel.php',
@@ -86,7 +86,7 @@ if (count($uwFilesCurrent) < 5) {
 
     $uwFiles = array();
     foreach ($uwFilesCurrent as $file) {
-        $uwFiles[] = str_replace("./", "", clean_path($file));
+        $uwFiles[] = str_replace("./", "", (string) clean_path($file));
     }
 }
 ////	END DYNAMICALLY GENERATE UPGRADEWIZARD MODULE FILE LIST

@@ -1,19 +1,14 @@
 <template>
-    <a class="mint-phone-list-field" :href="`tel:${props.data.bean[props.defs.name]}`">
-        <v-icon size="x-small" v-if="props.data.bean[props.defs.name]">mdi-phone</v-icon>
-        {{ props.data.bean[props.defs.name] }}
+    <a class="mint-phone-list-field" :href="`tel:${props.modelValue}`">
+        <v-icon size="x-small" v-if="props.modelValue">mdi-phone</v-icon>
+        {{ props.modelValue }}
     </a>
 </template>
 
 <script setup lang="ts">
-import { FieldVardef } from '@/store/modules'
+import { FieldProps } from '../Field.model';
 
-interface Props {
-    defs: FieldVardef
-    data?: any
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FieldProps>()
 </script>
 
 <style scoped lang="scss">

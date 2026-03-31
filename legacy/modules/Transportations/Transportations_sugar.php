@@ -40,6 +40,7 @@
  * PLEASE DO NOT CHANGE THIS CLASS
  * PLACE ANY CUSTOMIZATIONS IN Transportations
  */
+#[\AllowDynamicProperties]
 class Transportations_sugar extends Basic {
 
    public $new_schema = true;

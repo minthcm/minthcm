@@ -11,7 +11,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -74,7 +74,7 @@ if (!empty($_REQUEST['duplicateId'])) {
     $copyFromProspectList = BeanFactory::newBean('ProspectLists');
     $copyFromProspectList->retrieve($_REQUEST['duplicateId']);
     $relations = $copyFromProspectList->retrieve_relationships('prospect_lists_prospects', array('prospect_list_id'=>$_REQUEST['duplicateId']), 'related_id, related_type');
-    if (count($relations)>0) {
+    if ((is_countable($relations) ? count($relations) : 0)>0) {
         foreach ($relations as $rel) {
             $rel['prospect_list_id']=$return_id;
             $focus->set_relationship('prospect_lists_prospects', $rel, true);

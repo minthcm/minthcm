@@ -9,9 +9,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -50,6 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
+#[\AllowDynamicProperties]
 class SugarWidgetSubPanelIcon extends SugarWidgetField
 {
     public function displayHeaderCell($layout_def)
@@ -98,7 +99,7 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
             || ACLController::checkAccess($layout_def['owner_module'], 'view', $layout_def['owner_id'] == $current_user->id))) {
             $action_access = true;
         }
-        $icon_img_html = '<span class="suitepicon suitepicon-module-'.strtolower(str_replace('_', '-', $module)).'"></span>';
+        $icon_img_html = '<span class="suitepicon suitepicon-module-'.strtolower(str_replace('_', '-', (string) $module)).'"></span>';
         if (!empty($layout_def['attachment_image_only']) && $layout_def['attachment_image_only'] == true) {
             $ret="";
         } else {
@@ -132,8 +133,10 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
         if (!empty($layout_def['image2']) && !empty($layout_def['image2_url_field'])) {
             if (is_array($layout_def['image2_url_field'])) {
                 //Generate file url.
-                if (!empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['id_field'])])
-                and !empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['filename_field'])])) {
+                if (
+                    !empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['id_field'])]) &&
+                    !empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['filename_field'])])
+                ) {
                     $key=$layout_def['fields'][strtoupper($layout_def['image2_url_field']['id_field'])];
                     $file=$layout_def['fields'][strtoupper($layout_def['image2_url_field']['filename_field'])];
                     $filepath="index.php?entryPoint=download&id=".$key."&type=".$layout_def['module'];

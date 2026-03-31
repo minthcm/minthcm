@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -60,12 +60,13 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
 require_once('include/Dashlets/DashletGeneric.php');
 require_once('modules/Applications/Applications.php');
 
+#[\AllowDynamicProperties]
 class ApplicationsDashlet extends DashletGeneric {
 
    function ApplicationsDashlet($id, $def = null) {
       require('modules/Applications/metadata/dashletviewdefs.php');
 
-      parent::DashletGeneric($id, $def);
+      parent::__construct($id, $def);
 
       if ( empty($def['title']) )
          $this->title = translate('LBL_HOMEPAGE_TITLE', 'Applications');

@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -54,9 +54,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 function getEmployeeStatusOptions($focus, $name = 'employee_status', $value = null, $view = 'DetailView')
 {
-    $employee_status_options = $GLOBALS['app_list_strings']['employee_status_dom'];
-
-    if ($view === 'eslist'
+    $app_list_strings = return_app_list_strings_language($GLOBALS['current_language']);
+    $employee_status_options = $app_list_strings['employee_status_dom'];
+    
+    if (in_array($view, ['eslist', 'MintLogic'] )
         || (is_admin($GLOBALS['current_user']) && in_array($view, ['EditView', 'MassUpdate']))
     ) {
         return $employee_status_options;

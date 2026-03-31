@@ -6,9 +6,9 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -51,6 +51,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 global $disable_date_format;
 $disable_date_format = true;
 
+#[\AllowDynamicProperties]
 class SoapHelperWebServices
 {
     public function get_field_list($value, $fields, $translate = true)
@@ -237,7 +238,18 @@ class SoapHelperWebServices
                 global $current_user;
                 require_once('modules/Users/User.php');
                 $current_user = BeanFactory::newBean('Users');
-                $current_user->retrieve($_SESSION['user_id']);
+                $userLoaded = $current_user->retrieve($_SESSION['user_id']);
+
+                if (!$userLoaded || !$current_user->isEnabled()) {
+                    LogicHook::initialize();
+                    $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
+                    $GLOBALS['log']->info('End: SoapHelperWebServices->validate_authenticated - validation failed');
+                    $GLOBALS['log']->security('v4 Api - Load user failed: user ' . $GLOBALS['current_user']->user_name . ' is not active');
+                    $GLOBALS['log']->debug("calling destroy");
+                    session_destroy();
+
+                    return false;
+                }
                 $this->login_success();
                 $GLOBALS['log']->info('Begin: SoapHelperWebServices->validate_authenticated - passed');
                 $GLOBALS['log']->info('End: SoapHelperWebServices->validate_authenticated');
@@ -279,7 +291,7 @@ class SoapHelperWebServices
                 } else {
                     // match class C IP addresses
                     for ($i = 0; $i < 3; $i++) {
-                        if ($session_parts[$i] == $client_parts[$i]) {
+                        if ($session_parts[$i] === $client_parts[$i]) {
                             $classCheck = 1;
                             continue;
                         }
@@ -469,7 +481,7 @@ class SoapHelperWebServices
                     $type = $var['type'];
 
                     if (strcmp($type, 'date') == 0) {
-                        $val = substr($val, 0, 10);
+                        $val = substr((string) $val, 0, 10);
                     } elseif (strcmp($type, 'enum') == 0 && !empty($var['options'])) {
                         //$val = $app_list_strings[$var['options']][$val];
                     }
@@ -541,7 +553,7 @@ class SoapHelperWebServices
                     $type = $var['type'];
 
                     if (strcmp($type, 'date') == 0) {
-                        $val = substr($val, 0, 10);
+                        $val = substr((string) $val, 0, 10);
                     } elseif (strcmp($type, 'enum') == 0 && !empty($var['options'])) {
                         //$val = $app_list_strings[$var['options']][$val];
                     }
@@ -845,7 +857,7 @@ class SoapHelperWebServices
         require_once($beanFiles[$class_name]);
         $ids = array();
         $count = 1;
-        $total = count($name_value_lists);
+        $total = is_countable($name_value_lists) ? count($name_value_lists) : 0;
         foreach ($name_value_lists as $name_value_list) {
             $seed = new $class_name();
 
@@ -863,7 +875,7 @@ class SoapHelperWebServices
                     $vardef = $seed->field_name_map[$value['name']];
                     if (isset($app_list_strings[$vardef['options']]) && !isset($app_list_strings[$vardef['options']][$value])) {
                         if (in_array($val, $app_list_strings[$vardef['options']])) {
-                            $val = array_search($val, $app_list_strings[$vardef['options']]);
+                            $val = array_search($val, $app_list_strings[$vardef['options']], true);
                         }
                     }
                 }
@@ -917,7 +929,7 @@ class SoapHelperWebServices
                             $query = $seed->table_name . ".outlook_id = '" . DBManagerFactory::getInstance()->quote($seed->outlook_id) . "'";
                             $response = $seed->get_list($order_by, $query, 0, -1, -1, 0);
                             $list = $response['list'];
-                            if (count($list) > 0) {
+                            if ((is_countable($list) ? count($list) : 0) > 0) {
                                 foreach ($list as $value) {
                                     $seed->id = $value->id;
                                     break;

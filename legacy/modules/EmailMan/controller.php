@@ -8,7 +8,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -43,6 +43,7 @@
  */
 
 
+ #[\AllowDynamicProperties]
  class EmailManController extends SugarController
  {
      public function action_Save()
@@ -63,15 +64,6 @@
          if (!isset($sugar_config['allow_sendmail_outbound']) || !$sugar_config['allow_sendmail_outbound']) {
              $_REQUEST['mail_sendtype'] = "SMTP";
          }
- 
-         // save Outbound settings  #Bug 20033 Ensure data for Outbound email exists before trying to update the system mailer.
-         if (isset($_REQUEST['mail_sendtype']) && empty($_REQUEST['campaignConfig'])) {
-             $oe = new OutboundEmail();
-             $oe->populateFromPost();
-             $oe->saveSystem();
-         }
- 
- 
  
          $focus = BeanFactory::newBean('Administration');
  

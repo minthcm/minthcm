@@ -12,7 +12,7 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -105,8 +105,9 @@ if (isset($_REQUEST['change_parent']) && '1' == $_REQUEST['change_parent']) {
    }
 } else {
    $base_id = $_REQUEST['record'];
-   foreach ( $_REQUEST['mass'] as $id ) {
-      $merge_ids_array[] = $id;
+   $mass = $_REQUEST['mass'] ?? [];
+   foreach ($mass as $id) {
+       $merge_ids_array[] = $id;
    }
 }
 $focus = BeanFactory::newBean('MergeRecords');
@@ -180,7 +181,7 @@ foreach ( $temp_field_array as $field_array ) {
       //Prcoess locaton of the field. if values are different show field in first section. else 2nd.
       $select_row_curr_field_value = $focus->merge_bean->$tempName;
       foreach ( $merge_ids_array as $id ) {
-            if (('' == $mergeBeanArray[$id]->$tempName and '' == $select_row_curr_field_value) or $mergeBeanArray[$id]->$tempName == $select_row_curr_field_value) {
+         if ($mergeBeanArray[$id]->$tempName=='' && $select_row_curr_field_value =='' || $mergeBeanArray[$id]->$tempName == $select_row_curr_field_value) {
             $section_name = 'merge_row_similar';
          } else {
             $section_name = 'merge_row_diff';
@@ -190,15 +191,17 @@ foreach ( $temp_field_array as $field_array ) {
       }
       //check for vname in mod strings first, then app, else just display name
       $col_name = $tempName;
-        if (isset($focus->merge_bean_strings[$field_array['vname']]) && '' != $focus->merge_bean_strings[$field_array['vname']]) {
-         $xtpl->assign("FIELD_LABEL", $focus->merge_bean_strings[$field_array['vname']]);
-        } elseif (isset($app_strings[$field_array['vname']]) && '' != $app_strings[$field_array['vname']]) {
-         $xtpl->assign("FIELD_LABEL", $app_strings[$field_array['vname']]);
+      $focusVname = $field_array['vname'] ?? '';
+
+      if (isset($focus->merge_bean_strings[$focusVname]) && $focus->merge_bean_strings[$focusVname] != '') {
+          $xtpl->assign("FIELD_LABEL", $focus->merge_bean_strings[$focusVname]);
+      } elseif (isset($app_strings[$focusVname]) && $app_strings[$focusVname] != '') {
+          $xtpl->assign("FIELD_LABEL", $app_strings[$focusVname]);
       } else {
-         $xtpl->assign("FIELD_LABEL", $tempName);
+          $xtpl->assign("FIELD_LABEL", $tempName);
       }
       //if required add signage.
-        if (!empty($focus->merge_bean->required_fields[$col_name]) or 'team_name' == $col_name) {
+      if (!empty($focus->merge_bean->required_fields[$col_name]) || $col_name=='team_name') {
          $xtpl->assign("REQUIRED_SYMBOL", "<span class='required'>" . $app_strings['LBL_REQUIRED_SYMBOL'] . "</span>");
       } else {
          $xtpl->assign("REQUIRED_SYMBOL", "");
@@ -213,9 +216,9 @@ foreach ( $temp_field_array as $field_array ) {
          $field_check = $field_array['type'];
       }
 
-      if ( preg_match('/.*?_address_street$/', $tempName) ) {
+      if (preg_match('/.*?_address_street$/', (string) $tempName)) {
          $field_check = 'text';
-      }
+     }
 
         if ('email1' === $field_array['name']) {
             $field_check = 'email';
@@ -373,7 +376,7 @@ foreach ( $temp_field_array as $field_array ) {
                     $xtpl->assign("FIELD_VALUE", $display_value);
                     $xtpl->assign("HOVER_TEXT", $mod_strings['LBL_MERGE_VALUE_OVER'] . ": " . implode(", ", $value_array));
                     $field_name = "main." . $section_name . ".merge_cell_field_value_email";
-                    break;
+               break;
             case ('relate'):
             case ('link'):
                $related_name = false;
@@ -396,16 +399,16 @@ foreach ( $temp_field_array as $field_array ) {
             $json_data = array('field_name' => $tempName, 'field_type' => $field_check);
          //add an array of fields/values to the json array
          //for setting all the values for merge
-         if ( $field_check == 'relate' or $field_check == 'link' ) {
+         if ($field_check == 'relate' || $field_check == 'link') {
             $temp_array = array();
             $tempId = $field_array['id_name'];
                 $json_data['popup_fields'] = array($tempName => $mergeBeanArray[$id]->$tempName, $tempId => $mergeBeanArray[$id]->$tempId);
             } elseif ('teamset' == $field_check) {
                 $json_data['field_value'] = TeamSetManager::getCommaDelimitedTeams($mergeBeanArray[$id]->team_set_id, $mergeBeanArray[$id]->team_id, true);
                 $json_data['field_value2'] = TeamSetManager::getTeamsFromSet($mergeBeanArray[$id]->team_set_id);
-                $json_data['field_value3'] = $mergeBeanArray[$id]->team_set_id;
+                $json_data['field_value3'] =  $mergeBeanArray[$id]->team_set_id;
             } elseif ('multienum' == $field_check) {
-                $json_data['field_value'] = unencodeMultienum($mergeBeanArray[$id]->$tempName);
+                    $json_data['field_value'] = unencodeMultienum($mergeBeanArray[$id]->$tempName);
             } else if ('email' == $field_check) {
                 $json_data['field_value'] = $value_array;
             }
@@ -454,7 +457,7 @@ if ('Case' == $focus->merge_bean->object_name) {
    $focus->merge_bean->object_name = 'aCase';
 }
 
-$mod = array_search($focus->merge_bean->object_name, $beanList);
+$mod=array_search($focus->merge_bean->object_name, $beanList, true);
 $mod_strings = return_module_language($current_language, $mod);
 
 //add javascript for required fields enforcement.
@@ -478,9 +481,9 @@ $xtpl->out("main");
 function display_field_value($value)
 {
    global $xtpl, $max_data_length, $mod_strings;
-   if ( strlen($value) - $max_data_length > 3 ) {
-      $xtpl->assign("FIELD_VALUE", substr($value, 0, $max_data_length) . '...');
-   } else {
+   if (strlen((string) $value)-$max_data_length > 3) {
+      $xtpl->assign("FIELD_VALUE", substr((string) $value, 0, $max_data_length).'...');
+  } else {
       $xtpl->assign("FIELD_VALUE", $value);
    }
    $xtpl->assign("HOVER_TEXT", $mod_strings['LBL_MERGE_VALUE_OVER'] . ': ' . $value);
@@ -499,33 +502,33 @@ function show_field($field_def)
    }
    //field has 'duplicate_merge property set to disabled?'
    if ( isset($field_def['duplicate_merge']) ) {
-        if ('disabled' == $field_def['duplicate_merge'] or false == $field_def['duplicate_merge']) {
+     if ($field_def['duplicate_merge']=='disabled' || $field_def['duplicate_merge']==false) {
          return false;
-      }
-        if ('enabled' == $field_def['duplicate_merge'] or true == $field_def['duplicate_merge']) {
+     }
+     if ($field_def['duplicate_merge']=='enabled' || $field_def['duplicate_merge']==true) {
          return true;
-      }
+     }
    }
 
    //field has auto_increment set to true do not participate in merge.
    //we have a unique index on that field.
-    if (isset($field_def['auto_increment']) and true == $field_def['auto_increment']) {
+   if (isset($field_def['auto_increment']) && $field_def['auto_increment']==true) {
       return false;
    }
 
    //set required attribute values in $field_def
-   if ( !isset($field_def['source']) or empty($field_def['source']) ) {
-      $field_def['source'] = 'db';
+   if (!isset($field_def['source']) || empty($field_def['source'])) {
+      $field_def['source']='db';
    }
 
-   if ( !isset($field_def['dbType']) or empty($field_def['dbType']) and isset($field_def['type']) ) {
-      $field_def['dbType'] = $field_def['type'];
+   if (!isset($field_def['dbType']) || empty($field_def['dbType']) && isset($field_def['type'])) {
+      $field_def['dbType']=$field_def['type'];
    }
 
    foreach ( $filter_for_valid_editable_attributes as $attribute_set ) {
       $b_all = false;
       foreach ( $attribute_set as $attr => $value ) {
-         if ( isset($field_def[$attr]) and $field_def[$attr] == $value ) {
+         if (isset($field_def[$attr]) && $field_def[$attr]==$value) {
             $b_all = true;
          } else {
             $b_all = false;

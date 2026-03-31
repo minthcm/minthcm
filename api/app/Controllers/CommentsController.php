@@ -10,7 +10,7 @@
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
- * Copyright (C) 2018-2023 MintHCM
+ * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -47,11 +47,13 @@
 namespace MintHCM\Api\Controllers;
 
 use Doctrine\ORM\EntityManagerInterface;
-use MintHCM\Api\Entities\Comment;
+use MintHCM\Api\Entities\Comments;
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use MintHCM\Modules\Comments\AccessChecker;
+use MintHCM\Api\Entities\Users;
 
+#[\AllowDynamicProperties]
 class CommentsController
 {
     protected $entityManager;
@@ -76,14 +78,17 @@ class CommentsController
         if (!$parent->ACLAccess('view')) {
             return $response->withStatus(403);
         }
-        $db = \DBManagerFactory::getInstance();
-        $sql = "SELECT id, user_name, CONCAT_WS(' ', first_name, last_name) name, status, photo FROM users WHERE deleted = 0";
-        $result = $db->query($sql);
-        $users = [];
-        while ($row = $db->fetchByAssoc($result)) {
-            $users[] = $row;
-        }
         chdir('../api');
+
+        /** @var Users[] */
+        $users = $this->entityManager->getRepository(Users::class)->getActiveUsers();
+        $users = array_map(fn(Users $user) => [
+            'id' => $user->id,
+            'user_name' => $user->user_name,
+            'full_name' => $user->getFullName(),
+            'status' => $user->status,
+            'photo' => $user->photo,
+        ], $users);
 
         $init_controller = new Init\Init($this->entityManager);
         $languages_controller = new Init\Languages();
@@ -92,7 +97,7 @@ class CommentsController
             'user' => $init_controller->getCurrentUserData(),
             'languages' => $languages_controller->getLanguages(),
             'access' => $this->getAccess($parent),
-            'comments' => $this->entityManager->getRepository(Comment::class)->get($parent_type, $parent_id),
+            'comments' => $this->getParentComments($parent_id, $parent_type),
             'users' => $users,
         ]));
 
@@ -116,7 +121,7 @@ class CommentsController
         }
         chdir('../api');
 
-        $comments = $this->entityManager->getRepository(Comment::class)->get($parent_type, $parent_id);
+        $comments = $this->getParentComments($parent_id, $parent_type);
 
         $response->getBody()->write(json_encode($comments));
         return $response;
@@ -192,5 +197,45 @@ class CommentsController
         $class_path = "\MintHCM\Modules\Comments\AccessChecker\\{$parent->module_name}AccessChecker";
         $access_checker = class_exists($class_path) ? new $class_path($parent) : new AccessChecker\AccessChecker($parent);
         return $access_checker->get();
+    }
+
+    private function getParentComments(string $parent_id, string $parent_type): array
+    {
+        /** @var Comments[] */
+        $comments = $this->entityManager->getRepository(Comments::class)->getParentCommentsWithReactions($parent_type, $parent_id);
+        $parsed_comments = [];
+        foreach ($comments as $comment) {
+            $parsed_comment = [
+                'id' => $comment->id,
+                'description' => $comment->description,
+                'reply_to_id' => $comment->reply_to_id,
+                'date_entered' => !empty($comment->date_entered) ? $comment->date_entered->format('Y-m-d H:i:s') : null,
+                'pinned' => boolval($comment->pinned),
+                'date_edited' => !empty($comment->date_edited) ? $comment->date_edited->format('Y-m-d H:i:s'): null,
+                'removed' => boolval($comment->removed),
+            ];
+
+            if ($comment->assigned_user_link instanceof Users) {
+                $parsed_comment['assigned_user'] = [
+                    'id' => $comment->assigned_user_link->id,
+                    'name' => $comment->assigned_user_link->getFullName(),
+                    'photo' => $comment->assigned_user_link->photo,
+                ];
+            }
+
+            foreach ($comment->reactions->getValues() as $reaction) {
+                $parsed_comment['reactions'][] = [
+                    'type' => $reaction->reaction_type,
+                    'user' => [
+                        'id' => $reaction->assigned_user_link->id,
+                        'name' => $reaction->assigned_user_link->getFullName(),
+                    ],
+                ];
+            }
+
+            $parsed_comments[] = $parsed_comment;
+        }
+
+        return $parsed_comments;
     }
 }

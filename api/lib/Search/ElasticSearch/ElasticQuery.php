@@ -51,6 +51,7 @@ use MintHCM\Lib\Search\Base\SearchQuery;
 use MintHCM\Lib\Search\ElasticSearch\ElasticMapperParser;
 use MintHCM\Lib\Search\ElasticSearch\ElasticQueryOperatorsManager;
 use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
+use MintHCM\Utils\ConstantsLoader;
 use MintHCM\Utils\CustomLoader;
 use MintHCM\Utils\LegacyConnector;
 
@@ -91,7 +92,7 @@ class ElasticQuery extends SearchQuery
         if (static::DEFAULT_SORT_FIELD !== $field) {
             $parser = ElasticMapperParser::getInstance();
             $module_name = $this->params['type'] ?? '';
-            $field = $parser->getFieldAttributePath($module_name, $field);
+            $field = $parser->getFieldAttributePath($module_name, $field, true);
         }
         $this->sort = array(
             $field => array(
@@ -111,7 +112,7 @@ class ElasticQuery extends SearchQuery
                 $search_modules = $this->getGlobalSearchModuleList();
             }
             $searchModules = array_map('strtolower', $search_modules);
-            $searchModules = substr_replace($searchModules, $prefix . '_', 0, 0);
+            $searchModules = substr_replace($searchModules, $prefix.'_', 0, 0);
             $indexes = implode(',', $searchModules);
             $this->indice_module_map = array_combine($searchModules, $search_modules);
 
@@ -127,6 +128,7 @@ class ElasticQuery extends SearchQuery
             "size" => $this->size,
             "from" => $this->from,
             "sort" => $this->sort,
+            "track_total_hits" => true,
         );
     }
 
@@ -164,11 +166,11 @@ class ElasticQuery extends SearchQuery
 
     private function getGlobalQuery()
     {
-
+        $global_query = null;
         if ($this->add_acl_filters) {
             $uniq = static::getIndexPrefix();
-            $main_acl["bool"]["must"] = $this->noAclGlobalQuery();
-            $main_acl["bool"]["filter"]["bool"]["should"] = [];
+            $global_query["bool"]["must"] = $this->noAclGlobalQuery();
+            $global_query["bool"]["filter"]["bool"]["should"] = [];
             $search_modules = $this->getGlobalSearchModuleList();
 
             foreach ($search_modules as $module_to_search) {
@@ -185,33 +187,73 @@ class ElasticQuery extends SearchQuery
                 }
 
                 if (is_array($module_filters)) {
-                    $main_acl["bool"]["filter"]["bool"]["should"][] = $module_filters;
+                    $global_query["bool"]["filter"]["bool"]["should"][] = $module_filters;
                     $module_filters = [];
                 }
             }
 
             if (count($this->exclude_modules)) {
-                $main_acl["bool"]["filter"]["bool"]['must_not'] = $this->getExcludeModules();
+                $global_query["bool"]["filter"]["bool"]['must_not'] = $this->getExcludeModules();
             }
-
-            return $main_acl;
         } else {
-            return $this->noAclGlobalQuery();
+            $global_query = $this->noAclGlobalQuery();
         }
+        if(!empty($this->params['nestedQuery'])){
+            return $this->getGlobalQueryWithNestedQueries($global_query);
+        }
+
+        return $global_query;
+    }
+
+    protected function getGlobalQueryWithNestedQueries($global_query)
+    {
+        if(array_key_exists('bool', $global_query)){
+            if (empty($global_query['bool']['should'])) {
+                $global_query['bool']['should'] = [];
+            }
+            $global_query['bool']['should'] = [
+                ...$global_query['bool']['should'],
+                ...$this->params['nestedQuery']
+            ];
+        } else {
+            $simple_query = $global_query;
+            $global_query = [];
+            $global_query['bool']['should'] = [
+                $simple_query,
+                ...$this->params['nestedQuery']
+            ];
+        }
+        return $global_query;
     }
 
     private function noAclGlobalQuery()
     {
         $fields = !empty($this->params['fields']) ? $this->params['fields'] : array(static::ALL_FIELDS);
-        return array(
-            'simple_query_string' => array(
-                'query' => $this->params['query'],
-                'fields' => $fields,
-                'analyzer' => 'standard',
-                'default_operator' => 'OR',
-                'minimum_should_match' => '66%',
-            ),
-        );
+
+        // Phone queries need query_string with allow_leading_wildcard so that
+        // patterns like *906888767* (contains) work. simple_query_string only
+        // supports trailing wildcards (prefix queries), so leading * is silently
+        // dropped there.
+        if (!empty($this->params['phone_query'])) {
+            return [
+                'query_string' => [
+                    'query' => $this->params['query'],
+                    'fields' => $fields,
+                    'default_operator' => 'OR',
+                    'allow_leading_wildcard' => true,
+                ],
+            ];
+        }
+
+        return [
+            'simple_query_string' => [
+                    'query' => $this->params['query'],
+                    'fields' => $fields,
+                    'analyzer' => 'standard',
+                    'default_operator' => 'AND',
+                    'minimum_should_match' => $this->params['minimum_should_match'] ?? '66%',
+            ],
+        ];
     }
 
     private function getListQuery()
@@ -268,9 +310,9 @@ class ElasticQuery extends SearchQuery
                 require_once $variant['path'];
                 if (class_exists($variant['className'])) {
                     return new $variant['className']($module);
-                }
             }
         }
+    }
         throw new InvalidArgumentException("ACL class not found for module: {$module}");
     }
     public function getIndiceToModuleMapping()
@@ -280,13 +322,16 @@ class ElasticQuery extends SearchQuery
 
     protected function getGlobalSearchModuleList()
     {
+        if (!empty($this->params['type'])) {
+            return $this->params['type'];
+        }
         if (!empty($this->search_modules)) {
             return $this->search_modules;
         }
         include '../legacy/custom/modules/unified_search_modules_display.php';
 
         $search_modules = [];
-        $exclude_hardcode = ["Connectors", "Currencies", "OAuthTokens", "OAuthKeys", "ACLRoles", "ACLActions", "EmailMan", "Schedulers", "SchedulersJobs", "CampaignLog", "EmailMarketing", "AOW_WorkFlow"];
+        $exclude_hardcode = ConstantsLoader::getConstants('global_search_excluded_modules') ?: [];
         global $beanList;
         if (!empty($unified_search_modules_display)) {
             $search_modules = array_filter(array_map(function ($row) {
@@ -347,7 +392,7 @@ class ElasticQuery extends SearchQuery
         }
     }
 
-    public static function getIndexPrefix(): string
+    public static function getIndexPrefix():string
     {
         return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
     }

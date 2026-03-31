@@ -12,11 +12,9 @@
  * You can contact us at info@kreporter.org
  * ****************************************************************************** */
 
-
-
-
-if (!defined('sugarEntry') || !sugarEntry)
+if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
+}
 
 $dictionary['KReport'] = array(
     'table' => 'kreports',
@@ -34,7 +32,7 @@ $dictionary['KReport'] = array(
             'type' => 'enum',
             'options' => 'kreportstatus',
             'len' => '1',
-            'vname' => 'LBL_REPORT_STATUS'
+            'vname' => 'LBL_REPORT_STATUS',
         ),
         'union_modules' => array(
             'name' => 'union_modules',
@@ -43,7 +41,7 @@ $dictionary['KReport'] = array(
         'reportoptions' => array(
             'name' => 'reportoptions',
             'type' => 'text',
-            'vname' => 'LBL_REPORT_OPTIONS'
+            'vname' => 'LBL_REPORT_OPTIONS',
         ),
         'listtype' => array(
             'name' => 'listtype',
@@ -93,17 +91,17 @@ $dictionary['KReport'] = array(
         'listfields' => array(
             'name' => 'listfields',
             'type' => 'text',
-            'vname' => 'LBL_LISTFIELDS'
+            'vname' => 'LBL_LISTFIELDS',
         ),
         'unionlistfields' => array(
             'name' => 'unionlistfields',
             'type' => 'text',
-            'vname' => 'LBL_UNIONLISTFIELDS'
+            'vname' => 'LBL_UNIONLISTFIELDS',
         ),
         'advancedoptions' => array(
             'name' => 'advancedoptions',
             'type' => 'text',
-            'vname' => 'LBL_ADVANCEDOPTIONS'
+            'vname' => 'LBL_ADVANCEDOPTIONS',
         ),
         'prospectlists' => array(
             'name' => 'prospectlists',

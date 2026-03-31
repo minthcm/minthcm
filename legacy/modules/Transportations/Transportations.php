@@ -41,6 +41,7 @@
 require_once('modules/Transportations/Transportations_sugar.php');
 require_once('modules/Transportations/SugarFeeds/TransportationsFeed.php');
 
+#[\AllowDynamicProperties]
 class Transportations extends Transportations_sugar {
 
    public function save($check_notify = false) {
