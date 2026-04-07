@@ -14,6 +14,11 @@
             variant="plain"
             @update:focused="isFocused = $event"
             @blur="isFocused = false"
+            name="global-search-input"
+            id="global-search-input"
+            :aria-label="languages.label('LBL_GLOBAL_SEARCH_INPUT')"
+            :aria-description="languages.label('LBL_GLOBAL_SEARCH_INPUT_COMMENT')"
+            :aria-describedby="'global-search-input-help'"
         >
             <template #prepend-inner>
                 <v-fab-transition class="search-prepend-icon">
@@ -22,6 +27,7 @@
                 </v-fab-transition>
             </template>
         </v-text-field>
+        <p id="global-search-input-help" name="global-search-input-help" hidden>{{languages.label('LBL_GLOBAL_SEARCH_INPUT_COMMENT')}}</p>
         <v-slide-y-transition>
             <template v-if="isFocused">
                 <v-skeleton-loader v-if="isSearching" type="list-item-two-line" class="search-results" />

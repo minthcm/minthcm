@@ -20,12 +20,33 @@
                     color="error"
                     location="bottom start"
                     :model-value="!!drawer.badge?.()"
-                    @click="ux.drawer = ux.drawer === drawer.key ? null : drawer.key"
+                    @click="setDrawer(drawer)"
+                    @keydown.enter="setDrawer(drawer)"
+                    @keydown.space="setDrawer(drawer)"
+                    :name="drawer.key"
+                    :id="drawer.key"
+                    :aria-label="languages.label(drawer.label)"
+                    :aria-description="languages.label(drawer.descriptionLabel)"
+                    :aria-describedby="drawer.key + 'drawer-help'"
                 >
                     <MintButton :icon="drawer.icon" variant="nav" :active="ux.drawer === drawer.key" />
                 </v-badge>
+                <p :id="drawer.key + 'drawer-help'" :name="drawer.key + 'drawer-help'" hidden>{{languages.label(drawer.descriptionLabel)}}</p>
             </template>
-            <MintButton v-if="ux.drawer" @click="ux.drawer = null" icon="mdi-close" variant="nav" />
+            <MintButton 
+                    v-if="ux.drawer" 
+                    @click="ux.drawer = null" 
+                    icon="mdi-close" 
+                    variant="nav"
+                    @keydown.enter="ux.drawer = null"
+                    @keydown.space="ux.drawer = null"
+                    name='close-mint-drawer'
+                    id="close-mint-drawer"
+                    :aria-label="languages.label('LBL_CLOSE_DRAWER')"
+                    :aria-description="languages.label('LBL_CLOSE_DRAWER_COMMENT')"
+                    aria-describedby='close-mint-drawer-help'
+            />
+            <p id="close-mint-drawer-help" name="close-mint-drawer-help" hidden>{{languages.label('LBL_CLOSE_DRAWER_COMMENT')}}</p>
         </div>
         <v-slide-x-transition hide-on-leave>
             <div 
@@ -50,8 +71,10 @@ import MintButton from '@/components/MintButtons/MintButton.vue'
 import { useUxStore } from '@/store/ux'
 import { computed, ref } from 'vue'
 import bundle from '@/bundler'
+import { useLanguagesStore } from '@/store/languages'
 
 const ux = useUxStore()
+const languages = useLanguagesStore()
 const drawerContentRef = ref<HTMLElement | null>(null)
 
 const activeDrawer = computed(() => bundle.drawers.find((drawer: any) => drawer.key === ux.drawer))
@@ -61,6 +84,11 @@ function handleScroll() {
         activeDrawer.value.onScroll(drawerContentRef.value)
     }
 }
+
+function setDrawer(drawer: any) {
+    ux.drawer = ux.drawer === drawer.key ? null : drawer.key
+}
+
 </script>
 
 <style scoped lang="scss">

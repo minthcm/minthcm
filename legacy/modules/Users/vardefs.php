@@ -520,6 +520,7 @@ $dictionary['User'] = array(
         'reports_to_id' => array(
             'name' => 'reports_to_id',
             'vname' => 'LBL_REPORTS_TO_ID',
+            'relationship' => 'user_direct_reports',
             'type' => 'id',
             'required' => false,
         ),
@@ -529,7 +530,6 @@ $dictionary['User'] = array(
             'id_name' => 'reports_to_id',
             'vname' => 'LBL_REPORTS_TO_NAME',
             'type' => 'relate',
-            'isnull' => 'true',
             'module' => 'Users',
             'table' => 'users',
             'link' => 'reports_to_link',

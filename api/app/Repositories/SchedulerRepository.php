@@ -50,6 +50,7 @@ use ACLController;
 
 class SchedulerRepository
 {
+    /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
     public function __construct($connection)
@@ -129,7 +130,12 @@ class SchedulerRepository
                     $users[] = $participant['id'];
                 }
             }
-            $idsSQL = "AND users.id IN ('" . implode("','", $users) . "')";
+            if (!empty($users)) {
+                $quoted = implode(',', array_map(fn($id) => $this->connection->quote($id), $users));
+                $idsSQL = "AND users.id IN ({$quoted})";
+            } else {
+                $idsSQL = 'AND 1=0';
+            }
         }
         return "SELECT users.id
             , CONCAT_WS(' ', users.first_name, users.last_name) name
@@ -167,7 +173,12 @@ class SchedulerRepository
                     $candidates[] = $participant['id'];
                 }
             }
-            $idsSQL = "AND candidates.id IN ('" . implode("','", $candidates) . "')";
+            if (!empty($candidates)) {
+                $quoted = implode(',', array_map(fn($id) => $this->connection->quote($id), $candidates));
+                $idsSQL = "AND candidates.id IN ({$quoted})";
+            } else {
+                $idsSQL = 'AND 1=0';
+            }
         }
         return "SELECT candidates.id
             , CONCAT_WS(' ', candidates.first_name, candidates.last_name) name
@@ -208,7 +219,12 @@ class SchedulerRepository
                     $resources[] = $participant['id'];
                 }
             }
-            $idsSQL = "AND resources.id IN ('" . implode("','", $resources) . "')";
+            if (!empty($resources)) {
+                $quoted = implode(',', array_map(fn($id) => $this->connection->quote($id), $resources));
+                $idsSQL = "AND resources.id IN ({$quoted})";
+            } else {
+                $idsSQL = 'AND 1=0';
+            }
         }
         return "SELECT resources.id
             , resources.name

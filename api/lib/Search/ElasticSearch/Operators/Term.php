@@ -60,9 +60,16 @@ class Term extends ElasticOperator
 
     protected function getDataArray(ModulePrefixer $prefixer): array
     {
+        $field = $prefixer->modify($this->field);
+        $value = $this->value;
+
+        if (is_string($value) && str_ends_with($field, '.keyword')) {
+            $value = ['value' => $value, 'case_insensitive' => true];
+        }
+
         return [
             'term' => [
-                $prefixer->modify($this->field) => $this->value,
+                $field => $value,
             ],
         ];
     }

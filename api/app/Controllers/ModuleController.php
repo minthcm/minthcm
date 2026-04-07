@@ -229,11 +229,25 @@ class ModuleController
 
         $record_data = !empty($entity) && $entity->id === $record_id ? $this->mergeRecordData($entity, $relation_list) : null;
         $bean = MintBeanFactory::getBean($module, $record_id);
+        $class_metadata = $this->entity_manager->getClassMetadata(get_class($entity));
         foreach ($bean->field_defs as $field => $defs) {
+            // Fields mapped as Doctrine associations (ManyToOne/JoinColumn without a separate @Column)
+            // are not serialized as scalars by getSerialized() — fetch them from the legacy bean instead.
+            // Non-db, non-link fields (e.g. relate/computed) are absent from the entity entirely.
+            // Only scalar associations (ManyToOne/OneToOne) are included — Collection types (ManyToMany/OneToMany)
+            // must not be fetched from the legacy bean as null, as they cannot be safely written back during update.
+            $isScalarAssociation = $class_metadata->hasAssociation($field)
+                && in_array($class_metadata->getAssociationMapping($field)['type'], [
+                    \Doctrine\ORM\Mapping\ClassMetadata::MANY_TO_ONE,
+                    \Doctrine\ORM\Mapping\ClassMetadata::ONE_TO_ONE,
+                ]);
             if (
-                $defs['source'] === 'non-db' 
-                && $defs['type'] !== 'link' 
-                && $defs['name'] !== 'email1'
+                $isScalarAssociation
+                || (
+                    ($defs['source'] ?? '') === 'non-db'
+                    && ($defs['type'] ?? '') !== 'link'
+                    && ($defs['name'] ?? '') !== 'email1'
+                )
             ) {
                 $record_data['attributes'][$field] = $bean->$field;
             }

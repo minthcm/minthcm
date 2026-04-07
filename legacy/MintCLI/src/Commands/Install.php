@@ -97,6 +97,9 @@ class Install extends Command
         $io->section('Create OAuth2 keys and Frontend client...');
         $installer->setupOAuth2();
 
+        $io->section('Setting up files permissions...');
+        $installer->setupFilesPermissions();
+
         $io->success('Installation finished successfuly');
         return Command::SUCCESS;
     }
