@@ -1,6 +1,6 @@
 <template>
     <v-list class="mint-menu-list" nav density="compact" color="secondary">
-        <v-list-item v-for="item in processedItems" :name="item.actionKey || null" :id="item.actionKey || null" :key="item.title" @click="item.onClick" :active="false" v-bind="item.url && item.url !== '/' ? { to: item.url } : { tag: 'button' }">
+        <v-list-item v-for="item in processedItems" :name="item.actionKey || null" :id="item.actionKey || null" :key="item.title" @click="item.onClick" :active="false" v-bind="item.url && item.url !== '/' ? { to: item.url } : { tag: 'button' }" :aria-label="languages.label(item.title)">
             <template v-if="item.icon" #prepend>
                 <span style="font-size: 11px"><v-icon :icon="getIcon(item.icon)" /></span>
             </template>

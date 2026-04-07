@@ -98,7 +98,7 @@ class PrivateGroup extends SecurityGroup {
       $sgur->securitygroup_id = $pg_id;
       $sgur->save();
       $reports_to_id = User::getUserSupervisiorID($user_id);
-      if ( $reports_to_id ) {
+      if ( $reports_to_id && $user_id !== $reports_to_id ) {
          $this->addSupervisorToPrivateGroup($pg_id, $reports_to_id);
       }
    }
@@ -109,7 +109,7 @@ class PrivateGroup extends SecurityGroup {
          $sgur->mark_deleted($sgur->id);
       }
       $reports_to_id = User::getUserSupervisiorID($user_id);
-      if ( $reports_to_id ) {
+      if ( $reports_to_id && $reports_to_id !== $user_id) {
          $this->delSupervisorFromPrivateGroup($pg_id, $reports_to_id);
       }
    }

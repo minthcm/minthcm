@@ -5,6 +5,7 @@ import { useACL } from '@/composables/useACL'
 export default {
     icon: 'mdi-thumb-up',
     component: MintKudos,
+    label: 'LBL_KUDOS_DRAWER',
     onScroll: (drawerElement: HTMLElement) => {
         if (!drawerElement) {
             return
