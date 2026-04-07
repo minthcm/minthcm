@@ -1,0 +1,1 @@
+import{d as s,x as a,b as o,f as n,u as t,_}from"./index-Dn55WBht.js";const r=["innerHTML"],c=s({__name:"SetupWizardCookies",setup(i){const e=a();return(u,p)=>(o(),n("div",{class:"setup-wizard-cookies-container",innerHTML:t(e).label("LBL_MINT4_SETUP_WIZARD_COOKIES_DESCRIPTION")},null,8,r))}}),l=_(c,[["__scopeId","data-v-870be637"]]);export{l as default};

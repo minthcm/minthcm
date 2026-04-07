@@ -66,6 +66,7 @@ class QueryString extends ElasticOperator
             'query_string' => array(
                     "query" => $query,
                     "fields" => array("*__last^5", "*__first^4", "*__name.*^3", "*"),
+                    "default_operator" => "AND",
             ),
         );
     }

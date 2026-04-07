@@ -17,6 +17,7 @@ import { useStatusBoxesStore } from '@/store/statusBoxes'
 import { mintApi } from '@/api/api'
 import { useBackendStore } from '@/store/backend'
 import ComponentLoader from '@/utils/componentLoader'
+import { decodeRecordStrings } from '@/utils/html'
 
 interface Preferences {
     columns: string[]
@@ -188,10 +189,10 @@ export const useListViewStore = defineStore('listview', () => {
         if (module.value === result?.data.module && requestCount <= 0) {
             requestCount = 0;
             isLoading.value = false;
-            results.value = result.data?.results.map((item) => {
-                const bean = useBean(item.module, item.id)
-                bean.setData(item)
-                return bean
+            results.value = result.data?.results.map((item) => { 
+                const bean = useBean(item.module, item.id) 
+                bean.setData({ ...item, attributes: decodeRecordStrings(item.attributes) }) 
+                return bean 
             }) || []
             itemsLength.value = result.data?.total
             if (options.value.page === 1) {

@@ -60,10 +60,11 @@ class Installer
 
     public function setupFilesPermissions()
     {
-        exec("chmod -R 000 " . self::INSTANCE_DIR);
         exec("chmod -R 755 " . self::INSTANCE_DIR);
         exec("chmod -R 775 " . self::INSTANCE_DIR. "/cache ". self::INSTANCE_DIR. "/custom ". self::INSTANCE_DIR. "/data ". self::INSTANCE_DIR. "/modules ". self::INSTANCE_DIR. "/themes ". self::INSTANCE_DIR. "/upload");
         exec("chown -R www-data:www-data " . self::INSTANCE_DIR);
+        exec("chmod -R 755 ./api");
+        exec("chown -R www-data:www-data ./api");
     }
 
     public function setupHtaccess()

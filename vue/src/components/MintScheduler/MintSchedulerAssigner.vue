@@ -6,17 +6,23 @@
             variant="outlined"
             :width="$vuetify.display.mdAndDown ? '95%' : '350px'"
             density="compact"
-            :label="language.label('LBL_SEARCH')"
+            :label="languages.label('LBL_SEARCH')"
             clearable
             :loading="isSearching"
             color="secondary"
             :messages="
                 !isSearching && searchQueryParsed && !visibleParticipants?.length
-                    ? language.label('LBL_SCHEDULER_NO_RESULTS')
+                    ? languages.label('LBL_SCHEDULER_NO_RESULTS')
                     : []
             "
             @keydown.enter="search"
+            name="search-resources"
+            id="search-resources"
+            :aria-label="languages.label('LBL_SEARCH')"
+            :aria-description="languages.label('LBL_SCHEDULER_SEARCH_BAR_COMMENT')"
+            :aria-describedby="'scheduler-search-bar-help'"
         />
+        <p id="scheduler-search-bar-help" name="scheduler-search-bar-help" hidden>{{languages.label('LBL_SCHEDULER_SEARCH_BAR_COMMENT')}}</p>
     </div>
     <div>
         <div>
@@ -62,7 +68,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const language = useLanguagesStore()
+const languages = useLanguagesStore()
 
 const searchQuery = ref('')
 const searchQueryParsed = computed(() => searchQuery.value?.trim().toLowerCase() ?? '')

@@ -39,11 +39,7 @@
                         v-if="store.view === 'detail'"
                         class="ml-auto"
                         icon="mdi-pencil"
-                        :text="
-                            mdAndDown
-                                ? ''
-                                : `${languages.label('LBL_EDIT_BUTTON_LABEL')} ${languages.label('LBL_DETAILS')}`
-                        "
+                        :text="mdAndDown ? '' : languages.label('LBL_EDIT_BUTTON_LABEL')"
                         @click="edit"
                     />
                     <div class="buttons" v-if="store.view === 'edit'">

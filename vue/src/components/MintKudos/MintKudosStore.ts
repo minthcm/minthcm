@@ -30,18 +30,43 @@ export const useMintKudosStore = defineStore('mint-kudos', () => {
     const activeView = ref<Views>('kudos-list')
     const showSuccessMessage = ref<boolean>(false)
     const KUDOS_READ_DELAY_MS = 5000
+    let fetchAbortController: AbortController | null = null
+
+    function abortCurrentFetch() {
+        if (fetchAbortController) {
+            fetchAbortController.abort()
+            fetchAbortController = null
+        }
+    }
 
     async function fetchInitialData() {
+        abortCurrentFetch()
         kudos.value = []
         isLoading.value = true
-        const response = await mintApi.get<InitialResponse>(`kudos/init?listType=${activeTab.value}`)
-        kudos.value = response.data.kudos
-        users.value = response.data.users
-        isLoading.value = false
+        const controller = new AbortController()
+        fetchAbortController = controller
+        try {
+            const response = await mintApi.get<InitialResponse>(`kudos/init?listType=${activeTab.value}`, {
+                signal: controller.signal,
+            })
+            kudos.value = response.data.kudos
+            users.value = response.data.users
+        } catch (error) {
+            if (controller.signal.aborted) {
+                return
+            }
+            throw error
+        } finally {
+            if (!controller.signal.aborted) {
+                isLoading.value = false
+            }
+        }
     }
 
     async function fetchKudos(clear = false) {
         if (clear) {
+            abortCurrentFetch()
+            isLoading.value = false
             kudos.value = []
             page.value = 1
             fetchedAllKudos.value = false
@@ -51,14 +76,27 @@ export const useMintKudosStore = defineStore('mint-kudos', () => {
                 page.value++
             }
             isLoading.value = true
-            const response = await mintApi.get<InitialResponse>(
-                `kudos?listType=${activeTab.value}&page=${page.value}`,
-            )
-            if (response.data.kudos.length === 0) {
-                fetchedAllKudos.value = true
+            const controller = new AbortController()
+            fetchAbortController = controller
+            try {
+                const response = await mintApi.get<InitialResponse>(
+                    `kudos?listType=${activeTab.value}&page=${page.value}`,
+                    { signal: controller.signal },
+                )
+                if (response.data.kudos.length === 0) {
+                    fetchedAllKudos.value = true
+                }
+                kudos.value = [...kudos.value, ...response.data.kudos]
+            } catch (error) {
+                if (controller.signal.aborted) {
+                    return
+                }
+                throw error
+            } finally {
+                if (!controller.signal.aborted) {
+                    isLoading.value = false
+                }
             }
-            kudos.value = [...kudos.value, ...response.data.kudos]
-            isLoading.value = false
         }
     }
 

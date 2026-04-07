@@ -47,12 +47,18 @@
                 variant="plain"
                 density="compact"
                 hide-details
+                :name="'find-module-input'"
+                :id="'find-module-input'"
+                :aria-label="languages.label('LBL_MINT4_FIND_MODULE')"
+                :aria-description="languages.label('LBL_MINT4_FIND_MODULE_COMMENT')"
+                :aria-describedby="'find-module-input-help'"
             >
                 <template #prepend-inner>
                     <v-fab-transition>
                         <v-icon v-if="filterModulesQuery" icon="mdi-close" @click="clearInput" />
                         <v-icon v-else icon="mdi-magnify" />
                     </v-fab-transition>
+                    <p id="find-module-input-help" name="find-module-input-help" hidden>{{languages.label('LBL_MINT4_FIND_MODULE_COMMENT')}}</p>
                 </template>
             </v-text-field>
             <v-list
@@ -68,14 +74,20 @@
                         <v-list-item
                             class="nav-item"
                             v-for="filteredModule in filteredModules"
-                            :key="filteredModule.name"
-                            :value="filteredModule.name"
-                            :data-cy="filteredModule.name"
-                            :to="`/modules/${filteredModule.name}`"
-                            :active="filteredModule.name === url.module"
-                            color="secondary"
-                            :class="{ 'v-list-item--active keyboard-hovered': selectedItem === filteredModule.name }"
+                                :key="filteredModule.name"
+                                :value="filteredModule.name"
+                                :data-cy="filteredModule.name"
+                                :to="`/modules/${filteredModule.name}`"
+                                :active="filteredModule.name === url.module"
+                                color="secondary"
+                                :class="{ 'v-list-item--active keyboard-hovered': selectedItem === filteredModule.name }"
+                                :name="'module-' + filteredModule.name + '-button'"
+                                :id="'module-' + filteredModule.name + '-button'"
+                                :aria-label="filteredModule.label"
+                                :aria-description="filteredModule.label"
+                                :aria-describedby="'module-' + filteredModule.name + '-button-help'"
                         >
+                            <p :id="'module-' + filteredModule.name + '-button-help'" :name="'module-' + filteredModule.name + '-button-help'" hidden>{{filteredModule.label}}</p>
                             <div style="display: flex; align-items: center; justify-content: space-between">
                                 <div class="nav-title">
                                     <v-icon :icon="`${filteredModule.icon}`" />
@@ -107,10 +119,19 @@
                 </transition-group>
             </v-list>
             <v-expansion-panels class="nav-accordion" variant="accordion">
-                <v-expansion-panel v-if="recents.recents?.length" bg-color="transparent">
+                <v-expansion-panel 
+                    v-if="recents.recents?.length" 
+                    bg-color="transparent"
+                    name="recently-viewed-panel"
+                    id="recently-viewed-panel"
+                    :aria-label="languages.label('LBL_MINT4_RECENTLY_VIEWED')"
+                    :aria-description="languages.label('LBL_MINT4_RECENTLY_VIEWED_COMMENT')"
+                    :aria-describedby="'recently-viewed-panel-help'"
+                >
                     <v-expansion-panel-title>
                         <v-icon class="mr-4" icon="mdi-history" />
                         <span v-text="languages.label('LBL_MINT4_RECENTLY_VIEWED')" />
+                        <p id="recently-viewed-panel-help" name="recently-viewed-panel-help" hidden>{{languages.label('LBL_MINT4_RECENTLY_VIEWED_COMMENT')}}</p>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <v-list nav class="nav-list">
@@ -130,10 +151,20 @@
                         </v-list>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel v-if="favorites.favorites?.length" bg-color="transparent" elevetion="10">
+                <v-expansion-panel 
+                    v-if="favorites.favorites?.length" 
+                    bg-color="transparent" 
+                    elevetion="10"
+                    name="favorite-records-panel"
+                    id="favorite-records-panel"
+                    :aria-label="languages.label('LBL_MINT4_FAVORITE_RECORDS')"
+                    :aria-description="languages.label('LBL_MINT4_FAVORITE_RECORDS_COMMENT')"
+                    :aria-describedby="'favorite-records-panel-help'"
+                >
                     <v-expansion-panel-title>
                         <v-icon class="mr-4" icon="mdi-heart" />
                         <span v-text="languages.label('LBL_MINT4_FAVORITE_RECORDS')" />
+                        <p id="favorite-records-panel-help" name="favorite-records-panel-help" hidden>{{languages.label('LBL_MINT4_FAVORITE_RECORDS_COMMENT')}}</p>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <v-list nav class="nav-list">
@@ -156,19 +187,27 @@
             </v-expansion-panels>
         </div>
     </v-navigation-drawer>
-    <div 
-        class="shrinker" 
+    <div
+        class="shrinker"
         :class="{ 'rail-mode': storage.sideMenuShrinked }"
         v-if="!$vuetify.display.mdAndDown"
     >
         <div class="shrinker-background"></div>
-        <MintButton 
-            class="shrinker-button" 
-            variant="icon" 
-            size="x-large" 
-            :icon="storage.sideMenuShrinked || $vuetify.display.mdAndDown ? 'mdi-chevron-right' : 'mdi-chevron-left'" 
-            @click="shrink" 
+        <MintButton
+            class="shrinker-button"
+            variant="icon"
+            size="x-large"
+            :icon="storage.sideMenuShrinked || $vuetify.display.mdAndDown ? 'mdi-chevron-right' : 'mdi-chevron-left'"
+            @click="shrink"
+            @keydown.enter="shrink"
+            @keydown.space="shrink"
+            :name="'toggle-side-menu-button'"
+            :id="'toggle-side-menu-button'"
+            :aria-label="languages.label('LBL_MINT_TOGGLE_SIDE_MENU')"
+            :aria-description="languages.label('LBL_MINT_TOGGLE_SIDE_MENU_COMMENT')"
+            :aria-describedby="'toggle-side-menu-button-help'"
         />
+        <p id="toggle-side-menu-button-help" name="toggle-side-menu-button-help" hidden>{{languages.label('LBL_MINT_TOGGLE_SIDE_MENU_COMMENT')}}</p>
     </div>
 </div>
 

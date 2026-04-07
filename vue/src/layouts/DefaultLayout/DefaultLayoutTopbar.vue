@@ -14,7 +14,19 @@
         <div class="flex-grow-1" />
         <v-menu offset="16">
             <template v-slot:activator="{ props, isActive }">
-                <MintButton v-bind="props" variant="nav" icon="mdi-plus" :active="isActive" v-if="!mdAndDown || !ux.sideMenu" />
+                <MintButton
+                    v-bind="props"
+                    variant="nav"
+                    icon="mdi-plus"
+                    :active="isActive"
+                    v-if="!mdAndDown || !ux.sideMenu"
+                    name="quick-create-menu-button"
+                    id="quick-create-menu-button"
+                    :aria-label="languages.label('LBL_MINT_QUICK_CREATE')"
+                    :aria-description="languages.label('LBL_MINT_QUICK_CREATE_COMMENT')"
+                    aria-describedby="quick-create-menu-button-help"
+                />
+                <p id="quick-create-menu-button-help" name="quick-create-menu-button-help" hidden>{{ languages.label('LBL_MINT_QUICK_CREATE_COMMENT') }}</p>
             </template>
             <MintMenuList :items="quickCreateMenu" />
         </v-menu>
@@ -24,7 +36,15 @@
             @click="showModulesPopup"
             :active="!!popups.popups.find((p) => p.component === DefaultLayoutModulesPopup)"
             v-if="!mdAndDown"
+            @keydown.enter="showModulesPopup"
+            @keydown.space="showModulesPopup"
+            name="all-modules-popup-button"
+            id="all-modules-popup-button"
+            :aria-label="languages.label('LBL_MINT_ALL_MODULES')"
+            :aria-description="languages.label('LBL_MINT_ALL_MODULES_COMMENT')"
+            aria-describedby="all-modules-popup-button-help"
         />
+        <p id="all-modules-popup-button-help" name="all-modules-popup-button-help" hidden>{{ languages.label('LBL_MINT_ALL_MODULES_COMMENT') }}</p>
 
         <v-menu v-model="alertsMenu" offset="16" :close-on-content-click="false" v-if="!mdAndDown || !ux.sideMenu">
             <template v-slot:activator="{ props, isActive }">
@@ -35,7 +55,17 @@
                     location="bottom end"
                     :model-value="alerts.unreadFilteredAlertsCount > 0"
                 >
-                    <MintButton icon="mdi-bell" variant="nav" :active="isActive" />
+                    <MintButton 
+                        icon="mdi-bell" 
+                        variant="nav" 
+                        :active="isActive" 
+                        name="alerts-menu-button"
+                        id="alerts-menu-button"
+                        :aria-label="languages.label('LBL_MINT_ALERTS')"
+                        :aria-description="languages.label('LBL_MINT_ALERTS_COMMENT')"
+                        aria-describedby="alerts-menu-button-help"
+                    />
+                    <p id="alerts-menu-button-help" name="alerts-menu-button-help" hidden>{{ languages.label('LBL_MINT_ALERTS_COMMENT') }}</p>
                 </v-badge>
             </template>
             <DefaultLayoutAlerts @close="alertsMenu = false" />
