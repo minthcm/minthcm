@@ -13,7 +13,24 @@
     </a>
 </p>
 
-[minthcm.org](https://minthcm.org/) is a free and open-source tool for Human Capital Management. 
+[minthcm.org](https://minthcm.org/) is an open-source, AI-native HCM platform designed for Agentic Engineering.
+
+Build, customize, and deploy HR systems powered by AI agents — with full control over your data, architecture, and infrastructure.
+
+### Why MintHCM?
+
+- 🤖 AI-native (not AI as an add-on)
+- 🧠 Agentic Engineering ready (MCP, A2A, custom agents)
+- 🚀 Deploy anywhere (on-prem, cloud, hybrid)
+- 🔌 API-first & extensible
+- 🟢 Open-source, no vendor lock-in
+
+### What you can build:
+
+- AI-powered HR automation
+- agent-driven recruitment workflows
+- internal HR copilots
+- custom HR platforms tailored to your organization
 
 ## Main features:
 
