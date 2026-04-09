@@ -13,52 +13,106 @@
     </a>
 </p>
 
-[minthcm.org](https://minthcm.org/) is an open-source, AI-native HCM platform designed for Agentic Engineering.
+[minthcm.org](https://minthcm.org/) is an **open-source, AI-native HCM platform** designed for **Agentic Engineering**.
 
 Build, customize, and deploy HR systems powered by AI agents — with full control over your data, architecture, and infrastructure.
 
-### Why MintHCM?
+---
+### 🚀 Why MintHCM?
 
-- 🤖 AI-native (not AI as an add-on)
-- 🧠 Agentic Engineering ready (MCP, A2A, custom agents)
-- 🚀 Deploy anywhere (on-prem, cloud, hybrid)
-- 🔌 API-first & extensible
-- 🟢 Open-source, no vendor lock-in
+MintHCM goes beyond traditional HR systems. It is a **platform for building AI-driven workforce solutions**.
 
-### What you can build:
+- 🤖 **AI-native architecture** – built for AI agents, not extended with AI  
+- 🧠 **Agentic Engineering ready** – design and orchestrate AI-driven processes  
+- 🚀 **Deploy anywhere** – cloud, on-premise, hybrid, or edge  
+- 🔌 **API-first & extensible** – integrate and extend without limits  
+- 🟢 **Open-source** – no vendor lock-in, full control  
+- 🧩 **Customizable data model** – adapt the system to your organization  
 
-- AI-powered HR automation
-- agent-driven recruitment workflows
-- internal HR copilots
-- custom HR platforms tailored to your organization
+---
+## 🤖 AI & Agents
 
-## Main features:
+MintHCM is designed to work within modern AI ecosystems and support advanced agent-based architectures:
+- MCP / WebMCP support  
+- Agent-to-agent communication (A2A)  
+- A2UI / AGUi interfaces  
+- Built-in AI agent  
+- Support for custom AI tools and agents  
 
-* recruitment
-* time management
-* onboarding & offboarding
-* calendar
-* leave management
-* resources booking
-* travel & expenses
-* workplace management
-* analytics
-* roles & permissions management
-* job descriptions
-* employer branding
-* employee profiles
-* competences & skills
-* employment history
-* employee evaluations
-* [iOS](https://apps.apple.com/pl/app/minthcm/id1622342256) & [Android](https://play.google.com/store/apps/details?id=com.minthcm.mobile&hl=en&gl=US) mobile apps
+> Build HR processes as intelligent, autonomous systems powered by AI.
 
-Mint based on two popular, well-known business applications: SugarCRM Community Edition and SuiteCRM. This is why we often say that **MintHCM is CRM reinvented**. You all know how much goes into technological development of this type of business software… 
+---
+## 🚀 Deployment Freedom
 
+Run MintHCM in any environment:
+- On-premise infrastructure  
+- Public cloud (AWS, Azure, GCP, etc.)  
+- Private cloud  
+- Hybrid environments  
+
+> No restrictions. No lock-in. Full flexibility.
+
+---
+
+## 🧩 What You Can Build
+
+With MintHCM, you can create:
+
+- AI-powered recruitment systems  
+- Autonomous HR workflows  
+- Employee lifecycle management platforms  
+- Internal HR copilots  
+- Custom HR solutions tailored to your organization  
+
+---
+## ⚙️ Core Capabilities
+
+MintHCM provides a full set of HR functionalities, including:
+
+- Recruitment & candidate management  
+- Employee management  
+- Time and attendance tracking  
+- Performance and development management  
+- Organizational structure management  
+- Reporting and analytics
+- [iOS](https://apps.apple.com/pl/app/minthcm/id1622342256) & [Android](https://play.google.com/store/apps/details?id=com.minthcm.mobile&hl=en&gl=US) mobile apps
+
+> All capabilities are fully customizable and extensible.
+
+---
+
+## 🔌 Extensibility & Architecture
+- Open API for integrations  
+- Modular architecture  
+- Custom workflows and business logic  
+- Flexible data model  
+- Integration with external systems and AI services  
+
+---
+
+## 🎯 Who Is It For?
+
+MintHCM is designed for:
+- Enterprises with complex HR processes  
+- Organizations adopting AI in operations  
+- Companies requiring full control over data and infrastructure  
+- System integrators and development teams  
+
+---
+
+## 🆓 Open Source
+
+MintHCM is open-source, giving you:
+- Full transparency  
+- Freedom to modify and extend  
+- Independence from vendors  
+- Ability to build custom solutions  
+
+Mint is based on two popular, well-known business applications: SugarCRM Community Edition and SuiteCRM. This is why we often say that **MintHCM is CRM reinvented**. You all know how much goes into technological development of this type of business software… 
 <br/>
 
 **That's why we need your help.**
 
-<br/>
 
 Thanks to the open code of both SugarCRM CE and SuiteCRM we were able to reintroduce some features, redesign other, and provide brand new system to the users. The code of MintHCM remains open so feel free to use it
 
