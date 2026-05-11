@@ -39,11 +39,11 @@ What makes it different:
 ## 🤖 AI & Agents
 
 MintHCM is designed to work within modern AI ecosystems and support advanced agent-based architectures:
-- MCP / WebMCP support  
-- Agent-to-agent communication (A2A)  
-- A2UI / AGUi interfaces  
-- Built-in AI agent  
-- Support for custom AI tools and agents  
+- 🔗 MCP / WebMCP — connect HR data and processes to any MCP-compatible AI agent
+- 🤝 A2A (Agent-to-Agent) — orchestrate multi-agent workflows across systems
+- 🖥️ A2UI / AGUi — human ↔ agent collaboration interfaces
+- 🧠 Built-in AI agent — ready to use out of the box
+- 🛠️ Custom agent support — build and deploy your own agents on HR data and processes
 
 > Build HR processes as intelligent, autonomous systems powered by AI.
 
