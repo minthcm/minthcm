@@ -79,11 +79,16 @@ With MintHCM, you can create:
 
 MintHCM provides a full set of HR functionalities, including:
 
-- Recruitment & candidate management  
-- Employee management  
-- Time and attendance tracking  
-- Performance and development management  
-- Organizational structure management  
+- Recruitment & candidate management
+- Onboarding & offboarding
+- Employee profiles & employment history
+- Competences, skills & evaluations
+- Time and attendance tracking
+- Leave management
+- Performance and development management
+- Organizational structure management
+- Job descriptions & employer branding
+- Resources booking & workplace management
 - Reporting and analytics
 - [iOS](https://apps.apple.com/pl/app/minthcm/id1622342256) & [Android](https://play.google.com/store/apps/details?id=com.minthcm.mobile&hl=en&gl=US) mobile apps
 
