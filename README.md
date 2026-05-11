@@ -30,10 +30,10 @@ The problem with existing options:
 
 What makes it different:
 
-🤖 Agent-ready by design — not AI features bolted on, but native MCP/A2A/WebMCP architecture built for the agentic era
-🔓 Truly open-source — AGPL v3, no gated features, no enterprise-only fork, no phone-home telemetry
-🏗️ Framework-level customization — full code and data-model control, not just configuration
-🌍 Deploy anywhere — on-prem, cloud, hybrid, edge; any region, any provider, any jurisdiction 
+- 🤖 Agent-ready by design — not AI features bolted on, but native MCP/A2A/WebMCP architecture built for the agentic era
+- 🔓 Truly open-source — AGPL v3, no gated features, no enterprise-only fork, no phone-home telemetry
+- 🏗️ Framework-level customization — full code and data-model control, not just configuration
+- 🌍 Deploy anywhere — on-prem, cloud, hybrid, edge; any region, any provider, any jurisdiction 
 
 ---
 ## 🤖 AI & Agents
