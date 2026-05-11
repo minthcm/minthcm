@@ -20,14 +20,20 @@ Build, customize, and deploy HR systems powered by AI agents — with full contr
 ---
 ### 🚀 Why MintHCM?
 
-MintHCM goes beyond traditional HR systems. It is a **platform for building AI-driven workforce solutions**.
+MintHCM is not just another HR system. It's a **platform for building AI-driven workforce solutions** - with full ownership of your data, code, and infrastructure.
 
-- 🤖 **AI-native architecture** – built for AI agents, not extended with AI  
-- 🧠 **Agentic Engineering ready** – design and orchestrate AI-driven processes  
-- 🚀 **Deploy anywhere** – cloud, on-premise, hybrid, or edge  
-- 🔌 **API-first & extensible** – integrate and extend without limits  
-- 🟢 **Open-source** – no vendor lock-in, full control  
-- 🧩 **Customizable data model** – adapt the system to your organization  
+The problem with existing options:
+
+- Traditional SaaS HR — no data sovereignty, no deep customization, vendor lock-in
+- Other open-source HR tools — full control, but no native AI agent ecosystem
+- AI-first SaaS — powerful AI features, but you don't own your data or infrastructure
+
+What makes it different:
+
+🤖 Agent-ready by design — not AI features bolted on, but native MCP/A2A/WebMCP architecture built for the agentic era
+🔓 Truly open-source — AGPL v3, no gated features, no enterprise-only fork, no phone-home telemetry
+🏗️ Framework-level customization — full code and data-model control, not just configuration
+🌍 Deploy anywhere — on-prem, cloud, hybrid, edge; any region, any provider, any jurisdiction 
 
 ---
 ## 🤖 AI & Agents
