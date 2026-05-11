@@ -147,13 +147,16 @@ MintHCM is based on SuiteCRM, so the API is very similar. However there are a fe
 
 ## Community and Contributions 🤝
 
-Be part of the conversation. Join our [Discord server](https://discord.gg/zHu8AfCEVb)
+MintHCM is built with and for its community — developers, HR professionals, system integrators, and open-source advocates worldwide.
+Be part of the conversation. 
+- 💬Join our [Discord server](https://discord.gg/zHu8AfCEVb)
 
-If you're willing to help, **fork a repo**, make some changes, and then create Pull Request!
+
 
 ## i18n 🌐
 
-You can download and contribute your own translation packages via our [Crowdin project](https://crowdin.com/project/minthcm)
+- MintHCM is available in multiple languages and actively growing its global reach.
+- You can download and contribute your own translation packages via our [Crowdin project](https://crowdin.com/project/minthcm)
 
 ## Do you have a problem? Maybe you'd like to ask us about something? ❌
 
