@@ -123,7 +123,7 @@ MintHCM is open-source, giving you:
 - Independence from vendors  
 - Ability to build custom solutions  
 
-Mint is based on two popular, well-known business applications: SugarCRM Community Edition and SuiteCRM. This is why we often say that **MintHCM is CRM reinvented**. You all know how much goes into technological development of this type of business software… 
+Mint is based on two popular, well-known business applications: SugarCRM Community Edition (now SugarAI) and SuiteCRM. This is why we often say that **MintHCM is CRM reinvented**. You all know how much goes into technological development of this type of business software… 
 <br/>
 
 **That's why we need your help.**
