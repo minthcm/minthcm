@@ -45,6 +45,9 @@ MintHCM is designed to work within modern AI ecosystems and support advanced age
 - 🧠 Built-in AI agent — ready to use out of the box
 - 🛠️ Custom agent support — build and deploy your own agents on HR data and processes
 
+- **LLM-agnostic:** Use any model or provider — OpenAI, Anthropic, Mistral, local Llama, or regional sovereign LLMs. No forced dependency on any single AI vendor.
+- **Agentic Engineering:** MintHCM enables teams to design, deploy, and orchestrate agents that automate HR decisions — not just workflows.
+
 > Build HR processes as intelligent, autonomous systems powered by AI.
 
 ---
