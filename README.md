@@ -17,6 +17,8 @@
 
 Build, customize, and deploy HR systems powered by AI agents — with full control over your data, architecture, and infrastructure.
 
+<img width="2880" height="1800" alt="Mint4 - Dashboard" src="https://github.com/user-attachments/assets/6c07a2d4-041c-44c8-b4e4-a04235b7223e" />
+
 ---
 ### 🚀 Why MintHCM?
 
