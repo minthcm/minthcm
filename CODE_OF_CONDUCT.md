@@ -8,13 +8,13 @@ To ensure a welcoming and productive environment for all members, we ask that yo
 Treat all community members with kindness and professionalism. We embrace diversity and expect everyone to show respect for individuals of all backgrounds and identities. Harassment, discrimination, and any form of disrespectful behavior will not be tolerated.
 
 ## Maintain Professionalism
-Refrain from using language or images that are sexualized or inappropriate. Avoid making unwelcome advances or engaging in behavior that could be interpreted as such. Personal attacks, trolling, and political discussions have no place in our community.
+Refrain from using language or images that are sexualized or inappropriate. Avoid making unwelcome advances or engaging in behavior that could be interpreted as such. Personal attacks, trolling, and off-topic political debates have no place in our community.
 
 ## Respect Privacy
 Protect the privacy of others by refraining from sharing personal information without explicit consent. This includes physical addresses, email addresses, and any other private data.
 
 ## Remain Objective
-Focus on technical discussions and problem-solving. Emotions are natural, but negative emotions should not drive interactions. Assume good intentions from others and strive to find constructive solutions to technical challenges.
+Focus on technical discussions and problem-solving. Emotions are natural, but strive to communicate constructively and focus on solutions rather than frustration.
 
 ## Act Responsibly
 Consider the impact of your actions on the community and the project as a whole. Be transparent about any affiliations and ensure that your contributions benefit the collective effort. Adhere to security best practices and report any vulnerabilities responsibly.
