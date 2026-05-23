@@ -111,15 +111,6 @@ class Meetings extends MintEntity
     // Auto-generated SectionProperties section start
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Meetings_cstm",
-     *     mappedBy="main_entity",
-     *     cascade={"persist", "remove"},
-     *     fetch="EAGER"
-     * )
-     */
-    protected $custom_entity;
-    /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
@@ -411,25 +402,7 @@ class Meetings extends MintEntity
         $this->conclusions = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->resources = new ArrayCollection();
-        $this->setCustomEntity(new Meetings_cstm());
     }
 
-                public function getCustomEntity()
-    {
-        return $this->custom_entity;
-    }
-
-
-    public function setCustomEntity($custom_entity)
-    {
-        $this->custom_entity = $custom_entity;
-
-        if ($custom_entity && $custom_entity->getMainEntity() !== $this) {
-            $custom_entity->setMainEntity($this);
-        }
-
-        return $this;
-    }
-
-            // Auto-generated SectionMethods section end
+    // Auto-generated SectionMethods section end
 }

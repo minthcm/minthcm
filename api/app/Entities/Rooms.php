@@ -191,9 +191,9 @@ class Rooms extends MintEntity
 
     /**
      * @ORM\JoinTable(name="rooms_resources")
-     * @ORM\OneToOne(targetEntity=Resources::class, mappedBy="rooms_resources")
+     * @ORM\ManyToMany(targetEntity=Resources::class, mappedBy="rooms_resources")
      */
-    protected $rooms_resources;
+    protected Collection $rooms_resources;
 
     /**
      * @ORM\OneToMany(targetEntity=Workplaces::class, mappedBy="rooms_workplaces")
@@ -204,8 +204,16 @@ class Rooms extends MintEntity
     // Auto-generated SectionMethods section start
     public function __construct()
     {
+        $this->rooms_resources = new ArrayCollection();
         $this->rooms_workplaces = new ArrayCollection();
     }
 
+            public function getResource(): ?Resources
+    {
+        if ($this->rooms_resources instanceof \Doctrine\Common\Collections\Collection) {
+            return $this->rooms_resources->first() ?: null;
+        }
+        return null;
+    }
     // Auto-generated SectionMethods section end
 }

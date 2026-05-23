@@ -86,7 +86,8 @@ class Appraisals extends Basic
     public function save($check_notify = false)
     {
         $new_evaluator = false;
-        if ($this->fetched_row['evaluator_id'] != $this->evaluator_id) {
+        $old_evaluator_id = !empty($this->fetched_row['evaluator_id']) ? $this->fetched_row['evaluator_id'] : '';
+        if ($old_evaluator_id != $this->evaluator_id) {
             $new_evaluator = true;
         }
         $id = parent::save($check_notify);

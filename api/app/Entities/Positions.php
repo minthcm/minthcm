@@ -292,5 +292,12 @@ class Positions extends MintEntity
         $this->files = new ArrayCollection();
     }
 
+            public function getSecurityGroup(): ?SecurityGroups
+    {
+        if ($this->securitygroups_leader instanceof \Doctrine\Common\Collections\Collection) {
+            return $this->securitygroups_leader->first() ?: null;
+        }
+        return null;
+    }
     // Auto-generated SectionMethods section end
 }

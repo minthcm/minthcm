@@ -162,7 +162,7 @@ async function fetchRecordItems(e) {
         menuOpen.value = true
         const val = e?.target?.value ?? props.data?.bean.fields[props.defs.name]?.model ?? ''
         const predefinedFilters = getFilters(
-            modulesStore.modules[currentTypeItem.value].vardefs,
+            modulesStore.modules[currentTypeItem.value]?.vardefs || {},
             props.defs.filters && typeof props.defs.filters === 'object' && !Array.isArray(props.defs.filters)
                 ? props.defs.filters[currentTypeItem.value]
                 : [],

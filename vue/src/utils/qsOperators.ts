@@ -6,11 +6,23 @@ const typedOperatorDefs = operatorDefs as unknown as OperatorsConfig
 
 export default function getQuery(vardefs: any, filterDefs: filterDef[] | [] = []) {
     const query: { must: Filter[]; must_not: Filter[] } = { must: [], must_not: [] }
+    if (!vardefs) {
+        return query
+    }
     filterDefs.forEach((filter) => {
+        if (!vardefs[filter.field]) {
+            return
+        }
         const type = vardefs[filter.field].type as string
         const operators = (typedOperatorDefs[type as keyof OperatorsConfig] ??
             typedOperatorDefs[typedOperatorDefs.typeMap[type] as keyof OperatorsConfig]) as Record<string, BaseOperator>
+        if (!operators) {
+            return
+        }
         const operator = operators[filter.operator]
+        if (!operator) {
+            return
+        }
         const filterType = operator.not ? 'must_not' : 'must'
         const filterObject: Filter = {
             [operator.filters[0].op]: {

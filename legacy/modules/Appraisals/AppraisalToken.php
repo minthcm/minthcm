@@ -18,14 +18,15 @@ class AppraisalToken
         $id = $this->id;
         $employee_id = $this->employee_id;
         $appraisal_id = $this->appraisal_id;
-        $deleted = $this->deleted;
-        $status = $this->status;
+        $deleted = !empty($this->deleted) ? (int)$this->deleted : 0;
+        $status = !empty($this->status) ? (int)$this->status : 0;
         if (!empty($this->id)) {
-            $sql = "UPDATE appraisals_tokens SET deleted = {$deleted}, status = {$status}, appraisal_id = {$appraisal_id} WHERE id = {$id}";
+            $sql = "UPDATE appraisals_tokens SET deleted = {$deleted}, status = {$status}, appraisal_id = '{$appraisal_id}' WHERE id = '{$id}'";
         } else {
             $id = create_guid();
             $token = create_guid();
-            $sql = "INSERT INTO appraisals_tokens (id, date_entered, deleted, status, expired_date, token, employee_id, appraisal_id) VALUES ('{$id}', NOW(), 0, 1, DATE_ADD(NOW(), INTERVAL +{$this->sugar_config['days_to_token_expiration']} DAY), '{$token}', '{$employee_id}', '{$appraisal_id}')";
+            $daysToExpiration = !empty($GLOBALS['sugar_config']['days_to_token_expiration']) ? (int)$GLOBALS['sugar_config']['days_to_token_expiration'] : 30;
+            $sql = "INSERT INTO appraisals_tokens (id, date_entered, deleted, status, expired_date, token, employee_id, appraisal_id) VALUES ('{$id}', NOW(), 0, 1, DATE_ADD(NOW(), INTERVAL +{$daysToExpiration} DAY), '{$token}', '{$employee_id}', '{$appraisal_id}')";
         }
         if ($db->query($sql) === true) {
             return $id;

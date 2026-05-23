@@ -124,7 +124,7 @@ async function fetchItems(e) {
         menuOpen.value = true
         const val = e?.target?.value ?? props.data.bean.attributes[props.defs.name] ?? ''
         const predefinedFilters = getFilters(
-            modulesStore.modules[props.defs.module].vardefs,
+            modulesStore.modules[props.defs.module]?.vardefs || {},
             Array.isArray(props.defs.filters) ? props.defs.filters : [],
         )
         const wordFilters = val.split(/\s+/).filter(Boolean).map((word: string) => ({

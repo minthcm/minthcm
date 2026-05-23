@@ -1,0 +1,1 @@
+import{u as t}from"./MintChatStore-CDJawuum.js";import{d as o,b as n,e as r,m as a,u as s}from"./index-BIlPx8Mp.js";import"./MintSearch-Ci1ru-fv.js";const f=o({__name:"MintChat",setup(c){const e=t();return(m,p)=>(n(),r(a(s(e).currentView)))}});export{f as default};

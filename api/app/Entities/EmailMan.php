@@ -100,8 +100,6 @@ class EmailMan extends MintEntity
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="integer", length="11")
      */
     protected $id;

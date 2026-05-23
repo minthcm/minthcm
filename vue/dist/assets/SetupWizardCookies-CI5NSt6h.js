@@ -1,0 +1,1 @@
+import{d as a,x as s,b as o,f as n,u as t,_}from"./index-BIlPx8Mp.js";const r=["innerHTML"],c=a({__name:"SetupWizardCookies",setup(i){const e=s();return(u,p)=>(o(),n("div",{class:"setup-wizard-cookies-container",innerHTML:t(e).label("LBL_MINT4_SETUP_WIZARD_COOKIES_DESCRIPTION")},null,8,r))}}),l=_(c,[["__scopeId","data-v-6952aa1a"]]);export{l as default};

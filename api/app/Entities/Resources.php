@@ -196,9 +196,9 @@ class Resources extends MintEntity
 
     /**
      * @ORM\JoinTable(name="rooms_resources", joinColumns={@ORM\JoinColumn(name="resource_id", referencedColumnName="id")}, inverseJoinColumns={@ORM\JoinColumn(name="room_id", referencedColumnName="id")})
-     * @ORM\OneToOne(targetEntity=Rooms::class, inversedBy="rooms_resources")
+     * @ORM\ManyToMany(targetEntity=Rooms::class, inversedBy="rooms_resources")
      */
-    protected $rooms_resources;
+    protected Collection $rooms_resources;
 
     /**
      * @ORM\OneToMany(targetEntity=Files::class, mappedBy="resource")
@@ -213,8 +213,16 @@ class Resources extends MintEntity
         $this->reservations = new ArrayCollection();
         $this->meetings = new ArrayCollection();
         $this->calls = new ArrayCollection();
+        $this->rooms_resources = new ArrayCollection();
         $this->files = new ArrayCollection();
     }
 
+            public function getRoom(): ?Rooms
+    {
+        if ($this->rooms_resources instanceof \Doctrine\Common\Collections\Collection) {
+            return $this->rooms_resources->first() ?: null;
+        }
+        return null;
+    }
     // Auto-generated SectionMethods section end
 }

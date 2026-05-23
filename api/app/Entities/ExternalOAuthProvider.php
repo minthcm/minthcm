@@ -70,6 +70,7 @@ use Doctrine\Common\Collections\Collection;
  * @property mixed $deleted
  * @property mixed $type
  * @property mixed $connector
+ * @property mixed $redirect_uri_type
  * @property mixed $client_id
  * @property mixed $client_secret
  * @property mixed $scope
@@ -149,6 +150,11 @@ class ExternalOAuthProvider extends MintEntity
      * @ORM\Column(type="string")
      */
     protected $connector;
+
+    /**
+     * @ORM\Column(type="string", length="50")
+     */
+    protected $redirect_uri_type;
 
     /**
      * @ORM\Column(type="string")

@@ -32,10 +32,9 @@ CAL.repeat_tab_handle=function(module_name){clear_all_errors();toggle_repeat_typ
 CAL.GR_update_user=function(user_id){var callback={success:function(o){SUGAR.util.globalEval('res = ('+o.responseText+')');GLOBAL_REGISTRY.focus.users_arr_hash=undefined;}};var data={"users":user_id};var url="index.php?module=Calendar&action=GetGRUsers&sugar_body_only=true";YAHOO.util.Connect.asyncRequest('POST',url,callback,CAL.toURI(data));}
 CAL.GR_update_focus=function(module,record){if(record==""){GLOBAL_REGISTRY["focus"]={"module":module,users_arr:[],fields:{"id":"-1"}};SugarWidgetScheduler.update_time();}else{var callback={success:function(o){SUGAR.util.globalEval("retValue = "+o.responseText);res=retValue;SugarWidgetScheduler.update_time();if(CAL.record_editable){CAL.enable_buttons();}}};var url='index.php?module=Calendar&action=GetGR&sugar_body_only=true&type='+module+'&record='+record;YAHOO.util.Connect.asyncRequest('POST',url,callback,false);}}
 CAL.toggle_settings=function(){$('.modal-calendar-settings').modal('toggle')}
-CAL.fill_invitees=function(){CAL.get("user_invitees").value="";CAL.get("contact_invitees").value="";CAL.get("lead_invitees").value="";CAL.each(GLOBAL_REGISTRY['focus'].users_arr,function(i,v){var field_name="";if(v.module=="User")
+CAL.fill_invitees=function(){CAL.get("user_invitees").value="";CAL.get("contact_invitees").value="";CAL.each(GLOBAL_REGISTRY['focus'].users_arr,function(i,v){var field_name="";if(v.module=="User")
 field_name="user_invitees";if(v.module=="Contact")
-field_name="contact_invitees";if(v.module=="Lead")
-field_name="lead_invitees";var str=CAL.get(field_name).value;CAL.get(field_name).value=str+v.fields.id+",";});}
+field_name="contact_invitees";var str=CAL.get(field_name).value;CAL.get(field_name).value=str+v.fields.id+",";});}
 CAL.repeat_type_selected=function(){var rt;if(rt=CAL.get("repeat_type")){if(rt.value=='Weekly'){var nodes=CAL.query(".weeks_checks_div");CAL.each(nodes,function(i,v){nodes[i].style.display="block";});}else{var nodes=CAL.query(".weeks_checks_div");CAL.each(nodes,function(i,v){nodes[i].style.display="none";});}
 if(rt.value==''){CAL.get("repeat_interval").setAttribute("disabled","disabled");CAL.get("repeat_end_date").setAttribute("disabled","disabled");}else{CAL.get("repeat_interval").removeAttribute("disabled");CAL.get("repeat_end_date").removeAttribute("disabled");}}}
 CAL.load_form_in_new_tab=function(module_name,record,edit_all_recurrences,cal_event){var url="index.php?module="+module_name+"&action=DetailView&record="+record;window.open(url,'_blank');}

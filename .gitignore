@@ -80,3 +80,8 @@ legacy/reindexElastic.php
 
 #CLAUDE
 .claude/settings.local.json
+
+architecture.docx
+architecture.md
+docker-compose.yml
+.env

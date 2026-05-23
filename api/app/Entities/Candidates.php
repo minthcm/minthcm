@@ -504,5 +504,12 @@ public function getSerialized(bool $json = false): array|string
     $data['email1'] = $this->getEmail1();
     return $data;
 }
+            public function getUser(): ?Users
+    {
+        if ($this->employee instanceof \Doctrine\Common\Collections\Collection) {
+            return $this->employee->first() ?: null;
+        }
+        return null;
+    }
     // Auto-generated SectionMethods section end
 }

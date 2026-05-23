@@ -1,0 +1,17 @@
+admin
+minthcm
+minthcm-db
+3306
+root
+minthcm
+minthcm
+utf8mb4_general_ci
+minthcm-es
+9200
+elastic
+changeme
+no
+no
+http://localhost
+/var/www/MintHCM
+no

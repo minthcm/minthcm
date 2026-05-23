@@ -236,5 +236,12 @@ class SecurityGroups extends MintEntity
         $this->securitygroups_rooms = new ArrayCollection();
     }
 
+            public function getPosition(): ?Positions
+    {
+        if ($this->positions_leader instanceof \Doctrine\Common\Collections\Collection) {
+            return $this->positions_leader->first() ?: null;
+        }
+        return null;
+    }
     // Auto-generated SectionMethods section end
 }

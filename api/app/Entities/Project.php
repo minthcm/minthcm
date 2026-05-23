@@ -82,15 +82,6 @@ class Project extends MintEntity
     // Auto-generated SectionProperties section start
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Project_cstm",
-     *     mappedBy="main_entity",
-     *     cascade={"persist", "remove"},
-     *     fetch="EAGER"
-     * )
-     */
-    protected $custom_entity;
-    /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
@@ -241,25 +232,7 @@ class Project extends MintEntity
         $this->projecttask = new ArrayCollection();
         $this->project_users_1 = new ArrayCollection();
         $this->am_projecttemplates_project_1 = new ArrayCollection();
-        $this->setCustomEntity(new Project_cstm());
     }
 
-                public function getCustomEntity()
-    {
-        return $this->custom_entity;
-    }
-
-
-    public function setCustomEntity($custom_entity)
-    {
-        $this->custom_entity = $custom_entity;
-
-        if ($custom_entity && $custom_entity->getMainEntity() !== $this) {
-            $custom_entity->setMainEntity($this);
-        }
-
-        return $this;
-    }
-
-            // Auto-generated SectionMethods section end
+    // Auto-generated SectionMethods section end
 }

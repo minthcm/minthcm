@@ -57,7 +57,7 @@ use MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity;
  * @ORM\Entity(repositoryClass="MintHCM\Api\Repositories\UserPreferencesRepository")
  * @ORM\Table(name="user_preferences", indexes={
  * @ORM\Index(name="userpreferencespk", columns={"id"}), 
- * @ORM\Index(name="idx_userprefnamecat", columns={"assigned_user_id", "category"})})
+ * @ORM\Index(name="idx_userprefnamecat", columns={"assigned_user_id", "category", "deleted"})})
  * @property mixed $id
  * @property mixed $category
  * @property mixed $deleted
