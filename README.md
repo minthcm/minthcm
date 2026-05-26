@@ -14,9 +14,9 @@
    <a href="https://hub.docker.com/r/minthcm/minthcm" target="_blank">
             <img src="https://img.shields.io/docker/pulls/minthcm/minthcm?logo=docker&color=2496ED" alt="Docker Pulls">
         </a>
-        <a href="https://discord.gg/zHu8AfCEVb" target="_blank">
-            <img src="https://img.shields.io/discord/1296047605360365578?logo=discord&label=Discord&color=5865F2" alt="Discord">
-        </a>  
+         <a href="https://discord.gg/zHu8AfCEVb" target="_blank">
+            <img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white" alt="Discord">
+        </a>
 </p>
 
 [minthcm.org](https://minthcm.org/) is an **open-source, AI-native HCM platform** designed for **Agentic Engineering**.
