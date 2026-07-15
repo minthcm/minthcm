@@ -143,6 +143,7 @@ $dictionary['CampaignTracker'] = array(
         'campaign' => array(
             'name' => 'campaign',
             'type' => 'link',
+            'module' => 'Campaigns',
             'relationship' => 'campaign_campaigntrakers',
             'source' => 'non-db',
             'vname' => 'LBL_CAMPAIGN',

@@ -94,11 +94,6 @@ $searchdefs[$module_name] = array(
                 'default' => true,
                 'width' => '10%',
             ),
-            'collaboration' => array(
-                'name' => 'collaboration',
-                'default' => true,
-                'width' => '10%',
-            ),
             'last_time_contact' => array(
                 'name' => 'last_time_contact',
                 'type' => 'date',

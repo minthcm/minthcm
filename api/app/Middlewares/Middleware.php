@@ -51,10 +51,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteContext;
 
-#[\AllowDynamicProperties]
 abstract class Middleware
 {
-    protected $route_manager;
+    protected RouteManager $route_manager;
 
     public function __construct()
     {

@@ -179,7 +179,8 @@ $ESListViewDefs[$module_name] = [
         ],
         'original_candidature_name' => [
             'default' => false,
-		],        'parent_name' => [
+		],        
+        'parent_name' => [
             'default' => false,
             'link' => true,
             'name' => 'parent_name',

@@ -65,7 +65,7 @@
     const isLoading = ref(false)
     const isError = ref(false)
     
-    const { massUpdateRows, module, selected } = storeToRefs(useListViewStore())
+    const { massUpdateRows, module, selected, allSelected, searchPhrase, filters, activeFilter, myObjects } = storeToRefs(useListViewStore())
 
     const handleClose = () => {
         store.setMassUpdate(false)
@@ -74,7 +74,13 @@
     const handleSave = async () => {
         isLoading.value = true
         isError.value = false
-        const result = await (new Update(module.value, selected.value)).executeMassUpdate()
+        const selectedIds = allSelected.value ? ['all'] : selected.value.map((item: any) => item.id)
+        const result = await (new Update(module.value, selectedIds, {
+            searchPhrase: searchPhrase.value,
+            filters: filters.value,
+            activeFilter: activeFilter.value,
+            myObjects: myObjects.value
+        })).executeMassUpdate()
         isLoading.value = false
         if (result.data.success) {
             store.setMassUpdate(false)

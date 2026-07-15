@@ -91,9 +91,12 @@ $mod_strings = array(
     'LBL_CONTRACT_ID' => 'Contract (ID)',
     'LBL_PANEL_SALARY' => 'Salary',
     'LBL_TERMS_NOT_ADJECENT' => "Terms' dates must directly follow one another",
-    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Unit',
+    'LBL_LAST_TERM_NOT_CLOSED' => "The last term of employment has no end date. Please close it before adding a new one.",
     'LBL_DOCUMENTS' => 'Documents',
     'LBL_POSITION_NAME' => 'Position',
     'LBL_CONTRACTED_EMPLOYEE' => 'Contracted Employee',
     'LBL_POSITION_ID' => 'Position (ID)',
+    'LBL_DATE_END_ERROR' => 'Ending Date is before Starting Date',
+    'LBL_CURRENCY' => 'Currency',
+    'LBL_CURRENCY_SYMBOL' => 'Currency Symbol',
 );

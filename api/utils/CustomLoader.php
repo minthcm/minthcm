@@ -48,8 +48,6 @@ namespace MintHCM\Utils;
 
 use Exception;
 
-#[\AllowDynamicProperties]
-
 class CustomLoader
 {
     public static function getObject($class, ...$args)

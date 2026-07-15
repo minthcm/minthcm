@@ -8,15 +8,36 @@
             :name="props.defs.name"
             :error="props.state === 'error'"
             v-model="parsedValue"
-        />
-        <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
-            <template v-slot:activator="{ props, isActive }">
-                <v-icon class="mint-date-field-btn" v-bind="props">mdi-calendar</v-icon>
+        >
+            <template #append-inner>
+                <v-menu
+                    v-model="datePickerMenu"
+                    offset="16"
+                    :close-on-content-click="false"
+                >
+                    <template v-slot:activator="{ props: menuProps }">
+                        <v-btn
+                        icon
+                        variant="text"
+                        class="mint-date-field-btn"
+                        v-bind="menuProps"
+                        @keydown.enter.prevent="datePickerMenu = true"
+                        @keydown.space.prevent="datePickerMenu = true"
+                        >
+                        <v-icon>mdi-calendar</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-date-picker
+                        v-model="pickerValue"
+                        hide-actions
+                        @keydown.enter.prevent="onPickerEnter"
+                        @keydown.space.prevent="onPickerEnter"
+                    >
+                        <template #header />
+                    </v-date-picker>
+                </v-menu>
             </template>
-            <v-date-picker v-model="pickerValue" hide-actions>
-                <template #header></template>
-            </v-date-picker>
-        </v-menu>
+        </v-text-field>
     </div>
 </template>
 
@@ -30,6 +51,14 @@ import { MintDate } from '@/composables/useMintDate'
 const props = defineProps<FieldProps<MintDate>>()
 const emit = defineEmits(['update:modelValue'])
 
+const onPickerEnter = (element: KeyboardEvent) => {
+    const target = element.target as HTMLElement
+
+    if (target?.classList.contains('v-btn')) {
+        target.click()
+    }
+}
+
 const datePickerMenu = ref(false)
 const model = ref(props.modelValue)
 const preferences = usePreferencesStore()
@@ -38,12 +67,13 @@ const parsedValue = computed({
     get() {
         return model.value.formatted?.user_date || ''
     },
-    async set(newVal) {
+    set(newVal) {
         datePickerMenu.value = false
         if (!newVal?.trim()) {
             model.value.clear()
+            return
         }
-        const dt = DateTime.fromFormat(newVal, preferences.user?.date_format || 'yyyy-MM-dd', { zone: 'utc' })
+        const dt = DateTime.fromFormat(newVal, preferences.userDateFormat || 'yyyy-MM-dd', { zone: 'utc' })
         if (dt.isValid) {
             model.value.set(dt)
         }

@@ -9,7 +9,7 @@
 
     <link href='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/fullcalendar.print.css' rel='stylesheet' media='print' />
     <script src='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/lib/moment.min.js'></script>
-    <script src='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/fullcalendar.js'></script>
+    <script src='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/fullcalendar.min.js'></script>
     <script src='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/lang-all.js'></script>
 
     <script src='modules/Home/Dashlets/LeaveOfAbsenceDashlet/fc/qtip/jquery.qtip.min.js'></script>

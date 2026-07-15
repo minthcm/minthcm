@@ -18,6 +18,7 @@ import { mintApi } from '@/api/api'
 import { useBackendStore } from '@/store/backend'
 import ComponentLoader from '@/utils/componentLoader'
 import { decodeRecordStrings } from '@/utils/html'
+import { useLocalStorageStore } from '@/store/localStorage'
 
 interface Preferences {
     columns: string[]
@@ -53,6 +54,7 @@ export const useListViewStore = defineStore('listview', () => {
     const favorites = useFavoritesStore()
     const isInit = ref(false)
     const config = ref({})
+    const allSelected = ref(false)
     const defs = ref<Defs | null>(null)
     const preferences = ref<Preferences | null>(null)
     const module = ref(url.module)
@@ -79,8 +81,27 @@ export const useListViewStore = defineStore('listview', () => {
     const defaultAction = 'ESList'
     const defaultActionUrl = 'legacy/index.php?'
     const filterRows = ref<FilterRow[]>([])
+    
+    const selectedOnPageCount = computed(() => {
+        return results.value.map(r => r.id).filter(id => selected.value.map(s => s.id).includes(id)).length
+    })
 
-    let requestCount = 0
+    const isHeaderChecked = computed(() => {
+        if (allSelected.value) {
+            return true
+        } 
+
+        return results.value.map(r => r.id).every(id => selected.value.map(s => s.id).includes(id))
+    })
+
+    const isHeaderIndeterminate = computed(() => {
+        if (allSelected.value) {
+            return true
+        }
+        return selectedOnPageCount.value > 0 && selectedOnPageCount.value < results.value.map(r => r.id).length
+    })
+
+    let currentRequestId = 0
     const predefinedFilters = ref<boolean>(false)
     const isMassUpdate = ref(false)
 
@@ -128,11 +149,15 @@ export const useListViewStore = defineStore('listview', () => {
             return;
         }
 
-        activeFilter.value = preferences.value?.activeFilter ?? null
-        if (typeof preferences.value?.filterRows === 'string') {
-            filterRows.value = JSON.parse(preferences.value?.filterRows ?? '[]') ?? []
+        const ls = useLocalStorageStore()
+        const savedActiveName = ls.getModuleActiveFilter(getModule())
+        const matchedFilter = (preferences.value?.saved_filters as any[])?.find((f: any) => f.name === savedActiveName)
+        if (savedActiveName && matchedFilter) {
+            activeFilter.value = savedActiveName
+            filterRows.value = matchedFilter.filters ?? []
         } else {
-            filterRows.value = preferences.value?.filterRows ?? []
+            activeFilter.value = null
+            filterRows.value = ls.getModuleFilters(getModule())
         }
     }
 
@@ -154,7 +179,7 @@ export const useListViewStore = defineStore('listview', () => {
             options.value.sortBy = [
                 {
                     key: defaultSortBy,
-                    order: defaultSortOrder,
+                    order: defaultSortOrder.toLowerCase() as 'asc' | 'desc',
                 }
             ]
         }
@@ -162,8 +187,8 @@ export const useListViewStore = defineStore('listview', () => {
 
     async function getData() {
         isMassUpdate.value = false
-        requestCount++
-        isLoading.value = requestCount > 0
+        const myRequestId = ++currentRequestId
+        isLoading.value = true
         error.value = false
 
         const result = await modulesApi.getListData(
@@ -180,19 +205,21 @@ export const useListViewStore = defineStore('listview', () => {
         )
             .catch(moduleAccessError)
             .catch((requestError) => {
+                if (myRequestId !== currentRequestId) return
                 console.error('Error fetching data:', requestError?.response?.data || requestError)
                 isLoading.value = false
                 error.value = true
                 results.value = []
             })
-        requestCount--
-        if (module.value === result?.data.module && requestCount <= 0) {
-            requestCount = 0;
-            isLoading.value = false;
-            results.value = result.data?.results.map((item) => { 
-                const bean = useBean(item.module, item.id) 
-                bean.setData({ ...item, attributes: decodeRecordStrings(item.attributes) }) 
-                return bean 
+
+        if (myRequestId !== currentRequestId) return
+
+        if (module.value === result?.data.module) {
+            isLoading.value = false
+            results.value = result.data?.results.map((item) => {
+                const bean = useBean(item.module, item.id)
+                bean.setData({ ...item, attributes: decodeRecordStrings(item.attributes) })
+                return bean
             }) || []
             itemsLength.value = result.data?.total
             if (options.value.page === 1) {
@@ -343,6 +370,17 @@ export const useListViewStore = defineStore('listview', () => {
         relatePopup.value.data?.onConfirm({ selectionList })
         usePopupsStore().closePopup(relatePopup.value)
     }
+
+    function selectAll() {
+        allSelected.value = true
+        selected.value = []
+    }
+
+    function clearAllSelection() {
+        allSelected.value = false
+        selected.value = []
+    }
+
     const massActions = computed<MassAction[]>(() => {
         if (!isInit.value || !config.value?.config?.massActions?.length) {
             return []
@@ -358,7 +396,13 @@ export const useListViewStore = defineStore('listview', () => {
                 icon: massAction.icon,
                 title: languages.label(massAction.label, module.value),
                 onClick: async () => {
-                    const result = await new actionClass(module.value, selected.value).execute()
+                    const selectedIds = selected.value.map(item => item.id);
+                    const result = await new actionClass(module.value, allSelected.value ? ['all'] : selectedIds, {
+                        searchPhrase: searchPhrase.value,
+                        filters: filters.value,
+                        activeFilter: activeFilter.value,
+                        myObjects: myObjects.value
+                    }).execute()
                     if (result) {
                         selected.value = []
                         getData()
@@ -369,13 +413,29 @@ export const useListViewStore = defineStore('listview', () => {
         return massActions
     })
 
+    function handleOptionsUpdate(event: { page: number; itemsPerPage: number }) {
+        options.value.page = event.page
+        options.value.itemsPerPage = event.itemsPerPage
+    }
+
+    function setSortBy(key: string) {
+        const current = options.value.sortBy[0]
+        options.value.sortBy = [{
+            key,
+            order: current?.key === key && current?.order === 'asc' ? 'desc' : 'asc',
+        }]
+    }
+
+    let optionsWatchTimer: ReturnType<typeof setTimeout> | null = null
     watch(
         options,
         () => {
             if (isInit.value) {
-                getData()
-            } 
-        }, 
+                //getData()
+                if (optionsWatchTimer) clearTimeout(optionsWatchTimer)
+                optionsWatchTimer = setTimeout(() => getData(), 30)
+            }
+        },
         { deep: true },
     )
 
@@ -464,6 +524,7 @@ export const useListViewStore = defineStore('listview', () => {
             preferences.value.filterRows = filterRows
             if (mode.value === 'list') {
                 savePreferences()
+                useLocalStorageStore().setModuleFilters(getModule(), filterRows)
             }
             getData()
         }
@@ -622,5 +683,13 @@ export const useListViewStore = defineStore('listview', () => {
         clearCustomActionsCache,
         customActionsCache,
         actionsLoaded,
+        handleOptionsUpdate,
+        setSortBy,
+        allSelected,
+        isHeaderChecked,
+        isHeaderIndeterminate,
+        selectedOnPageCount,
+        selectAll,
+        clearAllSelection
     }
 })

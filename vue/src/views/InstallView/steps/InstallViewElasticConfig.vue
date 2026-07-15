@@ -64,8 +64,12 @@ defineExpose({
             errors.value.host = 'Field is required'
             isValid = false
         }
+        const port = Number(store.elasticConfig.port)
         if (!store.elasticConfig.port) {
             errors.value.port = 'Field is required'
+            isValid = false
+        } else if (!Number.isInteger(port) || port < 1 || port > 65535) {
+            errors.value.port = 'Port must be an integer between 1 and 65535'
             isValid = false
         }
         return isValid

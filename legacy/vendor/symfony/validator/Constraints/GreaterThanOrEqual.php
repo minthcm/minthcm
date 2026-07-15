@@ -18,9 +18,10 @@ namespace Symfony\Component\Validator\Constraints;
  * @author Daniel Holmes <daniel@danielholmes.org>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class GreaterThanOrEqual extends AbstractComparison
 {
-    const TOO_LOW_ERROR = 'ea4e51d1-3342-48bd-87f1-9e672cd90cad';
+    public const TOO_LOW_ERROR = 'ea4e51d1-3342-48bd-87f1-9e672cd90cad';
 
     protected static $errorNames = [
         self::TOO_LOW_ERROR => 'TOO_LOW_ERROR',

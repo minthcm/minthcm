@@ -49,7 +49,6 @@ namespace MintHCM\Data;
 use MintHCM\Data\MintBean;
 use \BeanFactory as LegacyFactory;
 
-#[\AllowDynamicProperties]
 class BeanFactory
 {
     public static function getBean($module, $id = null, $params = array(), $deleted = true)

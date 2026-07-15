@@ -19,7 +19,7 @@ class GeneralNotificationToUser extends \MintHCM\Firebase\PushNotification
             $tokens,
             $data['body'] ?? '',
             '',
-            ''
+            $data['link'] ?? ''
         );
     }
 }

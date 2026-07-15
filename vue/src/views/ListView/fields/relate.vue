@@ -30,9 +30,10 @@ const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
 const autocomplete = ref(null)
-const value = ref(null)
+const value = ref(props.input?.value ?? null)
 const items = ref([])
 const isLoading = ref(false)
+const isInitialized = ref(false)
 
 const activeItem = computed(() => items.value.find((item) => item.id === value.value))
 const otherInputs = computed(() => {
@@ -53,7 +54,7 @@ onMounted(async () => {
         const response = await modulesApi.getListData(module.value, '', {
             filter: [
                 {
-                    equals: {
+                    term: {
                         _id: props.input.value,
                     },
                 },
@@ -63,16 +64,23 @@ onMounted(async () => {
         items.value = response.data?.results ?? []
         value.value = props.input.value
     }
+    isInitialized.value = true
 })
 
 let debounceTimeout: null | number = null
 let prevQuery = ''
 
 function fetchItems(query: string) {
-    if (activeItem.value?.name === query) {
+    if (!isInitialized.value) {
+        return
+    }
+    if (activeItem.value?.name === query || query === value.value) {
         return
     }
     if (!query) {
+        if (value.value !== null) {
+            return
+        }
         items.value = []
         value.value = null
         emit('update:modelValue', null)

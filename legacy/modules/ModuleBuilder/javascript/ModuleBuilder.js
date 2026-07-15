@@ -716,7 +716,7 @@ if (typeof('console') == 'undefined') {
                 // call the original callback
                 if (ModuleBuilder.updateContent(o)) {
                   // refresh page content
-                  ModuleBuilder.asyncRequest(YUI_HistoryBookmarkedState, ModuleBuilder.updateContent);
+                  ModuleBuilder.asyncRequest(YAHOO.util.History.getBookmarkedState('mbContent'), ModuleBuilder.updateContent);
                 }
               };
               onFailure = function (o) {
@@ -725,7 +725,7 @@ if (typeof('console') == 'undefined') {
                 // call the original callback
                 ModuleBuilder.failed(o);
                 // refresh page content
-                ModuleBuilder.asyncRequest(YUI_HistoryBookmarkedState, ModuleBuilder.updateContent);
+                ModuleBuilder.asyncRequest(YAHOO.util.History.getBookmarkedState('mbContent'), ModuleBuilder.updateContent);
               };
             }
           }
@@ -744,6 +744,10 @@ if (typeof('console') == 'undefined') {
                 YAHOO.SUGAR.MessageBox.hide();
             }, 1000);
             successCall(o);
+          }
+          onFailure = function (o) {
+            YAHOO.SUGAR.MessageBox.hide();
+            ModuleBuilder.callLock = false;
           }
         }
         Connect.setForm(document.getElementById(formname) || document.forms[formname]);

@@ -20,16 +20,20 @@
                     color="error"
                     location="bottom start"
                     :model-value="!!drawer.badge?.()"
-                    @click="setDrawer(drawer)"
-                    @keydown.enter="setDrawer(drawer)"
-                    @keydown.space="setDrawer(drawer)"
                     :name="drawer.key"
                     :id="drawer.key"
                     :aria-label="languages.label(drawer.label)"
                     :aria-description="languages.label(drawer.descriptionLabel)"
                     :aria-describedby="drawer.key + 'drawer-help'"
                 >
-                    <MintButton :icon="drawer.icon" variant="nav" :active="ux.drawer === drawer.key" />
+                    <MintButton
+                        :icon="drawer.icon"
+                        variant="nav"
+                        :active="ux.drawer === drawer.key"
+                        @click="setDrawer(drawer)"
+                        @keydown.enter.prevent="setDrawer(drawer)"
+                        @keydown.space.prevent="setDrawer(drawer)"
+                    />
                 </v-badge>
                 <p :id="drawer.key + 'drawer-help'" :name="drawer.key + 'drawer-help'" hidden>{{languages.label(drawer.descriptionLabel)}}</p>
             </template>
@@ -38,8 +42,8 @@
                     @click="ux.drawer = null" 
                     icon="mdi-close" 
                     variant="nav"
-                    @keydown.enter="ux.drawer = null"
-                    @keydown.space="ux.drawer = null"
+                    @keydown.enter.prevent="ux.drawer = null"
+                    @keydown.space.prevent="ux.drawer = null"
                     name='close-mint-drawer'
                     id="close-mint-drawer"
                     :aria-label="languages.label('LBL_CLOSE_DRAWER')"

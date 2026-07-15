@@ -8,6 +8,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUrlStore } from '@/store/url'
 import LegacyEvents from './LegacyEventManager'
 import { useMintWallStore } from '@/components/MintWall/MintWallStore'
+import { mintApi } from '@/api/api'
+import { useBackendStore } from '@/store/backend'
+import { useLegacyIframeStore } from '@/store/legacyIframe'
 
 const route = useRoute()
 const router = useRouter()
@@ -107,6 +110,9 @@ const legacyUrl = computed(() => {
 
 const iframeReload = ref(0)
 const legacyIframe = ref<HTMLIFrameElement | null>(null)
+const backend = useBackendStore()
+
+const legacyIframeStore = useLegacyIframeStore()
 
 function onIframeLoad() {
     const iframe = legacyIframe.value
@@ -114,6 +120,7 @@ function onIframeLoad() {
         return
     }
     let currentIframeUrl = iframe.contentWindow?.location.href || iframe.src
+    reloadModuleMenu()
     if (route.meta?.legacyQueryToHash) {
         const legacyUrlSearchParams = new URLSearchParams(currentIframeUrl.split('?')[1])
         let hash = []
@@ -132,6 +139,31 @@ function onIframeLoad() {
             history.pushState(null, null, fullHash)
         }
     }
+}
+async function reloadModuleMenu() {
+    const iframe = legacyIframe.value
+    if (!iframe?.contentWindow) {
+        return
+    }
+    
+    const win = iframe.contentWindow
+
+    const currentAction = win.action_sugar_grp1 ?? ''
+    const currentModule = win.module_sugar_grp1 ?? ''
+
+    const { prevAction, prevModule } = legacyIframeStore
+
+    if (
+        prevAction === 'EditView' &&
+        currentAction === 'DetailView' &&
+        currentModule === 'Users'
+    ) {
+        const result = await mintApi.post('init', {}, { rawError: true })
+        backend.initData.menu_modules = result.data.menu_modules
+    }
+
+    legacyIframeStore.prevAction = currentAction
+    legacyIframeStore.prevModule = currentModule
 }
 </script>
 

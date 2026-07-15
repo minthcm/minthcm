@@ -65,6 +65,7 @@ onMounted(() => {
         flex-grow: 1;
 
         .mint-status-box-title {
+            display: block;
             font-weight: 600;
         }
     }

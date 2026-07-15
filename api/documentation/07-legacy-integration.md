@@ -126,6 +126,18 @@ $user = new LegacyConnector(
 );
 ```
 
+### Calling Legacy Global Functions
+
+Some legacy functionality is exposed as standalone global functions rather than class methods (e.g. `translate()`). Use the static `LegacyConnector::callFunction()` helper to call them without instantiating a class:
+
+```php
+use MintHCM\Utils\LegacyConnector;
+
+$label = LegacyConnector::callFunction('translate', 'LBL_START_DATE', 'Delegations');
+```
+
+It switches to `../legacy/` for the duration of the call (so the function can resolve legacy includes/globals) and restores the previous working directory afterward — the same isolation `LegacyConnector` provides for instance methods.
+
 ## Common Legacy Classes
 
 ### BeanFactory

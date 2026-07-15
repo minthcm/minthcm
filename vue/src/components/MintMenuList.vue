@@ -1,6 +1,6 @@
 <template>
-    <v-list class="mint-menu-list" nav density="compact" color="secondary">
-        <v-list-item v-for="item in processedItems" :name="item.actionKey || null" :id="item.actionKey || null" :key="item.title" @click="item.onClick" :active="false" v-bind="item.url && item.url !== '/' ? { to: item.url } : { tag: 'button' }" :aria-label="languages.label(item.title)">
+    <v-list ref="listRef" class="mint-menu-list" nav density="compact" color="secondary">
+        <v-list-item v-for="item in processedItems" :name="item.actionKey || null" :id="item.actionKey || null" :key="item.title" @click="item.onClick" @keydown.space.prevent="handleItemSpace(item)" :active="false" v-bind="item.url && item.url !== '/' ? { to: item.url } : { tag: 'button' }" :aria-label="languages.label(item.title)">
             <template v-if="item.icon" #prepend>
                 <span style="font-size: 11px"><v-icon :icon="getIcon(item.icon)" /></span>
             </template>
@@ -13,9 +13,10 @@
 
 <script setup lang="ts">
 import { usePopupsStore } from '@/store/popups'
-import { computed, defineProps } from 'vue'
+import { computed, defineProps, onMounted, onUnmounted, useTemplateRef } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
 import ComponentLoader from '@/utils/componentLoader'
+import { useRouter } from 'vue-router'
 
 export interface MenuListOnClickActionData {
     type?: string
@@ -38,6 +39,7 @@ const languages = useLanguagesStore()
 
 const props = defineProps<Props>()
 const popups = usePopupsStore()
+const router = useRouter()
 
 const processedItems = computed(() =>
   props.items.map((item) => {
@@ -56,6 +58,42 @@ const processedItems = computed(() =>
     return { ...item }
   })
 )
+
+function handleItemSpace(item: MenuListItem) {
+    if (item.url && item.url !== '/') {
+        router.push(item.url)
+    } else if (item.onClick) {
+        item.onClick()
+    }
+}
+
+function handleTabCapture(e: KeyboardEvent) {
+    if (e.key !== 'Tab') return
+    const listComp = listRef.value
+    if (!listComp) return
+    const list = (listComp as any)?.$el as HTMLElement | null
+    if (!list) return
+    const focusable = Array.from(list.querySelectorAll<HTMLElement>('a.v-list-item, button.v-list-item'))
+    if (!focusable.length) return
+    const idx = focusable.indexOf(document.activeElement as HTMLElement)
+    if (idx === -1) return
+    e.preventDefault()
+    e.stopImmediatePropagation()
+    const next = e.shiftKey
+        ? (idx <= 0 ? focusable.length - 1 : idx - 1)
+        : (idx >= focusable.length - 1 ? 0 : idx + 1)
+    focusable[next]?.focus()
+}
+
+const listRef = useTemplateRef<HTMLElement>('listRef')
+
+onMounted(() => {
+    document.addEventListener('keydown', handleTabCapture, true)
+})
+
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleTabCapture, true)
+})
 
 //TODO: global function?
 function getIcon(icon: string) {

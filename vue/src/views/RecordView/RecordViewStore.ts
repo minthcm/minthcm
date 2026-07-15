@@ -69,12 +69,16 @@ export const useRecordViewStore = defineStore('recordview', () => {
     function resetBean() {
         bean.value = useBean(module.value, recordId.value)
         view.value = 'detail'
+        editCycles.value = false
+        hasCyclicRecords.value = false
         subpanelsData.value = null
     }
 
     const view = ref<'detail' | 'edit' | 'list'>('detail')
     const inlineEditField = ref<string>('')
     const inlineEditFieldSaving = ref<string>('')
+    const editCycles = ref<boolean>(false)
+    const hasCyclicRecords = ref<boolean>(false)
 
     const panels = computed(() => {
         let panels: Panel[] = []
@@ -154,23 +158,28 @@ export const useRecordViewStore = defineStore('recordview', () => {
 
         await Promise.all(
             subpanels.value.map(async (subpanel) => {
-                let link = bean.value.loadRelationship(subpanel.properties?.get_subpanel_data.toString())
+                subpanelsLoading.value[subpanel.key] = true
+                try {
+                    let link = bean.value.loadRelationship(subpanel.properties?.get_subpanel_data.toString())
 
-                if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
-                    link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
-                }
-                
-                if (link) {
-                    await link.fetchRelatedRecords(subpanel.key, subpanel.paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder)
+                    if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
+                        link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
+                    }
                     
-                    if (!subpanelsData.value) {
-                        subpanelsData.value = {}
+                    if (link) {
+                        await link.fetchRelatedRecords(subpanel.key, subpanel.paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder)
+                        
+                        if (!subpanelsData.value) {
+                            subpanelsData.value = {}
+                        }
+                        subpanelsData.value[subpanel.key] = {
+                            records: link.beansArray,
+                            page: link.currentPage,
+                            total: link.total
+                        }
                     }
-                    subpanelsData.value[subpanel.key] = {
-                        records: link.beansArray,
-                        page: link.currentPage,
-                        total: link.total
-                    }
+                } finally {
+                    subpanelsLoading.value[subpanel.key] = false
                 }
             })
         )
@@ -180,22 +189,27 @@ export const useRecordViewStore = defineStore('recordview', () => {
         const subpanel = getSubpanelByKey(subpanelKey)
         const getSubpanelData = subpanel?.properties?.get_subpanel_data?.toString()
 
-        let link = bean.value.loadRelationship(getSubpanelData)
-        if (!link && getSubpanelData?.includes('function:')) {
-            link = bean.value.createFakeLink(getSubpanelData)
-        }
-        if (!link) {
-            return
-        }
-        await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder)
-        
-        if (!subpanelsData.value) {
-            subpanelsData.value = {}
-        }
-        subpanelsData.value[subpanelKey] = {
-            records: link.beansArray,
-            page: link.currentPage,
-            total: link.total
+        subpanelsLoading.value[subpanelKey] = true
+        try {
+            let link = bean.value.loadRelationship(getSubpanelData)
+            if (!link && getSubpanelData?.includes('function:')) {
+                link = bean.value.createFakeLink(getSubpanelData)
+            }
+            if (!link) {
+                return
+            }
+            await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder)
+            
+            if (!subpanelsData.value) {
+                subpanelsData.value = {}
+            }
+            subpanelsData.value[subpanelKey] = {
+                records: link.beansArray,
+                page: link.currentPage,
+                total: link.total
+            }
+        } finally {
+            subpanelsLoading.value[subpanelKey] = false
         }
     }
 
@@ -208,7 +222,41 @@ export const useRecordViewStore = defineStore('recordview', () => {
     }
 
     const subpanelsData = ref<SubpanelsData | null>(null)
+    const subpanelsLoading = ref<Record<string, boolean>>({})
 
+    const loadingSubpanels = ref<Map<string, number>>(new Map())
+
+    function setSubpanelLoading(key: string, count: number) {
+        const newMap = new Map(loadingSubpanels.value)
+        if (count > 0) {
+            newMap.set(key, count)
+        } else {
+            newMap.delete(key)
+        }
+        loadingSubpanels.value = newMap
+    }
+
+    const skeletonRecordIds = ref<Map<string, Set<string>>>(new Map())
+
+    function addSkeletonRecord(subpanelKey: string, recordId: string) {
+        const newMap = new Map(skeletonRecordIds.value)
+        const ids = new Set(newMap.get(subpanelKey) ?? [])
+        ids.add(recordId)
+        newMap.set(subpanelKey, ids)
+        skeletonRecordIds.value = newMap
+    }
+
+    function removeSkeletonRecord(subpanelKey: string, recordId: string) {
+        const newMap = new Map(skeletonRecordIds.value)
+        const ids = new Set(newMap.get(subpanelKey) ?? [])
+        ids.delete(recordId)
+        if (ids.size === 0) {
+            newMap.delete(subpanelKey)
+        } else {
+            newMap.set(subpanelKey, ids)
+        }
+        skeletonRecordIds.value = newMap
+    }
 
     async function fetchLanguagesForSubpanels() {
         const languages = useLanguagesStore()
@@ -225,6 +273,8 @@ export const useRecordViewStore = defineStore('recordview', () => {
     return {
         defs,
         view,
+        editCycles,
+        hasCyclicRecords,
         inlineEditField,
         inlineEditFieldSaving,
         bean,
@@ -235,5 +285,11 @@ export const useRecordViewStore = defineStore('recordview', () => {
         fetchLanguagesForSubpanels,
         updateField,
         fetchSubpanelRecords,
+        loadingSubpanels,
+        setSubpanelLoading,
+        skeletonRecordIds,
+        addSkeletonRecord,
+        removeSkeletonRecord,
+        subpanelsLoading,
     }
 })

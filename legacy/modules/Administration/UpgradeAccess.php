@@ -69,6 +69,9 @@ RedirectMatch 403 {$ignoreCase}/+emailmandelivery\.php
 RedirectMatch 403 {$ignoreCase}/+upload
 RedirectMatch 403 {$ignoreCase}/+cache/+diagnostic
 RedirectMatch 403 {$ignoreCase}/+files\.md5\$
+RedirectMatch 403 {$ignoreCase}/+composer\.json$
+RedirectMatch 403 {$ignoreCase}/+composer\.lock$
+RedirectMatch 403 {$ignoreCase}/+sugar_version\.json$
 <IfModule mod_rewrite.c>
     Options +SymLinksIfOwnerMatch
     RewriteEngine On

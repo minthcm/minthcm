@@ -15,8 +15,8 @@ $viewdefs['TermsOfEmployment'] = [
                                 'contract_name',
                             ],
                             [
-                                'date_of_signing',
                                 'position_name',
+                                'date_of_signing',
                             ],
                             [
                                 'term_starting_date',

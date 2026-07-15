@@ -492,7 +492,7 @@ class M2MRelationship extends SugarRelationship
         }
 
         if (empty($params['return_as_array'])) {
-            $query = "SELECT $targetKey id $SelectIncludedMiddleTableFields FROM $from WHERE $where AND $rel_table.deleted=$deleted";
+            $query = "SELECT DISTINCT $targetKey id $SelectIncludedMiddleTableFields FROM $from WHERE $where AND $rel_table.deleted=$deleted";
             if (!empty($order_by)) {
                 $query .= ' ORDER BY '.$order_by;
             }
@@ -504,7 +504,7 @@ class M2MRelationship extends SugarRelationship
             return $query;
         } else {
             return array(
-                'select' => "SELECT $targetKey id",
+                'select' => "SELECT DISTINCT $targetKey id",
                 'from' => "FROM $from",
                 'where' => "WHERE $where AND $rel_table.deleted=$deleted",
                 'order_by' => $order_by

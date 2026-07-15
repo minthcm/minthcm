@@ -51,10 +51,13 @@ use MintHCM\Utils\ConstantsLoader;
 
 use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
 
-#[\AllowDynamicProperties]
 abstract class ElasticOperator
 {
-    protected $field, $value, $not, $boost, $data;
+    protected ?string $field = null;
+    protected mixed $value = null;
+    protected bool $not = false;
+    protected float $boost = 1.0;
+    protected mixed $data = null;
 
     public function __construct(array $data)
     {

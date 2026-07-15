@@ -49,7 +49,6 @@ $viewdefs[$module_name] = array(
         'templateMeta' => array(
             'form' => array(
                 'hidden' => array(
-                    '<input type="hidden" id="projecttask_issue_tracker" name="projecttask_issue_tracker" value="{$fields.projecttask_issue_tracker.value}" />',
                     '<input type="hidden" name="current_user_is_admin" id="current_user_is_admin" value="{$CURRENT_USER_IS_ADMIN}">',
                     '<input type="hidden" name="work_date" id="work_date" value="{$fields.work_date.value}">',
                 ),

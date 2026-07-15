@@ -68,7 +68,7 @@ class ElasticQuery extends SearchQuery
     protected $exclude_modules = [];
     protected $search_modules = [];
 
-    protected $add_acl_filters = false;
+    protected bool $add_acl_filters = false;
     protected $indice_module_map;
     protected $parsed = [];
 
@@ -86,20 +86,35 @@ class ElasticQuery extends SearchQuery
         return $this;
     }
 
-    protected function setSort()
+     protected function setSort()
     {
         $field = !empty($this->params["sort_by"]) ? $this->params['sort_by']: static::DEFAULT_SORT_FIELD;
+        $order = !empty($this->params["sort_order"]) ? $this->params['sort_order'] : 'asc';
+
         if (static::DEFAULT_SORT_FIELD !== $field) {
             $parser = ElasticMapperParser::getInstance();
             $module_name = $this->params['type'] ?? '';
             $field = $parser->getFieldAttributePath($module_name, $field, true);
+
+            if (str_ends_with((string) $field, static::SORT_KEYWORD)) {
+                $missing_fallback = $order === 'asc' ? "\u{0FFF}" : '';
+                $this->sort = [
+                    '_script' => [
+                        'type'   => 'string',
+                        'order'  => $order,
+                        'script' => [
+                            'lang'   => 'painless',
+                            'source' => "def f = doc['" . $field . "']; f.size() > 0 ? f.value.toLowerCase() : '" . $missing_fallback . "'",
+                        ],
+                    ],
+                ];
+                return;
+            }
         }
-        $this->sort = array(
-            $field => array(
-                "order" => !empty($this->params["sort_order"]) ? $this->params['sort_order'] : 'asc',
-            ),
-        );
-        return;
+
+        $this->sort = [
+            $field => ['order' => $order],
+        ];
     }
 
     private function getIndex()
@@ -252,6 +267,7 @@ class ElasticQuery extends SearchQuery
                     'analyzer' => 'standard',
                     'default_operator' => 'AND',
                     'minimum_should_match' => $this->params['minimum_should_match'] ?? '66%',
+                    'lenient' => true,
             ],
         ];
     }

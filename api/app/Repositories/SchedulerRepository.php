@@ -137,7 +137,7 @@ class SchedulerRepository
                 $idsSQL = 'AND 1=0';
             }
         }
-        return "SELECT users.id
+        return "SELECT DISTINCT users.id
             , CONCAT_WS(' ', users.first_name, users.last_name) name
             , 'Employees' module
             , 'users' link
@@ -180,7 +180,7 @@ class SchedulerRepository
                 $idsSQL = 'AND 1=0';
             }
         }
-        return "SELECT candidates.id
+        return "SELECT DISTINCT candidates.id
             , CONCAT_WS(' ', candidates.first_name, candidates.last_name) name
             , 'Candidates' module
             , 'candidates' link
@@ -226,7 +226,7 @@ class SchedulerRepository
                 $idsSQL = 'AND 1=0';
             }
         }
-        return "SELECT resources.id
+        return "SELECT DISTINCT resources.id
             , resources.name
             , 'Resources' module
             , 'resources' link
@@ -251,10 +251,13 @@ class SchedulerRepository
 			, 'date_end', calls.date_end
 		))
 		FROM calls
-		INNER JOIN calls_{$table}
+		INNER JOIN (
+			SELECT DISTINCT call_id, {$field}
+			FROM calls_{$table}
+			WHERE deleted = 0
+		) calls_{$table}
 			ON calls_{$table}.call_id = calls.id
 			AND calls_{$table}.{$field} = {$table}.id
-			AND calls_{$table}.deleted = 0
 		WHERE calls.deleted = 0
 			AND calls.date_end > :date_from
 			AND calls.date_start < :date_to";
@@ -270,10 +273,13 @@ class SchedulerRepository
 			, 'date_end', meetings.date_end
 		))
 		FROM meetings
-		INNER JOIN meetings_{$table}
+		INNER JOIN (
+			SELECT DISTINCT meeting_id, {$field}
+			FROM meetings_{$table}
+			WHERE deleted = 0
+		) meetings_{$table}
 			ON meetings_{$table}.meeting_id = meetings.id
 			AND meetings_{$table}.{$field} = {$table}.id
-			AND meetings_{$table}.deleted = 0
 		WHERE meetings.deleted = 0
 			AND meetings.date_end > :date_from
 			AND meetings.date_start < :date_to";

@@ -423,12 +423,14 @@ class SugarAuthenticate
      * Called when a user requests to logout
      *
      */
-    public function logout()
+    public function logout(bool $stay = false)
     {
         session_start();
         session_destroy();
         ob_clean();
-        header('Location: index.php?module=Users&action=Login');
+        if (!$stay) {
+            header('Location: index.php?module=Users&action=Login');
+        }
         sugar_cleanup(true);
     }
 
@@ -466,16 +468,12 @@ class SugarAuthenticate
      * pre_login
      *
      * This function allows the SugarAuthenticate subclasses to perform some pre login initialization as needed
+     * @param bool $stay - if true, the function should return a url to redirect to instead of performing the redirection itself
+     * @return string|null - if $stay is true, return the url to redirect to otherwise return null
      */
-    public function pre_login()
+    public function pre_login(bool $stay = false)
     {
-        if (isset($_SESSION['authenticated_user_id'])) {
-            ob_clean();
-            // fixing bug #46837: Previosly links/URLs to records in Sugar from MSO Excel/Word were referred to the home screen and not the record
-            // It used to appear when default browser was not MS IE
-            header("Location: ".$GLOBALS['app']->getLoginRedirect());
-            sugar_cleanup(true);
-        }
+        
     }
 
     /**

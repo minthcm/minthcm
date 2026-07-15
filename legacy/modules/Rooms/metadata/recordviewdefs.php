@@ -12,6 +12,7 @@ $viewdefs['Rooms'] = [
                         'fields' => [
                             [
                                 'name',
+                                'availability',
                             ],
                             [
                                 [

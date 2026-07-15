@@ -148,6 +148,7 @@ $GLOBALS['tabStructure'] = array(
             6 => 'Certificates',
             7 => 'AOK_Knowledge_Base_Categories',
             8 => 'FP_Event_Locations',
+            9 => 'AIPromptTemplates',
         ),
     ),
 );

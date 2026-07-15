@@ -273,8 +273,11 @@ class Task extends SugarBean
         }
 
         if ($this->status != "Completed" && $this->status != "Deferred") {
-            $setCompleteUrl = "<b><a id='{$this->id}' class='list-view-data-icon' title='" . translate('LBL_LIST_CLOSE', 'Tasks') . "' onclick='SUGAR.util.closeActivityPanel.show(\"{$this->module_dir}\",\"{$this->id}\",\"Completed\",\"listview\",\"1\");'>";
-            $task_fields['SET_COMPLETE'] = $setCompleteUrl . "<span class='suitepicon suitepicon-action-clear'></span></a></b>";
+            $completeUrl = "<a class='list-view-data-icon' style='cursor:pointer;' title='" . translate('LBL_LIST_CLOSE', 'Tasks') . "' onclick='SUGAR.util.setActivityStatus(\"{$this->module_dir}\",\"{$this->id}\",\"Completed\",this);'>"
+                . "<span class='suitepicon suitepicon-action-confirm'></span></a>";
+            $deferUrl = "<a class='list-view-data-icon' style='cursor:pointer;' title='" . translate('LBL_LIST_DEFER', 'Tasks') . "' onclick='SUGAR.util.setActivityStatus(\"{$this->module_dir}\",\"{$this->id}\",\"Deferred\",this);'>"
+                . "<span class='suitepicon suitepicon-action-clear'></span></a>";
+            $task_fields['SET_COMPLETE'] = $completeUrl . '&nbsp;' . $deferUrl;
         }
 
         $task_fields['TITLE'] = '';

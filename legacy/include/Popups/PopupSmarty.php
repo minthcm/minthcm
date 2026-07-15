@@ -219,11 +219,15 @@ class PopupSmarty extends ListViewSmarty
     {
         global $app_strings;
 
-        if (!is_file(sugar_cached("jsLanguage/{$GLOBALS['current_language']}.js"))) {
-            require_once('include/language/jsLanguage.php');
-            jsLanguage::createAppStringsCache($GLOBALS['current_language']);
+        $jsLangCode = isset($GLOBALS['current_language']) ? $GLOBALS['current_language'] : 'en_us';
+        if (!isset(get_languages()[$jsLangCode])) {
+            $jsLangCode = 'en_us';
         }
-        $jsLang = getVersionedScript("cache/jsLanguage/{$GLOBALS['current_language']}.js", $GLOBALS['sugar_config']['js_lang_version']);
+        if (!is_file(sugar_cached("jsLanguage/{$jsLangCode}.js"))) {
+            require_once('include/language/jsLanguage.php');
+            jsLanguage::createAppStringsCache($jsLangCode);
+        }
+        $jsLang = getVersionedScript("cache/jsLanguage/{$jsLangCode}.js", $GLOBALS['sugar_config']['js_lang_version']);
 
         $this->th->ss->assign('data', $this->data['data']);
         $this->data['pageData']['offsets']['lastOffsetOnPage'] = $this->data['pageData']['offsets']['current'] + count($this->data['data']);

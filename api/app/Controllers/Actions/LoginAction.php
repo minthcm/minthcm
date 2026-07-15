@@ -49,14 +49,15 @@ namespace MintHCM\Api\Controllers\Actions;
 use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Controllers\Init\Languages;
 use MintHCM\Api\Controllers\Init\Preferences;
+use MintHCM\Api\Utils\AuthHelper;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class LoginAction
 {
 
-    protected $preferences_controller, $languages_controller;
+    protected Preferences $preferences_controller;
+    protected Languages $languages_controller;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -75,8 +76,31 @@ class LoginAction
         global $system_config;
         $response_body['global']['ldap_enabled'] = !empty($system_config->settings['system_ldap_enabled']) && $system_config->settings['system_ldap_enabled'] == true;
         $response_body['languages'] = $this->languages_controller->getLanguages([], $lang);
-        
+
+        $response_body['redirect_url'] = $this->getRedirectUrl();
         $response->getBody()->write(json_encode($response_body));
+
         return $response;
+    }
+
+    private function getRedirectUrl(): ?string
+    {
+        global $sugar_config;
+
+        if (!AuthHelper::isSAML2On() && !AuthHelper::isOIDCOn()) {
+            return null;
+        }
+
+        // Do NOT build the IdP authorization URL here. This runs inside an API (fetch)
+        // request, so pre_login(true) would generate the CSRF state (oidc_state /
+        // AuthNRequestID) in the session bound to that fetch. The IdP callback, however,
+        // arrives as a top-level navigation to legacy/index.php and runs in a different
+        // PHP session, so state validation would fail on the first attempt.
+        //
+        // Instead point the SSO button at the legacy Login action and let the browser
+        // navigate there top-level. pre_login() then issues the state and redirects to the
+        // IdP within the very session the callback returns to, so validation passes on the
+        // first try.
+        return rtrim($sugar_config['site_url'], '/') . '/legacy/index.php?module=Users&action=Login';
     }
 }

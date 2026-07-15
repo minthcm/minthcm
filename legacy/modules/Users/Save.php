@@ -239,6 +239,7 @@ if (!$focus->is_group && !$focus->portal_only) {
 
     $tabs = new TabController();
     if (isset($_POST['display_tabs'])) {
+        updateMintRebuildFile(['reload_module_menu']);
         $tabs->set_user_tabs($DISPLAY_ARR['display_tabs'], $focus, 'display');
     }
 

@@ -12,7 +12,12 @@
                         class="alert"
                         v-ripple="{ class: 'text-primary' }"
                         :class="{ 'alert-faded': alert.is_read }"
+                        tabindex="0"
+                        role="button"
+                        :aria-label="alert.description"
                         @click="redirectToAlert(alert)"
+                        @keydown.enter.prevent="redirectToAlert(alert)"
+                        @keydown.space.prevent="redirectToAlert(alert)"
                     >
                         <div class="alert-body">
                             <span class="alert-title" v-text="alert.description" />

@@ -127,6 +127,7 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
         'users' => array(
                 'name' => 'users',
                 'type' => 'link',
+                'module' => 'Users',
                 'relationship' => 'acl_roles_users',
                 'source' => 'non-db',
                 'vname' => 'LBL_USERS',
@@ -134,6 +135,7 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
         'actions' => array(
                 'name' => 'actions',
                 'type' => 'link',
+                'module' => 'ACLActions',
                 'relationship' => 'acl_roles_actions',
                 'source' => 'non-db',
                 'vname' => 'LBL_USERS',

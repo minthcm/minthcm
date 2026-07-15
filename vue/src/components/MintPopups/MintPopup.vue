@@ -1,5 +1,13 @@
 <template>
-    <div ref="mintPopup" class="mint-popup">
+    <div
+        ref="mintPopup"
+        class="mint-popup"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="props.popup.title"
+        tabindex="-1"
+        @keydown="handleKeydown"
+    >
         <div ref="mintHeader" class="mint-popup-header">
             <v-icon v-if="props.popup.icon" :icon="props.popup.icon" />
             <span v-text="props.popup.title" />
@@ -12,6 +20,8 @@
                 class="ms-auto"
                 @mousedown.stop="null"
                 @click="closePopup(props.popup)"
+                @keydown.enter.prevent="closePopup(props.popup)"
+                @keydown.space.prevent="closePopup(props.popup)"
             />
         </div>
         <div class="mint-popup-content">
@@ -21,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { Popup, usePopupsStore } from '@/store/popups'
 import { useDraggable } from '@/composables/useDraggable'
 import { nextTick } from 'vue'
@@ -34,14 +44,79 @@ const props = defineProps<Props>()
 const { closePopup } = usePopupsStore()
 const mintPopup = ref<HTMLElement | null>(null)
 const mintHeader = ref<HTMLElement | null>(null)
+let previouslyFocusedElement: HTMLElement | null = null
+
+function getFocusableElements(): HTMLElement[] {
+    if (!mintPopup.value) {
+        return []
+    }
+    return Array.from(
+        mintPopup.value.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+        )
+    ).filter((el) => el.offsetParent !== null)
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape' && !props.popup.unclosable) {
+        event.stopPropagation()
+        closePopup(props.popup)
+        return
+    }
+
+    if (event.key === 'Tab') {
+        const focusableElements = getFocusableElements()
+        if (focusableElements.length === 0) return
+
+        const firstElement = focusableElements[0]
+        const lastElement = focusableElements[focusableElements.length - 1]
+
+        if (event.shiftKey) {
+            if (document.activeElement === firstElement || document.activeElement === mintPopup.value) {
+                event.preventDefault()
+                lastElement.focus()
+            }
+        } else {
+            if (document.activeElement === lastElement) {
+                event.preventDefault()
+                firstElement.focus()
+            }
+        }
+    }
+}
+
+let hasDragged = false
+let resizeObserver: ResizeObserver | null = null
 
 onMounted(async () => {
+    previouslyFocusedElement = document.activeElement as HTMLElement
     if (mintHeader.value && mintPopup.value) {
+        mintHeader.value.addEventListener('mousedown', () => {
+            window.addEventListener('mousemove', () => { hasDragged = true }, { once: true })
+        })
         const draggable = useDraggable(mintHeader.value, mintPopup.value)
         draggable.init()
     }
+    mintPopup.value?.focus()
     await nextTick()
     center()
+    const firstFocusable = mintPopup.value?.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    firstFocusable?.focus()
+    if (mintPopup.value) {
+        resizeObserver = new ResizeObserver(() => {
+            if (!hasDragged) {
+                center()
+            }
+        })
+        resizeObserver.observe(mintPopup.value)
+    }
+})
+
+onBeforeUnmount(() => {
+    previouslyFocusedElement?.focus()
+    resizeObserver?.disconnect()
 })
 
 function center() {

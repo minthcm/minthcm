@@ -1,4 +1,4 @@
-import { computed, ref, watch } from 'vue'
+import { computed, markRaw, reactive, ref, watch } from 'vue'
 import { useLogic } from './useLogic'
 import { useDebounceFn, useThrottleFn } from '@vueuse/core'
 import { useRouter } from 'vue-router'
@@ -9,6 +9,11 @@ import { useLink } from './useLink'
 import { mintApi } from '@/api/api'
 import { DateTime } from 'luxon'
 import { MintDate, useMintDate } from '@/composables/useMintDate'
+import { usePopupsStore } from '@/store/popups'
+import { useStatusBoxesStore } from '@/store/statusBoxes'
+import { useLanguagesStore } from '@/store/languages'
+import { cyclicRecordsApi, CyclicRecordDatePair } from '@/api/cyclicRecords.api'
+import MintPopupProgressBar from '@/components/MintPopups/MintPopupProgressBar.vue'
 
 export type MintBean = ReturnType<typeof useBean>
 interface MintBeanAttributes {
@@ -96,7 +101,11 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
     const isValid = computed(() => {
         if (logic.requiredFields.value) {
             for (const fieldName of logic.requiredFields.value) {
-                if ((isDirty.value || fields.value[fieldName]?.isDirty) && !fields.value[fieldName].model) {
+                const fieldValue = fields.value[fieldName]?.formatted?.server
+                if (
+                    (isDirty.value || fields.value[fieldName]?.isDirty) &&
+                    (fieldValue === null || fieldValue === undefined || fieldValue === '')
+                ) {
                     return false
                 }
             }
@@ -342,7 +351,7 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         return links.value.get(name)
     }
 
-    async function save() {
+    async function save(options?: { editCycles?: boolean; onCyclicComplete?: () => void }) {
         isDirty.value = true
         if (!isValid.value) {
             return {
@@ -383,6 +392,13 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
             } else if ([200, 201].includes(response.status)) {
                 await retrieve()
             }
+            if (options?.editCycles) {
+                const recordId = response.data.id || id
+                _startCyclicRecordsProgress(module, recordId, 'update', options?.onCyclicComplete)
+            } else if (response.data?.pending_cyclic_records) {
+                const recordId = response.data.id || id
+                _startCyclicRecordsProgress(module, recordId, 'create', options?.onCyclicComplete)
+            }
             return response
         } catch (error) {
             if (error?.response?.data?.isValid === false && error.response.data.error) {
@@ -396,6 +412,101 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
             }
         } finally {
             isSaving.value = false
+        }
+    }
+
+    async function _startCyclicRecordsProgress(
+        targetModule: string,
+        recordId: string,
+        mode: 'create' | 'update' = 'create',
+        onComplete?: () => void,
+    ): Promise<void> {
+        const languages = useLanguagesStore()
+        const popupsStore = usePopupsStore()
+        const statusBoxes = useStatusBoxesStore()
+        const CHUNK_SIZE = 5
+
+        const isUpdate = mode === 'update'
+
+        // Step 1: Ask backend for the work list (no DB writes yet)
+        let items: string[] | CyclicRecordDatePair[] = []
+        let relatedIds: Record<string, string[]> = {}
+        try {
+            if (isUpdate) {
+                const planResponse = await cyclicRecordsApi.planCyclicRecordsUpdate(targetModule, recordId)
+                items = planResponse.data?.ids ?? []
+            } else {
+                const planResponse = await cyclicRecordsApi.planCyclicRecords(targetModule, recordId)
+                items = planResponse.data?.records ?? []
+                relatedIds = planResponse.data?.related_ids ?? {}
+            }
+        } catch {
+            statusBoxes.showStatus(`cyclic-records-error-${recordId}`, {
+                type: 'error',
+                message: languages.label(isUpdate ? 'LBL_CYCLIC_RECORDS_UPDATE_ERROR' : 'LBL_CYCLIC_RECORDS_ERROR'),
+                autoClose: true,
+                autoCloseDelay: 6000,
+            })
+            return
+        }
+
+        if (items.length === 0) return
+
+        // Step 2: Reactive progress state passed directly into the popup
+        const progress = reactive({ value: 0, max: items.length })
+
+        popupsStore.showPopup({
+            title: languages.label(isUpdate ? 'LBL_UPDATING_CYCLIC_RECORDS' : 'LBL_CREATING_CYCLIC_RECORDS'),
+            icon: 'mdi-progress-clock',
+            unclosable: true,
+            component: markRaw(MintPopupProgressBar),
+            data: { progress },
+        })
+        const popup = popupsStore.popups[popupsStore.popups.length - 1]
+
+        // Step 3: Send chunks and update progress after each one
+        try {
+            for (let i = 0; i < items.length; i += CHUNK_SIZE) {
+                const chunk = items.slice(i, i + CHUNK_SIZE)
+                if (isUpdate) {
+                    const batchResponse = await cyclicRecordsApi.updateCyclicRecordsBatch(
+                        targetModule,
+                        recordId,
+                        chunk as string[],
+                    )
+                    progress.value += batchResponse.data?.updated ?? chunk.length
+                } else {
+                    const batchResponse = await cyclicRecordsApi.createCyclicRecordsBatch(
+                        targetModule,
+                        recordId,
+                        chunk as CyclicRecordDatePair[],
+                        relatedIds,
+                    )
+                    progress.value += batchResponse.data?.created ?? chunk.length
+                }
+            }
+
+            // Step 4: All done — close popup and show success
+            onComplete?.()
+            popupsStore.closePopup(popup)
+            statusBoxes.showStatus(`cyclic-records-done-${recordId}`, {
+                type: 'success',
+                message: languages.label(
+                    isUpdate ? 'LBL_CYCLIC_RECORDS_UPDATED' : 'LBL_CYCLIC_RECORDS_CREATED',
+                ),
+                autoClose: true,
+                autoCloseDelay: 4000,
+            })
+        } catch {
+            popupsStore.closePopup(popup)
+            statusBoxes.showStatus(`cyclic-records-error-${recordId}`, {
+                type: 'error',
+                message: languages.label(
+                    isUpdate ? 'LBL_CYCLIC_RECORDS_UPDATE_ERROR' : 'LBL_CYCLIC_RECORDS_ERROR',
+                ),
+                autoClose: true,
+                autoCloseDelay: 6000,
+            })
         }
     }
 

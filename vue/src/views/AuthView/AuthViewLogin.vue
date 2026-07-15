@@ -7,12 +7,22 @@
         <MintStatusBox v-if="route.query.reset === 'success'" type="success">
             {{ languages.label('LBL_MINT4_AUTH_RESET_SUCCESS') }}
         </MintStatusBox>
-        <v-form class="login-form" @submit.prevent="handleSubmit">
+        <template v-if="backend.ssoRedirectUrl">
+            <MintButton
+                variant="primary"
+                :text="languages.label('LBL_MINT4_AUTH_SSO_LOGIN_BTN')"
+                @click="handleSsoLogin"
+            />
+            <div class="login-divider" v-text="languages.label('LBL_MINT4_AUTH_OR_LOCAL_LOGIN')" />
+        </template>
+        <v-form class="login-form" autocomplete="on" @submit.prevent="handleSubmit">
             <v-text-field
                 class="login-input"
                 v-model.trim="authViewStore.username"
                 color="primary"
                 name="username"
+                autocomplete="username"
+                autofocus
                 base-color="#00000099"
                 density="comfortable"
                 :label="languages.label('LBL_MINT4_AUTH_USERNAME')"
@@ -25,6 +35,7 @@
                 v-model.trim="password"
                 :type="showPassword ? 'text' : 'password'"
                 name="password"
+                autocomplete="current-password"
                 color="primary"
                 base-color="#00000099"
                 density="comfortable"
@@ -48,7 +59,11 @@
                 </v-btn>
                 </template>
             </v-text-field>
-            <MintButton variant="primary" :text="languages.label('LBL_MINT4_AUTH_LOGIN_BTN')" @click="handleSubmit" />
+            <MintButton
+                :variant="backend.ssoRedirectUrl ? 'regular' : 'primary'"
+                :text="languages.label('LBL_MINT4_AUTH_LOGIN_BTN')"
+                @click="handleSubmit"
+            />
         </v-form>
     </div>
 </template>
@@ -105,6 +120,12 @@ const loginError = ref(false)
 const router = useRouter()
 const route = useRoute()
 
+function handleSsoLogin() {
+    if (backend.ssoRedirectUrl) {
+        location.href = backend.ssoRedirectUrl
+    }
+}
+
 async function handleSubmit() {
     loginError.value = false
     if (isSubmiting.value) {
@@ -112,7 +133,7 @@ async function handleSubmit() {
     }
     isSubmiting.value = true
     const result = await auth.authenticate(authViewStore.username, password.value)
-    if (result) {
+    if (result === true) {
         backend.initialLoading = true
         const redirect = router.currentRoute.value?.query?.redirect
 
@@ -122,7 +143,7 @@ async function handleSubmit() {
         } else {
             router.go(0)
         }
-    } else {
+    } else if (result === false) {
         loginError.value = true
     }
     isSubmiting.value = false
@@ -136,8 +157,15 @@ async function handleSubmit() {
     gap: 32px;
     width: 100%;
 }
+.login-divider {
+    text-align: center;
+    color: #00000099;
+    font-size: 14px;
+    margin: 16px 0;
+}
 </style>
 <style>
+/* Prevent autofill background color flash */
 .login-form .login-input input:-webkit-autofill,
 .login-form .login-input input:-webkit-autofill:hover,
 .login-form .login-input input:-webkit-autofill:focus,
@@ -147,5 +175,22 @@ async function handleSubmit() {
 .login-password-toggle {
     min-width: 0;
     padding: 0;
+}
+
+/*
+ * Pure CSS autofill label fix for Vuetify outlined variant.
+ * When browser applies :-webkit-autofill, force the floating label visible
+ * and hide the inline label without touching JS Virtual DOM, safely bypassing
+ * browser security restrictions related to password autofill scripts.
+ */
+.login-form .login-input .v-field:has(input:-webkit-autofill) .v-label.v-field-label {
+    visibility: hidden !important;
+}
+.login-form .login-input .v-field:has(input:-webkit-autofill) .v-label.v-field-label--floating {
+    visibility: visible !important;
+    opacity: 1;
+}
+.login-form .login-input .v-field:has(input:-webkit-autofill) .v-field__outline__notch::before {
+    opacity: 0 !important;
 }
 </style>

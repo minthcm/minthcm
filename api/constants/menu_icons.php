@@ -52,6 +52,7 @@ return array(
     "import" => 'import',
     "default" => 'menu-open',
     'labels' => 'label',
+    'masquerade' => 'account-switch',
     'fields' => 'format-color-highlight',
     'relationships' => 'relation-many-to-many',
     'layouts' => 'page-layout-sidebar-left',

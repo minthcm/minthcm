@@ -1,18 +1,39 @@
+DirectoryIndex vue/dist/index.html
+<FilesMatch "(?i:\.md)$">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     Options +SymLinksIfOwnerMatch
     RewriteEngine On
     RewriteBase __BASE_PATH__
 
-    RewriteRule ^assets/(.*?)$ assets/$1 [L]
+    RewriteRule ^assets/(.*?)$ vue/dist/assets/$1 [L]
+    RewriteRule ^(\.claude|\.ai)(/.*)?$ - [F,L]
     RewriteRule ^legacy/(.*?)$ legacy/index.php/$1 [L]
     RewriteRule ^api/(.*?)$ api/index.php [L]
-    RewriteRule ^bg.jpg$ bg.jpg [L]
-    RewriteRule ^favicon.ico$ favicon.ico [L]
+    RewriteRule ^mcp/?$ mcp/index.php [L,QSA]
+    RewriteRule ^\.well-known/oauth-protected-resource/mcp/?$ mcp/oauth.php [L,QSA,E=OAUTH_ENDPOINT:discovery]
+    RewriteRule ^\.well-known/oauth-authorization-server/mcp/?$ mcp/oauth.php [L,QSA,E=OAUTH_ENDPOINT:authorization]
+    RewriteRule ^\.well-known/openid-configuration/mcp/?$ mcp/oauth.php [L,QSA,E=OAUTH_ENDPOINT:authorization]
+    RewriteRule ^\.well-known/ - [R=404,L]
+    RewriteRule ^bg.jpg$ vue/dist/bg.jpg [L]
+    RewriteRule ^favicon.ico$ vue/dist/favicon.ico [L]
     RewriteRule ^Api/(.*?)$ legacy/Api/$1 [L,QSA]
     RewriteRule ^service/(.*?)$ legacy/service/$1 [L,QSA]
     RewriteRule ^index.php$ legacy/index.php [L]
 
-    RewriteRule .* index.html [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !/mcp/
+    RewriteRule ^ vue/dist/index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    <Files "index.html">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "Thu, 01 Jan 1970 00:00:00 GMT"
+    </Files>
 </IfModule>
 
 <IfModule mod_headers.c>

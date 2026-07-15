@@ -107,7 +107,8 @@ $dictionary['SecurityGroup'] = [
         ),
         'position_leader_id' => array(
             'name' => 'position_leader_id',
-            'type' => 'link',
+            'type' => 'id',
+            'module' => 'Positions',
             'relationship' => 'securitygroups_positions_leader',
             'source' => 'non-db',
             'reportable' => false,

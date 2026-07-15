@@ -2,21 +2,19 @@
 /**
  * This file is part of php-saml.
  *
- * (c) OneLogin Inc
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @package OneLogin
- * @author  OneLogin Inc <saml-info@onelogin.com>
- * @license MIT https://github.com/onelogin/php-saml/blob/master/LICENSE
- * @link    https://github.com/onelogin/php-saml
+ * @author  Sixto Martin <sixto.martin.garcia@gmail.com>
+ * @license MIT https://github.com/SAML-Toolkits/php-saml/blob/master/LICENSE
+ * @link    https://github.com/SAML-Toolkits/php-saml
  */
 
 namespace OneLogin\Saml2;
 
 /**
- * Constants of OneLogin PHP Toolkit
+ * Constants of SAML PHP Toolkit
  *
  * Defines all required constants
  */
@@ -64,9 +62,11 @@ class Constants
     const AC_PASSWORD_PROTECTED = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport';
     const AC_X509 = 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509';
     const AC_SMARTCARD = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Smartcard';
+    const AC_SMARTCARD_PKI = 'urn:oasis:names:tc:SAML:2.0:ac:classes:SmartcardPKI';
     const AC_KERBEROS = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Kerberos';
     const AC_WINDOWS = 'urn:federation:authentication:windows';
     const AC_TLS = 'urn:oasis:names:tc:SAML:2.0:ac:classes:TLSClient';
+    const AC_RSATOKEN = 'urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken';
 
     // Subject Confirmation
     const CM_BEARER = 'urn:oasis:names:tc:SAML:2.0:cm:bearer';

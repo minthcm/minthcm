@@ -281,6 +281,15 @@ $dictionary['Trainings'] = array(
             'label' => 'LBL_REQUESTS',
             'side' => 'right',
         ),
+        'onboardings' => array(
+            'name' => 'onboardings',
+            'type' => 'link',
+            'relationship' => 'onboardings_trainings',
+            'module' => 'Onboardings',
+            'bean_name' => 'Onboardings',
+            'source' => 'non-db',
+            'vname' => 'LBL_ONBOARDINGS',
+        ),
     ),
     'relationships' => array(
         "onboardingoffboardingelements_trainings" => array(

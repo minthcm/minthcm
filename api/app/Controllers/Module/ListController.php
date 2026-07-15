@@ -57,11 +57,12 @@ use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 use UserPreference;
 
-#[\AllowDynamicProperties]
 class ListController
 {
-    private $request, $params, $search_result;
-    protected $entityManager;
+    private ?Request $request = null;
+    private array $params = [];
+    private mixed $search_result = null;
+    protected EntityManagerInterface $entityManager;
 
     const DEFAULT_SORT_BY = '_score';
 

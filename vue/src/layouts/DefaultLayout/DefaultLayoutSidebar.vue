@@ -1,28 +1,32 @@
 <template>
-<div class="default-layout-sidebar">
-    <div 
-        class="navigation-scrim"
-        :class="{ 'navigation-scrim-open': ux.sideMenu && !mdAndUp}"
-        @click="ux.showHideSideMenu()"
-    />
+    <div :class="{
+        'default-layout-sidebar': !shrinked && !mdAndDown,
+        'default-layout-sidebar-railed': shrinked && !mdAndDown,
+        'default-layout-sidebar-mobile': mdAndDown,
+        'no-hover': disableHover
+    }">
     <v-navigation-drawer
-        class="sidebar-nav"
-        :expand-on-hover="mdAndUp"
-        :rail="!$vuetify.display.mdAndDown && storage.sideMenuShrinked"
-        :temporary="!mdAndUp"
-        :permanent="mdAndUp"
+        :rail="!mdAndDown && shrinked"
+        permanent
         width="260"
-        color="#00000010"
+        color="transparent"
         floating="true"
         rail-width="76"
         v-model="ux.sideMenu"
         :scrim="false"
+        @mouseenter="onSidebarNavEnter"
+        @mouseleave="onSidebarNavLeave"
+        :class="{
+            'no-hover': disableHover,
+            'sidebar-nav': true,
+        }"
     >
         <v-list
                         v-if="modules.currentModule?.name !== 'Home' && modules.currentModule?.actions"
             nav
             bg-color="primary"
             class="nav-list flex-shrink-0 py-4"
+            ref="module-actions-ref"
         >
             <v-list-item
                 v-for="action in modules.currentModule.actions"
@@ -31,6 +35,7 @@
                 :value="action.action"
                 v-bind="getLinkBinding(action)"
                 :active="false"
+                tabindex="0"
                 @click="getClickHandler(action)"
             >
                 <div class="nav-title">
@@ -41,6 +46,7 @@
         </v-list>
         <div class="flex-grow-1" style="display: flex; flex-direction: column; overflow: auto">
             <v-text-field
+                ref="searchInputRef"
                 v-model="filterModulesQuery"
                 class="find-module"
                 :placeholder="languages.label('LBL_MINT4_FIND_MODULE')"
@@ -86,6 +92,9 @@
                                 :aria-label="filteredModule.label"
                                 :aria-description="filteredModule.label"
                                 :aria-describedby="'module-' + filteredModule.name + '-button-help'"
+                                :tabindex="0"
+                                @keydown.space="handleModuleItemSpace($event, filteredModule.name)"
+                                @keydown.enter="handleModuleItemEnter($event, filteredModule.name)"
                         >
                             <p :id="'module-' + filteredModule.name + '-button-help'" :name="'module-' + filteredModule.name + '-button-help'" hidden>{{filteredModule.label}}</p>
                             <div style="display: flex; align-items: center; justify-content: space-between">
@@ -142,6 +151,7 @@
                                 :value="recent.item_id"
                                 :to="`/modules/${recent.module_name}/DetailView/${recent.item_id}`"
                                 :active="false"
+                                :tabindex="0"
                             >
                                 <div class="nav-title">
                                     <v-icon :icon="modules.modules[recent.module_name]?.icon ?? 'mdi-clock'" />
@@ -175,6 +185,7 @@
                                 :value="favorite.id"
                                 :to="`/modules/${favorite.module_name}/DetailView/${favorite.id}`"
                                 :active="false"
+                                :tabindex="0"
                             >
                                 <div class="nav-title">
                                     <v-icon :icon="modules.modules[favorite.module_name]?.icon ?? 'mdi-heart'" />
@@ -187,20 +198,28 @@
             </v-expansion-panels>
         </div>
     </v-navigation-drawer>
-    <div
-        class="shrinker"
-        :class="{ 'rail-mode': storage.sideMenuShrinked }"
+    <div 
+        class="shrinker" 
+        :class="{ 
+            'rail-mode': shrinked, 
+            'alternative-color': useAlternativeColor,
+        }"
         v-if="!$vuetify.display.mdAndDown"
+        @mouseenter="onShrinkerEnter"
     >
-        <div class="shrinker-background"></div>
-        <MintButton
-            class="shrinker-button"
-            variant="icon"
-            size="x-large"
-            :icon="storage.sideMenuShrinked || $vuetify.display.mdAndDown ? 'mdi-chevron-right' : 'mdi-chevron-left'"
-            @click="shrink"
-            @keydown.enter="shrink"
-            @keydown.space="shrink"
+        <MintButton 
+            class="shrinker-button" 
+            :class="{
+                'no-hover': disableHover,
+                'alternative-color': useAlternativeColor,
+            }"
+            variant="icon" 
+            size="x-large" 
+            :icon="shrinked || $vuetify.display.mdAndDown ? 'mdi-chevron-right' : 'mdi-chevron-left'" 
+            @click="shrink" 
+            ref="shrinker-button-ref"
+            @keydown.enter.prevent="shrink"
+            @keydown.space.prevent="shrink"
             :name="'toggle-side-menu-button'"
             :id="'toggle-side-menu-button'"
             :aria-label="languages.label('LBL_MINT_TOGGLE_SIDE_MENU')"
@@ -223,7 +242,6 @@ import { useUxStore } from '@/store/ux'
 import MintMenuList from '@/components/MintMenuList.vue'
 import { useLanguagesStore } from '@/store/languages'
 import { useRouter } from 'vue-router'
-import { popupComponents } from '@/custom/components/MintPopups/CustomMintPopupsMap'
 import { usePopupsStore } from '@/store/popups'
 import ComponentLoader from '@/utils/componentLoader'
 import MintButton from '@/components/MintButtons/MintButton.vue'
@@ -239,13 +257,74 @@ const popups = usePopupsStore()
 const router = useRouter()
 const storage = useLocalStorageStore()
 
+const shrinked = ref(storage.sideMenuShrinked)
+const disableHover = ref(false)
+const sidebarNavHovered = ref(false)
+let clearSidebarHoverTimeout: ReturnType<typeof setTimeout> | null = null
+
+function onSidebarNavEnter() {
+    if (clearSidebarHoverTimeout) {
+        clearTimeout(clearSidebarHoverTimeout)
+        clearSidebarHoverTimeout = null
+    }
+    sidebarNavHovered.value = true
+}
+
+function onSidebarNavLeave() {
+    clearSidebarHoverTimeout = setTimeout(() => {
+        sidebarNavHovered.value = false
+    }, 150)
+}
+
+function onShrinkerEnter() {
+    if (sidebarNavHovered.value && shrinked.value) {
+        if (clearSidebarHoverTimeout) {
+            clearTimeout(clearSidebarHoverTimeout)
+            clearSidebarHoverTimeout = null
+        }
+    }
+}
 
 const shrink = () => {
-    storage.sideMenuShrinked = !storage.sideMenuShrinked
+    shrinked.value = !shrinked.value
+    sidebarNavHovered.value = false
+    storage.sideMenuShrinked = shrinked.value
+
+    if (clearSidebarHoverTimeout) {
+        clearTimeout(clearSidebarHoverTimeout)
+        clearSidebarHoverTimeout = null
+    }
+}
+
+const moduleActionsRef = useTemplateRef('module-actions-ref')
+const moduleActionsHeight = ref(0)
+const shrinkerButtonRef = useTemplateRef('shrinker-button-ref')
+const shrinkerButtonPosition = ref(0)
+
+const useAlternativeColor = computed(() => {
+    return moduleActionsHeight.value > shrinkerButtonPosition.value
+})
+
+function calculateModuleActionsAndShrinkerHeight() {
+    nextTick(() => {
+        if (moduleActionsRef.value && modules.currentModule?.actions) {
+            const element = moduleActionsRef.value.$el || moduleActionsRef.value
+            moduleActionsHeight.value = element.offsetHeight
+        } else {
+            moduleActionsHeight.value = 0
+        }
+
+        if(shrinkerButtonRef.value) {
+            const element = shrinkerButtonRef.value.$el || shrinkerButtonRef.value
+            shrinkerButtonPosition.value = element.getBoundingClientRect().top
+        } else {
+            shrinkerButtonPosition.value = 0
+        }
+    })
 }
 const ux = useUxStore()
 
-const { mdAndUp } = useDisplay()
+const { mdAndUp, mdAndDown } = useDisplay()
 
 const filterModulesQuery = ref('')
 const filteredModules = computed(() => {
@@ -307,6 +386,25 @@ function navigateToModule(moduleName: string) {
     router.push({ name: 'list', params: { module: moduleName } })
 }
 
+function handleModuleItemSpace(event: KeyboardEvent, moduleName: string) {
+    const target = event.target as HTMLElement
+    if (target.closest('button')) {
+        return
+    }
+    event.preventDefault()
+    navigateToModule(moduleName)
+}
+
+function handleModuleItemEnter(event: KeyboardEvent, moduleName: string) {
+    const target = event.target as HTMLElement
+    if (target.closest('button')) {
+        return
+    }
+    event.preventDefault()
+    navigateToModule(moduleName)
+}
+
+const searchInputRef = useTemplateRef('searchInputRef')
 const navListRef = useTemplateRef('nav-list-ref')
 function scrollToSelectedItem() {
     nextTick(() => {
@@ -324,7 +422,11 @@ function scrollToSelectedItem() {
     })
 }
 
-function selectItem(event) {
+function selectItem(event: KeyboardEvent) {
+    const searchEl = (searchInputRef.value as any)?.$el as HTMLElement | null
+    if (!searchEl?.contains(document.activeElement)) {
+        return
+    }
     if (!filteredModules.value.length || filterModulesQuery.value == '') {
         selectedItem.value = ''
         return
@@ -355,6 +457,12 @@ function selectItem(event) {
                 navigateToModule(selectedItem.value)
             }
             break
+        case ' ':
+            event.preventDefault()
+            if (selectedItem.value) {
+                navigateToModule(selectedItem.value)
+            }
+            break
         case 'Escape':
             event.preventDefault()
             selectedItem.value = ''
@@ -362,8 +470,15 @@ function selectItem(event) {
     }
 }
 
+const keydownHandler = (event: KeyboardEvent) => selectItem(event)
+
 onMounted(() => {
-    document.addEventListener('keydown', (event) => selectItem(event))
+    document.addEventListener('keydown', keydownHandler)
+    calculateModuleActionsAndShrinkerHeight()
+})
+
+onUnmounted(() => {
+    document.removeEventListener('keydown', keydownHandler)
 })
 
 watch(
@@ -375,22 +490,90 @@ watch(
     },
 )
 
-onUnmounted(() => {
-    document.removeEventListener('keydown', selectItem)
-})
+watch(
+    () => modules.currentModule?.name,
+    () => {
+        calculateModuleActionsAndShrinkerHeight()
+    }
+)
 
+// On mobile the sidebar is an overlay; collapse it back once the user picks an
+// option and navigates somewhere (module, recent, favorite).
+watch(
+    () => router.currentRoute.value.fullPath,
+    () => {
+        if (mdAndDown.value) {
+            ux.sideMenu = false
+        }
+    }
+)
 </script>
 <style lang="scss">
 .sidebar-nav {
     top: var(--v-top-nav-height) !important;
     max-height: calc(100vh - var(--v-top-nav-height));
-    backdrop-filter: blur(24px);
     .v-navigation-drawer__content {
         overflow: hidden;
         display: flex;
         flex-direction: column;
     }
 }
+.default-layout-sidebar {
+    transition: all 0.3s ease;
+    &::before {
+        top: var(--v-top-nav-height) !important;
+        left: 0;
+        width: 277px;
+        height: calc(100vh - var(--v-top-nav-height));
+        content: '';
+        backdrop-filter: blur(24px);
+        background: rgba(0, 0, 0, 0.039);
+        z-index: 0;
+        position: absolute;
+        transition: width 0.3s ease, mask 0.3s ease;
+        mask: 
+            radial-gradient(
+                circle 17px at 260px calc(50vh - var(--v-top-nav-height)),
+                black 17px, 
+                transparent 17px
+            ),
+            linear-gradient(
+                to right,
+                black 0px 260px,
+                transparent 260px 277px
+            );
+        mask-composite: add;
+    }
+}
+.default-layout-sidebar-railed {
+    transition: all 0.3s ease;
+    
+    // The frosted backdrop lives on the drawer content itself — not a wrapper
+    // ::before with an animated mask — so it always matches the drawer's real
+    // width (76px rail or 260px expanded-on-hover) and fully covers the menu,
+    // instead of leaving page content bleeding through where the mask fails to
+    // expand in sync with the drawer.
+    &::before {
+        content: none;
+    }
+
+    .sidebar-nav .v-navigation-drawer__content {
+        backdrop-filter: blur(24px);
+        background: rgba(0, 0, 0, 0.039);
+    }
+}
+
+// On mobile the sidebar has only two states: fully hidden or fully expanded
+// (no icon rail, no hover expansion). The frosted wrapper ::before is not used
+// here — instead the backdrop lives on the drawer itself, so it appears only
+// while the drawer is open and never leaks a strip over the page background.
+.default-layout-sidebar-mobile {
+    .sidebar-nav .v-navigation-drawer__content {
+        backdrop-filter: blur(24px);
+        background: rgba(var(--v-theme-surface), 0.85);
+    }
+}
+
 .sidebar-nav.v-navigation-drawer--rail {
     .menu-icon {
         display: none;
@@ -416,9 +599,21 @@ onUnmounted(() => {
     padding-left: 0px;
     padding-right: 16px;
     overflow-y: auto !important;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
+}
+
+// While the rail is collapsed the highlight should fill the whole row, edge to
+// edge, with no rounding — the flush-left rounded lozenge only makes sense in the
+// wide expanded menu. Drop the right inset and radius, and hide the labels
+// explicitly so the full-width row never reveals a sliver of module text (they
+// are otherwise only clipped, not hidden). Everything comes back on hover.
+.default-layout-sidebar-railed:not(:hover) {
+    .nav-list {
+        padding-right: 0;
+    }
+    .nav-item {
+        border-radius: 0;
+    }
+    .nav-title span {
         display: none;
     }
 }
@@ -433,6 +628,11 @@ onUnmounted(() => {
     }
     :deep(.v-field__input) {
         padding-top: 8px;
+    }
+    :deep(.v-field:has(input:focus-visible)) {
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: -2px;
+        border-radius: 4px;
     }
 }
 
@@ -455,6 +655,10 @@ onUnmounted(() => {
     }
     :deep(.v-list-item-title) {
         font-weight: 600;
+    }
+    :deep(.v-expansion-panel-title:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: -2px;
     }
 }
 
@@ -487,6 +691,11 @@ onUnmounted(() => {
         margin-left: auto;
         opacity: 0 !important;
         transition: all 250ms ease-in-out;
+        &:focus-visible {
+            opacity: 1 !important;
+            outline: 2px solid rgb(var(--v-theme-secondary));
+            border-radius: 4px;
+        }
     }
     .menu-icon.menu-icon-active {
         opacity: 1 !important;
@@ -494,6 +703,18 @@ onUnmounted(() => {
 
     &:hover,
     &.keyboard-hovered {
+        background: #0000001f;
+        .nav-title {
+            transform: translateX(-8px);
+            color: rgb(var(--v-theme-secondary-dark));
+        }
+        .menu-icon {
+            opacity: 1 !important;
+        }
+    }
+    &:focus-visible {
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: -2px;
         background: #0000001f;
         .nav-title {
             transform: translateX(-8px);
@@ -514,6 +735,13 @@ onUnmounted(() => {
     }
     &:hover .nav-title {
         color: #fff;
+    }
+    &:focus-visible {
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6);
+        background: #0004;
+        .nav-title {
+            color: #fff;
+        }
     }
 }
 
@@ -544,25 +772,13 @@ onUnmounted(() => {
     width: 34px;
     height: 34px;
     cursor: pointer;
-    transition: left 0.3s ease;
+    transition: left 0.5s ease;
     z-index: 1005;
+    border-radius: 50%;
     
     &.rail-mode {
         left: calc(76px - 17px);
     }
-}
-
-.shrinker-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 34px;
-    height: 34px;
-    background: rgba(0, 0, 0, 0.039);
-    border-radius: 50%;
-    backdrop-filter: blur(24px);
-    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
-    z-index: 0;
 }
 
 .shrinker-button {
@@ -570,41 +786,52 @@ onUnmounted(() => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 5;
+    &:focus-visible {
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: 2px;
+        border-radius: 50%;
+    }
 }
 
-.default-layout-sidebar {
+.default-layout-sidebar,
+.default-layout-sidebar-railed {
     &:hover {
         .shrinker {
             left: calc(260px - 17px);
         }
     }
 
+    .v-navigation-drawer--rail {
+        transition: transform 0.5s ease, width 0.5s ease !important;
+    }
+
     &:hover,
     &:has(.shrinker:hover) {
         .v-navigation-drawer--rail {
-            transform: translateX(0) !important;
             width: 260px !important;
+            transition: all 0.5s ease;
         }
     }
 }
 
-.navigation-scrim {
-    background-color: rgba(0, 0, 0, 0);
-    position: fixed;
-    top: var(--v-top-nav-height);
-    left: 0;
-    right: 0;
-    height: calc(100vh - var(--v-top-nav-height));
-    z-index: 1004;
-    transition: left 0.2s ease, background-color 0.2s ease;
-    pointer-events: none;
+.no-hover {
+    pointer-events: none !important;
+}
 
-    &.navigation-scrim-open {
-        left: 260px;
-        width: auto;
-        background-color: rgba(0, 0, 0, 0.3);
-        pointer-events: auto;
+.shrinker
+{
+    &.alternative-color
+    {
+        background-color: rgb(var(--v-theme-primary)) !important;
+    }
+}
+
+.shrinker-button.alternative-color
+{
+    color: rgba(255, 255, 255, 0.686) !important;
+    &:hover {
+        color: white;
     }
 }
 </style>

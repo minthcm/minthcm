@@ -1,0 +1,15 @@
+includes:
+    - phpstan-baseline.neon
+parameters:
+    level: 5
+    phpVersion: 80200
+    paths:
+        - Auth
+        - Capabilities
+        - Server
+    excludePaths:
+        - vendor/*
+        - apps/*
+        - node_modules/*
+    scanDirectories:
+        - ../legacy/include/AI   # traity MintHCM\AI\Tools\Traits\* używane przez mcp żyją w legacy

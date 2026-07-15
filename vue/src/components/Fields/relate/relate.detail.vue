@@ -1,30 +1,23 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()" @keyup.enter="$emit('inlineEditSave')">
+        <div class="detail-field-row">
             <router-link :name="props.defs.name" v-if="hasViewAccess" :to="recordUrl" class="relate-field">
                 {{ props.modelValue }}
             </router-link>
             <span :name="props.defs.name" v-else>
                 {{ props.modelValue }}
             </span>
-            <Pencil
-                :defs="props.defs"
-                :hidePencil="hidePencil"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import Pencil from '../Pencil.vue'
+import { computed } from 'vue';
 import { FieldProps } from '../Field.model';
 import { useACL } from '@/composables/useACL';
 
 const props = defineProps<FieldProps>()
-const emit = defineEmits(['inlineEditBtnClicked'])
 
 const recordUrl = computed(() => {
     const module = props.defs.module
@@ -32,11 +25,6 @@ const recordUrl = computed(() => {
     if (!module || !id) return ''
     return `/modules/${module}/DetailView/${id}`
 })
-function startInlineEdit() {
-    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
-        emit('inlineEditBtnClicked', props.defs.name)
-    }
-}
 const hasViewAccess = computed<boolean>(() => {
     return useACL().hasAccess(props.defs.module, 'view', true, true)
 })

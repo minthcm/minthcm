@@ -108,6 +108,7 @@ $routes = array(
         "desc" => "Logout user from MintHCM",
         "options" => array(
             'auth' => false,
+            'optional_auth' => true,
         ),
         "pathParams" => array(),
         "queryParams" => array(),

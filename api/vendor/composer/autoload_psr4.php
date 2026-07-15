@@ -39,7 +39,7 @@ return array(
     'MintHCM\\Custom\\Modules\\' => array($baseDir . '/custom/modules'),
     'MintHCM\\Custom\\Api\\' => array($baseDir . '/custom/app'),
     'MintHCM\\Api\\' => array($baseDir . '/app'),
-    'League\\Uri\\' => array($vendorDir . '/league/uri-interfaces', $vendorDir . '/league/uri'),
+    'League\\Uri\\' => array($vendorDir . '/league/uri', $vendorDir . '/league/uri-interfaces'),
     'League\\OAuth2\\Server\\' => array($vendorDir . '/league/oauth2-server/src'),
     'League\\Event\\' => array($vendorDir . '/league/event/src'),
     'Lcobucci\\JWT\\' => array($vendorDir . '/lcobucci/jwt/src'),

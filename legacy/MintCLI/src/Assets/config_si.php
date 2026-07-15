@@ -68,5 +68,6 @@ $sugar_config_si = array(
         'studio',
         'moduleBuilder',
         'connector_settings',
+        'scheduler',
     ],
 );

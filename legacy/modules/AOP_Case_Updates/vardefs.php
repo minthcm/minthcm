@@ -112,6 +112,7 @@ $dictionary['AOP_Case_Updates'] = array(
         'notes' => array(
                 'name' => 'notes',
                 'type' => 'link',
+                'module' => 'Notes',
                 'relationship' => 'aop_case_updates_notes',
                 'source' => 'non-db',
                 'vname' => 'LBL_NOTES',

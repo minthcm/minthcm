@@ -33,24 +33,28 @@ class ConstraintViolation implements ConstraintViolationInterface
      * Creates a new constraint violation.
      *
      * @param string|\Stringable $message         The violation message as a string or a stringable object
-     * @param string             $messageTemplate The raw violation message
+     * @param string|null        $messageTemplate The raw violation message
      * @param array              $parameters      The parameters to substitute in the
      *                                            raw violation message
      * @param mixed              $root            The value originally passed to the
      *                                            validator
-     * @param string             $propertyPath    The property path from the root
+     * @param string|null        $propertyPath    The property path from the root
      *                                            value to the invalid value
      * @param mixed              $invalidValue    The invalid value that caused this
      *                                            violation
      * @param int|null           $plural          The number for determining the plural
      *                                            form when translating the message
-     * @param mixed              $code            The error code of the violation
+     * @param string|null        $code            The error code of the violation
      * @param Constraint|null    $constraint      The constraint whose validation
      *                                            caused the violation
      * @param mixed              $cause           The cause of the violation
      */
-    public function __construct($message, $messageTemplate, array $parameters, $root, $propertyPath, $invalidValue, $plural = null, $code = null, Constraint $constraint = null, $cause = null)
+    public function __construct($message, ?string $messageTemplate, array $parameters, $root, ?string $propertyPath, $invalidValue, ?int $plural = null, ?string $code = null, ?Constraint $constraint = null, $cause = null)
     {
+        if (!\is_string($message) && !(\is_object($message) && method_exists($message, '__toString'))) {
+            throw new \TypeError('Constraint violation message should be a string or an object which implements the __toString() method.');
+        }
+
         $this->message = $message;
         $this->messageTemplate = $messageTemplate;
         $this->parameters = $parameters;
@@ -66,7 +70,7 @@ class ConstraintViolation implements ConstraintViolationInterface
     /**
      * Converts the violation into a string for debugging purposes.
      *
-     * @return string The violation as string
+     * @return string
      */
     public function __toString()
     {
@@ -79,13 +83,12 @@ class ConstraintViolation implements ConstraintViolationInterface
         }
 
         $propertyPath = (string) $this->propertyPath;
-        $code = (string) $this->code;
 
         if ('' !== $propertyPath && '[' !== $propertyPath[0] && '' !== $class) {
             $class .= '.';
         }
 
-        if ('' !== $code) {
+        if (null !== ($code = $this->code) && '' !== $code) {
             $code = ' (code '.$code.')';
         }
 
@@ -97,7 +100,7 @@ class ConstraintViolation implements ConstraintViolationInterface
      */
     public function getMessageTemplate()
     {
-        return $this->messageTemplate;
+        return (string) $this->messageTemplate;
     }
 
     /**
@@ -137,7 +140,7 @@ class ConstraintViolation implements ConstraintViolationInterface
      */
     public function getPropertyPath()
     {
-        return $this->propertyPath;
+        return (string) $this->propertyPath;
     }
 
     /**
@@ -151,7 +154,7 @@ class ConstraintViolation implements ConstraintViolationInterface
     /**
      * Returns the constraint whose validation caused the violation.
      *
-     * @return Constraint|null The constraint or null if it is not known
+     * @return Constraint|null
      */
     public function getConstraint()
     {

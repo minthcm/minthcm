@@ -1,0 +1,47 @@
+# Changelog
+
+All notable changes to `mcp/sdk` will be documented in this file.
+
+0.4.0
+-----
+
+* Rename `Mcp\Server\Session\Psr16StoreSession` to `Mcp\Server\Session\Psr16SessionStore`
+* Add missing handlers for resource subscribe/unsubscribe and persist subscriptions via session
+
+0.3.0
+-----
+
+* Add output schema support to MCP tools
+* Add validation of the input parameters given to a Tool.
+* Rename `Mcp\Capability\Registry\ResourceReference::$schema` to `Mcp\Capability\Registry\ResourceReference::$resource`.
+* Introduce `SchemaGeneratorInterface` and `DiscovererInterface` to allow custom schema generation and discovery implementations.
+* Remove `DocBlockParser::getSummary()` method, use `DocBlockParser::getDescription()` instead.
+
+0.2.2
+-----
+
+* Throw exception when trying to inject parameter with the unsupported names `$_session` or `$_request`.
+* `Throwable` objects are passed to log context instead of the exception message.
+
+0.2.1
+-----
+
+* Add `RunnerControl` for `StdioTransport` to allow break out from continuously listening for new input.
+* Open range of supported Symfony versions to include v5.4
+
+0.2.0
+-----
+
+* Make `Protocol` stateless by decouple if from `TransportInterface`. Removed `Protocol::getTransport()`.
+* Change signature of `Builder::addLoaders(...$loaders)` to `Builder::addLoaders(iterable $loaders)`.
+* Removed `ClientAwareInterface` in favor of injecting a `RequestContext` with argument injection.
+* The `ClientGateway` cannot be injected with argument injection anymore. Use `RequestContext` instead.
+* Removed `ClientAwareTrait`
+* Removed `Protocol::getTransport()`
+* Added parameter for `TransportInterface` to `Protocol::processInput()`
+
+0.1.0
+-----
+
+* First tagged release of package
+* Support for implementing MCP server

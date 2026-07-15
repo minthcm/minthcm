@@ -30,7 +30,7 @@ const format = computed(() => {
 onMounted(() => {
     const dec_sep = preferences.user?.dec_sep || '.'
     if (props.modelValue) {
-        props.modelValue = onInput(String(props.modelValue).replace(/[.]/g, dec_sep))
+        onInput(String(props.modelValue).replace(/[.]/g, dec_sep))
     }
 })
 

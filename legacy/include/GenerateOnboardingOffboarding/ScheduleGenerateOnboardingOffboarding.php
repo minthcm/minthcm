@@ -49,6 +49,7 @@ class ScheduleGenerateOnboardingOffboarding
     protected $template_id;
     protected $employee_id;
     protected $date_start;
+    protected $employees_ids;
 
     public function __construct($module_name, $template_id, $employees_ids, $date_start)
     {
@@ -91,16 +92,36 @@ class ScheduleGenerateOnboardingOffboarding
         $jq->submitJob($job);
     }
 
+    protected function getAllowedStatuses(): array
+    {
+        return $this->module_name === 'OffboardingTemplates' ? ['Active', 'during_termination', 'Terminated'] : ['Active'];
+    }
+
     protected function validate()
     {
         $errors = [];
+        $allowedStatuses = $this->getAllowedStatuses();
+        foreach ($this->employees_ids as $employee_id) {
+            $employee = BeanFactory::getBean('Employees', $employee_id);
+            if (empty($employee) || empty($employee->id)) {
+                continue;
+            }
+            if (empty($employee->user_name) || !in_array($employee->employee_status, $allowedStatuses)) {
+                $errors['employee_status'] = [
+                    'module' => 'Employees',
+                    'id' => $employee->id,
+                    'name' => $employee->full_name,
+                ];
+                return $errors;
+            }
+        }
         $template = BeanFactory::getBean($this->module_name, $this->template_id);
         if ($template && !empty($template->id) && $template->load_relationship('elements')) {
             foreach ($template->elements->get() as $element_id) {
                 foreach ($this->employees_ids as $employee_id) {
                     $this->validateElement($employee_id, $element_id, $errors);
+                }
             }
-        }
         }
         return $errors;
     }
@@ -112,7 +133,7 @@ class ScheduleGenerateOnboardingOffboarding
             switch ($element->kind_of_element) {
                 case 'self';
                     $employee = BeanFactory::getBean('Employees', $employee_id);
-                    if (empty($errors[$element->kind_of_element]) && (empty($employee->user_name) || $employee->status != 'Active')) {
+                    if (empty($errors[$element->kind_of_element]) && (empty($employee->user_name) || !in_array($employee->employee_status, $this->getAllowedStatuses()))) {
                         $errors[$element->kind_of_element] = [
                             'module' => 'Employees',
                             'id' => $employee->id,

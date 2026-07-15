@@ -112,6 +112,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'email_addresses_primary',
                 'type' => 'link',
+                'module' => 'EmailAddresses',
                 'relationship' => 'prospects_email_addresses_primary',
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAIL_ADDRESS_PRIMARY',
@@ -140,6 +141,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'calls',
                 'type' => 'link',
+                'module' => 'Calls',
                 'relationship' => 'prospect_calls',
                 'source' => 'non-db',
                 'vname' => 'LBL_CALLS',
@@ -148,6 +150,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'meetings',
                 'type' => 'link',
+                'module' => 'Meetings',
                 'relationship' => 'prospect_meetings',
                 'source' => 'non-db',
                 'vname' => 'LBL_MEETINGS',
@@ -156,6 +159,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'notes',
                 'type' => 'link',
+                'module' => 'Notes',
                 'relationship' => 'prospect_notes',
                 'source' => 'non-db',
                 'vname' => 'LBL_NOTES',
@@ -164,6 +168,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'tasks',
                 'type' => 'link',
+                'module' => 'Tasks',
                 'relationship' => 'prospect_tasks',
                 'source' => 'non-db',
                 'vname' => 'LBL_TASKS',
@@ -172,6 +177,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'emails',
                 'type' => 'link',
+                'module' => 'Emails',
                 'relationship' => 'emails_prospects_rel',
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAILS',
@@ -180,6 +186,7 @@ $dictionary['Prospect'] = array(
             array(
                 'name' => 'fp_events_prospects_1',
                 'type' => 'link',
+                'module' => 'FP_events',
                 'relationship' => 'fp_events_prospects_1',
                 'source' => 'non-db',
                 'vname' => 'LBL_FP_EVENTS_PROSPECTS_1_FROM_FP_EVENTS_TITLE',

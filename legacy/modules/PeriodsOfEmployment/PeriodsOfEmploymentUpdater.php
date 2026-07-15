@@ -188,9 +188,11 @@ class PeriodsOfEmploymentUpdater {
 
    protected function setDateFieldToDateTimeForRow($row) {
       global $timedate;
-      $row['contract_starting_date'] = DateTime::createFromFormat(
-                      $timedate->get_db_date_format(), $row['contract_starting_date']
-              )->setTime(0, 0, 0);
+      if ( !empty($row['contract_starting_date']) ) {
+         $row['contract_starting_date'] = DateTime::createFromFormat(
+                         $timedate->get_db_date_format(), $row['contract_starting_date']
+                 )->setTime(0, 0, 0);
+      }
       if ( !empty($row['contract_ending_date']) ) {
          $row['contract_ending_date'] = DateTime::createFromFormat(
                          $timedate->get_db_date_format(), $row['contract_ending_date']

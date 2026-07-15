@@ -80,7 +80,6 @@ $mod_strings = array(
     'LBL_SW_EDIT_DROPDOWNS' => 'Edit Drop Downs',
     'LBL_SW_EDIT_TABS' => 'Configure Tabs',
     'LBL_SW_RENAME_TABS' => 'Rename Tabs',
-    'LBL_SW_EDIT_GROUPTABS' => 'Configure Group Tabs',
     'LBL_SW_EDIT_PORTAL' => 'Edit Portal',
     'LBL_SW_REPAIR_CUSTOMFIELDS' => 'Repair Custom Fields',
     'LBL_SW_MIGRATE_CUSTOMFIELDS' => 'Migrate Custom Fields',
@@ -115,13 +114,7 @@ $mod_strings = array(
 //TABS
     'LBL_MODULES' => 'Modules',
     'LBL_MODULE_NAME' => 'Administration',
-    'LBL_CONFIGURE_GROUP_TABS' => 'Configure Module Menu Filters',
-    'LBL_GROUP_TAB_WELCOME' => 'The filters below will be displayed in the More list in the module menu for users to use to view groups of modules within the menu. Drag and drop modules to and from the filters. Note: Empty filters will not be displayed in the menu.',
     'LBL_RENAME_TAB_WELCOME' => 'Click on any tab\'s Display Value in the table below to rename the tab.',
-    'LBL_DELETE_MODULE' => 'Remove&nbsp;module<br />from&nbsp;filter',
-    'LBL_TAB_GROUP_LANGUAGE_HELP' => 'Select an available language, edit the Group labels and click Save & Deploy to apply the labels in the selected language.',
-    'LBL_ADD_GROUP' => 'Add Filter',
-    'LBL_NEW_GROUP' => 'New Group',
     'LBL_RENAME_TABS' => 'Rename Modules',
 
 //ERRORS

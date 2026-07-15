@@ -35,33 +35,17 @@ abstract class FileDumper implements DumperInterface
     /**
      * Sets the template for the relative paths to files.
      *
-     * @param string $relativePathTemplate A template for the relative paths to files
+     * @return void
      */
-    public function setRelativePathTemplate($relativePathTemplate)
+    public function setRelativePathTemplate(string $relativePathTemplate)
     {
         $this->relativePathTemplate = $relativePathTemplate;
     }
 
     /**
-     * Sets backup flag.
-     *
-     * @param bool $backup
-     *
-     * @deprecated since Symfony 4.1
+     * @return void
      */
-    public function setBackup($backup)
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1.', __METHOD__), \E_USER_DEPRECATED);
-
-        if (false !== $backup) {
-            throw new \LogicException('The backup feature is no longer supported.');
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(MessageCatalogue $messages, $options = [])
+    public function dump(MessageCatalogue $messages, array $options = [])
     {
         if (!\array_key_exists('path', $options)) {
             throw new InvalidArgumentException('The file dumper needs a path option.');
@@ -73,7 +57,7 @@ abstract class FileDumper implements DumperInterface
             if (!file_exists($fullpath)) {
                 $directory = \dirname($fullpath);
                 if (!file_exists($directory) && !@mkdir($directory, 0777, true)) {
-                    throw new RuntimeException(sprintf('Unable to create directory "%s".', $directory));
+                    throw new RuntimeException(\sprintf('Unable to create directory "%s".', $directory));
                 }
             }
 
@@ -102,19 +86,13 @@ abstract class FileDumper implements DumperInterface
 
     /**
      * Transforms a domain of a message catalogue to its string representation.
-     *
-     * @param string $domain
-     *
-     * @return string representation
      */
-    abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = []);
+    abstract public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string;
 
     /**
      * Gets the file extension of the dumper.
-     *
-     * @return string file extension
      */
-    abstract protected function getExtension();
+    abstract protected function getExtension(): string;
 
     /**
      * Gets the relative file path using the template.

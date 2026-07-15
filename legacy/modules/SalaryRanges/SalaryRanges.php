@@ -44,6 +44,8 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+require_once 'modules/AOS_Products_Quotes/AOS_Utils.php';
+
  #[\AllowDynamicProperties]
 class SalaryRanges extends Basic
 {
@@ -91,6 +93,8 @@ class SalaryRanges extends Basic
     public function save($check_notify = false)
     {
         $this->name = implode(' - ', array_filter([$this->position_name, $this->start_date, $this->end_date]));
+
+        perform_aos_save($this);
 
         return parent::save($check_notify);
     }

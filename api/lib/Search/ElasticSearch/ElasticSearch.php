@@ -57,6 +57,7 @@ class ElasticSearch extends SearchManager
 {
 
     protected $client, $result, $indice_module_map,$queryClass;
+    protected static ?string $serverVersion = null;
 
     public function __construct(array $params)
     {
@@ -117,5 +118,19 @@ class ElasticSearch extends SearchManager
         }
 
         $this->client = ClientBuilder::create()->setHosts($hosts)->build();
+
+        if (static::$serverVersion === null) {
+            try {
+                $info = $this->client->info();
+                static::$serverVersion = $info['version']['number'] ?? '0.0.0';
+            } catch (\Exception $e) {
+                static::$serverVersion = '0.0.0';
+            }
+        }
+    }
+
+    public static function getServerVersion(): string
+    {
+        return static::$serverVersion ?? '0.0.0';
     }
 }

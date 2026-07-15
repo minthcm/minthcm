@@ -2,6 +2,9 @@
 use MintHCM\Lib\MintLogic\Hook;
 use MintHCM\Lib\MintLogic\Formula;
 use MintHCM\Lib\MintLogic\Modules\Delegations\Validators\DelegationValidator;
+use MintHCM\Lib\MintLogic\Exceptions\ValidationException;
+use MintHCM\Data\BeanFactory;
+use MintHCM\Utils\LegacyConnector;
 
 return [
     'bean' => [
@@ -20,7 +23,7 @@ return [
                     'total_accommodation_usdollar' => true,
                     'other_usdollar' => true,
                     'total_expenses_usdollar' => true,
-                    'obtained_sum_usdollars' => true,
+                    'obtained_sum_usdollar' => true,
                     'return_sum_usdollar' => true,
                     'payoff_sum_usdollar' => true,
                     'currency_id' => true,
@@ -55,6 +58,33 @@ return [
                 //     }
                 //     return [];
                 // },
+            ],
+        ],
+        'date_order' => [
+            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'triggerFields' => ['start_date', 'end_date'],
+            'trigger' => true,
+            'logic' => [
+                'validation' => [
+                    'start_date' => [
+                        function ($bean) {
+                            $start_date = empty($bean->start_date) ? null : new DateTimeImmutable($bean->start_date, new DateTimeZone('UTC'));
+                            $end_date = empty($bean->end_date) ? null : new DateTimeImmutable($bean->end_date, new DateTimeZone('UTC'));
+                            if ($start_date && $end_date && $start_date > $end_date) {
+                                throw new ValidationException(LegacyConnector::callFunction('translate', 'LBL_START_DATE', 'Delegations') . ' ' . LegacyConnector::callFunction('translate', 'MSG_IS_NOT_BEFORE') . ' ' . LegacyConnector::callFunction('translate', 'LBL_END_DATE', 'Delegations'));
+                            }
+                        },
+                    ],
+                    'end_date' => [
+                        function ($bean) {
+                            $start_date = empty($bean->start_date) ? null : new DateTimeImmutable($bean->start_date, new DateTimeZone('UTC'));
+                            $end_date = empty($bean->end_date) ? null : new DateTimeImmutable($bean->end_date, new DateTimeZone('UTC'));
+                            if ($start_date && $end_date && $start_date > $end_date) {
+                                throw new ValidationException(LegacyConnector::callFunction('translate', 'LBL_START_DATE', 'Delegations') . ' ' . LegacyConnector::callFunction('translate', 'MSG_IS_NOT_BEFORE') . ' ' . LegacyConnector::callFunction('translate', 'LBL_END_DATE', 'Delegations'));
+                            }
+                        },
+                    ],
+                ],
             ],
         ],
     ],

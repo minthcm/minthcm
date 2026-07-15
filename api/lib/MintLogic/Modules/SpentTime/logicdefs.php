@@ -2,12 +2,52 @@
 
 use MintHCM\Lib\MintLogic\Exceptions\ValidationException;
 use MintHCM\Lib\MintLogic\Hook;
+use MintHCM\Lib\MintLogic\Modules\SpentTime\Updaters\SetDatesFromWorkscheduleUpdater;
+use MintHCM\Lib\MintLogic\Modules\SpentTime\Validators\SpentTimeOverlapValidator;
 use MintHCM\Lib\MintLogic\Validators\IsInRange;
 
 return [
     'rules' => [
-        [
+        'setDatesFromWorkschedule' => [
+            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'triggerFields' => ['workschedule_name', 'workschedule_id'],
+            'trigger' => true,
+            'logic' => [
+                'update' => new SetDatesFromWorkscheduleUpdater(),
+            ],
+        ],
+        'calculateSpentTime' => [
+            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'triggerFields' => ['date_start', 'date_end'],
+            'trigger' => true,
+            'logic' => [
+                'update' => function ($bean) {
+                    if (empty($bean->date_start) || empty($bean->date_end)) {
+                        return [];
+                    }
+                    $date_start = new DateTime($bean->date_start);
+                    $date_end = new DateTime($bean->date_end);
+                    if ($date_start >= $date_end) {
+                        return [];
+                    }
+                    $diff_seconds = $date_end->getTimestamp() - $date_start->getTimestamp();
+                    $hours = round($diff_seconds / 3600, 2);
+                    return [
+                        'spent_time' => $hours,
+                    ];
+                },
+            ],
+        ],
+        'spentTimeReadonly' => [
             'hooks' => [Hook::ALL],
+            'logic' => [
+                'readonly' => [
+                    'spent_time' => true,
+                ],
+            ],
+        ],
+        [
+            'hooks' => [Hook::ALL, Hook::CHANGE],
             'triggerFields' => ['date_start', 'date_end'],
             'trigger' => true,
             'logic' => [
@@ -58,38 +98,7 @@ return [
             'trigger' => true,
             'logic' => [
                 'validation' => [
-                    'date_start' => [
-                        function ($bean) {
-                            global $timedate;
-                            if (empty($bean->workschedule_id) || empty($bean->date_start) || empty($bean->date_end)) {
-                                return;
-                            }
-                            $date_start = $timedate->to_db($bean->date_start);
-                            $date_end = $timedate->to_db($bean->date_end);
-                            if (empty($date_start) || empty($date_end)) {
-                                return;
-                            }
-                            $db = DBManagerFactory::getInstance();
-                            $id_where = '';
-                            if (isset($bean->id)) {
-                                $id_where = "st.id != '{$bean->id}' AND ";
-                            }
-                            $sql = "SELECT COUNT(st.id) AS count FROM workschedules_spenttime ws "
-                                . "LEFT JOIN spenttime st ON "
-                                . "ws.spenttime_id=st.id "
-                                . "AND ws.workschedule_id = '{$bean->workschedule_id}' WHERE "
-                                . "st.deleted = 0 AND "
-                                . $id_where
-                                . "((st.date_start <= '{$date_start}' AND st.date_end > '{$date_start}') OR "
-                                . "(st.date_start < '{$date_end}' AND st.date_end >= '{$date_end}') OR "
-                                . "(st.date_start < '{$date_start}' AND st.date_end > '{$date_start}') OR "
-                                . "(st.date_start > '{$date_start}' AND st.date_end < '{$date_end}'))";
-                            $count = intval($db->getOne($sql));
-                            if ($count != 0) {
-                                throw new ValidationException('LBL_SPENT_TIME_RECORD_FOR_THIS_PERIOD_ALREADY_EXISTS');
-                            }
-                        },
-                    ],
+                    'date_start' => SpentTimeOverlapValidator::class,
                 ],
             ],
         ],

@@ -121,4 +121,5 @@ return array(
     "Home" => "home",
     "ResourceCalendar" => "calendar-lock",
     "Campaigns" => "email-newsletter",
+    "AIPromptTemplates" => "robot",
 );

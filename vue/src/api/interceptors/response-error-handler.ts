@@ -15,6 +15,10 @@ export async function responseErrorHandler(error: HttpErrorType) {
             throw error
         }
 
+        if (response?.data?.isValid === false) {
+            throw error
+        }
+
         const seekers = [String(data?.code), error.code, error?.name, String(response?.status)]
 
         const result = await errorHandlerRegistry.handleError(seekers, error)

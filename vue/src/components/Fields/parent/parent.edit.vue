@@ -32,12 +32,27 @@
             >
                 <template #append-inner>
                 <v-fab-transition class="search-prepend-icon">
-                    <v-icon
-                    v-if="recordModel.name"
-                    icon="mdi-close"
-                    @click="recordModel = { id: '', name: '' }"
-                    />
-                    <v-icon v-else icon="mdi-magnify" @click.stop="openRelatePopup" />
+                    <v-btn
+                        v-if="recordModel.name"
+                        icon
+                        variant="text"
+                        @click="recordModel = { id: '', name: '' }"
+                        @keydown.enter.prevent="recordModel = { id: '', name: '' }"
+                        @keydown.space.prevent="recordModel = { id: '', name: '' }"
+                    >
+                        <v-icon icon="mdi-close" />
+                    </v-btn>
+
+                    <v-btn
+                        v-else
+                        icon
+                        variant="text"
+                        @click.stop="openRelatePopup"
+                        @keydown.enter.prevent="openRelatePopup"
+                        @keydown.space.prevent="openRelatePopup"
+                    >
+                        <v-icon icon="mdi-magnify" />
+                    </v-btn>
                 </v-fab-transition>
                 </template>
             </v-text-field>

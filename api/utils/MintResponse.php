@@ -48,7 +48,6 @@ namespace MintHCM\Api\utils;
 
 use Slim\Psr7\Response as BaseResponse;
 
-#[\AllowDynamicProperties]
 class MintResponse extends BaseResponse
 {
     public function withJson($data, $status = null, $encodingOptions = JSON_INVALID_UTF8_IGNORE): MintResponse {

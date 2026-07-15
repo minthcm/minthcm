@@ -16,6 +16,7 @@ import { useRoute } from 'vue-router'
 import { useStatusBoxesStore } from '@/store/statusBoxes'
 import { useRouter } from 'vue-router'
 import { useACL, ACLView } from '@/composables/useACL'
+import { mintApi } from '@/api/api'
 
 const store = useRecordViewStore()
 const languages = useLanguagesStore()
@@ -34,6 +35,23 @@ onMounted(async () => {
     }
 
     if (store.bean.isNew) {
+        if (Object.keys(route.query).includes('copy_id')) {
+            // Clear virtual fields set by INIT logic (fields not in vardefs) so they
+            // don't interfere with explicit values provided by the duplicate action.
+            const initRule = store.bean.logic.rules.find(
+                (rule: any) => rule.key === 'init' && rule.trigger
+            )
+            if (initRule?.logic?.update) {
+                const clearMap: Record<string, null> = {}
+                Object.keys(initRule.logic.update).forEach((field) => {
+                    if (!store.bean.fieldDefs[field]) {
+                        clearMap[field] = null
+                    }
+                })
+                store.bean.updateFields(clearMap)
+            }
+        }
+
         if (Object.keys(route.query).length) {
             store.bean.setAttributesFromQuery(route.query)
         }
@@ -53,6 +71,11 @@ onMounted(async () => {
             }
             await store.bean.setAttributesFromBeanId(route.query.copy_id as string, excludedFields)
         }
+    } else {
+        await mintApi.post('Trackers', {
+            record: store.bean?.id,
+            module_name: store.bean?.module
+        }, { rawError: true});
     }
 })
 

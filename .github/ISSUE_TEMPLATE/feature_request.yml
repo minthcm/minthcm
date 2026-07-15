@@ -1,0 +1,79 @@
+name: 💡 Feature Request
+description: Suggest a new feature or improvement for MintHCM
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement! MintHCM is an open, community-driven platform — your ideas help shape its direction.
+        Please describe your request as clearly as possible.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the problem or limitation you're facing. What can't you do today, or what's painful about the current experience?
+      placeholder: "Example: When managing multiple leave requests, I have to open each record individually. There's no way to approve several at once, which wastes a lot of time for HR managers."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the feature you'd like
+      description: A clear description of what you want to happen. How should it work?
+      placeholder: "Example: Add a 'Mass Approve' action to the Leave Requests list view, similar to the existing Mass Update feature introduced in 4.3.0."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Have you found any workarounds or alternative solutions? Why are they not sufficient?
+      placeholder: "Example: I currently export to CSV and process approvals manually. It works but it's error-prone and slow."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area of MintHCM does this relate to?
+      options:
+        - Recruitment / Applications
+        - Leave & Time Management
+        - Onboarding / Offboarding
+        - HR Records & Employee Profiles
+        - AI / MCP / Agentic features
+        - API / Integrations
+        - RecordView / ListView / UI
+        - Reporting & Analytics
+        - Admin & Configuration
+        - Mobile
+        - Security & Permissions
+        - Other / Not sure
+    validations:
+      required: false
+
+  - type: dropdown
+    id: persona
+    attributes:
+      label: Who would benefit most from this feature?
+      options:
+        - HR Manager / CHRO
+        - Employee (self-service)
+        - System Administrator
+        - Developer / Integrator
+        - Executive / Manager
+        - All users
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other information — mockups, links, examples from other tools, business rules, compliance requirements, etc.
+    validations:
+      required: false

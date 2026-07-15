@@ -49,7 +49,6 @@ namespace MintHCM\Api\Repositories;
 use MintHCM\Api\Entities\Reactions;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-#[\AllowDynamicProperties]
 class ReactionRepository extends MintEntityRepository
 {
     /*

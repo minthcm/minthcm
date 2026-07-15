@@ -53,10 +53,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use MintHCM\Modules\Comments\AccessChecker;
 use MintHCM\Api\Entities\Users;
 
-#[\AllowDynamicProperties]
 class CommentsController
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {

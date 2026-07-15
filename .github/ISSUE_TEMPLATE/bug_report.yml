@@ -1,0 +1,105 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in MintHCM
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill in as much detail as possible to help us reproduce and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: "Example: When I try to save a leave request, the page throws a 500 error instead of saving the record."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Please provide step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Fill in '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: "Example: The leave request should be saved and a confirmation message should appear."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened? Include error messages, screenshots, or logs if available.
+      placeholder: "Example: A 500 Internal Server Error is displayed. Browser console shows: TypeError: Cannot read properties of undefined..."
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: MintHCM version
+      description: Which version of MintHCM are you using? You can find this in Admin → About MintHCM.
+      placeholder: "e.g. 4.3.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: php_version
+    attributes:
+      label: PHP version
+      description: Which PHP version is your server running?
+      options:
+        - "8.2"
+        - "8.1"
+        - "8.0"
+        - Other (please specify in additional context)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database
+      options:
+        - MySQL 8.0
+        - MariaDB 10.11
+        - MariaDB 10.10
+        - MariaDB 10.6
+        - MariaDB 10.5
+        - Other (please specify in additional context)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Deployment type
+      options:
+        - On-premises
+        - Self-hosted cloud (own infrastructure)
+        - Docker / containerized
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other information that might help — browser type/version, operating system, custom modules, relevant configuration, etc.
+    validations:
+      required: false

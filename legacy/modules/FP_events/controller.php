@@ -52,174 +52,71 @@ class FP_eventsController extends SugarController
     public function action_markasinvited()
     {
         $db = DBManagerFactory::getInstance();
-
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                //update contacts query
-                $query = 'UPDATE fp_events_contacts_c SET invite_status="Invited" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Invited" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
-            }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET invite_status="Invited" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Invited" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
-        }
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'invite_status="Invited"', $ids, $entireList);
     }
 
     public function action_markasattended()
     {
         $db = DBManagerFactory::getInstance();
-
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                $query = 'UPDATE fp_events_contacts_c SET invite_status="Attended" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Attended" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
-            }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET invite_status="Attended" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Attended" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
-        }
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'invite_status="Attended"', $ids, $entireList);
     }
 
     public function action_markasnotattended()
     {
         $db = DBManagerFactory::getInstance();
-
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Attended" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Not Attended" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
-            }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Attended" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Not Attended" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
-        }
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'invite_status="Not Attended"', $ids, $entireList);
     }
 
     public function action_markasnotinvited()
     {
         $db = DBManagerFactory::getInstance();
-
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Invited", email_responded="0" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Not Invited", email_responded="0" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
-            }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Invited", email_responded="0" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET invite_status="Not Invited", email_responded="0" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
-        }
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'invite_status="Not Invited", email_responded="0"', $ids, $entireList);
     }
 
     public function action_markasaccepted()
     {
         $db = DBManagerFactory::getInstance();
-
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                $query = 'UPDATE fp_events_contacts_c SET accept_status="Accepted" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET accept_status="Accepted" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
-            }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET accept_status="Accepted" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET accept_status="Accepted" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
-        }
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'accept_status="Accepted"', $ids, $entireList);
     }
+
     public function action_markasdeclined()
     {
         $db = DBManagerFactory::getInstance();
+        $eventIDQuoted = $db->quote($_POST['event_id'] ?? '');
+        $entireList = ($_POST['entire_list'] ?? '') === '1';
+        $ids = $entireList ? [] : explode(',', $_POST['id'] ?? '');
+        $this->updateDelegateStatus($eventIDQuoted, 'accept_status="Declined"', $ids, $entireList);
+    }
 
-        $ids = $_POST['id'];
-        $entire_list = $_POST['entire_list'];
-        $eventIDQuoted = $db->quote($_POST['event_id']);
-
-        if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
-
-            foreach ($contacts as $contact) {
-                $query = 'UPDATE fp_events_contacts_c SET accept_status="Declined" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'" AND fp_events_contactscontacts_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query);
-                //update targets query
-                $query3 = 'UPDATE fp_events_prospects_1_c SET accept_status="Declined" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'" AND fp_events_prospects_1prospects_idb="'. $db->quote($contact) .'"';
-                $res = $db->query($query3);
+    private function updateDelegateStatus(string $eventIDQuoted, string $setClause, array $ids, bool $entireList): void
+    {
+        $db = DBManagerFactory::getInstance();
+        if ($entireList) {
+            $db->query('UPDATE fp_events_contacts_c SET ' . $setClause . ' WHERE fp_events_contactsfp_events_ida="' . $eventIDQuoted . '"');
+            $db->query('UPDATE fp_events_prospects_1_c SET ' . $setClause . ' WHERE fp_events_prospects_1fp_events_ida="' . $eventIDQuoted . '"');
+            $db->query('UPDATE fp_events_candidates SET ' . $setClause . ' WHERE fp_events_id="' . $eventIDQuoted . '"');
+        } else {
+            foreach ($ids as $id) {
+                $idQuoted = $db->quote($id);
+                $db->query('UPDATE fp_events_contacts_c SET ' . $setClause . ' WHERE fp_events_contactsfp_events_ida="' . $eventIDQuoted . '" AND fp_events_contactscontacts_idb="' . $idQuoted . '"');
+                $db->query('UPDATE fp_events_prospects_1_c SET ' . $setClause . ' WHERE fp_events_prospects_1fp_events_ida="' . $eventIDQuoted . '" AND fp_events_prospects_1prospects_idb="' . $idQuoted . '"');
+                $db->query('UPDATE fp_events_candidates SET ' . $setClause . ' WHERE fp_events_id="' . $eventIDQuoted . '" AND candidates_id="' . $idQuoted . '"');
             }
-        } elseif ($entire_list == '1') { //updates all records
-
-            //update contacts query
-            $query = 'UPDATE fp_events_contacts_c SET accept_status="Declined" WHERE fp_events_contactsfp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query);
-            //update targets query
-            $query3 = 'UPDATE fp_events_prospects_1_c SET accept_status="Declined" WHERE fp_events_prospects_1fp_events_ida="'.$eventIDQuoted.'"';
-            $res = $db->query($query3);
         }
     }
 
@@ -240,11 +137,13 @@ class FP_eventsController extends SugarController
                 $event->retrieve($eventIDQuoted);
                 $event->load_relationship('fp_events_prospects_1');
                 $event->load_relationship('fp_events_contacts');
+                $event->load_relationship('fp_events_candidates');
 
                 $target_list = BeanFactory::newBean('ProspectLists');
                 $target_list->retrieve($list);
                 $target_list->load_relationship('prospects');
                 $target_list->load_relationship('contacts');
+                $target_list->load_relationship('candidates');
 
                 //add prospects/targets
                 foreach ($target_list->prospects->getBeans() as $contact) {
@@ -261,6 +160,14 @@ class FP_eventsController extends SugarController
 
                     if (!in_array($contact->id, $contact_id_list)) {
                         $event->fp_events_contacts->add($contact->id);
+                    }
+                }
+                //add candidates
+                foreach ($target_list->candidates->getBeans() as $candidate) {
+                    $candidate_id_list = $event->fp_events_candidates->get();
+
+                    if (!in_array($candidate->id, $candidate_id_list)) {
+                        $event->fp_events_candidates->add($candidate->id);
                     }
                 }
             }
@@ -294,6 +201,20 @@ class FP_eventsController extends SugarController
                 }
             }
         }
+        //candidates
+        elseif ($type == 'candidates') {
+            foreach ($ids as $candidate) {
+                $event = BeanFactory::newBean('FP_events');
+                $event->retrieve($eventIDQuoted);
+                $event->load_relationship('fp_events_candidates');
+
+                $candidate_id_list = $event->fp_events_candidates->get();
+
+                if (!in_array($candidate, $candidate_id_list)) {
+                    $event->fp_events_candidates->add($candidate);
+                }
+            }
+        }
 
         die();
     }
@@ -311,6 +232,7 @@ class FP_eventsController extends SugarController
 
         $event->load_relationship('fp_events_contacts'); // get related contacts
         $event->load_relationship('fp_events_prospects_1'); //get related targets
+        $event->load_relationship('fp_events_candidates'); //get related candidates
 
         //Count the number of delegates linked to the event that have not yet been invited
         $query = "SELECT * FROM fp_events_contacts_c WHERE fp_events_contactsfp_events_ida='".$event->id."' AND (invite_status='Not Invited' OR invite_status='' OR invite_status IS NULL) AND deleted='0'";
@@ -321,7 +243,11 @@ class FP_eventsController extends SugarController
         $result = $db->query($query);
         $prospect_count = $db->getRowCount($result);//count targets
 
-        $delegate_count = $contact_count + $prospect_count;//Total up delegates
+        $query = "SELECT * FROM fp_events_candidates WHERE fp_events_id='".$event->id."' AND (invite_status='Not Invited' OR invite_status='' OR invite_status IS NULL) AND deleted='0'";
+        $result = $db->query($query);
+        $candidate_count = $db->getRowCount($result);//count candidates
+
+        $delegate_count = $contact_count + $prospect_count + $candidate_count;//Total up delegates
         $invite_count = 0; //used to count the number of emails sent
         $error_count = 0; //used to count the number of failed email attempts
 
@@ -441,6 +367,69 @@ class FP_eventsController extends SugarController
                 } else {
                     //update contact to invites
                     $query = 'UPDATE fp_events_prospects_1_c SET invite_status="Invited" WHERE fp_events_prospects_1fp_events_ida="'.$event->id.'" AND fp_events_prospects_1prospects_idb="'.$target->id.'"';
+                    $res = $db->query($query);
+                }
+            }
+        }
+
+        //loop through related candidates
+        foreach ($event->fp_events_candidates->getBeans() as $candidate) {
+
+            //Get invite status of candidate
+            $query = 'SELECT invite_status FROM fp_events_candidates WHERE fp_events_id="'.$event->id.'" AND candidates_id="'.$candidate->id.'"';
+            $status = $db->getOne($query);
+
+            if ($status == null || $status == '' || $status == 'Not Invited') {
+                $invite_count ++;
+
+                //set email links
+                $event->link = "<a href='".$sugar_config['site_url']."/index.php?entryPoint=responseEntryPoint&event=".$event->id."&delegate=".$candidate->id."&type=ca&response=accept'>{$mod_strings['LBL_ACCEPT_LINK']}</a>";
+                $event->link_declined = "<a href='".$sugar_config['site_url']."/index.php?entryPoint=responseEntryPoint&event=".$event->id."&delegate=".$candidate->id."&type=ca&response=decline'>{$mod_strings['LBL_DECLINE_LINK']}</a>";
+
+                //Get the TO name and e-mail address for the message
+                $rcpt_name = $candidate->first_name . ' ' . $candidate->last_name;
+                $rcpt_email = $candidate->email1;
+
+                $emailTemp = BeanFactory::newBean('EmailTemplates');
+                $emailTemp->disable_row_level_security = true;
+                $emailTemp->retrieve($event->invite_templates);  //Use the ID value of the email template record
+
+                //check email template is set, if not return error
+                if ($emailTemp->id == '') {
+                    SugarApplication::appendErrorMessage($mod_strings['LBL_ERROR_MSG_5']);
+                    SugarApplication::redirect("index.php?module=FP_events&return_module=FP_events&action=DetailView&record=".$event->id);
+                    die();
+                }
+
+                //parse the candidate variables first
+                $firstpass = $emailTemp->parse_template_bean($emailTemp->body_html, 'Candidates', $candidate);
+
+                $email_subject = $emailTemp->parse_template_bean($emailTemp->subject, 'FP_events', $event);
+                $email_body = from_html($emailTemp->parse_template_bean($firstpass, 'FP_events', $event));
+                $alt_emailbody = wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
+
+                //get attachments
+                $attachmentBean = BeanFactory::newBean('Notes');
+                $attachment_list = $attachmentBean->get_full_list('', "parent_type = 'Emails' AND parent_id = '".$event->invite_templates."'");
+
+                $attachments = array();
+
+                if ($attachment_list != null) {
+                    foreach ($attachment_list as $attachment) {
+                        $attachments[] = $attachment;
+                    }
+                }
+
+                //send the email
+                $send_invite = $this->sendEmail($rcpt_email, $email_subject, $rcpt_name, $email_body, $alt_emailbody, $candidate, $attachments);
+
+                //Send the message, log if error occurs
+                if (!$send_invite) {
+                    $GLOBALS['log']->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
+                    $error_count ++;
+                } else {
+                    //update candidate to invited
+                    $query = 'UPDATE fp_events_candidates SET invite_status="Invited" WHERE fp_events_id="'.$event->id.'" AND candidates_id="'.$candidate->id.'"';
                     $res = $db->query($query);
                 }
             }

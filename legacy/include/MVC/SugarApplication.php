@@ -86,6 +86,7 @@ class SugarApplication
             $module = $_REQUEST['module'];
         }
         insert_charset_header();
+        send_security_headers(); // MintHCM
         $this->setupPrint();
         $this->controller = ControllerFactory::getController($module);
         // If the entry point is defined to not need auth, then don't authenticate.
@@ -187,8 +188,11 @@ class SugarApplication
             self::setCookie('ck_login_theme_font_20', $_SESSION['authenticated_user_theme_font'], time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_language'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_language_20 to " . $_SESSION['authenticated_user_language']);
-            self::setCookie('ck_login_language_20', $_SESSION['authenticated_user_language'], time() + 86400 * 90);
+            $langValue = $_SESSION['authenticated_user_language'];
+            if (isset(get_languages()[$langValue])) {
+                $GLOBALS['log']->debug("setting cookie ck_login_language_20 to " . $langValue);
+                self::setCookie('ck_login_language_20', $langValue, time() + 86400 * 90);
+            }
         }
         //check if user can access
     }

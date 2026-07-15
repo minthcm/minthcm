@@ -1,0 +1,229 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/AuthManager.php
+
+		-
+			message: '#^Function return_app_list_strings_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: Auth/AuthManager.php
+
+		-
+			message: '#^Function return_application_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: Auth/AuthManager.php
+
+		-
+			message: '#^Access to property \$assigned_user_id on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 4
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$client on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$id on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$name on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$refresh_token_expires on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$scope on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Access to property \$token_is_revoked on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Call to method save\(\) on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Call to method save\(\) on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/OAuth2Server.php
+
+		-
+			message: '#^Function logEvent not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: Auth/OAuthEndpoints.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 3
+			path: Auth/Services/AuthCodeService.php
+
+		-
+			message: '#^Access to property \$redirect_url on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Function logEvent not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Method MintMCP\\Auth\\Services\\ClientService\:\:getClientById\(\) has invalid return type OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Method MintMCP\\Auth\\Services\\ClientService\:\:getOrCreateInternalClient\(\) has invalid return type OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Parameter \$clientBean of method MintMCP\\Auth\\Services\\ClientService\:\:isValidRedirectUri\(\) has invalid type OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/ClientService.php
+
+		-
+			message: '#^Access to property \$access_token_expires on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$assigned_user_id on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$client on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$id on an unknown class OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 4
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$scope on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$token_is_revoked on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Access to property \$token_type on an unknown class OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 4
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Function logEvent not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Method MintMCP\\Auth\\Services\\TokenService\:\:getTokenBean\(\) has invalid return type OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Method MintMCP\\Auth\\Services\\TokenService\:\:getTokenByRefreshToken\(\) has invalid return type OAuth2Tokens\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Parameter \$clientBean of method MintMCP\\Auth\\Services\\TokenService\:\:createTokens\(\) has invalid type OAuth2Clients\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Auth/Services/TokenService.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Auth/Services/UserService.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\AI\\Tools\\ToolResult\:\:\$structuredContent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Capabilities/Tools/AbstractMCPTool.php
+
+		-
+			message: '#^Function logger not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: Capabilities/Tools/BrowseDocumentationTool.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 5
+			path: Server/DatabaseSessionStore.php

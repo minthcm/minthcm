@@ -75,7 +75,8 @@ class WorkSchedulesDayValid extends NotificationPlugin {
          (new MintHCM\Firebase\PushNotifications\GeneralNotificationToUser())->execute([
             'user_id' => $work_schedule['assigned_user_id'],
             'title' => translate('LBL_LIST_TITLE', 'WorkSchedules'),
-            'body' => sprintf(translate('LBL_APPROVED_ALERT', 'WorkSchedules'), $this->getWorkScheduleStartDate($work_schedule['id']))
+            'body' => sprintf(translate('LBL_APPROVED_ALERT', 'WorkSchedules'), $this->getWorkScheduleStartDate($work_schedule['id'])),
+            'link' => "minthcm://detail/WorkSchedules/{$work_schedule['id']}"
          ]);
          // MintHCM #136592 end
       }

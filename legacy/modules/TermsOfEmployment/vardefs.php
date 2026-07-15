@@ -42,6 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 $dictionary['TermsOfEmployment'] = array(
+    'table' => 'termsofemployment',
     'audited' => true,
     'fields' => array(
         'term_starting_date' => array(
@@ -87,7 +88,10 @@ $dictionary['TermsOfEmployment'] = array(
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
-            'vt_validation' => "AEM(callCustomApi('TermsOfEmployment', 'validateTermDates', {id: \$id, contract_id: \$contract_id, date_start: \$term_starting_date, date_end: \$term_ending_date,}),'LBL_TERMS_NOT_ADJECENT')",
+            'vt_validation' => [
+                "AEM(callCustomApi('TermsOfEmployment', 'validateLastTermClosed', {id: \$id, contract_id: \$contract_id}),'LBL_LAST_TERM_NOT_CLOSED')",
+                "AEM(callCustomApi('TermsOfEmployment', 'validateTermDates', {id: \$id, contract_id: \$contract_id, date_start: \$term_starting_date, date_end: \$term_ending_date,}),'LBL_TERMS_NOT_ADJECENT')",
+            ],
             'vt_readonly' => "callCustomApi('TermsOfEmployment', 'checkIfTermInBetween', {id: \$id})",
         ),
         'date_of_signing' => array(
@@ -139,6 +143,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         'gross_usdollar' => array(
             'required' => false,
@@ -162,6 +169,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         'currency_id' => array(
             'required' => false,
@@ -211,6 +221,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         'net_usdollar' => array(
             'required' => false,
@@ -234,6 +247,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         'employer_cost' => array(
             'required' => false,
@@ -257,6 +273,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         'employer_cost_usdollar' => array(
             'required' => false,
@@ -280,6 +299,9 @@ $dictionary['TermsOfEmployment'] = array(
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'precision' => 6,
+            'related_fields' => array(
+                'currency_id',
+            ),
         ),
         "contracts" => array(
             'name' => 'contracts',
@@ -314,6 +336,7 @@ $dictionary['TermsOfEmployment'] = array(
         'documents' => array(
             'name' => 'documents',
             'type' => 'link',
+            'module' => 'Documents',
             'relationship' => 'documents_termsofemployment',
             'source' => 'non-db',
             'vname' => 'LBL_DOCUMENTS',
@@ -321,6 +344,7 @@ $dictionary['TermsOfEmployment'] = array(
         "positions" => array(
             'name' => 'positions',
             'type' => 'link',
+            'module' => 'Positions',
             'relationship' => 'positions_termsofemployment',
             'source' => 'non-db',
             'vname' => 'LBL_POSITIONS',

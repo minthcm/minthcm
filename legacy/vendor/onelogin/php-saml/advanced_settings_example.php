@@ -87,11 +87,15 @@ $advancedSettings = array(
 
         // If true, Destination URL should strictly match to the address to
         // which the response has been sent.
-        // Notice that if 'relaxDestinationValidation' is true an empty Destintation
+        // Notice that if 'relaxDestinationValidation' is true an empty Destination
         // will be accepted.
         'destinationStrictlyMatches' => false,
 
-        // If true, SAMLResponses with an InResponseTo value will be rejectd if not
+        // If true, the toolkit will not raised an error when the Statement Element
+        // contain atribute elements with name duplicated
+        'allowRepeatAttributeName' => false,
+
+        // If true, SAMLResponses with an InResponseTo value will be rejected if not
         // AuthNRequest ID provided to the validation method.
         'rejectUnsolicitedResponsesWithInResponseTo' => false,
 
@@ -112,12 +116,23 @@ $advancedSettings = array(
         // Notice that sha1 is a deprecated algorithm and should not be used
         'digestAlgorithm' => 'http://www.w3.org/2001/04/xmlenc#sha256',
 
+        // Algorithm that the toolkit will use for encryption process. Options:
+        // 'http://www.w3.org/2001/04/xmlenc#tripledes-cbc'
+        // 'http://www.w3.org/2001/04/xmlenc#aes128-cbc'
+        // 'http://www.w3.org/2001/04/xmlenc#aes192-cbc'
+        // 'http://www.w3.org/2001/04/xmlenc#aes256-cbc'
+        // 'http://www.w3.org/2009/xmlenc11#aes128-gcm'
+        // 'http://www.w3.org/2009/xmlenc11#aes192-gcm'
+        // 'http://www.w3.org/2009/xmlenc11#aes256-gcm';
+        // Notice that aes-cbc are not consider secure anymore so should not be used
+        'encryption_algorithm' => 'http://www.w3.org/2009/xmlenc11#aes128-gcm',
+
         // ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses
         // uppercase. Turn it True for ADFS compatibility on signature verification
         'lowercaseUrlencoding' => false,
     ),
 
-    // Contact information template, it is recommended to suply a technical and support contacts
+    // Contact information template, it is recommended to supply a technical and support contacts
     'contactPerson' => array(
         'technical' => array(
             'givenName' => '',
@@ -129,7 +144,7 @@ $advancedSettings = array(
         ),
     ),
 
-    // Organization information template, the info in en_US lang is recomended, add more if required
+    // Organization information template, the info in en_US lang is recommended, add more if required
     'organization' => array(
         'en-US' => array(
             'name' => '',

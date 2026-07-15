@@ -2,6 +2,7 @@
 use MintHCM\Lib\MintLogic\Exceptions\ValidationException;
 use MintHCM\Lib\MintLogic\Formula;
 use MintHCM\Lib\MintLogic\Hook;
+use MintHCM\Data\BeanFactory;
 
 return [
     'rules' => [
@@ -14,7 +15,7 @@ return [
                     'room_name' => [
                         function ($bean) {
                             /** @var Workplaces $bean */
-                            $room = \BeanFactory::getBean('Rooms', $bean->room_id);
+                            $room = BeanFactory::getBean('Rooms', $bean->room_id);
                             if ($room->availability !== 'active') {
                                 throw new \MintHCM\Lib\MintLogic\Exceptions\ValidationException('LBL_ERR_CANT_SELECT_ROOM');
                             }

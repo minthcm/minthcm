@@ -53,7 +53,7 @@
 {assign var="alt_prev" value=$navStrings.previous}
 {assign var="alt_end" value=$navStrings.end}
 
-<table id="dashletPanel" cellpadding='0' cellspacing='0' width='100%' border='0' class='list view default dashletPanel'>
+<table id="dashletPanel" cellpadding='0' cellspacing='0' width='100%' border='0' class='list view default dashletPanel' data-current-page-url="{$pageData.urls.currentPage|escape:'html'}">
 	<thead>
     <tr class="pagination" role=”presentation”>
         <td colspan='{$colCount+1}' align='right'>
@@ -133,7 +133,7 @@
 				<div style='white-space: normal; width:100%; text-align:{$params.align|default:'left'}'>
                 {if $params.sortable|default:true}
 					<!-- dashlet: {$dashletId} -->
-	                <a href='#' onclick='return SUGAR.mySugar.retrieveDashlet("{$dashletId}", "{$pageData.urls.orderBy}{$params.orderBy|default:$colHeader|lower}&sugar_body_only=1&id={$dashletId}", false, false, true, $(this).closest("div[id^=pageNum_][id$=_div]").parent().parent())' class='listViewThLinkS1' title="{$arrowAlt}">{sugar_translate label=$params.label module=$pageData.bean.moduleDir}</a>&nbsp;&nbsp;
+	                <a href='#' onkeydown='{literal}if(event.key==" "){event.preventDefault();this.click();}{/literal}' onclick='return SUGAR.mySugar.retrieveDashlet("{$dashletId}", "{$pageData.urls.orderBy}{$params.orderBy|default:$colHeader|lower}&sugar_body_only=1&id={$dashletId}", false, false, true, $(this).closest("div[id^=pageNum_][id$=_div]").parent().parent())' class='listViewThLinkS1' title="{$arrowAlt}">{sugar_translate label=$params.label module=$pageData.bean.moduleDir}</a>&nbsp;&nbsp;
 	                {if $params.orderBy|default:$colHeader|lower == $pageData.ordering.orderBy}
 	                    {* MintHCM #82984 START *}
 						{if $pageData.ordering.sortOrder == 'DESC'}
@@ -207,10 +207,10 @@
 				{if $pageData.rowAccess[$id].edit}
                     {capture name='tmp1' assign='alt_edit'}{sugar_translate label="LNK_EDIT"}{/capture}
                     {capture name='tmp1' assign='alt_view'}{sugar_translate label="LBL_VIEWINLINE"}{/capture}
-                    <a title='{$editLinkString}' class="list-view-data-icon" href='index.php?action=EditView&module={$pageData.bean.moduleDir}&record={$rowData.ID}&offset={$pageData.offsets.current+$smarty.foreach.rowIteration.iteration}&stamp={$pageData.stamp}&return_module=Home&return_action=index'> <span class="suitepicon suitepicon-action-edit"></span></a>
+                    <a title='{$editLinkString}' onkeydown='{literal}if(event.key==" "){event.preventDefault();this.click();}{/literal}' class="list-view-data-icon" href='index.php?action=EditView&module={$pageData.bean.moduleDir}&record={$rowData.ID}&offset={$pageData.offsets.current+$smarty.foreach.rowIteration.iteration}&stamp={$pageData.stamp}&return_module=Home&return_action=index'> <span class="suitepicon suitepicon-action-edit"></span></a>
 				{/if}
 				{if $pageData.access.view}
-                <a title='{$viewLinkString}' class="list-view-data-icon" href='index.php?action=DetailView&module={$pageData.bean.moduleDir}&record={$rowData[$params.parent_id]|default:$rowData.ID}&offset={$pageData.offsets.current+$smarty.foreach.rowIteration.iteration}&stamp={$pageData.stamp}&return_module=Home&return_action=index' title="{sugar_translate label="LBL_VIEW_INLINE"}"> <span class="suitepicon suitepicon-action-view-record"></span></a>
+                <a title='{$viewLinkString}' onkeydown='{literal}if(event.key==" "){event.preventDefault();this.click();}{/literal}' class="list-view-data-icon" href='index.php?action=DetailView&module={$pageData.bean.moduleDir}&record={$rowData[$params.parent_id]|default:$rowData.ID}&offset={$pageData.offsets.current+$smarty.foreach.rowIteration.iteration}&stamp={$pageData.stamp}&return_module=Home&return_action=index' title="{sugar_translate label="LBL_VIEW_INLINE"}"> <span class="suitepicon suitepicon-action-view-record"></span></a>
 				{/if}
 			</td>
 			{/if}

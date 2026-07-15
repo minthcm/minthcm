@@ -34,7 +34,7 @@ app/
 ├── ApiManager.php              # Main application bootstrapper
 ├── Config/
 │   └── AppConfig.php          # Application configuration
-├── Constansts/
+├── Constants/
 │   └── global_params.php      # Global parameters
 ├── Containers/
 │   └── Doctrine/              # Doctrine DI container setup

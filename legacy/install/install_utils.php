@@ -1037,6 +1037,8 @@ RedirectMatch 403 {$ignoreCase}/+upload
 RedirectMatch 403 {$ignoreCase}/+custom/+blowfish
 RedirectMatch 403 {$ignoreCase}/+cache/+diagnostic
 RedirectMatch 403 {$ignoreCase}/+files\.md5\$
+RedirectMatch 403 {$ignoreCase}/+sugar_version\.json$
+RedirectMatch 403 {$ignoreCase}.*\.md$
 
 EOQ;
 
@@ -1508,7 +1510,7 @@ function insert_default_settings()
 
 
     //insert default tracker settings
-    $db->query("INSERT INTO config (category, name, value) VALUES ('tracker', 'Tracker', '1')");
+    $db->query("INSERT INTO config (category, name, value) VALUES ('tracker', 'Tracker', '0')");
 }
 
 function installDefaultRoles(){

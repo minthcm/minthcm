@@ -46,7 +46,6 @@
 
 namespace MintHCM\Api\Config;
 
-#[\AllowDynamicProperties]
 class AppConfig
 {
 

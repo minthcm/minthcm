@@ -72,7 +72,8 @@ class WorkSchedulesNotPlandForTwoWeeks extends NotificationPlugin
             (new MintHCM\Firebase\PushNotifications\GeneralNotificationToUser())->execute([
                 'user_id' => $work_schedule['id'],
                 'title' => translate('LBL_LIST_TITLE', 'WorkSchedules'),
-                'body' => translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules')
+                'body' => translate('LBL_TWO_WEEKS_ALERT', 'WorkSchedules'),
+                'link' => "minthcm://calendar"
             ]);
             // MintHCM #136592 end
         }

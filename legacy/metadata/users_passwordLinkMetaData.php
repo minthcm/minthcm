@@ -48,6 +48,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 $dictionary['users_password_link'] = [
     'table' => 'users_password_link',
+    'doctrineEntity' => [
+        'repository' => 'UsersPasswordLinkRepository',
+    ],
     'fields' => [
         'id' => [
             'name' => 'id',

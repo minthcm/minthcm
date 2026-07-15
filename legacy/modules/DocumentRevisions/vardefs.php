@@ -162,6 +162,7 @@ $dictionary['DocumentRevision'] = array(
         'documents' => array(
             'name' => 'documents',
             'type' => 'link',
+            'module' => 'Documents',
             'relationship' => 'document_revisions',
             'source' => 'non-db',
             'vname' => 'LBL_REVISIONS',

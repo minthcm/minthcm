@@ -43,9 +43,9 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
-require_once('../mcp/Config/Config.php');
+require_once(dirname(__DIR__, 2) . '/include/AI/Tools/Config/ToolConfig.php');
 
-use MintMCP\Config\Config;
+use MintHCM\AI\Tools\Config\ToolConfig;
 
 class MCPSettings extends Basic
 {
@@ -72,7 +72,7 @@ class MCPSettings extends Basic
 
     public function save($check_notify = false)
     {
-        $config = Config::getInstance();
+        $config = ToolConfig::getInstance();
         $config->set('blacklist', $this->blacklist);
         $config->set('max_pagination_limit', $this->max_pagination_limit);
 
@@ -81,7 +81,7 @@ class MCPSettings extends Basic
 
     public function retrieve($id = -1, $encode = true, $deleted = true)
     {
-        $config = Config::getInstance();
+        $config = ToolConfig::getInstance();
         $this->id = 1;
         $this->blacklist = $config->get('blacklist');
         $this->max_pagination_limit = $config->get('max_pagination_limit');

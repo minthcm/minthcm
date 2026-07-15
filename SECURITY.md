@@ -1,4 +1,4 @@
-# Security Policy
+# 🔒 Security Policy
 <!--
 ## Supported Versions
 
@@ -14,7 +14,11 @@ currently being supported with security updates.
 
 -->
 
-## Reporting a Vulnerability
+## 🛡️ Reporting a Vulnerability
 
-Please report any vulnerabilities that you find via Security Advisories section https://github.com/minthcm/minthcm/security/advisories
-We will reply to your report within 1 business day. We kindly ask you not to make the vulerability public for 14 days after we released a security update addressing it.
+If you discover a vulnerability, please report it via our **[Security Advisories](https://github.com/minthcm/minthcm/security/advisories)**.
+
+- We will respond to your report within **1 business day**.
+- We kindly ask you **not to disclose the vulnerability publicly** for **14 days** after we release a security update addressing it.
+
+📧 For any additional questions, reach us at: contact@minthcm.org

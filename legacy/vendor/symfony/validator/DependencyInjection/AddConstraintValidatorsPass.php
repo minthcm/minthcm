@@ -25,8 +25,12 @@ class AddConstraintValidatorsPass implements CompilerPassInterface
     private $validatorFactoryServiceId;
     private $constraintValidatorTag;
 
-    public function __construct($validatorFactoryServiceId = 'validator.validator_factory', $constraintValidatorTag = 'validator.constraint_validator')
+    public function __construct(string $validatorFactoryServiceId = 'validator.validator_factory', string $constraintValidatorTag = 'validator.constraint_validator')
     {
+        if (0 < \func_num_args()) {
+            trigger_deprecation('symfony/validator', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
+        }
+
         $this->validatorFactoryServiceId = $validatorFactoryServiceId;
         $this->constraintValidatorTag = $constraintValidatorTag;
     }

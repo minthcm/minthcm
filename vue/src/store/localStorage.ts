@@ -19,10 +19,20 @@ interface DescriptionFieldExpanded {
     }
 }
 
+interface ModuleFilters {
+    [module: string]: any[]
+}
+
+interface ModuleActiveFilter {
+    [module: string]: string | null
+}
+
 export const useLocalStorageStore = defineStore('localStorage', () => {
     const expandedPanels = useStorage<ExpandedPanels>('app.panels.expanded', { modules: {} })
     const sideMenuShrinked = useStorage<boolean>('app.sidebar.shrinked', false)
     const descriptionFieldExpanded = useStorage<DescriptionFieldExpanded>('app.description.field.expanded', { modules: {}})
+    const moduleFilters = useStorage<ModuleFilters>('app.listview.filters', {})
+    const moduleActiveFilter = useStorage<ModuleActiveFilter>('app.listview.activeFilter', {})
 
     function getPanelSections(module: string, panel: string): Array<number | string> {
         if (!expandedPanels.value.modules[module]) {
@@ -61,6 +71,22 @@ export const useLocalStorageStore = defineStore('localStorage', () => {
     function hasPanelSections(module: string, panel: string): boolean {
         return !!(expandedPanels.value.modules[module] && expandedPanels.value.modules[module][panel])
     }
+    
+    function getModuleFilters(module: string): any[] {
+        return moduleFilters.value[module] ?? []
+    }
+
+    function setModuleFilters(module: string, rows: any[]) {
+        moduleFilters.value[module] = rows
+    }
+
+    function getModuleActiveFilter(module: string): string | null {
+        return moduleActiveFilter.value[module] ?? null
+    }
+
+    function setModuleActiveFilter(module: string, name: string | null) {
+        moduleActiveFilter.value[module] = name
+    }
 
     return {
         getPanelSections,
@@ -68,6 +94,10 @@ export const useLocalStorageStore = defineStore('localStorage', () => {
         hasPanelSections,
         sideMenuShrinked,
         getDescriptionFieldExpanded,
-        setDescriptionFieldExpanded
+        setDescriptionFieldExpanded,
+        getModuleFilters,
+        setModuleFilters,
+        getModuleActiveFilter,
+        setModuleActiveFilter,
     }
 })

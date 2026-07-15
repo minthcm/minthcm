@@ -78,10 +78,10 @@ class TokenService
             throw new Exception('User ID is required for token creation');
         }
 
-        Logger::getLogger()->info('Creating tokens', [
+        logEvent('OAuth token issued', [
             'client_id' => $clientBean->id,
-            'user_id' => $userId,
-            'scope' => $scope
+            'user_id'   => $userId,
+            'scope'     => $scope,
         ]);
 
         // Generate tokens
@@ -147,6 +147,58 @@ class TokenService
         ]);
 
         return $found ?: null;
+    }
+
+    /**
+     * Create internal token for authenticated MintHCM users
+     * 
+     * @param string $userId User ID
+     * @param string $scope Token scope (default: mcp:read mcp:write)
+     * @return array Token data (no refresh token)
+     * @throws Exception If token creation fails
+     */
+    public function createInternalToken(string $userId, string $scope = 'mcp:read mcp:write'): array
+    {
+        if (empty($userId)) {
+            throw new Exception('User ID is required for token creation');
+        }
+
+        $clientBean = $this->clientService->getOrCreateInternalClient();
+
+        Logger::getLogger()->info('Creating internal token', [
+            'client_id' => $clientBean->id,
+            'user_id' => $userId,
+            'scope' => $scope
+        ]);
+
+        $accessToken = 'mcp_internal_' . bin2hex(random_bytes(32));
+
+        $expiresIn = 3600; // 1 hour
+
+        chdir('../legacy');
+        $tokenBean = BeanFactory::newBean('OAuth2Tokens');
+        $tokenBean->client = $clientBean->id;
+        $tokenBean->access_token = $accessToken;
+        $tokenBean->token_type = 'Bearer';
+        $tokenBean->refresh_token = ''; // No refresh token for internal tokens
+        $tokenBean->access_token_expires = $this->getExpiryDate($expiresIn);
+        $tokenBean->refresh_token_expires = null; // No refresh token expiry
+        $tokenBean->scope = $scope;
+        $tokenBean->assigned_user_id = $userId;
+
+        $result = $tokenBean->save();
+        chdir('../mcp');
+
+        if (!$result) {
+            throw new Exception('Failed to save internal OAuth token');
+        }
+
+        return [
+            'access_token' => $accessToken,
+            'token_type' => 'Bearer',
+            'expires_in' => $expiresIn,
+            'scope' => $scope
+        ];
     }
 
     /**

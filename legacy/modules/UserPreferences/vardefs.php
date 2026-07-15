@@ -49,6 +49,7 @@ $GLOBALS['dictionary']['UserPreference'] = array(
     'table' => 'user_preferences',
     'doctrineEntity' => array(
         'repository' => 'UserPreferencesRepository',
+        'traits' => array('UserPreferences'),
     ),
     'fields' => array(
         'id' => array(

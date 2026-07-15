@@ -55,10 +55,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use MintHCM\Utils\ConstantsLoader;
 
 
-#[\AllowDynamicProperties]
 class GlobalSearchController
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
