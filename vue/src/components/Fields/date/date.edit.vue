@@ -9,15 +9,37 @@
             :name="props.defs.name"
             :error="props.state === 'error'"
             v-model="parsedValue"
-        />
-        <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
-            <template v-slot:activator="{ props, isActive }">
-                <v-icon class="mint-date-field-btn" v-bind="props">mdi-calendar</v-icon>
-            </template>
-            <v-date-picker v-model="pickerValue" hide-actions>
-                <template #header></template>
-            </v-date-picker>
-        </v-menu>
+        >
+        <template #append-inner>
+            <v-menu
+                v-model="datePickerMenu"
+                offset="16"
+                :close-on-content-click="false"
+            >
+                <template v-slot:activator="{ props: menuProps }">
+                    <v-btn
+                    icon
+                    variant="text"
+                    class="mint-date-field-btn"
+                    v-bind="menuProps"
+                    @keydown.enter.prevent="datePickerMenu = true"
+                    @keydown.space.prevent="datePickerMenu = true"
+                    >
+                    <v-icon>mdi-calendar</v-icon>
+                    </v-btn>
+                </template>
+                <v-date-picker
+                    v-model="pickerValue"
+                    hide-actions
+                    :first-day-of-week="firstDayOfWeek"
+                    @keydown.enter.prevent="onPickerEnter"
+                    @keydown.space.prevent="onPickerEnter"
+                >
+                    <template #header />
+                </v-date-picker>
+            </v-menu>
+        </template>
+        </v-text-field>
     </div>
 </template>
 
@@ -31,6 +53,14 @@ import { usePreferencesStore } from '@/store/preferences'
 const props = defineProps<FieldProps<MintDate>>()
 
 const emit = defineEmits(['update:modelValue'])
+
+const onPickerEnter = (element: KeyboardEvent) => {
+    const target = element.target as HTMLElement
+
+    if (target?.classList.contains('v-btn')) {
+        target.click()
+    }
+}
 
 const datePickerMenu = ref(false)
 const model = ref(props.modelValue)
@@ -52,6 +82,8 @@ const parsedValue = computed({
         }
     },
 })
+
+const firstDayOfWeek = computed(() => preferences.user?.first_day_of_week ?? 1)
 
 const pickerValue = computed({
     get() {
@@ -79,9 +111,9 @@ const pickerValue = computed({
     .mint-date-field-btn {
         transition: all 100ms ease-out;
         cursor: pointer;
-        color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+        color: rgb(var(--v-theme-on-surface));
         &:hover {
-            color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+            color: rgb(var(--v-theme-on-surface));
         }
     }
 }

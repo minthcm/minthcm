@@ -48,9 +48,9 @@ namespace MintHCM\Api\Middlewares\Auth;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
+use MintHCM\Api\Controllers\AuthController;
 use MintHCM\Api\Controllers\OAuth2\Controller;
 use MintHCM\Api\Controllers\OAuth2\Server;
-use MintHCM\Api\Entities\OAuth2\AccessToken;
 use MintHCM\Api\Entities\OAuth2\MintToken;
 use MintHCM\Api\Middlewares\Middleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -59,14 +59,11 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class AuthMiddleware extends Middleware
 {
-    /** @var ResourceServer */
-    private $server;
+    private ResourceServer $server;
 
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -94,15 +91,16 @@ class AuthMiddleware extends Middleware
             }
         }
         if (str_contains($request->getRequestTarget(), "api/forget_password")) {
-            $this->validateForgotPassword($request, $handler);
+            $this->validateForgotPassword($request);
         }
         return $handler->handle($request);
     }
 
-    protected function validateForgotPassword(Request $request, RequestHandler $handler)
+    protected function validateForgotPassword(Request $request)
     {
-        $username = $request->getAttribute('username');
-        $email = $request->getAttribute('email');
+        $body = $request->getParsedBody() ?? [];
+        $username = $body['username'] ?? '';
+        $email = $body['email'] ?? '';
         if (empty(trim($username)) || empty(trim($email))) {
             throw new HttpBadRequestException($request, translate('LBL_MINT4_AUTH_FORGOT_PASSWORD_MISSING_CREDENTIALS_ERROR'));
         }
@@ -129,9 +127,25 @@ class AuthMiddleware extends Middleware
     private function runLegacyAuthorization(Request $request)
     {
         session_start();
-        $token = $_SESSION['oauth_access_token'];
+        $token = $_SESSION['oauth_access_token'] ?? '';
 
         if (empty($token)) {
+            $auth_controller = new AuthController($this->entityManager);
+            if ($auth_controller->isSamlOAuthPending() && $auth_controller->finalizeSAMLAuth($request)) {
+                return $this->runLegacyAuthorization($request);
+            }
+            if ($auth_controller->isOIDCOAuthPending() && $auth_controller->finalizeOIDCAuth($request)) {
+                return $this->runLegacyAuthorization($request);
+            }
+            // An OIDC/SAML handshake in progress stores its CSRF state (oidc_state) or
+            // request id (AuthNRequestID) in this session while the browser is away at the
+            // IdP. The login page fires several parallel API calls; destroying the session
+            // here would wipe that state and rotate the session id, so the IdP callback
+            // would fail state validation and bounce the user back to login. Leave the
+            // session intact and just report "unauthenticated" until the callback returns.
+            if ($this->isExternalAuthHandshakeInProgress()) {
+                return false;
+            }
             session_destroy();
             return false;
         }
@@ -160,6 +174,17 @@ class AuthMiddleware extends Middleware
         }
 
         return false;
+    }
+
+    /**
+     * True while an external-identity-provider handshake (OIDC or SAML) is mid-flight:
+     * the authorization request has been issued and its CSRF/correlation marker is held
+     * in the session, but the IdP has not yet called back. During this window the session
+     * must survive so the callback can validate against the stored marker.
+     */
+    private function isExternalAuthHandshakeInProgress(): bool
+    {
+        return !empty($_SESSION['oidc_state']) || !empty($_SESSION['AuthNRequestID']);
     }
 
     private function refreshToken(Request $request): bool

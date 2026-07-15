@@ -230,6 +230,19 @@ class ElasticSearchIndexer extends AbstractIndexer
         $totalRecordsCount = 0;
         $oldIndexedRecordsCount = $this->indexedRecordsCount;
         $this->nested_properties = (new \ElasticSearchVardefsReader)->getModuleNestedProperties($seed->object_name);
+
+        // Ensure the index exists with correct field type mappings before batch indexing.
+        // Without this, ES auto-creates the index with dynamic mapping on first bulk call,
+        // causing date fields to be mapped as text instead of date.
+        $this->index = static::getIndexPrefix() . '_' . strtolower($module);
+        if (!$this->client->indices()->exists(['index' => $this->index])) {
+            try {
+                $this->createIndex($this->index, $this->getDefaultMapParams($module));
+            } catch (Exception $exception) {
+                $this->logger->error("Cannot create index '{$this->index}': " . $exception->getMessage());
+            }
+        }
+
         try {
             $records_in_module_count = $this->getRecordsInModuleCount($seed, $tableName, $where, $showDeleted);
             $memory_limit_bytes = \MintHCM\Utils\EnvironmentUtils::getMemoryLimitInBytes();
@@ -274,6 +287,24 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     public function putMeta(string $module, array $meta): void
     {
+        if (!$this->client->indices()->exists(['index' => $this->index])) {
+            try {
+                $this->createIndex($this->index, $this->getDefaultMapParams($module));
+            } catch (Exception $exception) {
+                $capacity = $this->getIndexCapacityInfo();
+                if ($capacity !== false && $capacity['shard_count'] >= $capacity['max_shards_total']) {
+                    $this->logger->error(
+                        "Cannot create index '{$this->index}': shard limit reached. " .
+                        "Current: {$capacity['shard_count']}/{$capacity['max_shards_total']}. " .
+                        "Increase cluster.max_shards_per_node in Elasticsearch settings."
+                    );
+                } else {
+                    $this->logger->error("Cannot create index '{$this->index}': " . $exception->getMessage());
+                }
+                return;
+            }
+        }
+
         $params = [
             'index' => $this->index,
             'body' => ['_meta' => $meta],
@@ -391,11 +422,14 @@ class ElasticSearchIndexer extends AbstractIndexer
     }
 
     /** @inheritdoc */
-    public function removeBean(SugarBean $bean)
+    public function removeBean(SugarBean $bean, $ignore404 = true)
     {
         $this->logger->debug("Removing {$bean->module_name}($bean->name)");
 
         $args = $this->makeParamsHeaderFromBean($bean);
+        if ($ignore404) {
+            $args['client']['ignore'] = [404];
+        }
         $this->client->delete($args);
     }
 
@@ -553,37 +587,37 @@ class ElasticSearchIndexer extends AbstractIndexer
 
     private function restructureParams(array &$params, array $mappings): void
     {
-        if (is_array($mappings)) {
-            foreach($mappings as $key => $value) {
-                if ($key === 'properties' && is_array($value)) {
-                    $this->restructureParams($params, $value);
-                } else if (empty($params[$key])) {
-                    foreach ($params as $pkey => $pvalue) {
-                        if (is_array($pvalue) && $pkey != $key) {
-                            $keys = array_keys($pvalue);
-                            $keys_concatenated = [];
-
-                            foreach($keys as $k) {
-                               $name = explode('__', $k)[1];
-                               $keys_concatenated[$k] = $pkey . '_' . $name;
-                            }
-
-                            foreach ($keys_concatenated as $old_key => $new_key) {
-                                if ($key == $new_key) {
-                                    $params[$key] = $params[$pkey][$old_key];
-                                    unset($params[$pkey][$old_key]);
-                                }
-
-                                if (explode('__', $key)[1] == 'email1' && explode('__', $new_key)[1] == 'email_0') {
-                                    $params[$key] = $params[$pkey][$old_key];
-                                    unset($params[$pkey][$old_key]);
-                                }
-
-                                if (empty($params[$pkey])) {
-                                    unset($params[$pkey]);
-                                }
-                            }
-                        }
+        if (!is_array($mappings)) {
+            return;
+        }
+        foreach ($mappings as $key => $value) {
+            if ($key === 'properties' && is_array($value)) {
+                $this->restructureParams($params, $value);
+                continue;
+            }
+            if (!empty($params[$key])) {
+                continue;
+            }
+            foreach ($params as $pkey => $pvalue) {
+                if (!is_array($pvalue) || $pkey == $key) {
+                    continue;
+                }
+                $keys_concatenated = [];
+                foreach (array_keys($pvalue) as $k) {
+                    $name = explode('__', $k)[1];
+                    $keys_concatenated[$k] = $pkey . '_' . $name;
+                }
+                foreach ($keys_concatenated as $old_key => $new_key) {
+                    if ($key == $new_key) {
+                        $params[$key] = $params[$pkey][$old_key];
+                        unset($params[$pkey][$old_key]);
+                    }
+                    if (explode('__', $key)[1] == 'email1' && explode('__', $new_key)[1] == 'email_0') {
+                        $params[$key] = $params[$pkey][$old_key];
+                        unset($params[$pkey][$old_key]);
+                    }
+                    if (empty($params[$pkey])) {
+                        unset($params[$pkey]);
                     }
                 }
             }
@@ -725,6 +759,48 @@ class ElasticSearchIndexer extends AbstractIndexer
         return $GLOBALS['sugar_config']['elasticsearch_index_prefix'] ?? $GLOBALS['sugar_config']['unique_key'];
     }
 
+    /**
+     * Returns Elasticsearch index/shard usage vs cluster limits.
+     *
+     * Returns an array with:
+     *   - index_count        : current number of open indices
+     *   - shard_count        : current total number of shards (primary + replica)
+     *   - max_shards_per_node: cluster limit (cluster.max_shards_per_node, default 1000)
+     *   - node_count         : number of data nodes
+     *   - max_shards_total   : effective cluster-wide shard limit (max_shards_per_node * node_count)
+     *
+     * Returns false if the cluster is unreachable.
+     *
+     * @return array|false
+     */
+    public function getIndexCapacityInfo()
+    {
+        try {
+            $stats = $this->client->cluster()->stats();
+            $settings = $this->client->cluster()->getSettings(['include_defaults' => true]);
+
+            $indexCount = $stats['indices']['count'] ?? null;
+            $shardCount = $stats['indices']['shards']['total'] ?? null;
+            $nodeCount = $stats['nodes']['count']['data'] ?? 1;
+
+            $maxShardsPerNode = $settings['defaults']['cluster']['max_shards_per_node']
+                ?? $settings['persistent']['cluster']['max_shards_per_node']
+                ?? $settings['transient']['cluster']['max_shards_per_node']
+                ?? 1000;
+
+            return [
+                'index_count'         => $indexCount,
+                'shard_count'         => $shardCount,
+                'max_shards_per_node' => (int) $maxShardsPerNode,
+                'node_count'          => $nodeCount,
+                'max_shards_total'    => (int) $maxShardsPerNode * $nodeCount,
+            ];
+        } catch (Exception $exception) {
+            $this->logger->error('Failed to retrieve Elasticsearch capacity info: ' . $exception->getMessage());
+            return false;
+        }
+    }
+
     protected function getFunctionPropertyValues(SugarBean $bean, string $property_name, array $nested_config): array
     {
         if (!empty($nested_config['function']) && !empty($nested_config['bean'])) {
@@ -779,5 +855,4 @@ class ElasticSearchIndexer extends AbstractIndexer
         $records_in_module = $db->fetchByAssoc($records_in_module);
         return intval($records_in_module['c'] ?? 0);
     }
-    
 }

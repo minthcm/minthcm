@@ -287,11 +287,20 @@ function make_sugar_config(&$sugar_config)
         'strict_id_validation' => false,
         'legacy_email_behaviour' => false,
         'display_week_number' => false,
+        // MintHCM Start - CSP customization in config_override.php:
+        // - csp_directives: replace an entire directive
+        //   e.g. $sugar_config['csp_directives']['script-src'] = "'self' 'unsafe-inline' 'unsafe-eval' https://extra-cdn.com";
+        // - csp_extra_sources: append hosts to an existing directive (simpler)
+        //   e.g. $sugar_config['csp_extra_sources']['style-src'] = 'https://my-cdn.com';
+        'csp_directives' => [],
+        'csp_extra_sources' => [],
+        // MintHCM End
         'valid_imap_ports' => [
             '110', '143', '993', '995'
         ],
         'web_to_lead_allowed_redirect_hosts' => [],
-        'trusted_hosts' => []
+        'trusted_hosts' => [],
+        'external_trusted_hosts' => []
     );
 }
 
@@ -592,6 +601,14 @@ function get_sugar_config_defaults(): array
         ],
         'legacy_email_behaviour' => false,
         'display_week_number' => false,
+        // MintHCM Start - CSP customization in config_override.php:
+        // - csp_directives: replace an entire directive
+        //   e.g. $sugar_config['csp_directives']['script-src'] = "'self' 'unsafe-inline' 'unsafe-eval' https://extra-cdn.com";
+        // - csp_extra_sources: append hosts to an existing directive (simpler)
+        //   e.g. $sugar_config['csp_extra_sources']['style-src'] = 'https://my-cdn.com';
+        'csp_directives' => [],
+        'csp_extra_sources' => [],
+        // MintHCM End
         'system_mode' => 'normal',
         'system_mode_restriced_modules' => ['ModuleBuilder', 'UpgradeWizard', 'Schedulers', 'OAuth2Clients', 'OAuthKeys', 'Connectors', 'Studio'],
         'system_mode_restriced_administration_actions' => ['UpgradeWizard', 'SearchSettings'],
@@ -604,12 +621,14 @@ function get_sugar_config_defaults(): array
             'studio',
             'moduleBuilder',
             'connector_settings',
+            'scheduler',
         ],
         'valid_imap_ports' => [
             '110', '143', '993', '995'
         ],
         'web_to_lead_allowed_redirect_hosts' => [],
         'trusted_hosts' => [],
+        'external_trusted_hosts' => []
     ];
 
     if (!is_object($locale)) {
@@ -868,10 +887,12 @@ function get_current_language()
     global $sugar_config;
 
     if (!empty($_SESSION['authenticated_user_language'])) {
-        return $_SESSION['authenticated_user_language'];
-    } else {
-        return $sugar_config['default_language'];
+        $lang = $_SESSION['authenticated_user_language'];
+        if (isset(get_languages()[$lang])) {
+            return $lang;
+        }
     }
+    return $sugar_config['default_language'];
 }
 
 function get_assigned_user_name($assigned_user_id, $is_group = '')
@@ -1304,7 +1325,7 @@ function _mergeCustomAppListStrings($file, $app_list_strings)
  */
 function return_application_language($language)
 {
-    global $app_strings, $sugar_config, $app_list_strings;
+    global $app_strings, $sugar_config;
 
     $cache_key = 'app_strings.' . $language;
 
@@ -2510,6 +2531,9 @@ function clean_special_arguments()
     if (!empty($_REQUEST) && !empty($_REQUEST['ck_login_theme_20'])) {
         clean_string($_REQUEST['ck_login_theme_20'], 'STANDARD');
     }
+    if (!empty($_REQUEST) && !empty($_REQUEST['ck_login_language_20'])) {
+        clean_string($_REQUEST['ck_login_language_20'], 'STANDARD');
+    }
     if (!empty($_SESSION) && !empty($_SESSION['authenticated_user_theme'])) {
         clean_string($_SESSION['authenticated_user_theme'], 'STANDARD');
     }
@@ -2647,7 +2671,9 @@ function clean_incoming_data()
     if (isset($_REQUEST['stamp'])) {
         clean_string($_REQUEST['stamp']);
     }
-
+    if (isset($_REQUEST['return_id'])) {
+        $_REQUEST['return_id'] = purifyId($_REQUEST['return_id']);
+    }
     if (isset($_REQUEST['lvso'])) {
         set_superglobals('lvso', (strtolower($_REQUEST['lvso']) === 'desc') ? 'desc' : 'asc');
     }
@@ -3339,6 +3365,53 @@ function insert_charset_header()
 {
     header('Content-Type: text/html; charset=UTF-8');
 }
+// MintHCM Start
+function get_default_csp_directives(): array
+{
+    return [
+        'default-src'     => "'self'",
+        'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval'",
+        'style-src'       => "'self' 'unsafe-inline' https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.googleapis.com",
+        'img-src'         => "'self' data: blob:",
+        'font-src'        => "'self' data: https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.gstatic.com",
+        'connect-src'     => "'self' https://cdn.jsdelivr.net",
+        'frame-src'       => "'self' https:",
+        'frame-ancestors' => "'self'",
+        'object-src'      => "'none'",
+        'base-uri'        => "'self'",
+        'form-action'     => "'self'",
+    ];
+}
+
+function send_security_headers()
+{
+    global $sugar_config;
+
+    $directives = array_merge(
+        get_default_csp_directives(),
+        $sugar_config['csp_directives'] ?? []
+    );
+
+    foreach ($sugar_config['csp_extra_sources'] ?? [] as $directive => $extra) {
+        if (isset($directives[$directive])) {
+            $directives[$directive] .= ' ' . trim($extra);
+        } else {
+            $directives[$directive] = trim($extra);
+        }
+    }
+
+    $csp = implode('; ', array_map(
+        fn($directive, $value) => "{$directive} {$value}",
+        array_keys($directives),
+        $directives
+    ));
+
+    header("Content-Security-Policy: {$csp}");
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+}
+// MintHCM End
 
 /**
  * @deprecated This function is unused and will be removed in a future release.
@@ -5721,8 +5794,8 @@ function utf8_recursive_encode($data)
  */
 function get_language_header()
 {
-    return isset($GLOBALS['current_language']) ? "lang='{$GLOBALS['current_language']}'"
-    : "lang='en'";
+    $lang = isset($GLOBALS['current_language']) ? $GLOBALS['current_language'] : 'en';
+    return "lang='" . htmlspecialchars($lang, ENT_QUOTES, 'UTF-8') . "'";
 }
 
 /**
@@ -6052,6 +6125,23 @@ function isValidId($id)
     $isValidator = new \SuiteCRM\Utility\SuiteValidator();
     $result = $isValidator->isValidId($id);
     return $result;
+}
+
+/**
+ * Purify id by validating it and returning empty string if invalid. This is useful for cleaning up data that is going to be used in a query or as part of a file path.
+ * @param string $id
+ * @return string
+ */
+function purifyId(string $id): string
+{
+    $isValidator = new \SuiteCRM\Utility\SuiteValidator();
+    $result = $isValidator->isValidId($id);
+
+    if (!$result) {
+        return '';
+    }
+
+    return $id;
 }
 
 function isValidEmailAddress($email, $message = 'Invalid email address given', $orEmpty = true, $logInvalid = 'error')
@@ -6589,6 +6679,121 @@ function check_trusted_hosts(): void {
 
         throw new BadMethodCallException(sprintf('Untrusted Host "%s".', $host));
     }
+}
+
+/**
+ * Get currently configured external trusted hosts, if none configured return empty
+ * @return array
+ */
+function get_external_trusted_hosts(): array {
+
+    $trustedHosts = SugarConfig::getInstance()->get('external_trusted_hosts', []);
+
+    if (!empty($trustedHosts) && is_array($trustedHosts)){
+        return $trustedHosts;
+    }
+
+    return [];
+}
+
+/**
+ * Validate external host
+ */
+function validate_external_host(string $url): bool {
+
+    global $log;
+
+    // Allow self-referential URLs (site_url and HTTP_HOST)
+    if (isSelfRequest($url)) {
+        return true;
+    }
+
+    // Allow tmp urls for file uploads for internal tcpdf use
+    if (str_starts_with($url, '/tmp') || str_starts_with($url, 'tmp/')) {
+        return true;
+    }
+
+    $urlparse = parse_url($url);
+    if ($urlparse === false || empty($urlparse['scheme']) || empty($urlparse['host'])) {
+        $log->security("Invalid external host URL: $url");
+        return false;
+    }
+
+    if ($urlparse['scheme'] !== 'http' && $urlparse['scheme'] !== 'https') {
+        $log->security("Invalid external host URL scheme: $url");
+        return false;
+    }
+
+    $host = strtolower($urlparse['host']);
+
+    // MintHCM Start
+    // Resolve hostname to IP and validate (IPv4 + IPv6)
+    $ipv4s = @gethostbynamel($host) ?: [];
+    $ipv6Records = @dns_get_record($host, DNS_AAAA) ?: [];
+    $ipv6s = array_column($ipv6Records, 'ipv6');
+
+    // Handle literal IP addresses (both IPv4 and IPv6)
+    $literalIp = filter_var($host, FILTER_VALIDATE_IP);
+    if ($literalIp !== false) {
+        $ips = [$literalIp];
+    } else {
+        $ips = array_merge($ipv4s, $ipv6s);
+    }
+
+    // Fail-closed: if hostname could not be resolved to any IP, deny access (prevents SSRF via IPv6-only or unresolvable hosts)
+    if (empty($ips)) {
+        $log->security("Could not resolve external host to any IP address: $url");
+        return false;
+    }
+    // MintHCM End
+
+    foreach ($ips as $ip) {
+        if ($ip === false) {
+            continue;
+        }
+
+        // Validate IPv4 and IPv6 addresses
+        $isValidIPv4 = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+        $isValidIPv6 = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_RES_RANGE);
+
+        // Additional IPv6 private range checks (as FILTER_FLAG_NO_PRIV_RANGE doesn't cover all)
+        if ($isValidIPv6 !== false) {
+            $isValidIPv6 = !preg_match('/^(::1|fe80:|fc00:|fd00:)/i', $ip);
+        }
+
+        if ($isValidIPv4 === false && $isValidIPv6 === false) {
+            $log->security("Invalid external host IP address (private/reserved): $url resolves to $ip");
+            return false;
+        }
+    }
+
+    $externalTrustedHostPatterns = get_external_trusted_hosts();
+
+    if (empty($externalTrustedHostPatterns)) {
+        return true;
+    }
+
+    // Add site_url and HTTP_HOST to trusted patterns
+    $siteUrl = SugarConfig::getInstance()->get('site_url', '');
+    $parsedSiteUrl = parse_url($siteUrl);
+
+    if (!empty($parsedSiteUrl['host'])) {
+        $externalTrustedHostPatterns[] = preg_quote($parsedSiteUrl['host'], '/');
+    }
+
+    if (!empty($_SERVER["HTTP_HOST"])) {
+        $externalTrustedHostPatterns[] = preg_quote($_SERVER["HTTP_HOST"], '/');
+    }
+
+    foreach ($externalTrustedHostPatterns as $pattern) {
+        // Match pattern against the host only, not the entire URL
+        if (preg_match('/^' . $pattern . '$/i', $host)) {
+            return true;
+        }
+    }
+
+    $log->security("Untrusted external Host: $url (host: $host)");
+    return false;
 }
 
 /**

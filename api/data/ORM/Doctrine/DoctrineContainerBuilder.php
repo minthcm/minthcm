@@ -60,7 +60,6 @@ use MintHCM\Data\ORM\Doctrine\MintTypes\MintTypeManager;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-#[\AllowDynamicProperties]
 class DoctrineContainerBuilder extends ContainerBuilder
 {
     public function __construct()

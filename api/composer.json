@@ -30,9 +30,10 @@
         "league/oauth2-server": "^8.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.5"
+        "phpunit/phpunit": "^11.5",
+        "phpstan/phpstan": "^2.2"
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit ./tests/*.php"
+        "test": "@php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml"
     }
 }

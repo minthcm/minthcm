@@ -46,10 +46,9 @@
 
 namespace MintHCM\Lib\Search;
 
-#[\AllowDynamicProperties]
 abstract class SearchManager
 {
-    protected $params;
+    protected mixed $params = null;
 
     abstract public function getResult(): array;
 

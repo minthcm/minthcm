@@ -500,8 +500,9 @@ class AOR_Report extends Basic
                 $select_field = $this->db->quoteIdentifier($table_alias) . '.' . $field->field;
             }
 
-            if ($field->sort_by != '') {
-                $query_array['sort_by'][] = $field_label . ' ' . $field->sort_by;
+            if ($field->sort_by != '' && in_array(strtoupper($field->sort_by), getAorAllowedSortDirections(), true)) {
+                $safe_label = str_replace("'", "''", $field_label);
+                $query_array['sort_by'][] = $safe_label . ' ' . strtoupper($field->sort_by);
             }
 
             if ($field->format && in_array($data['type'], array('date', 'datetime', 'datetimecombo'))) {
@@ -515,13 +516,14 @@ class AOR_Report extends Basic
                 );
             }
 
-            if ($field->field_function != null) {
-                $select_field = $field->field_function . '(' . $select_field . ')';
+            if ($field->field_function != null && in_array(strtoupper($field->field_function), getAorAllowedFieldFunctions(), true)) {
+                $select_field = strtoupper($field->field_function) . '(' . $select_field . ')';
             }
 
             $query_array['group_by'][] = $select_field;
 
-            $query_array['select'][] = $select_field . " AS '" . $field_label . "'";
+            $safe_label = str_replace("'", "''", $field_label);
+            $query_array['select'][] = $select_field . " AS '" . $safe_label . "'";
             if (isset($extra['select']) && $extra['select']) {
                 foreach ($extra['select'] as $selectField => $selectAlias) {
                     if ($selectAlias) {
@@ -1337,25 +1339,27 @@ class AOR_Report extends Basic
                     unset($query['id_select'][$table_alias]);
                 }
 
-                if ($field->field_function != null) {
+                if ($field->field_function != null && in_array(strtoupper($field->field_function), getAorAllowedFieldFunctions(), true)) {
                     $unique = $field->group_by == 1 ? 'DISTINCT ' : '';
-                    $select_field = $field->field_function . '(' . $unique . $select_field . ')';
+                    $select_field = strtoupper($field->field_function) . '(' . $unique . $select_field . ')';
                 } elseif ($field->group_by == 1) {
                     $query['group_by'][] = $select_field;
                 } else {
                     $query['second_group_by'][] = $select_field;
                 }
 
-                if ($field->sort_by != '') {
+                if ($field->sort_by != '' && in_array(strtoupper($field->sort_by), getAorAllowedSortDirections(), true)) {
+                    $sortDir = strtoupper($field->sort_by);
                     // If the field is a date, sort by the natural date and not the user-formatted date
                     if ($data['type'] == 'date' || $data['type'] == 'datetime') {
-                        $query['sort_by'][] = $select_field_db . " " . $field->sort_by;
+                        $query['sort_by'][] = $select_field_db . " " . $sortDir;
                     } else {
-                        $query['sort_by'][] = $select_field . " " . $field->sort_by;
+                        $query['sort_by'][] = $select_field . " " . $sortDir;
                     }
                 }
 
-                $query['select'][] = $select_field . " AS '" . $field->label . "'";
+                $safe_label = str_replace("'", "''", $field->label);
+                $query['select'][] = $select_field . " AS '" . $safe_label . "'";
 
                 if ($field->group_display == 1 && $group_value) {
                     if ($group_value === '_empty') {

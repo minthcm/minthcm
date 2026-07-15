@@ -122,12 +122,11 @@ class Delegations extends Delegations_sugar
         $this->regiments_usdollar              = $this->getAmount('regiments') * $exchange_rate;
         $this->accommodation_lump_sum_usdollar = $this->getAmount('accommodation_lump_sum') * $exchange_rate;
         $this->total_expenses_usdollar         = $this->total_expenses * $exchange_rate;
-        $this->obtained_sum_usdollar           = $this->obtained_sum * $$exchange_rate;
+        $this->obtained_sum_usdollar           = $this->obtained_sum * $exchange_rate;
         $this->payoff_sum_usdollar             = $this->payoff_sum * $exchange_rate;
         $this->return_sum_usdollar             = $this->return_sum * $exchange_rate;
         $this->regimen_value_usdollar          = $this->regimen_value * $exchange_rate;
         $this->accommodation_value_usdollar    = $this->accommodation_value * $exchange_rate;
-        $this->obtained_sum_usdollars          = $this->obtained_sum * $exchange_rate;
     }
 
     public function generateSequenceName()

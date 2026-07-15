@@ -89,7 +89,7 @@ class TermsOfEmployment extends Basic {
       $old_ending_date = $this->fetched_row['term_ending_date'];
       $old_contract_id = $this->fetched_row['contract_id'];
       $this->convertCurrencyFields();
-      parent::save($check_notify);
+      $id = parent::save($check_notify);
 
       if ( $this->term_starting_date != $old_starting_date || $this->term_ending_date != $old_ending_date || $this->contract_id != $old_contract_id ) {
          $contract = BeanFactory::getBean('Contracts', $this->contract_id);
@@ -103,6 +103,7 @@ class TermsOfEmployment extends Basic {
             $old_contract->updateDates();
          }
       }
+      return $id;
    }
 
    public function mark_deleted($id) {

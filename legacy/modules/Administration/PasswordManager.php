@@ -111,6 +111,13 @@ if (!empty($_POST['saveConfig'])) {
             $_POST['authenticationClass'] = '';
         }
 
+        // Save OIDC settings
+        $oidcFields = ['OIDC_clientId', 'OIDC_clientSecret', 'OIDC_authorizationEndpoint',
+                       'OIDC_tokenEndpoint', 'OIDC_logoutEndpoint', 'OIDC_scope', 'OIDC_usernameClaim'];
+        foreach ($oidcFields as $field) {
+            $configurator->config[$field] = isset($_POST[$field]) ? trim($_POST[$field]) : '';
+        }
+
         if (isset($_REQUEST['ldap_group_attr_req_dn']) && $_REQUEST['ldap_group_attr_req_dn'] == 'on') {
             $_POST['ldap_group_attr_req_dn'] = 1;
         } else {

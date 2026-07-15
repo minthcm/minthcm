@@ -23,11 +23,16 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A test case to ease testing Constraint Validators.
@@ -36,8 +41,6 @@ use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
  */
 abstract class ConstraintValidatorTestCase extends TestCase
 {
-    use ForwardCompatTestTrait;
-
     /**
      * @var ExecutionContextInterface
      */
@@ -56,8 +59,11 @@ abstract class ConstraintValidatorTestCase extends TestCase
     protected $propertyPath;
     protected $constraint;
     protected $defaultTimezone;
+    private $defaultLocale;
+    private $expectedViolations;
+    private $call;
 
-    private function doSetUp()
+    protected function setUp(): void
     {
         $this->group = 'MyGroup';
         $this->metadata = null;
@@ -74,19 +80,29 @@ abstract class ConstraintValidatorTestCase extends TestCase
         $this->validator = $this->createValidator();
         $this->validator->initialize($this->context);
 
-        \Locale::setDefault('en');
+        if (class_exists(\Locale::class)) {
+            $this->defaultLocale = \Locale::getDefault();
+            \Locale::setDefault('en');
+        }
+
+        $this->expectedViolations = [];
+        $this->call = 0;
 
         $this->setDefaultTimezone('UTC');
     }
 
-    private function doTearDown()
+    protected function tearDown(): void
     {
         $this->restoreDefaultTimezone();
+
+        if (class_exists(\Locale::class)) {
+            \Locale::setDefault($this->defaultLocale);
+        }
     }
 
-    protected function setDefaultTimezone($defaultTimezone)
+    protected function setDefaultTimezone(?string $defaultTimezone)
     {
-        // Make sure this method can not be called twice before calling
+        // Make sure this method cannot be called twice before calling
         // also restoreDefaultTimezone()
         if (null === $this->defaultTimezone) {
             $this->defaultTimezone = date_default_timezone_get();
@@ -104,23 +120,32 @@ abstract class ConstraintValidatorTestCase extends TestCase
 
     protected function createContext()
     {
-        $translator = $this->getMockBuilder('Symfony\Component\Translation\TranslatorInterface')->getMock();
-        $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')->getMock();
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->expects($this->any())->method('trans')->willReturnArgument(0);
+        $validator = $this->createMock(ValidatorInterface::class);
+        $validator->expects($this->any())
+            ->method('validate')
+            ->willReturnCallback(function () {
+                return $this->expectedViolations[$this->call++] ?? new ConstraintViolationList();
+            });
 
         $context = new ExecutionContext($validator, $this->root, $translator);
         $context->setGroup($this->group);
         $context->setNode($this->value, $this->object, $this->metadata, $this->propertyPath);
         $context->setConstraint($this->constraint);
 
-        $contextualValidator = $this->getMockBuilder(AssertingContextualValidator::class)
-            ->setMethods([
-                'atPath',
-                'validate',
-                'validateProperty',
-                'validatePropertyValue',
-                'getViolations',
-            ])
-            ->getMock();
+        $contextualValidatorMockBuilder = $this->getMockBuilder(AssertingContextualValidator::class)
+            ->setConstructorArgs([$context]);
+        $contextualValidatorMethods = [
+            'atPath',
+            'validate',
+            'validateProperty',
+            'validatePropertyValue',
+            'getViolations',
+        ];
+
+        $contextualValidatorMockBuilder->onlyMethods($contextualValidatorMethods);
+        $contextualValidator = $contextualValidatorMockBuilder->getMock();
         $contextualValidator->expects($this->any())
             ->method('atPath')
             ->willReturnCallback(function ($path) use ($contextualValidator) {
@@ -154,7 +179,7 @@ abstract class ConstraintValidatorTestCase extends TestCase
         return $context;
     }
 
-    protected function setGroup($group)
+    protected function setGroup(?string $group)
     {
         $this->group = $group;
         $this->context->setGroup($group);
@@ -193,7 +218,7 @@ abstract class ConstraintValidatorTestCase extends TestCase
         $this->validator->initialize($this->context);
     }
 
-    protected function setPropertyPath($propertyPath)
+    protected function setPropertyPath(string $propertyPath)
     {
         $this->propertyPath = $propertyPath;
         $this->context->setNode($this->value, $this->object, $this->metadata, $this->propertyPath);
@@ -205,23 +230,61 @@ abstract class ConstraintValidatorTestCase extends TestCase
         $validator->expectNoValidate();
     }
 
-    protected function expectValidateAt($i, $propertyPath, $value, $group)
+    protected function expectValidateAt(int $i, string $propertyPath, $value, $group)
     {
         $validator = $this->context->getValidator()->inContext($this->context);
         $validator->expectValidation($i, $propertyPath, $value, $group, function ($passedConstraints) {
-            $expectedConstraints = new LogicalOr();
-            $expectedConstraints->setConstraints([new IsNull(), new IsIdentical([]), new IsInstanceOf(Valid::class)]);
+            $expectedConstraints = LogicalOr::fromConstraints(new IsNull(), new IsIdentical([]), new IsInstanceOf(Valid::class));
 
             Assert::assertThat($passedConstraints, $expectedConstraints);
         });
     }
 
-    protected function expectValidateValueAt($i, $propertyPath, $value, $constraints, $group = null)
+    protected function expectValidateValue(int $i, $value, array $constraints = [], $group = null)
+    {
+        $contextualValidator = $this->context->getValidator()->inContext($this->context);
+        $contextualValidator->expectValidation($i, null, $value, $group, function ($passedConstraints) use ($constraints) {
+            if (\is_array($constraints) && !\is_array($passedConstraints)) {
+                $passedConstraints = [$passedConstraints];
+            }
+
+            Assert::assertEquals($constraints, $passedConstraints);
+        });
+    }
+
+    protected function expectFailingValueValidation(int $i, $value, array $constraints, $group, ConstraintViolationInterface $violation)
+    {
+        $contextualValidator = $this->context->getValidator()->inContext($this->context);
+        $contextualValidator->expectValidation($i, null, $value, $group, function ($passedConstraints) use ($constraints) {
+            if (\is_array($constraints) && !\is_array($passedConstraints)) {
+                $passedConstraints = [$passedConstraints];
+            }
+
+            Assert::assertEquals($constraints, $passedConstraints);
+        }, $violation);
+    }
+
+    protected function expectValidateValueAt(int $i, string $propertyPath, $value, $constraints, $group = null)
     {
         $contextualValidator = $this->context->getValidator()->inContext($this->context);
         $contextualValidator->expectValidation($i, $propertyPath, $value, $group, function ($passedConstraints) use ($constraints) {
             Assert::assertEquals($constraints, $passedConstraints);
         });
+    }
+
+    protected function expectViolationsAt($i, $value, Constraint $constraint)
+    {
+        $context = $this->createContext();
+
+        $validatorClassname = $constraint->validatedBy();
+
+        $validator = new $validatorClassname();
+        $validator->initialize($context);
+        $validator->validate($value, $constraint);
+
+        $this->expectedViolations[] = $context->getViolations();
+
+        return $context->getViolations();
     }
 
     protected function assertNoViolation()
@@ -230,8 +293,6 @@ abstract class ConstraintValidatorTestCase extends TestCase
     }
 
     /**
-     * @param $message
-     *
      * @return ConstraintViolationAssertion
      */
     protected function buildViolation($message)
@@ -242,10 +303,7 @@ abstract class ConstraintValidatorTestCase extends TestCase
     abstract protected function createValidator();
 }
 
-/**
- * @internal
- */
-class ConstraintViolationAssertion
+final class ConstraintViolationAssertion
 {
     /**
      * @var ExecutionContextInterface
@@ -266,7 +324,10 @@ class ConstraintViolationAssertion
     private $constraint;
     private $cause;
 
-    public function __construct(ExecutionContextInterface $context, $message, Constraint $constraint = null, array $assertions = [])
+    /**
+     * @internal
+     */
+    public function __construct(ExecutionContextInterface $context, string $message, ?Constraint $constraint = null, array $assertions = [])
     {
         $this->context = $context;
         $this->message = $message;
@@ -274,20 +335,29 @@ class ConstraintViolationAssertion
         $this->assertions = $assertions;
     }
 
-    public function atPath($path)
+    /**
+     * @return $this
+     */
+    public function atPath(string $path)
     {
         $this->propertyPath = $path;
 
         return $this;
     }
 
-    public function setParameter($key, $value)
+    /**
+     * @return $this
+     */
+    public function setParameter(string $key, string $value)
     {
         $this->parameters[$key] = $value;
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function setParameters(array $parameters)
     {
         $this->parameters = $parameters;
@@ -295,6 +365,9 @@ class ConstraintViolationAssertion
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function setTranslationDomain($translationDomain)
     {
         // no-op for BC
@@ -302,6 +375,9 @@ class ConstraintViolationAssertion
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function setInvalidValue($invalidValue)
     {
         $this->invalidValue = $invalidValue;
@@ -309,20 +385,29 @@ class ConstraintViolationAssertion
         return $this;
     }
 
-    public function setPlural($number)
+    /**
+     * @return $this
+     */
+    public function setPlural(int $number)
     {
         $this->plural = $number;
 
         return $this;
     }
 
-    public function setCode($code)
+    /**
+     * @return $this
+     */
+    public function setCode(string $code)
     {
         $this->code = $code;
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function setCause($cause)
     {
         $this->cause = $cause;
@@ -330,7 +415,7 @@ class ConstraintViolationAssertion
         return $this;
     }
 
-    public function buildNextViolation($message)
+    public function buildNextViolation(string $message): self
     {
         $assertions = $this->assertions;
         $assertions[] = $this;
@@ -358,10 +443,10 @@ class ConstraintViolationAssertion
         }
     }
 
-    private function getViolation()
+    private function getViolation(): ConstraintViolation
     {
         return new ConstraintViolation(
-            null,
+            $this->message,
             $this->message,
             $this->parameters,
             $this->context->getRoot(),
@@ -380,17 +465,37 @@ class ConstraintViolationAssertion
  */
 class AssertingContextualValidator implements ContextualValidatorInterface
 {
+    private $context;
     private $expectNoValidate = false;
     private $atPathCalls = -1;
     private $expectedAtPath = [];
     private $validateCalls = -1;
     private $expectedValidate = [];
 
-    public function atPath($path)
+    public function __construct(ExecutionContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
+    public function __destruct()
+    {
+        if ($this->expectedAtPath) {
+            throw new ExpectationFailedException('Some expected validation calls for paths were not done.');
+        }
+
+        if ($this->expectedValidate) {
+            throw new ExpectationFailedException('Some expected validation calls for values were not done.');
+        }
+    }
+
+    public function atPath(string $path)
     {
     }
 
-    public function doAtPath($path)
+    /**
+     * @return $this
+     */
+    public function doAtPath(string $path)
     {
         Assert::assertFalse($this->expectNoValidate, 'No validation calls have been expected.');
 
@@ -398,7 +503,10 @@ class AssertingContextualValidator implements ContextualValidatorInterface
             throw new ExpectationFailedException(sprintf('Validation for property path "%s" was not expected.', $path));
         }
 
-        Assert::assertSame($this->expectedAtPath[$this->atPathCalls], $path);
+        $expectedPath = $this->expectedAtPath[$this->atPathCalls];
+        unset($this->expectedAtPath[$this->atPathCalls]);
+
+        Assert::assertSame($expectedPath, $path);
 
         return $this;
     }
@@ -407,43 +515,62 @@ class AssertingContextualValidator implements ContextualValidatorInterface
     {
     }
 
+    /**
+     * @return $this
+     */
     public function doValidate($value, $constraints = null, $groups = null)
     {
         Assert::assertFalse($this->expectNoValidate, 'No validation calls have been expected.');
 
-        list($expectedValue, $expectedGroup, $expectedConstraints) = $this->expectedValidate[++$this->validateCalls];
+        if (!isset($this->expectedValidate[++$this->validateCalls])) {
+            return $this;
+        }
+
+        [$expectedValue, $expectedGroup, $expectedConstraints, $violation] = $this->expectedValidate[$this->validateCalls];
+        unset($this->expectedValidate[$this->validateCalls]);
 
         Assert::assertSame($expectedValue, $value);
         $expectedConstraints($constraints);
         Assert::assertSame($expectedGroup, $groups);
 
+        if (null !== $violation) {
+            $this->context->addViolation($violation->getMessage(), $violation->getParameters());
+        }
+
         return $this;
     }
 
-    public function validateProperty($object, $propertyName, $groups = null)
+    public function validateProperty(object $object, string $propertyName, $groups = null)
     {
     }
 
-    public function doValidateProperty($object, $propertyName, $groups = null)
-    {
-        return $this;
-    }
-
-    public function validatePropertyValue($objectOrClass, $propertyName, $value, $groups = null)
-    {
-    }
-
-    public function doValidatePropertyValue($objectOrClass, $propertyName, $value, $groups = null)
+    /**
+     * @return $this
+     */
+    public function doValidateProperty(object $object, string $propertyName, $groups = null)
     {
         return $this;
     }
 
-    public function getViolations()
+    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null)
+    {
+    }
+
+    /**
+     * @return $this
+     */
+    public function doValidatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null)
+    {
+        return $this;
+    }
+
+    public function getViolations(): ConstraintViolationListInterface
     {
     }
 
     public function doGetViolations()
     {
+        return $this->context->getViolations();
     }
 
     public function expectNoValidate()
@@ -451,9 +578,12 @@ class AssertingContextualValidator implements ContextualValidatorInterface
         $this->expectNoValidate = true;
     }
 
-    public function expectValidation($call, $propertyPath, $value, $group, $constraints)
+    public function expectValidation(string $call, ?string $propertyPath, $value, $group, callable $constraints, ?ConstraintViolationInterface $violation = null)
     {
-        $this->expectedAtPath[$call] = $propertyPath;
-        $this->expectedValidate[$call] = [$value, $group, $constraints];
+        if (null !== $propertyPath) {
+            $this->expectedAtPath[$call] = $propertyPath;
+        }
+
+        $this->expectedValidate[$call] = [$value, $group, $constraints, $violation];
     }
 }

@@ -162,6 +162,7 @@ $dictionary['jjwg_Markers'] = array(
         'jjwg_maps_jjwg_markers' => array(
             'name' => 'jjwg_maps_jjwg_markers',
             'type' => 'link',
+            'module' => 'jjwg_Maps',
             'relationship' => 'jjwg_maps_jjwg_markers',
             'source' => 'non-db',
             'vname' => 'LBL_JJWG_MAPS_JJWG_MARKERS_FROM_JJWG_MAPS_TITLE',

@@ -3,6 +3,7 @@
 namespace MintHCM\Data\MassActions\Actions;
 
 use MintHCM\Data\MassActions\MassAction;
+use MintHCM\Utils\LegacyConnector;
 
 class MassConfirmation extends MassAction
 {
@@ -11,7 +12,9 @@ class MassConfirmation extends MassAction
     
     public function execute()
     {
-        throw new \Exception('Mass confirmation is implemented in legacy code.');
+        $connector = new LegacyConnector('MassConfirmation', 'modules/WorkSchedules/MassConfirmation.php');
+        $connector->schedule(implode(',', $this->ids), '', '');
+        return ['success' => true];
     }
 
     public function hasAccess()

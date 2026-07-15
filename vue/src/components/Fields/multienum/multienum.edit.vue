@@ -10,8 +10,6 @@
         item-title="value"
         item-value="key"
         multiple
-        @keyup.enter="$emit('inlineEditSave')"
-        @keyup.esc="$emit('inlineEditCancel')"
     >
     </v-select>
 </template>

@@ -183,4 +183,9 @@ const isFilterEditable = computed(() => {
 .filter-row:first-child {
     border-top: 1px solid #0000001f;
 }
+
+.filter-row :deep(.v-field--focused .v-field__outline) {
+    --v-field-border-opacity: 1;
+    color: rgb(var(--v-theme-secondary-dark));
+}
 </style>

@@ -12,6 +12,7 @@
 namespace Symfony\Component\Validator\Constraints;
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\Exception\UninitializedPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
@@ -29,7 +30,7 @@ abstract class AbstractComparisonValidator extends ConstraintValidator
 {
     private $propertyAccessor;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(?PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->propertyAccessor = $propertyAccessor;
     }
@@ -55,7 +56,9 @@ abstract class AbstractComparisonValidator extends ConstraintValidator
             try {
                 $comparedValue = $this->getPropertyAccessor()->getValue($object, $path);
             } catch (NoSuchPropertyException $e) {
-                throw new ConstraintDefinitionException(sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, \get_class($constraint)).$e->getMessage(), 0, $e);
+                throw new ConstraintDefinitionException(sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)).$e->getMessage(), 0, $e);
+            } catch (UninitializedPropertyException $e) {
+                $comparedValue = null;
             }
         } else {
             $comparedValue = $constraint->value;
@@ -72,21 +75,26 @@ abstract class AbstractComparisonValidator extends ConstraintValidator
             try {
                 $comparedValue = new $dateTimeClass($comparedValue);
             } catch (\Exception $e) {
-                throw new ConstraintDefinitionException(sprintf('The compared value "%s" could not be converted to a "%s" instance in the "%s" constraint.', $comparedValue, $dateTimeClass, \get_class($constraint)));
+                throw new ConstraintDefinitionException(sprintf('The compared value "%s" could not be converted to a "%s" instance in the "%s" constraint.', $comparedValue, $dateTimeClass, get_debug_type($constraint)));
             }
         }
 
         if (!$this->compareValues($value, $comparedValue)) {
-            $this->context->buildViolation($constraint->message)
+            $violationBuilder = $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $this->formatValue($value, self::OBJECT_TO_STRING | self::PRETTY_DATE))
                 ->setParameter('{{ compared_value }}', $this->formatValue($comparedValue, self::OBJECT_TO_STRING | self::PRETTY_DATE))
                 ->setParameter('{{ compared_value_type }}', $this->formatTypeOf($comparedValue))
-                ->setCode($this->getErrorCode())
-                ->addViolation();
+                ->setCode($this->getErrorCode());
+
+            if (null !== $path) {
+                $violationBuilder->setParameter('{{ compared_value_path }}', $path);
+            }
+
+            $violationBuilder->addViolation();
         }
     }
 
-    private function getPropertyAccessor()
+    private function getPropertyAccessor(): PropertyAccessorInterface
     {
         if (null === $this->propertyAccessor) {
             $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -101,14 +109,14 @@ abstract class AbstractComparisonValidator extends ConstraintValidator
      * @param mixed $value1 The first value to compare
      * @param mixed $value2 The second value to compare
      *
-     * @return bool true if the relationship is valid, false otherwise
+     * @return bool
      */
     abstract protected function compareValues($value1, $value2);
 
     /**
      * Returns the error code used if the comparison fails.
      *
-     * @return string|null The error code or `null` if no code should be set
+     * @return string|null
      */
     protected function getErrorCode()
     {

@@ -24,12 +24,12 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      * Whether to format {@link \DateTime} objects, either with the {@link \IntlDateFormatter}
      * (if it is available) or as RFC-3339 dates ("Y-m-d H:i:s").
      */
-    const PRETTY_DATE = 1;
+    public const PRETTY_DATE = 1;
 
     /**
      * Whether to cast objects with a "__toString()" method to strings.
      */
-    const OBJECT_TO_STRING = 2;
+    public const OBJECT_TO_STRING = 2;
 
     /**
      * @var ExecutionContextInterface
@@ -54,11 +54,11 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      *
      * @param mixed $value The value to return the type of
      *
-     * @return string The type of the value
+     * @return string
      */
     protected function formatTypeOf($value)
     {
-        return \is_object($value) ? \get_class($value) : \gettype($value);
+        return get_debug_type($value);
     }
 
     /**
@@ -82,12 +82,12 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      * @param int   $format A bitwise combination of the format
      *                      constants in this class
      *
-     * @return string The string representation of the passed value
+     * @return string
      */
-    protected function formatValue($value, $format = 0)
+    protected function formatValue($value, int $format = 0)
     {
         if (($format & self::PRETTY_DATE) && $value instanceof \DateTimeInterface) {
-            if (class_exists('IntlDateFormatter')) {
+            if (class_exists(\IntlDateFormatter::class)) {
                 $formatter = new \IntlDateFormatter(\Locale::getDefault(), \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT, 'UTC');
 
                 return $formatter->format(new \DateTime(
@@ -97,6 +97,10 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
             }
 
             return $value->format('Y-m-d H:i:s');
+        }
+
+        if ($value instanceof \UnitEnum) {
+            return $value->name;
         }
 
         if (\is_object($value)) {
@@ -144,11 +148,11 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      * @param int   $format A bitwise combination of the format
      *                      constants in this class
      *
-     * @return string The string representation of the value list
+     * @return string
      *
      * @see formatValue()
      */
-    protected function formatValues(array $values, $format = 0)
+    protected function formatValues(array $values, int $format = 0)
     {
         foreach ($values as $key => $value) {
             $values[$key] = $this->formatValue($value, $format);

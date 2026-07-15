@@ -92,7 +92,6 @@ if (isset($_REQUEST['loginErrorMessage'])) {
         $sugar_smarty->assign('LOGIN_ERROR_MESSAGE', $mod_strings[$_REQUEST['loginErrorMessage']]);
     } else {
         if (isset($app_strings[$_REQUEST['loginErrorMessage']])) {
-
             $sugar_smarty->assign('LOGIN_ERROR_MESSAGE', $app_strings[$_REQUEST['loginErrorMessage']]);
         }
     }
@@ -108,13 +107,13 @@ foreach ((array)$lvars as $k => $v) {
 if (isset($_SESSION['login_user_name'])) {
     $_SESSION['login_user_name'] = purify_html($_SESSION['login_user_name']);
     if (isset($_REQUEST['default_user_name'])) {
-        $login_user_name = $_REQUEST['default_user_name'];
+        $login_user_name = purify_html($_REQUEST['default_user_name']);
     } else {
         $login_user_name = $_SESSION['login_user_name'];
     }
 } else {
     if (isset($_REQUEST['default_user_name'])) {
-        $login_user_name = $_REQUEST['default_user_name'];
+        $login_user_name = purify_html($_REQUEST['default_user_name']);
     } elseif (isset($_REQUEST['ck_login_id_20'])) {
         $login_user_name = get_user_name($_REQUEST['ck_login_id_20']);
     } else {

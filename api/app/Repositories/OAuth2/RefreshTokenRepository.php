@@ -81,7 +81,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         /** @var MintToken */
         $token = $mint_token_repository->findOneBy(['access_token' => $refresh_token->getAccessToken()->getIdentifier()]);
 
-        if ($token->id === null) {
+        if ($token === null) {
             throw new \InvalidArgumentException('Access token is not found for this client');
         }
 
@@ -102,7 +102,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         /** @var MintToken */
         $token = $mint_token_repository->findOneBy(['refresh_token' => $tokenId]);
 
-        if ($token->id === null) {
+        if ($token === null) {
             throw new \InvalidArgumentException('Refresh token is not found for this client');
         }
 
@@ -122,6 +122,10 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         $token = $mint_token_repository->findOneBy(['refresh_token' => $tokenId]);
 
 
-        return $token->id === null || new \DateTime() > $token->refresh_token_expires;
+        if ($token === null) {
+            return true;
+        }
+
+        return new \DateTime() > $token->refresh_token_expires;
     }
 }

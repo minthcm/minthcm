@@ -41,6 +41,13 @@ onMounted(() => {
     width: 100%;
     position: relative;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    &.dz-started {
+        align-items: flex-start;
+        align-content: flex-start;
+    }
 
     :deep(.dz-preview) {
         z-index: 1;
@@ -68,8 +75,23 @@ onMounted(() => {
             margin: 0 auto;
             margin-bottom: 10px;
             border-radius: 16px;
-            background: #999;
-            background: linear-gradient(to bottom, #eee, #ddd);
+            position: relative;
+            overflow: hidden;
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: linear-gradient(to bottom, rgba(238, 238, 238, 0.7), rgba(221, 221, 221, 0.7));
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.15s;
+            }
+
+            &:hover::after {
+                opacity: 1;
+            }
 
             img {
                 border-radius: 16px !important;
@@ -86,14 +108,14 @@ onMounted(() => {
 
         &:not(:hover) {
             .dz-remove {
-                display: none;
+                visibility: hidden;
             }
         }
 
         &:hover {
             z-index: 1000;
             .dz-remove {
-                display: block;
+                visibility: visible;
             }
             .dz-image {
                 background: rgba(255, 255, 255, 0);
@@ -133,16 +155,11 @@ onMounted(() => {
     }
 
     :deep(.dz-message) {
-        position: absolute;
-        z-index: 0;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
         text-align: center;
+        padding: 16px 0;
+        order: 9999;
     }
 
-    :deep(.smudge-effect) {
-        filter: blur(1px);
-    }
 }
 </style>

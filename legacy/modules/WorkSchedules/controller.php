@@ -287,7 +287,7 @@ class WorkSchedulesController extends SugarController
     {
         SugarAutoLoader::requireWithCustom('modules/WorkSchedules/MassConfirmation.php');
         if (!empty($_REQUEST['ids']) || (isset($_REQUEST['entire_list']) && !empty($_REQUEST['encoded_query']))) {
-            MassConfirmation::schedule($_REQUEST['ids'], $_REQUEST['encoded_query'], $_REQUEST['entire_list']);
+            MassConfirmation::schedule($_REQUEST['ids'] ?? '', $_REQUEST['encoded_query'] ?? '', $_REQUEST['entire_list'] ?? '');
         }
     }
 

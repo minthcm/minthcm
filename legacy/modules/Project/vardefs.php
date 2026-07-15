@@ -245,6 +245,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'quotes',
                 'type' => 'link',
+                'module' => 'AOS_Quotes',
                 'relationship' => 'projects_quotes',
                 'source' => 'non-db',
                 'ignore_role' => true,
@@ -254,6 +255,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'contacts',
                 'type' => 'link',
+                'module' => 'Contacts',
                 'relationship' => 'projects_contacts',
                 'source' => 'non-db',
                 'ignore_role' => true,
@@ -263,6 +265,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'notes',
                 'type' => 'link',
+                'module' => 'Notes',
                 'relationship' => 'projects_notes',
                 'source' => 'non-db',
                 'vname' => 'LBL_NOTES',
@@ -271,6 +274,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'tasks',
                 'type' => 'link',
+                'module' => 'Tasks',
                 'relationship' => 'projects_tasks',
                 'source' => 'non-db',
                 'vname' => 'LBL_TASKS',
@@ -279,6 +283,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'meetings',
                 'type' => 'link',
+                'module' => 'Meetings',
                 'relationship' => 'projects_meetings',
                 'source' => 'non-db',
                 'vname' => 'LBL_MEETINGS',
@@ -287,6 +292,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'calls',
                 'type' => 'link',
+                'module' => 'Calls',
                 'relationship' => 'projects_calls',
                 'source' => 'non-db',
                 'vname' => 'LBL_CALLS',
@@ -295,6 +301,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'emails',
                 'type' => 'link',
+                'module' => 'Emails',
                 'relationship' => 'emails_projects_rel',
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAILS',
@@ -303,6 +310,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'projecttask',
                 'type' => 'link',
+                'module' => 'ProjectTask',
                 'relationship' => 'projects_project_tasks',
                 'source' => 'non-db',
                 'vname' => 'LBL_PROJECT_TASKS',
@@ -358,6 +366,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'cases',
                 'type' => 'link',
+                'module' => 'Cases',
                 'relationship' => 'projects_cases',
                 'side' => 'right',
                 'source' => 'non-db',
@@ -367,6 +376,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'bugs',
                 'type' => 'link',
+                'module' => 'Bugs',
                 'relationship' => 'projects_bugs',
                 'side' => 'right',
                 'source' => 'non-db',
@@ -376,6 +386,7 @@ $dictionary['Project'] = array(
             array(
                 'name' => 'products',
                 'type' => 'link',
+                'module' => 'AOS_Products',
                 'relationship' => 'projects_products',
                 'side' => 'right',
                 'source' => 'non-db',
@@ -440,6 +451,7 @@ $dictionary['Project'] = array(
                 'name' => 'aos_quotes_project',
                 'vname' => 'LBL_AOS_QUOTES_PROJECT',
                 'type' => 'link',
+                'module' => 'AOS_Quotes',
                 'relationship' => 'aos_quotes_project',
                 'source' => 'non-db',
             ),

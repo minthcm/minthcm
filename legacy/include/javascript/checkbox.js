@@ -235,8 +235,7 @@ function select_targets() {
   htmltext = "<table style='width: 100%;text-align:left;'>";
 
   htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><b><a href='#' onclick='handle_targetlists();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_TARGET_LIST') + "</a></b><td></tr>";
-  htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_targets();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_TARGETS') + "</a></strong><td></tr>";
-  htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_contacts();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_CONTACTS') + "</a></strong><td></tr>";
+  htmltext += "<tr><td style='padding: 2px;text-align:right;'><img src='themes/default/images/view-process-own.png'></td><td style='padding: 2px;font-size: 110%;'><strong><a href='#' onclick='handle_candidates();return false;'>" + SUGAR.language.get('FP_events', 'LBL_SELECT_DELEGATES_CANDIDATES') + "</a></strong><td></tr>";
 
   htmltext += "</table>";
   //initialise dialog
@@ -300,10 +299,10 @@ function handle_targets() {
     }
   }, "MultiSelect", true);
 }
-//open contacts pop-up window
-function handle_contacts() {
+//open candidates pop-up window
+function handle_candidates() {
   dialog.cancel();
-  open_popup("Contacts", 600, 400, "", true, true, {
+  open_popup("Candidates", 600, 400, "", true, true, {
     "call_back_function": "set_return_and_save_background2",
     "form_name": "DetailView",
     "field_to_name_array": {"id": "subpanel_id"},
@@ -313,7 +312,7 @@ function handle_contacts() {
       "link_field_name": null,
       "module_name": "delegates",
       "refresh_page": 0,
-      "pop_up_type": "contacts"
+      "pop_up_type": "candidates"
     }
   }, "MultiSelect", true);
 }

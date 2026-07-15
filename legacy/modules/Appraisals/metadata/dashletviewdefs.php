@@ -77,7 +77,7 @@ $dashletData['AppraisalsDashlet']['columns'] = array(
    ),
    'status' =>
    array(
-      'type' => 'enum',
+      'type' => 'ColoredEnum',
       'default' => true,
       'studio' => 'visible',
       'label' => 'LBL_STATUS',

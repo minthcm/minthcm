@@ -2,34 +2,37 @@
 
 namespace MintMCP\Server;
 
-use Monolog\Logger as MonologLogger;
-use Monolog\Handler\StreamHandler;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 
-/**
- * Singleton Logger class for MintMCP
- */
 class Logger
 {
-    private static ?MonologLogger $logger = null;
+    private static ?LoggerInterface $fallbackLogger = null;
 
-    private function __construct() {}
-
-    private function __clone() {}
-
-    /**
-     * Get the Monolog logger instance.
-     *
-     * @return MonologLogger
-     */
-    public static function getLogger(): MonologLogger
+    public static function getLogger(): LoggerInterface
     {
-        if (self::$logger === null) {
-            $logFile = './mintmcp.log';
-
-            self::$logger = new MonologLogger('mintmcp');
-            $handler = new StreamHandler($logFile, MonologLogger::DEBUG, true, 0664);
-            self::$logger->pushHandler($handler);
+        if (function_exists('logger')) {
+            return logger();
         }
-        return self::$logger;
+
+        if (self::$fallbackLogger instanceof LoggerInterface) {
+            return self::$fallbackLogger;
+        }
+
+        self::$fallbackLogger = new class extends AbstractLogger {
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $logMessage = sprintf(
+                    "[%s] [%s] %s %s\n",
+                    date('Y-m-d H:i:s'),
+                    strtoupper((string) $level),
+                    (string) $message,
+                    empty($context) ? '' : json_encode($context)
+                );
+                @file_put_contents(__DIR__ . '/../mintmcp.log', $logMessage, FILE_APPEND);
+            }
+        };
+
+        return self::$fallbackLogger;
     }
 }

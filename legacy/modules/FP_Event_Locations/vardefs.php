@@ -51,6 +51,7 @@
             array(
                 'name' => 'fp_event_locations_fp_events_1',
                 'type' => 'link',
+                'module' => 'FP_events',
                 'relationship' => 'fp_event_locations_fp_events_1',
                 'source' => 'non-db',
                 'side' => 'right',
@@ -185,6 +186,7 @@
         'fp_event_locations_fp_events_1' => array(
             'name' => 'fp_event_locations_fp_events_1',
             'type' => 'link',
+            'module' => 'FP_events',
             'relationship' => 'fp_event_locations_fp_events_1',
             'source' => 'non-db',
             'side' => 'right',

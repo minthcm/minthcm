@@ -32,14 +32,7 @@ class RecursiveValidator implements ValidatorInterface
     /**
      * Creates a new validator.
      *
-     * @param ExecutionContextFactoryInterface    $contextFactory     The factory for
-     *                                                                creating new contexts
-     * @param MetadataFactoryInterface            $metadataFactory    The factory for
-     *                                                                fetching the metadata
-     *                                                                of validated objects
-     * @param ConstraintValidatorFactoryInterface $validatorFactory   The factory for creating
-     *                                                                constraint validators
-     * @param ObjectInitializerInterface[]        $objectInitializers The object initializers
+     * @param ObjectInitializerInterface[] $objectInitializers The object initializers
      */
     public function __construct(ExecutionContextFactoryInterface $contextFactory, MetadataFactoryInterface $metadataFactory, ConstraintValidatorFactoryInterface $validatorFactory, array $objectInitializers = [])
     {
@@ -104,7 +97,7 @@ class RecursiveValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function validateProperty($object, $propertyName, $groups = null)
+    public function validateProperty(object $object, string $propertyName, $groups = null)
     {
         return $this->startContext($object)
             ->validateProperty($object, $propertyName, $groups)
@@ -114,7 +107,7 @@ class RecursiveValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function validatePropertyValue($objectOrClass, $propertyName, $value, $groups = null)
+    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null)
     {
         // If a class name is passed, take $value as root
         return $this->startContext(\is_object($objectOrClass) ? $objectOrClass : $value)

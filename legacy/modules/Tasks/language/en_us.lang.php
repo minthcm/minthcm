@@ -53,6 +53,7 @@ $mod_strings = array(
     'LBL_LIST_FORM_TITLE' => ' Task List',
     'LBL_NEW_FORM_TITLE' => ' Create Task',
     'LBL_LIST_CLOSE' => 'Close',
+    'LBL_LIST_DEFER' => 'Defer',
     'LBL_LIST_SUBJECT' => 'Subject',
     'LBL_LIST_CONTACT' => 'Contact',
     'LBL_LIST_PRIORITY' => 'Priority',

@@ -23,6 +23,10 @@ $ESListViewDefs['FP_events'] = [
         'assigned_user_name' => [
             'default' => true,
         ],
+        'activity_status_type' => [
+            'type' => 'ColoredEnum',
+            'default' => true,
+        ],
     ],
     'search' => [
         'name' => [],
@@ -34,5 +38,6 @@ $ESListViewDefs['FP_events'] = [
         'date_modified' => [],
         'created_by_name' => [],
         'modified_by_name' => [],
+        'activity_status_type' => [],
     ],
 ];

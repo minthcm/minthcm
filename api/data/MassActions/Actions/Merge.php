@@ -11,7 +11,8 @@ class Merge extends MassAction
     
     public function execute()
     {
-        throw new \Exception('Merge is implemented in legacy code.');
+        $_SESSION['merge_uids'] = $this->ids;
+        return ['success' => true, 'module' => $this->module_name];
     }
 
     public function hasAccess()

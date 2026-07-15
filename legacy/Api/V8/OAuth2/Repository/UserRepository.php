@@ -34,7 +34,7 @@ class UserRepository implements UserRepositoryInterface
         ClientEntityInterface $clientEntity
     ) {
 
-        if($this->IsLdapOn() && !(new \AuthenticationController())->authController->loginAuthenticate($username, $password, false, [])){
+        if($this->IsLdapOn() && !(new \AuthenticationController('LDAPAuthenticate'))->authController->loginAuthenticate($username, $password, false, [])){
             throw new \InvalidArgumentException("The password is invalid: {$password} or username is invalid: {$username}");   
         }
 

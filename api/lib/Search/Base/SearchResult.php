@@ -51,14 +51,19 @@ use MintHCM\Data\BeanFactory;
 use MintHCM\Lib\MintLogic\MintLogic;
 use MintHCM\Utils\LegacyConnector;
 
-#[\AllowDynamicProperties]
 abstract class SearchResult
 {
-    protected $result, $grouped_ids, $beans, $hits;
+    protected array $result = [];
+    protected array $grouped_ids = [];
+    protected ?array $beans = null;
+    protected array $hits = [];
 
-    protected $handle_acl, $indice_module_map;
+    protected bool $handle_acl = false;
+    protected array $indice_module_map = [];
 
-    protected $size, $current_offset, $total;
+    protected int $size = 0;
+    protected int $current_offset = 0;
+    protected int $total = 0;
 
     public function __construct($result, $current_offset, $size, $handle_acl = false, $indice_module_map = [])
     {
@@ -127,6 +132,10 @@ abstract class SearchResult
             ],
             'logic' => (new MintLogic($bean))->getInitial(),
         ];
+    }
+    public function getGroupedIds(): array
+    {
+        return $this->grouped_ids;
     }
 
     protected function setData($result, $current_offset): void

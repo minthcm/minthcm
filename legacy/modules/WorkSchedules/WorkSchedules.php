@@ -198,6 +198,9 @@ class WorkSchedules extends Basic
             $fetched_row_before_save = $this->fetched_row;
             $parent_result = parent::save($check_notify);
 
+            if ($this->shouldBeProcessedApi()) {
+                $this->saveRepeatlyApi();
+            }
             $this->saveRepeatly();
             //prevents work schedule from being saved with spent_time_settlement equals to 0
             if ($this->spent_time_settlement == 0 || $this->spent_time_settlement == null) {
@@ -256,13 +259,12 @@ class WorkSchedules extends Basic
     protected function isInCycle()
     {
         $result = false;
-        if ($this->spent_time > 0) {
+        if (
+            isset($this->fetched_row['spent_time']) 
+            && (float)$this->fetched_row['spent_time'] <= 0 
+            && $this->spent_time > 0
+        ) {
             $result = true;
-        }
-        if ($this->repeat_parent_id != '' && $this->id != '') {
-            if (!empty($this->fetched_row)) {
-                $result = true;
-            }
         }
         return $result;
     }
@@ -328,6 +330,51 @@ class WorkSchedules extends Basic
     private function shouldBeProcessed()
     {
         return !($_REQUEST['module'] != $this->module_name || self::$repeatSaveRoudTripCounter || empty($_REQUEST['repeat_type']) || empty($_REQUEST['date_start']));
+    }
+
+    protected function shouldBeProcessedApi()
+    {
+        return !(
+            self::$repeatSaveRoudTripCounter
+            || empty($this->repeat_type)
+            || empty($this->date_start)
+            || !empty($this->fetched_row)
+            || empty($_SERVER['REQUEST_URI'])
+            || substr($_SERVER['REQUEST_URI'], -14, 14) != '/Api/V8/module'
+        );
+    }
+
+    protected function saveRepeatlyApi()
+    {
+        self::$repeatSaveRoudTripCounter++;
+        require_once 'modules/Calendar/CalendarUtils.php';
+
+        $params = array(
+            'type' => $this->repeat_type,
+            'interval' => $this->repeat_interval,
+            'count' => $this->repeat_count,
+            'until' => isset($this->repeat_until) ? $this->repeat_until : null,
+            'dow' => $this->repeat_dow,
+        );
+
+        $date_start = $GLOBALS['timedate']->fromDb($this->date_start);
+        if (!empty($date_start)) {
+            $date_start = $GLOBALS['timedate']->tzUser($date_start);
+            $repeatArr = CalendarUtils::build_repeat_sequence($date_start->format($GLOBALS['timedate']->get_date_time_format()), $params);
+        } else {
+            $repeatArr = CalendarUtils::build_repeat_sequence($this->date_start, $params);
+        }
+        $limit = SugarConfig::getInstance()->get('calendar.max_repeat_count', 1000);
+
+        if (!empty($this->edit_all_recurrences)) {
+            CalendarUtils::markRepeatDeleted($this);
+        }
+
+        $repeat_arr_count = is_countable($repeatArr) ? count($repeatArr) : 0;
+
+        if ($repeat_arr_count < $limit && isset($repeatArr) && is_array($repeatArr) && $repeat_arr_count > 0) {
+            CalendarUtils::save_repeat_activities($this, $repeatArr);
+        }
     }
 
     private function saveRepeatly()

@@ -339,6 +339,17 @@ Calendar.setup = function ( params ) {
                dialog.fireEvent( "changeContent" );
             } );
 
+            // WCAG: Add keyboard support for calendar date cells
+            Event.addListener( dialog.element, "keydown", function ( e ) {
+               var target = Event.getTarget( e );
+               if ( target.tagName === 'A' && Dom.hasClass( target, calendar.Style.CSS_CELL_SELECTOR ) ) {
+                  if ( e.key === 'Enter' || e.key === ' ' ) {
+                     e.preventDefault();
+                     target.click();
+                  }
+               }
+            } );
+
          }
 
          var sanitizeDate = function ( date, dateParams ) {
@@ -412,6 +423,15 @@ Calendar.setup = function ( params ) {
 
          calendar.render();
          dialog.show();
+
+         // WCAG: Move focus into calendar popup after opening
+         var selectedCell = calendar.oDomContainer.querySelector( '.' + calendar.Style.CSS_CELL_SELECTED + ' a.' + calendar.Style.CSS_CELL_SELECTOR );
+         if ( !selectedCell ) {
+            selectedCell = calendar.oDomContainer.querySelector( 'td.' + calendar.Style.CSS_CELL_SELECTABLE + ' a.' + calendar.Style.CSS_CELL_SELECTOR );
+         }
+         if ( selectedCell ) {
+            selectedCell.focus();
+         }
       } );
    } );
 };

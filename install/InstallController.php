@@ -31,7 +31,8 @@ class InstallController
 
     public function getInitialData()
     {
-        $isInstalling = !empty($this->service->readMintInstallStatus()['step']);
+        $installStatus = $this->service->readMintInstallStatus();
+        $isInstalling = !empty($installStatus['step']);
 
         require_once '../legacy/minthcm_version.php';
         return [
@@ -39,12 +40,18 @@ class InstallController
             'license' => trim(file_get_contents('../LICENSE')),
             'environment' => (new VersionValidator)->runValidations(),
             'isInstalling' => (bool)$isInstalling,
+            'installError' => $installStatus['error'] ?? null,
         ];
     }
 
     public function validateDb($data)
     {
         $dbService = new DatabaseService();
+
+        $result = $dbService->testDBname($data['dbname']);
+        if (!$result['status']) {
+            return ["status" => 0, "message" => $result['message']];
+        }
         $result = $dbService->testConnection($data['host'], $data['port'], $data['username'], $data['password']);
         if (!$result['status']) {
             return ["status" => 0, "message" => $result['message']];
@@ -59,16 +66,17 @@ class InstallController
     public function validateElastic($data)
     {
         $response = $this->elasticService->testConnection($data['host'], $data['port'], $data['username'], $data['password']);
-        if($response['status']){
-            return ["status" => 1, "message" => "ok"];
-        } else {
-            if(isset($response['message'])){
-                $message = $response['message'];
-            } else {
-                $message = "Elastic connection failed";
-            }
+        if (!$response['status']) {
+            $message = $response['message'] ?? 'Elastic connection failed';
             return ["status" => 0, "message" => $message];
         }
+
+        $capacityResponse = $this->elasticService->checkShardCapacity($data['host'], $data['port'], $data['username'], $data['password']);
+        if (!$capacityResponse['status']) {
+            return ["status" => 0, "message" => $capacityResponse['message']];
+        }
+
+        return ["status" => 1, "message" => "ok"];
     }
 
     public function checkStatus()
@@ -113,10 +121,11 @@ class InstallController
             $installer->setupFilesPermissions();
 
             $this->service->setMintInstallStatus(3, "Starting backend installation...");
-            $installer->installBackendApplication();
+            $installer->installBackendApplication($cfg);
 
             $lastStep = $this->service->readMintInstallStatus();
             if($lastStep["step"] != self::LAST_BACKEND_STEP){
+                $this->service->setMintInstallError("Backend installation failed at step " . $lastStep["step"]);
                 return ["status" => 0, "message" => "Installation failed.", "error" => "Backend installation failed"];
             }
 
@@ -138,7 +147,8 @@ class InstallController
 
             return ["status" => 1, "message" => "Installation finished successfully."];
         } catch (\Exception $e) {
-            return ["status" => 0, "message" => "Installation failed.", "error" => $e];
+            $this->service->setMintInstallError($e->getMessage());
+            return ["status" => 0, "message" => "Installation failed.", "error" => $e->getMessage()];
         }
     }
 }

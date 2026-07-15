@@ -5,7 +5,7 @@ const files = import.meta.glob('./Actions/*.ts', {
 })
 
 interface Actions {
-    [key: string]: new (module: string, ids: string[]) => MassAction
+    [key: string]: new (module: string, ids: string[], filters: any) => MassAction
 }
 
 const actions: Actions = {}

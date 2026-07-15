@@ -124,7 +124,8 @@ $dictionary['Positions'] = array(
         ),
         'securitygroup_leader_id' => array(
             'name' => 'securitygroup_leader_id',
-            'type' => 'link',
+            'type' => 'id',
+            'module' => 'SecurityGroups',
             'relationship' => 'securitygroups_positions_leader',
             'source' => 'non-db',
             'reportable' => false,

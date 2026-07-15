@@ -49,7 +49,6 @@ namespace MintHCM\Modules\Alerts\api\controllers;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class ListAction
 {
 

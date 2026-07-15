@@ -4,10 +4,10 @@
             <label>{{ languages.label('LBL_ASSIGNED_TO_MODULE') }}</label>
             <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
                 <router-link :name="props.defs.name + '_module'" v-if="hasListAccess" :to="urls.parent" class="relate-field">
-                    {{ props.data.bean.fields.parent_type?.model ?? '' }}
+                    {{ parentTypeLabel }}
                 </router-link>
-                <span :name="props.defs.name + '_module'"v-else>
-                    {{ props.data.bean.fields.parent_type?.model ?? '' }}
+                <span :name="props.defs.name + '_module'" v-else>
+                    {{ parentTypeLabel }}
                 </span>
                 <Pencil :defs="props.defs" />
             </div>
@@ -21,8 +21,6 @@
                 <span :name="props.defs.name" v-else>
                     {{ props.field.model }}
                 </span>
-                <Pencil :defs="props.defs" :hidePencil="hidePencil"
-                    @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)" />
             </div>
         </div>
     </div>
@@ -30,24 +28,25 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import Pencil from '../Pencil.vue'
 import { useLanguagesStore } from '@/store/languages'
 import { FieldProps } from '../Field.model';
 import { useACL } from '@/composables/useACL';
 
 const props = defineProps<FieldProps>()
 const languages = useLanguagesStore()
-const emit = defineEmits(['inlineEditBtnClicked'])
+
+const parentTypeLabel = computed(() => {
+    const model = props.data.bean.fields.parent_type?.model ?? ''
+    const options = props.data.bean.fieldDefs?.parent_type?.options
+    if (!options || typeof options !== 'string') return model
+    return languages.getList(options).find((item) => item.key === model)?.value || model
+})
+
 const urls = computed(() => {
     const recordModule = props.data.bean.fields.parent_type?.model || ''
     const recordId = props.data.bean.fields[props.defs.id_name]?.model || ''
     return { record: `/modules/${recordModule}/DetailView/${recordId}`, parent: `/modules/${recordModule}/ESListView` }
 })
-function startInlineEdit() {
-    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
-        emit('inlineEditBtnClicked', props.defs.name)
-    }
-}
 const hasListAccess = computed<boolean>(() => {
     return useACL().hasAccess(props.data.bean.fields.parent_type?.model, 'list', true, true)
 })

@@ -55,14 +55,12 @@ use MintHCM\Api\Middlewares\Routes\RouteAccessMiddleware;
 use MintHCM\Api\Routes\RouteManager;
 use MintHCM\Utils\CustomLoader;
 
-#[\AllowDynamicProperties]
 class ApiManager
 {
     protected static $_instance;
 
-    /** @var \Slim\App */
-    protected $app;
-    protected $routeManager;
+    protected \Slim\App $app;
+    protected RouteManager $routeManager;
 
     public function __construct()
     {

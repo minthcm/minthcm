@@ -2,7 +2,6 @@
 
 namespace MintMCP\Auth;
 
-use Monolog\Logger as MonologLogger;
 use MintMCP\Server\Logger;
 use Throwable;
 
@@ -15,6 +14,9 @@ class OAuthEndpoints
 {
     private OAuth2Server $oauth2Server;
 
+    /** Current endpoint name, used to annotate error responses in logs. */
+    private ?string $currentEndpoint = null;
+
     /**
      * Constructor
      */
@@ -25,14 +27,13 @@ class OAuthEndpoints
 
     /**
      * Handle OAuth requests
-     * 
+     *
      * @param string $endpoint The requested endpoint
      */
     public function handleRequest(string $endpoint): void
     {
+        $this->currentEndpoint = $endpoint;
         try {
-            $this->logRequest($endpoint);
-
             switch ($endpoint) {
                 case 'authorization':
                     $this->validateGetRequest();
@@ -42,10 +43,6 @@ class OAuthEndpoints
                 case 'authorize':
                     $this->validateGetRequest();
                     $this->handleAuthorize();
-                    break;
-
-                case 'login':
-                    $this->handleLogin();
                     break;
 
                 case 'token':
@@ -88,36 +85,6 @@ class OAuthEndpoints
     }
 
     /**
-     * Log incoming request
-     */
-    private function logRequest(string $endpoint): void
-    {
-        Logger::getLogger()->info('OAuth Request', [
-            'endpoint' => $endpoint,
-            'method' => $_SERVER['REQUEST_METHOD'],
-            'query' => $_GET,
-            'post' => $_SERVER['REQUEST_METHOD'] === 'POST' ? $this->sanitizePostData($_POST) : [],
-        ]);
-    }
-
-    /**
-     * Sanitize POST data for logging (remove sensitive info)
-     */
-    private function sanitizePostData(array $postData): array
-    {
-        $sanitized = $postData;
-
-        // Mask sensitive fields
-        foreach (['code', 'refresh_token', 'access_token', 'token', 'password', 'client_secret'] as $field) {
-            if (isset($sanitized[$field])) {
-                $sanitized[$field] = substr($sanitized[$field], 0, 6) . '...';
-            }
-        }
-
-        return $sanitized;
-    }
-
-    /**
      * Handle errors
      */
     private function handleError(Throwable $e): void
@@ -134,32 +101,20 @@ class OAuthEndpoints
     }
 
     /**
-     * Handle login endpoint
-     */
-    private function handleLogin(): void
-    {
-        require_once __DIR__ . '/login.php';
-        exit;
-    }
-
-    /**
      * Handle authorization endpoint
      */
     private function handleAuthorize(): void
     {
-        $response = $this->oauth2Server->handleAuthorizeRequest();
+        $response = $this->oauth2Server->handleAuthorizeRequest($_GET);
 
         if ($response['status'] === 302 && !empty($response['headers']['Location'])) {
             header('Location: ' . $response['headers']['Location']);
             exit;
         }
 
-        $redirectUri = $_GET['redirect_uri'] ?? '';
-        if (!empty($redirectUri) && !empty($response['body'])) {
-            header('Location: ' . $redirectUri . '?' . http_build_query($response['body']));
-            exit;
-        }
-
+        // RFC 6749 §3.1.2.4: MUST NOT redirect to redirect_uri when the URI was not
+        // validated against the registered client (e.g. missing params, invalid client).
+        // Return the error as JSON directly instead.
         $this->sendResponse($response['status'], $response['body'] ?? []);
     }
 
@@ -263,7 +218,7 @@ class OAuthEndpoints
 
     /**
      * Send HTTP response
-     * 
+     *
      * @param int $status HTTP status code
      * @param array $body Response body
      */
@@ -271,6 +226,17 @@ class OAuthEndpoints
     {
         http_response_code($status);
         header('Content-Type: application/json');
+
+        // Log errors only; body is never logged — tokens/codes would leak.
+        if ($status >= 400) {
+            logEvent('OAuth error response', [
+                'endpoint' => $this->currentEndpoint ?? 'unknown',
+                'status'   => $status,
+                'error'    => $body['error'] ?? null,
+                'error_description' => $body['error_description'] ?? null,
+            ]);
+        }
+
         echo json_encode($body, JSON_PRETTY_PRINT);
         exit;
     }

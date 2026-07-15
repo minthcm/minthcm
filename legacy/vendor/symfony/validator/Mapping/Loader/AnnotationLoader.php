@@ -20,15 +20,16 @@ use Symfony\Component\Validator\Exception\MappingException;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
- * Loads validation metadata using a Doctrine annotation {@link Reader}.
+ * Loads validation metadata using a Doctrine annotation {@link Reader} or using PHP 8 attributes.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
+ * @author Alexander M. Turek <me@derrabus.de>
  */
 class AnnotationLoader implements LoaderInterface
 {
     protected $reader;
 
-    public function __construct(Reader $reader)
+    public function __construct(?Reader $reader = null)
     {
         $this->reader = $reader;
     }
@@ -42,7 +43,7 @@ class AnnotationLoader implements LoaderInterface
         $className = $reflClass->name;
         $success = false;
 
-        foreach ($this->reader->getClassAnnotations($reflClass) as $constraint) {
+        foreach ($this->getAnnotations($reflClass) as $constraint) {
             if ($constraint instanceof GroupSequence) {
                 $metadata->setGroupSequence($constraint->groups);
             } elseif ($constraint instanceof GroupSequenceProvider) {
@@ -56,7 +57,7 @@ class AnnotationLoader implements LoaderInterface
 
         foreach ($reflClass->getProperties() as $property) {
             if ($property->getDeclaringClass()->name === $className) {
-                foreach ($this->reader->getPropertyAnnotations($property) as $constraint) {
+                foreach ($this->getAnnotations($property) as $constraint) {
                     if ($constraint instanceof Constraint) {
                         $metadata->addPropertyConstraint($property->name, $constraint);
                     }
@@ -68,7 +69,7 @@ class AnnotationLoader implements LoaderInterface
 
         foreach ($reflClass->getMethods() as $method) {
             if ($method->getDeclaringClass()->name === $className) {
-                foreach ($this->reader->getMethodAnnotations($method) as $constraint) {
+                foreach ($this->getAnnotations($method) as $constraint) {
                     if ($constraint instanceof Callback) {
                         $constraint->callback = $method->getName();
 
@@ -77,7 +78,7 @@ class AnnotationLoader implements LoaderInterface
                         if (preg_match('/^(get|is|has)(.+)$/i', $method->name, $matches)) {
                             $metadata->addGetterMethodConstraint(lcfirst($matches[2]), $matches[0], $constraint);
                         } else {
-                            throw new MappingException(sprintf('The constraint on "%s::%s" cannot be added. Constraints can only be added on methods beginning with "get", "is" or "has".', $className, $method->name));
+                            throw new MappingException(sprintf('The constraint on "%s::%s()" cannot be added. Constraints can only be added on methods beginning with "get", "is" or "has".', $className, $method->name));
                         }
                     }
 
@@ -87,5 +88,58 @@ class AnnotationLoader implements LoaderInterface
         }
 
         return $success;
+    }
+
+    /**
+     * @param \ReflectionClass|\ReflectionMethod|\ReflectionProperty $reflection
+     */
+    private function getAnnotations(object $reflection): iterable
+    {
+        $dedup = [];
+
+        if (\PHP_VERSION_ID >= 80000) {
+            foreach ($reflection->getAttributes(GroupSequence::class) as $attribute) {
+                $dedup[] = $attribute->newInstance();
+                yield $attribute->newInstance();
+            }
+            foreach ($reflection->getAttributes(GroupSequenceProvider::class) as $attribute) {
+                $dedup[] = $attribute->newInstance();
+                yield $attribute->newInstance();
+            }
+            foreach ($reflection->getAttributes(Constraint::class, \ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
+                $dedup[] = $attribute->newInstance();
+                yield $attribute->newInstance();
+            }
+        }
+        if (!$this->reader) {
+            return;
+        }
+
+        $annotations = [];
+
+        if ($reflection instanceof \ReflectionClass) {
+            $annotations = $this->reader->getClassAnnotations($reflection);
+        }
+        if ($reflection instanceof \ReflectionMethod) {
+            $annotations = $this->reader->getMethodAnnotations($reflection);
+        }
+        if ($reflection instanceof \ReflectionProperty) {
+            $annotations = $this->reader->getPropertyAnnotations($reflection);
+        }
+
+        foreach ($dedup as $annotation) {
+            if ($annotation instanceof Constraint) {
+                $annotation->groups; // trigger initialization of the "groups" property
+            }
+        }
+
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof Constraint) {
+                $annotation->groups; // trigger initialization of the "groups" property
+            }
+            if (!\in_array($annotation, $dedup, false)) {
+                yield $annotation;
+            }
+        }
     }
 }

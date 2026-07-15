@@ -20,6 +20,7 @@ class EntityCreator
     private const SECTIONS = [
         'SectionUse',
         'SectionRepository',
+        'SectionTraits',
         'SectionProperties',
         'SectionMethods',
     ];
@@ -48,7 +49,15 @@ class EntityCreator
         $smarty = $this->prepareSmartyTemplate();
 
         if ($this->entityExists()) {
-            $this->updateExistingEntity($file_path, $smarty);
+            $backup = file_get_contents($file_path);
+            try {
+                $this->updateExistingEntity($file_path, $smarty);
+            } catch (Throwable $e) {
+                if ($backup !== false) {
+                    file_put_contents($file_path, $backup);
+                }
+                throw $e;
+            }
         } else {
             $this->createNewEntity($file_path, $smarty);
         }
@@ -78,8 +87,23 @@ class EntityCreator
 
         foreach (self::SECTIONS as $section) {
             $new_section_code = $smarty->fetch($this->getTplPath($section));
-            $pattern = '/' . preg_quote($this->getStartCommentForSection($section), '/') . '.*?' . preg_quote($this->getEndCommentForSection($section), '/') . '/s';
-            $class_code = preg_replace($pattern, $new_section_code, $class_code);
+            $start = $this->getStartCommentForSection($section);
+            $end = $this->getEndCommentForSection($section);
+            $pattern = '/' . preg_quote($start, '/') . '.*?' . preg_quote($end, '/') . '/s';
+
+            if (preg_match($pattern, $class_code)) {
+                $class_code = preg_replace($pattern, $new_section_code, $class_code);
+            } else if ($section === 'SectionTraits') {
+                $properties_start = $this->getStartCommentForSection('SectionProperties');
+                $updated = str_replace($properties_start, $new_section_code . "\n    " . $properties_start, $class_code);
+                if ($updated === $class_code) {
+                    $GLOBALS['log']->warn("EntityCreator: {$section} insertion failed - SectionProperties marker not found in {$file_path}");
+                } else {
+                    $class_code = $updated;
+                }
+            } else {
+                $GLOBALS['log']->warn("EntityCreator: {$section} marker not found in {$file_path}, update skipped");
+            }
         }
 
         file_put_contents($file_path, $class_code);
@@ -139,7 +163,8 @@ class EntityCreator
 
     private function entityExists(): bool
     {
-        return file_exists(self::ENTITY_FOLDER_PATH . $this->moduleName . self::FILE_FORMAT_PHP);
+        $file_path = self::ENTITY_FOLDER_PATH . $this->moduleName . self::FILE_FORMAT_PHP;
+        return file_exists($file_path) && trim((string) file_get_contents($file_path)) !== '';
     }
 
     private function getTplPath(string $file_name = 'Entity'): string

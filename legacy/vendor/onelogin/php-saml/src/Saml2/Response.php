@@ -2,15 +2,13 @@
 /**
  * This file is part of php-saml.
  *
- * (c) OneLogin Inc
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @package OneLogin
- * @author  OneLogin Inc <saml-info@onelogin.com>
- * @license MIT https://github.com/onelogin/php-saml/blob/master/LICENSE
- * @link    https://github.com/onelogin/php-saml
+ * @author  Sixto Martin <sixto.martin.garcia@gmail.com>
+ * @license MIT https://github.com/SAML-Toolkits/php-saml/blob/master/LICENSE
+ * @link    https://github.com/SAML-Toolkits/php-saml
  */
 
 namespace OneLogin\Saml2;
@@ -62,6 +60,13 @@ class Response
      * @var bool
      */
     public $encrypted = false;
+
+    /**
+     * The response contains an encrypted nameId in the assertion.
+     *
+     * @var bool
+     */
+    public $encryptedNameId = false;
 
     /**
      * After validation, if it fail this var has the cause of the problem
@@ -229,14 +234,12 @@ class Response
                     );
                 }
 
-                if ($security['wantNameIdEncrypted']) {
-                    $encryptedIdNodes = $this->_queryAssertion('/saml:Subject/saml:EncryptedID/xenc:EncryptedData');
-                    if ($encryptedIdNodes->length != 1) {
-                        throw new ValidationError(
-                            "The NameID of the Response is not encrypted and the SP requires it",
-                            ValidationError::NO_ENCRYPTED_NAMEID
-                        );
-                    }
+                $this->encryptedNameId = $this->encryptedNameId || $this->_queryAssertion('/saml:Subject/saml:EncryptedID/xenc:EncryptedData')->length > 0;
+                if (!$this->encryptedNameId && $security['wantNameIdEncrypted']) {
+                    throw new ValidationError(
+                        "The NameID of the Response is not encrypted and the SP requires it",
+                        ValidationError::NO_ENCRYPTED_NAMEID
+                    );
                 }
 
                 // Validate Conditions element exists
@@ -247,7 +250,7 @@ class Response
                     );
                 }
 
-                // Validate Asserion timestamps
+                // Validate Assertion timestamps
                 $this->validateTimestamps();
 
                 // Validate AuthnStatement element exists and is unique
@@ -390,17 +393,6 @@ class Response
                     throw new ValidationError(
                         "The Message of the Response is not signed and the SP requires it",
                         ValidationError::NO_SIGNED_MESSAGE
-                    );
-                }
-            }
-
-            // Detect case not supported
-            if ($this->encrypted) {
-                $encryptedIDNodes = Utils::query($this->decryptedDocument, '/samlp:Response/saml:Assertion/saml:Subject/saml:EncryptedID');
-                if ($encryptedIDNodes->length > 0) {
-                    throw new ValidationError(
-                        'SAML Response that contains an encrypted Assertion with encrypted nameId is not supported.',
-                        ValidationError::NOT_SUPPORTED
                     );
                 }
             }
@@ -613,9 +605,16 @@ class Response
         if ($encryptedIdDataEntries->length == 1) {
             $encryptedData = $encryptedIdDataEntries->item(0);
 
-            $key = $this->_settings->getSPkey();
+            $pem = $this->_settings->getSPkey();
+
+            if (empty($pem)) {
+                throw new Error(
+                    "No private key available, check settings",
+                    Error::PRIVATE_KEY_NOT_FOUND
+                );
+            }
             $seckey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type'=>'private'));
-            $seckey->loadKey($key);
+            $seckey->loadKey($pem);
 
             $nameId = Utils::decryptElement($encryptedData, $seckey);
 
@@ -628,8 +627,8 @@ class Response
 
         $nameIdData = array();
 
+        $security = $this->_settings->getSecurityData();
         if (!isset($nameId)) {
-            $security = $this->_settings->getSecurityData();
             if ($security['wantNameId']) {
                 throw new ValidationError(
                     "NameID not found in the assertion of the Response",
@@ -637,7 +636,7 @@ class Response
                 );
             }
         } else {
-            if ($this->_settings->isStrict() && empty($nameId->nodeValue)) {
+            if ($this->_settings->isStrict() && $security['wantNameId'] && empty($nameId->nodeValue)) {
                 throw new ValidationError(
                     "An empty NameID value found",
                     ValidationError::EMPTY_NAMEID
@@ -804,6 +803,9 @@ class Response
     {
         $attributes = array();
         $entries = $this->_queryAssertion('/saml:AttributeStatement/saml:Attribute');
+
+        $security = $this->_settings->getSecurityData();
+        $allowRepeatAttributeName = $security['allowRepeatAttributeName'];
         /** @var $entry DOMNode */
         foreach ($entries as $entry) {
             $attributeKeyNode = $entry->attributes->getNamedItem($keyName);
@@ -811,11 +813,13 @@ class Response
                 continue;
             }
             $attributeKeyName = $attributeKeyNode->nodeValue;
-            if (in_array($attributeKeyName, array_keys($attributes))) {
-                throw new ValidationError(
-                    "Found an Attribute element with duplicated ".$keyName,
-                    ValidationError::DUPLICATED_ATTRIBUTE_NAME_FOUND
-                );
+            if (in_array($attributeKeyName, array_keys($attributes), true)) {
+                if (!$allowRepeatAttributeName) {
+                    throw new ValidationError(
+                        "Found an Attribute element with duplicated ".$keyName,
+                        ValidationError::DUPLICATED_ATTRIBUTE_NAME_FOUND
+                    );
+                }
             }
             $attributeValues = array();
             foreach ($entry->childNodes as $childNode) {
@@ -824,7 +828,12 @@ class Response
                     $attributeValues[] = $childNode->nodeValue;
                 }
             }
-            $attributes[$attributeKeyName] = $attributeValues;
+
+            if (in_array($attributeKeyName, array_keys($attributes), true)) {
+                $attributes[$attributeKeyName] = array_merge($attributes[$attributeKeyName], $attributeValues);
+            } else {
+                $attributes[$attributeKeyName] = $attributeValues;
+            }
         }
         return $attributes;
     }
@@ -994,9 +1003,9 @@ class Response
         $responseTag = '{'.Constants::NS_SAMLP.'}Response';
         $assertionTag = '{'.Constants::NS_SAML.'}Assertion';
 
-        $ocurrence = array_count_values($signedElements);
-        if ((in_array($responseTag, $signedElements) && $ocurrence[$responseTag] > 1)
-            || (in_array($assertionTag, $signedElements) && $ocurrence[$assertionTag] > 1)
+        $occurrence = array_count_values($signedElements);
+        if ((in_array($responseTag, $signedElements) && $occurrence[$responseTag] > 1)
+            || (in_array($assertionTag, $signedElements) && $occurrence[$assertionTag] > 1)
             || !in_array($responseTag, $signedElements) && !in_array($assertionTag, $signedElements)
         ) {
             return false;
@@ -1079,7 +1088,7 @@ class Response
     }
 
     /**
-     * Extracts nodes that match the query from the DOMDocument (Response Menssage)
+     * Extracts nodes that match the query from the DOMDocument (Response Message)
      *
      * @param string $query Xpath Expression
      *
@@ -1155,6 +1164,18 @@ class Response
         if ($check === false) {
             throw new Exception('Error: string from decrypted assertion could not be loaded into a XML document');
         }
+
+        // check if the decrypted assertion contains an encryptedID
+        $encryptedID = $decrypted->getElementsByTagName('EncryptedID')->item(0);
+
+        if ($encryptedID) {
+            // decrypt the encryptedID
+            $this->encryptedNameId = true;
+            $encryptedData = $encryptedID->getElementsByTagName('EncryptedData')->item(0);
+            $nameId = $this->decryptNameId($encryptedData, $pem);
+            Utils::treeCopyReplace($encryptedID, $nameId);
+        }
+
         if ($encData->parentNode instanceof DOMDocument) {
             return $decrypted;
         } else {
@@ -1185,6 +1206,46 @@ class Response
             $dom = new DOMDocument();
             return Utils::loadXML($dom, $container->ownerDocument->saveXML());
         }
+    }
+
+    /**
+     * Decrypt EncryptedID element
+     *
+     * @param \DOMElement $encryptedData The encrypted data.
+     * @param string     $key            The private key
+     *
+     * @return \DOMElement  The decrypted element.
+     */
+    private function decryptNameId(\DOMElement $encryptedData, string $pem)
+    {
+        $objenc = new XMLSecEnc();
+        $encData = $objenc->locateEncryptedData($encryptedData);
+        $objenc->setNode($encData);
+        $objenc->type = $encData->getAttribute("Type");
+        if (!$objKey = $objenc->locateKey()) {
+            throw new ValidationError(
+                "Unknown algorithm",
+                ValidationError::KEY_ALGORITHM_ERROR
+            );
+        }
+
+        $key = null;
+        if ($objKeyInfo = $objenc->locateKeyInfo($objKey)) {
+            if ($objKeyInfo->isEncrypted) {
+                $objencKey = $objKeyInfo->encryptedCtx;
+                $objKeyInfo->loadKey($pem, false, false);
+                $key = $objencKey->decryptKey($objKeyInfo);
+            } else {
+                // symmetric encryption key support
+                $objKeyInfo->loadKey($pem, false, false);
+            }
+        }
+
+        if (empty($objKey->key)) {
+            $objKey->loadKey($key);
+        }
+
+        return Utils::decryptElement($encryptedData, $objKey);
     }
 
     /**

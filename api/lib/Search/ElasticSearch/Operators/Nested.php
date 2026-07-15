@@ -6,7 +6,7 @@ use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
 
 class Nested extends ElasticOperator
 {
-    protected $data;
+    protected mixed $data;
 
     public function __construct(array $data)
     {

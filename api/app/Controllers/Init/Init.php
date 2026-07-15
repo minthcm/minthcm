@@ -54,10 +54,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use User;
 
-#[\AllowDynamicProperties]
 class Init
 {
-    protected $preferences_controller, $languages_controller, $module_init_controller, $mintRebuildID, $request_language, $user_id, $all_modules;
+    protected Preferences $preferences_controller;
+    protected Languages $languages_controller;
+    protected Module $module_init_controller;
+    protected string $mintRebuildID; // initialized in __invoke
+    protected string $request_language; // initialized in __invoke
+    protected string $user_id; // initialized in __invoke
+    protected array $all_modules; // initialized in getFullData
 
     const VIEW_META = [
         "DetailView",
@@ -128,6 +133,8 @@ class Init
             chdir('../api');
         }
         $response_body['mintRebuildID'] = $this->mintRebuildID;
+        $response_body['masquerade_user_id'] = $_SESSION['masquerade_user_id'] ?? null;
+        $response_body['masquerade_admin_name'] = $_SESSION['masquerade_admin_name'] ?? null;
         $response_body['system_name'] = $GLOBALS['system_config']->settings['system_name'];
         global $sugar_config;
         $response_body['upload_maxsize'] = $sugar_config['upload_maxsize'] ?? '3000000';

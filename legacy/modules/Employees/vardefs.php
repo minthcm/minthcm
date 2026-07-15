@@ -50,6 +50,9 @@ if (empty($dictionary['User'])) {
     include 'modules/Users/vardefs.php';
 }
 $dictionary['Employee'] = $dictionary['User'];
+// Override doctrineEntity for Employees (to avoid using the UsersRepository for Employees)
+$dictionary['Employee']['doctrineEntity'] = array(
+);
 //users of employees modules are not allowed to change the employee/user status.
 $dictionary['Employee']['fields']['status']['massupdate'] = false;
 $dictionary['Employee']['fields']['is_admin']['massupdate'] = false;

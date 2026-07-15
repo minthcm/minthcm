@@ -48,11 +48,12 @@ namespace MintHCM\Lib\Search\Base;
 
 use MintHCM\Lib\Search\Base\SearchResult;
 
-#[\AllowDynamicProperties]
 abstract class SearchManager
 {
-    protected $params,$query, $result_manager ;
-    protected $elastic_acl = true;
+    protected array $params = [];
+    protected mixed $query = null;
+    protected mixed $result_manager = null;
+    protected bool $elastic_acl = true;
 
     public function __construct($params = [])
     {

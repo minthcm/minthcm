@@ -1,5 +1,7 @@
 <?php
 
+require_once 'TraitNameResolver.php';
+
 class EntityCreatorDataGenerator
 {
     public const ORM_TYPE_MAP = [
@@ -77,11 +79,28 @@ class EntityCreatorDataGenerator
             'constructorFields' => [],
             'generate_custom_entity' => (new CustomEntityCreator($this->moduleName, $this->vardefs))->shouldGenerateCustomEntity(),
             'additionalMethods' => [],
+            'traits' => [],
         ];
         $repositorySet = !empty($this->vardefs['doctrineEntity']['repository']);
         if ($repositorySet) {
             $this->data['repositoryClassPath'] = EntityCreator::REPOSITORY_FOLDER_PATH . $this->vardefs['doctrineEntity']['repository'];
             $this->data['repositorySet'] = true;
+        }
+
+        // Auto-detect PersonTrait: module uses 'person' template
+        if (!empty($this->vardefs['templates']) && in_array('person', $this->vardefs['templates'])) {
+            if (empty($this->vardefs['doctrineEntity']['traits'])) {
+                $this->vardefs['doctrineEntity']['traits'] = [];
+            }
+            if (!in_array('Person', $this->vardefs['doctrineEntity']['traits'])) {
+                array_unshift($this->vardefs['doctrineEntity']['traits'], 'Person');
+            }
+        }
+
+        if (!empty($this->vardefs['doctrineEntity']['traits'])) {
+            foreach ($this->vardefs['doctrineEntity']['traits'] as $traitShortName) {
+                $this->data['traits'][] = TraitNameResolver::resolve($traitShortName);
+            }
         }
     }
 
@@ -130,9 +149,14 @@ class EntityCreatorDataGenerator
 
             $attributes[] = 'type="' . $ORM_type . '"';
 
-            if (!empty($fieldDef['len'])) {
+            if ('decimal' === $ORM_type) {
+                if (!empty($fieldDef['len']) && str_contains($fieldDef['len'], ',')) {
+                    [$precision, $scale] = explode(',', $fieldDef['len'], 2);
+                    $attributes[] = 'precision=' . (int) trim($precision) . ', scale=' . (int) trim($scale);
+                }
+            } elseif (!empty($fieldDef['len'])) {
                 $attributes[] = 'length="' . $fieldDef['len'] . '"';
-            } else if ('id' == $type || 'relate' == $type) {
+            } elseif ('id' == $type || 'relate' == $type) {
                 $attributes[] = 'length="36"';
             }
 
@@ -141,6 +165,10 @@ class EntityCreatorDataGenerator
                 if ('id' == $type) {
                     $field['CustomIdGenerator'] = 'class=UuidGenerator::class';
                 }
+            }
+
+            if ('date' === $ORM_type && empty($fieldDef['required'])) {
+                $attributes[] = 'nullable=true';
             }
         }
 
@@ -305,13 +333,18 @@ class EntityCreatorDataGenerator
         $this->data['relationshipFields'][] = $relationshipField;
         if (!in_array($target['module'], $entityCreator['CreatingEntities']) && !empty($dictionary[$target['module']])) {
             $entityCreator['CreatingEntities'][] = $target['module'];
-            try{
-            (new EntityCreator($target['module'], $dictionary[$target['module']]))->run();
-            (new CustomEntityCreator($target['module'], $dictionary[$target['module']]))->run();
-            } catch (Exception $e) {
-                sugar_die("Exception caught while creating related entity: " . $e->getMessage());
+            try {
+                (new EntityCreator($target['module'], $dictionary[$target['module']]))->run();
+                (new CustomEntityCreator($target['module'], $dictionary[$target['module']]))->run();
+            } catch (Throwable $e) {
+                $msg = "EntityCreator: failed to create related entity '{$target['module']}': " . $e->getMessage();
+                $GLOBALS['log']->fatal($msg);
+                if (!EntityCreatorManager::$errorShown) {
+                    echo "EntityCreator: An error occurred while creating entities. Please check the admin logs.<br/>\n";
+                    EntityCreatorManager::$errorShown = true;
+                }
+            }
         }
-    }
     }
 
     protected function getRelationshipLinkFieldName($relationshipDef, $side, $relationshipName)
@@ -481,6 +514,10 @@ class EntityCreatorDataGenerator
                 break;
             }
         }
+
+        foreach ($this->data['traits'] as $resolvedTraitName) {
+            $this->data['additionalUseStatements'][] = 'use ' . TraitNameResolver::TRAIT_NAMESPACE . $resolvedTraitName;
+        }
     }
 
     protected function buildConstructorFields()
@@ -498,6 +535,12 @@ class EntityCreatorDataGenerator
 
     protected function buildAdditionalMethods()
     {
+        // Skip email1/getSerialized if PersonTrait will handle it
+        if (in_array('PersonTrait', $this->data['traits'])) {
+            $this->buildSemanticOneToOneGetters();
+            return;
+        }
+
         if (!empty($this->vardefs['fields']['email1'])) {
             $this->data['additionalMethods'][] = <<<'PHP'
     public function getEmail1(): string

@@ -42,6 +42,9 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+
+
+
 *}
 
 <script type='text/javascript'>var fileFields = new Array();</script>
@@ -200,7 +203,6 @@ function checkFileType(id, submit) {
  }
  function processPDFClass(){
      document.getElementById('settingsForTCPDF').style.display="";
-    // document.getElementById('fontManager').style.display="";
      if(!check_form('ConfigureSugarpdfSettings')){
          for (var i = 0; i <document.ConfigureSugarpdfSettings.sugarpdf_pdf_class.length; i++) {
              if(document.ConfigureSugarpdfSettings.sugarpdf_pdf_class[i].value == "TCPDF"){
@@ -216,7 +218,6 @@ function checkFileType(id, submit) {
          }
          if(chosen == "EZPDF"){
              document.getElementById('settingsForTCPDF').style.display="none";
-             //document.getElementById('fontManager').style.display="none";
          }
      }
  }

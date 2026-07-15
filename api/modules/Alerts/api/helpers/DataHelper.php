@@ -4,7 +4,6 @@ namespace MintHCM\Modules\Alerts\api\helpers;
 
 use Alert;
 
-#[\AllowDynamicProperties]
 class DataHelper
 {
     public static function isAssignedUserCurrentUser(Alert $alert)

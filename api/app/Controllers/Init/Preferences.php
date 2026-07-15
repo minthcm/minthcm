@@ -54,11 +54,10 @@ use MintHCM\Utils\LuxonMapper;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class Preferences
 {
-    protected $entityManager;
-    protected $user_preferences;
+    protected EntityManagerInterface $entityManager;
+    protected array $user_preferences = [];
 
     public function __construct(EntityManagerInterface $entityManager)
     {

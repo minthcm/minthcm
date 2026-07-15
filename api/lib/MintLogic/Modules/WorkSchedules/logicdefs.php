@@ -13,7 +13,7 @@ use MintHCM\Lib\MintLogic\Modules\WorkSchedules\Validators\WorkSchedulesWorkplac
 return [
     'rules' => [
         'init' => [
-            'hooks' => [Hook::ALL],
+            'hooks' => [Hook::INIT],
             'logic' => [
                 'visible' => [
                     'occasional_leave_type' => false,
@@ -107,23 +107,34 @@ return [
                     'workplace_name' => WorkSchedulesWorkplaceValidator::class,
                 ],
                 'update' => function ($bean) {
+                    if(!empty($bean->workplace_id)){
+                        $fallback_workplace = BeanFactory::getBean('Workplaces', $bean->workplace_id);
+                        $fallback_workplace_name = $fallback_workplace->name;
+                    }
                     if (empty($bean->workplace_id) || empty($bean->workplace_name)) {
                         global $timedate;
                         $employee = BeanFactory::getBean('Employees', $bean->assigned_user_id);
                         $date_start = $timedate->to_db_date($bean->date_start);
                         $date_end = $timedate->to_db_date($bean->date_end);
                         if (empty($employee->id)) {
-                            return [];
+                            return [
+                                'workplace_name' => $bean->workplace_name ?? $fallback_workplace_name ?? '',
+                            ];
                         }
                         $activeWorkplace = $employee->getActiveWorkplaces(null, $date_start, $date_end);
-                        if (!empty($activeWorkplace)) {
-                            return [];
+                        if (empty($activeWorkplace)) {
+                            return [
+                                'workplace_name' => $bean->workplace_name ?? $fallback_workplace_name ?? '',
+                            ];
                         }
                         return [
-                            'workplace_id' => $activeWorkplace['id'],
-                            'workplace_name' => $activeWorkplace['name'],
+                            'workplace_id' => $activeWorkplace[0]['id'],
+                            'workplace_name' => $activeWorkplace[0]['name'],
                         ];
                     }
+                    return [
+                        'workplace_name' => $bean->workplace_name ?? $fallback_workplace_name ?? '',
+                    ];
                 },
             ],
         ],
@@ -260,7 +271,7 @@ return [
             ],
         ],
         [
-            'hooks' => [Hook::INIT, Hook::CHANGE],
+            'hooks' => [Hook::INIT],
             'triggerFields' => ['assigned_user_id'],
             'trigger' => true,
             'logic' => [
@@ -279,6 +290,23 @@ return [
                     return [
                         'assigned_user_id' => $current_user->id,
                         'assigned_user_name' => $current_user->name
+                    ];
+                },
+            ],
+        ],
+        [
+            'hooks' => [Hook::CHANGE],
+            'triggerFields' => ['assigned_user_id'],
+            'trigger' => Formula::notEmpty('$assigned_user_id'),
+            'logic' => [
+                'update' => function ($bean) {
+                    $user = BeanFactory::getBean('Users', $bean->assigned_user_id);
+                    if(empty($user->id) || $user->id !== $bean->assigned_user_id){
+                        return [];
+                    }
+                    return [
+                        'assigned_user_id' => $user->id,
+                        'assigned_user_name' => $user->name
                     ];
                 },
             ],

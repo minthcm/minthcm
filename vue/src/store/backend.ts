@@ -36,6 +36,8 @@ interface InitResponse {
     systemName: string
     upload_maxsize: string
     field_variables: string[]
+    masquerade_user_id: string | null
+    masquerade_admin_name: string | null
 }
 export const useBackendStore = defineStore('backend', () => {
     const router = useRouter()
@@ -51,8 +53,22 @@ export const useBackendStore = defineStore('backend', () => {
     const initialLoading = ref(true)
     const isInstalled = ref(true)
     const cachedConfig = ref()
+    const ssoRedirectUrl = ref<string | null>(null)
+    let initPromise: Promise<void> | null = null
 
     async function init() {
+        if (initPromise) {
+            return initPromise
+        }
+        initPromise = runInit()
+        try {
+            await initPromise
+        } finally {
+            initPromise = null
+        }
+    }
+
+    async function runInit() {
         const auth = useAuthStore()
         try {
             if (typeof caches === "undefined") {
@@ -88,6 +104,8 @@ export const useBackendStore = defineStore('backend', () => {
                 cachedConfig.value.systemName = initResponse.data.system_name
                 cachedConfig.value.upload_maxsize = initResponse.data.upload_maxsize
                 cachedConfig.value.field_variables = initResponse.data.field_variables
+                cachedConfig.value.masquerade_user_id = initResponse.data.masquerade_user_id
+                cachedConfig.value.masquerade_admin_name = initResponse.data.masquerade_admin_name
                 if (initResponse.data.languages && current_language !== initResponse.data.languages?.current_language) {
                     cachedConfig.value.languages = initResponse.data.languages
                 }
@@ -132,6 +150,7 @@ export const useBackendStore = defineStore('backend', () => {
                 })
             }
             preferences.global = initData.value.global ?? null
+            ssoRedirectUrl.value = null
             alerts.init()
             favorites.fetch()
             recents.fetch()
@@ -146,6 +165,7 @@ export const useBackendStore = defineStore('backend', () => {
                         rawError: true,
                     })
                 ).data
+                ssoRedirectUrl.value = loginData?.redirect_url ?? null
                 languages.languages = {
                     app_strings: loginData.languages?.app_strings ?? {},
                     app_list_strings: loginData.languages?.app_list_strings ?? {},
@@ -183,5 +203,6 @@ export const useBackendStore = defineStore('backend', () => {
         isInit,
         initData,
         isInstalled,
+        ssoRedirectUrl,
     }
 })

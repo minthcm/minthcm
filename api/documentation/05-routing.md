@@ -66,6 +66,41 @@ $routes = [
 
 **Important:** Routes with `'auth' => false` are publicly accessible without JWT token. Use carefully!
 
+#### Optional Authentication Flag
+
+Some endpoints need to work both with and without authentication — for example, an endpoint that returns different data depending on whether the user is logged in, or a logout endpoint that should not fail if the session already expired.
+
+Set `optional_auth` to `true` (alongside `auth => false`) to enable this behavior:
+
+```php
+$routes = [
+    'public.with.context' => [
+        'method' => 'GET',
+        'path' => '/data',
+        'class' => DataController::class,
+        'function' => 'getData',
+        'options' => [
+            'auth' => false,
+            'optional_auth' => true,  // Try to authenticate, but don't fail if it can't
+        ],
+    ],
+];
+```
+
+When `optional_auth` is `true`, the `AuthMiddleware` **attempts** to validate the token or session. If validation succeeds, `$current_user` is set as usual. If it fails, the request proceeds anyway — no `401` is thrown.
+
+**Summary of `auth` / `optional_auth` combinations:**
+
+| `auth` | `optional_auth` | Behavior |
+|--------|-----------------|----------|
+| `true` (default) | `false` (default) | **Required** — valid token/session mandatory; `401` on failure |
+| `false` | `false` | **Public** — authentication is skipped entirely |
+| `false` | `true` | **Optional** — authentication is attempted but failure is allowed |
+
+**Use cases:**
+- `/logout` — should cleanly terminate a session if one exists, but must not break if the session is already gone
+- `/languages` — returns language data for anyone, but may personalize the response for authenticated users
+
 ### Route Name
 
 The array key becomes the route name, used for:

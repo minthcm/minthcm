@@ -61,7 +61,8 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
     white-space: nowrap;
 
     &:focus-visible {
-        outline: thin solid #0002;
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: 2px;
     }
 }
 
@@ -105,6 +106,10 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
     &.active {
         color: #f5fbfa;
         background: rgb(var(--v-theme-secondary));
+    }
+    &:focus-visible {
+        outline: 2px solid rgb(var(--v-theme-secondary));
+        outline-offset: 2px;
     }
 }
 

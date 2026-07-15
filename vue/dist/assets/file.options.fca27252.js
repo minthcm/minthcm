@@ -1,0 +1,1 @@
+import{aZ as t,X as a}from"./index.85f34d44.js";const n={validator:e=>{if(!e||!(e instanceof File))return;const o=t().global?.upload_maxsize;if(o&&e&&e.size>o){const s=Math.round(o/1e3/1e3);return a().label("LBL_UPLOAD_MAXSIZE_EXCEEDED",null,{size_mb:s})}}};export{n as default};

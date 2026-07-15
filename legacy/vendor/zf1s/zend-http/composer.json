@@ -1,0 +1,31 @@
+{
+    "name": "zf1s/zend-http",
+    "description": "Zend Framework 1 Http package",
+    "keywords": ["framework", "zf1", "zend", "http"],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.1",
+        "ext-ctype": "*",
+        "zf1s/zend-exception": "^1.16.0",
+        "zf1s/zend-loader": "^1.16.0",
+        "zf1s/zend-uri": "^1.16.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Http": "library/"
+        }
+    },
+    "suggest": {
+        "ext-curl": "Used in special situations or with special adapters (Zend_Http_Client_Adapter_Curl)",
+        "ext-fileinfo": "Used in special situations or with special adapters (Zend_Http_Client)"
+    },
+    "replace": {
+        "zf1/zend-http": "^1.12"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

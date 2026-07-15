@@ -13,6 +13,7 @@ namespace Symfony\Component\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -20,11 +21,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 class DateTimeValidator extends DateValidator
 {
-    /**
-     * @deprecated since version 3.1, to be removed in 4.0.
-     */
-    const PATTERN = '/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/';
-
     /**
      * {@inheritdoc}
      */
@@ -34,19 +30,19 @@ class DateTimeValidator extends DateValidator
             throw new UnexpectedTypeException($constraint, DateTime::class);
         }
 
-        if (null === $value || '' === $value || $value instanceof \DateTimeInterface) {
+        if (null === $value || '' === $value) {
             return;
         }
 
-        if (!is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
-            throw new UnexpectedTypeException($value, 'string');
+        if (!\is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
+            throw new UnexpectedValueException($value, 'string');
         }
 
         $value = (string) $value;
 
         \DateTime::createFromFormat($constraint->format, $value);
 
-        $errors = \DateTime::getLastErrors();
+        $errors = \DateTime::getLastErrors() ?: ['error_count' => 0, 'warnings' => []];
 
         if (0 < $errors['error_count']) {
             $this->context->buildViolation($constraint->message)
@@ -57,7 +53,7 @@ class DateTimeValidator extends DateValidator
             return;
         }
 
-        if ('+' === substr($constraint->format, -1)) {
+        if (str_ends_with($constraint->format, '+')) {
             $errors['warnings'] = array_filter($errors['warnings'], function ($warning) {
                 return 'Trailing data' !== $warning;
             });

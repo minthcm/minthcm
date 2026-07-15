@@ -58,27 +58,165 @@ The API includes several built-in middlewares:
 
 **Location:** `app/Middlewares/Auth/AuthMiddleware.php`
 
-Validates JWT tokens and sets current user.
+Validates JWT tokens and legacy sessions, and sets the global `$current_user`. Reads the `auth` and `optional_auth` options from the matched route to decide its behavior (see [Routing — Optional Authentication Flag](./05-routing.md#optional-authentication-flag)).
 
 ```php
 public function __invoke(Request $request, RequestHandler $handler): Response
 {
-    // Extract and validate JWT token
-    $token = $this->extractToken($request);
-    
-    if (!$token) {
-        // Allow public routes
-        return $handler->handle($request);
+    [$runLogic, $optionalAuth] = $this->getAuthOptions($request);
+
+    if ($runLogic || $optionalAuth) {
+        // 1. No session cookie → validate OAuth2 Bearer token
+        // 2. Session cookie exists → validate legacy session + refresh token if needed
+        // If validation fails and $optionalAuth is false → throw HttpUnauthorizedException
+        // If validation fails and $optionalAuth is true  → proceed without user context
     }
-    
-    $user = $this->validateToken($token);
-    
-    // Add user to request attributes
-    $request = $request->withAttribute('current_user', $user);
-    
+
     return $handler->handle($request);
 }
 ```
+
+#### How authentication options are resolved
+
+```php
+protected function getAuthOptions(Request $request): array
+{
+    $route_data = $this->getRouteData($request);
+    return [
+        $route_data['options']['auth'] ?? true,            // default: authentication required
+        $route_data['options']['optional_auth'] ?? false,   // default: failure is not allowed
+    ];
+}
+```
+
+## Authentication Methods
+
+MintHCM supports four authentication methods. The active method is determined by the legacy configuration and is transparent to the API layer — the `AuthMiddleware` delegates credential validation to the legacy `AuthenticationController`, which picks the correct backend.
+
+### Core (SugarAuthenticate) — default
+
+Standard username + password authentication against the `users` table. This is the default when no external provider is configured.
+
+- **Config:** `$sugar_config['authenticationClass']` is unset or `'SugarAuthenticate'`
+- **Login flow:** `POST /api/login` with `username`, `password`, and `client_secret` → OAuth2 token pair (access + refresh)
+- **Implementation:** `legacy/modules/Users/authentication/SugarAuthenticate/`
+
+### LDAP (LDAPAuthenticate)
+
+Authenticates users against an external LDAP / Active Directory server. User records are still stored in MintHCM's `users` table — LDAP is used only for credential verification (and optional attribute sync on login).
+
+- **Config toggle:** Admin → Password Management → Enable LDAP Authentication (`system_ldap_enabled` setting in `config` table)
+- **Key config values (stored in `config` table):**
+
+  | Setting | Description | Default |
+  |---------|-------------|---------|
+  | `ldap_hostname` | LDAP server URL | — |
+  | `ldap_port` | Connection port | `389` |
+  | `ldap_base_dn` | Base DN for user search | — |
+  | `ldap_bind_attr` | Attribute used to bind (e.g. `cn`, `uid`) | — |
+  | `ldap_login_attr` | Attribute matching the MintHCM username | — |
+  | `ldap_group` | Enable group membership check | — |
+  | `ldap_group_user_attr` | User attribute for group comparison | — |
+  | `ldap_group_attr` | Group attribute to compare | — |
+
+- **Attribute mapping** (`legacy/modules/Users/authentication/LDAPAuthenticate/LDAPConfigs/default.php`):
+
+  ```php
+  // LDAP attribute → MintHCM user field
+  'givenName'              => 'first_name',
+  'sn'                     => 'last_name',
+  'mail'                   => 'email1',
+  'telephoneNumber'        => 'phone_work',
+  'facsimileTelephoneNumber' => 'phone_fax',
+  'mobile'                 => 'phone_mobile',
+  'street'                 => 'primary_address_street',
+  'l'                      => 'primary_address_city',
+  'st'                     => 'primary_address_state',
+  'postalCode'             => 'primary_address_postalcode',
+  'c'                      => 'primary_address_country',
+  ```
+
+- **LDAP options set by the connector:**
+  - `LDAP_OPT_PROTOCOL_VERSION` = 3
+  - `LDAP_OPT_REFERRALS` = 0 (required for Active Directory)
+  - `LDAP_OPT_NETWORK_TIMEOUT` = 60 s
+- **Login flow:** Same `POST /api/login` endpoint — the API layer calls `AuthenticationController::loginAuthenticate()` which transparently uses `LDAPAuthenticateUser` when LDAP is enabled.
+- **Implementation:** `legacy/modules/Users/authentication/LDAPAuthenticate/`
+- **API-side check:** `AuthController::IsLdapOn()` and `UsersRepository::isLdapOn()` both read `system_ldap_enabled` from the `config` table.
+
+### SAML 2.0 (SAML2Authenticate)
+
+Federated SSO via an external Identity Provider (IdP) using the SAML 2.0 protocol. Uses the **OneLogin php-saml** library.
+
+- **Config toggle:** Set `$sugar_config['authenticationClass'] = 'SAML2Authenticate';` in `config_override.php`
+- **SAML settings:** `legacy/modules/Users/authentication/SAML2Authenticate/lib/onelogin/settings.php` — standard OneLogin settings array (SP entity ID, IdP SSO/SLO URLs, certificates, NameID format, etc.)
+- **SP Metadata:** `legacy/modules/Users/authentication/SAML2Authenticate/SAML2Metadata.php` — generates XML metadata for registering the Service Provider with the IdP.
+- **Login flow:**
+  1. The frontend detects SAML is active (via `AuthHelper::isSAML2On()`)
+  2. The user is redirected to the IdP's SSO URL
+  3. The IdP posts a `SAMLResponse` back to MintHCM's ACS endpoint
+  4. `SAML2Authenticate::pre_login()` validates the response and stores the NameID in `$_SESSION['samlNameId']`
+  5. `SAML2AuthenticateUser::loadUserOnLogin()` matches the NameID to a `users` record
+  6. An OAuth2 token pair is issued as with any other login
+- **Logout flow:** `POST /api/logout` calls `AuthenticationController->authController->preLogout()` and `->logout()`, which triggers SAML SLO if configured. The logout route uses `optional_auth` because at the moment of SLO callback the session may already be terminated by the IdP.
+- **User matching:** SAML NameID is matched against `User::findUserPassword($name)`. Users must exist in MintHCM — SAML does not auto-provision accounts. The `external_auth_only` flag on a user record indicates the user authenticates exclusively via SAML (no local password).
+- **Implementation:** `legacy/modules/Users/authentication/SAML2Authenticate/`
+- **API-side check:** `AuthHelper::isSAML2On()` reads `$sugar_config['authenticationClass']`.
+
+### OpenID Connect (OIDCAuthenticate)
+
+Federated SSO via an external Identity Provider (IdP) using the OpenID Connect authorization code flow. Implemented without a third-party library — the class talks to the IdP's authorization and token endpoints directly.
+
+- **Config toggle:** Set `$sugar_config['authenticationClass'] = 'OIDCAuthenticate';` in `config_override.php`
+- **OIDC settings** (stored in `config` table, editable via Admin → Password Management): `OIDC_clientId`, `OIDC_clientSecret`, `OIDC_authorizationEndpoint`, `OIDC_tokenEndpoint`, `OIDC_logoutEndpoint` (optional), `OIDC_scope` (default `openid profile email`), `OIDC_usernameClaim` (default `preferred_username`)
+- **Login flow:**
+  1. The frontend detects OIDC is active and the user is redirected to the IdP's authorization endpoint (`OIDCAuthenticate::pre_login()` builds the URL and stores a CSRF `state` value in both the session and a short-lived `oidc_state` cookie)
+  2. The IdP redirects back to MintHCM's login URL with `?code=...&state=...`
+  3. `OIDCAuthenticate::pre_login()` validates `state`, exchanges the code for tokens at the token endpoint, and decodes the ID token to resolve the username from the configured claim
+  4. `OIDCAuthenticateUser::loadUserOnLogin()` matches the resolved username to a `users` record
+  5. An OAuth2 token pair is issued as with any other login
+- **Logout flow:** `POST /api/logout` triggers RP-Initiated Logout against `OIDC_logoutEndpoint` when configured, passing `id_token_hint` and `post_logout_redirect_uri`.
+- **User matching:** the resolved username is matched against `User::findUserPassword($name)`. Users must exist in MintHCM with `external_auth_only = 1` — OIDC does not auto-provision accounts.
+- **Implementation:** `legacy/modules/Users/authentication/OIDCAuthenticate/`
+- **API-side check:** `AuthHelper::isOIDCOn()` reads `$sugar_config['authenticationClass']`.
+
+### Detecting active method from the API
+
+`AuthController` exposes a private `IsLdapOn()` helper used internally during login/logout. SAML and OIDC detection live in the shared `MintHCM\Api\Utils\AuthHelper` class, used by `AuthController`, `LoginAction` and `UsersRepository` alike:
+
+```php
+// AuthController — returns true when LDAP authentication is enabled
+private function IsLdapOn(): bool
+{
+    global $system_config;
+    return !empty($system_config->settings['system_ldap_enabled'])
+        && $system_config->settings['system_ldap_enabled'] == true;
+}
+
+// AuthHelper — returns true when SAML 2.0 authentication is active
+public static function isSAML2On(): bool
+{
+    global $sugar_config;
+    return !empty($sugar_config['authenticationClass'])
+        && (
+            $sugar_config['authenticationClass'] == 'SAML2Authenticate'
+            || is_subclass_of($sugar_config['authenticationClass'], 'SAML2Authenticate')
+        );
+}
+
+// AuthHelper — returns true when OpenID Connect authentication is active
+public static function isOIDCOn(): bool
+{
+    global $sugar_config;
+    return !empty($sugar_config['authenticationClass'])
+        && (
+            $sugar_config['authenticationClass'] === 'OIDCAuthenticate'
+            || is_subclass_of($sugar_config['authenticationClass'], 'OIDCAuthenticate')
+        );
+}
+```
+
+The `LoginAction` also exposes `ldap_enabled` in the login response body (`$response_body['global']['ldap_enabled']`) so the frontend can adapt the login form accordingly.
 
 ### Route Access Middleware
 

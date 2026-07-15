@@ -29,14 +29,10 @@ class PropertyPath
      * returned. Otherwise, the concatenation of the two paths is returned,
      * separated by a dot (".").
      *
-     * @param string $basePath The base path
-     * @param string $subPath  The path to append
-     *
-     * @return string The concatenation of the two property paths
+     * @return string
      */
-    public static function append($basePath, $subPath)
+    public static function append(string $basePath, string $subPath)
     {
-        $subPath = (string) $subPath;
         if ('' !== $subPath) {
             if ('[' === $subPath[0]) {
                 return $basePath.$subPath;

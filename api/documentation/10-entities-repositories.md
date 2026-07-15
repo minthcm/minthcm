@@ -10,13 +10,15 @@ Entities are PHP classes that represent database tables. Each property maps to a
 
 **Important:** Entity classes in MintHCM are **automatically generated** from vardefs (variable definitions) during the "Quick Repair and Rebuild" process in the Administration Panel.
 
+> **Entities are NOT part of the repository.** As of the entity-generation rework, `api/app/Entities/*.php` files are **git-ignored** (see `.gitignore`) and produced locally during Quick Repair / build. Do not commit them. Reusable, hand-written entity behaviour now lives in **Traits** under `api/app/EntityTraits/` (see [Entity Traits](#entity-traits) below), which *are* versioned and referenced from vardefs. The only entity file still tracked is the OAuth2 entity.
+
 **How it works:**
 
 1. **Vardefs** define field structures in legacy MintHCM modules (located in `modules/{ModuleName}/vardefs.php`)
 2. Navigate to **Admin Panel** → **Repair** → **Quick Repair and Rebuild**
 3. The system scans all module vardefs
 4. **Entity Creator** automatically generates Doctrine Entity classes in `api/app/Entities/`
-5. Each module's vardefs are converted to Doctrine annotations
+5. Each module's vardefs are converted to Doctrine annotations, and any Traits declared in the vardefs are wired in via `use` statements
 
 **Example vardefs to Entity conversion:**
 
@@ -597,7 +599,55 @@ public function findActive(): array
 
 ## Extending Entities and Repositories
 
-Although entities are auto-generated from vardefs, the Entity Creator uses **protected sections** that allow you to safely add custom code that won't be overwritten during regeneration.
+Because the generated `api/app/Entities/*.php` files are git-ignored and regenerated on every build, **hand-written code must not live directly in an entity file** — it would not be versioned and would be lost. Reusable entity behaviour is instead placed in **Traits** (`api/app/EntityTraits/`) and referenced from the module's vardefs. New database-mapped properties still go through the `custom/` directory (see [Extending via Custom Directory](#extending-via-custom-directory)).
+
+### Entity Traits
+
+Traits hold hand-written, reusable methods that the Entity Creator wires into the generated entity. Unlike inline entity code, Traits are committed to the repository and survive regeneration.
+
+**How it works:**
+
+1. Create a trait in `api/app/EntityTraits/` under the `MintHCM\Api\EntityTraits` namespace. Name it `{ShortName}Trait` (e.g. `UsersTrait`, `PersonTrait`).
+2. Declare which traits a module uses in its vardefs under `doctrineEntity.traits`, using the **short name** (without the `Trait` suffix).
+3. On Quick Repair, the Entity Creator resolves each short name via `TraitNameResolver` (appends `Trait`, prepends the namespace), adds the `use` statement, and emits `use {Trait};` inside the generated class.
+
+**Declaring traits in vardefs:**
+
+```php
+// legacy/modules/Users/vardefs.php
+$dictionary['User'] = array(
+    'table' => 'users',
+    'doctrineEntity' => array(
+        'repository' => 'UsersRepository',
+        'traits' => array('Users'),   // -> MintHCM\Api\EntityTraits\UsersTrait
+    ),
+    // ...
+);
+```
+
+**Defining a trait:**
+
+```php
+// api/app/EntityTraits/UsersTrait.php
+namespace MintHCM\Api\EntityTraits;
+
+trait UsersTrait
+{
+    public function getIdentifier(): string
+    {
+        return $this->id;
+    }
+
+    public function checkPassword(string $password): bool
+    {
+        // ...
+    }
+}
+```
+
+**The `person` template shortcut:** modules whose vardefs include `'templates' => array('person', ...)` automatically receive `PersonTrait` (providing `getFullName()`, `getName()`, `getEmail1()`, `getSerialized()`) — no explicit `traits` entry is needed. When `PersonTrait` is applied, the Entity Creator skips generating its own `getEmail1()`/`getSerialized()` to avoid duplicate declarations.
+
+**Note on Employees:** the `Employee` module reuses the `User` vardefs but overrides `doctrineEntity` to an empty array, so the `Employees` entity does not inherit the `UsersRepository` or `UsersTrait`.
 
 ### Understanding Protected Sections
 
@@ -631,7 +681,9 @@ public function __construct()
 
 ### Adding Custom Code Directly to Generated Entities
 
-You can add custom code **outside** the auto-generated sections:
+> ⚠️ **Discouraged.** Since generated entity files are git-ignored and rebuilt from scratch, code added directly to a `*.php` entity file (even outside the auto-generated sections) is **not versioned and is lost on regeneration**. Use an [Entity Trait](#entity-traits) for reusable methods, or the [custom directory](#extending-via-custom-directory) for new mapped properties. The pattern below is retained only to explain the protected-section markers the generator emits.
+
+You can technically place code **outside** the auto-generated sections, but prefer Traits:
 
 **File:** `app/Entities/Users.php`
 
@@ -717,7 +769,7 @@ class Users
 
 ### Example: Real Users Entity with Custom Methods
 
-Looking at the actual `app/Entities/Users.php`, you can see custom methods added outside auto-generated sections:
+Methods such as `getIdentifier()`, `getFullName()` and `checkPassword()` used to be added directly to `app/Entities/Users.php`. They now live in `api/app/EntityTraits/UsersTrait.php` and `PersonTrait.php`, and the generator emits `use UsersTrait;` / `use PersonTrait;` into the `Users` entity based on its vardefs. The equivalent generated result looks like:
 
 ```php
 // Auto-generated SectionMethods section start
@@ -774,14 +826,13 @@ public function checkPassword(string $password): bool
 }
 ```
 
-### When to Use Direct Extension vs Custom Directory
+### When to Use a Trait vs Custom Directory
 
-**Use direct extension (add code outside auto-generated sections):**
+**Use an Entity Trait (`api/app/EntityTraits/`, declared in vardefs):**
 - ✅ Adding helper methods (getFullName, isActive, etc.)
 - ✅ Adding business logic methods
-- ✅ Adding computed properties
-- ✅ Adding custom imports
-- ✅ When you want changes in the same file
+- ✅ Sharing behaviour across several entities (e.g. `PersonTrait`)
+- ✅ Any hand-written method that must survive regeneration and be versioned
 
 **Use custom directory extension:**
 - ✅ Adding new Doctrine-mapped properties (@ORM\Column)

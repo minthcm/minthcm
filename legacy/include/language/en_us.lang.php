@@ -2266,6 +2266,7 @@ $app_strings = array(
     'LBL_GENERATEONBOARDINGOFFBOARDING_START_DATE' => 'Start Date',
     'LBL_GENERATEONBOARDINGOFFBOARDING_SUCCESS' => 'Generation has been started',
     'LBL_GENERATEONBOARDINGOFFBOARDING_ERROR' => 'Generation failed',
+    'LBL_GENERATEONBOARDINGOFFBOARDING_ERROR_EMPLOYEE_STATUS' => 'Invalid Employee Status',
     'LBL_GENERATEONBOARDINGOFFBOARDING_TEMPLATE' => 'Template',
     'LBL_GENERATEONBOARDINGOFFBOARDING_POPUP_TITLE' => 'Generate',
     'LBL_SUBORDINATES_FILTER' => 'My Subordinates',
@@ -4616,6 +4617,8 @@ $app_strings['LBL_MINT4_ALERTS_DELETE_ALL_CANCEL'] = 'Cancel';
 // Login, Forget Password, Reset Password
 $app_strings['LBL_MINT4_AUTH_LOGIN_TITLE'] = 'Login';
 $app_strings['LBL_MINT4_AUTH_LOGIN_BTN'] = 'Log in';
+$app_strings['LBL_MINT4_AUTH_SSO_LOGIN_BTN'] = 'Log in with SSO';
+$app_strings['LBL_MINT4_AUTH_OR_LOCAL_LOGIN'] = 'or log in with a local account';
 $app_strings['LBL_MINT4_AUTH_BACK_TO_LOGIN'] = 'Back to login';
 $app_strings['LBL_MINT4_AUTH_LOGIN_ERROR'] = 'Incorrect email or password, please try another one.';
 $app_strings['LBL_MINT4_AUTH_FORGET_TITLE'] = 'Forgot Password';
@@ -4725,7 +4728,7 @@ $app_strings['LBL_MINT4_MASS_DELETE_CONFIRM'] = 'Are you sure you want to delete
 $app_strings['LBL_MINT4_MASS_DELETE_ERROR'] = 'Failed to delete selected items';
 
 $app_list_strings['dropzone_labels'] = [
-    'dictDefaultMessage' => "Drop files here or click to upload<br />(Maximum file size is 3MB)",
+    'dictDefaultMessage' => "Click to add attachment / drag files here",
     'dictFallbackMessage' => 'Your browser does not support drag\'n\'drop file uploads',
     'dictFileTooBig' => 'The file size is too large',
     'dictInvalidFileType' => 'You can\'t upload files of this type',
@@ -4736,7 +4739,6 @@ $app_list_strings['dropzone_labels'] = [
     'dictRemoveFile' => 'Remove file',
     'dictMaxFilesExceeded' => 'You can not upload any more files',
 ];
-$app_strings['LBL_DEFAULT_DROPZONE_MESSAGE'] = "Drop files here or click to upload<br />(Maximum file size is {upload_maxsize} MB)";
 $app_list_strings['moduleList']['Files'] = 'Files';
 $app_list_strings['moduleListSingular']['Files'] = 'File';
 $app_list_strings['parent_type_display_for_files'] = array(
@@ -4918,6 +4920,7 @@ $app_strings['LBL_WORKSCHEDULES_NOT_PLANNED_FOR_TWO_WEEKS'] = 'Get notified if W
 $app_strings['LBL_WORKSCHEDULESACCEPTANCE'] = 'Get notified if the work schedule is approved by the supervisor';
 $app_strings['LBL_CLEAR_BUTTON_KANBAN_LABEL'] = 'Clear Filters';
 $app_strings['LBL_KANBAN_UNASSIGNED'] = 'Unassigned';
+
 $app_strings['LBL_LINK_RECORD_BUTTON'] = 'LINK RECORD';
 $app_strings['LBL_EXPAND'] = 'Expand';
 $app_strings['LBL_COLLAPSE'] = 'Collapse';
@@ -4960,10 +4963,33 @@ $app_list_strings['moduleList']['MCPSettings'] = 'MCP Settings';
 $app_list_strings['moduleListSingular']['MCPSettings'] = 'MCP Setting';
 
 $app_strings['LBL_REPEAT_FIELD'] = 'Repeat';
+
 $app_strings['LBL_EVERY'] = 'every';
 $app_strings['LBL_MINT4_AUTH_HIDE_PASSWORD'] = 'Hide Password';
 $app_strings['LBL_MINT4_AUTH_SHOW_PASSWORD'] = 'Show Password';
 $app_strings['LBL_MINT4_AUTH_FORGOT_PASSWORD_MISSING_CREDENTIALS_ERROR'] = 'Missing Email or Username';
+
+$app_strings['LBL_MINT4_MCP_CLIENT_REQUESTING'] = 'is requesting access to your MintHCM account.';
+$app_strings['LBL_MINT4_MCP_PERMISSIONS_HEADER'] = 'Permissions requested:';
+$app_strings['LBL_MINT4_MCP_AUTHORIZE_FAILED'] = 'Authorization failed. Please try again.';
+$app_strings['LBL_MINT4_MCP_REDIRECTING'] = 'Redirecting…';
+$app_strings['LBL_MINT4_MCP_SCOPE_MCP_READ'] = 'Read your data';
+$app_strings['LBL_MINT4_MCP_SCOPE_MCP_WRITE'] = 'Modify your data';
+$app_strings['LBL_MINT4_MCP_SCOPE_OPENID'] = 'Access your identity';
+$app_strings['LBL_MINT4_MCP_SCOPE_PROFILE'] = 'Access your profile information';
+$app_strings['LBL_MINT4_MCP_SCOPE_EMAIL'] = 'Access your email address';
+$app_strings['LBL_MINT4_MCP_AUTHORIZE_BTN'] = 'Authorize';
+$app_strings['LBL_MINT4_MCP_CANCEL_BTN'] = 'Cancel';
+$app_strings['LBL_MINT4_MCP_SESSION_EXPIRED'] = 'This authorization request has expired. Please try again.';
+$app_strings['LBL_MINT4_MCP_SIGNED_IN_AS'] = 'Signed in as';
+
+$app_strings['LBL_ESLIST_MASS_SELECTION_ALL_RECORDS_PAGE'] = 'All records ({number}) selected in this view';
+$app_strings['LBL_ESLIST_MASS_SELECTION_ALL_RECORDS_FILTERS'] = 'Select all records ({number}) available for current filters';
+$app_strings['LBL_ESLIST_MASS_SELECTION_CLEAR'] = 'Clear selection';
+$app_strings['LBL_TREEVIEW_INSERT_COUNT'] = 'Insert count';
+$app_strings['LBL_TREEVIEW_INSERT_FOR_LOOP'] = 'Insert for loop';
+$app_strings['LBL_CREATE_EVENT_TITLE'] = 'Create event';
+$app_strings['LBL_SELECT_EVENT_TYPE'] = 'Select the event type you want to create.';
 $app_strings['LBL_MINT_USER_MENU'] = 'User Menu';
 $app_strings['LBL_MINT_USER_MENU_COMMENT'] = 'Access your profile, settings, administration, and more';
 $app_strings['LBL_KUDOS_NAVBAR_ITEM_ALL'] = 'All';
@@ -4994,3 +5020,59 @@ $app_strings['LBL_KUDOS_DRAWER'] = 'Kudos Drawer';
 $app_strings['LBL_KUDOS_DRAWER_COMMENT'] = 'View details of the kudos, including the message and sender information';
 $app_strings['LBL_MINT_WALL'] = 'Wall';
 $app_strings['LBL_MINT_WALL_COMMENT'] = 'View recent activities, updates, and posts from your employees in one place';
+
+$app_strings['LBL_HOME'] = 'Home';
+$app_strings['LBL_HOME_DESCRIPTION'] = 'Navigate to the home page';
+
+$app_strings['LBL_TIME_FROM'] = 'Time From';
+$app_strings['LBL_TIME_TO'] = 'Time To';
+$app_strings['LBL_CREATING_CYCLIC_RECORDS'] = 'Creating recurring records...';
+$app_strings['LBL_CYCLIC_RECORDS_CREATED'] = 'Recurring records created successfully.';
+$app_strings['LBL_CYCLIC_RECORDS_ERROR'] = 'An error occurred while creating recurring records.';
+$app_strings['LBL_UPDATING_CYCLIC_RECORDS'] = 'Updating recurring records...';
+$app_strings['LBL_CYCLIC_RECORDS_UPDATED'] = 'Recurring records updated successfully.';
+$app_strings['LBL_CYCLIC_RECORDS_UPDATE_ERROR'] = 'An error occurred while updating recurring records.';
+$app_strings['LBL_EDIT_CYCLES_BUTTON_LABEL'] = 'Edit Cycles';
+
+$app_list_strings['mint4_repeat_type_list'] = [
+    '' => 'Never',
+    'daily' => 'Daily',
+    'every_weekday' => 'Every weekday (Mo. - Fr.)',
+    'weekly' => 'Weekly (weekday)',
+    'every_two_weeks' => 'Every 2 weeks (weekday)',
+    'monthly' => 'Monthly',
+    'yearly' => 'Yearly',
+    'custom' => 'Custom',
+];
+
+$app_strings['LBL_REPEAT_PANEL_REPEAT_EVERY'] = 'Repeat every';
+$app_strings['LBL_REPEAT_PANEL_REPEAT_ON'] = 'Repeat on';
+$app_strings['LBL_REPEAT_PANEL_ENDS'] = 'Ends';
+$app_strings['LBL_REPEAT_PANEL_AFTER'] = 'After';
+$app_strings['LBL_REPEAT_PANEL_ON'] = 'On';
+$app_strings['LBL_REPEAT_PANEL_OCCURRENCES'] = 'Occurrences';
+$app_strings['LBL_REPEAT_PANEL_DATE'] = 'Date';
+$app_list_strings['mint4_repeat_panel_interval_unit_list'] = [
+    'day' => 'Day',
+    'week' => 'Week',
+    'month' => 'Month',
+    'year' => 'Year',
+];
+$app_list_strings['mint4_repeat_panel_days_short_list'] = [
+    '1' => 'S',
+    '2' => 'M',
+    '3' => 'T',
+    '4' => 'W',
+    '5' => 'T',
+    '6' => 'F',
+    '7' => 'S',
+];
+$app_list_strings['moduleList']['AIPromptTemplates'] = 'Prompt Templates';
+$app_list_strings['moduleListSingular']['AIPromptTemplate'] = 'Prompt Template';
+# MCP Administration Start
+$app_list_strings['moduleList']['MCPSettings'] = 'MCP Settings';
+$app_list_strings['moduleListSingular']['MCPSettings'] = 'MCP Setting';
+# MCP Administration End
+$app_strings['LBL_LOGIN_AS'] = 'Login As';
+$app_strings['LBL_LOGOUT_AS'] = 'Logout As';
+$app_strings['LBL_MASQUERADE_USER_INACTIVE'] = 'Cannot login as an inactive user.';

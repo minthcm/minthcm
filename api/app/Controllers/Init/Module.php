@@ -56,7 +56,6 @@ use MintHCM\Api\Controllers\MetaController;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use MintHCM\Utils\ConstantsLoader;
 
-#[\AllowDynamicProperties]
 class Module
 {
     const VIEW_META = [
@@ -66,7 +65,11 @@ class Module
         "RecordView",
     ];
 
-    protected $preferences_controller, $sugar_view, $modules_icons, $action_icons, $module_meta_controller;
+    protected MetaController $module_meta_controller;
+    protected Preferences $preferences_controller;
+    protected \SugarView $sugar_view;
+    protected array $modules_icons;
+    protected array $action_icons;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -102,9 +105,8 @@ class Module
 
     public function getModuleLang($module)
     {
-        global $current_language;
         chdir('../legacy/');
-            $response = return_module_language($current_language, $module);
+            $response = return_module_language(get_current_language(), $module);
         chdir('../api/');
         return $response;
     }

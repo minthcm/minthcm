@@ -63,6 +63,9 @@ export const useInstallViewStore = defineStore('install-view', () => {
             if (response.data?.isInstalling) {
                 currentStepNumber.value = INSTALL_CONFIG.steps.length - 1
             }
+            if (response.data?.installError) {
+                errorMsg.value = response.data.installError
+            }
         } catch (err) {
             if ((err as AxiosError).response?.status === 404) {
                 router.push({ name: 'dashboard' })

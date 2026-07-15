@@ -17,6 +17,8 @@ Welcome to the MintHCM API documentation. This guide will help you understand th
 11. [Middlewares](./11-middlewares.md) - Request/response processing
 12. [Testing](./12-testing.md) - Writing and running tests
 13. [MintLogic](./13-mintlogic.md) - Dynamic form logic and validation
+14. [MCP Login Flow](./14-mcp-login-flow.md) - OAuth2 consent flow for MCP clients
+15. [Mass Actions](./15-mass-actions.md) - Executing actions on multiple records, select-all mechanism
 
 ## Overview
 
@@ -36,6 +38,9 @@ The API provides a clean, modern interface for client applications while maintai
 - **Connect to legacy code**: See [Legacy Integration](./07-legacy-integration.md)
 - **Work with database**: See [Database Communication](./06-database.md)
 - **Define form logic and validation**: See [MintLogic](./13-mintlogic.md)
+- **OAuth2 consent for MCP clients**: See [MCP Login Flow](./14-mcp-login-flow.md)
+- **Execute actions on multiple records**: See [Mass Actions](./15-mass-actions.md)
+- **Authentication methods (core / LDAP / SAML / OIDC)**: See [Middlewares — Authentication Methods](./11-middlewares.md#authentication-methods)
 
 ## Project Philosophy
 

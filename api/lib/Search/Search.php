@@ -46,7 +46,6 @@
 
 namespace MintHCM\Lib\Search;
 
-#[\AllowDynamicProperties]
 class Search
 {
     public static function getManager($engine = null, ...$args)

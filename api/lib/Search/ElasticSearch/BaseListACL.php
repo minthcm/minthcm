@@ -7,12 +7,11 @@ use MintHCM\Lib\Search\ElasticSearch\ESListACLHelper;
 use MintHCM\Data\BeanFactory;
 use MintHCM\Utils\LegacyConnector;
 
-#[\AllowDynamicProperties]
 class BaseListACL
 {
-    protected $module;
-    protected $acl_helper;
-    protected $prefixer;
+    protected string $module;
+    protected ESListACLHelper $acl_helper;
+    protected ModulePrefixer $prefixer;
 
     public function __construct(string $module)
     {

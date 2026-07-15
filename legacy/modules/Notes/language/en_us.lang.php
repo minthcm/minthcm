@@ -47,7 +47,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 $mod_strings = array(
-    'LBL_CASE_ID' => 'Case ID:',
     'LBL_CLOSE' => 'Close:',
     'LBL_CONTACT_ID' => 'Contact ID:',
     'LBL_CONTACT_NAME' => 'Contact:',
@@ -132,6 +131,5 @@ $mod_strings = array(
     'LBL_RELATED_TO_COMMENT' => 'Module record the note is related to.',
     'LBL_SHOW_PREVIEW_COMMENT' => 'Flag for showing preview of the note.',
     'LBL_CAMPAIGN_ID_COMMENT' => 'ID of the campaign the note is associated with.',
-    'LBL_CASE_ID_COMMENT' => 'ID of the related case for the note.',
     'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
 );

@@ -49,7 +49,6 @@ namespace MintHCM\Api\Repositories;
 use Doctrine\ORM\Query\Expr\Join;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-#[\AllowDynamicProperties]
 class CommentRepository extends MintEntityRepository
 {
     /*

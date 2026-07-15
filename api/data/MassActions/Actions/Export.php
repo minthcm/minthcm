@@ -11,7 +11,8 @@ class Export extends MassAction
     
     public function execute()
     {
-        throw new \Exception('Export is implemented in legacy code.');
+        $_SESSION['uids'] = implode(',', $this->ids);
+        return ['success' => true, 'module' => $this->module_name];
     }
 
     public function hasAccess()

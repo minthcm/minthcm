@@ -116,18 +116,31 @@ class AuthManager
      */
     private function setCurrentUser(): void
     {
-        global $current_user;
+        global $current_user, $current_language, $app_strings, $app_list_strings, $sugar_config;
 
         if (empty($this->userId)) {
             return;
         }
-        
+
         chdir('../legacy');
         $user = BeanFactory::getBean('Users', $this->userId);
         chdir('../mcp');
-        
+
         if ($user) {
             $current_user = $user;
+
+            // The MCP bootstrap never runs SugarApplication::execute(), which is what
+            // normally populates these globals for legacy UI / API v8 requests. Without
+            // this, any bean/logic-hook code relying on `global $app_list_strings` (etc.)
+            // silently gets empty data under MCP.
+            //
+            // get_current_language() reads $_SESSION['authenticated_user_language'], which
+            // is only ever set by the legacy login flow (SugarAuthenticate) — never true
+            // under MCP's bearer-token auth. Resolve the language from the authenticated
+            // user's own preference instead, mirroring what SugarAuthenticate does at login.
+            $current_language = $user->getPreference('language') ?? $sugar_config['default_language'];
+            $app_strings = return_application_language($current_language);
+            $app_list_strings = return_app_list_strings_language($current_language);
         }
     }
 }

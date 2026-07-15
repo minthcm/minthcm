@@ -42,7 +42,7 @@
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
- if (!defined('sugarEntry') || !sugarEntry) {
+if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -214,10 +214,12 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
 
 
             ldap_unbind($ldapconn);
-            $dbresult = DBManagerFactory::getInstance()->query("SELECT id, status FROM users WHERE user_name='" . $name . "' AND deleted = 0");
+            $db = DBManagerFactory::getInstance();
+            $quotedName = $db->quote($name);
+            $dbresult = $db->query("SELECT id, status FROM users WHERE user_name='" . $quotedName . "' AND deleted = 0");
 
             //user already exists use this one
-            if ($row = DBManagerFactory::getInstance()->fetchByAssoc($dbresult)) {
+            if ($row = $db->fetchByAssoc($dbresult)) {
                 if ($row['status'] != 'Inactive') {
                     return $row['id'];
                 }
@@ -243,7 +245,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
      */
     public function getUserNameFilter($name)
     {
-        $name_filter = "(" . $GLOBALS['ldap_config']->settings['ldap_login_attr']. "=" . $name . ")";
+        $name_filter = "(" . $GLOBALS['ldap_config']->settings['ldap_login_attr']. "=" . ldap_escape($name) . ")";
         //add the additional user filter if it is specified
         if (!empty($GLOBALS['ldap_config']->settings['ldap_login_filter'])) {
             $add_filter = $GLOBALS['ldap_config']->settings['ldap_login_filter'];

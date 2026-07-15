@@ -119,6 +119,10 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         $mint_token_repository = $this->entityManager->getRepository(MintToken::class);
         $token = $mint_token_repository->findOneBy(['access_token' => $tokenId]);
 
-        return $token->id === null || $token->token_is_revoked === '1' || new \DateTime() > $token->access_token_expires;
+        if ($token === null) {
+            return true;
+        }
+
+        return $token->token_is_revoked === true || new \DateTime() > $token->access_token_expires;
     }
 }

@@ -234,6 +234,7 @@ $dictionary[$module_name] = array(
         'documents' => array(
             'name' => 'documents',
             'type' => 'link',
+            'module' => 'Documents',
             'relationship' => 'documents_contracts',
             'source' => 'non-db',
             'vname' => 'LBL_DOCUMENTS',

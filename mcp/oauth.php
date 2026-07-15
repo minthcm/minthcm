@@ -19,12 +19,17 @@ $app->startSession();
 // Switch back to MCP directory
 chdir('../mcp/');
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/bootstrap.php';
 
 // Determine requested endpoint from server variables
 $endpoint = $_SERVER['REDIRECT_OAUTH_ENDPOINT'] ?? $_SERVER['OAUTH_ENDPOINT'] ?? null;
 
 if (!$endpoint) {
     http_response_code(400);
+    logEvent('OAuth endpoint missing', [
+        'uri' => $_SERVER['REQUEST_URI'] ?? '',
+        'ua'  => shortUserAgent(),
+    ]);
     echo json_encode(['error' => 'invalid_request', 'error_description' => 'No OAuth endpoint specified']);
     exit;
 }

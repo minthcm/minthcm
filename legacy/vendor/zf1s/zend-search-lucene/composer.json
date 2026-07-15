@@ -1,0 +1,32 @@
+{
+    "name": "zf1s/zend-search-lucene",
+    "description": "Zend Framework 1 Search Lucene package",
+    "keywords": ["framework", "zf1", "zend", "search", "lucene"],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.1",
+        "ext-ctype": "*",
+        "ext-dom": "*",
+        "ext-iconv": "*",
+        "zf1s/zend-exception": "^1.16.0",
+        "zf1s/zend-search": "^1.16.0",
+        "zf1s/zend-xml": "^1.16.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Search_Lucene": "library/"
+        }
+    },
+    "suggest": {
+        "ext-bitset": "Used in special situations or with special adapters"
+    },
+    "replace": {
+        "zf1/zend-search-lucene": "^1.12"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

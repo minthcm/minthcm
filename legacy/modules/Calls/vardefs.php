@@ -289,6 +289,7 @@ $dictionary['Call'] = array(
       'project' => array(
          'name' => 'project',
          'type' => 'link',
+         'module' => 'Project',
          'relationship' => 'projects_calls',
          'source' => 'non-db',
          'vname' => 'LBL_PROJECTS'
@@ -297,6 +298,7 @@ $dictionary['Call'] = array(
       array(
          'name' => 'case',
          'type' => 'link',
+         'module' => 'Cases',
          'relationship' => 'case_calls',
          'source' => 'non-db',
          'link_type' => 'one',
@@ -306,6 +308,7 @@ $dictionary['Call'] = array(
       array(
          'name' => 'aos_contracts',
          'type' => 'link',
+         'module' => 'AOS_Contracts',
          'relationship' => 'aos_contracts_calls',
          'source' => 'non-db',
          'vname' => 'LBL_CONTRACT',
@@ -314,6 +317,7 @@ $dictionary['Call'] = array(
       array(
          'name' => 'users',
          'type' => 'link',
+         'module' => 'Users',
          'relationship' => 'calls_users',
          'source' => 'non-db',
          'vname' => 'LBL_USERS',
@@ -507,6 +511,7 @@ $dictionary['Call'] = array(
          'name' => 'candidates',
          'type' => 'link',
          'relationship' => 'calls_candidates',
+         'module' => 'Candidates',
          'source' => 'non-db',
          'vname' => 'LBL_CANDIDATES',
       ),
@@ -522,6 +527,7 @@ $dictionary['Call'] = array(
       'resources' => array(
          'name' => 'resources',
          'type' => 'link',
+         'module' => 'Resources',
          'relationship' => 'calls_resources',
          'source' => 'non-db',
          'vname' => 'LBL_RESOURCES',

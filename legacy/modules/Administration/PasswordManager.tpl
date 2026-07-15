@@ -511,6 +511,10 @@
                                              <td width='25%' align="left"  valign='top'><textarea style='height:200px;width:600px' name="SAML_X509Cert" >{$config.SAML_X509Cert}</textarea></td>
 
                                           </tr>
+														<tr>
+															<td scope="row" valign='middle' nowrap>{$MOD.LBL_SAML_NAMEID_FORMAT} {sugar_help text=$MOD.LBL_SAML_NAMEID_FORMAT_DESC}</td>
+															<td align="left"  valign='middle'><input name="SAML_NameIDFormat" size='80' type="text" value="{$config.SAML_NameIDFormat}"></td>
+														</tr>
 
 
                      </table>
@@ -520,6 +524,76 @@
             </tr>
          </table>
          <!-- end SAML -->
+
+                            <!-- start OIDC -->
+                            {if !empty($config.authenticationClass)
+                                && $config.authenticationClass == 'OIDCAuthenticate'}
+                            {assign var='oidc_enabled_checked' value='CHECKED'}
+                            {assign var='oidc_display' value='inline'}
+                            {else}
+                            {assign var='oidc_enabled_checked' value=''}
+                            {assign var='oidc_display' value='none'}
+                            {/if}
+
+                            <table id="oidc_table" width="100%" border="0" cellspacing="0" cellpadding="0" class="edit view">
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <th align="left" scope="row" colspan="3"><h4>{$MOD.LBL_OIDC_TITLE}</h4></th>
+                                            </tr>
+                                            <tr>
+                                                <td width="25%" scope="row" valign="middle">
+                                                    {$MOD.LBL_OIDC_ENABLE}{sugar_help text=$MOD.LBL_OIDC_HELP_TXT}
+                                                </td>
+                                                <td valign="middle">
+                                                    <input name="authenticationClass" id="system_oidc_enabled" class="checkbox"
+                                                        value="OIDCAuthenticate" type="checkbox"
+                                                        {if $oidc_enabled_checked}checked="1"{/if}
+                                                        onclick='toggleDisplay("oidc_display");enableDisablePasswordTable("system_oidc_enabled");'>
+                                                </td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <table cellspacing="0" cellpadding="1" id="oidc_display" style="display:{$oidc_display}" width="100%">
+                                                        <tr>
+                                                            <td width="25%" scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_CLIENT_ID} {sugar_help text=$MOD.LBL_OIDC_CLIENT_ID_DESC}</td>
+                                                            <td width="75%" align="left" valign="middle"><input name="OIDC_clientId" size="60" type="text" value="{$config.OIDC_clientId}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_CLIENT_SECRET} {sugar_help text=$MOD.LBL_OIDC_CLIENT_SECRET_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_clientSecret" size="60" type="password" value="{$config.OIDC_clientSecret}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_AUTHORIZATION_ENDPOINT} {sugar_help text=$MOD.LBL_OIDC_AUTHORIZATION_ENDPOINT_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_authorizationEndpoint" size="80" type="text" value="{$config.OIDC_authorizationEndpoint}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_TOKEN_ENDPOINT} {sugar_help text=$MOD.LBL_OIDC_TOKEN_ENDPOINT_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_tokenEndpoint" size="80" type="text" value="{$config.OIDC_tokenEndpoint}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_LOGOUT_ENDPOINT} {sugar_help text=$MOD.LBL_OIDC_LOGOUT_ENDPOINT_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_logoutEndpoint" size="80" type="text" value="{$config.OIDC_logoutEndpoint}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_SCOPE} {sugar_help text=$MOD.LBL_OIDC_SCOPE_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_scope" size="60" type="text" value="{if !empty($config.OIDC_scope)}{$config.OIDC_scope}{else}openid profile email{/if}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_USERNAME_CLAIM} {sugar_help text=$MOD.LBL_OIDC_USERNAME_CLAIM_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_usernameClaim" size="40" type="text" value="{if !empty($config.OIDC_usernameClaim)}{$config.OIDC_usernameClaim}{else}preferred_username{/if}"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- end OIDC -->
 					</td>
 				</tr>
 			</table>
@@ -593,7 +667,7 @@ function enableDisablePasswordTable(checkbox_id) {
 		document.getElementById("userResetPassId").style.display = "";
 
 	}
-} // if
+}
 
 function edit_email_template_form(templateField) {
 	fieldToSetValue = templateField;
@@ -732,6 +806,7 @@ forgot_password_enable(document.getElementById('forgotpassword_checkbox'));
 enable_syst_generated_pwd(document.getElementById('SystemGeneratedPassword_checkbox'));
 if(document.getElementById('system_saml_enabled').checked)enableDisablePasswordTable('system_saml_enabled');
 if(document.getElementById('system_ldap_enabled').checked)enableDisablePasswordTable('system_ldap_enabled');
+if(document.getElementById('system_oidc_enabled').checked)enableDisablePasswordTable('system_oidc_enabled');
 
 </script>
 

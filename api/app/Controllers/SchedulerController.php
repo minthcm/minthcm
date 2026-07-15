@@ -117,8 +117,9 @@ class SchedulerController
         $search_manager->setQuery(array(
             "search" => 'global',
             "type" => $participantModules,
-            "fields" => ["*__last^5", "*__first^4", "*__name.*^3", "*"],
+            "fields" => ["*__name.*__last^5", "*__name.*__first^4", "*__name.*__name^3"],
             "items" => 25,
+            "from" => 0,
             "query" => $searchQuery,
             "nestedQuery" => $this->processNestedSecurityGroupsQueries($participantModules, $searchQuery),
             "sort_order" => "desc",

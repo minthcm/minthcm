@@ -88,6 +88,16 @@ class MintLogic
 
     private function getRules(Hook $hook = Hook::ALL, $triggerFields = null)
     {
+        // Pre-compute the net (final) visibility for every field by evaluating ALL
+        // hook-matched rules, ignoring the request-specific triggerFields filter.
+        // This mirrors the Vue's hiddenFields computation (last-wins across activeRules)
+        // and lets calculateLogic() avoid nulling a field whose final state is visible —
+        // e.g. the core init rule hides `occasional_leave_type`, but show_special_leave_type
+        // (triggerFields:['type']) would show it again; without pre-computation that rule is
+        // skipped when triggerFields=['occasional_leave_type'], the field is nulled, and
+        // subsequent triggers that read it always see null.
+        $netVisibility = $this->computeNetVisibility($hook);
+
         $rules = [];
         foreach ($this->getAllRules() as $key => $rule) {
             if (empty($rule)) {
@@ -106,11 +116,48 @@ class MintLogic
                 'key' => $key,
                 'triggerFields' => $rule['triggerFields'] ?? [],
                 'trigger' => $isTriggered,
-                'logic' => $isTriggered ? $this->calculateLogic($rule) : [],
+                'logic' => $isTriggered ? $this->calculateLogic($rule, $netVisibility) : [],
                 'hooks' => $rule['hooks'] ?? [],
             ];
         }
         return $rules;
+    }
+
+    /**
+     * Compute the net visibility for every field by scanning ALL triggered rules that
+     * match the given hook — regardless of the request's triggerFields filter.
+     *
+     * Each rule's visible declaration is applied in order; the last one wins, exactly
+     * as the Vue's `hiddenFields` computed property does.  The result is used in
+     * calculateLogic() to decide whether nulling the bean for a visible:false field
+     * is safe — if another rule (perhaps one filtered out of the main getRules pass)
+     * would ultimately make the field visible, the bean value must be preserved.
+     */
+    private function computeNetVisibility(Hook $hook): array
+    {
+        $net = [];
+        foreach ($this->getAllRules() as $rule) {
+            if (empty($rule)) {
+                continue;
+            }
+            if (Hook::ALL !== $hook && !in_array(Hook::ALL, $rule['hooks']) && !in_array($hook, $rule['hooks'])) {
+                continue;
+            }
+            // Evaluate the trigger on the unmodified bean (no calculateLogic() mutations yet).
+            // For the rare trigger that depends on a value set by a previous rule's update
+            // closure this may differ from the main-loop result, but visibility computation
+            // is the only purpose here and that case does not arise in practice.
+            $isTriggered = !isset($rule['trigger']) || self::calculateExpression($rule['trigger'], $this->bean);
+            if (!$isTriggered) {
+                continue;
+            }
+
+            $visible = self::calculateExpression($rule['logic']['visible'] ?? null, $this->bean) ?? [];
+            foreach ($visible as $field => $isVisible) {
+                $net[$field] = $isVisible; // last-wins — same semantics as Vue hiddenFields
+            }
+        }
+        return $net;
     }
 
     private function getAllRules(): array
@@ -149,7 +196,7 @@ class MintLogic
         return $basicSets;
     }
 
-    private function calculateLogic($rule)
+    private function calculateLogic($rule, array $netVisibility = [])
     {
         $logic = [
             'errors' => [],
@@ -171,8 +218,15 @@ class MintLogic
         $logic['visible'] = self::calculateExpression($rule['logic']['visible'], $this->bean) ?? [];
         foreach ($logic['visible'] as $field => $isVisible) {
             if (!$isVisible) {
-                $this->bean->{$field} = null;
                 $logic['update'][$field] = null;
+                // Only null the bean when the field is ultimately not visible across all
+                // triggered rules (pre-computed by computeNetVisibility).  If another rule
+                // — even one filtered out of this pass by triggerFields — makes the field
+                // visible in the end, the bean value must be preserved so that subsequent
+                // trigger expressions in this same getRules() loop can read the real data.
+                if (!($netVisibility[$field] ?? false)) {
+                    $this->bean->{$field} = null;
+                }
             }
         }
 

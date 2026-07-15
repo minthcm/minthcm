@@ -46,9 +46,11 @@
 
 namespace MintHCM\Api\Repositories;
 
+use MintHCM\Api\Controllers\AuthController;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use MintHCM\Api\Entities\Users;
+use MintHCM\Api\Utils\AuthHelper;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
 class UsersRepository extends MintEntityRepository implements UserRepositoryInterface
@@ -65,26 +67,34 @@ class UsersRepository extends MintEntityRepository implements UserRepositoryInte
         ClientEntityInterface $clientEntity
     ) {
 
+        // An SSO (OIDC/SAML) finalize call reaches this method with an empty password,
+        // because the identity was already verified by the external IdP. LDAP must be
+        // skipped in that case — otherwise an empty-password LDAP bind fails and the SSO
+        // login bounces the user back to the login screen when LDAP is also enabled.
+        $is_sso_finalize = $this->shouldSkipCheckingPasswordForSAML($username)
+            || $this->shouldSkipCheckingPasswordForOIDC($username);
+
         chdir('../legacy/');
         $is_ldap_enabled = $this->IsLdapOn();
-        if($is_ldap_enabled && !(new \AuthenticationController())->authController->loginAuthenticate($username, $password, false, [])){
-            throw new \InvalidArgumentException("The password is invalid: {$password} or username is invalid: {$username}");   
+        if (!$is_sso_finalize && $is_ldap_enabled && !(new \AuthenticationController('LDAPAuthenticate'))->authController->loginAuthenticate($username, $password, false, [])) {
+            chdir('../api/');
+            throw new \InvalidArgumentException("The password is invalid: {$password} or username is invalid: {$username}");
         }
         chdir('../api/');
-        
+
         /** @var Users */
         $user = $this->findOneBy(['user_name' => $username, 'deleted' => false]);
         if (!$user) {
             throw new \InvalidArgumentException('No user found with this username: ' . $username);
         }
 
-        if (!$is_ldap_enabled && $user->checkPassword($password) === false) {
+        if (!$this->shouldSkipCheckingPassword($username) && $user->checkPassword($password) === false) {
             throw new \InvalidArgumentException('The password is invalid: ' . $password);
         }
 
         return $user;
     }
-    
+
     /*
      * Get active users list
      *
@@ -103,8 +113,37 @@ class UsersRepository extends MintEntityRepository implements UserRepositoryInte
         if (!empty($user_id)) {
             $qb->setParameter('user_id', $user_id);
         }
-        
+
         return $qb->getQuery()->getResult();
+    }
+
+    private function shouldSkipCheckingPassword(string $username): bool
+    {
+        return $this->IsLdapOn()
+            || $this->shouldSkipCheckingPasswordForSAML($username)
+            || $this->shouldSkipCheckingPasswordForOIDC($username);
+    }
+
+    private function shouldSkipCheckingPasswordForSAML(string $username): bool
+    {
+        $pending_at = (int) ($_SESSION['saml_oauth_pending_at'] ?? 0);
+        return AuthHelper::isSAML2On()
+            && !empty($_SESSION['saml_oauth_pending'])
+            && !empty($_SESSION['saml_oauth_pending_user'])
+            && $pending_at > 0
+            && (time() - $pending_at) <= AuthController::SAML_OAUTH_PENDING_TTL
+            && $_SESSION['saml_oauth_pending_user'] === $username;
+    }
+
+    private function shouldSkipCheckingPasswordForOIDC(string $username): bool
+    {
+        $pending_at = (int) ($_SESSION['oidc_oauth_pending_at'] ?? 0);
+        return AuthHelper::isOIDCOn()
+            && !empty($_SESSION['oidc_oauth_pending'])
+            && !empty($_SESSION['oidc_oauth_pending_user'])
+            && $pending_at > 0
+            && (time() - $pending_at) <= AuthController::OIDC_OAUTH_PENDING_TTL
+            && $_SESSION['oidc_oauth_pending_user'] === $username;
     }
 
     private function IsLdapOn(): bool
@@ -125,7 +164,7 @@ class UsersRepository extends MintEntityRepository implements UserRepositoryInte
         if (!empty($user_id)) {
             $qb->setParameter('user_id', $user_id);
         }
-        
+
         return $qb->getQuery()->getResult();
     }
 }

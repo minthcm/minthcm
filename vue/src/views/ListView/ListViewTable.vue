@@ -21,18 +21,83 @@
         "
         hover
     >
+        <template #header.data-table-select="{}">
+            <div class="table-checkbox-wrapper">
+                <v-checkbox
+                    :model-value="store.isHeaderChecked"
+                    :indeterminate="store.isHeaderIndeterminate"
+                    @update:model-value="toggleHeader"
+                />
+            </div>
+        </template>
+        <template #item.data-table-select="{ item }">
+            <div class="table-checkbox-wrapper">
+                <v-checkbox
+                    :model-value="isRowSelected(item)"
+                    @update:model-value="toggleRow(item)"
+                />
+            </div>
+        </template>
+
+        <template
+            v-for="header in store.headers.filter(h => h.sortable !== false)"
+            :key="header.key"
+            v-slot:[`header.${header.key}`]="{ column, toggleSort, isSorted, getSortIcon }"
+        >
+            <span
+                tabindex="0"
+                role="button"
+                :aria-sort="isSorted(column) ? (getSortIcon(column) === 'mdi-arrow-up' ? 'ascending' : 'descending') : 'none'"
+                @click="toggleSort(column)"
+                @keydown.enter.prevent="toggleSort(column)"
+                @keydown.space.prevent="toggleSort(column)"
+                style="cursor: pointer;"
+            >
+                {{ column.title }}
+                <v-icon v-if="isSorted(column)" size="small">
+                    {{ getSortIcon(column) }}
+                </v-icon>
+            </span>
+        </template>
         <template v-slot:item.is_favorite="{ item }">
             <v-icon
                 color="secondary"
                 :icon="item.attributes.is_favorite ? 'mdi-heart' : 'mdi-heart-outline'"
                 @click="store.toggleFavorite(item)"
+                @keydown.enter.prevent="store.toggleFavorite(item)"
+                @keydown.space.prevent="store.toggleFavorite(item)"
+                tabindex="0"
+                role="button"
+                :aria-label="item.attributes.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
                 size="small"
                 class="favorite-icon"
                 v-ripple
             />
         </template>
         <template v-for="column in store.visibleColumns" v-slot:[`item.${column.name}`]="{ item }" :key="column.name">
+            <span
+                v-if="store.mode === 'relate'"
+                tabindex="0"
+                @keydown.enter.prevent="chooseRecord(item)"
+                @keydown.space.prevent="chooseRecord(item)"
+                style="cursor: pointer"
+            >
+                <Field
+                    view="list"
+                    :defs="
+                        column.name === 'name'
+                            ? Object.assign(store.defs.columns[column.name], { type: 'name' })
+                            : store.defs.columns[column.name]
+                    "
+                    :data="{ bean: item }"
+                    :label="languages.label(store.defs.columns[column.name].label, store.module)"
+                    :options="item.logic.fieldsOptions[column.name]"
+                    :modelValue="item.attributes[column.name]"
+                    :field="item.fields[column.name]"
+                />
+            </span>
             <Field
+                v-else
                 view="list"
                 :defs="
                     column.name === 'name'
@@ -44,6 +109,7 @@
                 :options="item.logic.fieldsOptions[column.name]"
                 :modelValue="item.attributes[column.name]"
                 :field="item.fields[column.name]"
+                tabindex="0"
             />
         </template>
         <template v-slot:item.actions="{ item }">
@@ -55,24 +121,71 @@
                     location="top"
                 >
                     <template v-slot:activator="{ props }">
-                        <v-icon
+                        <v-btn
+                            icon
+                            variant="text"
                             v-bind="props"
                             @click="action.onClick(item)"
-                            color="secondary"
-                            size="small"
-                            :icon="action.icon"
-                        />
+                            @keydown.space.prevent="action.onClick(item)"
+                            @keydown.enter.prevent="action.onClick(item)"
+                        >
+                            <v-icon size="small" color="secondary" :icon="action.icon"/>
+                        </v-btn>
                     </template>
                     <span>{{ action.label ? languages.label(action.label, url.module) : '' }}</span>
                 </v-tooltip>
             </div>
         </template>
-        <template #bottom>
-            <VDataTableFooter
-                :items-per-page-options="store.config?.config?.itemsPerPageOptions"
-                v-bind:items-per-page-text="languages.label('LBL_ESLIST_ITEMS_PER_PAGE')"
-                :page-text="pageText"
-            />
+        <template v-slot:bottom>
+            <div class="v-data-table-footer">
+                <div class="v-data-table-footer__items-per-page">
+                    <span class="v-data-table-footer__items-per-page-text">
+                        {{ languages.label('LBL_ESLIST_ITEMS_PER_PAGE') }}
+                    </span>
+                    <v-select
+                        :items="store.config?.config?.itemsPerPageOptions || [10, 25, 50, 100]"
+                        v-model="store.options.itemsPerPage"
+                        density="compact"
+                        variant="outlined"
+                        hide-details
+                    />
+                </div>
+                
+                <div class="v-data-table-footer__info">
+                    <div class="v-data-table-footer__page-text">{{ pageText }}</div>
+                </div>
+                
+                <div class="v-data-table-footer__pagination">
+                    <v-btn
+                        icon="mdi-page-first"
+                        variant="text"
+                        :disabled="store.options.page === 1"
+                        @click="store.options.page = 1"
+                        density="comfortable"
+                    />
+                    <v-btn
+                        icon="mdi-chevron-left"
+                        variant="text"
+                        :disabled="store.options.page === 1"
+                        @click="store.options.page--"
+                        density="comfortable"
+                    />
+                    <v-btn
+                        icon="mdi-chevron-right"
+                        variant="text"
+                        :disabled="store.options.page >= totalPages"
+                        @click="store.options.page++"
+                        density="comfortable"
+                    />
+                    <v-btn
+                        icon="mdi-page-last"
+                        variant="text"
+                        :disabled="store.options.page >= totalPages"
+                        @click="store.options.page = totalPages"
+                        density="comfortable"
+                    />
+                </div>
+            </div>
         </template>
     </v-data-table-server>
 </template>
@@ -93,10 +206,38 @@ const url = useUrlStore()
 const languages = useLanguagesStore()
 const popups = usePopupsStore()
 
-const pageText = computed(() => {
-    const pageText = `{0} - {1} ${languages.label('LBL_ESLIST_PAGE_TEXT')} {2}`
-    return pageText
+const totalPages = computed(() => {
+    return Math.ceil((store.itemsLength || 0) / (store.options.itemsPerPage || 10))
 })
+
+const pageText = computed(() => {
+    const start = ((store.options.page - 1) * store.options.itemsPerPage) + 1
+    const end = Math.min(store.options.page * store.options.itemsPerPage, store.itemsLength || 0)
+    const total = store.itemsLength || 0
+    
+    return `${start} - ${end} ${languages.label('LBL_ESLIST_PAGE_TEXT')} ${total}`
+})
+
+function chooseRecord(item) {
+    if (!store.relatePopup) return
+    if (store.relatePopup.data.fieldToNameArray) {
+        const nameToValueArray: { [key: string]: string } = {}
+        for (const key in store.relatePopup.data.fieldToNameArray) {
+            if (['full_name', 'name', 'last_name', 'first_name'].includes(key)) {
+                nameToValueArray[store.relatePopup.data.fieldToNameArray[key]] =
+                    item.attributes?.full_name || item.attributes?.name || item.attributes?.last_name || item.attributes?.first_name || ''
+            } else if (!nameToValueArray[store.relatePopup.data.fieldToNameArray[key]] && key === 'subpanel_id') {
+                nameToValueArray[store.relatePopup.data.fieldToNameArray[key]] = item.id
+            } else {
+                nameToValueArray[store.relatePopup.data.fieldToNameArray[key]] = item.attributes?.[key] ?? ''
+            }
+        }
+        store.relatePopup.data?.onConfirm({ nameToValueArray })
+    } else {
+        store.relatePopup.data?.onConfirm({ selectionList: [item.id || ''] })
+    }
+    popups.closePopup(store.relatePopup)
+}
 
 const coreActions = {
     edit: {
@@ -120,6 +261,38 @@ const coreActions = {
             }
         },
     },
+}
+
+function toggleHeader(value: boolean) {
+    if (value) {
+        const idsOnPage = store.results
+        store.selected = [
+        ...store.selected.filter(s => !idsOnPage.some(i => i.id === s.id)),
+        ...idsOnPage
+        ]
+    } else {
+        const idsOnPage = store.results.map(r => r.id)
+        store.selected = store.selected.filter(s => !idsOnPage.includes(s.id))
+    }
+}
+
+function isRowSelected(item: any) {
+    if (store.allSelected) {
+        return true
+    }
+    return store.selected.some(s => s.id === item.id)
+}
+
+function toggleRow(item: any) {
+    if (store.allSelected) {
+        return
+    }
+
+    if (store.selected.some(s => s.id === item.id)) {
+        store.selected = store.selected.filter(s => s.id !== item.id)
+    } else {
+        store.selected.push(item)
+    }
 }
 
 function getItemActions(item: Record<string, unknown>) {
@@ -174,6 +347,11 @@ function getItemActions(item: Record<string, unknown>) {
         text-decoration: none;
         color: rgb(var(--v-theme-secondary));
     }
+    :deep(a:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary-dark)) !important;
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
     :deep(.v-pagination__first),
     :deep(.v-pagination__last) {
         display: none;
@@ -191,12 +369,23 @@ function getItemActions(item: Record<string, unknown>) {
         }
         &:focus-visible {
             background-color: rgba(var(--v-theme-on-surface), 0.12);
-            outline: 2px solid rgb(var(--v-theme-primary));
+            outline: 2px solid rgb(var(--v-theme-secondary-dark));
             outline-offset: 2px;
         }
         &:active {
             background-color: rgba(var(--v-theme-on-surface), 0.16);
         }
+    }
+
+    :deep(th .v-data-table-header__content:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary-dark));
+        outline-offset: 2px;
+    }
+
+    :deep(td .v-icon:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary-dark));
+        outline-offset: 2px;
+        border-radius: 50%;
     }
 
     @media only screen and (min-width: 1280px) {
@@ -218,5 +407,29 @@ function getItemActions(item: Record<string, unknown>) {
             }
         }
     }
+}
+.v-data-table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+
+    &__items-per-page {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    &__pagination {
+        display: flex;
+        gap: 4px;
+    }
+}
+.table-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    padding-left: 4px;
 }
 </style>

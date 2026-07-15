@@ -690,6 +690,7 @@ $dictionary['AOS_Contracts'] = array(
                 'name' => 'emails',
                 'vname' => 'LBL_EMAILS',
                 'type' => 'link',
+                'module' => 'Emails',
                 'relationship' => 'emails_aos_contracts_rel',/* reldef in emails */
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAILS',

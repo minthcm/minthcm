@@ -49,15 +49,14 @@ namespace MintHCM\Api\Routes;
 use MintHCM\Utils\CustomLoader;
 use Psr\Container\ContainerInterface;
 
-#[\AllowDynamicProperties]
 class RouteManager
 {
     protected static $_instance;
 
-    protected $app;
+    protected \Slim\App $app;
 
-    protected $routes = array();
-    protected $modules_routes = array();
+    protected array $routes = [];
+    protected array $modules_routes = [];
 
     protected $routes_locations = [
         'app/Routes/routes/',

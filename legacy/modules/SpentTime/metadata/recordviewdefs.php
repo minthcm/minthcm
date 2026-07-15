@@ -23,6 +23,8 @@ $viewdefs['SpentTime'] = [
                                     ],
                                 ],
                                 'spent_time',
+                            ],
+                            [
                                 'category',
                             ],
                             [

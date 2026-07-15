@@ -3,11 +3,11 @@ import router from '@/router'
 
 export class Merge extends MassAction {
     public async execute() {
+        await this.sendRequest()
         router.push({
-            name: 'merge-records',
+            name: `merge-records`,
             query: {
                 return_action: 'index',
-                uid: this.ids.join(','),
                 action_module: this.module,
                 action: 'index',
                 return_module: this.module,

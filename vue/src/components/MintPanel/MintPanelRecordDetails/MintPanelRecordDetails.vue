@@ -34,7 +34,21 @@
                 </div>
             </div>
             <div class="buttons">
-                <div v-if="store.bean.aclAccess?.edit === true">
+                <MintButton
+                    v-if="store.view === 'detail' && store.bean.aclAccess?.edit === true"
+                    class="ml-auto"
+                    icon="mdi-pencil"
+                    :text="`${languages.label('LBL_EDIT_BUTTON_LABEL')} ${languages.label('LBL_DETAILS')}`"
+                    @click="edit"
+                />
+                <MintButton
+                    v-if="store.view === 'detail' && store.bean.aclAccess?.edit === true && moduleHasRepeat && store.hasCyclicRecords"
+                    class="ml-auto"
+                    icon="mdi-pencil-box-multiple-outline"
+                    :text="languages.label('LBL_EDIT_CYCLES_BUTTON_LABEL')"
+                    @click="editCycles"
+                />
+                <div class="buttons" v-if="store.view === 'edit' && store.bean.aclAccess?.edit === true">
                     <MintButton
                         v-if="store.view === 'detail'"
                         class="ml-auto"
@@ -60,6 +74,9 @@
                                     : languages.label(store.bean.isSaving ? 'LBL_SAVING' : 'LBL_SAVE_BUTTON_LABEL')
                             "
                             @click="save"
+                            @keydown.space.prevent="save"
+                            @keyup.space.prevent
+                            @keydown.enter.prevent="save"
                         />
                     </div>
                 </div>
@@ -105,8 +122,8 @@
                         </div>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="fields-container">
-                        <div v-for="(row, i) in computeRows(section)" class="row" :key="`${index}-${i}`">
-                            <div v-for="n in row.length >= 2 ? 2 : 1" :key="n - 1">
+                        <div v-for="(row, i) in computeRows(section)" class="row" :key="row.map(f => f.name).join('-')">
+                            <div v-for="n in row.length >= 2 ? 2 : 1" :key="row[n - 1]?.name ?? n - 1">
                                 <v-skeleton-loader
                                     v-if="store.bean.isRetrieving"
                                     type="list-item-two-line"
@@ -116,6 +133,7 @@
                                     v-if="row[n - 1] 
                                         && !store.bean.logic.hiddenFields.includes(row[n - 1].name)
                                         && !store.bean.isRetrieving"
+                                    :ref="element => registerFieldRef(row[n - 1].name, element)"
                                     :view="
                                         store.bean.logic.readonlyFields.includes(row[n - 1].name)
                                             ? 'detail'
@@ -145,7 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import Field from '@/components/Fields/Field.vue'
 import { useRouter } from 'vue-router'
 import { useFavoritesStore } from '@/store/favorites'
@@ -159,6 +177,97 @@ import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
 import BeanActions from '@/business/BeanActions'
 import { useLocalStorageStore } from '@/store/localStorage'
 import { useDisplay } from 'vuetify'
+import { cyclicRecordsApi } from '@/api/cyclicRecords.api'
+
+const computeErrorMessages = () => {
+    const errors: Record<string, string> = {}
+
+    Object.values(props.data.sections).forEach((section) => {
+        section.fields.flat().forEach((field) => {
+            if (!field) {
+                return
+            }
+            const fieldName = field.name
+            if (
+                store.bean.logic.hiddenFields.includes(fieldName)
+                || store.bean.logic.readonlyFields.includes(fieldName)
+            ) {
+                return
+            }
+            const fieldComponent = fieldRefs.value[fieldName]
+            let error: string | null = null
+
+            if (fieldComponent) {
+                error = fieldComponent.hasError()
+            }
+            if (!error && !store.bean.fields[fieldName]?.model && store.bean.logic.requiredFields.includes(fieldName)) {
+                error = 'ERR_FIELD_REQUIRED'
+            }
+
+            if (error) {
+                errors[fieldName] = error
+            }
+        })
+    })
+
+    return errors
+}
+
+const scrollToFirstError = async (errors: Record<string, string>) => {
+    const errorFields = Object.keys(errors)
+    if (!errorFields.length) {
+        return
+    }
+    const firstFieldName = errorFields[0]
+
+    const currentSections = [...expandedSections.value]
+
+    Object.keys(props.data.sections).forEach((key) => {
+        const section = props.data.sections[key]
+        const sectionFieldNames = section.fields.flat().map(f => f?.name)
+        if (sectionFieldNames.includes(firstFieldName) && !currentSections.includes(key)) {
+            currentSections.push(key)
+        }
+    })
+
+    expandedSections.value = currentSections
+
+    await nextTick()
+    await nextTick()
+
+    const waitForRef = (name: string, maxAttempts = 10): Promise<any> => {
+        return new Promise((resolve) => {
+            let attempts = 0
+            const check = () => {
+                const comp = fieldRefs.value[name]
+                if (comp) {
+                    resolve(comp)
+                } else if (++attempts < maxAttempts) {
+                    requestAnimationFrame(check)
+                } else {
+                    resolve(null)
+                }
+            }
+            check()
+        })
+    }
+
+    const fieldComponent = fieldRefs.value[firstFieldName] || await waitForRef(firstFieldName)
+    if (fieldComponent) {
+        fieldComponent.getElement()?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        fieldComponent.focus()
+    }
+}
+
+const fieldRefs = ref<Record<string, any>>({})
+
+const registerFieldRef = (name: string, element: any) => {
+    if (element) {
+        fieldRefs.value[name] = element
+    } else {
+        delete fieldRefs.value[name]
+    }
+}
 
 interface Props {
     data: {
@@ -226,6 +335,7 @@ const cancel = () => {
     }
     store.bean.restore()
     store.view = 'detail'
+    store.editCycles = false
     store.inlineEditField = ''
     store.inlineEditFieldSaving = ''
     replaceViewPath('EditView', 'DetailView')
@@ -240,22 +350,22 @@ const save = async () => {
         store.inlineEditFieldSaving = prevInlineEditField
     }
     store.inlineEditField = ''
-    const response = await store.bean.save()
+    const response = await store.bean.save({
+        editCycles: store.editCycles,
+        onCyclicComplete: () => {
+            store.hasCyclicRecords = true
+        },
+    })
     if (response.status) {
         store.view = 'detail'
+        store.editCycles = false
         store.inlineEditField = ''
         store.inlineEditFieldSaving = ''
+        replaceViewPath('EditView', 'DetailView')
     } else {
         store.inlineEditField = prevInlineEditField
-    }
-    replaceViewPath('EditView', 'DetailView')
-}
-
-const replaceViewPath = (needle: string, replacement: string) => {
-    const pathSegments = window.location.href.split('/')
-    if (pathSegments.includes(needle)) {
-        const location = window.location.href.replace(needle, replacement)
-        window.history.replaceState(null, '', location)
+        const dynamicErrors = computeErrorMessages()
+        scrollToFirstError(dynamicErrors)
     }
 }
 
@@ -285,22 +395,49 @@ const goBack = () => {
     router.back()
 }
 
+const replaceViewPath = (needle: string, replacement: string) => {
+    const pathSegments = window.location.href.split('/')
+    if (pathSegments.includes(needle)) {
+        const location = window.location.href.replace(needle, replacement)
+        window.history.replaceState(null, '', location)
+    }
+}
+
 const isFavorite = computed(() => favorites.isFavorite(store.bean.module, store.bean.id))
 
-onMounted(() => {
-    if (storage.hasPanelSections(store.bean.module, 'MintPanelRecordDetails')) {
-        return
+/** True when the current module has the repeat_type field (i.e. supports recurring records). */
+const moduleHasRepeat = computed(() => !!modules.modules[store.bean.module]?.vardefs?.repeat_type)
+
+const editCycles = () => {
+    store.view = 'edit'
+    store.editCycles = true
+    store.inlineEditField = ''
+    store.inlineEditFieldSaving = ''
+    replaceViewPath('DetailView', 'EditView')
+}
+
+onMounted(async () => {
+    if (!storage.hasPanelSections(store.bean.module, 'MintPanelRecordDetails')) {
+        let array = []
+        const keys = Object.keys(props.data.sections)
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            if (!props.data.sections[key].collapsed) {
+                array.push(key)
+            }
+        }
+        expandedSections.value = array
     }
 
-    let array = []
-    const keys = Object.keys(props.data.sections)
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i]
-        if (!props.data.sections[key].collapsed) {
-            array.push(key)
+    // Check if this record is the parent of a repeat series
+    if (store.bean.id && moduleHasRepeat.value) {
+        try {
+            const res = await cyclicRecordsApi.canEditRepeat(store.bean.module, store.bean.id)
+            store.hasCyclicRecords = res.data?.hasCyclicRecords === true
+        } catch {
+            store.hasCyclicRecords = false
         }
     }
-    expandedSections.value = array
 })
 
 watch(

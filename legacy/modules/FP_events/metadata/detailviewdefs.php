@@ -116,6 +116,10 @@ $viewdefs [$module_name] =
                                     array (
                                         0 => 'assigned_user_name',
                                     ),
+                                5 =>
+                                    array (
+                                        0 => 'activity_status_type',
+                                    ),
                             ),
                         'LBL_EMAIL_INVITE' =>
                             array (

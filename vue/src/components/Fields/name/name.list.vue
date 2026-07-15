@@ -1,8 +1,19 @@
 <template>
-    <a v-if="store.mode === 'relate'" class="name-field" @click="choose">
+    <a
+        v-if="store.mode === 'relate'"
+        class="name-field"
+        @click="choose"
+        @keydown.enter.prevent="choose"
+        @keydown.space.prevent="choose"
+    >
         {{ props.modelValue }}
     </a>
-    <router-link v-else-if="hasViewAccess" :to="recordUrl" class="name-field">
+    <router-link 
+        v-else-if="hasViewAccess" 
+        :to="recordUrl" 
+        class="name-field"
+        @keydown.space.prevent="handleSpaceNavigation"
+    >
         {{ props.modelValue }}
     </router-link>
     <span v-else>
@@ -15,9 +26,18 @@ import { computed } from 'vue';
 import { FieldProps } from '../Field.model';
 import { useListViewStore } from '@/views/ListView/ListViewStore';
 import { usePopupsStore } from '@/store/popups';
+import router from '@/router';
 
 const props = defineProps<FieldProps>()
 const store = useListViewStore()
+
+function handleSpaceNavigation() {
+    if (store.mode === 'relate') {
+        window.open(router.resolve(recordUrl.value).href, '_blank')
+    } else {
+        router.push(recordUrl.value)
+    }
+}
 
 const hasViewAccess = computed<boolean>(() => {
     return props.data.bean.aclAccess?.view || false

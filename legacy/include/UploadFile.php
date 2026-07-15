@@ -280,8 +280,8 @@ class UploadFile
                     $errMess = string_format(
                         $GLOBALS['app_strings']['UPLOAD_ERROR_TEXT_SIZEINFO'],
                         array(
-                            $_FILES['filename_file']['error'],
-                            self::$filesError[$_FILES['filename_file']['error']],
+                            $_FILES[$this->field_name]['error'],
+                            self::$filesError[$_FILES[$this->field_name]['error']],
                             $sugar_config['upload_maxsize']
                         )
                     );
@@ -293,8 +293,8 @@ class UploadFile
                     $errMess = string_format(
                         $GLOBALS['app_strings']['UPLOAD_ERROR_TEXT'],
                         array(
-                            $_FILES['filename_file']['error'],
-                            self::$filesError[$_FILES['filename_file']['error']]
+                            $_FILES[$this->field_name]['error'],
+                            self::$filesError[$_FILES[$this->field_name]['error']]
                         )
                     );
                     $GLOBALS['log']->fatal($errMess);

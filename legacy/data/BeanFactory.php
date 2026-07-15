@@ -438,7 +438,7 @@ class BeanFactory
     {
         global $beanFiles;
 
-        $beanClass = self::getBeanName($module);
+        $beanClass = self::getBeanName($module) ?? $module;
 
         if (!empty($beanFiles[$beanClass])) {
             return $beanFiles[$beanClass];

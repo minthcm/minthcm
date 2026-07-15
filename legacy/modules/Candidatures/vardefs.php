@@ -533,6 +533,7 @@ $dictionary['Candidatures'] = array(
             ),
             'enforced' => '',
             'dependency' => '',
+            'audited' => true,
         ),
         'task_grade' => array(
             'required' => false,
@@ -670,7 +671,7 @@ $dictionary['Candidatures'] = array(
             'label' => 'LBL_ORIGINAL_CANDIDATURES',
         ),
         'original_candidature_name' => array(
-            'required' => true,
+            'required' => false,
             'name' => 'original_candidature_name',
             'type' => 'relate',
             'source' => 'non-db',
@@ -732,15 +733,17 @@ $dictionary['Candidatures'] = array(
             'massupdate' => true,
             'sortable' => false,
         ),
-        'candidate' => array(
-            'name' => 'candidate',
+        'candidates_candidature_link' => array(
+            'name' => 'candidates_candidature_link',
             'type' => 'link',
-            'relationship' => 'candidate_candidatures',
+            'relationship' => 'candidates_candidatures',
             'source' => 'non-db',
             'module' => 'Candidates',
             'bean_name' => 'Candidates',
             'vname' => 'LBL_CANDIDATE',
             'label' => 'LBL_CANDIDATE',
+            'studio' => 'false',
+            'duplicate_merge' => 'disabled',
         ),
         "recruitments" => array(
             'name' => 'recruitments',
@@ -834,6 +837,7 @@ $dictionary['Candidatures'] = array(
         'documents' => array(
             'name' => 'documents',
             'type' => 'link',
+            'module' => 'Documents',
             'relationship' => 'documents_candidatures',
             'source' => 'non-db',
             'vname' => 'LBL_DOCUMENTS',
@@ -865,17 +869,7 @@ $dictionary['Candidatures'] = array(
         ),
     ),
     'relationships' => array(
-        'candidate_candidatures' => array(
-            'lhs_module' => 'Candidates',
-            'lhs_table' => 'candidates',
-            'lhs_key' => 'id',
-            'rhs_module' => 'Candidatures',
-            'rhs_table' => 'candidatures',
-            'rhs_key' => 'parent_id',
-            'relationship_type' => 'one-to-many',
-            'relationship_role_column' => 'parent_type',
-            'relationship_role_column_value' => 'Candidates',
-        ),
+
         'candidatures_calls' => array(
             'lhs_module' => 'Candidatures',
             'lhs_table' => 'candidatures',
@@ -972,3 +966,5 @@ foreach ([
         $dictionary['Candidatures']['fields'][$field]['comment'] = $commentLabel;
     }
 }
+
+$dictionary['Candidatures']['fields']['description']['audited'] = true;

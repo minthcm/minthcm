@@ -1,5 +1,5 @@
 <template>
-    <div class="mint-date-field-detail" @keyup.enter="$emit('inlineEditSave')" @keyup.esc="$emit('inlineEditCancel')">
+    <div class="mint-date-field-detail">
         <v-text-field
             :label="dateLabel"
             variant="outlined"

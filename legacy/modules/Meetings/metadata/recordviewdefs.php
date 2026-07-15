@@ -10,8 +10,8 @@ $viewdefs['Meetings'] = [
                     'Audit',
                     'Delete',
                     [
-                        'name' => 'Duplicate',
-                        'skipFields' => ['repeat'],
+                        'name' => 'DuplicateMeetings',
+                        'skipFields' => ['repeat','status'],
                     ],
                 ],
                 'sections' => [

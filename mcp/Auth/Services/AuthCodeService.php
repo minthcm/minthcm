@@ -4,7 +4,6 @@ namespace MintMCP\Auth\Services;
 
 use BeanFactory;
 use Exception;
-use MintMCP\Auth\Utils\LegacyBridge;
 use MintMCP\Server\Logger;
 
 /**
@@ -41,12 +40,6 @@ class AuthCodeService
         if (!$success) {
             throw new Exception('Failed to save authorization code');
         }
-
-        Logger::getLogger()->info('Generated auth code', [
-            'code' => substr($code, 0, 8) . '...',
-            'client_id' => $clientId,
-            'user_id' => $userId
-        ]);
 
         return $code;
     }
@@ -85,23 +78,26 @@ class AuthCodeService
     public function deleteAuthCode(string $code): void
     {
         chdir('../legacy');
-        $codeBean = BeanFactory::newBean('OAuth2Codes');
-        $found = $codeBean->retrieve_by_string_fields([
-            'code' => $code,
-            'used' => 0,
-            'deleted' => 0
-        ]);
+        try {
+            $codeBean = BeanFactory::newBean('OAuth2Codes');
+            $found = $codeBean->retrieve_by_string_fields([
+                'code' => $code,
+                'used' => 0,
+                'deleted' => 0
+            ]);
 
-        if (empty($found->id)) {
-            throw new Exception('Authorization code not found or already used');
+            if (empty($found->id)) {
+                throw new Exception('Authorization code not found or already used');
+            }
+
+            $codeBean = $found;
+            $codeBean->used = 1;
+            $codeBean->date_modified = date('Y-m-d H:i:s');
+            $codeBean->save();
+            $codeBean->mark_deleted($codeBean->id);
+        } finally {
+            chdir('../mcp');
         }
-
-        $codeBean = $found;
-        $codeBean->used = 1;
-        $codeBean->date_modified = date('Y-m-d H:i:s');
-        $codeBean->save();
-        $codeBean->mark_deleted($codeBean->id);
-        chdir('../mcp');
     }
 
     /**

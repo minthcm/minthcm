@@ -57,7 +57,6 @@ use MintHCM\Lib\Search\ElasticSearch\Operators\Term;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Terms;
 use MintHCM\Lib\Search\ElasticSearch\Operators\Wildcard;
 
-#[\AllowDynamicProperties]
 class ElasticQueryOperatorsManager
 {
     const BOOLEAN_CLAUSES = [
@@ -79,7 +78,9 @@ class ElasticQueryOperatorsManager
         'nested' => Nested::class,
     ];
 
-    protected $query, $filters, $module;
+    protected array $query = [];
+    protected array $filters;
+    protected ?string $module = null;
 
     public function __construct(array $filters, ?string $module)
     {

@@ -781,3 +781,15 @@ if (file_exists('include/modules_override.php')) {
 if (file_exists('custom/application/Ext/Include/modules.ext.php')) {
     include 'custom/application/Ext/Include/modules.ext.php';
 }
+
+$beanList['AIPromptTemplates'] = 'AIPromptTemplates';
+$beanFiles['AIPromptTemplates'] = 'modules/AIPromptTemplates/AIPromptTemplates.php';
+$moduleList[] = 'AIPromptTemplates';
+
+$beanList['MCPDocCategories'] = 'MCPDocCategories';
+$beanFiles['MCPDocCategories'] = 'modules/MCPDocCategories/MCPDocCategories.php';
+$moduleList[] = 'MCPDocCategories';
+
+$beanList['MCPDocumentation'] = 'MCPDocumentation';
+$beanFiles['MCPDocumentation'] = 'modules/MCPDocumentation/MCPDocumentation.php';
+$moduleList[] = 'MCPDocumentation';

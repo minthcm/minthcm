@@ -4986,13 +4986,22 @@ SUGAR.append(SUGAR.util, {
                                             // parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + id ) );
                                             if(childElement.length != 0){
                                                 parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + childElement.id ) );
+                                                if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
+                                                    // childElement was provided but dashlet already refreshed (race condition on double-click) — do nothing
+                                                    ajaxStatus.hideStatus();
+                                                    return;
+                                                }
                                                }
                                             /* MintHCM #122649 END */
                                            if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
                                               window.location.reload( true )
                                            } else {
                       //else just refresh the parent panel using the SUGAR.mysugar.retrieveDashlet method
-                      SUGAR.mySugar.retrieveDashlet(parent.attr('id').replace("dashlet_entire_", ""));
+                      // MintHCM START - preserve current dashlet page after close
+                      var dashletId = parent.attr('id').replace("dashlet_entire_", "");
+                      var currentPageUrl = parent.find('[data-current-page-url]').attr('data-current-page-url') || undefined;
+                      SUGAR.mySugar.retrieveDashlet(dashletId, currentPageUrl);
+                      // MintHCM END
                     }
                   }
 
@@ -5017,6 +5026,26 @@ SUGAR.append(SUGAR.util, {
          $("#closeActivityDialog .container-close").css("margin-right","10px");
         // MintHCM 114934 END
     }
+  },
+
+  setActivityStatus: function (module, id, newStatus, childElement) {
+    ajaxStatus.showStatus(SUGAR.language.get('app_strings', 'LBL_SAVING'));
+    var args = "action=save&id=" + id + "&record=" + id + "&status=" + newStatus + "&module=" + module;
+    var callback = {
+      success: function () {
+        ajaxStatus.flashStatus(SUGAR.language.get('app_strings', 'LBL_SAVED'), 2000);
+        var parent;
+        if (childElement) {
+          parent = $('div[id^="dashlet_entire_"]').has($(childElement));
+        }
+        if (jQuery.isEmptyObject(parent) || parent.length === 0) {
+          window.location.reload(true);
+        } else {
+          SUGAR.mySugar.retrieveDashlet(parent.attr('id').replace("dashlet_entire_", ""));
+        }
+      }
+    };
+    YAHOO.util.Connect.asyncRequest('POST', 'index.php', callback, args);
   },
 
   setEmailPasswordDisplay: function (id, exists, formName) {

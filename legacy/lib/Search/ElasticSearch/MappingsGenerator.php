@@ -253,7 +253,7 @@ class MappingsGenerator
     {
         $are_fields_set = $esv_reader->areBeanAndFunctionSet($nested_config);
         if ($are_fields_set) {
-            $properties = []; 
+            $properties = [];
             $related_bean = BeanFactory::newBean($nested_config['bean']);
             foreach ($nested_config['fields'] as $field_name) {
                 $properties[$field_name] = $this->getPropertyMappingConfig($related_bean->field_defs[$field_name]);

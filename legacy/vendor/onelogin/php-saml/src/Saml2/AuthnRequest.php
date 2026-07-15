@@ -2,15 +2,13 @@
 /**
  * This file is part of php-saml.
  *
- * (c) OneLogin Inc
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @package OneLogin
- * @author  OneLogin Inc <saml-info@onelogin.com>
- * @license MIT https://github.com/onelogin/php-saml/blob/master/LICENSE
- * @link    https://github.com/onelogin/php-saml
+ * @author  Sixto Martin <sixto.martin.garcia@gmail.com>
+ * @license MIT https://github.com/SAML-Toolkits/php-saml/blob/master/LICENSE
+ * @link    https://github.com/SAML-Toolkits/php-saml
  */
 
 namespace OneLogin\Saml2;
@@ -55,7 +53,6 @@ class AuthnRequest
         $this->_settings = $settings;
 
         $spData = $this->_settings->getSPData();
-        $idpData = $this->_settings->getIdPData();
         $security = $this->_settings->getSecurityData();
 
         $id = Utils::generateUniqueID();
@@ -150,6 +147,7 @@ REQUESTEDAUTHN;
 
         $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
         $acsUrl = htmlspecialchars($spData['assertionConsumerService']['url'], ENT_QUOTES);
+        $destination = $this->_settings->getIdPSSOUrl();
         $request = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -157,8 +155,8 @@ REQUESTEDAUTHN;
     ID="$id"
     Version="2.0"
 {$providerNameStr}{$forceAuthnStr}{$isPassiveStr}
-    IssueInstant="$issueInstant"
-    Destination="{$idpData['singleSignOnService']['url']}"
+    IssueInstant="{$issueInstant}"
+    Destination="{$destination}"
     ProtocolBinding="{$spData['assertionConsumerService']['binding']}"
     AssertionConsumerServiceURL="{$acsUrl}">
     <saml:Issuer>{$spEntityId}</saml:Issuer>{$subjectStr}{$nameIdPolicyStr}{$requestedAuthnStr}

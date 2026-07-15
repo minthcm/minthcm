@@ -50,7 +50,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use \BeanFactory;
 
-#[\AllowDynamicProperties]
 class ListAction
 {
 

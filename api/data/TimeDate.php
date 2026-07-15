@@ -54,19 +54,25 @@ class TimeDate
 
     public function __construct()
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        global $current_user;
-        $this->legacy = new \TimeDate($current_user);
-        chdir('../api/');
+        try {
+            global $current_user;
+            $this->legacy = new \TimeDate($current_user);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __get($name)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = $this->legacy->$name;
-        chdir('../api/');
-
-        return $response;
+        try {
+            return $this->legacy->$name;
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __set($name, $value)
@@ -76,42 +82,56 @@ class TimeDate
             return;
         }
 
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $this->legacy->$name = $value;
-        chdir('../api/');
+        try {
+            $this->legacy->$name = $value;
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __isset($name)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = isset($this->legacy->$name);
-        chdir('../api/');
-
-        return $response;
+        try {
+            return isset($this->legacy->$name);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __unset($name)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        unset($this->legacy->$name);
-        chdir('../api/');
+        try {
+            unset($this->legacy->$name);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public function __call($name, $arguments)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = $this->legacy->$name(...$arguments);
-        chdir('../api/');
-
-        return $response;
+        try {
+            return $this->legacy->$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 
     public static function __callStatic($name, $arguments)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = \TimeDate::class::$name(...$arguments);
-        chdir('../api/');
-
-        return $response;
+        try {
+            return \TimeDate::$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
     }
 }

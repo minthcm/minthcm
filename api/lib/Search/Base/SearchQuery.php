@@ -46,12 +46,14 @@
 
 namespace MintHCM\Lib\Search\Base;
 
-#[\AllowDynamicProperties]
 abstract class SearchQuery
 {
-    protected $params, $query, $sort, $size, $from;
-
-    protected $add_acl_filters  = false;
+    protected array $params;
+    protected array $query = [];
+    protected mixed $sort = null;
+    protected int $size = 0;
+    protected int $from = 0;
+    protected bool $add_acl_filters = false;
 
     public function __construct(array $params)
     {

@@ -1,0 +1,23 @@
+{
+    "name": "zf1s/zend-exception",
+    "description": "Zend Framework 1 Exception package",
+    "keywords": ["framework", "zf1", "zend", "exception"],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Exception": "library/"
+        }
+    },
+    "replace": {
+        "zf1/zend-exception": "^1.12"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

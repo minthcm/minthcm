@@ -75,8 +75,6 @@ class Reminder extends Basic
     public $related_event_module;
     public $related_event_module_id;
 
-    public $popup_viewed;
-
     private static $remindersData = array();
 
     private static $remindersInSaving = false;

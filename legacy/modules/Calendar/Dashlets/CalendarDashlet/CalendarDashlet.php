@@ -91,6 +91,11 @@ class CalendarDashlet extends Dashlet
      */
     public function display()
     {
+        if (!ACLController::checkAccess('Calendar', 'list', true)) {
+            ACLController::displayNoAccess(true);
+            return '';
+        }
+
         ob_start();
 
         if (isset($GLOBALS['cal_strings'])) {
@@ -103,7 +108,6 @@ class CalendarDashlet extends Dashlet
 
         global $cal_strings, $current_language;
         $cal_strings = return_module_language($current_language, 'Calendar');
-
 
         $cal = new Calendar($this->view);
         $cal->dashlet = true;

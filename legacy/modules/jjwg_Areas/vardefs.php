@@ -123,6 +123,7 @@ $dictionary['jjwg_Areas'] = array(
             array(
                 'name' => 'jjwg_maps_jjwg_areas',
                 'type' => 'link',
+                'module' => 'jjwg_Maps',
                 'relationship' => 'jjwg_maps_jjwg_areas',
                 'source' => 'non-db',
                 'vname' => 'LBL_JJWG_MAPS_JJWG_AREAS_FROM_JJWG_MAPS_TITLE',

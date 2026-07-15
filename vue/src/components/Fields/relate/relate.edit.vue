@@ -15,8 +15,27 @@
             >
                 <template #append-inner>
                     <v-fab-transition class="search-prepend-icon" v-if="showAdvancedSearch !== false">
-                        <v-icon v-if="model.name" icon="mdi-close" @click="model = { id: '', name: '' }" />
-                        <v-icon v-else icon="mdi-magnify" @click.stop="openRelatePopup" />
+                        <v-btn
+                            v-if="model.name"
+                            icon
+                            variant="text"
+                            @click="model = { id: '', name: '' }"
+                            @keydown.enter.prevent="model = { id: '', name: '' }"
+                            @keydown.space.prevent="model = { id: '', name: '' }"
+                        >
+                            <v-icon icon="mdi-close" />
+                        </v-btn>
+
+                        <v-btn
+                            v-else
+                            icon
+                            variant="text"
+                            @click.stop="openRelatePopup"
+                            @keydown.enter.prevent="openRelatePopup"
+                            @keydown.space.prevent="openRelatePopup"
+                        >
+                            <v-icon icon="mdi-magnify" />
+                        </v-btn>
                     </v-fab-transition>
                 </template>
             </v-text-field>
@@ -36,7 +55,13 @@
                 @input="(event) => fetchItems(event, index)"
             />
             <div v-if="!isLoading">
-                <v-list-item @click="clickOnMenuItem(item)" v-for="(item, index) in items" :key="index">
+                <v-list-item
+                    @click="clickOnMenuItem(item)"
+                    @keydown.enter.prevent="clickOnMenuItem(item)"
+                    @keydown.space.prevent="clickOnMenuItem(item)"
+                    v-for="(item, index) in items"
+                    :key="index"
+                >
                     <span v-html="getHighlightedText(item.name, model.name)"></span>
                 </v-list-item>
             </div>

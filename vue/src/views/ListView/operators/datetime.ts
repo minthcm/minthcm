@@ -93,8 +93,8 @@ export default {
     between: {
         label: 'LBL_ESLIST_BETWEEN',
         inputs: [
-            { ...dateTimeInput, label: 'LBL_ESLIST_FROM' },
-            { ...dateTimeInput, label: 'LBL_ESLIST_TO' },
+            { ...dateTimeInput, label: ['LBL_ESLIST_FROM', 'LBL_TIME_FROM'] },
+            { ...dateTimeInput, label: ['LBL_ESLIST_TO', 'LBL_TIME_TO'] },
         ],
         filters: [{ op: 'range', value: { gte: '{0}', lte: '{1}' } }],
     },

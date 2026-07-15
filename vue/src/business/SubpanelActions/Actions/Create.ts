@@ -12,27 +12,36 @@ export class Create extends SubpanelAction {
 
     public async execute() {
         const store = useRecordViewStore()
-
-        const relateBean = ref<ReturnType<typeof useBean>>(useBean(this.subpanel.module, ''))
-        const relationshipName = store.bean.fieldDefs?.[this.subpanel.properties.get_subpanel_data]?.relationship
-        const link = relateBean.value.loadRelationship(relationshipName)
+        const relationship_name = store.bean.fieldDefs?.[this.subpanel.properties.get_subpanel_data]?.relationship
+        const relate_bean = ref<ReturnType<typeof useBean>>(useBean(this.subpanel.module, ''))
+        const link = relate_bean.value.loadRelationship(relationship_name)
 
         let query: { [key: string]: string } = {
             return_action: 'DetailView',
             return_id: store.bean.id,
             return_module: store.bean.module,
-            return_relationship: relationshipName,
-            parent_type: store.bean.module,
-            parent_id: store.bean.id,
-            parent_name: store.bean.attributes.name,
+            return_relationship: relationship_name,
         }
 
         if (link) {
-            if (link.relateFieldName && store.bean.attributes.name) {
+            if (link?.relateFieldName && store.bean.attributes.name) {
                 query[link.relateFieldName] = store.bean.attributes.name
             }
-            if (link.idFieldName) {
+
+            if (link?.idFieldName) {
                 query[link.idFieldName] = store.bean.id
+            }
+
+            if(link?.parentFieldName && store.bean.attributes.name) {
+                query[link.parentFieldName] = store.bean.attributes.name
+            }
+
+            if(link?.parentIdFieldName) {
+                query[link.parentIdFieldName] = store.bean.id
+            }
+
+            if(link?.parentTypeFieldName) {
+                query[link.parentTypeFieldName] = store.bean.module
             }
         }
 

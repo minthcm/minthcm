@@ -14,7 +14,7 @@
                 :id="subpanel.key"
                 :class="{
                     'mint-subpanel': true, 
-                    'mint-subpanel-disabled': subpanel.total <= 0 && !expandedSubpanels.includes(subpanel.key)
+                    'mint-subpanel-disabled': !store.subpanelsLoading[subpanel.key] && subpanel.total <= 0 && !expandedSubpanels.includes(subpanel.key)
                 }"
             >
                 <v-expansion-panel-title class="mint-subpanel-title" hide-actions>
@@ -23,8 +23,15 @@
                             :icon="expandedSubpanels.includes(subpanel.key) ? 'mdi-chevron-down' : 'mdi-chevron-right'"
                         />
                         <span>{{ languages.label(subpanel.label, $route.params.module) }}</span>
+                        <v-progress-circular
+                            v-if="store.subpanelsLoading[subpanel.key]"
+                            indeterminate
+                            size="16"
+                            width="2"
+                            class="mint-subpanel-spinner"
+                        />
                         <span
-                            v-if="subpanel.total > 0"
+                            v-else-if="subpanel.total > 0"
                             class="mint-subpanel-records-count"
                             v-text="subpanel.total"
                         />
@@ -37,11 +44,14 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="mint-subpanel-content">
                     <MintDataTable
+                        :key="subpanel.key"
                         :subpanel="subpanel"
                         :columns="subpanel.columns"
                         :records="subpanel.records"
                         :module="subpanel.module"
-                        :key="`${subpanel.key}-${subpanel.page}`"
+                        :loading="store.loadingSubpanels.get(subpanel.key) ?? 0"
+                        :skeletonIds="store.skeletonRecordIds.get(subpanel.key)"
+                        @sort-changed="(params) => handleSortChanged(subpanel.key, params)"
                     />
                     <MintDataTablePagination
                         :tableName="subpanel.key"
@@ -58,7 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+
 import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
 import { useLanguagesStore } from '@/store/languages'
 import MintDataTable from '@/components/MintDataTable/MintDataTable.vue'
@@ -83,8 +94,18 @@ const expandedSubpanels = computed({
     set: (value: string[]) => storage.setPanelSections(store.bean.module, 'MintPanelSubpanels', value)
 });
 
+const subpanelSortState = ref<{ [key: string]: { sortBy: string; sortOrder: string } }>({})
+
+function handleSortChanged(subpanelKey: string, params: { sortBy: string; sortOrder: string }) {
+    subpanelSortState.value[subpanelKey] = params
+    const subpanel = store.subpanels.find(sp => sp.key === subpanelKey)
+    if (!subpanel) return
+    store.fetchSubpanelRecords(subpanelKey, subpanel.paginateBy, 0, params.sortBy, params.sortOrder)
+}
+
 const changePage = (page: number, tableName: string, paginateBy: number) => {
-    store.fetchSubpanelRecords(tableName, paginateBy, page)
+    const sort = subpanelSortState.value[tableName]
+    store.fetchSubpanelRecords(tableName, paginateBy, page, sort?.sortBy, sort?.sortOrder)
 }
 </script>
 
@@ -137,6 +158,10 @@ const changePage = (page: number, tableName: string, paginateBy: number) => {
             text-align: center;
             align-items: center;
             justify-content: center;
+        }
+
+        .mint-subpanel-spinner {
+            color: rgb(var(--v-theme-primary));
         }
     }
     .mint-subpanel-content {

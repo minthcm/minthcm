@@ -31,7 +31,6 @@
   }
 
   .nav-tabs > li > a,
-  .nav-tabs > li > a:focus,
   .nav-tabs > li > a:hover {
     text-transform: uppercase;
     font-size: $page-font-size;
@@ -48,7 +47,6 @@
 
 
   .nav-tabs > li.active > a,
-  .nav-tabs > li.active > a:focus,
   .nav-tabs > li.active > a:hover {
     font-size: $page-font-size;
     font-weight: 700;
@@ -66,9 +64,7 @@
     box-shadow: 0 2px 0 0 $active-tab-indicator;
   }
 
-  .nav-tabs > li > a:focus,
   .nav-tabs > li > a:hover,
-  .nav-tabs > li.active > a:focus,
   .nav-tabs > li.active > a:hover {
     background-color: $default-tab-bg-hover;
   }
@@ -145,7 +141,6 @@
 
   /*Override bootstrap (needs to be stacked)*/
   .dropdown-menu > li > a,
-  .dropdown-menu > li > a:focus,
   .dropdown-menu > li > a:hover {
     background-color: $action-tab-bg;
     color: $action-tab-color;
@@ -233,6 +228,9 @@
     background-color: $action-tab-bg;
     border: none;
   }
+  #tab-actions > a:focus{
+    outline: 5px auto -webkit-focus-ring-color;
+  }
 
   #EditView_tabs .tab-content {
     background-color: $tab-bg;
@@ -291,11 +289,11 @@
     }
 }
 
-.tab-content .tab-pane-NOBOOTSTRAPTOGGLER:not(.active) {
-  display: none;
+select:focus, 
+#chooser_display_tabs_up_arrow:focus, 
+#chooser_display_tabs_down_arrow:focus,
+#chooser_display_tabs_left_arrow:focus,
+#chooser_display_tabs_right_arrow:focus,
+input[type="checkbox"]:focus{
+  outline: 5px auto -webkit-focus-ring-color;
 }
-// MintHCM #120479 START
-#page_0_hidden0b,  #page_0_hidden1b {
-    display: none;
-}
-// MintHCM #120479 END

@@ -1,0 +1,2641 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to property \$authController on an unknown class AuthenticationController\.$#'
+			identifier: class.notFound
+			count: 4
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$date_generated on an unknown class MintHCM\\Api\\Entities\\UsersPasswordLink\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$deleted on an unknown class MintHCM\\Api\\Entities\\UsersPasswordLink\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\UsersPasswordLink\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$is_group on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$portal_only on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$user_id on an unknown class MintHCM\\Api\\Entities\\UsersPasswordLink\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$username on an unknown class MintHCM\\Api\\Entities\\UsersPasswordLink\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<MintHCM\\Api\\Entities\\UsersPasswordLink\>\:\:findOneById\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<MintHCM\\Api\\Entities\\UsersPasswordLink\>\:\:markAllAsDeletedByUsername\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method isPrimaryEmail\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method passwordValidationCheck\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method retrieve\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method retrieve_user_id\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method sendEmailForPassword\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method setNewPassword\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to method startSession\(\) on an unknown class SugarApplication\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class AuthenticationController\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class TimeDate\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\UsersPasswordLink not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Function return_module_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Instantiated class AuthenticationController not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Instantiated class MintHCM\\Api\\Entities\\UsersPasswordLink not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Instantiated class SugarApplication not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Instantiated class User not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$authController contains unknown class AuthenticationController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/MVC/SugarApplication\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/Users/authentication/AuthenticationController\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 2
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/Users/authentication/SugarAuthenticate/SugarAuthenticateUser\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Variable \$user in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Controllers/AuthController.php
+
+		-
+			message: '#^Access to property \$assigned_user_link on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 4
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$date_edited on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$date_entered on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$description on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$photo on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$pinned on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$reactions on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$removed on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$reply_to_id on an unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$status on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Access to property \$user_name on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<MintHCM\\Api\\Entities\\Comments\>\:\:getParentCommentsWithReactions\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<MintHCM\\Api\\Entities\\Users\>\:\:getActiveUsers\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to method getFullName\(\) on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 5
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Comments not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Users not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Comments\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Parameter \$user of anonymous function has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/CommentsController.php
+
+		-
+			message: '#^Call to method addFavorite\(\) on an unknown class MintHCM\\Api\\Controllers\\Favorites\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FavoritesController.php
+
+		-
+			message: '#^Call to method deleteFavorite\(\) on an unknown class MintHCM\\Api\\Controllers\\Favorites\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FavoritesController.php
+
+		-
+			message: '#^Call to method getFavoriteID\(\) on an unknown class MintHCM\\Api\\Controllers\\Favorites\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FavoritesController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/FavoritesController.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$favorites contains unknown class MintHCM\\Api\\Controllers\\Favorites\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/FavoritesController.php
+
+		-
+			message: '#^Call to method confirm_upload\(\) on an unknown class UploadFile\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Call to method final_move\(\) on an unknown class UploadFile\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Call to method get_mime_type\(\) on an unknown class UploadFile\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Call to method get_stored_file_name\(\) on an unknown class UploadFile\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Instantiated class UploadFile not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/upload_file\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Variable \$result might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Controllers/FilesController.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Api\\Controllers\\GlobalSearchController\:\:\$request\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Controllers/GlobalSearchController.php
+
+		-
+			message: '#^Caught class MintHCM\\Api\\Controllers\\BadRequest400Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/GlobalSearchController.php
+
+		-
+			message: '#^Caught class MintHCM\\Api\\Controllers\\InvalidArgumentException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/GlobalSearchController.php
+
+		-
+			message: '#^Function is_admin not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/GlobalSearchController.php
+
+		-
+			message: '#^Access to property \$email1 on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$first_name on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$full_name on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$id on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$is_admin on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$last_name on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Access to property \$photo on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Call to method getPreference\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Call to method get_tabs\(\) on an unknown class TabController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Call to static method filterModuleList\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Function updateMintRebuildFile not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Instantiated class TabController not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Controllers\\Init\\Init\:\:getMenuForAllModules\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$current_user contains unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/ACL/ACLController\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/MySettings/TabController\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/Init/Init.php
+
+		-
+			message: '#^Function return_app_list_strings_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Init/Languages.php
+
+		-
+			message: '#^Function return_application_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Init/Languages.php
+
+		-
+			message: '#^Function return_module_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Init/Languages.php
+
+		-
+			message: '#^Call to method getMenu\(\) on an unknown class SugarView\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Call to static method getUserActions\(\) on an unknown class ACLAction\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Constant ACL_ALLOW_ALL not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Constant ACL_ALLOW_ENABLED not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Function get_current_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Function return_module_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Instantiated class SugarView not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Property MintHCM\\Api\\Controllers\\Init\\Module\:\:\$sugar_view has unknown class SugarView as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Module.php
+
+		-
+			message: '#^Access to property \$category on an unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Call to method getContentsAsArray\(\) on an unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Call to method getUsableLocaleNameOptions\(\) on an unknown class Localization\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Call to static method getTimezoneList\(\) on an unknown class TimeDate\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Currencies not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\UserPreferences not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Instantiated class Localization not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Offset ''currencies'' on array\{calendar\: mixed, currency\: mixed, date_format\: mixed, time_format\: mixed, time_zones\: mixed, default_date_format\: mixed, default_time_format\: mixed, default_language\: mixed, \.\.\.\} in empty\(\) does not exist\.$#'
+			identifier: empty.offset
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Variable \$preferences might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Controllers/Init/Preferences.php
+
+		-
+			message: '#^Access to property \$alerts on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 3
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$announced on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$announcement_date on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$assigned_user_link on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 6
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$created_by on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$date_entered on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$description on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$employee_link on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 6
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$first_name on an unknown class MintHCM\\Api\\Entities\\Employees\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$first_name on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Employees\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 4
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$photo on an unknown class MintHCM\\Api\\Entities\\Employees\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$photo on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$private on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$reactions on an unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$status on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Access to property \$user_name on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Call to method getFullName\(\) on an unknown class MintHCM\\Api\\Entities\\Employees\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Call to method getFullName\(\) on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 3
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Employees not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Kudos not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Users not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Kudos\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Parameter \$user of anonymous function has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/KudosController.php
+
+		-
+			message: '#^Call to method getClientById\(\) on an unknown class MintMCP\\Auth\\Services\\ClientService\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Call to method isValidRedirectUri\(\) on an unknown class MintMCP\\Auth\\Services\\ClientService\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Call to method startSession\(\) on an unknown class SugarApplication\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class MintMCP\\Auth\\OAuth2Server\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Instantiated class MintMCP\\Auth\\Services\\ClientService not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Instantiated class SugarApplication not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/MVC/SugarApplication\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/McpController.php
+
+		-
+			message: '#^Access to property \$module on an unknown class ViewDetail\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Access to property \$module on an unknown class ViewEdit\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Access to property \$module on an unknown class ViewRecord\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to method getFieldDefinitions\(\) on an unknown class SugarBean\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to method getMetaDataFile\(\) on an unknown class ViewDetail\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to method getMetaDataFile\(\) on an unknown class ViewEdit\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to method getMetaDataFile\(\) on an unknown class ViewRecord\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 5
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Class SugarBean not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Instantiated class SubPanelDefinitions not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Instantiated class ViewDetail not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Instantiated class ViewEdit not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Instantiated class ViewRecord not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/SubPanel/SubPanelDefinitions\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Variable \$viewdefs might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: app/Controllers/MetaController.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Call to method getPreference\(\) on an unknown class UserPreference\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Call to method setPreference\(\) on an unknown class UserPreference\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Caught class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Caught class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Function is_admin not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Instantiated class UserPreference not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Controllers\\Module\\ListController\:\:getParsedFilters\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Undefined variable\: \$module$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Variable \$module in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Variable \$module in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Controllers/Module/ListController.php
+
+		-
+			message: '#^Call to method getPreference\(\) on an unknown class UserPreference\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Call to static method getLogger\(\) on an unknown class LoggerManager\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Function get_current_language not found\.$#'
+			identifier: function.notFound
+			count: 4
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Function return_app_list_strings_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Function return_module_language not found\.$#'
+			identifier: function.notFound
+			count: 3
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Instantiated class UserPreference not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Variable \$ESListViewDefs might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Controllers/Module/ListInitController.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$module_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Access to property \$layout_defs on an unknown class SubPanelDefinitions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:confirm_upload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:final_move\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:set_is_http_upload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to method load_subpanel\(\) on an unknown class SubPanelDefinitions\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to method process_dynamic_listview\(\) on an unknown class ListViewSubPanel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 4
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Function get_current_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Function return_app_list_strings_language not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Instantiated class ListViewSubPanel not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Instantiated class SubPanelDefinitions not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/ListView/ListViewSubPanel\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Path in require_once\(\) "include/SubPanel/SubPanelDefinitions\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Result of method MintHCM\\Data\\ORM\\Doctrine\\MintRepository\\MintEntityRepository\:\:delete\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Variable \$bean in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Variable \$entity in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 6
+			path: app/Controllers/ModuleController.php
+
+		-
+			message: '#^Dead catch \- Exception is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Controllers/OAuth2/Controller.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Users not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^Instantiated class Api\\V8\\OAuth2\\Repository\\ScopeRepository not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class Api\\V8\\OAuth2\\Repository\\ClientRepository\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^Parameter \#1 \$clientRepository of class League\\OAuth2\\Server\\AuthorizationServer constructor expects League\\OAuth2\\Server\\Repositories\\ClientRepositoryInterface, Api\\V8\\OAuth2\\Repository\\ClientRepository given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^Parameter \#3 \$scopeRepository of class League\\OAuth2\\Server\\AuthorizationServer constructor expects League\\OAuth2\\Server\\Repositories\\ScopeRepositoryInterface, Api\\V8\\OAuth2\\Repository\\ScopeRepository given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between ''''\|''LINUX'' and ''WINDOWS'' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Controllers/OAuth2/Server.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<object\>\:\:getCompetencies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/PositionsController.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<object\>\:\:getResponsibilities\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Controllers/PositionsController.php
+
+		-
+			message: '#^Access to property \$assigned_user_id on an unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Access to property \$parent_id on an unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Access to property \$parent_type on an unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Access to property \$reaction_type on an unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Call to method hasAccess\(\) on an unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Reactions not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Instantiated class MintHCM\\Api\\Entities\\Reactions not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Result of method MintHCM\\Data\\ORM\\Doctrine\\MintRepository\\MintEntityRepository\:\:delete\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Variable \$entity in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 2
+			path: app/Controllers/ReactionsController.php
+
+		-
+			message: '#^Function is_admin not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Controllers/SchedulerController.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\TimeDate\:\:getNow\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Entities/OAuth2/MintToken.php
+
+		-
+			message: '#^Variable \$userId might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Entities/OAuth2/MintToken.php
+
+		-
+			message: '#^Trait MintHCM\\Api\\EntityTraits\\PersonTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/EntityTraits/PersonTrait.php
+
+		-
+			message: '#^Trait MintHCM\\Api\\EntityTraits\\UserPreferencesTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/EntityTraits/UserPreferencesTrait.php
+
+		-
+			message: '#^Trait MintHCM\\Api\\EntityTraits\\UsersTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/EntityTraits/UsersTrait.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/ExceptionHandlers/MintExceptionHandler.php
+
+		-
+			message: '#^Access to property \$id on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Call to method retrieve\(\) on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class AuthenticationController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Dead catch \- Exception is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Function translate not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Instantiated class User not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Middlewares\\Auth\\AuthMiddleware\:\:__invoke\(\) should return Slim\\Psr7\\Response but returns Psr\\Http\\Message\\ResponseInterface\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Middlewares\\Auth\\AuthMiddleware\:\:runTokenValidation\(\) should return Psr\\Http\\Message\\ServerRequestInterface\|Slim\\Psr7\\Response but returns Psr\\Http\\Message\\ResponseInterface\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/Users/authentication/AuthenticationController\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: app/Middlewares/Auth/AuthMiddleware.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Middlewares/Middleware.php
+
+		-
+			message: '#^Parameter \#1 \$access_token of method MintHCM\\Api\\Entities\\OAuth2\\MintToken\:\:setDataFromAccessToken\(\) expects MintHCM\\Api\\Entities\\OAuth2\\AccessToken, League\\OAuth2\\Server\\Entities\\AccessTokenEntityInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Repositories/OAuth2/AccessTokenRepository.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: app/Repositories/OAuth2/ClientRepository.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: app/Repositories/OAuth2/ClientRepository.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Repositories/OAuth2/ClientRepository.php
+
+		-
+			message: '#^Parameter \#1 \$refresh_token of method MintHCM\\Api\\Entities\\OAuth2\\MintToken\:\:setDataFromRefreshToken\(\) expects MintHCM\\Api\\Entities\\OAuth2\\RefreshToken, League\\OAuth2\\Server\\Entities\\RefreshTokenEntityInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Repositories/OAuth2/RefreshTokenRepository.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between MintHCM\\Api\\Entities\\OAuth2\\MintToken and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 3
+			path: app/Repositories/OAuth2/RefreshTokenRepository.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Repositories\\OAuth2\\ScopeRepository\:\:getScopeEntityByIdentifier\(\) should return League\\OAuth2\\Server\\Entities\\ScopeEntityInterface\|null but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: app/Repositories/OAuth2/ScopeRepository.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Reactions not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/ReactionRepository.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Repositories\\ReactionRepository\:\:getUserReactionToParent\(\) has invalid return type MintHCM\\Api\\Entities\\Reactions\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/ReactionRepository.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 3
+			path: app/Repositories/SchedulerRepository.php
+
+		-
+			message: '#^Access to property \$contents on an unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Repositories/UserPreferencesRepository.php
+
+		-
+			message: '#^Call to method getContentsAsArray\(\) on an unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UserPreferencesRepository.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$preference contains unknown class MintHCM\\Api\\Entities\\UserPreferences\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UserPreferencesRepository.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\UsersPasswordLink not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UsersPasswordLinkRepository.php
+
+		-
+			message: '#^Access to property \$authController on an unknown class AuthenticationController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^Call to method checkPassword\(\) on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^Instantiated class AuthenticationController not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^Method MintHCM\\Api\\Repositories\\UsersRepository\:\:getUserEntityByUserCredentials\(\) should return League\\OAuth2\\Server\\Entities\\UserEntityInterface\|null but returns MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Repositories/UsersRepository.php
+
+		-
+			message: '#^Call to an undefined method ReflectionType\:\:getName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Routes/RouteManager.php
+
+		-
+			message: '#^Parameter \#1 \$di of method MintHCM\\Api\\Routes\\RouteManager\:\:prepareConstructorArguments\(\) expects Psr\\Container\\ContainerInterface, \$this\(MintHCM\\Api\\Routes\\RouteManager\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Routes/RouteManager.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/BeanFactory.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/Actions/Delete.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/Actions/Export.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:schedule\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/MassActions/Actions/MassConfirmation.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/Actions/MassConfirmation.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 2
+			path: data/MassActions/Actions/Merge.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/Actions/Update.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/MassAction.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MassActions/MassAction.php
+
+		-
+			message: '#^Function is_admin not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: data/MassActions/MassActionDataHelper.php
+
+		-
+			message: '#^Access to property \$id on an unknown class MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\UserPreferences not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getMintDateTimeFromString\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getUserDateFormat\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getUserDateTimeFormat\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getUserId\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getUserTimeFormat\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:getUserTimezoneName\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:toUserDateFormat\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Parameter \$user of method MintHCM\\Data\\MintDateTime\:\:toUserFormat\(\) has invalid type MintHCM\\Api\\Entities\\Users\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/MintDateTime.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$field_defs\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$custom_entity\.$#'
+			identifier: property.notFound
+			count: 6
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\MintBean\:\:ACLAccess\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\MintBean\:\:bean_implements\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\MintBean\:\:mark_deleted\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\MintBean\:\:save\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Call to static method getSkipingFieldTypes\(\) on an unknown class EntityCreatorManager\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class EntityCreatorManager\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^PHPDoc tag @var with type EntityCreatorManager is not subtype of native type MintHCM\\Utils\\LegacyConnector\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Static property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$mint_bean \(MintHCM\\Data\\MintBean\) in empty\(\) is not falsy\.$#'
+			identifier: empty.property
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntity.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$custom_entity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntitySerializer.php
+
+		-
+			message: '#^Variable \$legacy_bean in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/MintEntitySerializer.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:getORMMappingTypes\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEntity/PropertiesManager.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$custom_entity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEventManager/Subscribers/CustomEntitySubscriber.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEventManager/Subscribers/CustomEntitySubscriber.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$main_entity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintEventManager/Subscribers/CustomEntitySubscriber.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintEntity\\MintEntity\:\:\$custom_entity\.$#'
+			identifier: property.notFound
+			count: 2
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\ORM\\Doctrine\\MintRepository\\MintEntityRepository\:\:\$request\.$#'
+			identifier: property.notFound
+			count: 2
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Call to an undefined method Doctrine\\ORM\\EntityRepository\<object\>\:\:getNewEntity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Caught class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Caught class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Function is_admin not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: data/ORM/Doctrine/MintRepository/MintEntityRepository.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: data/ORM/Doctrine/MintTypes/Types/Date.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: data/ORM/Doctrine/MintTypes/Types/DateTime.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\TimeDate\:\:\$legacy_bean\.$#'
+			identifier: property.notFound
+			count: 1
+			path: data/TimeDate.php
+
+		-
+			message: '#^Instantiated class TimeDate not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: data/TimeDate.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/BasicSets/check_relate_module_access.php
+
+		-
+			message: '#^Undefined variable\: \$this$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/MintLogic/BasicSets/function_options.php
+
+		-
+			message: '#^Variable \$this on left side of \?\? is never defined\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: lib/MintLogic/BasicSets/function_options.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/BasicSets/parent_fields.php
+
+		-
+			message: '#^Access to property \$module_name on an unknown class SugarBean\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/MintLogic.php
+
+		-
+			message: '#^Class SugarBean not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/MintLogic.php
+
+		-
+			message: '#^Cloning object of an unknown class SugarBean\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/MintLogic.php
+
+		-
+			message: '#^Access to property \$availability on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^Access to property \$mode on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^Function translate not found\.$#'
+			identifier: function.notFound
+			count: 6
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$workplace contains unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^Variable \$to_date in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: lib/MintLogic/Modules/Allocations/logicdefs.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 5
+			path: lib/MintLogic/Modules/Costs/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$current_user contains unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Costs/logicdefs.php
+
+		-
+			message: '#^Function translate not found\.$#'
+			identifier: function.notFound
+			count: 3
+			path: lib/MintLogic/Modules/ExitInterviews/logicdefs.php
+
+		-
+			message: '#^Parameter \#1 \$hour of method DateTime\:\:setTime\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: lib/MintLogic/Modules/Meetings/logicdefs.php
+
+		-
+			message: '#^Access to property \$room_surface on an unknown class Rooms\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Rooms/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$bean contains unknown class Rooms\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Rooms/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$group contains unknown class SecurityGroup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Rooms/logicdefs.php
+
+		-
+			message: '#^Variable \$group in PHPDoc tag @var does not match assigned variable \$sg_id\.$#'
+			identifier: varTag.differentVariable
+			count: 1
+			path: lib/MintLogic/Modules/Rooms/logicdefs.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/SpentTime/Updaters/SetDatesFromWorkscheduleUpdater.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/SpentTime/Validators/SpentTimeOverlapValidator.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/SpentTime/logicdefs.php
+
+		-
+			message: '#^Call to method getTimestamp\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesDateEndValidator.php
+
+		-
+			message: '#^Instantiated class SugarDateTime not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesDateEndValidator.php
+
+		-
+			message: '#^Call to method getTimestamp\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesDurationHoursValidator.php
+
+		-
+			message: '#^Instantiated class SugarDateTime not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesDurationHoursValidator.php
+
+		-
+			message: '#^Call to method asDb\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesTypeExistsValidator.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesTypeExistsValidator.php
+
+		-
+			message: '#^Instantiated class SugarDateTime not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesTypeExistsValidator.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/Validators/WorkSchedulesTypeWorkOffValidator.php
+
+		-
+			message: '#^Access to property \$id on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Access to property \$name on an unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Call to method add\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Call to method asDb\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 3
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Call to method getTimestamp\(\) on an unknown class SugarDateTime\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Function format_number not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Function unformat_number not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Instantiated class SugarDateTime not found\.$#'
+			identifier: class.notFound
+			count: 5
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$current_user contains unknown class User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/WorkSchedules/logicdefs.php
+
+		-
+			message: '#^Access to property \$fetched_row on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^Access to property \$mode on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^Access to property \$room_id on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^Access to property \$workplaces_allocations on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^Call to method load_relationship\(\) on an unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$bean contains unknown class Workplaces\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/MintLogic/Modules/Workplaces/logicdefs.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Modules/_example/Validators/ExampleValidator.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: lib/MintLogic/Modules/_example/logicdefs.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Validators/DelegationValidator.php
+
+		-
+			message: '#^Function translate not found\.$#'
+			identifier: function.notFound
+			count: 6
+			path: lib/MintLogic/Validators/IsInRange.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/MintLogic/Validators/ReservationValidator.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:getGroupWhere\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: lib/Search/Base/SearchResult.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireOwner\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: lib/Search/Base/SearchResult.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireSecurityGroup\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: lib/Search/Base/SearchResult.php
+
+		-
+			message: '#^Variable \$where might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Search/Base/SearchResult.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:getController\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^Call to static method getIDOfSubordinates\(\) on an unknown class UsersController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^Call to static method requireOwner\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^Call to static method requireSecurityGroup\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$controller contains unknown class UsersController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/BaseListACL.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ESListACLHelper.php
+
+		-
+			message: '#^Variable \$employee_related_exclude_modules might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Search/ElasticSearch/ESListACLHelper.php
+
+		-
+			message: '#^Call to method parseFile\(\) on an unknown class Symfony\\Component\\Yaml\\Parser\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticMapperParser.php
+
+		-
+			message: '#^Instantiated class Symfony\\Component\\Yaml\\Parser not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticMapperParser.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticMapperParser.php
+
+		-
+			message: '#^Variable \$const_field might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticMapperParser.php
+
+		-
+			message: '#^Instantiated class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticOperator.php
+
+		-
+			message: '#^Throwing object of an unknown class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticOperator.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:checkAccess\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Call to static method checkAccess\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Call to static method requireOwner\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Call to static method requireSecurityGroup\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Instantiated class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$acl_controller contains unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^PHPDoc tag @var with type ACLController is not subtype of native type MintHCM\\Utils\\LegacyConnector\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Throwing object of an unknown class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException\.$#'
+			identifier: class.notFound
+			count: 2
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 3
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Variable \$prefix in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQuery.php
+
+		-
+			message: '#^Instantiated class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQueryOperatorsManager.php
+
+		-
+			message: '#^Throwing object of an unknown class Elasticsearch\\Common\\Exceptions\\BadRequest400Exception\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticQueryOperatorsManager.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$is_favorite\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticResult.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Data\\MintBean\:\:\$module_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticResult.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Data\\MintBean\:\:load_relationships\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticResult.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 2
+			path: lib/Search/ElasticSearch/ElasticResult.php
+
+		-
+			message: '#^Call to static method create\(\) on an unknown class Elasticsearch\\ClientBuilder\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Search/ElasticSearch/ElasticSearch.php
+
+		-
+			message: '#^Instantiated class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: lib/Search/ElasticSearch/ElasticSearch.php
+
+		-
+			message: '#^Throwing object of an unknown class Elasticsearch\\Common\\Exceptions\\InvalidArgumentException\.$#'
+			identifier: class.notFound
+			count: 3
+			path: lib/Search/ElasticSearch/ElasticSearch.php
+
+		-
+			message: '#^Property MintHCM\\Lib\\Search\\ElasticSearch\\ElasticOperator\:\:\$boost \(float\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: lib/Search/ElasticSearch/Operators/Wildcard.php
+
+		-
+			message: '#^Right side of \|\| is always true\.$#'
+			identifier: booleanOr.rightAlwaysTrue
+			count: 1
+			path: lib/Search/ElasticSearch/Operators/Wildcard.php
+
+		-
+			message: '#^Access to property \$view_object_map on an unknown class AlertsController\.$#'
+			identifier: class.notFound
+			count: 2
+			path: modules/Alerts/api/controllers/ListAction.php
+
+		-
+			message: '#^Call to method action_get\(\) on an unknown class AlertsController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Alerts/api/controllers/ListAction.php
+
+		-
+			message: '#^Instantiated class AlertsController not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Alerts/api/controllers/ListAction.php
+
+		-
+			message: '#^Path in require_once\(\) "modules/Alerts/controller\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: modules/Alerts/api/controllers/ListAction.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 2
+			path: modules/Alerts/api/controllers/MassActionController.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Alerts/api/controllers/UpdateAction.php
+
+		-
+			message: '#^Access to property \$assigned_user_id on an unknown class Alert\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Alerts/api/helpers/DataHelper.php
+
+		-
+			message: '#^Parameter \$alert of method MintHCM\\Modules\\Alerts\\api\\helpers\\DataHelper\:\:isAssignedUserCurrentUser\(\) has invalid type Alert\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Alerts/api/helpers/DataHelper.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:convert\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/Candidatures/api/controllers/Convert.php
+
+		-
+			message: '#^Call to static method requireOwner\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Employees/EmployeesListACL.php
+
+		-
+			message: '#^Call to static method requireSecurityGroup\(\) on an unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Employees/EmployeesListACL.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$acl_controller contains unknown class ACLController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Employees/EmployeesListACL.php
+
+		-
+			message: '#^PHPDoc tag @var with type ACLController is not subtype of native type MintHCM\\Utils\\LegacyConnector\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: modules/Employees/EmployeesListACL.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Favorites/api/controllers/ListAction.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireOwner\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: modules/Kudos/KudosListACL.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireSecurityGroup\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: modules/Kudos/KudosListACL.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/News/api/controllers/ListAction.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireOwner\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: modules/SalaryRanges/SalaryRangesListACL.php
+
+		-
+			message: '#^Call to an undefined static method MintHCM\\Utils\\LegacyConnector\:\:requireSecurityGroup\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: modules/SalaryRanges/SalaryRangesListACL.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class DBManagerFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/SalaryRanges/SalaryRangesListACL.php
+
+		-
+			message: '#^Call to static method newBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/SalaryRanges/SalaryRangesListACL.php
+
+		-
+			message: '#^Call to static method getBean\(\) on an unknown class BeanFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Trackers/api/controllers/ListAction.php
+
+		-
+			message: '#^Undefined variable\: \$trackerManager$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/Trackers/api/controllers/RecordViewAction.php
+
+		-
+			message: '#^Class MintHCM\\Api\\Entities\\Users not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/Users/api/controllers/UserNameUnique.php
+
+		-
+			message: '#^Access to an undefined property MintHCM\\Utils\\LegacyConnector\:\:\$employee\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/WorkSchedules/api/controllers/CloseWorkSchedule.php
+
+		-
+			message: '#^Call to an undefined method MintHCM\\Utils\\LegacyConnector\:\:validate\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/WorkSchedules/api/controllers/CloseWorkSchedule.php
+
+		-
+			message: '#^Call to an undefined method ReflectionType\:\:getName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: utils/CustomLoader.php
+
+		-
+			message: '#^Method Doctrine\\ORM\\EntityManagerInterface\:\:createQueryBuilder\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: utils/CyclicRecordsSaver.php
+
+		-
+			message: '#^Parameter \#1 \$hour of method DateTime\:\:setTime\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: utils/CyclicRecordsSaver.php
+
+		-
+			message: '#^Parameter \#2 \$minute of method DateTime\:\:setTime\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/CyclicRecordsSaver.php
+
+		-
+			message: '#^Parameter \#3 \$second of method DateTime\:\:setTime\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/CyclicRecordsSaver.php

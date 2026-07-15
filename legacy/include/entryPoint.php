@@ -126,7 +126,6 @@ require_once 'modules/Trackers/BreadCrumbStack.php';
 require_once 'modules/Trackers/Tracker.php';
 require_once 'modules/Trackers/TrackerManager.php';
 require_once 'modules/ACL/ACLController.php';
-require_once 'modules/ACLActions/ACLAction.php';
 require_once 'modules/Administration/Administration.php';
 require_once 'modules/Administration/updater_utils.php';
 require_once 'modules/Users/User.php';
@@ -213,4 +212,7 @@ if (empty($GLOBALS['installing'])) {
 ///////////////////////////////////////////////////////////////////////////////
 
 //It does a check to see if the host is valid
-check_trusted_hosts();
+$sapi_type = php_sapi_name();
+if ($sapi_type !== 'cli') {
+    check_trusted_hosts();
+}

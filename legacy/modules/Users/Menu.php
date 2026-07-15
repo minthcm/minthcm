@@ -77,7 +77,14 @@ if (is_admin($current_user)) {
     $module_menu[] = array("index.php?module=ACLRoles&action=index&return_module=SecurityGroups&return_action=ListView", $admin_mod_strings['LBL_MANAGE_ROLES_TITLE'], "Role_Management");
     $module_menu[] = array("index.php?module=SecurityGroups&action=config&return_module=SecurityGroups&return_action=ListView", $admin_mod_strings['LBL_CONFIG_SECURITYGROUPS_TITLE'], "Security_Suite_Settings");
 
-
+    $masquerade_record = preg_match('/^[0-9a-f-]{36}$/i', $_REQUEST['record'] ?? '') 
+        ? $_REQUEST['record'] : '{record_id}';
+    $module_menu[] = array(
+        "index.php?module=Users&action=Masquerade&record=" . $masquerade_record,
+        $app_strings['LBL_LOGIN_AS'],
+        "Masquerade",
+        array('view' => 'DetailView'),
+    );
 }
 
 // MintHCM #123323 START

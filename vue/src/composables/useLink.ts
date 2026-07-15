@@ -2,6 +2,7 @@ import { computed, ComputedRef, ref } from 'vue'
 import { mintApi } from '@/api/api'
 import { subpanelsApi } from '@/api/subpanels.api'
 import { useBean } from './useBean'
+import { useLanguagesStore } from '@/store/languages'
 
 interface RelationshipRecord {
     id: string
@@ -22,6 +23,8 @@ export const useLink = (link: string, relationshipName: string, beanData: BeanDa
     const currentPage = ref(0)
     const isFake = ref(fake)
 
+    const languages = useLanguagesStore()
+
     const relateFieldName = computed<string | null>(() => {
         const relateField = Object.keys(beanData.fieldDefs.value).find(
             (fieldName) =>
@@ -40,6 +43,34 @@ export const useLink = (link: string, relationshipName: string, beanData: BeanDa
                     beanData.fieldDefs.value?.[fieldName]?.relationship === relationshipName),
         )
         return idField || null
+    })
+
+    const parentFieldName = computed<string | null>(() => {
+        const relatedModule = beanData.fieldDefs.value[link]?.module
+        if (!relatedModule) return null
+
+        const parentField = Object.keys(beanData.fieldDefs.value).find((fieldName) => {
+            if (beanData.fieldDefs.value?.[fieldName]?.type !== 'parent') return false
+
+            const optionsListName = beanData.fieldDefs.value?.[fieldName]?.options
+            if (!optionsListName || typeof optionsListName !== 'string') return false
+
+            const optionsList = languages.languages.app_list_strings[optionsListName]
+            if (!optionsList) return false
+
+            return Object.keys(optionsList).includes(relatedModule)
+        })
+        return parentField ?? null
+    })
+
+    const parentIdFieldName = computed<string | null>(() => {
+        if (!parentFieldName.value) return null
+        return beanData.fieldDefs.value[parentFieldName.value]?.id_name ?? null
+    })
+
+    const parentTypeFieldName = computed<string | null>(() => {
+        if (!parentFieldName.value) return null
+        return beanData.fieldDefs.value[parentFieldName.value]?.type_name ?? null
     })
 
     const beansArray = computed(() => {
@@ -119,6 +150,9 @@ export const useLink = (link: string, relationshipName: string, beanData: BeanDa
         beans,
         relateFieldName,
         idFieldName,
+        parentFieldName,
+        parentIdFieldName,
+        parentTypeFieldName,
         isFake,
         add,
         remove,

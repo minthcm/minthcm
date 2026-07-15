@@ -79,10 +79,6 @@ $layout_defs['Employees'] = array(
                 array(
                     'widget_class' => 'SubPanelTopButtonQuickCreate',
                 ),
-                array(
-                    'widget_class' => 'SubPanelTopSelectButton',
-                    'mode' => 'MultiSelect',
-                ),
             ),
         ),
         "reservations" => array(

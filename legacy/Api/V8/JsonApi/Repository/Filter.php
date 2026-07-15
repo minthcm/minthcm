@@ -142,7 +142,11 @@ class Filter
         switch ($operator) {
             case 'in':
             case 'not_in':
-                return '("' . implode('","', explode(',', $value)) . '")';
+                $items = array_map(
+                    fn($item) => $this->db->quoted(trim($item)),
+                    explode(',', $value)
+                );
+                return '(' . implode(',', $items) . ')';
         }
         return $this->db->quoted($value);
     }
