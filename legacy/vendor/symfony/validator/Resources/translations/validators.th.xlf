@@ -1,22 +1,22 @@
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="file.ext">
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="th" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
                 <source>This value should be false.</source>
-                <target>ค่านี้ควรจะเป็น false</target>
+                <target>ค่านี้ควรเป็น false</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>This value should be true.</source>
-                <target>ค่านี้ควรจะเป็น true</target>
+                <target>ค่านี้ควรเป็น true</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>This value should be of type {{ type }}.</source>
-                <target>ค่านี้ควรจะเป็นชนิด {{ type }}</target>
+                <target>ค่านี้ควรเป็น {{ type }}</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>This value should be blank.</source>
-                <target>ควรจะเป็นค่าว่าง</target>
+                <target>ควรเป็นค่าว่าง</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>The value you selected is not a valid choice.</source>
@@ -36,11 +36,11 @@
             </trans-unit>
             <trans-unit id="9">
                 <source>This field was not expected.</source>
-                <target>ฟิลด์นี้ที่ไม่ได้คาดหวัง</target>
+                <target>ไม่ควรมีฟิลด์นี้</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>This field is missing.</source>
-                <target>ฟิลด์นี้จะหายไป</target>
+                <target>ฟิลด์นี้หายไป</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>This value is not a valid date.</source>
@@ -134,9 +134,9 @@
                 <source>This file is not a valid image.</source>
                 <target>ไฟล์นี้ไม่ใช่ไฟล์รูปภาพ</target>
             </trans-unit>
-            <trans-unit id="37">
-                <source>This is not a valid IP address.</source>
-                <target>ค่าของ IP ไม่ถูกต้อง</target>
+            <trans-unit id="37" resname="This is not a valid IP address.">
+                <source>This value is not a valid IP address.</source>
+                <target state="needs-review-translation">ค่านี้ไม่ใช่ที่อยู่ IP ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="38">
                 <source>This value is not a valid language.</source>
@@ -164,7 +164,7 @@
             </trans-unit>
             <trans-unit id="44">
                 <source>The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.</source>
-                <target>ความกว้างของภาพไม่ได้ขนาด ({{ width }}px) อนุญาตให้สั้นที่สุด {{ min_width }}px</target>
+                <target>ความกว้างของภาพต่ำเกินไป ({{ width }}px) อนุญาตให้ความกว้างไม่ต่ำกว่า {{ min_width }}px</target>
             </trans-unit>
             <trans-unit id="45">
                 <source>The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.</source>
@@ -172,7 +172,7 @@
             </trans-unit>
             <trans-unit id="46">
                 <source>The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.</source>
-                <target>ความสูงของภาพไม่ได้ขนาด ({{ height }}px) อนุญาตให้สูงอย่างน้อยที่สุด {{ min_height }}px</target>
+                <target>ความสูงของภาพเล็กเกินไป ({{ height }}px) อนุญาตให้ความสูงไม่ควรต่ำกว่า {{ min_height }}px</target>
             </trans-unit>
             <trans-unit id="47">
                 <source>This value should be the user's current password.</source>
@@ -190,17 +190,17 @@
                 <source>No file was uploaded.</source>
                 <target>ไม่มีไฟล์ใดถูกอัปโหลด</target>
             </trans-unit>
-            <trans-unit id="51">
-                <source>No temporary folder was configured in php.ini.</source>
-                <target>ไม่พบไฟล์ temp ควรจะกำหนดใน php.ini</target>
+            <trans-unit id="51" resname="No temporary folder was configured in php.ini.">
+                <source>No temporary folder was configured in php.ini, or the configured folder does not exist.</source>
+                <target state="needs-review-translation">ไม่มีการกำหนดโฟลเดอร์ชั่วคราวใน php.ini หรือโฟลเดอร์ที่กำหนดไม่มีอยู่จริง</target>
             </trans-unit>
             <trans-unit id="52">
                 <source>Cannot write temporary file to disk.</source>
-                <target>ไม่สามารถเขียน temp ไฟล์ลงดิสก์ได้</target>
+                <target>ไม่สามารถเขียนไฟล์ชั่วคราว (temporary file) ลงดิสก์ได้</target>
             </trans-unit>
             <trans-unit id="53">
                 <source>A PHP extension caused the upload to fail.</source>
-                <target>PHP extension เกี่ยวกับการอัปโหลดมีปัญหา</target>
+                <target>PHP extension ทำให้การอัปโหลดมีปัญหา</target>
             </trans-unit>
             <trans-unit id="54">
                 <source>This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.</source>
@@ -212,7 +212,7 @@
             </trans-unit>
             <trans-unit id="56">
                 <source>This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.</source>
-                <target>คอเล็กชั่นนี้ควรจะมีสมาชิก {{ limit }} เท่านั้น</target>
+                <target>คอเล็กชั่นนี้ควรจะมี {{ limit }} สมาชิกเท่านั้น</target>
             </trans-unit>
             <trans-unit id="57">
                 <source>Invalid card number.</source>
@@ -222,33 +222,33 @@
                 <source>Unsupported card type or invalid card number.</source>
                 <target>ไม่รู้จักประเภทของบัตร หรือหมายเลขบัตรไม่ถูกต้อง</target>
             </trans-unit>
-            <trans-unit id="59">
-                <source>This is not a valid International Bank Account Number (IBAN).</source>
-                <target>นี่ไม่ถูกต้องตาม International Bank Account Number (IBAN)</target>
+            <trans-unit id="59" resname="This is not a valid International Bank Account Number (IBAN).">
+                <source>This value is not a valid International Bank Account Number (IBAN).</source>
+                <target state="needs-review-translation">ค่านี้ไม่ใช่หมายเลขบัญชีธนาคารระหว่างประเทศ (IBAN) ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="60">
                 <source>This value is not a valid ISBN-10.</source>
-                <target>ค่านี้ไม่ถูกต้องตาม ISBN-10</target>
+                <target>ค่านี้ไม่ใช่ ISBN-10 ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="61">
                 <source>This value is not a valid ISBN-13.</source>
-                <target>ค่านี้ไม่ถูกต้องตาม ISBN-13</target>
+                <target>ค่านี้ไม่ใช่ ISBN-13 ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="62">
                 <source>This value is neither a valid ISBN-10 nor a valid ISBN-13.</source>
-                <target>ค่านี้ไม่ถูกต้องตามทั้ง ISBN-10 และ ISBN-13</target>
+                <target>ค่านี้ไม่ใช่ ISBN-10 หรือ ISBN-13 ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="63">
                 <source>This value is not a valid ISSN.</source>
-                <target>ค่านี้ไม่ถุกต้องตาม ISSN</target>
+                <target>ค่านี้ไม่ใช่ ISSN ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="64">
                 <source>This value is not a valid currency.</source>
-                <target>ค่านี้ไม่ถูกต้องตามสกุลเงิน</target>
+                <target>ค่านี้ไม่ใช่สกุลเงินที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="65">
                 <source>This value should be equal to {{ compared_value }}.</source>
-                <target>ค่านี้ไม่ตรงกับ {{ compared_value }}</target>
+                <target>ค่านี้ควรตรงกับ {{ compared_value }}</target>
             </trans-unit>
             <trans-unit id="66">
                 <source>This value should be greater than {{ compared_value }}.</source>
@@ -280,11 +280,11 @@
             </trans-unit>
             <trans-unit id="73">
                 <source>The image ratio is too big ({{ ratio }}). Allowed maximum ratio is {{ max_ratio }}.</source>
-                <target>สัดส่วนของภาพใหญ่เกิน ({{ ratio }}) สามารถมีขนาดใหญ่ที่สุดได้ {{ max_ratio }}</target>
+                <target>สัดส่วนของภาพใหญ่เกิน ({{ ratio }}) สัดส่วนใหญ่ที่สุดที่ใช้ได้คือ {{ max_ratio }}</target>
             </trans-unit>
             <trans-unit id="74">
                 <source>The image ratio is too small ({{ ratio }}). Minimum ratio expected is {{ min_ratio }}.</source>
-                <target>สัดส่วนของภาพเล็กเกิน ({{ ratio }}) สามารถมีขนาดเล็กที่สุดได้ {{ min_ratio }}</target>
+                <target>สัดส่วนของภาพเล็กเกิน ({{ ratio }}) สัดส่วนเล็กที่สุดที่ใช้ได้คือ {{ min_ratio }}</target>
             </trans-unit>
             <trans-unit id="75">
                 <source>The image is square ({{ width }}x{{ height }}px). Square images are not allowed.</source>
@@ -310,17 +310,17 @@
                 <source>This value does not match the expected {{ charset }} charset.</source>
                 <target>ค่านี้ไม่ตรงกับการเข้ารหัส {{ charset }}</target>
             </trans-unit>
-            <trans-unit id="81">
-                <source>This is not a valid Business Identifier Code (BIC).</source>
-                <target>นี่ไม่ถูกต้องตามรหัสสำหรับระบุธุรกิจนี้ (BIC)</target>
+            <trans-unit id="81" resname="This is not a valid Business Identifier Code (BIC).">
+                <source>This value is not a valid Business Identifier Code (BIC).</source>
+                <target state="needs-review-translation">ค่านี้ไม่ใช่รหัสประจำตัวธุรกิจ (BIC) ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="82">
                 <source>Error</source>
                 <target>เกิดข้อผิดพลาด</target>
             </trans-unit>
-            <trans-unit id="83">
-                <source>This is not a valid UUID.</source>
-                <target>นี่ไม่ใช่ UUID ที่ถูกต้อง</target>
+            <trans-unit id="83" resname="This is not a valid UUID.">
+                <source>This value is not a valid UUID.</source>
+                <target state="needs-review-translation">ค่านี้ไม่ใช่ UUID ที่ถูกต้อง</target>
             </trans-unit>
             <trans-unit id="84">
                 <source>This value should be a multiple of {{ compared_value }}.</source>
@@ -365,6 +365,106 @@
             <trans-unit id="94">
                 <source>This value should be between {{ min }} and {{ max }}.</source>
                 <target>ค่านี้ควรอยู่ระหว่าง {{ min }} ถึง {{ max }}</target>
+            </trans-unit>
+            <trans-unit id="95">
+                <source>This value is not a valid hostname.</source>
+                <target>ค่าโฮสต์เนมไม่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="96">
+                <source>The number of elements in this collection should be a multiple of {{ compared_value }}.</source>
+                <target>จำนวนของสมาชิกในคอเล็กชั่นควรเป็นพหุคูณของ {{ compared_value }}</target>
+            </trans-unit>
+            <trans-unit id="97">
+                <source>This value should satisfy at least one of the following constraints:</source>
+                <target>ค่านี้ควรเป็นไปตามข้อจำกัดอย่างน้อยหนึ่งข้อจากข้อจำกัดเหล่านี้:</target>
+            </trans-unit>
+            <trans-unit id="98">
+                <source>Each element of this collection should satisfy its own set of constraints.</source>
+                <target>สมาชิกแต่ละตัวในคอเล็กชั่นควรเป็นไปตามข้อจำกัดของคอเล็กชั่นนั้นๆ</target>
+            </trans-unit>
+            <trans-unit id="99">
+                <source>This value is not a valid International Securities Identification Number (ISIN).</source>
+                <target>ค่ารหัสหลักทรัพย์สากล (ISIN) ไม่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="100">
+                <source>This value should be a valid expression.</source>
+                <target>ค่านี้ควรเป็นนิพจน์ที่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="101">
+                <source>This value is not a valid CSS color.</source>
+                <target>ค่านี้ไม่ใช่สี CSS ที่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="102">
+                <source>This value is not a valid CIDR notation.</source>
+                <target>ค่านี้ไม่ใช่รูปแบบ CIDR ที่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="103">
+                <source>The value of the netmask should be between {{ min }} and {{ max }}.</source>
+                <target>ค่าของ netmask ควรมีค่าระหว่าง {{ min }} ถึง {{ max }}</target>
+            </trans-unit>
+            <trans-unit id="104">
+                <source>The filename is too long. It should have {{ filename_max_length }} character or less.|The filename is too long. It should have {{ filename_max_length }} characters or less.</source>
+                <target>ชื่อไฟล์ยาวเกินไป ควรจะมีแค่ {{ filename_max_length }} ตัวอักษรหรือน้อยกว่านั้น</target>
+            </trans-unit>
+            <trans-unit id="105">
+                <source>The password strength is too low. Please use a stronger password.</source>
+                <target>รหัสผ่านมีความปลอดภัยต่ำ กรุณาใช้รหัสผ่านที่มีความปลอดภัยสูง</target>
+            </trans-unit>
+            <trans-unit id="106">
+                <source>This value contains characters that are not allowed by the current restriction-level.</source>
+                <target>ค่านี้ประกอบด้วยตัวอักษรที่ไม่รับอนุญาตจากระดับข้อบังคับปัจจุบัน</target>
+            </trans-unit>
+            <trans-unit id="107">
+                <source>Using invisible characters is not allowed.</source>
+                <target>ไม่อนุญาตให้ใช้ตัวอักษรที่มองไม่เห็น</target>
+            </trans-unit>
+            <trans-unit id="108">
+                <source>Mixing numbers from different scripts is not allowed.</source>
+                <target>ไม่อนุญาตให้ผสมตัวเลขจากสคริปต์ที่แตกต่างกัน</target>
+            </trans-unit>
+            <trans-unit id="109">
+                <source>Using hidden overlay characters is not allowed.</source>
+                <target>ไม่อนุญาตให้ใช้ตัวอักษรซ้อนทับที่ซ่อนอยู่</target>
+            </trans-unit>
+            <trans-unit id="110">
+                <source>The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}.</source>
+                <target state="needs-review-translation">นามสกุลไฟล์ไม่ถูกต้อง ({{ extension }}). นามสกุลที่อนุญาตคือ {{ extensions }}.</target>
+            </trans-unit>
+            <trans-unit id="111">
+                <source>The detected character encoding is invalid ({{ detected }}). Allowed encodings are {{ encodings }}.</source>
+                <target state="needs-review-translation">การเข้ารหัสอักขระที่ตรวจพบไม่ถูกต้อง ({{ detected }}). การเข้ารหัสที่อนุญาตคือ {{ encodings }}.</target>
+            </trans-unit>
+            <trans-unit id="112">
+                <source>This value is not a valid MAC address.</source>
+                <target state="needs-review-translation">ค่านี้ไม่ใช่ที่อยู่ MAC ที่ถูกต้อง</target>
+            </trans-unit>
+            <trans-unit id="113">
+                <source>This URL is missing a top-level domain.</source>
+                <target state="needs-review-translation">URL นี้ขาดโดเมนระดับสูงสุด.</target>
+            </trans-unit>
+            <trans-unit id="114">
+                <source>This value is too short. It should contain at least one word.|This value is too short. It should contain at least {{ min }} words.</source>
+                <target state="needs-translation">This value is too short. It should contain at least one word.|This value is too short. It should contain at least {{ min }} words.</target>
+            </trans-unit>
+            <trans-unit id="115">
+                <source>This value is too long. It should contain one word.|This value is too long. It should contain {{ max }} words or less.</source>
+                <target state="needs-translation">This value is too long. It should contain one word.|This value is too long. It should contain {{ max }} words or less.</target>
+            </trans-unit>
+            <trans-unit id="116">
+                <source>This value does not represent a valid week in the ISO 8601 format.</source>
+                <target state="needs-translation">This value does not represent a valid week in the ISO 8601 format.</target>
+            </trans-unit>
+            <trans-unit id="117">
+                <source>This value is not a valid week.</source>
+                <target state="needs-translation">This value is not a valid week.</target>
+            </trans-unit>
+            <trans-unit id="118">
+                <source>This value should not be before week "{{ min }}".</source>
+                <target state="needs-translation">This value should not be before week "{{ min }}".</target>
+            </trans-unit>
+            <trans-unit id="119">
+                <source>This value should not be after week "{{ max }}".</source>
+                <target state="needs-translation">This value should not be after week "{{ max }}".</target>
             </trans-unit>
         </body>
     </file>

@@ -56,7 +56,7 @@ $viewdefs['Delegations'] = [
                                 'total_expenses_usdollar',
                             ],
                             [
-                                'obtained_sum_usdollars',
+                                'obtained_sum_usdollar',
                                 'return_sum_usdollar',
                             ],
                             [

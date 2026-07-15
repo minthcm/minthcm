@@ -88,6 +88,9 @@ class OAuth2Server
             'response_types_supported' => ['code'],
             'code_challenge_methods_supported' => ['S256'],
             'grant_types_supported' => ['authorization_code', 'refresh_token'],
+            // Required by OIDC Discovery 1.0 §3 — Bun/Claude Code SDK validates these as arrays.
+            'subject_types_supported' => ['public'],
+            'id_token_signing_alg_values_supported' => ['RS256'],
         ];
     }
 
@@ -120,90 +123,111 @@ class OAuth2Server
     }
 
     /**
-     * Handle the authorization request
-     * 
-     * @return array Response data with status and headers/body
+     * First leg of the authorization code flow. Validates the incoming request
+     * and ALWAYS redirects to the Vue consent page — even when the user already
+     * has an authenticated session — so the user must explicitly approve.
+     * The second leg (completeAuthorization) is invoked by McpController after
+     * the user clicks Authorize on the consent screen.
      */
-    public function handleAuthorizeRequest(): array
+    public function handleAuthorizeRequest(array $params): array
     {
-        $params = $this->getAuthorizationParams();
-        if (!$this->validateAuthorizationParams($params)) {
+        $normalized = [
+            'clientId' => $params['client_id'] ?? '',
+            'redirectUri' => $params['redirect_uri'] ?? '',
+            'scope' => $params['scope'] ?? 'mcp:read',
+            'state' => $params['state'] ?? '',
+            'codeChallenge' => $params['code_challenge'] ?? '',
+            'codeChallengeMethod' => $params['code_challenge_method'] ?? 'S256',
+        ];
+
+        if (!$this->validateAuthorizationParams($normalized)) {
             return $this->createError(400, 'invalid_request', 'Missing required parameters');
         }
 
         chdir('../legacy');
-        $clientBean = $this->clientService->getClientById($params['clientId']);
+        $clientBean = $this->clientService->getClientById($normalized['clientId']);
         chdir('../mcp');
 
         if (!$clientBean) {
             return $this->createError(400, 'invalid_client', 'Client not found');
         }
 
-        // Check if user is already authenticated
-        $authenticatedUserId = $this->userService->getAuthenticatedUserId();
-        if (!$authenticatedUserId) {
-            // Redirect to login form
-            return $this->redirectToLogin(
-                $params['clientId'],
-                $clientBean->name,
-                $params['redirectUri'],
-                $params['scope'],
-                $params['state'],
-                $params['codeChallenge'],
-                $params['codeChallengeMethod']
-            );
+        // Validate redirect_uri up front so a malicious client can't use the consent
+        // page as a confused-deputy to bounce the browser to an arbitrary URL.
+        if (!$this->clientService->isValidRedirectUri($clientBean, $normalized['redirectUri'])) {
+            return $this->createError(400, 'invalid_request', 'Invalid redirect_uri');
         }
 
-        if (!$this->clientService->isValidRedirectUri($clientBean, $params['redirectUri'])) {
+        return $this->redirectToLogin(
+            $normalized['clientId'],
+            $clientBean->name,
+            $normalized['redirectUri'],
+            $normalized['scope'],
+            $normalized['state'],
+            $normalized['codeChallenge'],
+            $normalized['codeChallengeMethod']
+        );
+    }
+
+    /**
+     * Issue the authorization code after explicit user consent. Called from
+     * McpController::authorize() which has already validated the consent_token
+     * and confirmed the session user.
+     *
+     * @param array $flow The stored oauth_flows[flow_id] entry.
+     * @param string $userId ID of the authenticated user granting consent.
+     */
+    public function completeAuthorization(array $flow, string $userId): array
+    {
+        $clientId = (string) ($flow['client_id'] ?? '');
+        $redirectUri = (string) ($flow['redirect_uri'] ?? '');
+        $scope = (string) ($flow['scope'] ?? '');
+        $state = (string) ($flow['state'] ?? '');
+        $codeChallenge = (string) ($flow['code_challenge'] ?? '');
+        $codeChallengeMethod = (string) ($flow['code_challenge_method'] ?? 'S256');
+
+        chdir('../legacy');
+        $clientBean = $this->clientService->getClientById($clientId);
+        chdir('../mcp');
+
+        if (!$clientBean) {
+            return $this->createError(400, 'invalid_client', 'Client not found');
+        }
+
+        if (!$this->clientService->isValidRedirectUri($clientBean, $redirectUri)) {
             return $this->createError(400, 'invalid_request', 'Invalid redirect_uri');
         }
 
         chdir('../legacy');
         if (empty($clientBean->assigned_user_id)) {
-            $clientBean->assigned_user_id = $authenticatedUserId;
+            $clientBean->assigned_user_id = $userId;
             $clientBean->save();
         }
         chdir('../mcp');
 
-        // Generate authorization code with logged in user ID
         $authCode = $this->authCodeService->generateAuthCode(
             $clientBean->id,
-            $params['scope'],
-            $params['codeChallenge'],
-            $params['codeChallengeMethod'],
-            $authenticatedUserId
+            $scope,
+            $codeChallenge,
+            $codeChallengeMethod,
+            $userId
         );
 
-        Logger::getLogger()->info("Redirecting to client after authorization", [
-            'client_id' => $params['clientId'],
-            'redirect_uri' => $params['redirectUri'],
+        Logger::getLogger()->info('Issuing authorization code after consent', [
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
             'auth_code' => substr($authCode, 0, 8) . '...',
-            'state' => $params['state']
+            'state' => $state,
         ]);
 
         return [
             'status' => 302,
             'headers' => [
-                'Location' => $params['redirectUri'] . '?' . http_build_query([
+                'Location' => $redirectUri . '?' . http_build_query([
                     'code' => $authCode,
-                    'state' => $params['state']
+                    'state' => $state,
                 ])
             ]
-        ];
-    }
-
-    /**
-     * Get and validate authorization request parameters
-     */
-    private function getAuthorizationParams(): array
-    {
-        return [
-            'clientId' => $_GET['client_id'] ?? '',
-            'redirectUri' => $_GET['redirect_uri'] ?? '',
-            'scope' => $_GET['scope'] ?? 'mcp:read',
-            'state' => $_GET['state'] ?? '',
-            'codeChallenge' => $_GET['code_challenge'] ?? '',
-            'codeChallengeMethod' => $_GET['code_challenge_method'] ?? 'S256',
         ];
     }
 
@@ -217,9 +241,8 @@ class OAuth2Server
             !empty($params['codeChallenge']);
     }
 
-    /**
-     * Redirect to login form
-     */
+    public const FLOW_TTL_SECONDS = 900;
+
     private function redirectToLogin(
         string $clientId,
         string $clientName,
@@ -229,19 +252,39 @@ class OAuth2Server
         string $codeChallenge,
         string $codeChallengeMethod
     ): array {
-        $_SESSION['oauth_params'] = [
+        $flowId = bin2hex(random_bytes(16));
+        $consentToken = bin2hex(random_bytes(32));
+        $now = time();
+
+        if (!isset($_SESSION['oauth_flows']) || !is_array($_SESSION['oauth_flows'])) {
+            $_SESSION['oauth_flows'] = [];
+        }
+
+        // Drop expired flows so abandoned consent screens don't accumulate in the session.
+        foreach ($_SESSION['oauth_flows'] as $id => $flow) {
+            if (!is_array($flow) || ($flow['expires_at'] ?? 0) < $now) {
+                unset($_SESSION['oauth_flows'][$id]);
+            }
+        }
+
+        $_SESSION['oauth_flows'][$flowId] = [
             'client_id' => $clientId,
             'client_name' => $clientName,
             'redirect_uri' => $redirectUri,
             'scope' => $scope,
             'state' => $state,
             'code_challenge' => $codeChallenge,
-            'code_challenge_method' => $codeChallengeMethod
+            'code_challenge_method' => $codeChallengeMethod,
+            'consent_token' => $consentToken,
+            'expires_at' => $now + self::FLOW_TTL_SECONDS,
         ];
 
-        $loginUrl = $this->urlHelper->getOAuthBaseUrl() . '/login';
+        // site_url points at the Mint/Vue host; HTTP_HOST would point at the MCP host where /#/mcp/login doesn't exist.
+        $loginUrl = $this->getMintSiteUrl() . '#/mcp/login?flow=' . urlencode($flowId);
+
         Logger::getLogger()->info('Redirecting to login', [
             'loginUrl' => $loginUrl,
+            'flow_id' => $flowId,
         ]);
 
         return [
@@ -250,6 +293,15 @@ class OAuth2Server
                 'Location' => $loginUrl
             ]
         ];
+    }
+
+    private function getMintSiteUrl(): string
+    {
+        $siteUrl = $GLOBALS['sugar_config']['site_url'] ?? '';
+        if (!is_string($siteUrl) || $siteUrl === '') {
+            $siteUrl = $this->urlHelper->getDomainUrl();
+        }
+        return rtrim($siteUrl, '/') . '/';
     }
 
     /**

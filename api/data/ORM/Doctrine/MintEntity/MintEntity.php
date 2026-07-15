@@ -25,7 +25,33 @@ abstract class MintEntity
     public function __set($name, $value)
     {
         if (property_exists($this, $name)) {
-            $this->$name = (new PropertiesManager($this->getEntityManager(), $this))->getConvertedToPHPValue($name, $value);
+            $em = $this->getEntityManager();
+            $meta = $em->getClassMetadata(static::class);
+            if ($meta->isCollectionValuedAssociation($name)) {
+                return;
+            }
+            if ($meta->isSingleValuedAssociation($name)) {
+                $mapping = $meta->getAssociationMapping($name);
+                if (!empty($value)) {
+                    $this->$name = $em->getReference($mapping['targetEntity'], $value);
+                } else {
+                    // When clearing an association, sync with the scalar FK field to avoid
+                    // Doctrine overwriting it with NULL on flush (dual-mapping conflict).
+                    $scalarValue = null;
+                    foreach ($mapping['joinColumns'] ?? [] as $joinColumn) {
+                        $scalarField = $meta->fieldNames[$joinColumn['name']] ?? null;
+                        if ($scalarField && property_exists($this, $scalarField)) {
+                            $scalarValue = $this->$scalarField;
+                            break;
+                        }
+                    }
+                    $this->$name = !empty($scalarValue)
+                        ? $em->getReference($mapping['targetEntity'], $scalarValue)
+                        : null;
+                }
+                return;
+            }
+            $this->$name = (new PropertiesManager($em, $this))->getConvertedToPHPValue($name, $value);
             return;
         }
 
@@ -36,7 +62,7 @@ abstract class MintEntity
 
         $mint_bean = $this->getMintBean(false);
         if(isset($mint_bean->field_defs[$name])){
-            $this->$name = $value;
+            $mint_bean->$name = $value;
             return;
         }
         

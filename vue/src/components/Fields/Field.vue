@@ -1,41 +1,64 @@
 <template>
-    <component
-        v-bind="{
-            ...$attrs,
-            ...( !['fieldset', 'date', 'age', 'datetime', 'datetimecombo', 'relate', 'parent'].includes(props.defs?.type) ? { name: props.defs.name } : {} )
-        }"
-        :aria-description="comment"
-        :aria-describedby="props.defs.name+'-help'"
-        :aria-label="label"
-        :is="FieldComponent"
-        :class="classList"
-        :data="data"
-        :defs="defs"
-        :label="label"
-        :options="props.options"
-        :state="fieldState"
-        :hidePencil="true"
-        :field="props.field"
-        :modelValue="props.field?.model ?? modelValue"
-        :view="view"
-    >
-    </component>
-    <p :id="`${props.defs.name}-help`" hidden>
-        {{comment}}
-    </p>
-    <div v-if="errorMessage" class="field-error-message">{{ errorMessage }}</div>
+    <div ref="wrapperRef">
+        <component
+            v-bind="{
+                ...$attrs,
+                ...( !['fieldset', 'date', 'age', 'datetime', 'datetimecombo', 'relate', 'parent'].includes(props.defs?.type) ? { name: props.defs.name } : {} )
+            }"
+            :aria-description="comment"
+            :aria-describedby="props.defs.name+'-help'"
+            :aria-label="label"
+            :is="FieldComponent"
+            :class="classList"
+            :data="data"
+            :defs="defs"
+            :label="label"
+            :options="props.options"
+            :state="fieldState"
+            :hidePencil="true"
+            :field="props.field"
+            :modelValue="props.field?.model ?? modelValue"
+            :view="view"
+        />
+        <p :id="`${props.defs.name}-help`" hidden>
+            {{comment}}
+        </p>
+        <div v-if="errorMessage" class="field-error-message">
+            {{ errorMessage }}
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, computed, watch } from 'vue'
+import { defineAsyncComponent, computed, watch, ref, nextTick } from 'vue'
 import { useModulesStore } from '@/store/modules'
 import { fieldConfig } from '../Fields/Field.config'
 import { FieldProps, FieldState } from './Field.model'
 import { useLanguagesStore } from '@/store/languages'
 
+const wrapperRef = ref<HTMLElement | null>(null)
 const props = defineProps<FieldProps>()
 const languagesStore = useLanguagesStore()
 const modulesStore = useModulesStore()
+
+const hasError = () => {
+    return errorMessage.value || null
+}
+
+const getFocusableElement = () => {
+    if (!wrapperRef.value) return null
+
+    return (
+        wrapperRef.value.querySelector('input, textarea, select, [tabindex]')
+    ) as HTMLElement | null
+}
+
+const focus = async () => {
+    await nextTick()
+    getFocusableElement()?.focus()
+}
+
+const getElement = () => wrapperRef.value
 
 const label = computed(() => {
     if (props.view !== 'edit' || !props.required) {
@@ -63,8 +86,11 @@ const errorMessage = computed(() => {
     if (props.errorMessage) {
         return languagesStore.label(props.errorMessage, modulesStore.currentModule?.name)
     }
-    if (props.isDirty && props.required && !props.modelValue) {
-        return languagesStore.label('ERR_FIELD_REQUIRED', modulesStore.currentModule?.name)
+    if (props.isDirty && props.required) {
+        const fieldValue = props.field?.formatted?.server ?? props.modelValue
+        if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
+            return languagesStore.label('ERR_FIELD_REQUIRED', modulesStore.currentModule?.name)
+        }
     }
     return ''
 })
@@ -105,7 +131,7 @@ let FieldComponent = defineAsyncComponent(() => {
 })
 
 watch(
-    () => props.view,
+    () => [props.view, props.defs?.type],
     () => {
         FieldComponent = defineAsyncComponent(() => {
             return import(`@/components/Fields/${resolvedFieldType.value}/${resolvedFieldType.value}.${props.view}.vue`)
@@ -113,6 +139,13 @@ watch(
     },
     { immediate: true },
 )
+
+defineExpose({
+    hasError,
+    focus,
+    getElement
+})
+
 </script>
 
 <style lang="scss">

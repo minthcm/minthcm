@@ -52,10 +52,9 @@ use MintHCM\Api\Repositories\ReactionRepository;
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-#[\AllowDynamicProperties]
 class ReactionsController
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {

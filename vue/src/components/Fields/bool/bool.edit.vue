@@ -5,6 +5,7 @@
         density="compact"
         color="secondary"
         :modelValue="!!Number(props.modelValue)"
+        @keydown.enter.prevent="$emit('update:modelValue', Number(props.modelValue) ? '0' : '1')"
         @update:modelValue="(v) => $emit('update:modelValue', v ? '1' : '0')"
     />
 </template>

@@ -1,13 +1,15 @@
 <template>
     <v-row no-gutters class="filters-nav">
-        <v-col :cols="$vuetify.display.lgAndDown ? 4 : 5">
+        <v-col :cols="$vuetify.display.lgAndDown ? 4 : 5" class="filters-search-wrapper">
             <v-text-field
                 v-model="store.searchPhrase"
                 class="filters-search"
+                :class="{ 'filters-search-active': isFocused }"
                 variant="plain"
                 :placeholder="languages.label('LBL_MINT4_GS_SEARCH_INPUT')"
                 @input="updateOptionsDebounce"
                 @keyup.enter="searchByPhrase"
+                @update:focused="isFocused = $event"
                 hide-details
             >
                 <template #prepend-inner>
@@ -17,8 +19,21 @@
                     </v-fab-transition>
                 </template>
             </v-text-field>
+            <v-slide-y-transition>
+                <div v-if="isFocused && !store.searchPhrase" class="filters-search-tip">
+                    <span class="text-caption" v-text="languages.label('LBL_MINT4_GS_HELP_TIP')" />
+                </div>
+            </v-slide-y-transition>
         </v-col>
-        <v-switch v-model="store.myObjects" class="flex-grow-0" @change="store.getData" color="secondary" hide-details>
+        <v-switch 
+            v-model="store.myObjects" 
+            class="flex-grow-0" 
+            @change="store.getData" 
+            color="secondary" 
+            hide-details
+            @keydown.space.prevent="toggleMyObjects"
+            @keydown.enter.prevent="toggleMyObjects"
+        >
             <template #label>
                 <span v-text="languages.label('LBL_ESLIST_MY_OBJECTS')"></span>
             </template>
@@ -29,6 +44,8 @@
             @change="store.getData"
             color="secondary"
             hide-details
+            @keydown.space.prevent="toggleFavorites"
+            @keydown.enter.prevent="toggleFavorites"
         >
             <template #label>
                 <span v-text="languages.label('LBL_ESLIST_MY_FAVORITES')"></span>
@@ -97,13 +114,24 @@ import ListViewFilterRow from './ListViewFilterRow.vue'
 import { usePopupsStore } from '@/store/popups'
 import ListViewSaveFilterPopup from './ListViewSaveFilterPopup.vue'
 import cloneDeep from 'lodash.clonedeep'
+import { useLocalStorageStore } from '@/store/localStorage'
 
 const store = useListViewStore()
 const { activeFilter, filterRows } = storeToRefs(useListViewStore())
 const languages = useLanguagesStore()
 const popups = usePopupsStore()
 const searchPhraseDebounceTimer = ref<number | null>(null)
+const isFocused = ref(false)
 
+const toggleFavorites = () => {
+    store.onlyFavorites = !store.onlyFavorites
+    store.getData()
+}
+
+const toggleMyObjects = () => {
+    store.myObjects = !store.myObjects
+    store.getData()
+}
 
 function updateOptionsDebounce() {
     if (searchPhraseDebounceTimer.value) {
@@ -116,6 +144,7 @@ function searchByPhrase() {
     if (searchPhraseDebounceTimer.value) {
         clearTimeout(searchPhraseDebounceTimer.value)
     }
+    store.clearAllSelection()
     store.getData()
 }
 
@@ -126,7 +155,7 @@ function showSaveFilterPopup() {
         component: ListViewSaveFilterPopup,
         icon: 'mdi-content-save-outline',
         data: {
-            filterRows,
+            filterRows: cloneDeep(filterRows.value),
             myObjects,
         },
     })
@@ -173,6 +202,7 @@ function deleteSavedFilter(filter: string) {
     filterRows.value = []
     activeFilter.value = null
     store.preferences.deleteActiveFilter = true
+    useLocalStorageStore().setModuleActiveFilter(store.module, null)
     store.savePreferences()
 }
 
@@ -181,11 +211,13 @@ watch(activeFilter, () => {
     if(!activeFilter.value){
         store.preferences.deleteActiveFilter = true
     }
+    useLocalStorageStore().setModuleActiveFilter(store.module, activeFilter.value)
     store.savePreferences()
     filterRows.value = cloneDeep(
         store.preferences?.saved_filters?.find((f) => f.name === activeFilter.value)?.filters ?? [],
     )
     store.myObjects = store.preferences?.saved_filters?.find((f) => f.name === activeFilter.value)?.myObjects ?? false
+    store.clearAllSelection()
 })
 </script>
 
@@ -201,7 +233,14 @@ watch(activeFilter, () => {
     flex-direction: column;
 }
 
+.filters-search-wrapper {
+    position: relative;
+}
+
 .filters-search {
+    border-radius: 8px;
+    transition: background 100ms ease-in-out;
+
     :deep(.v-field__prepend-inner) {
         padding-top: 12px;
         color: rgb(var(--v-theme-secondary));
@@ -216,6 +255,22 @@ watch(activeFilter, () => {
     :deep(.v-icon) {
         opacity: 1;
     }
+
+    &.filters-search-active {
+        background: rgb(var(--v-theme-primary-light));
+    }
+}
+
+.filters-search-tip {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    background: rgb(var(--v-theme-surface));
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0px 3px 6px #00000029;
+    z-index: 10;
+    padding: 8px 16px;
 }
 
 .save-filter-item {
@@ -230,6 +285,13 @@ watch(activeFilter, () => {
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+    }
+}
+
+.filters-nav {
+    :deep(.mint-button:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary-dark));
+        outline-offset: 2px;
     }
 }
 </style>

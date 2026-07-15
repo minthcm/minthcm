@@ -351,7 +351,7 @@ return [
     ],
     'TermsOfEmployment' => [
         'list' => false,
-        'record' => true,
+        'record' => false,
     ],
     'Trainings' => [
         'list' => false,

@@ -1,3 +1,4 @@
 Config/mcp_conifg.php
 *.log
 !.htaccess
+node_modules/

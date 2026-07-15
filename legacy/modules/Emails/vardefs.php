@@ -571,6 +571,7 @@ $dictionary['Email'] = array(
       "emails_email_templates_idb" => array(
          'name' => 'emails_email_templates_idb',
          'type' => 'link',
+         'module' => 'EmailTemplates',
          'relationship' => 'emails_email_templates',
          'source' => 'non-db',
          'reportable' => false,

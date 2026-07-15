@@ -1,26 +1,26 @@
 {
     "name": "onelogin/php-saml",
-    "description": "OneLogin PHP SAML Toolkit",
+    "description": "PHP SAML Toolkit",
     "license": "MIT",
-    "homepage": "https://developers.onelogin.com/saml/php",
-    "keywords": ["saml", "saml2", "onelogin"],
+    "homepage": "https://github.com/SAML-Toolkits/php-saml",
+    "keywords": ["saml", "saml2", "sso", "federation", "identity"],
     "autoload": {
         "psr-4": {
             "OneLogin\\": "src/"
         }
     },
     "support": {
-        "email": "sixto.garcia@onelogin.com",
-        "issues": "https://github.com/onelogin/php-saml/issues",
-        "source": "https://github.com/onelogin/php-saml/"
+        "email": "sixto.martin.garcia@gmail.com",
+        "issues": "https://github.com/onelogin/SAML-Toolkits/issues",
+        "source": "https://github.com/onelogin/SAML-Toolkits/"
     },
     "require": {
         "php": ">=5.4",
-        "robrichards/xmlseclibs": ">=3.0.4"
+        "robrichards/xmlseclibs": ">=3.1.4"
     },
     "require-dev": {
+        "phpunit/phpunit": "<7.5.18",
         "php-coveralls/php-coveralls": "^1.0.2 || ^2.0",
-        "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5 || ^7.1",
         "sebastian/phpcpd": "^2.0 || ^3.0 || ^4.0",
         "phploc/phploc": "^2.1 || ^3.0 || ^4.0",
         "pdepend/pdepend": "^2.5.0",

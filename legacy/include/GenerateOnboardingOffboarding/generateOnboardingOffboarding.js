@@ -101,7 +101,7 @@ generateOnboardingOffboarding = {
             }
             body += '</ul>';
          } else {
-            body += this.createLinkToModuleRecord(errors[error]) + '</p>';
+            body += ' ' + this.createLinkToModuleRecord(errors[error]) + '</p>';
          }
       }
       return body;
@@ -187,6 +187,20 @@ generateOnboardingOffboarding = {
             break;
       }
       return is_employees;
+   },
+   getEmployeeStatusFilter: function () {
+      const module = $('input[name=module]:not(.form-control)').val();
+      if (module === 'Employees') {
+         const parentType = $('#' + this.form_name + ' #parent_type').val();
+         if (parentType === 'OffboardingTemplates') {
+            return '&employee_status_advanced[]=Active&employee_status_advanced[]=during_termination&employee_status_advanced[]=Terminated';
+         }
+         return '&employee_status_advanced[]=Active';
+      }
+      if (module.indexOf('Offboarding') >= 0) {
+         return '&employee_status_advanced[]=Active&employee_status_advanced[]=during_termination&employee_status_advanced[]=Terminated';
+      }
+      return '&employee_status_advanced[]=Active';
    },
    getParentTypeOptions: function () {
       let selected = '';

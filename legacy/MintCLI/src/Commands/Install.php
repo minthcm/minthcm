@@ -2,6 +2,10 @@
 
 namespace MintHCM\MintCLI\Commands;
 
+if (! defined('sugarEntry')) {
+    define('sugarEntry', true);
+}
+
 use MintHCM\MintCLI\Installer\Installer;
 use MintHCM\MintCLI\Services\AppVersionService;
 use MintHCM\MintCLI\Services\DatabaseService;
@@ -72,7 +76,7 @@ class Install extends Command
         $installer->prepareConfigurationFile($userData);
         $installer->setupApiConfigOverride($userData);
         $installer->setupFilesPermissions();
-        $backendInstallationStatus = $installer->installBackendApplication();
+        $backendInstallationStatus = $installer->installBackendApplication($userData);
         if (!$backendInstallationStatus) {
             $io->error("An error occured while installing MintHCM. Check install.log file for more details.");
             return Command::FAILURE;

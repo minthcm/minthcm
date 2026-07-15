@@ -46,7 +46,7 @@
     die('Not A Valid Entry Point');
 }
 
-$spBase = $GLOBALS['sugar_config']['site_url'].'/index.php?action=Login&module=Users';
+$spBase = $GLOBALS['sugar_config']['site_url'].'/legacy/index.php?action=Login&module=Users';
 $settingsInfo = array (
     'sp' => array (
         'entityId' => $spBase,
@@ -56,7 +56,9 @@ $settingsInfo = array (
         'singleLogoutService' => array (
             'url' => $spBase,
         ),
-        'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+        'NameIDFormat' => !empty($GLOBALS['sugar_config']['SAML_NameIDFormat'])
+            ? $GLOBALS['sugar_config']['SAML_NameIDFormat']
+            : 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
     ),
     'idp' => array (
         'entityId' => $spBase,

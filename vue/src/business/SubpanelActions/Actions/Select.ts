@@ -35,14 +35,17 @@ export class Select extends SubpanelAction {
                     if (!ids.length) {
                         return
                     }
+                    store.setSubpanelLoading(this.subpanel.key, ids.length)
                     try {
                         await mintApi.post(`${this.bean.module}/Link/${this.bean.id}`, {
                             link_name: this.subpanel.properties.get_subpanel_data || this.subpanel.key,
                             ids,
                         })
-                        store.fetchSubpanelRecords(this.subpanel.key, this.subpanel.paginateBy, 0)
+                        await store.fetchSubpanelRecords(this.subpanel.key, this.subpanel.paginateBy, 0)
                     } catch (error) {
                         console.error('Error linking records:', error.response.data?.errors)
+                    } finally {
+                        store.setSubpanelLoading(this.subpanel.key, 0)
                     }
                 },
                 onClose: () => {},

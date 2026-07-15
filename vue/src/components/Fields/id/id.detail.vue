@@ -3,16 +3,11 @@
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
             {{ parsedValue }}
-            <!-- <Pencil
-                :defs="props.defs"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            /> -->
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-// import Pencil from '../Pencil.vue'
 import { useBackendStore } from '@/store/backend'
 import { computed } from 'vue'
 import { FieldProps } from '../Field.model'

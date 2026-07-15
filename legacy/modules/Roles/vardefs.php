@@ -126,6 +126,7 @@ $dictionary['Role'] = array('table' => 'roles'
   array(
     'name' => 'users',
     'type' => 'link',
+    'module' => 'Users',
     'relationship' => 'roles_users',
     'source'=>'non-db',
     'vname'=>'LBL_USERS',

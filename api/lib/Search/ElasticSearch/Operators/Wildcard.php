@@ -66,8 +66,9 @@ class Wildcard extends ElasticOperator
         return array(
             'wildcard' => array(
                 $prefixer->modify($this->field, true) => array(
-                    "value" => $this->value,
+                    "value" => is_string($this->value) ? strtolower($this->value) : $this->value,
                     "boost" => $this->boost ?? 1.0,
+                    "case_insensitive" => true,
                 ),
             ),
         );

@@ -37,6 +37,22 @@ class InstallService
         file_put_contents($statusFile, $encodedStatusData);
     }
 
+    public function setMintInstallError(string $message): void
+    {
+        $statusFile = self::STATUSFILE;
+        $statusData = [];
+
+        if (file_exists($statusFile)) {
+            $existingData = json_decode(file_get_contents($statusFile), true);
+            if (is_array($existingData)) {
+                $statusData = $existingData;
+            }
+        }
+
+        $statusData['error'] = $message;
+        file_put_contents($statusFile, json_encode($statusData, JSON_PRETTY_PRINT));
+    }
+
     public function readMintInstallStatus(): array
     {
         $statusFile = self::STATUSFILE;
@@ -44,12 +60,18 @@ class InstallService
         if (file_exists($statusFile)) {
             $existingData = json_decode(file_get_contents($statusFile), true);
             if (is_array($existingData)) {
-                $latestStepKey = max(array_keys($existingData));
-                $latestStepValue = $existingData[$latestStepKey];
-
-                return ["step" => $latestStepKey, "message" => $latestStepValue];
+                $error = $existingData['error'] ?? null;
+                $numericKeys = array_filter(array_keys($existingData), 'is_numeric');
+                if (!empty($numericKeys)) {
+                    $latestStepKey = max($numericKeys);
+                    $latestStepValue = $existingData[$latestStepKey];
+                    return ["step" => $latestStepKey, "message" => $latestStepValue, "error" => $error];
+                }
+                if ($error) {
+                    return ["step" => null, "message" => '', "error" => $error];
+                }
             }
         }
-        return ["step" => null, "message" => ''];
+        return ["step" => null, "message" => '', "error" => null];
     }
 }

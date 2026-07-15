@@ -7,8 +7,7 @@
         hide-details
         :error="props.state === 'error'"
         v-model="props.field.model"
-        @keyup.enter.prevent="$emit('inlineEditSave')"
-        @keyup.esc="$emit('inlineEditCancel')"
+        @update:modelValue="(v) => $emit('update:modelValue', v)"
     />
 </template>
 

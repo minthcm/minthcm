@@ -14,6 +14,7 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 /**
  * Validates whether the value is a valid ISSN.
@@ -38,8 +39,8 @@ class IssnValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
-            throw new UnexpectedTypeException($value, 'string');
+        if (!\is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
+            throw new UnexpectedValueException($value, 'string');
         }
 
         $value = (string) $value;
@@ -113,10 +114,7 @@ class IssnValidator extends ConstraintValidator
         }
 
         // Calculate a checksum. "X" equals 10.
-        $checkSum = 'X' === $canonical[7]
-        || 'x' === $canonical[7]
-        ? 10
-            : $canonical[7];
+        $checkSum = 'X' === $canonical[7] || 'x' === $canonical[7] ? 10 : $canonical[7];
 
         for ($i = 0; $i < 7; ++$i) {
             // Multiply the first digit by 8, the second by 7, etc.

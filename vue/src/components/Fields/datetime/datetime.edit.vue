@@ -1,5 +1,5 @@
 <template>
-    <div class="mint-date-field-detail" @keyup.enter="$emit('inlineEditSave')" @keyup.esc="$emit('inlineEditCancel')">
+    <div class="mint-date-field-detail">
         <v-text-field
             :label="label"
             variant="outlined"
@@ -10,13 +10,32 @@
             :name="props.defs.name"
         >
             <template #append-inner>
-                <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
-                    <template v-slot:activator="{ props }">
-                        <v-icon class="mint-date-field-btn" v-bind="props">mdi-calendar</v-icon>
-                    </template>
-                    <v-date-picker v-model="datePickerValue" hide-actions>
-                        <template #header></template>
-                    </v-date-picker>
+                <v-menu
+                v-model="datePickerMenu"
+                offset="16"
+                :close-on-content-click="false"
+                >
+                <template v-slot:activator="{ props: menuProps }">
+                    <v-btn
+                        icon
+                        variant="text"
+                        class="mint-date-field-btn"
+                        v-bind="menuProps"
+                        @keydown.enter.stop.prevent="datePickerMenu = true"
+                        @keydown.space.prevent="datePickerMenu = true"
+                    >
+                        <v-icon>mdi-calendar</v-icon>
+                    </v-btn>
+                </template>
+                <v-date-picker
+                    v-model="datePickerValue"
+                    hide-actions
+                    :first-day-of-week="firstDayOfWeek"
+                    @keydown.enter.prevent="onPickerEnter"
+                    @keydown.space.prevent="onPickerEnter"
+                >
+                    <template #header />
+                </v-date-picker>
                 </v-menu>
             </template>
         </v-text-field>
@@ -24,13 +43,24 @@
             <template #append-inner>
                 <v-menu v-model="timePickerMenu" offset="16" :close-on-content-click="false">
                     <template v-slot:activator="{ props }">
-                        <v-icon class="mint-date-field-btn" v-bind="props">mdi-clock-time-eight-outline</v-icon>
+                        <v-btn
+                            icon
+                            variant="text"
+                            class="mint-date-field-btn"
+                            v-bind="props"
+                            @keydown.enter.stop.prevent="timePickerMenu = true"
+                            @keydown.space.prevent="timePickerMenu = true"
+                        >
+                            <v-icon>mdi-clock-time-eight-outline</v-icon>
+                        </v-btn>
                     </template>
                     <v-time-picker
                         v-model="timeValue"
                         :format="timeFormat"
                         :ampm-in-title="timeFormat === 'ampm'"
                         :allowed-minutes="allowedMinutesStep"
+                        @keydown.enter.prevent="onPickerEnter"
+                        @keydown.space.prevent="onPickerEnter"
                         scrollable
                     >
                         <template #header></template>
@@ -57,7 +87,17 @@ const timePickerMenu = ref(false)
 const model = ref(props.field.model)
 const preferences = usePreferencesStore()
 
+const firstDayOfWeek = computed(() => preferences.user?.first_day_of_week ?? 1)
+
 const allowedMinutesStep = (m: number) => m % (props.minuteStep || 5) === 0
+
+const onPickerEnter = (element: KeyboardEvent) => {
+    const target = element.target as HTMLElement
+
+    if (target?.classList.contains('v-btn')) {
+        target.click()
+    }
+}
 
 const timeFormat = computed(() => {
     return DateUtils.getTimeFormatGeneralized()

@@ -22,7 +22,12 @@ router.beforeEach(async (to, from) => {
     }
     const auth = useAuthStore()
     if (!backend.isInit) {
-        await backend.init()
+        if (to.meta?.isMcpLogin) {
+            // MCP consent login renders before full init — just release the global spinner.
+            backend.initialLoading = false
+        } else {
+            await backend.init()
+        }
     }
     if (to.meta?.auth !== false && !auth.user?.id) {
         sessionStorage.setItem('auth_redirect', to.fullPath)
@@ -38,7 +43,7 @@ router.beforeEach(async (to, from) => {
     if (auth.user?.show_login_wizard && to.name !== 'setup-wizard') {
         return { name: 'setup-wizard' }
     }
-    if (to.meta?.auth === false && auth.user?.id) {
+    if (to.meta?.auth === false && auth.user?.id && !to.meta?.isMcpLogin) {
         return { name: 'dashboard' }
     }
     if (checkPermissions(to) === false) return false

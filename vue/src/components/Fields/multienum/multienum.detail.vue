@@ -1,13 +1,8 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+        <div class="detail-field-row">
             <div>{{ value }}</div>
-            <Pencil
-                :defs="props.defs"
-                :hidePencil="hidePencil"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
         </div>
     </div>
 </template>

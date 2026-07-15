@@ -46,15 +46,34 @@
 #[\AllowDynamicProperties]
 class TermsOfEmploymentApi {
 
+    public function validateLastTermClosed($args)
+    {
+        global $db;
+
+        $id_select = !empty($args['id']) ? "AND id != '{$args['id']}'" : '';
+        $query = "SELECT id
+        FROM termsofemployment
+            WHERE
+                deleted = 0
+                AND contract_id = '{$args['contract_id']}'
+                AND term_ending_date IS NULL
+                {$id_select}";
+
+        $sql_result = $db->query($query);
+
+        return !isset($sql_result->num_rows) || $sql_result->num_rows == 0;
+    }
+
     public function validateTermDates($args)
     {
         global $db;
 
         $id_select = !empty($args['id']) ? "AND id != '{$args['id']}'" : '';
-        $query = "SELECT id 
-        FROM termsofemployment 
-            WHERE 
-                deleted=0 
+
+        $query = "SELECT id
+        FROM termsofemployment
+            WHERE
+                deleted=0
                 AND contract_id = '{$args['contract_id']}'
                 {$id_select}";
 

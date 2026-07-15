@@ -12,8 +12,9 @@ class ListMassActionsController
 {
     public function __invoke(Request $request, Response $response, array $args): Response
     {
-        $action = $request->getAttribute('action');
+        $action = $request->getAttribute('action'); 
         $ids = $request->getAttribute('ids');
+        $filter = $request->getAttribute('filter');
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
@@ -23,7 +24,7 @@ class ListMassActionsController
             throw new HttpBadRequestException($request);
         }
 
-        $mass_action = MassActionLoader::getAction($action, $module, $ids);
+        $mass_action = MassActionLoader::getAction($action, $module, $ids, $filter);
 
         if (!$mass_action->hasAccess()) {
             throw new HttpForbiddenException($request);

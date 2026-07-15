@@ -10,7 +10,7 @@
                     </h3>
                 </td>
                 <td style="padding-right: 0px;" nowrap="" width="1%">
-                    <div class="dashletToolSet">
+                    <div class="dashletToolSet" id="dashletToolSet_{$DASHLET_ID}">
                         {* Mint start #52883 *}
                         {if !$is_locked}
                         <a href="javascript:void(0)" title="{$DASHLET_BUTTON_ARIA_EDIT}" aria-label="{$DASHLET_BUTTON_ARIA_EDIT}" onclick="SUGAR.mySugar.configureDashlet( '{$DASHLET_ID}' );
@@ -35,6 +35,22 @@
                         {/if}
                         {* Mint end #52883 *}
                     </div>
+                    {literal}
+                    <script>
+                    (function() {
+                        var id = '{/literal}{$DASHLET_ID}{literal}';
+                        var toolset = document.getElementById('dashletToolSet_' + id);
+                        if (toolset) {
+                            toolset.addEventListener('keydown', function(e) {
+                                if (e.key === ' ' && e.target.tagName === 'A') {
+                                    e.preventDefault();
+                                    e.target.click();
+                                }
+                            });
+                        }
+                    })();
+                    </script>
+                    {/literal}
                 </td>
             </tr>
         </table>

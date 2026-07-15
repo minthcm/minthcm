@@ -87,7 +87,7 @@ export interface FieldVardef {
     label: string
     id_name?: string
     type_name?: string
-    options?: string
+    options?: string | Record<string, string>
     options_colors?: string
     default?: string
     readonly?: boolean

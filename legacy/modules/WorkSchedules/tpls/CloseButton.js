@@ -1,3 +1,4 @@
+(function () {
 $(document).ready(function () {
     $('<div id="alert_dialog"></div>').appendTo('body').dialog({
         modal: true,
@@ -143,3 +144,4 @@ class CloseButton extends Button {
     }
 
 }
+})();

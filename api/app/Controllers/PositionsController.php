@@ -6,10 +6,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use Doctrine\ORM\EntityManagerInterface;
 
-#[\AllowDynamicProperties]
 class PositionsController
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {

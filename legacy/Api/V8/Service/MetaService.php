@@ -179,7 +179,7 @@ class MetaService
         $bean = $this->beanManager->newBeanSafe($module);
         $fieldList = [];
         foreach ($bean->field_defs as $fieldName => $fieldDef) {
-            $fieldList[$fieldName] = $this->pruneVardef($fieldDef);
+            $fieldList[$fieldName] = $this->pruneVardef($fieldDef, $bean); // MintHCM
         }
 
         return $fieldList;
@@ -191,7 +191,7 @@ class MetaService
      * @param array $def
      * @return array
      */
-    private function pruneVardef($def)
+    private function pruneVardef($def, \SugarBean $bean = null) // MintHCM
     {
         $pruned = [];
         foreach ($def as $var => $val) {
@@ -205,6 +205,14 @@ class MetaService
         if (!isset($def['dbType'])) {
             $pruned['dbType'] = $def['type'];
         }
+
+        // MintHCM start
+        $options = $this->getOptionsField($def, $bean);
+        if (!empty($options)) {
+            $pruned['options'] = $options;
+        }
+        // MintHCM end
+        
 
         return $pruned;
     }
@@ -377,4 +385,29 @@ class MetaService
         $GLOBALS['current_user'] = $currentUser;
     }
     // MintHCM #87119 end
+
+    // MintHCM start
+    public function getOptionsField($vardef, \SugarBean $focus): ?array
+    {
+        if (!empty($vardef['options'])) {
+            if (isset($vardef['enable_range_search']) && $vardef['enable_range_search'] == true) {
+                return null; //Skip search options
+            }
+
+            $list = return_app_list_strings_language('en_us');
+            return $list[$vardef['options']] ?? null;
+        }
+
+        if (!empty($vardef['function'])) {
+            $function = (is_array($vardef['function']) && isset($vardef['function']['name'])) ? $vardef['function']['name'] : $vardef['function'];
+            $additional_params = !empty($vardef['function']['additional_params']) ? $vardef['function']['additional_params']: null;
+            if (!empty($vardef['function']['returns']) && $vardef['function']['returns'] == 'html') {
+                return null;
+            }
+            return call_user_func($function, $focus, $vardef['name'], '', 'ListView', $additional_params);
+        }
+
+        return null;
+    }
+    // MintHCM end
 }

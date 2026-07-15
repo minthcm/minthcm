@@ -126,6 +126,25 @@
             </li>
         {/if}
     </ul>
+    {literal}
+    <script>
+    (function() {
+        var links = document.querySelectorAll('.nav-dashboard > li > a.hidden-xs');
+        for (var i = 0; i < links.length; i++) {
+            links[i].addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Space') {
+                    e.preventDefault();
+                    var match = this.id.match(/^tab(\d+)$/);
+                    if (match) {
+                        retrievePage(parseInt(match[1]));
+                        $(this).tab('show');
+                    }
+                }
+            });
+        }
+    })();
+    </script>
+    {/literal}
     <div class="clearfix"></div>
     <div class="tab-content">
         {foreach from=$dashboardPages key=tabNum item=tab}

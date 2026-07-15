@@ -210,6 +210,7 @@ $dictionary['News'] = array(
             'name' => 'prospectlists',
             'vname' => 'LBL_PROSPECT_LISTS',
             'type' => 'link',
+            'module' => 'ProspectLists',
             'relationship' => 'prospect_list_news',
             'source' => 'non-db',
         ),

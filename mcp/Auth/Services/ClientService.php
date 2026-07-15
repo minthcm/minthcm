@@ -65,9 +65,9 @@ class ClientService
                 throw new Exception('Failed to save client');
             }
 
-            Logger::getLogger()->info('Dynamic client registration successful', [
-                'client_id' => $registrationData['clientId'],
-                'client_name' => $registrationData['clientName']
+            logEvent('OAuth client registered', [
+                'client_id'   => $registrationData['clientId'],
+                'client_name' => $registrationData['clientName'],
             ]);
 
             // Prepare response according to RFC 7591
@@ -92,15 +92,66 @@ class ClientService
                 'data' => $response
             ];
         } catch (Exception $e) {
-            Logger::getLogger()->error('Dynamic client registration failed', [
-                'error' => $e->getMessage()
-            ]);
+            logEvent('OAuth client registration failed', ['error' => $e->getMessage()]);
 
             return [
                 'status' => 500,
                 'error' => 'server_error',
                 'error_description' => 'Failed to register client'
             ];
+        }
+    }
+
+    /**
+     * Get or create the internal OAuth2Client for internal token generation
+     * 
+     * @return OAuth2Clients The internal client bean
+     * @throws Exception If client creation fails
+     */
+    public function getOrCreateInternalClient(): OAuth2Clients
+    {
+        $internalClientId = 'mcp_internal';
+        
+        chdir('../legacy');
+        $clientBean = $this->getClientById($internalClientId);
+        chdir('../mcp');
+        
+        if ($clientBean) {
+            return $clientBean;
+        }
+        
+        // Create the internal client if it doesn't exist
+        try {
+            chdir('../legacy');
+            $clientBean = BeanFactory::newBean('OAuth2Clients');
+            $clientBean->id = $internalClientId;
+            $clientBean->name = 'MCP Internal Client';
+            $clientBean->new_with_id = true;
+            $clientBean->is_confidential = false;
+            $clientBean->secret = '';
+            $clientBean->redirect_url = '';
+            $clientBean->allowed_grant_type = '';
+            $clientBean->duration_value = 3600;
+            $clientBean->duration_amount = 1;
+            $clientBean->duration_unit = 'hour';
+            $success = $clientBean->save();
+            chdir('../mcp');
+            
+            if (!$success) {
+                throw new Exception('Failed to create internal OAuth2Client');
+            }
+            
+            Logger::getLogger()->info('Created internal OAuth2Client', [
+                'client_id' => $internalClientId
+            ]);
+            
+            return $clientBean;
+        } catch (Exception $e) {
+            chdir('../mcp');
+            Logger::getLogger()->error('Failed to create internal OAuth2Client', [
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
         }
     }
 

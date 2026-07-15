@@ -146,6 +146,7 @@ $dictionary['AOR_Report'] = array(
       array(
         'name' => 'aor_charts',
         'type' => 'link',
+        'module' => 'AOR_Charts',
         'relationship' => 'aor_charts_aor_reports',
         'source' => 'non-db',
         'id_name' => 'aor_report_id',

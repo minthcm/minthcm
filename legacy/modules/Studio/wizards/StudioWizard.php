@@ -68,7 +68,6 @@ class StudioWizard
                          'EditDropDownWizard'=>$GLOBALS['mod_strings']['LBL_SW_EDIT_DROPDOWNS'],
                          'RenameTabs'=>$GLOBALS['mod_strings']['LBL_SW_RENAME_TABS'],
                          'ConfigureTabs'=>$GLOBALS['mod_strings']['LBL_SW_EDIT_TABS'],
-                         'ConfigureGroupTabs'=>$GLOBALS['mod_strings']['LBL_SW_EDIT_GROUPTABS'],
                          'Portal'=>$GLOBALS['mod_strings']['LBL_SW_EDIT_PORTAL'],
                          'RepairCustomFields'=>$GLOBALS['mod_strings']['LBL_SW_REPAIR_CUSTOMFIELDS'],
                          'MigrateCustomFields'=>$GLOBALS['mod_strings']['LBL_SW_MIGRATE_CUSTOMFIELDS'],
@@ -101,9 +100,6 @@ class StudioWizard
             case 'ConfigureTabs':
                 header('Location: index.php?module=Administration&action=ConfigureTabs');
                 sugar_cleanup(true);
-                // no break
-            case 'ConfigureGroupTabs':
-                require_once('modules/Studio/TabGroups/EditViewTabs.php');
                 break;
             case 'Workflow':
                 header('Location: index.php?module=WorkFlow&action=ListView');

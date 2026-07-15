@@ -46,15 +46,14 @@
 namespace MintHCM\Api\Controllers\Module;
 
 use MintHCM\Data\MassActions\Actions as MassActions;
-use MintHCM\Utils\ConstantsLoader;
 use MintHCM\Data\MassActions\MassActionLoader;
+use MintHCM\Utils\ConstantsLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 
-#[\AllowDynamicProperties]
 class ListInitController
 {
     const METADATA_FILES = array(
@@ -74,20 +73,22 @@ class ListInitController
         'created_by_name',
         'modified_by_name',
     ];
-    private $request;
-    private $module, $metadata, $bean;
-    private $eslistmap = [];
-    private $mappings = [];
+    private ?Request $request = null;
+    private string $module = '';
+    private array $metadata = [];
+    private ?object $bean = null;
+    private array $eslistmap = [];
+    private array $mappings = [];
 
     public function __construct()
     {
-        global $app_list_strings, $current_language;
+        global $app_list_strings;
         if (!$app_list_strings) {
-            $app_list_strings = return_app_list_strings_language($current_language);
+            $app_list_strings = return_app_list_strings_language(get_current_language());
         }
     }
 
-    function __invoke(Request $request, Response $response, array $args): Response
+    public function __invoke(Request $request, Response $response, array $args): Response
     {
         $this->request = $request;
         $this->setData();
@@ -111,7 +112,7 @@ class ListInitController
         return $response;
     }
 
-    function setData()
+    public function setData()
     {
         $routeContext = RouteContext::fromRequest($this->request);
         $route = $routeContext->getRoute();
@@ -132,19 +133,19 @@ class ListInitController
         }
     }
 
-    function prepareUserPreferences()
+    public function prepareUserPreferences()
     {
         global $current_user;
         chdir('../legacy/');
         $preferences = (new \UserPreference($current_user))->getPreference($this->module, 'eslist');
-        if(!$preferences) {
+        if (!$preferences) {
             $preferences = [];
         }
         chdir('../api/');
         return $preferences;
     }
 
-    function prepareConfig()
+    public function prepareConfig()
     {
         global $sugar_config;
         $list_config = ConstantsLoader::getConstants('list_constants');
@@ -185,7 +186,7 @@ class ListInitController
         );
     }
 
-    function prepareDefs()
+    public function prepareDefs()
     {
         return [
             'columns' => $this->prepareDefsType("columns"),
@@ -197,9 +198,9 @@ class ListInitController
 
     protected function prepareMassUpdateDefs()
     {
-        global $mod_strings, $app_strings, $current_language;
+        global $mod_strings, $app_strings;
         $massupdate_fields = [];
-        foreach($this->bean->field_name_map as $field => $defs) {
+        foreach ($this->bean->field_name_map as $field => $defs) {
             if (empty($defs['massupdate']) || $defs['massupdate'] === false) {
                 continue;
             }
@@ -214,7 +215,7 @@ class ListInitController
             $massupdate_field['name'] = $field;
             $massupdate_field['key'] = $this->eslistmap[$field] ?? $field;
             $massupdate_field['options'] = $this->getParsedOptions($defs);
-            $mod_strings = return_module_language($current_language, $this->module);
+            $mod_strings = return_module_language(get_current_language(), $this->module);
             $label = $defs['label'] ?? $defs['vname'];
             $massupdate_field['label'] = $this->prepareLabel($mod_strings[$label] ?? $app_strings[$label] ?? $label);
             $massupdate_fields[$massupdate_field['name']] = $massupdate_field;
@@ -229,8 +230,8 @@ class ListInitController
 
     protected function prepareSearchDefs()
     {
-        global $mod_strings, $app_strings, $current_language;
-        $mod_strings = return_module_language($current_language, $this->module);
+        global $mod_strings, $app_strings;
+        $mod_strings = return_module_language(get_current_language(), $this->module);
         $this->addDefaultFields('search');
         $search = $this->metadata["search"];
         if (empty($search)) {
@@ -272,14 +273,14 @@ class ListInitController
         return $search;
     }
 
-    function prepareDefsType($type)
+    public function prepareDefsType($type)
     {
         $this->addDefaultFields($type);
         $columns = $this->metadata[$type];
 
-        global $mod_strings, $app_strings, $current_language, $app_list_strings;
+        global $mod_strings, $app_strings;
         chdir('../legacy/');
-        $mod_strings = return_module_language($current_language, $this->module);
+        $mod_strings = return_module_language(get_current_language(), $this->module);
         chdir('../api/');
         if (empty($columns)) {
             \LoggerManager::getLogger()->fatal('Columns for ESList View are not defined');
@@ -338,7 +339,7 @@ class ListInitController
         }
         return $fieldProps;
     }
-    function prepareLabel($label)
+    public function prepareLabel($label)
     {
         $label = trim($label);
         if (in_array(substr($label, -1), [':', '.'])) {
@@ -356,10 +357,10 @@ class ListInitController
         }
         if (!empty($field_defs['function']['include'])) {
             if (file_exists($field_defs['function']['include'])) {
-            require_once $field_defs['function']['include'];
+                require_once $field_defs['function']['include'];
             } else if (file_exists('../legacy/' . $field_defs['function']['include'])) {
                 require_once '../legacy/' . $field_defs['function']['include'];
-        }
+            }
         }
         $function = $field_defs['function']['name'] ?? $field_defs['function'];
         $additional_params = $field_defs['function']['additional_params'] ?? null;
@@ -372,7 +373,7 @@ class ListInitController
         foreach (static::DEFAULT_COLUMNS as $field) {
             if (!isset($this->metadata[$metadata_type][$field]) && !empty($this->bean->field_name_map[$field])) {
                 if ($metadata_type == 'columns' && in_array($field, ['created_by_name', 'modified_by_name'])) {
-                    $this->metadata[$metadata_type][$field] = [ 'link' => true ];
+                    $this->metadata[$metadata_type][$field] = ['link' => true];
                     continue;
                 }
                 $this->metadata[$metadata_type][$field] = [];

@@ -23,40 +23,25 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class TranslationWriter implements TranslationWriterInterface
 {
-    private $dumpers = [];
+    /**
+     * @var array<string, DumperInterface>
+     */
+    private array $dumpers = [];
 
     /**
      * Adds a dumper to the writer.
      *
-     * @param string $format The format of the dumper
+     * @return void
      */
-    public function addDumper($format, DumperInterface $dumper)
+    public function addDumper(string $format, DumperInterface $dumper)
     {
         $this->dumpers[$format] = $dumper;
     }
 
     /**
-     * Disables dumper backup.
-     *
-     * @deprecated since Symfony 4.1
-     */
-    public function disableBackup()
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1.', __METHOD__), \E_USER_DEPRECATED);
-
-        foreach ($this->dumpers as $dumper) {
-            if (method_exists($dumper, 'setBackup')) {
-                $dumper->setBackup(false);
-            }
-        }
-    }
-
-    /**
      * Obtains the list of supported formats.
-     *
-     * @return array
      */
-    public function getFormats()
+    public function getFormats(): array
     {
         return array_keys($this->dumpers);
     }
@@ -67,19 +52,21 @@ class TranslationWriter implements TranslationWriterInterface
      * @param string $format  The format to use to dump the messages
      * @param array  $options Options that are passed to the dumper
      *
+     * @return void
+     *
      * @throws InvalidArgumentException
      */
-    public function write(MessageCatalogue $catalogue, $format, $options = [])
+    public function write(MessageCatalogue $catalogue, string $format, array $options = [])
     {
         if (!isset($this->dumpers[$format])) {
-            throw new InvalidArgumentException(sprintf('There is no dumper associated with format "%s".', $format));
+            throw new InvalidArgumentException(\sprintf('There is no dumper associated with format "%s".', $format));
         }
 
         // get the right dumper
         $dumper = $this->dumpers[$format];
 
         if (isset($options['path']) && !is_dir($options['path']) && !@mkdir($options['path'], 0777, true) && !is_dir($options['path'])) {
-            throw new RuntimeException(sprintf('Translation Writer was not able to create directory "%s".', $options['path']));
+            throw new RuntimeException(\sprintf('Translation Writer was not able to create directory "%s".', $options['path']));
         }
 
         // save

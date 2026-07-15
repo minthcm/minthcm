@@ -138,6 +138,17 @@ export const useLogic = (module: string) => {
         rules.forEach((rule) => {
             if (!rule.logic?.update) return
             Object.entries(rule.logic.update).forEach(([fieldName, value]) => {
+                // MintLogic auto-adds update:null for every visible:false field.
+                // Skip that null when another rule makes the field visible in the end —
+                // otherwise the API value loaded into the form would be wiped.
+                if (value === null && rule.logic.visible?.[fieldName] === false && !hiddenFields.value.includes(fieldName)) {
+                    return
+                }
+                // MintLogic adds update:null for readonly non-db fields (e.g. parent_name)
+                // when the Sugar bean cannot populate them. Skip to keep the serializer value.
+                if (value === null && rule.logic.readonly?.[fieldName] === true) {
+                    return
+                }
                 updatedFields[fieldName] = value
             })
         })

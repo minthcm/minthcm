@@ -1199,6 +1199,9 @@ class SugarBean
                     $panel_name = $this_subpanel->name;
                     $params = array();
                     $params['distinct'] = $this_subpanel->distinct_query();
+                    if (!$params['distinct'] && !empty($query_array['type']) && $query_array['type'] == 'many-to-many') {
+                        $params['distinct'] = true;
+                    }
 
                     $params['joined_tables'] = isset($query_array['join_tables']) ? $query_array['join_tables'] : null;
                     $params['include_custom_fields'] = method_exists($subpanel_def ?? '', 'isCollection')
@@ -5909,7 +5912,18 @@ class SugarBean
     public function get_list_view_array()
     {
         static $cache = array();
+        // MintHCM - preserve non-db fields (e.g. relationship_info values from secondary queries)
+        // before retrieve() wipes them by re-fetching from DB
+        $nonDbValues = array();
+        foreach ($this->field_defs as $fieldName => $fieldDef) {
+            if (isset($fieldDef['source']) && $fieldDef['source'] === 'non-db' && isset($this->$fieldName) && $this->$fieldName !== '') {
+                $nonDbValues[$fieldName] = $this->$fieldName;
+            }
+        }
         $this->retrieve($this->id); // MintHCM
+        foreach ($nonDbValues as $fieldName => $fieldValue) {
+            $this->$fieldName = $fieldValue;
+        }
         // cn: bug 12270 - sensitive fields being passed arbitrarily in listViews
         $sensitiveFields = array('user_hash' => '');
 

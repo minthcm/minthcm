@@ -1,0 +1,17 @@
+{
+    "_hash": "f8ec61525f4a586011c8acc099a482299a4e1ef1807e60e341789febe8973d00",
+    "patches": {
+        "league/oauth2-server": [
+            {
+                "package": "league/oauth2-server",
+                "description": "0",
+                "url": "patches/league-oauth2-server-src-grant-abstractgrant-php.patch",
+                "sha256": "5653f58ad45dd3415a5bd06a73313b4a3f2b9f503bf829792a46cb9d147afbb3",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}

@@ -302,15 +302,6 @@ $dictionary['Note'] = array(
             'reportable' => false,
             'source' => 'non-db',
         ],
-        'acase_id' =>
-        [
-            'name' => 'acase_id',
-            'vname' => 'LBL_CASE_ID',
-            'type' => 'id',
-            'reportable' => false,
-            'source' => 'non-db',
-        ],
-
         'created_by_link' =>
         [
             'name' => 'created_by_link',
@@ -477,7 +468,6 @@ foreach ([
     'parent_name' => 'LBL_RELATED_TO_COMMENT',
     'show_preview' => 'LBL_SHOW_PREVIEW_COMMENT',
     'campaign_id' => 'LBL_CAMPAIGN_ID_COMMENT',
-    'acase_id' => 'LBL_CASE_ID_COMMENT',
 ] as $field => $commentLabel) {
     if (isset($dictionary['Note']['fields'][$field])) {
         $dictionary['Note']['fields'][$field]['comment'] = $commentLabel;

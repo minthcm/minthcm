@@ -232,6 +232,7 @@ $dictionary['jjwg_Maps'] = array(
             array(
                 'name' => 'jjwg_maps_jjwg_areas',
                 'type' => 'link',
+                'module' => 'jjwg_Areas',
                 'relationship' => 'jjwg_maps_jjwg_areas',
                 'source' => 'non-db',
                 'vname' => 'LBL_JJWG_MAPS_JJWG_AREAS_FROM_JJWG_AREAS_TITLE',
@@ -240,6 +241,7 @@ $dictionary['jjwg_Maps'] = array(
             array(
                 'name' => 'jjwg_maps_jjwg_markers',
                 'type' => 'link',
+                'module' => 'jjwg_Markers',
                 'relationship' => 'jjwg_maps_jjwg_markers',
                 'source' => 'non-db',
                 'vname' => 'LBL_JJWG_MAPS_JJWG_MARKERS_FROM_JJWG_MARKERS_TITLE',

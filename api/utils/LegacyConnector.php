@@ -46,6 +46,7 @@
 
 namespace MintHCM\Utils;
 
+// NOTE: #[\AllowDynamicProperties] is intentional — proxy pattern forwarding all property/method access to wrapped legacy object via __get/__set/__call
 #[\AllowDynamicProperties]
 class LegacyConnector
 {
@@ -116,6 +117,17 @@ class LegacyConnector
         chdir('../legacy/');
         try {
             return static::$static_class::$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
+    }
+
+    public static function callFunction(string $function_name, ...$arguments): mixed
+    {
+        $old_cwd = getcwd();
+        chdir('../legacy/');
+        try {
+            return $function_name(...$arguments);
         } finally {
             chdir($old_cwd);
         }

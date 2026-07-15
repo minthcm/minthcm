@@ -29,7 +29,7 @@ class Candidatures extends Candidatures_sugar
             $this->to_decision = 0;
         }
 
-        if (!strlen($this->name) > 0 || $old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['parent_id'] != $this->parent_id) {
+        if (!strlen($this->name) > 0 || (!empty($old_bean) && ($old_bean['recruitment_id'] != $this->recruitment_id || $old_bean['parent_id'] != $this->parent_id))) {
             $this->generateName();
         }
         $this->change_relation = false;

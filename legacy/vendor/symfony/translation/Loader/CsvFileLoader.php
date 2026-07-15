@@ -20,24 +20,21 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
  */
 class CsvFileLoader extends FileLoader
 {
-    private $delimiter = ';';
-    private $enclosure = '"';
-    private $escape = '\\';
+    private string $delimiter = ';';
+    private string $enclosure = '"';
+    private string $escape = '';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource): array
     {
         $messages = [];
 
         try {
             $file = new \SplFileObject($resource, 'rb');
         } catch (\RuntimeException $e) {
-            throw new NotFoundResourceException(sprintf('Error opening file "%s".', $resource), 0, $e);
+            throw new NotFoundResourceException(\sprintf('Error opening file "%s".', $resource), 0, $e);
         }
 
-        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
+        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
         $file->setCsvControl($this->delimiter, $this->enclosure, $this->escape);
 
         foreach ($file as $data) {
@@ -45,7 +42,7 @@ class CsvFileLoader extends FileLoader
                 continue;
             }
 
-            if ('#' !== substr($data[0], 0, 1) && isset($data[1]) && 2 === \count($data)) {
+            if (!str_starts_with($data[0], '#') && isset($data[1]) && 2 === \count($data)) {
                 $messages[$data[0]] = $data[1];
             }
         }
@@ -56,11 +53,9 @@ class CsvFileLoader extends FileLoader
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
      *
-     * @param string $delimiter Delimiter character
-     * @param string $enclosure Enclosure character
-     * @param string $escape    Escape character
+     * @return void
      */
-    public function setCsvControl($delimiter = ';', $enclosure = '"', $escape = '\\')
+    public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '')
     {
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;

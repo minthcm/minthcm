@@ -193,13 +193,6 @@ $admin_option_defs['Administration']['aop'] = [
     './index.php?module=Administration&action=AOPAdmin',
     'aop-settings'
 ];
-$admin_option_defs['Administration']['configure_group_tabs'] = [
-    'ConfigureTabs',
-    'LBL_CONFIGURE_GROUP_TABS',
-    'LBL_CONFIGURE_GROUP_TABS_DESC',
-    './index.php?action=wizard&module=Studio&wizard=StudioWizard&option=ConfigureGroupTabs',
-    'configure-module-menu-filters'
-];
 $admin_option_defs['Administration']['connector_settings'] = [
     'icon_Connectors',
     'LBL_CONNECTOR_SETTINGS',
@@ -227,14 +220,7 @@ $admin_option_defs['Bugs']['bug_tracker'] = [
     'LBL_RELEASE',
     './index.php?module=Releases&action=index',
     'releases'
-];
-$admin_option_defs['Administration']['aos'] = [
-    'AOS',
-    'LBL_AOS_SETTINGS',
-    'LBL_CHANGE_SETTINGS',
-    './index.php?module=Administration&action=AOSAdmin',
-    'aos-settings'
-];
+]; 
 
 $admin_group_header['sagility'] = ['LBL_MODULE_ADMIN', '', false, $admin_option_defs, 'LBL_MODULE_ADMIN_HEADER_DESC'];
 
@@ -508,36 +494,6 @@ $admin_option_defs['Administration']['generator'] = [
 ];
 $admin_group_header[] = ['LBL_ADMIN_GENERATOR', '', false, $admin_option_defs, ''];
 # PDFTemplates Administration Definition end
-
-# DateLastNextContact Administration Definition begin
-$admin_option_defs = array();
-$admin_option_defs['Administration']['AddLastNextContactPanel'] = array(
-    'Administration',
-    'LBL_ADD_LAST_NEXT_CONTACT_PANEL',
-    'LBL_ADD_LAST_NEXT_CONTACT_PANEL_DESCRIPTION',
-    'index.php?module=Administration&action=AddLastNextContactPanel',
-);
-$admin_option_defs['Administration']['AddLastNextContactTabs'] = array(
-    'Administration',
-    'LBL_ADD_LAST_NEXT_CONTACT_TABS',
-    'LBL_ADD_LAST_NEXT_CONTACT_TABS_DESCRIPTION',
-    'index.php?module=Administration&action=AddLastNextContactPanel&type=1',
-);
-
-$admin_option_defs['Administration']['DLNCSettings'] = array(
-    'Administration',
-    'LBL_DLNC_SETTINGS',
-    'LBL_DLNC_SETTINGS_DESCRIPTION',
-    'index.php?module=Administration&action=DLNCSettings&type=1',
-);
-$admin_option_defs['Administration']['configs'] = array(
-    'Administration',
-    'LBL_CALCULATE_DLNC',
-    'LBL_CALCULATE_DLNC',
-    'index.php?entryPoint=CalculateDLNC',
-);
-$admin_group_header[] = array('LBL_ADD_LAST_NEXT_CONTACT_PANEL', '', false, $admin_option_defs, '');
-# DateLastNextContact Administration Definition end
 
 # MCP Administration Definition begin
 $admin_option_defs = array();

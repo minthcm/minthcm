@@ -1,11 +1,12 @@
-<phpunit testdox="true">
-    <php>
-        <ini name="error_reporting" value="0"/>
-    </php>
-    
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    testdox="true"
+    bootstrap="tests/bootstrap.php"
+>
     <testsuites>
-        <testsuite name="My Test Suite">
-            <directory>./tests</directory>
+        <testsuite name="MintApi Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

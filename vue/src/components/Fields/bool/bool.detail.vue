@@ -6,7 +6,6 @@
         color="secondary"
         :modelValue="!!Number(props.modelValue)"
         readonly
-        disabled
     />
 </template>
 
@@ -28,12 +27,6 @@ const props = defineProps<FieldProps>()
     :deep(.v-label) {
         padding-left: 0px;
     }
-}
-:deep(.v-selection-control--disabled) {
-    opacity: 1;
-}
-:deep(.v-selection-control__wrapper) {
-    opacity: var(--v-disabled-opacity);
 }
 :deep(.v-label) {
     font-size: 12px;

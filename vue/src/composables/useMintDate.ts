@@ -1,4 +1,4 @@
-import { ref, computed, watch, UnwrapRef } from 'vue'
+import { ref, computed, watch, UnwrapRef, isRef } from 'vue'
 import { DateTime, DurationLike } from 'luxon'
 import { usePreferencesStore } from '@/store/preferences'
 
@@ -93,6 +93,13 @@ function toLuxon(input: DateInput): DateTime {
     }
     if (DateTime.isDateTime(input)) {
         return input.setZone('utc')
+    }
+    if (input && typeof input === 'object' && 'instance' in input) {
+        const raw = (input as any).instance
+        const dt = isRef(raw) ? raw.value : raw
+        if (DateTime.isDateTime(dt)) {
+            return dt.setZone('utc')
+        }
     }
     return DateTime.utc()
 }

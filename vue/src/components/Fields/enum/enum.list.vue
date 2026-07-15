@@ -1,9 +1,9 @@
 <template>
     <div>
         <v-chip v-if="props.defs?.options_colors" :style="coloredEnumStyle" class="enum-chip">
-            {{ item }}
+            {{ languages.translateListValue(props.modelValue, props.defs?.options) }}
         </v-chip>
-        <div v-else>{{ item }}</div>
+        <div v-else>{{ languages.translateListValue(props.modelValue, props.defs?.options) }}</div>
     </div>
 </template>
 
@@ -23,24 +23,6 @@ const coloredEnumStyle = computed(() => {
         return colors[props.defs.options_colors[props.modelValue]] || colors['-default-']
     }
     return ''
-})
-
-const item = computed(() => {
-    const options = props.options ?? props.defs?.options
-    if (!options) {
-        return []
-    }
-    if (typeof options === 'string') {
-        return languages.translateListValue(props.modelValue, props.defs?.options)
-    }
-    if (!Array.isArray(options) && typeof options === 'object') {
-        let list = Object.entries(options).map(([key, value]) => ({
-            key,
-            value,
-        }))
-        return list.find((item) => item.key === props.modelValue)?.value || ''
-    }
-    return props.modelValue
 })
 </script>
 

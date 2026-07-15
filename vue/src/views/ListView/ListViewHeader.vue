@@ -7,7 +7,7 @@
                     :active="isActive"
                     append-icon="mdi-menu-down"
                     :text="languages.label('LBL_ESLIST_MASS_ACTION')"
-                    :disabled="!store.selected?.length || store.isMassUpdate"
+                    :disabled="(!store.selected?.length || store.isMassUpdate) && !store.allSelected"
                 />
             </template>
             <MintMenuList :items="store.massActions" />
@@ -38,6 +38,21 @@
             @click="store.getData"
             :tooltip="languages.label('LBL_ESLIST_REFRESH')"
         />
+    </div>
+    <div>
+        <div
+            v-if="(store.isHeaderChecked || store.allSelected) && store.itemsLength > store.options.itemsPerPage"
+            class="mass-selection-bar"
+        >
+            <div v-if="!store.allSelected">
+                {{ languages.label('LBL_ESLIST_MASS_SELECTION_ALL_RECORDS_PAGE').replace("{number}", store.selectedOnPageCount) }}
+                <a @click="store.selectAll">{{ languages.label('LBL_ESLIST_MASS_SELECTION_ALL_RECORDS_FILTERS').replace("{number}", store.itemsLength) }}</a>
+            </div>
+            <div v-else>
+                {{ languages.label('LBL_ESLIST_MASS_SELECTION_ALL_RECORDS_PAGE').replace("{number}", store.itemsLength) }}
+                <a @click="store.clearAllSelection">{{ languages.label('LBL_ESLIST_MASS_SELECTION_CLEAR') }}</a>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -84,6 +99,27 @@ onMounted(() => {
     &.list-header-railed {
         overflow-y: auto;
         scrollbar-width: none;
+    }
+
+    :deep(.mint-button:focus-visible) {
+        outline: 2px solid rgb(var(--v-theme-secondary-dark));
+        outline-offset: 2px;
+    }
+}
+.mass-selection-bar {
+    width: 100%;
+    background: #c7e8dc;
+    padding: 12px 16px;
+    border-radius: 4px;
+    text-align: center;
+    color: #1f3b2e;
+    margin-bottom: 8px;
+    a {
+        margin-left: 8px;
+        text-decoration: underline;
+        cursor: pointer;
+        font-weight: bold;
+        color: #145D7B;
     }
 }
 </style>

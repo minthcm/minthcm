@@ -244,6 +244,7 @@ $dictionary['SpentTime'] = array(
         'employees' => array(
             'name' => 'employees',
             'type' => 'link',
+            'module' => 'Employees',
             'relationship' => 'spenttime_employees',
             'source' => 'non-db',
             'vname' => 'LBL_EMPLOYEES',
@@ -270,12 +271,6 @@ $dictionary['SpentTime'] = array(
             'isnull' => 'true',
             'dbType' => 'id',
             'audited' => true,
-        ),
-        'projecttask_issue_tracker' => array(
-            'name' => 'projecttask_issue_tracker',
-            'type' => 'varchar',
-            'source' => 'non-db',
-            'vname' => 'LBL_PROJECTTASK_ISSUE_TRACKER',
         ),
         'type' => array(
             'name' => 'type',

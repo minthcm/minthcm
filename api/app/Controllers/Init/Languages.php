@@ -48,7 +48,6 @@ namespace MintHCM\Api\Controllers\Init;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class Languages
 {
 
@@ -66,7 +65,7 @@ class Languages
         return $response;
     }
 
-    public function getLanguages(array $modules = [], string $lang = null): array
+    public function getLanguages(array $modules = [], string|null $lang = null): array
     {
         global $sugar_config, $app_list_strings, $app_strings, $current_language;
         $current_language = $lang ?? $_SESSION["authenticated_user_language"] ?? $sugar_config['default_language'];

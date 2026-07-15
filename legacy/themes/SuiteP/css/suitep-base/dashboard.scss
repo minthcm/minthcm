@@ -664,6 +664,63 @@ td.dashlet-title > h3 > span {
       }
   }
   // MintHCM #120479 END
+
+// Global dashlet focus styles
+.dashletPanel {
+    // Override bootstrap tab-focus mixin (-webkit-focus-ring-color)
+    a:focus,
+    a:focus-visible,
+    button:focus,
+    button:focus-visible,
+    select:focus,
+    select:focus-visible,
+    input:focus,
+    input:focus-visible,
+    [tabindex]:focus,
+    [tabindex]:focus-visible,
+    .list tr th a:focus,
+    .list tr td a:focus,
+    .pagination button:focus,
+    .pagination a:focus {
+        outline: 2px solid #089b78 !important;
+        outline-offset: 2px !important;
+        outline-style: solid !important;
+        outline-color: #089b78 !important;
+    }
+
+    img[tabindex] {
+        border: none;
+    }
+
+    img[tabindex]:focus,
+    img[tabindex]:focus-visible {
+        outline: none !important;
+        box-shadow: 0 0 0 2px #089b78 !important;
+        border-radius: 3px;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .dashletPanel:focus-within .suitepicon::before {
+        opacity: 1;
+    }
+}
+
+.dashletToolSet a:focus,
+.dashletToolSet a:focus-visible {
+    outline: 2px solid #089b78 !important;
+    outline-offset: 2px !important;
+    outline-style: solid !important;
+    outline-color: #089b78 !important;
+}
+
+.toolbar_container__action_buttons_container img[tabindex]:focus,
+.toolbar_container__action_buttons_container img[tabindex]:focus-visible{
+    outline: none !important;
+    box-shadow: 0 0 0 2px #045845 !important;
+    border-radius: 3px;
+}
+
 @media (max-width: 750px) {
 
   .dashletcontainer {

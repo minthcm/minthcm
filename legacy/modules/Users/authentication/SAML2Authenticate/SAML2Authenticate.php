@@ -91,7 +91,7 @@ class SAML2Authenticate extends SugarAuthenticate
      * pre login initialization - use SAML2 to authenticate a user login process
      * @throws OneLogin_Saml2_Error
      */
-    public function pre_login()
+    public function pre_login(bool $stay = false)
     {
         $settingsInfo = [];
         require_once __DIR__ . '/../SAML2Authenticate/lib/onelogin/settings.php';
@@ -138,11 +138,17 @@ class SAML2Authenticate extends SugarAuthenticate
                     $GLOBALS['log']->warn('SLO errors: ' . implode(', ', $errors));
                 }
 
-                $auth->login();
+                $url = $auth->login(str_replace('/api', '/legacy', OneLogin_Saml2_Utils::getSelfURLNoQuery()), [], false, false, $stay);
+                if ($stay) {
+                    return $url;
+                } 
                 exit;
             }
         } else {
-            $auth->login();
+            $url = $auth->login(str_replace('/api', '/legacy', OneLogin_Saml2_Utils::getSelfURLNoQuery()), [], false, false, $stay);
+            if ($stay) {
+                return $url;
+            } 
             exit;
         }
     }
@@ -154,10 +160,16 @@ class SAML2Authenticate extends SugarAuthenticate
      */
     public function redirectToLogin(SugarApplication $app)
     {
+        
         if (isset($_SESSION['samlNameId']) && !empty($_SESSION['samlNameId'])) {
             if ($this->userAuthenticate->loadUserOnLogin($_SESSION['samlNameId'], null)) {
                 global $authController;
-                $authController->login($_SESSION['samlNameId'], null);
+                $auth = $authController->login($_SESSION['samlNameId'], null);
+                if ($auth) {
+                    $_SESSION['saml_oauth_pending'] = true;
+                    $_SESSION['saml_oauth_pending_user'] = $_SESSION['samlNameId'];
+                    $_SESSION['saml_oauth_pending_at'] = time();
+                }
             }
             SugarApplication::redirect('index.php?module=Users&action=LoggedOut');
         } else {
@@ -169,21 +181,23 @@ class SAML2Authenticate extends SugarAuthenticate
      * Called when a user requests to logout, and use SAML2 logout
      * @throws OneLogin_Saml2_Error
      */
-    public function logout()
+    public function logout(bool $stay = false)
     {
         if ($this->samlLogoutAuth && $this->samlLogoutAuth->getSLOurl()) {
-            $this->samlLogoutAuth->logout(
-                $this->samlLogoutArgs['returnTo'],
+            return $this->samlLogoutAuth->logout(
+                str_replace('/api', '/legacy', OneLogin_Saml2_Utils::getSelfURLNoQuery()),
                 $this->samlLogoutArgs['parameters'],
                 $this->samlLogoutArgs['nameId'],
                 $this->samlLogoutArgs['sessionIndex'],
-                $this->samlLogoutArgs['false'],
+                $stay == true ? true : $this->samlLogoutArgs['false'],
                 $this->samlLogoutArgs['nameIdFormat']
             );
         } else {
             // TODO: SLO Url need for SAML2, add it to SAML2 authentication settings
             $GLOBALS['log']->debug('SLO Url need for SAML2, add it to SAML2 authentication settings');
-            SugarApplication::redirect('index.php');
+            if (!$stay) {
+                SugarApplication::redirect('index.php');
+            }
         }
     }
 

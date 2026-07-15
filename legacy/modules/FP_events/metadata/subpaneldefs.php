@@ -57,7 +57,7 @@ $layout_defs['FP_events'] = array(
             'title_key' => 'LBL_DEFAULT_SUBPANEL_TITLE',
             'type' => 'collection',
             'subpanel_name' => 'delegates',   //this values is not associated with a physical file.
-            'header_definition_from_subpanel'=> 'Contacts',
+            'header_definition_from_subpanel'=> 'Candidates',
             'module'=>'Delegates',
             'select_link_top'=>true,
 
@@ -71,15 +71,10 @@ $layout_defs['FP_events'] = array(
             ),
 
             'collection_list' => array(
-                'contacts' => array(
-                    'module' => 'Contacts',
-                    'subpanel_name' => 'FP_events_subpanel_fp_events_contacts',
-                    'get_subpanel_data' => 'fp_events_contacts',
-                ),
-                'prospects' => array(
-                    'module' => 'Prospects',
-                    'subpanel_name' => 'FP_events_subpanel_fp_events_prospects_1',
-                    'get_subpanel_data' => 'fp_events_prospects_1',
+                'candidates' => array(
+                    'module' => 'Candidates',
+                    'subpanel_name' => 'FP_events_subpanel_fp_events_candidates',
+                    'get_subpanel_data' => 'fp_events_candidates',
                 ),
             ),
             'searchdefs' => array(

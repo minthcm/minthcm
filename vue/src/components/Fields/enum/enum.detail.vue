@@ -1,7 +1,7 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+        <div class="detail-field-row">
             <v-chip
                 v-if="props.defs?.options_colors"
                 class="enum-chip"
@@ -10,18 +10,12 @@
                 {{ parsedValue }}
             </v-chip>
             <div v-else>{{ parsedValue }}</div>
-            <Pencil
-                :defs="props.defs"
-                :hidePencil="hidePencil"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useLanguagesStore } from '@/store/languages'
-import Pencil from '../Pencil.vue'
 import { computed } from 'vue'
 import { FieldProps } from '../Field.model'
 import { useBackendStore } from '@/store/backend'
@@ -59,11 +53,6 @@ const items = computed(() => {
     }
     return options
 })
-function startInlineEdit() {
-    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
-        emit('inlineEditBtnClicked', props.defs.name)
-    }
-}
 </script>
 
 <style scoped lang="scss">

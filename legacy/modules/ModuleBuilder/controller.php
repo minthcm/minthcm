@@ -294,8 +294,15 @@ class ModuleBuilderController extends SugarController
 
     public function action_SaveModule()
     {
+        global $log;
         $mb = new ModuleBuilder() ;
         $load = (! empty($_REQUEST [ 'original_name' ])) ? $_REQUEST [ 'original_name' ] : $_REQUEST [ 'name' ] ;
+
+        if (!isAllowedModuleName($_REQUEST[ 'name' ])) {
+            $log->security(  'Attempt to use invalid module name '. $_REQUEST[ 'name' ] );
+            throw new InvalidArgumentException('Invalid name');
+        }
+
         if (! empty($load)) {
             $mb->getPackage($_REQUEST [ 'package' ]) ;
             $mb->packages [ $_REQUEST [ 'package' ] ]->getModule($load) ;
@@ -329,6 +336,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_saveLabels()
     {
+        global $sugar_config;
         require_once 'modules/ModuleBuilder/parsers/parser.label.php' ;
         $parser = new ParserLabel($_REQUEST['view_module'], isset($_REQUEST [ 'view_package' ]) ? $_REQUEST [ 'view_package' ] : null) ;
         $parser->handleSave($_REQUEST, $_REQUEST [ 'selected_lang' ]) ;
@@ -337,10 +345,15 @@ class ModuleBuilderController extends SugarController
         } else { //STUDIO
             $this->view = isset($_REQUEST [ 'view' ]) ? 'edit' : 'labels' ; // detect if we are being called by the LayoutEditor rather than the LabelEditor (set in view.layoutlabel.php)
         }
+        require_once('ModuleInstall/ModuleInstaller.php');
+        $mi = new ModuleInstaller();
+        $mi->silent = true;
+        $mi->rebuild_languages($sugar_config['languages']);
     }
 
     public function action_SaveLabel()
     {
+        global $sugar_config;
         if (! empty($_REQUEST [ 'view_module' ]) && !empty($_REQUEST [ 'labelValue' ])) {
             $_REQUEST [ "label_" . $_REQUEST [ 'label' ] ] = $_REQUEST [ 'labelValue' ] ;
             require_once 'modules/ModuleBuilder/parsers/parser.label.php' ;
@@ -351,6 +364,10 @@ class ModuleBuilderController extends SugarController
                 $parser = new ParserLabel($req['view_module'], isset($req['view_package']) ? $req['view_package'] : null);
                 $parser->handleSave($req, $GLOBALS['current_language']);
             }
+            require_once('ModuleInstall/ModuleInstaller.php');
+            $mi = new ModuleInstaller();
+            $mi->silent = true;
+            $mi->rebuild_languages($sugar_config['languages']);
         }
         $this->view = 'modulefields' ;
     }
@@ -373,6 +390,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_SaveField()
     {
+        global $sugar_config;
         require_once('modules/DynamicFields/FieldCases.php') ;
         $field = get_widget($_REQUEST [ 'type' ]) ;
         $_REQUEST [ 'name' ] = trim($_REQUEST [ 'name' ]) ;
@@ -410,9 +428,10 @@ class ModuleBuilderController extends SugarController
                 require_once('ModuleInstall/ModuleInstaller.php');
                 $mi = new ModuleInstaller();
                 $mi->silent = true;
+                $mi->rebuild_languages($sugar_config['languages']);
                 $mi->rebuild_extensions();
+                
                 $repair = new RepairAndClear();
-
                 $repair->repairAndClearAll(array('rebuildExtensions', 'clearVardefs', 'clearTpls'), array($class_name), true, false);
                 if ($module == 'Users') {
                     $repair->repairAndClearAll(array('rebuildExtensions', 'clearVardefs', 'clearTpls'), array('Employee'), true, false);
@@ -421,7 +440,7 @@ class ModuleBuilderController extends SugarController
                 //#28707 ,clear all the js files in cache
                 $repair->module_list = array();
                 $repair->clearJsFiles();
-            }
+            } 
         } else {
             $mb = new ModuleBuilder() ;
             $module = & $mb->getPackageModule($_REQUEST [ 'view_package' ], $_REQUEST [ 'view_module' ]) ;
@@ -439,7 +458,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_saveSugarField()
     {
-        global $mod_strings;
+        global $mod_strings, $sugar_config;
         require_once('modules/DynamicFields/FieldCases.php') ;
                 
         $field = get_widget($_REQUEST [ 'type' ]) ;
@@ -473,6 +492,7 @@ class ModuleBuilderController extends SugarController
         require_once('ModuleInstall/ModuleInstaller.php');
         $mi = new ModuleInstaller();
         $mi->silent = true;
+        $mi->rebuild_languages($sugar_config['languages']);
         $mi->rebuild_extensions();
 
         $repair = new RepairAndClear();
@@ -489,6 +509,7 @@ class ModuleBuilderController extends SugarController
         }
 
         $GLOBALS [ 'mod_strings' ] = $MBmodStrings;
+        $this->view = 'modulefields';
     }
 
     public function action_RefreshField()

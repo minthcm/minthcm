@@ -1,11 +1,19 @@
 <template>
     <nav class="top-bar">
-        <div 
+        <div
             :class="{
                 'img-logo': true,
                 'img-logo-railed': mdAndDown && !ux.sideMenu,
-            }" 
+            }"
+            role="button"
+            tabindex="0"
             @click="logoOnClick"
+            @auxclick.prevent="logoOnClick"
+            @keydown.enter.prevent="logoOnClick"
+            @keydown.space.prevent="logoOnClick"
+            id="logo-button"
+            :aria-label="languages.label('LBL_HOME')"
+            :aria-description="languages.label('LBL_HOME_DESCRIPTION')"
         >
             <img v-if="(mdAndDown && ux.sideMenu) || !mdAndDown" src="../../assets/mint_logo_white.svg" />
             <v-icon v-else>mdi-menu</v-icon>
@@ -71,6 +79,18 @@
             <DefaultLayoutAlerts @close="alertsMenu = false" />
         </v-menu>
         <DefaultLayoutUser v-if="!mdAndDown || !ux.sideMenu" />
+        <v-chip
+            v-if="backend.initData?.masquerade_user_id"
+            color="error"
+            variant="elevated"
+            prepend-icon="mdi-account-switch"
+            class="masquerade-chip mr-2"
+            @click="unmasquerade"
+            :title="`${languages.label('LBL_LOGOUT_AS')} ${backend.initData?.user.full_name}`"
+            :aria-label="`${languages.label('LBL_LOGOUT_AS')} ${backend.initData?.user.full_name}`"
+        >
+            {{ backend.initData?.masquerade_admin_name }}
+        </v-chip>
         <div />
     </nav>
 </template>
@@ -132,7 +152,15 @@ function showModulesPopup() {
         component: DefaultLayoutModulesPopup,
     })
 }
-function navigateToDashboard() {
+function unmasquerade() {
+    router.push('/modules/Users/Unmasquerade')
+}
+
+function navigateToDashboard(event: MouseEvent) {
+    if (event.ctrlKey || event.metaKey || event.button === 1) {
+        window.open(router.resolve({ name: 'dashboard' }).href, '_blank')
+        return
+    }
     if(route.name === 'dashboard') {
         document.querySelector('iframe.legacy-view')?.contentWindow.document.querySelector('.nav-dashboard > li > a')?.click();
     } else {
@@ -140,11 +168,15 @@ function navigateToDashboard() {
     }
 }
 
-const logoOnClick = () => {
+const logoOnClick = (event: MouseEvent) => {
+    if (event.ctrlKey || event.metaKey || event.button === 1) {
+        window.open(router.resolve({ name: 'dashboard' }).href, '_blank')
+        return
+    }
     if (mdAndDown.value) {
         ux.showHideSideMenu();
     } else {
-        navigateToDashboard();
+        navigateToDashboard(event);
     }
 }
 </script>
@@ -160,6 +192,10 @@ const logoOnClick = () => {
     gap: 16px;
     align-items: center;
     box-shadow: 0 0 1rem #0005;
+}
+.masquerade-chip {
+    cursor: pointer;
+    font-weight: 600;
 }
 .nav-btn {
     padding: 6px;

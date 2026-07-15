@@ -585,9 +585,17 @@ class UserViewHelper
 
         $authclass = '';
         if (!empty($sugar_config['authenticationClass'])) {
-            $this->ss->assign('EXTERNAL_AUTH_CLASS_1', $sugar_config['authenticationClass']);
-            $this->ss->assign('EXTERNAL_AUTH_CLASS', $sugar_config['authenticationClass']);
             $authclass = $sugar_config['authenticationClass'];
+            if ($authclass === 'OIDCAuthenticate' || is_subclass_of($authclass, 'OIDCAuthenticate')) {
+                $this->ss->assign('EXTERNAL_AUTH_CLASS_1', translate('LBL_OIDC', 'Users'));
+                $this->ss->assign('EXTERNAL_AUTH_CLASS', translate('LBL_OIDC_AUTHENTICATION', 'Users'));
+            } elseif ($authclass === 'SAML2Authenticate' || is_subclass_of($authclass, 'SAML2Authenticate')) {
+                $this->ss->assign('EXTERNAL_AUTH_CLASS_1', translate('LBL_SAML', 'Users'));
+                $this->ss->assign('EXTERNAL_AUTH_CLASS', translate('LBL_SAML_AUTHENTICATION', 'Users'));
+            } else {
+                $this->ss->assign('EXTERNAL_AUTH_CLASS_1', $authclass);
+                $this->ss->assign('EXTERNAL_AUTH_CLASS', $authclass);
+            }
         } else {
             if (!empty($GLOBALS['system_config']->settings['system_ldap_enabled'])) {
                 $this->ss->assign('EXTERNAL_AUTH_CLASS_1', translate('LBL_LDAP', 'Users'));

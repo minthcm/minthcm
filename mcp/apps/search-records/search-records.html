@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Records - MintHCM</title>
+  </head>
+  <body>
+    <main class="search-records-app">
+      <header class="search-records-app__header">
+        <h2 class="search-records-app__title">Search records</h2>
+        <p class="search-records-app__subtitle" id="subtitle">Waiting for data from host.</p>
+      </header>
+
+      <section class="search-records-app__controls">
+        <div class="search-records-app__row">
+          <input id="module-name" class="search-records-app__input" type="text" placeholder="module_name (e.g. Meetings)" />
+          <input id="fields" class="search-records-app__input" type="text" placeholder="fields (comma-separated)" />
+        </div>
+        <div class="search-records-app__row">
+          <input id="filters" class="search-records-app__input" type="text" placeholder="filters JSON (optional)" />
+          <input id="operator" class="search-records-app__input" type="text" placeholder="operator: and/or" />
+          <input id="offset" class="search-records-app__input search-records-app__input--narrow" type="number" placeholder="offset" />
+          <input id="limit" class="search-records-app__input search-records-app__input--narrow" type="number" placeholder="limit" />
+          <button id="load-records-btn" class="search-records-app__button" type="button">Search</button>
+        </div>
+      </section>
+
+      <div id="status-card" class="search-records-app__status search-records-app__status--hidden">
+        <div class="search-records-app__spinner" aria-hidden="true"></div>
+        <p id="status-message">Loading records...</p>
+      </div>
+
+      <div id="results-meta" class="search-records-app__meta"></div>
+      <div id="results-table"></div>
+    </main>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

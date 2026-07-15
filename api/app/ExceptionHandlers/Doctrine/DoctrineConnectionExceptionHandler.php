@@ -49,7 +49,6 @@ namespace MintHCM\Api\ExceptionHandlers\Doctrine;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
-#[\AllowDynamicProperties]
 class DoctrineConnectionExceptionHandler
 {
     public function __invoke(

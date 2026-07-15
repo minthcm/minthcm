@@ -69,6 +69,24 @@ defineExpose({
         if (!store.siteConfig.url?.trim()) {
             errors.value.url = 'Field is required'
             isValid = false
+        } else {
+            try {
+                const parsed = new URL(store.siteConfig.url.trim())
+                if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                    errors.value.url = 'URL must start with http:// or https://'
+                    isValid = false
+                } else if (
+                    parsed.hostname !== 'localhost' &&
+                    !/^(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(parsed.hostname) &&
+                    !/^\d{1,3}(\.\d{1,3}){3}$/.test(parsed.hostname)
+                ) {
+                    errors.value.url = 'Invalid hostname in URL'
+                    isValid = false
+                }
+            } catch {
+                errors.value.url = 'Invalid URL format'
+                isValid = false
+            }
         }
         if (!store.siteConfig.username?.trim()) {
             errors.value.username = 'Field is required'

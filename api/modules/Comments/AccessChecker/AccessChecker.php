@@ -46,10 +46,9 @@
 
 namespace MintHCM\Modules\Comments\AccessChecker;
 
-#[\AllowDynamicProperties]
 class AccessChecker
 {
-    protected $parent;
+    protected object $parent;
 
     public function __construct($parent)
     {

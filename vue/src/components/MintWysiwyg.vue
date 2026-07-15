@@ -12,6 +12,7 @@ import { onMounted, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import tinymce, { Editor, RawEditorSettings } from 'tinymce'
 
+import 'tinymce/models/dom'
 import 'tinymce/icons/default'
 import 'tinymce/themes/silver'
 import 'tinymce/plugins/table'
@@ -30,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:modelValue', 'cursorChange'])
 
 const tinymceEditor = ref<null | Editor>(null)
-const uuid = uuidv4()
+const uuid = `id-${uuidv4()}`
 const selector = `.mint-wysiwyg textarea#${uuid}`
 
 defineExpose({

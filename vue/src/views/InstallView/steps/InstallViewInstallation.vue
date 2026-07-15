@@ -12,8 +12,9 @@
         />
         <div class="install-view-installation-steps" ref="stepsContainer">
             <div v-for="(label, step) in status" :key="step" class="install-view-installation-step">
+                <v-icon v-if="step === 'error'" icon="mdi-close-circle" color="#c0392b" size="20" />
                 <v-progress-circular
-                    v-if="parseInt(step) === installationStep"
+                    v-else-if="parseInt(step) === installationStep"
                     indeterminate
                     color="primary"
                     size="20"
@@ -65,6 +66,10 @@ async function fetchStatus() {
         const response = await mintApi.get('install/status', {rawError: true})
         if (Object.keys(response.data || {}).length !== Object.keys(status.value).length) {
             status.value = response.data || {}
+        }
+        if (response.data?.error) {
+            clearInterval(checkStatusInterval.value ?? undefined)
+            store.errorMsg = response.data.error
         }
     } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {

@@ -40,13 +40,17 @@ export const useAuthStore = defineStore('auth', () => {
                 return false
             }
             return true
-        } catch {
+        } catch (error) {
             return false
         }
     }
 
     async function logout() {
         const response = await mintApi.post('logout')
+        if (response.status == 200 && response.data?.redirect_url) {
+            location.href = response.data.redirect_url
+            return
+        }
         location.href = ''
     }
 

@@ -38,10 +38,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -49,7 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ini_set('zlib.output_compression', 'Off');
 
 ob_start();
-require_once('include/export_utils.php');
+require_once 'include/export_utils.php';
 global $sugar_config;
 global $current_user;
 global $app_list_strings;
@@ -62,9 +62,23 @@ if (empty($current_user) || empty($current_user->id)) {
     die($GLOBALS['app_strings']['ERR_EXPORT_DISABLED']);
 }
 
-if ($sugar_config['disable_export'] 	|| (!empty($sugar_config['admin_export_only']) && !(is_admin($current_user) || (ACLController::moduleSupportsACL($the_module)  && ACLAction::getUserAccessLevel($current_user->id, $the_module, 'access') == ACL_ALLOW_ENABLED &&
-    (ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN ||
-     ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN_DEV))))) {
+if (
+    $sugar_config['disable_export'] 
+    || (
+        !empty($sugar_config['admin_export_only']) 
+        && !(
+            is_admin($current_user) 
+            || (
+                ACLController::moduleSupportsACL($the_module) 
+                && ACLAction::getUserAccessLevel($current_user->id, $the_module, 'access') == ACL_ALLOW_ENABLED 
+                && (
+                    ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN 
+                    || ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN_DEV
+                )
+            )
+        )
+    )
+    ) {
     die($GLOBALS['app_strings']['ERR_EXPORT_DISABLED']);
 }
 
@@ -80,10 +94,12 @@ if (!empty($_REQUEST['sample'])) {
     //call special method that will create dummy data for bean as well as insert standard help message.
     $content = exportSample(clean_string($_REQUEST['module']));
 } else {
-    if (!empty($_REQUEST['uid'])) {
-        $content = export(clean_string($_REQUEST['module']), $_REQUEST['uid'], isset($_REQUEST['members']) ? $_REQUEST['members'] : false);
+    if (!empty($_REQUEST['uid']) || !empty($_SESSION['uids'])) {
+        $records = !empty($_SESSION['uids']) ? $_SESSION['uids'] : $_REQUEST['uid'];
+        unset($_SESSION['uids']);
+        $content = export(clean_string($_REQUEST['module']), $records, isset($_REQUEST['members']) ? $_REQUEST['members'] : false);
     } else {
-        $content = export(clean_string($_REQUEST['module']));
+        sugar_die('No records selected for export.');
     }
 }
 $filename = $_REQUEST['module'];
@@ -93,10 +109,10 @@ if (!empty($app_list_strings['moduleList'][$_REQUEST['module']])) {
 }
 
 if (!empty($_REQUEST['members'])) {
-    $filename .= '_'.'members';
+    $filename .= '_' . 'members';
 }
 ///////////////////////////////////////////////////////////////////////////////
-////	BUILD THE EXPORT FILE
+////    BUILD THE EXPORT FILE
 
 ob_clean();
 printCSV($content, $filename);

@@ -51,6 +51,7 @@ $dictionary['Certificates'] = array(
         'documents' => array(
             'name' => 'documents',
             'type' => 'link',
+            'module' => 'Documents',
             'relationship' => 'documents_certificates',
             'source' => 'non-db',
             'vname' => 'LBL_DOCUMENTS',

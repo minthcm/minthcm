@@ -47,6 +47,7 @@
 namespace MintHCM\Lib\Search\ElasticSearch\Operators;
 
 use MintHCM\Lib\Search\ElasticSearch\ElasticOperator;
+use MintHCM\Lib\Search\ElasticSearch\ElasticSearch;
 use MintHCM\Lib\Search\ElasticSearch\ModulePrefixer;
 
 class Term extends ElasticOperator
@@ -63,7 +64,7 @@ class Term extends ElasticOperator
         $field = $prefixer->modify($this->field);
         $value = $this->value;
 
-        if (is_string($value) && str_ends_with($field, '.keyword')) {
+        if (is_string($value) && str_ends_with($field, '.keyword') && version_compare(ElasticSearch::getServerVersion(), '7.10.0', '>=')) {
             $value = ['value' => $value, 'case_insensitive' => true];
         }
 

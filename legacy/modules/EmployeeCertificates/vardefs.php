@@ -136,6 +136,7 @@ $dictionary['EmployeeCertificates'] = array(
         "certificates" => array(
             'name' => 'certificates',
             'type' => 'link',
+            'module' => 'Certificates',
             'relationship' => 'certificates_employeecertificates',
             'source' => 'non-db',
             'vname' => 'LBL_CERTIFICATES',
@@ -242,13 +243,8 @@ if (!class_exists('VardefManager')) {
 VardefManager::createVardef('EmployeeCertificates', 'EmployeeCertificates',
     array('basic', 'assignable', 'security_groups', 'employee_related'));
 
-$dictionary['EmployeeCertificates']['fields']['name']['vt_readonly'] = "true";
-$dictionary['EmployeeCertificates']['fields']['name']['vt_calculated'] = 'concat($certificate_name,\' - \',ifElse(empty($employee_id),$candidate_name,$employee_name))';
+$dictionary['EmployeeCertificates']['fields']['name']['readonly'] = "true";
 $dictionary['EmployeeCertificates']['fields']['name']['audited'] = false;
-$dictionary['EmployeeCertificates']['fields']['name']['related_fields'] = array(
-    'certificate_name',
-    'employee_name',
-);
 $dictionary['EmployeeCertificates']['fields']['employee_name']['required'] = false;
 $dictionary['EmployeeCertificates']['fields']['employee_name']['audited'] = true;
 $dictionary['EmployeeCertificates']['fields']['employee_name']['vt_validation'] = 'AEM(ifElse(and(empty($candidate_id),empty($employee_id)),false,true), \'LBL_CANDIDATE_OR_EMPLOYEE_HAVE_TO_BE_SET\')';

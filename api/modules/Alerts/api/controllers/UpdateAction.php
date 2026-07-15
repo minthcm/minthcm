@@ -51,7 +51,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use Slim\Exception\HttpBadRequestException;
 
-#[\AllowDynamicProperties]
 class UpdateAction
 {
 

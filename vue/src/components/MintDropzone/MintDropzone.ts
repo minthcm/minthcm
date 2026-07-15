@@ -57,6 +57,10 @@ class MintDropzone {
             console.error('Provided empty record');
             return;
         }
+        const language_labels = this.languageStore.getList('dropzone_labels');
+        const language_list_object = Object.fromEntries(
+            language_labels.map(({ key, value }) => [key, value])
+        );
         Dropzone.autoDiscover = false;
         this.dropzone = new Dropzone(form, {
             autoProcessQueue: this.enableAutoProcess,
@@ -65,7 +69,7 @@ class MintDropzone {
             maxFilesize: this.backendStore.initData?.upload_maxsize,
             parallelUploads: this.getParallelUploads(),
             createImageThumbnails: false,
-            ...this.languageStore.getList('dropzone_labels'),
+            ...language_list_object,
             url: `/api/files/save`,
             accept: this.onFileAccepted.bind(this),
         });
@@ -105,7 +109,6 @@ class MintDropzone {
     }
 
     setEvents() {
-        this.dropzone.on("addedfile", this.onAddedFile.bind(this));
         this.dropzone.on("removedfile", this.onRemovedFile.bind(this));
         this.dropzone.on("sending", this.beforeSend.bind(this));
         this.dropzone.on("thumbnail", this.handleThumbnail.bind(this));
@@ -126,15 +129,7 @@ class MintDropzone {
                     }.bind(this),
                 );
             }
-
-            this.updateDropzoneAppearance();
         });
-    }
-
-    async onAddedFile(file) {
-        setTimeout(() => {
-            this.updateDropzoneAppearance();
-        }, 0);
     }
 
     async onFileAccepted(file, done) {
@@ -159,9 +154,6 @@ class MintDropzone {
 
     onRemovedFile(file) {
         this.dropzoneStore.deleteFile(file.id);
-        setTimeout(() => {
-            this.updateDropzoneAppearance();
-        }, 0);
     }
 
     beforeSend(file, xhr, data) {
@@ -195,20 +187,6 @@ class MintDropzone {
     getParallelUploads() {
         return 10;
     }
-
-    private updateDropzoneAppearance() {
-        const dzMessage = this.dropzone?.element?.querySelector('.dz-message');
-        if (dzMessage) {
-            const fileCount = this.dropzone.files ? this.dropzone.files.length : 0;
-            const hasFiles = fileCount > 0;
-            if (hasFiles && !dzMessage.classList.contains('smudge-effect')) {
-                dzMessage.classList.add('smudge-effect');
-            } else if (!hasFiles && dzMessage.classList.contains('smudge-effect')) {
-                dzMessage.classList.remove('smudge-effect');
-            }
-        }
-    }
-
 }
 
 export default MintDropzone

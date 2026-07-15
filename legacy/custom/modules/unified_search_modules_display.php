@@ -365,4 +365,16 @@ $unified_search_modules_display = array (
   array (
     'visible' => true,
   ),
+  'AIPromptTemplates' =>
+  array (
+    'visible' => true,
+  ),
+  'MCPDocCategories' =>
+  array (
+    'visible' => true,
+  ),
+  'MCPDocumentation' =>
+  array (
+    'visible' => true,
+  ),
 );

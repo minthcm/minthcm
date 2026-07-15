@@ -19,6 +19,7 @@ declare module 'vue-router' {
         layout?: Component
         entryPoint?: boolean
         legacyQueryToHash?: string[]
+        isMcpLogin?: boolean
     }
 }
 
@@ -194,6 +195,15 @@ const coreRoutes: Array<RouteRecordRaw> = [
         meta: {
             entryPoint: true,
             auth: true,
+        },
+    },
+    {
+        path: '/mcp/login',
+        name: 'mcp-login',
+        component: () => import('@/views/McpLoginView/McpLoginView.vue'),
+        meta: {
+            auth: false,
+            isMcpLogin: true,
         },
     },
     {

@@ -248,6 +248,7 @@ $dictionary['FP_events'] = array(
             array(
                 'name' => 'fp_events_contacts',
                 'type' => 'link',
+                'module' => 'Contacts',
                 'relationship' => 'fp_events_contacts',
                 'source' => 'non-db',
                 'vname' => 'LBL_FP_EVENTS_CONTACTS_FROM_CONTACTS_TITLE',
@@ -256,14 +257,23 @@ $dictionary['FP_events'] = array(
             array(
                 'name' => 'fp_events_prospects_1',
                 'type' => 'link',
+                'module' => 'Prospects',
                 'relationship' => 'fp_events_prospects_1',
                 'source' => 'non-db',
                 'vname' => 'LBL_FP_EVENTS_PROSPECTS_1_FROM_PROSPECTS_TITLE',
             ),
+        'fp_events_candidates' => array(
+            'name' => 'fp_events_candidates',
+            'type' => 'link',
+            'relationship' => 'fp_events_candidates',
+            'source' => 'non-db',
+            'vname' => 'LBL_FP_EVENTS_CANDIDATES_1_FROM_CANDIDATES_TITLE',
+        ),
         'fp_event_locations_fp_events_1' =>
             array(
                 'name' => 'fp_event_locations_fp_events_1',
                 'type' => 'link',
+                'module' => 'FP_Event_Locations',
                 'relationship' => 'fp_event_locations_fp_events_1',
                 'source' => 'non-db',
                 'vname' => 'LBL_FP_EVENT_LOCATIONS_FP_EVENTS_1_FROM_FP_EVENT_LOCATIONS_TITLE',
@@ -296,8 +306,13 @@ $dictionary['FP_events'] = array(
             array(
                 'name' => 'activity_status_type',
                 'vname' => 'LBL_ACTIVITY_STATUS',
-                'type' => 'enum',
+                'type' => 'ColoredEnum',
+                'dbType' => 'varchar',
                 'options' => 'activity_status_type_dom',
+                'options_colors' => [
+                    'active'   => 'green',
+                    'inactive' => 'red',
+                ],
                 'len' => '255',
                 'default' => '',
             ),

@@ -64,19 +64,21 @@ export const useLanguagesStore = defineStore('languages', () => {
         return null
     }
 
-    function getList(listKey?: string) {
-        return Object.entries(languages.value?.app_list_strings?.[listKey ?? ''] ?? {}).map(
+    function getList(listKey?: string | Record<string, string>) {
+        const list = typeof listKey === 'object' && listKey !== null
+            ? listKey
+            : languages.value?.app_list_strings?.[listKey ?? ''] ?? {}
+        return Object.entries(list).map(
             (x: [string, string] | [object]) => ({ key: x[0], value: x[1] }),
         )
     }
 
-    function translateListValue(value?: string, listKey?: string) {
-        if (!value || !listKey) {
+    function translateListValue(value?: string, listKey?: string | Record<string, string>) {
+        if (!listKey || value === undefined || value === null) {
             return ''
         }
-        return languages.value?.app_list_strings?.[listKey]?.[value]
-            ? languages.value?.app_list_strings?.[listKey]?.[value]
-            : value
+        const list = typeof listKey === 'object' ? listKey : languages.value?.app_list_strings?.[listKey]
+        return list?.[value] ? list[value] : value
     }
 
     return {

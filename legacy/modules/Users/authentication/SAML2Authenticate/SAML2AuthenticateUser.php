@@ -74,8 +74,10 @@ class SAML2AuthenticateUser extends SugarAuthenticateUser
             $checkPasswordMD5);
 
         // set the ID in the seed user.  This can be used for retrieving the full user record later
-        //if it's falling back on Sugar Authentication after the login failed on an external authentication return empty if the user has external_auth_disabled for them
-        if (empty($row) || empty($row['external_auth_only'])) {
+        // external_auth_only does not gate SSO login here: when set to 1 it additionally blocks
+        // local password login (enforced in SugarAuthenticateUser::authenticateUser()), but SAML
+        // login itself is available regardless of the flag's value.
+        if (empty($row)) {
             return '';
         }
 

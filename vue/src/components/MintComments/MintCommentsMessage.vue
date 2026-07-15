@@ -123,6 +123,7 @@ import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
 import MintReactions from '@/components/MintReactions/MintReactions.vue'
 import MintReactionsActions from '@/components/MintReactions/MintReactionsActions.vue'
+import DOMPurify from 'dompurify'
 import { DateTime } from 'luxon'
 import { useMintCommentsStore } from './MintCommentsStore'
 import { useAuthStore } from '@/store/auth'
@@ -179,7 +180,7 @@ const nestedCommentsCount = computed(() => {
 })
 
 const contentHtml = computed(() => {
-    let content = props.comment.description
+    let content = DOMPurify.sanitize(props.comment.description)
     const matchedUsers = Array.from(content.matchAll(/(\W|^)@(\w*)/g))
     matchedUsers.forEach((match) => {
         const username = match[2]
@@ -192,7 +193,8 @@ const contentHtml = computed(() => {
         if (user.id === auth.user?.id) {
             className += ' mint-comments-message-content-user-highlight-owner'
         }
-        content = content.replace(regex, `<span class="${className}" data-user-id="${user.id}">${user.full_name}</span>`)
+        const safeFullName = DOMPurify.sanitize(user.full_name, { ALLOWED_TAGS: [] })
+        content = content.replace(regex, `<span class="${className}" data-user-id="${user.id}">${safeFullName}</span>`)
     })
     return content
 })

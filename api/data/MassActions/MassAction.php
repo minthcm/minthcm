@@ -6,18 +6,20 @@ abstract class MassAction
 {
     const ICON = '';
     const LABEL = '';
-    
+
     protected $module_name;
     protected $ids;
+    protected $filter;
 
-    public function __construct($module_name, $ids)
+    public function __construct($module_name, $ids, $filter = [])
     {
         $this->module_name = $module_name;
-        $this->ids = $ids;
+        $this->filter = $filter;
+        $this->ids = in_array('all', $ids) ? MassActionDataHelper::getRecordIds($module_name, $filter) : $ids;
     }
 
-    public abstract function execute();
-    public abstract function hasAccess();
+    abstract public function execute();
+    abstract public function hasAccess();
 
     public function getFrontendData()
     {
@@ -27,7 +29,6 @@ abstract class MassAction
             'action' => (new \ReflectionClass($this))->getShortName(),
         ];
     }
-
     protected function getBeans()
     {
         if (empty($this->ids)) {

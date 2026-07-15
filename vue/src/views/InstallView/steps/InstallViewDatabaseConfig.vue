@@ -90,8 +90,12 @@ defineExpose({
             errors.value.host = 'Field is required'
             isValid = false
         }
+        const port = Number(store.databaseConfig.port)
         if (!store.databaseConfig.port) {
             errors.value.port = 'Field is required'
+            isValid = false
+        } else if (!Number.isInteger(port) || port < 1 || port > 65535) {
+            errors.value.port = 'Port must be an integer between 1 and 65535'
             isValid = false
         }
         if (!store.databaseConfig.username?.trim()) {

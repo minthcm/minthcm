@@ -49,6 +49,7 @@ use MintHCM\Utils\LegacyConnector;
 
 require_once '../legacy/data/SugarBean.php';
 
+// NOTE: #[\AllowDynamicProperties] is intentional — proxy pattern forwarding all property/method access to wrapped legacy SugarBean via __get/__set/__call
 #[\AllowDynamicProperties]
 class MintBean
 {

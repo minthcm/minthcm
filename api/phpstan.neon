@@ -1,0 +1,15 @@
+includes:
+    - phpstan-baseline.neon
+parameters:
+    level: 5
+    phpVersion: 80200
+    paths:
+        - app
+        - data
+        - lib
+        - utils
+        - modules
+    excludePaths:
+        - vendor/*
+        - cache/*
+        - tests/*

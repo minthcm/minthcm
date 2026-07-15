@@ -1,18 +1,4 @@
 {$start_sectionmethods}
-{literal}
-    public function getContentsAsArray(): array
-    {
-        if (!is_string($this->contents)) {
-            return [];
-        }
-        
-        $contents = unserialize(base64_decode($this->contents) ?: '');
-        if (!is_array($contents)) {
-            $contents = [];
-        }
-        return $contents;
-    }
-{/literal}
 {if $generate_custom_entity}
     {if $isCustom}
         {include file="$custom_entity_methods_tpl"}

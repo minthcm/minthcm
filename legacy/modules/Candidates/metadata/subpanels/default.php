@@ -84,7 +84,7 @@ $subpanel_layout = array(
          'sort_by' => 'last_name',
          'sort_order' => 'asc',
          'widget_class' => 'SubPanelDetailViewLink',
-         'module' => 'Contacts',
+         'module' => 'Candidates',
       ),
       'email' => array(
          'name' => 'email',
@@ -103,12 +103,12 @@ $subpanel_layout = array(
       'edit_button' => array(
          'vname' => 'LBL_EDIT_BUTTON',
          'widget_class' => 'SubPanelEditButton',
-         'module' => 'Contacts',
+         'module' => 'Candidates',
       ),
       'remove_button' => array(
          'vname' => 'LBL_REMOVE',
          'widget_class' => 'SubPanelRemoveButton',
-         'module' => 'Contacts',
+         'module' => 'Candidates',
       ),
    ),
 );

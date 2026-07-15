@@ -49,7 +49,6 @@ namespace MintHCM\Api\Repositories;
 use MintHCM\Api\Entities\UserPreferences;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-#[\AllowDynamicProperties]
 class UserPreferencesRepository extends MintEntityRepository
 {
     public function findAllUndeletedByUserId($user_id): array

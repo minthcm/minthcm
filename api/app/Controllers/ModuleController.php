@@ -51,13 +51,11 @@ use MintHCM\Data\BeanFactory as MintBeanFactory;
 use MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 use MintHCM\Lib\MintLogic\MintLogic;
-use MintHCM\Utils\CyclicRecordsSaver;
 use MintHCM\Utils\LegacyConnector;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 
-#[\AllowDynamicProperties]
 class ModuleController
 {
     protected EntityManagerInterface $entity_manager;
@@ -66,9 +64,9 @@ class ModuleController
     {
         $this->entity_manager = $entityManager;
 
-        global $app_list_strings, $current_language;
+        global $app_list_strings;
         if (!$app_list_strings) {
-            $app_list_strings = return_app_list_strings_language($current_language);
+            $app_list_strings = return_app_list_strings_language(get_current_language());
         }
     }
 
@@ -107,7 +105,14 @@ class ModuleController
             return $response->withStatus(403);
         }
 
+        $class_metadata = $this->entity_manager->getClassMetadata(get_class($entity));
         foreach ($record_data as $field_name => $value) {
+            if ($value === null) {
+                continue;
+            }
+            if ($class_metadata->hasAssociation($field_name)) {
+                continue;
+            }
             $entity->$field_name = $value;
         }
 
@@ -117,9 +122,7 @@ class ModuleController
         $this->handleRelateFieldsFromRecordData($entity, $record_data);
         $this->handleLinks($entity, $links);
 
-        if (!empty($record_data['repeat_type']) && '' != $record_data['repeat_type']) {
-            $this->handleCyclicalRecords($entity);
-        }
+        $has_repeat = !empty($record_data['repeat_type']) && '' != $record_data['repeat_type'];
 
         $this->entity_manager->flush();
 
@@ -127,8 +130,13 @@ class ModuleController
             return $response->withStatus(500);
         }
 
+        $response_data = $this->mergeRecordData($entity);
+        if ($has_repeat) {
+            $response_data['pending_cyclic_records'] = true;
+        }
+
         $response = $response->withStatus(201);
-        $response->getBody()->write(json_encode($this->mergeRecordData($entity)));
+        $response->getBody()->write(json_encode($response_data));
         return $response;
     }
 
@@ -156,8 +164,15 @@ class ModuleController
             return $response->withStatus(403);
         }
 
+        $class_metadata = $this->entity_manager->getClassMetadata(get_class($entity));
         foreach ($record_data as $field_name => $value) {
-            $entity->$field_name = $value;
+            if ($value === null) {
+                continue;
+            }
+            if ($class_metadata->hasAssociation($field_name)) {
+                continue;
+            }
+            $entity->$field_name = empty($value) ? null : $value;
         }
         $this->entity_manager->persist($entity);
 
@@ -173,9 +188,7 @@ class ModuleController
         $this->handleRelateFieldsFromRecordData($entity, $record_data);
         $this->handleLinks($entity, $links);
 
-        if (!empty($record_data['repeat_type']) && '' != $record_data['repeat_type']) {
-            $this->handleCyclicalRecords($entity);
-        }
+        $has_repeat = !empty($record_data['repeat_type']) && '' != $record_data['repeat_type'];
 
         $this->entity_manager->flush();
 
@@ -183,8 +196,13 @@ class ModuleController
             return $response->withStatus(500);
         }
 
+        $response_data = $this->mergeRecordData($entity);
+        if ($has_repeat) {
+            $response_data['pending_cyclic_records'] = true;
+        }
+
         $response = $response->withStatus(200);
-        $response->getBody()->write(json_encode($this->mergeRecordData($entity)));
+        $response->getBody()->write(json_encode($response_data));
         return $response;
     }
 
@@ -272,18 +290,12 @@ class ModuleController
         if (empty($entity)) {
             return $response->withStatus(404);
         }
-        $bean_attributes = [];
-        foreach ($attributes as $field => $value) {
-            if (!property_exists($entity, $field)) {
-                $bean_attributes[$field] = $value;
-                continue;
-            }
-            $entity->{$field} = $value;
-        }
 
         $mint_bean = $entity->getMintBean();
-        foreach($bean_attributes as $field => $value){
-            $mint_bean->$field = $value;
+        foreach ($attributes as $field => $value) {
+            if (isset($mint_bean->field_defs[$field]) && ($mint_bean->field_defs[$field]['type'] ?? '') !== 'link') {
+                $mint_bean->{$field} = $value;
+            }
         }
         $result = (new MintLogic($mint_bean))->getChanged($triggerFields);
         $response->getBody()->write(json_encode($result));
@@ -326,6 +338,9 @@ class ModuleController
         if (empty($focus->id)) {
             $response = $response->withStatus(404);
             return $response;
+        }
+        if (!$focus->ACLAccess('view')) {
+            return $response->withStatus(403);
         }
         $related_name = $request->getAttribute('relation_name');
         $page = $request->getQueryParams()['page'] ?? 0;
@@ -630,6 +645,9 @@ class ModuleController
             $response = $response->withStatus(404);
             return $response;
         }
+        if (!$focus->ACLAccess('view')) {
+            return $response->withStatus(403);
+        }
         $response = $response->withHeader('Content-type', 'application/json');
         if (isset($focus->checklist) && !empty($focus->checklist)) {
             if (!array($focus->checklist)) {
@@ -646,8 +664,4 @@ class ModuleController
         return $response;
     }
 
-    protected function handleCyclicalRecords(MintEntity $mint_entity)
-    {
-        (new CyclicRecordsSaver($mint_entity->getMintBean(), $this->entity_manager))->run();
-    }
 }

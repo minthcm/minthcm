@@ -1,0 +1,52 @@
+{
+    "name": "opis/json-schema",
+    "description": "Json Schema Validator for PHP",
+    "keywords": [
+        "json",
+        "schema",
+        "json-schema",
+        "validation",
+        "validator"
+    ],
+    "homepage": "https://opis.io/json-schema",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Sorin Sarca",
+            "email": "sarca_sorin@hotmail.com"
+        },
+        {
+            "name": "Marius Sarca",
+            "email": "marius.sarca@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "opis/string": "^2.1",
+        "opis/uri": "^1.0"
+    },
+    "require-dev": {
+        "ext-bcmath": "*",
+        "ext-intl": "*",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Opis\\JsonSchema\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Opis\\JsonSchema\\Test\\": "tests/"
+        }
+    },
+    "scripts": {
+        "tests": "./vendor/bin/phpunit --verbose --color"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

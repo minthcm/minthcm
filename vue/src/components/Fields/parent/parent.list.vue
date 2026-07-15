@@ -1,6 +1,12 @@
 <template>
-    <router-link :name="props.defs.name" v-if="hasViewAccess" :to="recordUrl" :target="store.mode === 'relate' ? '_blank' : null"
-        class="relate-field">
+    <router-link
+        :name="props.defs.name"
+        v-if="hasViewAccess"
+        :to="recordUrl"
+        :target="store.mode === 'relate' ? '_blank' : null"
+        class="relate-field"
+        @keydown.space.prevent="handleSpaceNavigation"
+    >
         {{ props.modelValue }}
     </router-link>
     <span :name="props.defs.name"v-else>
@@ -13,9 +19,18 @@ import { computed } from 'vue'
 import { FieldProps } from '../Field.model';
 import { useACL } from '@/composables/useACL';
 import { useListViewStore } from '@/views/ListView/ListViewStore';
+import router from '@/router';
 
 const props = defineProps<FieldProps>()
 const store = useListViewStore()
+
+function handleSpaceNavigation() {
+    if (store.mode === 'relate') {
+        window.open(router.resolve(recordUrl.value).href, '_blank')
+    } else {
+        router.push(recordUrl.value)
+    }
+}
 
 const hasViewAccess = computed<boolean>(() => {
     return useACL().hasAccess(props.data.bean.attributes.parent_type, 'view', true, true)

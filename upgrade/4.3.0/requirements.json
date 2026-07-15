@@ -1,0 +1,21 @@
+{
+  "php": {
+    "min": "8.2",
+    "max": "8.2.99"
+  },
+  "mysql": {
+    "min": "8.0"
+  },
+  "elasticsearch": {
+    "min": "7.10",
+    "max": "7.16.99"
+  },
+  "node": {
+    "min": "21"
+  },
+  "disk_space_mb": 3072,
+  "from_versions": [
+    "4.2.*"
+  ],
+  "notes": "Before upgrading, ensure you have a FULL BACKUP of your database and files. OAuth2 keys will be generated automatically if they do not exist."
+}

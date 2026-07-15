@@ -60,10 +60,3 @@ $hook_array['after_relationship_delete'][] = array(
    'after_relationship_delete'
 );
 
-$hook_array['after_save'][] = array(
-    1,
-    'WorkSchedules after_save',
-    'modules/WorkSchedules/LogicHooks.php',
-    'LogicHooks',
-    'after_save'
-);

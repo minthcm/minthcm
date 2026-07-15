@@ -115,6 +115,7 @@ $dictionary['DelegationsLocale'] = array(
       "delegations" => array(
          'name' => 'delegations',
          'type' => 'link',
+         'module' => 'Delegations',
          'relationship' => 'delegationslocale_delegations',
          'source' => 'non-db',
          'side' => 'right',

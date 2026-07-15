@@ -150,7 +150,7 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
       //Init save events
       if ( viewTools.cache.form_save !== undefined ) {
          var disabled_buttons = [ 'saved_search_submit' ];
-         var disabled_buttons_id = [ 'wiz_submit_button','wiz_submit_button_perm', 'savebtn' ];
+         var disabled_buttons_id = [ 'wiz_submit_button','wiz_submit_button_perm', 'savebtn', 'saveBtn' ];
          /*
           * Init form actions
           * - partly moved from formValidation
@@ -259,6 +259,23 @@ if ( window.disable_vt_tools === undefined || window.disable_vt_tools === false 
                viewTools.form.setFieldReadonly( $( this ), true );
             } else {
                viewTools.form.setFieldReadonly( $( this ), false );
+            }
+         }
+         if ( $( this ).data( 'validation' ) !== undefined ) {
+            var validation_array = $( this ).data( 'validation' ).split( ';' );
+            for ( var validation_idx in validation_array ) {
+               window.viewTools.cache.AEM = [ ];
+               formula = viewTools.formula._parseFormula( validation_array[validation_idx], $( this ), 'validation', validation_idx );
+               if ( eval( formula ) == false ) {
+                  if ( window.viewTools.cache.AEM.length > 0 ) {
+                     viewTools.GUI.fieldErrorMark( $( this ), window.viewTools.cache.AEM.join( ' ' ) );
+                  } else {
+                     viewTools.GUI.fieldErrorFormulaMark( $( this ), 'validation' );
+                  }
+                  viewTools.form.error_count++;
+                  ret = false;
+                  break;
+               }
             }
          }
       } );

@@ -464,6 +464,11 @@ $routes = array(
                     },
                 ',
             ),
+            "filter" => array(
+                "type" => ArrayType::class,
+                "required" => false,
+                "desc" => "Array of list filters",
+            ),
         ),
     ),
     "link" => array(

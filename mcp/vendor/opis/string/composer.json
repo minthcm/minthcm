@@ -1,0 +1,43 @@
+{
+    "name": "opis/string",
+    "description": "Multibyte strings as objects",
+    "keywords": ["opis", "string", "utf-8", "multi-byte", "string manipulation"],
+    "homepage": "https://opis.io/string",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Marius Sarca",
+            "email": "marius.sarca@gmail.com"
+        },
+        {
+          "name": "Sorin Sarca",
+          "email": "sarca_sorin@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "ext-iconv": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Opis\\String\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Opis\\String\\Test\\": "tests/"
+        }
+    },
+    "scripts": {
+      "tests": "./vendor/bin/phpunit --verbose --color"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

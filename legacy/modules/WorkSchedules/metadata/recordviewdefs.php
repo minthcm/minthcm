@@ -1,11 +1,19 @@
 <?php
 
 $viewdefs['WorkSchedules'] = [
-    'order' => ['basicInfo', /* 'recurrence', */ 'subpanels'],
+    'order' => ['basicInfo', 'subpanels'],
     'panels' => [
         'basicInfo' => [
             'component' => 'MintPanelRecordDetails',
             'data' => [
+                'actions' => [
+                    'Audit',
+                    'Delete',
+                    [
+                        'name' => 'Duplicate',
+                        'skipFields' => ['repeat'],
+                    ],
+                ],
                 'sections' => [
                     'basic' => [
                         'title' => 'LBL_BASIC',
@@ -24,6 +32,7 @@ $viewdefs['WorkSchedules'] = [
                             ],
                             [
                                 ['name' => 'assigned_user_name'],
+                                ['name' => 'repeat'],
                             ],
                             [
                                 ['name' => 'duration_hours'],

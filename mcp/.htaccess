@@ -3,12 +3,13 @@ RewriteEngine On
 
 RewriteRule ^\.well-known/oauth-protected-resource$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:discovery]
 RewriteRule ^\.well-known/oauth-authorization-server$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:authorization]
-
+RewriteRule ^\.well-known/openid-configuration$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:authorization]
 RewriteRule ^oauth/register/?$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:register]
 RewriteRule ^oauth/authorize$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:authorize]
 RewriteRule ^oauth/token$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:token]
-RewriteRule ^oauth/login$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:login]
 RewriteRule ^oauth/jwks$ oauth.php [L,QSA,E=OAUTH_ENDPOINT:jwks]
 
 RewriteRule ^oauth(/.*)?$ oauth.php [L,QSA]
+
+RewriteRule ^internal/session-token/?$ internal.php [L,QSA]
 </IfModule>

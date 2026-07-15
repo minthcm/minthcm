@@ -1,19 +1,16 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+        <div class="detail-field-row">
             <div>
-                {{ value }}
-                <a v-if="props.field.model?.length > lengthToCrop" @click="toggleExpanded"
-                    >{{ languages.label(expanded ? 'LBL_COLLAPSE' : 'LBL_EXPAND') }}
+                <div v-for="line in (value || '').split('\n')" :key="line">{{ line }}</div>
+                <a 
+                    v-if="(props.modelValue?.length > lengthToCrop) || (linesNumber >= linesToCrop)" 
+                    @click="toggleExpanded"
+                >{{ languages.label(expanded ? 'LBL_COLLAPSE' : 'LBL_EXPAND') }}
                     <v-icon :icon="expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
                 </a>
             </div>
-            <Pencil
-                :defs="props.defs"
-                :hidePencil="hidePencil"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
         </div>
     </div>
 </template>
@@ -21,7 +18,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useLanguagesStore } from '@/store/languages'
-import Pencil from '../Pencil.vue'
 import { FieldProps } from '../Field.model';
 import { onMounted } from 'vue'
 import router from '@/router';
@@ -40,11 +36,11 @@ onMounted(() => {
 })
 
 const props = defineProps<FieldProps<string>>()
-const emit = defineEmits(['inlineEditBtnClicked'])
 const languages = useLanguagesStore()
 const localStorage = useLocalStorageStore()
 
 const lengthToCrop = 180
+const linesToCrop = 4
 const expanded = ref<boolean>(false)
 
 function toggleExpanded() {
@@ -52,16 +48,20 @@ function toggleExpanded() {
     localStorage.setDescriptionFieldExpanded(router.currentRoute.value.params?.module as string, props.defs.name, expanded.value)
 }
 
-const value = computed(() =>
-    !expanded.value && props.field.model?.length > lengthToCrop
-        ? props.field.model.substring(0, lengthToCrop).trim() + '...'
-        : props.field.model,
-)
-function startInlineEdit() {
-    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
-        emit('inlineEditBtnClicked', props.defs.name)
+const value = computed(() => {
+    let textValue = ''
+    if (!expanded.value && ((props.modelValue || '').split('\n').length > linesToCrop || props.modelValue?.length > lengthToCrop)) {
+        textValue  = props.modelValue.substring(0, lengthToCrop).trim() + '...'
+        const lines = (textValue || '').split('\n').slice(0, linesToCrop)
+        const joinedLines = lines.join('\n')
+        textValue = joinedLines.slice(-3) == '...' ? joinedLines : joinedLines + '...'
+    } else {
+        textValue = props.modelValue || ''
     }
-}
+    return textValue
+})
+
+const linesNumber = computed(() => (props.modelValue || '').split('\n').length)
 </script>
 
 <style scoped lang="scss">

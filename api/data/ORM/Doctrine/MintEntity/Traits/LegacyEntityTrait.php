@@ -90,7 +90,7 @@ trait LegacyEntityTrait
             $value = $this->$property;
             
             $meta = $entity_manager->getClassMetadata($is_entity_property ? static::class : get_class($this->custom_entity));
-            if ($meta->hasField($property)) {
+            if ($meta->hasField($property) && $value !== '') {
                 $fieldType = $meta->getTypeOfField($property);
                 $doctrineType = \Doctrine\DBAL\Types\Type::getType($fieldType);
                 $value = $doctrineType->convertToDatabaseValue($value, $entity_manager->getConnection()->getDatabasePlatform());

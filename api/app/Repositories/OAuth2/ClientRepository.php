@@ -67,9 +67,22 @@ class ClientRepository extends MintEntityRepository implements ClientRepositoryI
         /** @var Client */
         $client = $this->findOneBy(['id' => $clientIdentifier, 'deleted' => false]);
 
+        if (!$client) {
+            return false;
+        }
+
         $allow_refresh_token = $grantType === 'refresh_token' && in_array($client->allowed_grant_type, ['password', 'mobile', 'frontend']);
 
-        if ($client && $client->secret === $clientSecret && ($grantType === $client->allowed_grant_type || $allow_refresh_token)) {
+        if (
+            (
+                $client->secret === $clientSecret
+                || (
+                    $grantType !== 'frontend'
+                    && $client->secret === hash('sha256', $clientSecret)
+                )
+            )
+            && ($grantType === $client->allowed_grant_type || $allow_refresh_token)
+        ) {
             return true;
         }
         return false;

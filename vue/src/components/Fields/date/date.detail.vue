@@ -1,33 +1,21 @@
 <template>
     <div>
         <label>{{ props.label }}</label>
-        <div class="detail-field-row" v-on:dblclick.prevent="startInlineEdit()">
+        <div class="detail-field-row">
             <div :name="props.defs.name">{{ parsedDate }}</div>
-            <Pencil
-                :defs="props.defs"
-                :hidePencil="hidePencil"
-                @inlineEditBtnClicked="(fieldName: string) => $emit('inlineEditBtnClicked', fieldName)"
-            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import Pencil from '../Pencil.vue'
 import { FieldProps } from '../Field.model'
 import { MintDate } from '@/composables/useMintDate'
 
 const props = defineProps<FieldProps<MintDate>>()
-const emit = defineEmits(['inlineEditBtnClicked'])
 const parsedDate = computed(() => {
     return props.field.model.isValid ? props.field.formatted.user : ''
 })
-function startInlineEdit() {
-    if (props?.defs?.name && typeof props.defs.name === 'string' && props.defs.name.length > 0) {
-        emit('inlineEditBtnClicked', props.defs.name)
-    }
-}
 </script>
 
 <style scoped lang="scss">

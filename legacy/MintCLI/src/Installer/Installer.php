@@ -7,6 +7,7 @@ use MintHCM\MintCLI\Services\HtaccessService;
 use MintHCM\MintCLI\Services\ServerService;
 use MintHCM\MintCLI\Services\ElasticsearchService;
 use MintHCM\MintCLI\Services\OAuth2Service;
+use MintHCM\MintCLI\Installer\Exceptions\AbstractInstallerException;
 
 #[\AllowDynamicProperties]
 class Installer
@@ -74,15 +75,36 @@ class Installer
         $this->htaccessService->setupApplicationHtaccess($basePath);
     }
 
-    public function installBackendApplication()
+    public function installBackendApplication($cfg)
     {
+
+        $bi = new BackendInstaller($cfg);
         chdir(self::INSTANCE_DIR);
-        global $argv;
-        $argv[1] = 'SilentInstall';
-        $argv[2] = 'true';
-        include 'install.php';
+        try {
+            ob_start();
+            $bi->process();
+
+        }
+        catch(AbstractInstallerException $ex)
+        {
+            installLog('Exception during backend installation: '. $ex->getMessage());
+            $this->logExceptionChain($ex);
+            throw $ex;
+        } 
+        catch(\Exception $ex)
+        {
+            installLog('Unknown exception during backend installation: '. $ex->getMessage());
+            $this->logExceptionChain($ex);
+            throw $ex;
+        }
+        finally
+        {
+            $contents =  ob_get_contents();
+            ob_end_clean();
+            file_put_contents(self::INSTALL_LOG_FILE, $contents."\n\n", FILE_APPEND);    
+        }
         chdir('../');
-        file_put_contents(self::INSTALL_LOG_FILE, "Installing MintHCM System Core...\n\n");
+        file_put_contents(self::INSTALL_LOG_FILE, "Installing MintHCM System Core...\n\n", FILE_APPEND);
         return true;
     }
 
@@ -158,5 +180,20 @@ class Installer
         $oauth2Service = new OAuth2Service();
         $oauth2Service->generateNewKeys();
         $oauth2Service->repairFrontendToken();
+    }
+
+
+    protected function logExceptionChain(\Throwable $e)
+    {    $i = 0;    
+        while ($e !== null) 
+        {
+            file_put_contents(
+                self::INSTALL_LOG_FILE, 
+                "Exception #$i:\n" . $e . "\n\n",            
+                FILE_APPEND        
+            );        
+            $e = $e->getPrevious();        
+            $i++;    
+        }
     }
 }

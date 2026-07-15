@@ -1,0 +1,27 @@
+{
+    "name": "zf1s/zend-registry",
+    "description": "Zend Framework 1 Registry package",
+    "keywords": ["framework", "zf1", "zend", "registry"],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.1",
+        "zf1s/zend-exception": "^1.16.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Registry": "library/"
+        }
+    },
+    "suggest": {
+        "zf1s/zend-loader": "Used in special situations or with special adapters"
+    },
+    "replace": {
+        "zf1/zend-registry": "^1.12"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

@@ -2,15 +2,13 @@
 /**
  * This file is part of php-saml.
  *
- * (c) OneLogin Inc
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @package OneLogin
- * @author  OneLogin Inc <saml-info@onelogin.com>
- * @license MIT https://github.com/onelogin/php-saml/blob/master/LICENSE
- * @link    https://github.com/onelogin/php-saml
+ * @author  Sixto Martin <sixto.martin.garcia@gmail.com>
+ * @license MIT https://github.com/SAML-Toolkits/php-saml/blob/master/LICENSE
+ * @link    https://github.com/SAML-Toolkits/php-saml
  */
 
 namespace OneLogin\Saml2;
@@ -237,7 +235,7 @@ class LogoutResponse
     }
 
     /**
-     * Extracts a node from the DOMDocument (Logout Response Menssage)
+     * Extracts a node from the DOMDocument (Logout Response Message)
      *
      * @param string $query Xpath Expression
      *
@@ -258,19 +256,18 @@ class LogoutResponse
     {
 
         $spData = $this->_settings->getSPData();
-        $idpData = $this->_settings->getIdPData();
 
         $this->id = Utils::generateUniqueID();
         $issueInstant = Utils::parseTime2SAML(time());
-
         $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
+        $destination = $this->_settings->getIdPSLOResponseUrl();
         $logoutResponse = <<<LOGOUTRESPONSE
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                   ID="{$this->id}"
                   Version="2.0"
                   IssueInstant="{$issueInstant}"
-                  Destination="{$idpData['singleLogoutService']['url']}"
+                  Destination="{$destination}"
                   InResponseTo="{$inResponseTo}"
                   >
     <saml:Issuer>{$spEntityId}</saml:Issuer>

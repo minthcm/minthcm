@@ -18,6 +18,9 @@ $ESListViewDefs[$module_name] = [
         'potential' => [
             'default' => true,
         ],
+        'expected_salary' => [
+            'default' => true,
+        ],
         'birthdate' => [
             'type' => 'age',
             'default' => true,

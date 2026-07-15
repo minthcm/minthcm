@@ -150,6 +150,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
   array(
     'name' => 'roles',
     'type' => 'link',
+    'module' => 'ACLRoles',
     'relationship' => 'acl_roles_actions',
     'source'=>'non-db',
     'vname'=>'LBL_USERS',

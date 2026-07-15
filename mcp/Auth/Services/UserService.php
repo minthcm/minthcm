@@ -3,7 +3,6 @@
 namespace MintMCP\Auth\Services;
 
 use BeanFactory;
-use MintMCP\Auth\Utils\LegacyBridge;
 use MintMCP\Server\Logger;
 
 /**

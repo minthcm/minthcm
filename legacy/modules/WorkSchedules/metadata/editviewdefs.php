@@ -125,7 +125,7 @@ array(
             'LBL_REPEAT_TAB' => array(
                 array(
                     array(
-                        'name' => 'repeat_pane',
+                        'name' => 'repeat_type',
                         'hideLabel' => true,
                         'customCode' => '{include file="modules/WorkSchedules/tpls/RepeatPanelEditView.tpl"}',
                     ),

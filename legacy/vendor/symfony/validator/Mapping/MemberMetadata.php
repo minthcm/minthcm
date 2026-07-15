@@ -60,7 +60,7 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
      * @param string $name     The name of the member
      * @param string $property The property the member belongs to
      */
-    public function __construct($class, $name, $property)
+    public function __construct(string $class, string $name, string $property)
     {
         $this->class = $class;
         $this->name = $name;
@@ -158,7 +158,7 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
      *
      * @param object|string $objectOrClassName The object or the class name
      *
-     * @return \ReflectionMethod|\ReflectionProperty The reflection instance
+     * @return \ReflectionMethod|\ReflectionProperty
      */
     public function getReflectionMember($objectOrClassName)
     {
@@ -173,23 +173,21 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     /**
      * Creates a new reflection instance for accessing the member's value.
      *
-     * Must be implemented by subclasses.
-     *
      * @param object|string $objectOrClassName The object or the class name
      *
-     * @return \ReflectionMethod|\ReflectionProperty The reflection instance
+     * @return \ReflectionMethod|\ReflectionProperty
      */
     abstract protected function newReflectionMember($objectOrClassName);
 
     private function checkConstraint(Constraint $constraint)
     {
         if (!\in_array(Constraint::PROPERTY_CONSTRAINT, (array) $constraint->getTargets(), true)) {
-            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on properties or getters.', \get_class($constraint)));
+            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on properties or getters.', get_debug_type($constraint)));
         }
 
         if ($constraint instanceof Composite) {
-            foreach ($constraint->getNestedContraints() as $nestedContraint) {
-                $this->checkConstraint($nestedContraint);
+            foreach ($constraint->getNestedConstraints() as $nestedConstraint) {
+                $this->checkConstraint($nestedConstraint);
             }
         }
     }
