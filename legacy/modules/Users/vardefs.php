@@ -51,7 +51,7 @@ $dictionary['User'] = array(
     'table' => 'users',
     'doctrineEntity' => array(
         'repository' => 'UsersRepository',
-        'traits' => array('Users'),
+        'traits' => array('Users', 'Person'),
     ),
     'fields' => array(
         'id' => array(
