@@ -11,16 +11,17 @@ if(!file_exists('.htaccess')) {
 
   RewriteRule ^api/(.*?)$ install/index.php [L]
 
-  RewriteRule ^assets/(.*?)$ assets/$1 [L]
-  RewriteRule ^favicon.ico$ favicon.ico [L]
-  RewriteRule ^bg.jpg$ bg.jpg [L]
-  
+  RewriteRule ^assets/(.*?)$ vue/dist/assets/$1 [L]
+  RewriteRule ^favicon.ico$ vue/dist/favicon.ico [L]
+  RewriteRule ^bg.jpg$ vue/dist/bg.jpg [L]
   RewriteRule ^oauth-handler/(.*)$ legacy/index.php?module=EAPM&action=$1 [L,QSA]
   RewriteRule ^vcal_server.php$ legacy/vcal_server.php [L]
   RewriteRule ^ical_server.php$ legacy/ical_server.php [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ vue/dist/index.html [L]
 </IfModule>";
   file_put_contents('.htaccess', $htaccess_body);
   
 }
-copy('vue/dist/index.html', 'index.html');
 header("Refresh:0");

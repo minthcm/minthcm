@@ -52,6 +52,7 @@ if (empty($dictionary['User'])) {
 $dictionary['Employee'] = $dictionary['User'];
 // Override doctrineEntity for Employees (to avoid using the UsersRepository for Employees)
 $dictionary['Employee']['doctrineEntity'] = array(
+        'traits' => array('Person'),
 );
 //users of employees modules are not allowed to change the employee/user status.
 $dictionary['Employee']['fields']['status']['massupdate'] = false;
