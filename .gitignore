@@ -11,7 +11,7 @@ legacy/custom/modules/*/Ext/Vardefs/vardefs.ext.php
 legacy/minthcm.log
 api/configs/mint/config_override.php
 api/lib/Search/ElasticSearch/defaultParams.json
-index.html
+/index.html
 install.log
 legacy/.htaccess
 legacy/config.php
@@ -64,6 +64,9 @@ legacy/custom/modules/Connectors/connectors/sources/ext/*/*/mapping.php
 legacy/custom/modules/Connectors/connectors/sources/ext/*/*/searchdefs.php
 legacy/custom/modules/Connectors/metadata/*
 
+# Generated Entity files (but keep OAuth2)
+api/app/Entities/*.php
+
 legacy/include/**/*.lang.php
 !legacy/include/**/en_us.lang.php
 legacy/include/**/*.notify_template.html
@@ -77,6 +80,14 @@ legacy/lib/Search/ElasticSearch/defaultParams.yml
 legacy/modules/ACLRoles/ACLRoles.js
 legacy/modules/Meetings/jsclass_scheduler.js
 legacy/reindexElastic.php
+legacy/vendor/cweagans/
+legacy/vendor/symplify/vendor-patches/
+legacy/vendor/bin/vendor-patches
+legacy/vendor/bin/vendor-patches.bat
 
 #CLAUDE
 .claude/settings.local.json
+.claude/.env
+
+# msys2/cygwin crash dumps
+*.stackdump

@@ -3370,8 +3370,8 @@ function get_default_csp_directives(): array
 {
     return [
         'default-src'     => "'self'",
-        'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval'",
-        'style-src'       => "'self' 'unsafe-inline' https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.googleapis.com",
+        'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com",
+        'style-src'       => "'self' 'unsafe-inline' https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://www.gstatic.com",
         'img-src'         => "'self' data: blob:",
         'font-src'        => "'self' data: https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.gstatic.com",
         'connect-src'     => "'self' https://cdn.jsdelivr.net",
