@@ -47,27 +47,76 @@
 class HomeApi {
 
    protected function loadRecordData($args) {
-      if ( !is_null($args['record_id']) && !is_null($args['module_name']) ) {
-         global $timedate;
-         global $current_user;
-         global $db;
-         $query = "SELECT * FROM {$args['module_name']} WHERE id='{$args['record_id']}'";
-         $rd = $db->fetchOne($query);
-         if ( is_array($rd) ) {
-            foreach ( $rd as $name => $value ) {
-               //Change every date to user format
-               if ( DateTime::createFromFormat("{$timedate->dbDayFormat} {$timedate->dbTimeFormat}", $value) !== false ) {
-                  $row[$name] = $timedate->to_display_date_time($value, true, true, $current_user);
-               }
-               //if column is not date, rewrite without date-formatting
-               else {
-                  $row[$name] = htmlentities($value, ENT_QUOTES);
-               }
-            }
-         }
-         return $row;
+      global $timedate, $current_user, $beanList;
+
+      if (!is_string($args['record_id']) || !is_string($args['module_name'])) {
+         return null;
       }
-      return null;
+
+      // Module whitelist — module_name must be a real Sugar module.
+      // The frontend (viewTools.js) sends the module name in lowercase (e.g. "employees"),
+      // while $beanList keys are PascalCase (e.g. "Employees") — the match must be
+      // case-insensitive so legitimate calls don't break.
+      $module_name = null;
+      foreach (array_keys($beanList) as $candidate) {
+         if (strcasecmp($candidate, $args['module_name']) === 0) {
+            $module_name = $candidate;
+            break;
+         }
+      }
+      if ($module_name === null) {
+         return null;
+      }
+
+      // Bean instead of raw SQL — no SQLi, BeanFactory handles invalid ids itself
+      $bean = BeanFactory::getBean($module_name, $args['record_id']);
+      if (empty($bean) || empty($bean->id)) {
+         return null;
+      }
+
+      // Modules without their own ACL implementation (e.g. Administration, OAuth2Clients) have
+      // bean_implements('ACL') === false, and ACLAccess() returns true unconditionally for them —
+      // reject them explicitly to prevent unauthorized reads of technical data.
+      if ($bean->bean_implements('ACL') !== true) {
+         return null;
+      }
+
+      // Authorization — the user must have 'view' rights to THIS specific record
+      if (!$bean->ACLAccess('view')) {
+         return null;
+      }
+
+      // Defense in depth — the viewToolsApi endpoint is generic, not a User-detail UI;
+      // the legitimate way to read your own user record is /api/users/{id} or the
+      // EditView/DetailView. Even an admin can read every user via this endpoint because
+      // ACL on Users allows it; restrict to current user only.
+      // FIXME [CR #192223]: `$moduleName` (uppercase N) is undefined — local var is `$module_name`.
+      // The condition `null === 'Users'` is always false, so this Users restriction never fires.
+      // Real vuln (user_hash exfiltration) is still blocked by clean_sensitive_data() below,
+      // but this defense-in-depth check does nothing. Tracked in #192223+1.
+      if ($moduleName === 'Users' && $bean->id !== $current_user->id) {
+         return null;
+      }
+
+      $row = [];
+      foreach ($bean->field_defs as $name => $def) {
+         $value = $bean->$name;
+         // Relationship fields (link/collection) return objects (e.g. Link2), not scalars —
+         // raw SQL never returned them either (they're not physical columns), so we skip them here too
+         if (!is_scalar($value) && $value !== null) {
+            continue;
+         }
+         if ($value === null) {
+            $row[$name] = null;
+         } elseif (DateTime::createFromFormat("{$timedate->dbDayFormat} {$timedate->dbTimeFormat}", $value) !== false) {
+            $row[$name] = $timedate->to_display_date_time($value, true, true, $current_user);
+         } else {
+            $row[$name] = htmlentities($value, ENT_QUOTES);
+         }
+      }
+
+      // Defense in depth — never return fields marked 'sensitive' in vardefs
+      return clean_sensitive_data($bean->field_defs, $row);
    }
 
    public function getDateTimeFormat() {

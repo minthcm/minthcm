@@ -37,9 +37,17 @@
                         </v-tooltip>
                     </template>
                     <template v-slot:item.name="{ item }">
-                        <a @click="showRecord(item.module, item.id)" class="list-table-name-link">
+                        <router-link
+                            v-if="item.module && item.id"
+                            :to="recordUrl(item)"
+                            class="list-table-name-link"
+                            @click="searchQuery = ''"
+                        >
                             {{ item.name }}
-                        </a>
+                        </router-link>
+                        <span v-else>
+                            {{ item.name }}
+                        </span>
                     </template>
                     <template #bottom>
                         <VDataTableFooter
@@ -56,7 +64,6 @@
 
 <script setup lang="ts">
 import { useLanguagesStore } from '@/store/languages'
-import { useRouter } from 'vue-router'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useModulesStore } from '@/store/modules'
 import { unifiedSearchApi } from '@/api/unifiedSearch.api'
@@ -82,7 +89,6 @@ interface SearchResult {
 }
 
 const languages = useLanguagesStore()
-const router = useRouter()
 const modules = useModulesStore()
 const backend = useBackendStore()
 
@@ -159,18 +165,8 @@ watch(options, () => {
     search()
 })
 
-function showRecord(module: string, id: string) {
-    if (module && id) {
-        router.push({
-            name: 'module-view',
-            params: {
-                module,
-                action: 'DetailView',
-                record: id,
-            },
-        })
-        searchQuery.value = ''
-    }
+function recordUrl(item: SearchResult) {
+    return `/modules/${item.module}/DetailView/${item.id}`
 }
 
 const searchResponse = ref<SearchResponse | null>(null)
@@ -194,7 +190,6 @@ async function search() {
         isSearching.value = false
     }
 }
-
 </script>
 
 <style scoped lang="scss">

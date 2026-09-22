@@ -2,6 +2,8 @@ import { MassAction } from '../MassAction'
 import router from '@/router'
 
 export class Merge extends MassAction {
+    protected static readonly actionName = 'Merge'
+
     public async execute() {
         await this.sendRequest()
         router.push({

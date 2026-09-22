@@ -67,12 +67,14 @@ class MetaController
     {
         chdir('../legacy/');
 
-        $vr = new \ViewRecord;
-        $vr->module = $module;
-        if (!file_exists($vr->getMetaDataFile())) {
+        // Path is relative to legacy/ (chdir above) -- not autoloaded. requireWithCustom() gives
+        // a full-file override point at custom/include/RecordView/RecordViewDefsCache.php.
+        \SugarAutoLoader::requireWithCustom('include/RecordView/RecordViewDefsCache.php');
+        $viewdefs = [$module => \RecordViewDefsCache::get($module)];
+        if (empty($viewdefs[$module])) {
+            chdir('../api/');
             return [];
         }
-        include $vr->getMetaDataFile();
 
         $bean = \BeanFactory::newBean($module);
         $module_fields = $this->getModuleVardefs($bean);
@@ -88,6 +90,9 @@ class MetaController
                     $data['recordview']['panels'][$panel]['data']['sections'][$section]['fields'] = $this->mergeModuleFields($views[$panel][$section], $module_fields)['fields'];
                 }
                 $data['recordview']['panels'][$panel]['data']['actions'] = $viewdefs[$module]['panels'][$panel]['data']['actions'];
+                if (isset($viewdefs[$module]['panels'][$panel]['data']['headerComponents'])) {
+                    $data['recordview']['panels'][$panel]['data']['headerComponents'] = $viewdefs[$module]['panels'][$panel]['data']['headerComponents'];
+                }
                 if (!in_array('other', array_keys($panel_defs['data']['sections']))) {
                     $views[$panel]['other']['fields'] = self::FIELDS_IN_OTHER_SECTION;
                     $data['recordview']['panels'][$panel]['data']['sections']['other'] = [
@@ -103,12 +108,17 @@ class MetaController
 
                 continue;
             }
+            if (!isset($panel_defs['data']) || !isset($panel_defs['data']['fields'])) {
+                $data['recordview']['panels'][$panel] = $viewdefs[$module]['panels'][$panel];
+                continue;
+            }
             $views[$panel]['fields'] = $panel_defs['data']['fields'];
             $data['recordview']['panels'][$panel] = $viewdefs[$module]['panels'][$panel];
             $data['recordview']['panels'][$panel]['data']['title'] = $viewdefs[$module]['panels'][$panel]['title'];
             $data['recordview']['panels'][$panel]['data']['fields'] = $this->mergeModuleFields($views[$panel], $module_fields)['fields'];
         }
         $data['recordview']['order'] = $viewdefs[$module]['order'];
+        $data['recordview']['sidepanel'] = $viewdefs[$module]['sidepanel'] ?? false;
 
         chdir('../api/');
         return $data['recordview'];
@@ -216,7 +226,11 @@ class MetaController
     private function getSubpanelSetup($sb)
     {
         $array = [];
+        $available_tabs = array_values($sb->get_available_tabs()); 
         foreach ($sb->layout_defs['subpanel_setup'] as $name => $defs) {
+            if (!in_array($name, $available_tabs)) {
+                continue;
+            }
             $module_bean = \BeanFactory::newBean($defs['module']);
             $array[$name]['properties'] = $defs;
             if (!empty($module_bean) && $module_bean instanceof \SugarBean) {

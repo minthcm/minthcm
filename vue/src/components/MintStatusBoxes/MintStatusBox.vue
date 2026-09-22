@@ -81,35 +81,35 @@ onMounted(() => {
 }
 
 .mint-status-box-error {
-    background: #ac0221;
-    color: #fcf5f6;
+    background: var(--mint-status-error-bg);
+    color: var(--mint-status-error-text);
 
     .mint-status-box-content,
     .mint-status-box-close {
-        background: #fcf5f6;
-        color: #ac0221;
+        background: var(--mint-status-error-bg-inv);
+        color: var(--mint-status-error-text-inv);
     }
 }
 
 .mint-status-box-success {
-    background: #097c31;
-    color: #f5faf7;
+    background: var(--mint-status-ok-bg);
+    color: var(--mint-status-ok-text);
 
     .mint-status-box-content,
     .mint-status-box-close {
-        background: #f5faf7;
-        color: #006222;
+        background: var(--mint-status-ok-bg-inv);
+        color: var(--mint-status-ok-text-inv);
     }
 }
 
 .mint-status-box-info {
-    background: #b0a900;
-    color: #fcfcf5;
+    background: var(--mint-status-warn-bg);
+    color: var(--mint-status-warn-text);
 
     .mint-status-box-content,
     .mint-status-box-close {
-        background: #fcfcf5;
-        color: #5b5800;
+        background: var(--mint-status-warn-bg-inv);
+        color: var(--mint-status-warn-text-inv);
     }
 }
 </style>

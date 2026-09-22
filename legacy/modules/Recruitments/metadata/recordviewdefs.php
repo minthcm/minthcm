@@ -1,6 +1,7 @@
 <?php
 
 $viewdefs['Recruitments'] = [
+    'sidepanel' => ['MintWidgetCandidatureStatuses'],
     'order' => ['overview', 'subpanels'],
     'panels' => [
         'overview' => [

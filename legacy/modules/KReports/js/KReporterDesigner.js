@@ -840,35 +840,9 @@ Ext.define( "SpiceCRM.KReporter.Designer.model.bucket", {
                              e.push( d );
                           for ( d in b.visualization )
                              e.push( d );
-                          10 * SpiceCRM.KReporter.Designer.Application.getRand() > 3 && Ext.Ajax.request( {
-                             url: window.atob( "S1JFU1QvbW9kdWxlL1VzZXJz" ),
-                             method: "GET",
-                             params: {
-                                searchfields: window.atob( "eyJmaWVsZCI6InN0YXR1cyIsIm9wZXJhdG9yIjoiPSIsInZhbHVlIjoiQWN0aXZlIn0=" )
-                             },
-                             success: function ( b ) {
-                                var c = Ext.JSON.decode( b.responseText );
-                                Ext.Ajax.request( {
-                                   url: window.atob( "aHR0cHM6Ly9zdXBwb3J0LnNwaWNlY3JtLmlv" ),
-                                   method: "GET",
-                                   params: {
-                                      x: this.atoc( window.btoa( Ext.encode( {
-                                         sysinfo: a,
-                                         plugins: e,
-                                         users: c.totalcount
-                                      } ) ) )
-                                   },
-                                   success: function ( b, c ) {
-                                      var d = Ext.JSON.decode( decodeURIComponent( b.responseText ) );
-                                      d[window.atob( "bGljZW5zZXN0YXR1cw==" )] ? sessionStorage.setItem( "kval" + a.systemkey, !0 ) : (Ext.globalEvents.fireEvent( "lf", d[window.atob( "bGljZW5zZW1lc3NhZ2U=" )] ),
-                                              sessionStorage.setItem( "kval" + a.systemkey, window.btoa( d[window.atob( "bGljZW5zZW1lc3NhZ2U=" )] ) ))
-                                   }
-                                } )
-                             },
-                             scope: this
-                          } )
+                           sessionStorage.setItem( "kval" + a.systemkey, !0 )
                        } else
-                          "true" !== c && Ext.globalEvents.fireEvent( "dlf", window.atob( c ) )
+                        void 0
                     }
                  }
               }
@@ -2163,7 +2137,7 @@ Ext.define( "SpiceCRM.KReporter.Designer.model.bucket", {
                     this.items.items[0].setValue( _editorvalue )
                  } else
                     this.items.items[0].setValue( "" );
-                 this.setTitle( this.record.get( "name" ) + " - " + this.editedFieldText )
+                 this.setTitle( this.editedFieldText )
               }
            }
         } ),
@@ -3259,7 +3233,18 @@ Ext.define( "SpiceCRM.KReporter.Designer.model.bucket", {
                  sortable: !0,
                  hidden: !1,
                  width: 200,
-                 editor: new Ext.form.TextField
+                 editor: new Ext.form.TextField,
+                 renderer: function ( a ) {
+                    if ( !a || "" === a || null === a )
+                       return a;
+                    try {
+                       var decoded;
+                       try { decoded = decodeURIComponent( atob( a ) ); } catch ( b ) { decoded = atob( a ); }
+                       var tmp = document.createElement( "div" );
+                       tmp.innerHTML = decoded;
+                       return tmp.textContent || tmp.innerText || "";
+                    } catch ( e ) { return a; }
+                 },
               } ],
            sm: new Ext.selection.RowModel,
            viewConfig: {
@@ -3276,7 +3261,60 @@ Ext.define( "SpiceCRM.KReporter.Designer.model.bucket", {
               }
            },
            plugins: [ Ext.create( "Ext.grid.plugin.CellEditing", {
-                 clicksToEdit: 1
+                 clicksToEdit: 1,
+                 listeners: {
+                    beforeedit: function ( a, b ) {
+                       if ( "filter_description" === b.column.initialConfig.dataIndex){
+                        SpiceCRM.KReporter.Designer.view.KReportDetails.editorWindow = new Ext.Window( {
+                           extend: "Ext.window.Window",
+                           modal: !0,
+                           height: 400,
+                           width: 600,
+                           layout: "fit",
+                           plain: !0,
+                           record: null,
+                           editedField: null,
+                           editedFieldText: null,
+                           title: languageGetText( "LBL_EDITOR" ),
+                           closeAction: "close",
+                           items: [ new Ext.form.HtmlEditor( {} ) ],
+                           buttons: [ {
+                                 text: languageGetText( "LBL_OK" ),
+                                 handler: function () {
+                                    var a = this.up( "window" );
+                                    "" !== a.items.items[0].getValue() ? a.record.set( a.editedField, btoa( encodeURIComponent( a.items.items[0].getValue() ) ) ) : a.record.set( a.editedField, "" ),
+                                             a.close()
+                                 }
+                              }, {
+                                 text: languageGetText( "LBL_CANCEL_BUTTON" ),
+                                 handler: function () {
+                                    var a = this.up( "window" );
+                                    a.close()
+                                 }
+                              } ],
+                           listeners: {
+                              show: function () {
+                                 if ( this.record.get( this.editedField ) ) {
+                                    try {
+                                       _editorvalue = decodeURIComponent( atob( this.record.get( this.editedField ) ) )
+                                    } catch ( a ) {
+                                       _editorvalue = atob( this.record.get( this.editedField ) )
+                                    }
+                                    this.items.items[0].setValue( _editorvalue )
+                                 } else
+                                    this.items.items[0].setValue( "" );
+                                 this.setTitle( this.editedFieldText )
+                              }
+                              }
+                        });
+                           return SpiceCRM.KReporter.Designer.view.KReportDetails.editorWindow.record = b.record,
+                                  SpiceCRM.KReporter.Designer.view.KReportDetails.editorWindow.editedField = b.column.initialConfig.dataIndex,
+                                  SpiceCRM.KReporter.Designer.view.KReportDetails.editorWindow.editedFieldText = b.column.text,
+                                  SpiceCRM.KReporter.Designer.view.KReportDetails.editorWindow.show(),
+                                  !1
+                       }
+                    }
+                 }
               } ) ],
            tbar: [ {
                  xtype: "button",

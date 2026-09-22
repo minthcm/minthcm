@@ -168,6 +168,7 @@ const changePage = (page: number, tableName: string, paginateBy: number) => {
         :deep(.v-expansion-panel-text__wrapper) {
             padding: 0px;
             margin-bottom: 16px;
+            overflow-x: auto;
         }
     }
 }
@@ -179,7 +180,7 @@ const changePage = (page: number, tableName: string, paginateBy: number) => {
     }
 
     .mint-subpanel-title {
-        color: #0004;
+        color: var(--mint-text-muted);
     }
 
     .mint-subpanel-create-btn {

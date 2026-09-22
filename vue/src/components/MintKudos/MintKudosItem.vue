@@ -75,6 +75,6 @@ watch(targetIsVisible, (isVisible) => {
     font-size: 14px;
     border-radius: 16px;
     color: rgba(var(--v-theme-on-surface), var(--v-hard-emphasis-opacity));
-    background-color: #f5fbfa;
+    background-color: rgb(var(--v-theme-primary-lighter));
 }
 </style>

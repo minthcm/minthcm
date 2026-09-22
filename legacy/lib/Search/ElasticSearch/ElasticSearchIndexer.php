@@ -240,6 +240,7 @@ class ElasticSearchIndexer extends AbstractIndexer
                 $this->createIndex($this->index, $this->getDefaultMapParams($module));
             } catch (Exception $exception) {
                 $this->logger->error("Cannot create index '{$this->index}': " . $exception->getMessage());
+                return;
             }
         }
 

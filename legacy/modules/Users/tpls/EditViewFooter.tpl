@@ -517,6 +517,18 @@
                         </td>
                     <tr>
                 {/if}
+                <tr id="mint_theme_preference_row">
+                    <td width="17%" scope="row">
+                        <span>{$MOD.LBL_THEME_PREFERENCE|default:"Color Scheme"}:</span>
+                    </td>
+                    <td width="83%" colspan="3">
+                        <select id="mint_theme_preference_select">
+                            <option value="system">{$MOD.LBL_THEME_SYSTEM|default:"System"}</option>
+                            <option value="light">{$MOD.LBL_THEME_LIGHT|default:"Light"}</option>
+                            <option value="dark">{$MOD.LBL_THEME_DARK|default:"Dark"}</option>
+                        </select>
+                    </td>
+                </tr>
                 <tr id="use_group_tabs_row" style="display: {$DISPLAY_GROUP_TAB};">
                     <td scope="row"><span>{$MOD.LBL_USE_GROUP_TABS}
                             :</span>&nbsp;{sugar_help text=$MOD.LBL_NAVIGATION_PARADIGM_DESCRIPTION }</td>
@@ -706,3 +718,51 @@
             {/literal}
         </script>
         {/if}
+
+<script>
+{literal}
+(function () {
+    var STORAGE_KEY = 'mint.theme.preference';
+    var API_PATH = '../../api/user/theme';
+
+    function getApiBase() {
+        var href = window.location.href;
+        var match = href.match(/^(https?:\/\/[^\/]+)(\/[^?]*legacy\/)?/);
+        if (match && match[2]) {
+            return match[1] + match[2].replace(/legacy\/$/, '') + 'api/';
+        }
+        return '../../api/';
+    }
+
+    function initThemeSelector() {
+        var select = document.getElementById('mint_theme_preference_select');
+        if (!select) return;
+
+        var stored = localStorage.getItem(STORAGE_KEY) || 'system';
+        select.value = stored;
+
+        select.addEventListener('change', function () {
+            var value = select.value;
+            localStorage.setItem(STORAGE_KEY, value);
+
+            fetch(getApiBase() + 'user/theme', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ theme: value }),
+            });
+
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'mint-theme-preference', preference: value }, '*');
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initThemeSelector);
+    } else {
+        initThemeSelector();
+    }
+})();
+{/literal}
+</script>

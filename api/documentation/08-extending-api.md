@@ -35,6 +35,7 @@ The API provides several ways to extend functionality:
 3. **Constants Extension** - Add/override constants
 4. **Module Routes** - Add module-specific endpoints
 5. **Middlewares** - Add request/response processing
+6. **Duplicate Detection** - Add record deduplication queries
 
 ## Adding Custom Routes
 
@@ -648,6 +649,130 @@ class EmployeeController
 }
 ```
 
+### Example: Implementing Duplicate Detection
+
+The `DuplicateDetectionService` uses class-based autodiscovery to find and execute duplicate detection queries by module name. This allows you to add duplicate detection support for any module using a simple naming convention.
+
+**How it works:**
+
+When checking for duplicates in a module (e.g., "Candidates"), the service automatically looks for a query class using this convention:
+1. **Custom first:** `MintHCM\Custom\Modules\{Module}\Custom{Module}DuplicateQuery`
+2. **Core fallback:** `MintHCM\Modules\{Module}\{Module}DuplicateQuery`
+
+If either class exists and implements `DuplicateQueryInterface`, it will be used.
+
+**Example: Adding duplicate detection for a custom module**
+
+**File:** `modules/Candidates/CandidatesDuplicateQuery.php`
+
+```php
+<?php
+
+namespace MintHCM\Modules\Candidates;
+
+use Doctrine\DBAL\Query\QueryBuilder;
+use MintHCM\Lib\DuplicateDetection\DuplicateArrayQuery;
+use MintHCM\Lib\DuplicateDetection\DuplicateQueryInterface;
+
+class CandidatesDuplicateQuery implements DuplicateQueryInterface
+{
+    public function buildQueries(QueryBuilder $query_builder, array $record_data): DuplicateArrayQuery
+    {
+        $duplicate_array_query = new DuplicateArrayQuery();
+        
+        // Check if minimum required data exists
+        if (empty($record_data['first_name']) || empty($record_data['last_name'])) {
+            return $duplicate_array_query;
+        }
+        
+        // Build query to find candidates with matching first/last names
+        $candidate_query = $query_builder
+            ->select('c.id', 'c.first_name', 'c.last_name', 'c.phone_mobile')
+            ->from('candidates', 'c')
+            ->where('c.first_name = :first_name')
+            ->andWhere('c.last_name = :last_name')
+            ->andWhere('c.deleted = 0')
+            ->setParameters([
+                'first_name' => $record_data['first_name'],
+                'last_name' => $record_data['last_name'],
+            ]);
+        
+        $duplicate_array_query->addQuery('by_name', $candidate_query);
+        
+        // Search by email if provided
+        if (!empty($record_data['email1'])) {
+            $email_query = clone $query_builder;
+            $email_query
+                ->select('c.id', 'c.first_name', 'c.last_name', 'c.phone_mobile')
+                ->from('email_addresses', 'ea')
+                ->join('ea', 'email_addr_bean_rel', 'eabr', 'ea.id = eabr.email_address_id')
+                ->join('eabr', 'candidates', 'c', 'eabr.bean_id = c.id')
+                ->where('ea.email_address = :email')
+                ->andWhere('c.deleted = 0')
+                ->setParameter('email', $record_data['email1']);
+            
+            $duplicate_array_query->addQuery('by_email', $email_query);
+        }
+        
+        return $duplicate_array_query;
+    }
+}
+```
+
+**For custom modules in `custom/`:**
+
+**File:** `custom/modules/MyModule/CustomMyModuleDuplicateQuery.php`
+
+```php
+<?php
+
+namespace MintHCM\Custom\Modules\MyModule;
+
+use Doctrine\DBAL\Query\QueryBuilder;
+use MintHCM\Lib\DuplicateDetection\DuplicateArrayQuery;
+use MintHCM\Lib\DuplicateDetection\DuplicateQueryInterface;
+
+class CustomMyModuleDuplicateQuery implements DuplicateQueryInterface
+{
+    public function buildQueries(QueryBuilder $query_builder, array $record_data): DuplicateArrayQuery
+    {
+        $duplicate_array_query = new DuplicateArrayQuery();
+        
+        // Your duplicate detection logic here
+        
+        return $duplicate_array_query;
+    }
+}
+```
+
+**Usage in service:**
+
+```php
+use MintHCM\Lib\DuplicateDetection\Service\DuplicateDetectionService;
+
+$service = new DuplicateDetectionService($entityManager);
+
+// Check if module supports duplicate detection
+if ($service->shouldProcessModule('Candidates')) {
+    $duplicates = $service->getDuplicates('Candidates', [
+        'id' => 'candidate-123',
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email1' => 'john.doe@example.com',
+    ]);
+    
+    // Returns empty array [] if no duplicates found or no query class exists
+}
+```
+
+**Key points:**
+
+- If no query class exists for a module, `getDuplicates()` returns `[]` (empty array) and processing is skipped
+- Implement `DuplicateQueryInterface` — it requires one method: `buildQueries(QueryBuilder $qb, array $data): DuplicateArrayQuery`
+- Return `DuplicateArrayQuery` to support multiple sub-queries (by name, by email, etc.)
+- Always check `$record_data` contents before building queries
+- Use `clone $query_builder` when creating multiple independent queries
+
 ## Custom Utilities
 
 Add helper functions and utilities:
@@ -720,6 +845,9 @@ custom/
 │   │   └── EmployeeService.php
 │   └── MintLogic/
 │       └── CustomLogic.php
+├── modules/
+│   └── MyModule/
+│       └── CustomMyModuleDuplicateQuery.php  # Duplicate detection for custom module
 └── utils/
     └── StringHelper.php
 ```

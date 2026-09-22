@@ -1,0 +1,28 @@
+/**
+ * MintHCM Dark Mode — Vue Component Overrides
+ *
+ * Mirrors the role of legacy/themes/SuiteP/css/dark-mode.css but for the
+ * Vue layer. All color values must use CSS custom properties defined in
+ * legacy/themes/SuiteP/css/mint-theme-tokens.css or Vuetify --v-theme-*.
+ *
+ * This file is imported by main.scss.
+ *
+ * To add a new theme: add a new html[data-mint-theme="<name>"] block below.
+ * The block receives its color values from the matching block in
+ * mint-theme-tokens.css — no hardcoded colors here.
+ */
+
+/* ─── Dark theme ────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] {
+    /* Topbar logo area — primary green is too saturated against dark UI */
+    .img-logo {
+        background: rgb(var(--v-theme-primary-light)) !important;
+    }
+
+    /* Module-actions list inside the navigation drawer */
+    .sidebar-nav .v-list.bg-primary {
+        background: rgb(var(--v-theme-primary-light)) !important;
+    }
+
+}

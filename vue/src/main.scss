@@ -4,6 +4,13 @@
     
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap');
 
+/* ─── Anti-FOUC: applied before Vuetify JS initialises ─────────────────── */
+html[data-mint-theme="dark"] .v-application {
+    background-image: none;
+    background-color: #121212;
+    color-scheme: dark;
+}
+
 html {
     overflow-y: auto !important;
 }
@@ -13,16 +20,19 @@ html {
     background-size: cover;
 }
 
+/* ─── Per-theme Vue component overrides ────────────────────────────────── */
+@import 'dark-mode';
+
 // scrollbar
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
 ::-webkit-scrollbar-track {
-    background: rgb(var(--v-theme-surface));
+    background: var(--mint-bg-surface-alt, rgb(var(--v-theme-surface)));
 }
 ::-webkit-scrollbar-thumb {
-    background: rgb(var(--v-theme-secondary));
+    background: var(--mint-secondary, rgb(var(--v-theme-secondary)));
     border-radius: 5px;
 }
 

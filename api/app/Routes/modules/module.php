@@ -113,6 +113,11 @@ $routes = array(
                     },
                 ',
             ),
+            'force_save' => array(
+                'type' => BoolType::class,
+                'required' => false,
+                'desc' => "Force save record, skipping duplicates search",
+            )
         ),
     ),
     "update" => array(
@@ -172,6 +177,11 @@ $routes = array(
                     },
                 ',
             ),
+            'force_save' => array(
+                'type' => BoolType::class,
+                'required' => false,
+                'desc' => "Force save record, skipping duplicates search",
+            )
         ),
     ),
     "get_record" => array(

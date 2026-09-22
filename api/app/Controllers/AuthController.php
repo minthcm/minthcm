@@ -327,8 +327,7 @@ class AuthController
             || $user->portal_only
             || $user->is_group
         ) {
-            $response = $response->withStatus(400);
-            $response->getBody()->write(json_encode(array('message' => "LBL_PROVIDE_USERNAME_AND_EMAIL")));
+            $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
             return $response;
         }
 
@@ -354,11 +353,11 @@ class AuthController
         chdir('../api/');
 
         if (true !== $result['status']) {
-            $response = $response->withStatus(500);
-            $response->getBody()->write(json_encode(array('message' => 'LBL_EMAIL_NOT_SENT')));
+            $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
             return $response;
         }
 
+        $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
         return $response;
     }
 

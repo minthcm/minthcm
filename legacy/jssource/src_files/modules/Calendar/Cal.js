@@ -275,9 +275,49 @@ CAL.load_form_in_new_tab = function (module_name, record, edit_all_recurrences, 
     var url = "index.php?module=" + module_name + "&action=DetailView&record=" + record;
     window.open(url, '_blank');
 }
+// Mint-Vue #191870 start - report the view the user is leaving, so the shell can bring them back to it.
+// The Vue shell owns the navigation but cannot see which view type and date range are on screen,
+// and the dashlet has no URL of its own that could carry them.
+// The CAL.* globals describe the page as it was first rendered. A dashlet paged over AJAX replaces
+// its own markup, which can leave those globals pointing at the week the dashboard opened on - so
+// a caller that knows the date for certain passes it in, and only the rest falls back to globals.
+CAL.get_view_state = function (date) {
+   return {
+      source: CAL.dashlet ? "calendar-dashlet" : "calendar",
+      dashletId: CAL.dashlet_id || null,
+      view: CAL.view,
+      year: (date && date.year) || CAL.year,
+      month: (date && date.month) || CAL.month,
+      day: (date && date.day) || CAL.day
+   };
+}
+// Derives the displayed date from the clicked event, which is by definition inside the range on screen.
+CAL.date_from_event = function (cal_event) {
+   if (!cal_event || !cal_event.start || typeof moment !== "function") {
+      return null;
+   }
+   var event_moment = moment(cal_event.start);
+   if (!event_moment.isValid()) {
+      return null;
+   }
+   return {
+      year: event_moment.format("YYYY"),
+      month: event_moment.format("MM"),
+      day: event_moment.format("DD")
+   };
+}
+// Must be called before the record URL is posted - that URL makes the shell navigate away immediately.
+CAL.report_return_location = function (date) {
+   if (!window.LegacyEventManager) {
+      return;
+   }
+   window.LegacyEventManager.emit("CaptureReturnLocation", CAL.get_view_state(date));
+}
+// Mint-Vue #191870 end
 CAL.load_form = function (module_name, record, edit_all_recurrences, cal_event) {
    // Mint start
    var url = "index.php?module=" + module_name + "&action=DetailView&record=" + record;
+   CAL.report_return_location(CAL.date_from_event(cal_event)); // Mint-Vue #191870
    window.parent.postMessage(new URL(url, document.location).href); // Mint-Vue
    // window.location.assign(url);
    //    CAL.disable_creating = true;
@@ -608,54 +648,99 @@ CAL.enable_buttons = function () {
    }
 }
 CAL.dialog_create = function (date, end_date, user_id) {
-   // Mint start
-   var module_name = CAL.get("current_module").value;
+   // Mint start - Show popup to select event type
    var return_module = (typeof (moduleName) != 'undefined') ? moduleName : 'Calendar';
    var month = date.split('/')[0];
    var day = date.split('/')[1];
    var year = String(date.split('/')[2]).split(' ')[0];
+   
+   // Prepare options for the popup
+   var options = [
+      {
+         value: 'WorkSchedules',
+         label: SUGAR.language.get('app_list_strings', 'moduleListSingular')['WorkSchedules']
+      },
+      {
+         value: 'Meetings',
+         label: SUGAR.language.get('app_list_strings', 'moduleListSingular')['Meetings']
+      },
+      {
+         value: 'Calls',
+         label: SUGAR.language.get('app_list_strings', 'moduleListSingular')['Calls']
+      }
+   ];
+   
+   // Create popup content
+   var popupContent = '<div style="padding: 15px;">';
+   popupContent += '<p style="margin-bottom: 15px; font-size: 14px;">' +
+      SUGAR.language.get('app_strings', 'LBL_SELECT_EVENT_TYPE') + '</p>';
+   
+   options.forEach(function(option) {
+      popupContent += '<button class="btn btn-primary cal-event-type-btn" style="display: block; width: 100%; margin-bottom: 10px;" ' +
+         'data-module="' + option.value + '">' + option.label + '</button>';
+   });
+   
+   popupContent += '</div>';
+   
+   // Show popup using MintHCMPopup
+   if (typeof MintHCMPopup !== 'undefined') {
+      MintHCMPopup(
+         SUGAR.language.get('app_strings', 'LBL_CREATE_EVENT_TITLE'),
+         popupContent,
+         [],
+         { css: { maxWidth: '400px' } },
+         function() {
+            $('.cal-event-type-btn').on('click', function() {
+               var selected_module = $(this).data('module');
+               MintHCMPopup.close();
+               CAL.redirectToEventCreate(selected_module, date, end_date, user_id, return_module, year, month, day);
+            });
+         }
+      );
+   } else {
+      // Fallback to Bootstrap modal
+      var modalHtml = '<div class="modal fade" id="calEventTypeModal" tabindex="-1" role="dialog">' +
+         '<div class="modal-dialog" role="document">' +
+         '<div class="modal-content">' +
+         '<div class="modal-header">' +
+         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+         '<span aria-hidden="true">&times;</span></button>' +
+         '<h4 class="modal-title">' +
+         SUGAR.language.get('app_strings', 'LBL_CREATE_EVENT_TITLE') + '</h4>' +
+         '</div>' +
+         '<div class="modal-body">' + popupContent + '</div>' +
+         '</div>' +
+         '</div>' +
+         '</div>';
+      
+      // Remove existing modal if any
+      $('#calEventTypeModal').remove();
+      
+      // Append and show modal
+      $('body').append(modalHtml);
+      $('#calEventTypeModal').modal('show');
+      
+      // Handle button clicks
+      $('#calEventTypeModal .cal-event-type-btn').on('click', function() {
+         var selected_module = $(this).data('module');
+         $('#calEventTypeModal').modal('hide');
+         CAL.redirectToEventCreate(selected_module, date, end_date, user_id, return_module, year, month, day);
+      });
+      
+      // Clean up on hide
+      $('#calEventTypeModal').on('hidden.bs.modal', function() {
+         $(this).remove();
+      });
+   }
+}
+CAL.redirectToEventCreate = function(module_name, date, end_date, user_id, return_module, year, month, day) {
    var url = "index.php?module=" + module_name + "&action=EditView&return_action=index&redirected_from_calendar=1&return_module=" + return_module 
    + "&date_start=" + date + "&date_end=" + end_date + "&assigned_user_id=" 
    + user_id + "&year=" + year + "&month=" + month + "&day=" + day;
+   // The caller already resolved these from the clicked slot, so they beat the globals. #191870
+   CAL.report_return_location({ year: year, month: month, day: day });
    window.parent.postMessage(new URL(url, document.location).href); // Mint-Vue
    // window.location.assign(url);
-   //   var e, user_id, user_name;
-   //   CAL.get( "title-cal-edit" ).innerHTML = CAL.lbl_loading;
-   //   CAL.open_edit_dialog();
-   //   CAL.disable_buttons();
-   //   var module_name = CAL.get( "current_module" ).value;
-   //   if ( CAL.view == 'sharedWeek' || CAL.view == 'sharedMonth' ) {
-   //      user_name = "";
-   //      CAL.GR_update_user( user_id );
-   //      $.ajax( {
-   //         url: "index.php?module=Calendar&action=getUser&record=" + user_id,
-   //      } ).done( function ( data ) {
-   //         data = jQuery.parseJSON( data );
-   //         user_name = data.user_name;
-   //         callback( user_name, user_id, module_name, date, end_date );
-   //      } );
-   //   } else {
-   //      user_id = CAL.current_user_id;
-   //      user_name = CAL.current_user_name;
-   //      CAL.GR_update_user( CAL.current_user_id );
-   //      callback( user_name, user_id, module_name, date, end_date );
-   //   }
-   //
-   //   function callback( user_name, user_id, module_name, date, end_date ) {
-   //      var params = {
-   //         'module_name': module_name,
-   //         'user_id': user_id,
-   //         'user_name': user_name,
-   //         'date_start': date,
-   //         'date_end': ""
-   //      };
-   //      if ( end_date != "" ) {
-   //         params.date_end = end_date;
-   //      }
-   //      CAL.current_params = params;
-   //      CAL.load_create_form( CAL.current_params );
-   //   }
-   // Mint end
 }
 CAL.dialog_save = function () {
    if (!check_form('CalendarEditView')) {
@@ -958,6 +1043,10 @@ $($.fullCalendar).ready(function () {
             var workschedules_status_dom = SUGAR.language.get('app_list_strings', 'workschedules_status_dom');
             valueToPush["title"] = element['name'] + ' (' + workschedules_status_dom[element['status']] + ')';
             // #42688 end
+            // Mint dark mode: tag the event so dark-mode.css can brighten its
+            // (hardcoded, light-theme-tuned) border/text/background colors
+            // without touching Meetings/Calls events rendered on the same calendar.
+            valueToPush["className"] = 'fc-event-workschedule';
             switch (element.ws_type) {
                case 'office':
                   if(element.status === "closed" ){
@@ -1313,4 +1402,53 @@ $(document).ready(function () {
       SUGAR.mySugar.retrieveDashlet($('#calendar' + global_current_user_id).closest('li.noBullet').get(0).id.replace('dashlet_', ''));
    }
 });
+
+// Mint-Vue #191870 start - restore the date range the dashlet was showing before the user opened a record.
+// The dashboard has no URL of its own that could carry that state, so the shell replays it as a message
+// once the dashboard is back on screen. Refreshing this single dashlet is what keeps the rest of the
+// dashboard - the other dashlets and the selected tab - untouched.
+CAL.restore_dashlet_view = function (state) {
+   // Without an id the refresh would hit the server with id=undefined, which answers 500 and leaves
+   // the loading indicator up for good, since it is only hidden on a successful response.
+   if (!state || !state.dashletId || typeof SUGAR == "undefined" || !SUGAR.mySugar) {
+      return;
+   }
+   // The dashlet refreshes itself once per page load (see CalendarDashlet::display). Claiming that
+   // slot here stops the pending refresh from resetting the dashlet back to today afterwards.
+   if (typeof calendar_dashlet_reloaded == "undefined") {
+      window.calendar_dashlet_reloaded = {};
+   }
+   calendar_dashlet_reloaded[state.dashletId] = true;
+
+   var url = "index.php?module=Home&action=DynamicAction&DynamicAction=displayDashlet&sugar_body_only=1"
+      + "&year=" + state.year + "&month=" + state.month + "&day=" + state.day
+      + "&id=" + state.dashletId;
+   SUGAR.mySugar.retrieveDashlet(state.dashletId, url);
+}
+// The dashboard renders its dashlets over AJAX after the page has loaded, so the shell has no
+// reliable moment at which to push this state in - the dashlet may not exist yet. Asking for it
+// here, once the dashlet is on screen, removes the timing problem. The shell answers at most once,
+// so the re-render triggered by the restore asks again, gets nothing, and stops.
+CAL.request_dashlet_restore = function () {
+   // Held in a local: this file starts with `var CAL = {}`, and a dashlet refreshing over AJAX
+   // re-runs it, wiping the globals. By the time the shell answers, CAL.dashlet_id may be empty
+   // again - it is repopulated asynchronously by the template.
+   var dashlet_id = CAL.dashlet_id;
+   if (!CAL.dashlet || !dashlet_id || !window.LegacyEventManager) {
+      return;
+   }
+   window.LegacyEventManager.emit("RestoreDashletView", { dashletId: dashlet_id })
+      .then(function (state) {
+         if (!state || !state.year) {
+            return;
+         }
+         CAL.restore_dashlet_view({
+            dashletId: dashlet_id,
+            year: state.year,
+            month: state.month,
+            day: state.day
+         });
+      });
+}
+// Mint-Vue #191870 end
 // Mint end #42774

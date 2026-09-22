@@ -41,17 +41,17 @@ function handleReactionClick(type: string) {
     background: rgb(var(--v-theme-primary-light));
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 100px;
-    gap: 8px;
-    padding: 8px;
+    gap: 4px;
+    padding: 5px 10px;
 
     .mint-reactions-action {
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        font-size: 20px;
-        width: 32px;
-        height: 32px;
+        font-size: 16px;
+        width: 24px;
+        height: 24px;
         cursor: pointer;
         user-select: none;
 

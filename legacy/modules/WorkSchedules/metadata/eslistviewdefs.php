@@ -60,6 +60,8 @@ $ESListViewDefs['WorkSchedules'] = [
         'Export',
         'Merge',
         'MassConfirmation',
+        'Update',
+        'MassAcceptance',
     ],
     'defaultSort' => [
         'field' => 'date_start',

@@ -866,5 +866,43 @@ var _dateFormat = "Y-m-d";
            return "undefined" != typeof SUGAR.App && (h = SUGAR.App.user.attributes.preferences.datepref),
                    "undefined" != typeof cal_date_format && (h = cal_date_format.replace( /%/g, "" )),
                    Ext.util.Format.kreportLinkBuilder( Ext.util.Format.date( a.replace( /-/g, "/" ), h ), c, e, f, g )
-        }
+        };
+
+SpiceCRM.KReporter.openHtmlEditorPopup = function ( ctx, fieldName ) {
+   var editorArea = new Ext.form.HtmlEditor( {} );
+   var win = new Ext.Window( {
+      modal: !0,
+      height: 400,
+      width: 600,
+      layout: "fit",
+      plain: !0,
+      title: ctx.column.text,
+      closeAction: "close",
+      items: editorArea,
+      buttons: [ {
+         text: languageGetText( "LBL_OK" ),
+         handler: function () {
+            var val = editorArea.getValue();
+            ctx.record.set( fieldName, "" !== val ? btoa( encodeURIComponent( val ) ) : "" );
+            win.close();
+         }
+      }, {
+         text: languageGetText( "LBL_CANCEL_BUTTON" ),
+         handler: function () { win.close(); }
+      } ],
+      listeners: {
+         show: function () {
+            var raw = ctx.record.get( fieldName );
+            if ( raw ) {
+               try { editorArea.setValue( decodeURIComponent( atob( raw ) ) ); }
+               catch ( e ) { try { editorArea.setValue( atob( raw ) ); } catch ( e2 ) { editorArea.setValue( raw ); } }
+            } else {
+               editorArea.setValue( "" );
+            }
+         }
+      }
+   } );
+   win.show();
+   return false;
+};
 ;

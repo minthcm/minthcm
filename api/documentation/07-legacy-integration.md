@@ -138,6 +138,27 @@ $label = LegacyConnector::callFunction('translate', 'LBL_START_DATE', 'Delegatio
 
 It switches to `../legacy/` for the duration of the call (so the function can resolve legacy includes/globals) and restores the previous working directory afterward — the same isolation `LegacyConnector` provides for instance methods.
 
+## The LegacyStaticConnector Class
+
+Some legacy classes use the Singleton pattern with a private constructor (e.g. `TrackerManager`) and can only be obtained through a static factory method such as `getInstance()`. `LegacyConnector` cannot wrap these — it always calls `new $class_name()` directly, which fails against a private constructor. Use `LegacyStaticConnector` instead.
+
+**File:** `utils/LegacyStaticConnector.php`
+
+Unlike `LegacyConnector`, it does not instantiate the class directly — it obtains the instance via a static factory method and proxies property access and method calls to it, with the same `chdir` isolation.
+
+```php
+use MintHCM\Utils\LegacyStaticConnector;
+
+$trackerManager = new LegacyStaticConnector(
+    'TrackerManager',                     // Class name
+    'modules/Trackers/TrackerManager.php' // File to include
+);
+
+$monitor = $trackerManager->getMonitor('tracker');
+```
+
+The factory method defaults to `getInstance()`; pass a different method name (and its arguments) as the 3rd/4th constructor arguments if the legacy class exposes a different singleton accessor.
+
 ## Common Legacy Classes
 
 ### BeanFactory

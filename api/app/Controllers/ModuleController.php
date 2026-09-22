@@ -47,10 +47,13 @@ namespace MintHCM\Api\Controllers;
 
 use BeanFactory as LegacyBeanFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use MintHCM\Data\BeanFactory as MintBeanFactory;
 use MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
+use MintHCM\Lib\DuplicateDetection\Service\DuplicateDetectionService;
 use MintHCM\Lib\MintLogic\MintLogic;
+use MintHCM\Utils\CyclicRecordsSaver;
 use MintHCM\Utils\LegacyConnector;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
@@ -59,10 +62,12 @@ use Slim\Routing\RouteContext;
 class ModuleController
 {
     protected EntityManagerInterface $entity_manager;
+    protected DuplicateDetectionService $duplicate_detection_service;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, DuplicateDetectionService $duplicate_detection_service)
     {
         $this->entity_manager = $entityManager;
+        $this->duplicate_detection_service = $duplicate_detection_service;
 
         global $app_list_strings;
         if (!$app_list_strings) {
@@ -114,6 +119,11 @@ class ModuleController
                 continue;
             }
             $entity->$field_name = $value;
+        }
+
+        $duplicate_response = $this->checkForDuplicates($request, $module, $record_data, $response);
+        if ($duplicate_response !== null) {
+            return $duplicate_response;
         }
 
         $this->entity_manager->persist($entity);
@@ -174,7 +184,6 @@ class ModuleController
             }
             $entity->$field_name = empty($value) ? null : $value;
         }
-        $this->entity_manager->persist($entity);
 
         $validationResult = (new MintLogic($entity->getMintBean()))->validateBean();
         if (!$validationResult['isValid']) {
@@ -182,6 +191,13 @@ class ModuleController
             $response->getBody()->write(json_encode($validationResult));
             return $response;
         }
+
+        $duplicate_response = $this->checkForDuplicates($request, $module, $record_data, $response);
+        if ($duplicate_response !== null) {
+            return $duplicate_response;
+        }
+
+        $this->entity_manager->persist($entity);
 
         $this->handleFiles($entity, $files);
         $entity_repository->save($entity, false);
@@ -541,10 +557,21 @@ class ModuleController
                 'size' => strlen($base64_decoded),
             ];
             $_FILES['filename_file'] = $file_name;
+            $file = new LegacyConnector('File', 'include/SugarObjects/templates/file/File.php', [$field_name]);
+            $file = populateFromPost('', $file);
             $upload_file = new LegacyConnector('UploadFile', 'include/upload_file.php', [$field_name]);
             $upload_file->set_is_http_upload(false);
-            if ($upload_file->confirm_upload()) {
-                $upload_file->final_move($file_name, $field_name);
+            $move = false;
+            if (isset($_FILES[$field_name]) && $upload_file->confirm_upload()) {
+                $file->filename = $upload_file->get_stored_file_name();
+                $file->file_mime_type = $upload_file->mime_type;
+                $file->file_ext = $upload_file->file_ext;
+                $move = true;
+            }
+            $file->save();
+            if ($move) {
+                $parent_id = $bean->id;
+                $upload_file->final_move($parent_id);
             }
             fclose($tmp_file);
         }
@@ -664,4 +691,48 @@ class ModuleController
         return $response;
     }
 
+    protected function handleCyclicalRecords(MintEntity $mint_entity)
+    {
+        (new CyclicRecordsSaver($mint_entity->getMintBean(), $this->entity_manager))->run();
+    }
+
+    protected function checkForDuplicates(Request $request, string $module, array $record_data, Response $response): ?Response
+    {
+        $force_save = $request->getAttribute("force_save") ?? false;
+        if (
+            $force_save
+            || !$this->duplicate_detection_service->shouldProcessModule($module)
+        ) {
+            return null;
+        }
+
+        $response = $this->handleDuplicates($module, $record_data, $response);
+        $status_code = $response->getStatusCode();
+        if ($status_code < 200 || $status_code >= 300) {
+            return $response;
+        }
+
+        return null;
+    }
+
+    protected function handleDuplicates(string $module, array $record_data, Response $response): Response
+    {
+        try {
+            $duplicates = $this->duplicate_detection_service->getDuplicates($module, $record_data);
+            if (!empty($duplicates)) {
+                $response = $response->withStatus(409)->withHeader('Content-Type', 'application/json');
+                $response->getBody()->write(json_encode([
+                    'duplicates_info' => [
+                        'records' => $duplicates,
+                        'count' => count($duplicates)
+                    ],
+                ]));
+                return $response;
+            }
+        } catch (Exception $e) {
+            $GLOBALS['log']->fatal($e->getMessage());
+            return $response->withStatus(500);
+        }
+        return $response;
+    }
 }

@@ -125,7 +125,7 @@ class UpgradeRequirementsService
             return $version === $pattern;
         }
 
-        $regex = '/^' . str_replace('\*', '\d+', preg_quote($pattern, '/')) . '$/';
+        $regex = '/^' . str_replace('\*', '\d+', preg_quote($pattern, '/')) . '(\.\d+)?$/';
         return (bool) preg_match($regex, $version);
     }
 
@@ -192,12 +192,19 @@ class UpgradeRequirementsService
         $this->successes[] = "MySQL/Percona {$current} OK (required: >= {$min}) — {$cfg['host']}:{$cfg['port']}";
     }
 
+    private function getConfigOverridePaths(): array
+    {
+        return [
+            'legacy' => dirname(__DIR__, 3) . '/config_override.php',
+            'api'    => dirname(__DIR__, 4) . '/api/configs/mint/config_override.php',
+        ];
+    }
+
     private function mysqlConfigHint(): string
     {
-        $legacy_override = dirname(__DIR__, 3) . '/config_override.php';
-        $api_override    = dirname(__DIR__, 4) . '/api/configs/mint/config_override.php';
-        return "  - {$legacy_override} (\$sugar_config['dbconfig']['db_host_name'])\n"
-             . "  - {$api_override} (\$mint_config['database']['host'])";
+        $paths = $this->getConfigOverridePaths();
+        return "  - {$paths['legacy']} (\$sugar_config['dbconfig']['db_host_name'])\n"
+             . "  - {$paths['api']} (\$mint_config['database']['host'])";
     }
 
     /**
@@ -208,8 +215,10 @@ class UpgradeRequirementsService
      */
     private function resolveMysqlConfig(): ?array
     {
+        $paths = $this->getConfigOverridePaths();
+
         // Legacy config_override: $sugar_config['dbconfig']
-        $legacy_override = dirname(__DIR__, 3) . '/config_override.php';
+        $legacy_override = $paths['legacy'];
         if (is_readable($legacy_override)) {
             $sugar_config = [];
             @include $legacy_override;
@@ -226,7 +235,7 @@ class UpgradeRequirementsService
         }
 
         // API config_override: $mint_config['database']
-        $api_override = dirname(__DIR__, 4) . '/api/configs/mint/config_override.php';
+        $api_override = $paths['api'];
         if (is_readable($api_override)) {
             $mint_config = [];
             @include $api_override;
@@ -303,10 +312,9 @@ class UpgradeRequirementsService
 
     private function elasticsearchConfigHint(): string
     {
-        $legacy_override = dirname(__DIR__, 3) . '/config_override.php';
-        $api_override    = dirname(__DIR__, 4) . '/api/configs/mint/config_override.php';
-        return "  - {$legacy_override} (\$sugar_config['search']['ElasticSearch']['host'])\n"
-             . "  - {$api_override} (\$mint_config['search']['engines']['ElasticSearch'][0]['host'])";
+        $paths = $this->getConfigOverridePaths();
+        return "  - {$paths['legacy']} (\$sugar_config['search']['ElasticSearch']['host'])\n"
+             . "  - {$paths['api']} (\$mint_config['search']['engines']['ElasticSearch'][0]['host'])";
     }
 
     /**
@@ -319,9 +327,10 @@ class UpgradeRequirementsService
     {
         $configs = [];
         $seen    = [];
+        $paths   = $this->getConfigOverridePaths();
 
         // Legacy config_override: $sugar_config['search']['ElasticSearch']
-        $legacy_override = dirname(__DIR__, 3) . '/config_override.php';
+        $legacy_override = $paths['legacy'];
         if (is_readable($legacy_override)) {
             $sugar_config = [];
             @include $legacy_override;
@@ -341,7 +350,7 @@ class UpgradeRequirementsService
         }
 
         // API config_override: $mint_config['search']['engines']['ElasticSearch'][0]
-        $api_override = dirname(__DIR__, 4) . '/api/configs/mint/config_override.php';
+        $api_override = $paths['api'];
         if (is_readable($api_override)) {
             $mint_config = [];
             @include $api_override;

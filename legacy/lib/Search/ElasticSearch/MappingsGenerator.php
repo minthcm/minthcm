@@ -7,6 +7,7 @@ if (!defined('sugarEntry')) {
 use Symfony\Component\Yaml\Yaml;
 
 require_once 'lib/Search/ElasticSearch/ElasticSearchVardefsReader.php';
+require_once 'include/SugarObjects/templates/person/Person.php';
 
 #[\AllowDynamicProperties]
 class MappingsGenerator
@@ -14,6 +15,7 @@ class MappingsGenerator
     protected $metadata_file = 'eslistviewdefs.php';
     protected $output_file_path = 'lib/Search/ElasticSearch/defaultParams.yml';
     protected $json_file_path = '../api/lib/Search/ElasticSearch/defaultParams.json';
+    // 'name' here only applies to Person beans (split first/last name); see shouldApplyNotStandardMapping()
     protected $not_standard_fields = [
         'name' => 'name.name',
         'first_name' => 'name.first',
@@ -114,6 +116,25 @@ class MappingsGenerator
         return $modulesWithElastic;
     }
 
+    /** @var string[] not_standard_fields entries that only apply to beans with a split first/last name */
+    protected const PERSON_ONLY_FIELDS = ['name', 'first_name', 'last_name'];
+
+    /**
+     * The name/first_name/last_name entries in $not_standard_fields exist to split a Person's
+     * full name into name.name/name.first/name.last for search boosting. Some non-Person modules'
+     * eslistviewdefs.php list 'first_name'/'last_name' as boilerplate search fields even though the
+     * bean has no such fields (e.g. ACLRoles) — applying the split mapping to them would nest a
+     * field ('name') that must otherwise stay flat for modules with a plain 'name' string.
+     */
+    protected function shouldApplyNotStandardMapping(string $field, \SugarBean $bean): bool
+    {
+        if (in_array($field, self::PERSON_ONLY_FIELDS, true)) {
+            return $bean instanceof \Person;
+        }
+
+        return true;
+    }
+
     public function generateMappings()
     {
         $esv_reader = new \ElasticSearchVardefsReader;
@@ -137,7 +158,7 @@ class MappingsGenerator
                     $es_type_name = $this->type_mapping[$defs[$field]['type']] ?? 'text';
                     $es_type = $this->types[$es_type_name];
 
-                    if (!empty($this->not_standard_fields[$field])) {
+                    if (!empty($this->not_standard_fields[$field]) && $this->shouldApplyNotStandardMapping($field, $bean)) {
                         $mappings = $this->handleNotStandardField($this->not_standard_fields[$field], $mappings, $key, $es_type);
                     } else if (!empty($defs[$field])) {
                         // else if because script does not work well for fields: search_name, recr_contact_agree oraz current_user_only

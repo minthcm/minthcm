@@ -48,7 +48,7 @@
                 tabindex="0"
                 role="button"
                 :aria-sort="isSorted(column) ? (getSortIcon(column) === 'mdi-arrow-up' ? 'ascending' : 'descending') : 'none'"
-                @click="toggleSort(column)"
+                @click.stop="toggleSort(column)"
                 @keydown.enter.prevent="toggleSort(column)"
                 @keydown.space.prevent="toggleSort(column)"
                 style="cursor: pointer;"

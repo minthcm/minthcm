@@ -22,6 +22,8 @@ class Update extends MassAction
         }
 
         $beans = $this->getBeans();
+        $total = count($this->ids);
+        $updated = 0;
     
         chdir('../legacy');
 
@@ -33,11 +35,20 @@ class Update extends MassAction
             foreach ($this->array_fields as $field => $value) {
                 $bean->$field = $value;
             }
-            $bean->save();
+            try {
+                $save_result = $bean->save();
+                if ($save_result) {
+                    $updated++;
+                }
+            } catch (\Exception $e) {
+                $GLOBALS['log']->error('MassUpdate: bean save failed for id=' . $bean->id . ': ' . $e->getMessage());
+            }
         }
         chdir('../api');
 
         $result['success'] = true;
+        $result['updated'] = $updated;
+        $result['total'] = $total;
         return $result;
     }
 

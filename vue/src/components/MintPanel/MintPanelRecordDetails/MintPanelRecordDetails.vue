@@ -4,7 +4,7 @@
             <div class="header-container">
                 <MintButton icon="mdi-arrow-left" @click="goBack" />
                 <v-avatar
-                    v-if="store.bean.syncAttributes.photo"
+                    v-if="store.bean.syncAttributes.photo && (modules?.currentModule?.name === 'Users' || modules?.currentModule?.name === 'Employees')"
                     class="photo"
                     size="120"
                     :image="`legacy/index.php?entryPoint=download&id=${store.bean.id}_photo&type=Users`"
@@ -34,6 +34,11 @@
                 </div>
             </div>
             <div class="buttons">
+                <component
+                    v-for="(HeaderComp, i) in headerComponentsList"
+                    :key="i"
+                    :is="HeaderComp"
+                />
                 <MintButton
                     v-if="store.view === 'detail' && store.bean.aclAccess?.edit === true"
                     class="ml-auto"
@@ -61,9 +66,10 @@
                             v-if="!store.bean.isSaving"
                             icon="mdi-close"
                             :text="mdAndDown ? '' : languages.label('LBL_CANCEL_BUTTON_LABEL')"
-                            @click="cancel"
+                            @click="store.bean.duplicateDetected ? store.bean.clearDuplicateState() : cancel()"
                         />
                         <MintButton
+                            v-if="!store.bean.duplicateDetected"
                             :disabled="!store.bean.isValid || store.bean.isSaving"
                             :icon="!store.bean.isSaving ? 'mdi-check' : ''"
                             :loading="store.bean.isSaving"
@@ -73,17 +79,25 @@
                                     ? ''
                                     : languages.label(store.bean.isSaving ? 'LBL_SAVING' : 'LBL_SAVE_BUTTON_LABEL')
                             "
-                            @click="save"
                             @keydown.space.prevent="save"
                             @keyup.space.prevent
                             @keydown.enter.prevent="save"
+                            @click="save(false)"
+                        />
+                        <MintButton
+                            v-if="store.bean.duplicateDetected"
+                            :disabled="!store.bean.isValid || store.bean.isSaving"
+                            :icon="!store.bean.isSaving ? 'mdi-check' : ''"
+                            :loading="store.bean.isSaving"
+                            variant="primary"
+                            :text="languages.label(store.bean.isSaving ? 'LBL_SAVING' : 'LBL_FORCE_SAVE_BUTTON_LABEL')"
+                            @click="save(true)"
                         />
                     </div>
                 </div>
                 <v-menu v-if="!store.bean.isNew && actions.length" offset="16">
                     <template v-slot:activator="{ props, isActive }">
                         <MintButton
-                            class="ml-auto"
                             v-bind="props"
                             :active="isActive"
                             append-icon="mdi-menu-down"
@@ -92,12 +106,16 @@
                     </template>
                     <MintMenuList :items="/*props.data.actions*/ actions || []" />
                 </v-menu>
-            </div>
+                </div>
         </div>
         <div v-if="store.view === 'edit' && store.bean.validationError">
             <MintStatusBox type="error">
                 {{ languages.label(store.bean.validationError, store.bean.module) }}
             </MintStatusBox>
+        </div>
+        <div v-if="store.view === 'edit' && store.bean.duplicateDetected">
+            <MintDuplicateStatus :count="store.bean.duplicateCount" :module="store.bean.module" />
+            <MintDuplicateTable :duplicated-records="store.bean.duplicatedRecords" />
         </div>
         <div>
             <v-expansion-panels multiple variant="accordion" class="details-accordion" v-model="expandedSections">
@@ -122,7 +140,7 @@
                         </div>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="fields-container">
-                        <div v-for="(row, i) in computeRows(section)" class="row" :key="row.map(f => f.name).join('-')">
+                        <div v-for="row in computeRows(section)" class="row" :key="row.map(f => f.name).join('-')">
                             <div v-for="n in row.length >= 2 ? 2 : 1" :key="row[n - 1]?.name ?? n - 1">
                                 <v-skeleton-loader
                                     v-if="store.bean.isRetrieving"
@@ -163,7 +181,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
 import Field from '@/components/Fields/Field.vue'
 import { useRouter } from 'vue-router'
 import { useFavoritesStore } from '@/store/favorites'
@@ -175,9 +193,13 @@ import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintStatusBox from '@/components/MintStatusBoxes/MintStatusBox.vue'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
 import BeanActions from '@/business/BeanActions'
+import { GenericApiAction } from '@/business/BeanActions/GenericApiAction'
 import { useLocalStorageStore } from '@/store/localStorage'
+import { useReturnLocationStore } from '@/store/returnLocation'
 import { useDisplay } from 'vuetify'
 import { cyclicRecordsApi } from '@/api/cyclicRecords.api'
+import MintDuplicateStatus from '@/components/MintDuplicate/MintDuplicateStatus.vue'
+import MintDuplicateTable from '@/components/MintDuplicate/MintDuplicateTable.vue'
 
 const computeErrorMessages = () => {
     const errors: Record<string, string> = {}
@@ -276,6 +298,8 @@ interface Props {
             collapsed?: boolean
             fields: Array<FieldVardef>[]
         }>
+        actions?: (string | { name: string } | Record<string, any>)[]
+        headerComponents?: string[]
     }
 }
 
@@ -288,6 +312,7 @@ const { mdAndDown } = useDisplay()
 
 const favorites = useFavoritesStore()
 const storage = useLocalStorageStore()
+const returnLocation = useReturnLocationStore()
 
 const expandedSections = computed({
     get: () => {
@@ -341,7 +366,7 @@ const cancel = () => {
     replaceViewPath('EditView', 'DetailView')
 }
 
-const save = async () => {
+const save = async (force = false) => {
     if (store.bean.isSaving) {
         return
     }
@@ -350,7 +375,7 @@ const save = async () => {
         store.inlineEditFieldSaving = prevInlineEditField
     }
     store.inlineEditField = ''
-    const response = await store.bean.save({
+    const response = await store.bean.save(force, {
         editCycles: store.editCycles,
         onCyclicComplete: () => {
             store.hasCyclicRecords = true
@@ -373,8 +398,9 @@ const actions = computed<MenuListItem[]>(() => {
     const actions: MenuListItem[] = []
 
     props.data.actions?.forEach((action) => {
+        const isGeneric = typeof action === 'object' && action !== null && 'api_route' in action
         const actionName = typeof action === 'string' ? action : action.name
-        const actionClass = BeanActions[actionName]
+        const actionClass = isGeneric ? GenericApiAction : BeanActions[actionName]
         if (typeof actionClass !== 'function') {
             console.warn(`Action ${actionName} not defined in BeanActions`)
             return
@@ -388,7 +414,24 @@ const actions = computed<MenuListItem[]>(() => {
     return actions
 })
 
+const headerComponentsList = computed(() =>
+    (props.data.headerComponents ?? []).map((name) =>
+        defineAsyncComponent(() => import(`@/components/${name}/${name}.vue`))
+    )
+)
+
 const goBack = () => {
+    // A place the record was opened from wins over the browser history, because history alone
+    // cannot survive a refresh on the record or an entry from a link. #191870
+    //
+    // Read without consuming: the destination may still need the stored view state to rebuild
+    // itself (the dashboard restores its calendar dashlet from it once the page has loaded).
+    // Whoever uses the state consumes it; anything left over is dropped by the router guard as
+    // soon as the user navigates off the journey.
+    const origin = returnLocation.peek()
+    if (origin) {
+        return router.push(origin.routerLocation)
+    }
     if (!router.options.history.state.back) {
         return router.push({ name: 'list', params: { module: modules.currentModule?.name } })
     }

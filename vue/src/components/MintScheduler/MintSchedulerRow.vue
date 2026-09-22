@@ -137,14 +137,14 @@ const description = computed(() => {
 .scheduler-row.border-top {
     .scheduler-participant,
     .scheduler-data {
-        border-top: thin solid #dbdbdb;
+        border-top: thin solid var(--mint-border);
     }
 }
 
 .scheduler-row.border-bottom {
     .scheduler-participant,
     .scheduler-data {
-        border-bottom: thin solid #dbdbdb;
+        border-bottom: thin solid var(--mint-border);
     }
 }
 
@@ -156,7 +156,7 @@ const description = computed(() => {
     .scheduler-participant-description {
         letter-spacing: 0.4px;
         font-size: 12px;
-        color: #00000099;
+        color: rgba(var(--v-theme-on-surface), 0.6);
         font-weight: 400;
     }
     > span {

@@ -182,6 +182,13 @@ $dictionary['CompetencyRatings'] = array(
             'relationship_role_column_value' => 'EmployeeRoles',
         ),
     ),
+    'indices' => array(
+        array(
+            'name' => 'idx_competencyratings_employee_deleted',
+            'type' => 'index',
+            'fields' => array('employee_id', 'deleted'),
+        ),
+    ),
     'optimistic_locking' => true,
     'unified_search' => true,
 );

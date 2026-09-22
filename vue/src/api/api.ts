@@ -18,7 +18,12 @@ function createMintApi() {
 
     instance.interceptors.response.use(
         responseHandler,
-        async (error: any) => await responseErrorHandler(error)
+        async (error: any) => {
+            if (error.response?.status === 409) {
+                return Promise.reject(error);
+            }
+            return await responseErrorHandler(error);
+        }
     )
 
     return instance

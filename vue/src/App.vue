@@ -21,8 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
+import { useTheme } from 'vuetify'
 import { useBackendStore } from '@/store/backend'
 import { useUxStore } from '@/store/ux'
+import { useThemeStore } from '@/store/theme'
 import MintPopups from '@/components/MintPopups/MintPopups.vue'
 import LoadingScreen from '@/components/LoadingScreen.vue'
 import MintOverlay from './components/MintOverlay.vue'
@@ -31,6 +34,17 @@ import MintStatusBoxes from './components/MintStatusBoxes/MintStatusBoxes.vue'
 
 const backend = useBackendStore()
 const ux = useUxStore()
+const themeStore = useThemeStore()
+const vuetifyTheme = useTheme()
+
+watch(
+    () => themeStore.activeTheme,
+    (name) => {
+        vuetifyTheme.change(name)
+        document.documentElement.setAttribute('data-mint-theme', name)
+    },
+    { immediate: true },
+)
 </script>
 
 <style scoped lang="scss">

@@ -6,6 +6,7 @@ import routes from './routes'
 import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
 import { useACL } from '@/composables/useACL'
 import { useStatusBoxesStore } from '@/store/statusBoxes'
+import { useReturnLocationStore } from '@/store/returnLocation'
 
 const router = createRouter({
     history: createWebHashHistory(window.location.pathname),
@@ -169,6 +170,27 @@ router.afterEach(async (to, from) => {
     } else if (languages.languages.modules[module]) {
         document.title = `${languages.label('LBL_MODULE_NAME', module)} | ${backend.initData?.systemName}`
     }
+})
+
+// A remembered return location only makes sense while the user is on the journey it was captured
+// for. Wandering off - the menu, the search, another module - drops it, so that entering the
+// calendar from scratch still opens the current week. #191870
+router.afterEach((to, from) => {
+    const returnLocation = useReturnLocationStore()
+    const origin = returnLocation.peek()
+    if (!origin || returnLocation.isOnJourney(to.path)) {
+        return
+    }
+    // Saving a new record replaces its temporary address with the saved record's own one
+    // (see useBean's save). That is the same journey continuing, not a departure.
+    const savedNewRecord =
+        from.path === origin.recordPath &&
+        to.name === 'record' &&
+        to.params.module === from.params.module
+    if (savedNewRecord) {
+        return returnLocation.followRecord(to.path)
+    }
+    returnLocation.clear()
 })
 
 export default router

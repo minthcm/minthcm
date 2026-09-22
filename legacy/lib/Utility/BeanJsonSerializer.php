@@ -60,6 +60,15 @@ class BeanJsonSerializer
     /** @var ArrayMapper */
     private $mapper;
 
+    /** @var array full mappings loaded from yaml, used for Person beans (split first/last name) */
+    private $personMappings;
+
+    /** @var array mappings with the name/first_name/last_name/salutation entries removed, used for non-Person beans */
+    private $nonPersonMappings;
+
+    /** @var string[] keys in BeanJsonSerializer.yml that only make sense for beans with a split first/last name */
+    private const PERSON_ONLY_MAPPING_KEYS = ['name', 'first_name', 'last_name', 'salutation'];
+
     /**
      * BeanJsonSerializer constructor.
      */
@@ -67,6 +76,9 @@ class BeanJsonSerializer
     {
         $this->mapper = new ArrayMapper();
         $this->mapper->loadYaml(__DIR__ . '/BeanJsonSerializer.yml');
+
+        $this->personMappings = $this->mapper->getMappings();
+        $this->nonPersonMappings = array_diff_key($this->personMappings, array_flip(self::PERSON_ONLY_MAPPING_KEYS));
     }
 
     /**
@@ -344,6 +356,10 @@ class BeanJsonSerializer
 
         list($fields, $keys) = $this->getFieldsAndKeys($bean);
 
+        // 'name' is only split into name.name/name.first/name.last for beans with a genuine
+        // first/last name (Person). Other beans have a plain 'name' field and must keep it flat,
+        // otherwise the document shape doesn't match the (flat) mapping generated for them.
+        $this->mapper->setMappings($bean instanceof Person ? $this->personMappings : $this->nonPersonMappings);
         $this->mapper->setMappable($fields);
         $this->mapper->setHideEmptyValues($hideEmptyValues);
 

@@ -23,6 +23,7 @@ class CyclicRecordsApi {
     public async planCyclicRecordsUpdate(module: string, id: string) {
         return await mintApi.get<{ ids: string[]; total: number }>(
             `/CyclicRecords/${module}/${id}/plan-update`,
+            { rawError: true },
         )
     }
 
@@ -33,7 +34,7 @@ class CyclicRecordsApi {
     public async updateCyclicRecordsBatch(module: string, id: string, ids: string[]) {
         return await mintApi.post<{ updated: number }>(`/CyclicRecords/${module}/${id}/batch-update`, {
             ids,
-        })
+        }, { rawError: true })
     }
 
     /**

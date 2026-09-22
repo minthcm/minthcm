@@ -53,6 +53,8 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
     const auth = useAuthStore()
     const languages = useLanguagesStore()
 
+    const recordId = computed(() => (route.params?.record || route.params?.id || '') as string)
+
     const threads = computed<MintComment[]>(() => {
         return comments.value.filter((comment) => !comment.reply_to_id)
     })
@@ -62,14 +64,16 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
     })
 
     async function fetchInitialData() {
+        if (!recordId.value) return
         const response = await mintApi.get<InitialResponse>(
-            `comments/${route.params.module}/${route.params.record}/init`,
+            `comments/${route.params.module}/${recordId.value}/init`,
         )
         auth.user = response.data.user
-        languages.languages = {
-            app_strings: response.data.languages?.app_strings ?? {},
-            app_list_strings: response.data.languages?.app_list_strings ?? {},
-            modules: {},
+        if (response.data.languages?.app_strings) {
+            Object.assign(languages.languages.app_strings, response.data.languages.app_strings)
+        }
+        if (response.data.languages?.app_list_strings) {
+            Object.assign(languages.languages.app_list_strings, response.data.languages.app_list_strings)
         }
         comments.value = response.data.comments
         access.value = response.data.access
@@ -78,25 +82,34 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
     }
 
     async function fetchComments() {
-        const response = await mintApi.get(`comments/${route.params.module}/${route.params.record}`)
+        if (!recordId.value) return
+        const response = await mintApi.get(`comments/${route.params.module}/${recordId.value}`)
         comments.value = response.data ?? []
     }
 
     async function addComment(description: string, replyTo?: string) {
+        if (!recordId.value) return
         isLoading.value = true
-        await mintApi.post(`comments/${route.params.module}/${route.params.record}`, {
-            description,
-            reply_to_id: replyTo,
-        })
-        isLoading.value = false
+        try {
+            await mintApi.post(`comments/${route.params.module}/${recordId.value}`, {
+                description,
+                reply_to_id: replyTo,
+            })
+        } finally {
+            isLoading.value = false
+        }
     }
 
     async function updateComment(id: string, attributes: { [field: string]: unknown }) {
+        if (!recordId.value) return
         isLoading.value = true
-        await mintApi.patch(`comments/${route.params.module}/${route.params.record}/${id}`, {
-            attributes,
-        })
-        isLoading.value = false
+        try {
+            await mintApi.patch(`comments/${route.params.module}/${recordId.value}/${id}`, {
+                attributes,
+            })
+        } finally {
+            isLoading.value = false
+        }
     }
 
     async function pinComment(id: string) {
@@ -157,7 +170,7 @@ export const useMintCommentsStore = defineStore('mint-comments', () => {
                 type: reactionType,
                 user: {
                     id: auth.user.id,
-                    full_name: auth.user.full_name,
+                    name: auth.user.full_name,
                 },
             })
         }

@@ -1,6 +1,7 @@
 <?php
 
 $viewdefs['Employees'] = [
+    'sidepanel' => ['MintWidgetTenure', 'MintWidgetLeave', 'MintWidgetCalendar', 'MintWidgetTrainings', 'MintWidgetKudos'],
     'order' => ['basicInfo', 'subpanels'],
     'panels' => [
         'basicInfo' => [

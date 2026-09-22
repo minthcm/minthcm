@@ -18,4 +18,10 @@
     background-image: url('../bg.jpg');
     background-size: cover;
 }
+
+/* In dark mode, hide the light background image to prevent white flash */
+:global(html[data-mint-theme="dark"] .loading-screen) {
+    background-image: none;
+    background-color: #121212;
+}
 </style>

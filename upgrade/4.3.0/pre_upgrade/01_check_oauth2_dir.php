@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 return function (OutputInterface $output): bool
 {
-    $keys_dir = __DIR__ . '/../../../../api/configs';
+    $keys_dir = __DIR__ . '/../../../api/configs';
     $private_key = $keys_dir . '/private.key';
     $public_key  = $keys_dir . '/public.key';
 

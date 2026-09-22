@@ -279,7 +279,10 @@ if (!$focus->is_group && !$focus->portal_only) {
         $focus->setPreference('timezone', $_POST['timezone'], 0, 'global');
     }
 
-    if (isset($_POST['ut'])) {
+    if ($newUser) {
+        // Leave 'ut' unset for a brand new user so the login wizard still triggers
+        // on their first login, regardless of login method (ref #190705).
+    } elseif (isset($_POST['ut'])) {
         $focus->setPreference('ut', '0', 0, 'global');
     } else {
         $focus->setPreference('ut', '1', 0, 'global');

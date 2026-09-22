@@ -357,19 +357,20 @@ class AOW_WorkFlow extends Basic
             if ($this->flow_run_on) {
                 switch ($this->flow_run_on) {
 
+                    // ref #192528 SQLi fix: quote activity_date/date_entered for consistency
                     case'New_Records':
                         if ($module->table_name === 'campaign_log') {
-                            $query['where'][] = $module->table_name . '.' . 'activity_date' . ' > ' . "'" . $this->activity_date . "'";
+                            $query['where'][] = $module->table_name . '.' . 'activity_date' . ' > ' . $this->db->quoted($this->activity_date);
                         } else {
-                            $query['where'][] = $module->table_name . '.' . 'date_entered' . ' > ' . "'" . $this->date_entered . "'";
+                            $query['where'][] = $module->table_name . '.' . 'date_entered' . ' > ' . $this->db->quoted($this->date_entered);
                         }
                         break;
 
                     case'Modified_Records':
                         if ($module->table_name === 'campaign_log') {
-                            $query['where'][] = $module->table_name . '.' . 'date_modified' . ' > ' . "'" . $this->activity_date . "'" . ' AND ' . $module->table_name . '.' . 'activity_date' . ' <> ' . $module->table_name . '.' . 'date_modified';
+                            $query['where'][] = $module->table_name . '.' . 'date_modified' . ' > ' . $this->db->quoted($this->activity_date) . ' AND ' . $module->table_name . '.' . 'activity_date' . ' <> ' . $module->table_name . '.' . 'date_modified';
                         } else {
-                            $query['where'][] = $module->table_name . '.' . 'date_modified' . ' > ' . "'" . $this->date_entered . "'" . ' AND ' . $module->table_name . '.' . 'date_entered' . ' <> ' . $module->table_name . '.' . 'date_modified';
+                            $query['where'][] = $module->table_name . '.' . 'date_modified' . ' > ' . $this->db->quoted($this->date_entered) . ' AND ' . $module->table_name . '.' . 'date_entered' . ' <> ' . $module->table_name . '.' . 'date_modified';
                         }
                         break;
 
@@ -415,7 +416,15 @@ class AOW_WorkFlow extends Basic
         if ($this->isSQLOperator($condition->operator)) {
             $where_set = false;
 
-            $data = $condition_module->field_defs[$condition->field];
+            $data = $condition_module->field_defs[$condition->field] ?? null;
+
+            if ($data === null) {
+                // ref #192528 SQLi fix: unknown field name must not reach raw SQL - fail closed
+                LoggerManager::getLogger()->warn(
+                    'AOW condition references undefined field: ' . $condition->field
+                );
+                return array();
+            }
 
             if ($data['type'] == 'relate' && isset($data['id_name'])) {
                 $condition->field = $data['id_name'];
@@ -496,7 +505,9 @@ class AOW_WorkFlow extends Basic
                     if (isset($module->field_defs[$condition->value])) {
                         $data = $module->field_defs[$condition->value];
                     } else {
+                        // ref #192528 SQLi fix: unknown field name must not reach raw SQL - fail closed
                         LoggerManager::getLogger()->warn('Undefined field def for condition value in module: ' . get_class($module) . '::field_defs[' . $condition->value . ']');
+                        return array();
                     }
 
                     if ($data['type'] == 'relate' && isset($data['id_name'])) {
@@ -553,7 +564,9 @@ class AOW_WorkFlow extends Basic
                             if (isset($module->field_defs[$params[0]])) {
                                 $data = $module->field_defs[$params[0]];
                             } else {
+                                // ref #192528 SQLi fix: unknown field name must not reach raw SQL - fail closed
                                 LoggerManager::getLogger()->warn('Filed def data is missing: ' . get_class($module) . '::$field_defs[' . $params[0] . ']');
+                                return array();
                             }
 
                         if ((isset($data['source']) && $data['source'] == 'custom_fields')) {
@@ -632,14 +645,16 @@ class AOW_WorkFlow extends Basic
                                 if ($value != '(') {
                                     $value .= $sep;
                                 }
-                                $value .= $field." $multi_operator '%^".$multi_value."^%'";
+                                // ref #192528 SQLi fix: escape value embedded in the %^..^% literal
+                                $value .= $field." $multi_operator '%^".$this->db->quote($multi_value)."^%'";
                             }
                         } else {
                             foreach ($multi_values as $multi_value) {
                                 if ($value != '(') {
                                     $value .= $sep;
                                 }
-                                $value .= $field.' '.$this->getSQLOperator($condition->operator)." '".$multi_value."'";
+                                // ref #192528 SQLi fix: quote the user-supplied condition value
+                                $value .= $field.' '.$this->getSQLOperator($condition->operator).' '.$this->db->quoted($multi_value);
                             }
                         }
                         $value .= ')';
@@ -652,16 +667,18 @@ class AOW_WorkFlow extends Basic
                     if (isset($data['module']) && $data['module'] !== '') {
                         $sgModule = $data['module'];
                     }
-                    $sql = 'EXISTS (SELECT 1 FROM securitygroups_records WHERE record_id = ' . $field . " AND module = '" . $sgModule . "' AND securitygroup_id = '" . $condition->value . "' AND deleted=0)";
+                    // ref #192528 SQLi fix: quote the user-supplied condition value
+                    $sql = 'EXISTS (SELECT 1 FROM securitygroups_records WHERE record_id = ' . $field . " AND module = '" . $sgModule . "' AND securitygroup_id = " . $this->db->quoted($condition->value) . ' AND deleted=0)';
                     if ($sgModule === 'Users') {
-                        $sql = 'EXISTS (SELECT 1 FROM securitygroups_users WHERE user_id = ' . $field . " AND securitygroup_id = '" . $condition->value . "' AND deleted=0)";
+                        $sql = 'EXISTS (SELECT 1 FROM securitygroups_users WHERE user_id = ' . $field . " AND securitygroup_id = " . $this->db->quoted($condition->value) . ' AND deleted=0)';
                     }
                     $query['where'][] = $sql;
                     $where_set = true;
                     break;
                 case 'Value':
                 default:
-                    $value = "'".$condition->value."'";
+                    // ref #192528 SQLi fix: quote the user-supplied condition value
+                    $value = $this->db->quoted($condition->value);
                     break;
             }
 
@@ -748,6 +765,12 @@ class AOW_WorkFlow extends Basic
 
             if (isset($path[0]) && $path[0] != $bean->module_dir) {
                 $query_array = $this->build_query_where($condition, $condition_bean, $query_array);
+                if (empty($query_array)) {
+                    // ref #192528 SQLi fix: build_query_where() fails closed (returns []) for
+                    // invalid/unvalidated conditions - propagate as "no match" instead of silently
+                    // discarding previously accumulated relational constraints (fail-open regression)
+                    return false;
+                }
                 continue;
             }
 
@@ -984,9 +1007,9 @@ class AOW_WorkFlow extends Basic
 
     public function check_in_group($bean_id, $module, $group)
     {
-        $sql = "SELECT id FROM securitygroups_records WHERE record_id = '".$bean_id."' AND module = '".$module."' AND securitygroup_id = '".$group."' AND deleted=0";
+        $sql = "SELECT id FROM securitygroups_records WHERE record_id = ".$this->db->quoted($bean_id)." AND module = ".$this->db->quoted($module)." AND securitygroup_id = ".$this->db->quoted($group)." AND deleted=0";
         if ($module == 'Users') {
-            $sql = "SELECT id FROM securitygroups_users WHERE user_id = '".$bean_id."' AND securitygroup_id = '".$group."' AND deleted=0";
+            $sql = "SELECT id FROM securitygroups_users WHERE user_id = ".$this->db->quoted($bean_id)." AND securitygroup_id = ".$this->db->quoted($group)." AND deleted=0";
         }
         $id = $this->db->getOne($sql);
         if ($id != '') {

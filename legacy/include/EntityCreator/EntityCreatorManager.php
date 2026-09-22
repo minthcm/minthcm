@@ -2,6 +2,7 @@
 
 require_once 'include/EntityCreator/EntityCreator.php';
 require_once 'include/EntityCreator/CustomEntityCreator.php';
+require_once 'include/SugarObjects/VardefManager.php';
 
 class EntityCreatorManager
 {
@@ -45,6 +46,12 @@ class EntityCreatorManager
     protected static function loadDictionary(): void
     {
         global $beanList, $dictionary;
+
+        // Vardefs of every module must be loaded before entities are generated, otherwise relationships
+        // declared only in not-yet-loaded modules stay invisible to the generator.
+        foreach ($beanList as $module => $bean) {
+            VardefManager::loadVardef($module, $bean, true);
+        }
 
         self::$dictionary = $dictionary;
 

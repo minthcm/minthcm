@@ -1,0 +1,1553 @@
+/**
+ * MintHCM Dark Mode — Legacy Override CSS
+ *
+ * Applies dark mode styles to the legacy (SuiteP/Bootstrap) layer when the
+ * data-mint-theme="dark" attribute is present on <html>.
+ *
+ * All color values are read from --mint-* CSS custom properties defined in
+ * mint-theme-tokens.css (one source of truth).
+ *
+ * Rule order mirrors the Bootstrap component hierarchy so specificity is
+ * predictable. Add new sections below existing ones when extending.
+ */
+
+/* ─── Page & body ───────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] body {
+    background-color: var(--mint-bg-page);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] #bootstrap-container,
+html[data-mint-theme="dark"] #content,
+html[data-mint-theme="dark"] #pagecontent,
+html[data-mint-theme="dark"] .container-fluid {
+    background-color: var(--mint-bg-content);
+    color: var(--mint-text);
+}
+
+/* ─── Typography ────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] h1,
+html[data-mint-theme="dark"] h2,
+html[data-mint-theme="dark"] h3,
+html[data-mint-theme="dark"] h4,
+html[data-mint-theme="dark"] h5,
+html[data-mint-theme="dark"] h6 {
+    color: var(--mint-text-heading);
+}
+
+html[data-mint-theme="dark"] a {
+    color: var(--mint-secondary);
+}
+
+html[data-mint-theme="dark"] a:hover {
+    color: var(--mint-primary);
+}
+
+/* ─── Navbar ────────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .navbar-inverse {
+    background-color: var(--mint-bg-navbar);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .navbar-inverse .navbar-nav > li > a,
+html[data-mint-theme="dark"] .navbar-inverse .navbar-brand {
+    color: var(--mint-text-on-primary);
+}
+
+html[data-mint-theme="dark"] .navbar-inverse .navbar-nav > li > a:hover,
+html[data-mint-theme="dark"] .navbar-inverse .navbar-nav > .active > a,
+html[data-mint-theme="dark"] .navbar-inverse .navbar-nav > .active > a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--mint-text-on-primary);
+}
+
+/* ─── Panels & cards ────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .panel,
+html[data-mint-theme="dark"] .dashlet-container,
+html[data-mint-theme="dark"] .well,
+html[data-mint-theme="dark"] .subpanel-container {
+    background-color: var(--mint-bg-panel);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .panel-heading,
+html[data-mint-theme="dark"] .panel-default > .panel-heading,
+html[data-mint-theme="dark"] .dashlet-title,
+html[data-mint-theme="dark"] .subpanel-title,
+html[data-mint-theme="dark"] .list-view-header {
+    background-color: var(--mint-bg-panel-header);
+    border-color: var(--mint-border);
+    color: var(--mint-text-heading);
+}
+
+html[data-mint-theme="dark"] .panel-body {
+    background-color: var(--mint-bg-panel);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .MintHCMPopup-container {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-text);
+}
+
+/* ─── Tables / list views ───────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] table,
+html[data-mint-theme="dark"] .table {
+    color: var(--mint-text);
+    background-color: var(--mint-bg-surface);
+}
+
+html[data-mint-theme="dark"] .table > thead > tr > th,
+html[data-mint-theme="dark"] .table > tfoot > tr > th,
+html[data-mint-theme="dark"] thead th {
+    background-color: var(--mint-bg-panel-header);
+    color: var(--mint-text-heading);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .table > tbody > tr > td,
+html[data-mint-theme="dark"] .table > tbody > tr > th,
+html[data-mint-theme="dark"] tbody td {
+    background-color: var(--mint-bg-table-row);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > td,
+html[data-mint-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--mint-bg-table-row-alt);
+}
+
+html[data-mint-theme="dark"] .table-hover > tbody > tr:hover > td,
+html[data-mint-theme="dark"] .table-hover > tbody > tr:hover {
+    background-color: var(--mint-bg-table-row-hover);
+}
+
+/* ─── Forms & inputs ────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] input[type="text"],
+html[data-mint-theme="dark"] input[type="password"],
+html[data-mint-theme="dark"] input[type="number"],
+html[data-mint-theme="dark"] input[type="search"],
+html[data-mint-theme="dark"] input[type="tel"],
+html[data-mint-theme="dark"] input[type="url"],
+html[data-mint-theme="dark"] input[type="date"],
+html[data-mint-theme="dark"] input:not([type]),
+html[data-mint-theme="dark"] textarea,
+html[data-mint-theme="dark"] select,
+html[data-mint-theme="dark"] .form-control {
+    background-color: var(--mint-bg-input);
+    color: var(--mint-text-input);
+    border-color: var(--mint-border-input);
+}
+
+html[data-mint-theme="dark"] input[type="email"] {
+    background-color: var(--mint-bg-input) !important;
+    color: var(--mint-text-input) !important;
+    border-color: var(--mint-border-input) !important;
+}
+
+html[data-mint-theme="dark"] input[type="text"]:focus,
+html[data-mint-theme="dark"] input:not([type]):focus,
+html[data-mint-theme="dark"] textarea:focus,
+html[data-mint-theme="dark"] select:focus,
+html[data-mint-theme="dark"] .form-control:focus {
+    background-color: var(--mint-bg-input);
+    color: var(--mint-text-input);
+    border-color: var(--mint-primary);
+    box-shadow: 0 0 0 2px rgba(0, 153, 122, 0.25);
+}
+
+html[data-mint-theme="dark"] input::placeholder,
+html[data-mint-theme="dark"] input:not([type])::placeholder,
+html[data-mint-theme="dark"] textarea::placeholder {
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] .input-group-addon {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border-input);
+    color: var(--mint-text-muted);
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .btn-default {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .btn-default:hover,
+html[data-mint-theme="dark"] .btn-default:focus {
+    background-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] input[type=submit].button.primary, 
+html[data-mint-theme="dark"] input[type=button].button.primary, 
+html[data-mint-theme="dark"] input[type=reset].button.primary, 
+html[data-mint-theme="dark"] input[type=button]#CloseButton {
+    background-color: var(--mint-secondary-dark);
+    border-color: var(--mint-secondary-dark);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] input[type=submit].button.primary:hover, 
+html[data-mint-theme="dark"] input[type=button].button.primary:hover, 
+html[data-mint-theme="dark"] input[type=reset].button.primary:hover, 
+html[data-mint-theme="dark"] input[type=button]#CloseButton:hover {
+    background-color: var(--mint-secondary);
+}
+
+html[data-mint-theme="dark"] input[type=button], 
+html[data-mint-theme="dark"] input.button[type=button], 
+html[data-mint-theme="dark"] input.button[type=submit] {
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-secondary);
+    color: var(--mint-secondary);
+}
+
+html[data-mint-theme="dark"] input.button[type=submit]:hover {
+    background-color: var(--mint-secondary-dark);
+    border-color: var(--mint-secondary-dark);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] input[type=button]:hover, 
+html[data-mint-theme="dark"] input.button[type=button]:hover, 
+html[data-mint-theme="dark"] .buttons .button:hover {
+    background-color: var(--mint-secondary-dark);
+    border-color: var(--mint-secondary-dark);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] input[type=button][selected],
+html[data-mint-theme="dark"] .buttons .button[selected],
+html[data-mint-theme="dark"] input[type=button].btn-info {
+    background-color: var(--mint-primary);
+    border-color: var(--mint-primary);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] input[type=button][selected]:hover, 
+html[data-mint-theme="dark"] input.button[type=button][selected]:hover, 
+html[data-mint-theme="dark"] .buttons .button[selected]:hover,
+html[data-mint-theme="dark"] input[type=button].btn-info:hover {
+    background-color: var(--mint-secondary-dark);
+    color: var(--mint-text);
+    border-color: var(--mint-secondary-dark);
+}
+
+html[data-mint-theme="dark"] input[type=button].btn-info:active {
+    background-color: var(--mint-primary);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] ul.clickMenu li.sugar_action_button:hover {
+    background-color: var(--mint-secondary-dark);
+}
+
+/* ─── Dropdown menus ────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .dropdown-menu {
+    background-color: var(--mint-bg-dropdown);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .dropdown-menu > li > a {
+    color: var(--mint-text-dropdown);
+}
+
+html[data-mint-theme="dark"] .dropdown-menu > li > a:hover,
+html[data-mint-theme="dark"] .dropdown-menu > .active > a,
+html[data-mint-theme="dark"] .dropdown-menu > .active > a:hover {
+    background-color: var(--mint-bg-dropdown-hover);
+    color: var(--mint-text-dropdown);
+}
+
+html[data-mint-theme="dark"] .dropdown-menu > li.divider,
+html[data-mint-theme="dark"] .dropdown-menu .divider {
+    background-color: var(--mint-border);
+}
+
+/* ─── Modals ────────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .modal-content {
+    background-color: var(--mint-bg-modal);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .modal-header,
+html[data-mint-theme="dark"] .modal-footer {
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .modal-header .close,
+html[data-mint-theme="dark"] .close {
+    color: var(--mint-text);
+    opacity: 0.7;
+    text-shadow: none;
+}
+
+/* ─── Detail / edit view ────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .edit.view,
+html[data-mint-theme="dark"] .detail.view {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .edit.view th,
+html[data-mint-theme="dark"] .detail.view th {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] .detail.view td,
+html[data-mint-theme="dark"] .edit.view td {
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .view {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .other.view td {
+    background-color: var(--mint-bg-surface);
+}
+
+/* ─── Sidebar / left panel ──────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] #sidebar,
+html[data-mint-theme="dark"] .sidebar,
+html[data-mint-theme="dark"] .side-menu {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+}
+
+/* ─── Search / filter bar ───────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .search-form,
+html[data-mint-theme="dark"] .basic-search,
+html[data-mint-theme="dark"] .advanced-search {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+}
+
+/* ─── Tabs ──────────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .content .nav-tabs {
+    background-color: var(--mint-bg-surface);
+}
+html[data-mint-theme="dark"] .content .nav-tabs > li > a {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] .content .nav-tabs > li.active > a,
+html[data-mint-theme="dark"] .content .nav-tabs > li.active > a:hover {
+    background-color: var(--mint-bg-surface);
+    border-bottom-color: var(--mint-bg-surface);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .tab-content {
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-border);
+}
+
+/* ─── Alerts ────────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .alert-info {
+    background-color: var(--mint-alert-info-bg);
+    border-color: var(--mint-alert-info-border);
+    color: var(--mint-alert-info-text);
+}
+
+html[data-mint-theme="dark"] .alert-success {
+    background-color: var(--mint-alert-success-bg);
+    border-color: var(--mint-alert-success-border);
+    color: var(--mint-alert-success-text);
+}
+
+html[data-mint-theme="dark"] .alert-warning {
+    background-color: var(--mint-alert-warning-bg);
+    border-color: var(--mint-alert-warning-border);
+    color: var(--mint-alert-warning-text);
+}
+
+html[data-mint-theme="dark"] .alert-danger {
+    background-color: var(--mint-alert-danger-bg);
+    border-color: var(--mint-alert-danger-border);
+    color: var(--mint-alert-danger-text);
+}
+
+/* ─── Legacy session messages (SugarApplication error/success banners) ──── */
+
+html[data-mint-theme="dark"] div.content p.error {
+    /* The "card" rule in Mint/common-for-dashlets.scss hardcodes a white
+       background + a light-mode "material" box-shadow for these banners
+       (e.g. the SMTP-not-configured notice). The shadow is invisible on a
+       dark page, so what's left is just a white card floating on it.
+       Swap in the same alert-danger tokens already used for .alert-danger
+       above, and drop the shadow - the tinted surface + border now do the
+       job of making it stand out, the way the shadow did in light mode. */
+    background-color: var(--mint-alert-danger-bg);
+    border: 1px solid var(--mint-alert-danger-border);
+    color: var(--mint-alert-danger-text);
+    box-shadow: none;
+}
+
+html[data-mint-theme="dark"] div.content p.success {
+    /* Light mode renders .success as plain colored text with no card/shadow
+       (unlike .error above) - keep that same, just re-tint the text. */
+    color: var(--mint-alert-success-text);
+}
+
+/* ─── Footer ────────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] footer,
+html[data-mint-theme="dark"] footer.collapsedSidebar,
+html[data-mint-theme="dark"] footer.expandedSidebar {
+    background-color: var(--mint-bg-footer);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .serverstats {
+    color: var(--mint-primary);
+}
+
+html[data-mint-theme="dark"] #copyright_data a {
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] #copyrightbuttons span,
+html[data-mint-theme="dark"] .footer_right > span {
+    color: var(--mint-text) !important;
+}
+
+/* ─── List view (SuiteP specific) ───────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .list-view-header,
+html[data-mint-theme="dark"] .listViewTd1,
+html[data-mint-theme="dark"] .listViewTd2 {
+    background-color: var(--mint-bg-table-row);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .oddListRowS1,
+html[data-mint-theme="dark"] .evenListRowS1 {
+    background-color: var(--mint-bg-table-row);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .oddListRowS1:hover td,
+html[data-mint-theme="dark"] .evenListRowS1:hover td {
+    background-color: var(--mint-bg-table-row-hover);
+}
+
+/* ─── Pagination ────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .pagination > li > a,
+html[data-mint-theme="dark"] .pagination > li > span {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .pagination > li > a:hover {
+    background-color: var(--mint-bg-dropdown-hover);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] .pagination > .active > a,
+html[data-mint-theme="dark"] .pagination > .active > span {
+    background-color: var(--mint-primary);
+    border-color: var(--mint-primary);
+}
+
+/* ─── Subpanels ─────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .subpanel-layout,
+html[data-mint-theme="dark"] .subpanel-body {
+    background-color: var(--mint-bg-subpanel);
+    border-color: var(--mint-border);
+    color: var(--mint-text);
+}
+
+/* ─── Misc utility ──────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] hr {
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] code,
+html[data-mint-theme="dark"] pre {
+    background-color: var(--mint-bg-surface-alt);
+    color: var(--mint-primary);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--mint-bg-surface-alt);
+}
+
+html[data-mint-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] ::-webkit-scrollbar-corner {
+    background: var(--mint-bg-surface);
+}
+
+/* ─── Dashlets ──────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .dashletPanel,
+html[data-mint-theme="dark"] .dashletcontainer {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .dashletPanel .hd,
+html[data-mint-theme="dark"] .dashletcontainer .hd,
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .hd {
+    background-color: var(--mint-bg-navbar) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text-on-primary) !important;
+}
+
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .pagination td button {
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .pagination td button span {
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] .dashletPanel .hd a,
+html[data-mint-theme="dark"] .dashletPanel .hd h3,
+html[data-mint-theme="dark"] .dashletcontainer .hd a,
+html[data-mint-theme="dark"] .dashletcontainer .hd h3 {
+    color: var(--mint-text-on-primary) !important;
+}
+
+html[data-mint-theme="dark"] .yui-module .hd,
+html[data-mint-theme="dark"] .yui-panel .hd {
+    background: var(--mint-bg-navbar) !important;
+    color: var(--mint-text-on-primary) !important;
+}
+
+html[data-mint-theme="dark"] .dashletPanel .bd,
+html[data-mint-theme="dark"] .dashletcontainer .bd {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .dashletPanel .list tr th,
+html[data-mint-theme="dark"] .dashletPanel .list tr td {
+    background-color: var(--mint-bg-table-row) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] thead a {
+    background-color: transparent !important;
+}
+
+html[data-mint-theme="dark"] .dashletPanel .list tbody tr:nth-child(odd) td {
+    background-color: var(--mint-bg-table-row-alt) !important;
+}
+
+html[data-mint-theme="dark"] .dashletPanel .h3Row,
+html[data-mint-theme="dark"] .dashletPanel .h3Row h3,
+html[data-mint-theme="dark"] .dashletPanel .h3Row h3 span {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-heading) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .pagination td {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .pagination td button {
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] #pageContainer .dashletcontainer .pagination td button span {
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] #dashletCategories,
+html[data-mint-theme="dark"] #dashletCategories > li a {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] #dashletCategories > li a:hover,
+html[data-mint-theme="dark"] #dashletCategories > li.active a {
+    background-color: var(--mint-primary) !important;
+    color: var(--mint-text-on-primary) !important;
+}
+
+/* ─── Calendar ──────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .monthHeader {
+    background: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .monthHeader a svg * {
+    fill: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .monthHeader h3 {
+    color: var(--mint-text-heading) !important;
+}
+
+html[data-mint-theme="dark"] .monthCalBody,
+html[data-mint-theme="dark"] .yearCalBodyMonth {
+    background-color: var(--mint-bg-panel) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .monthCalBody td {
+    background-color: var(--mint-bg-table-row) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] div.monthFooter {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text-muted) !important;
+}
+
+html[data-mint-theme="dark"] .fc-unthemed .fc-content,
+html[data-mint-theme="dark"] .fc-unthemed .fc-divider,
+html[data-mint-theme="dark"] .fc-unthemed .fc-list-heading td,
+html[data-mint-theme="dark"] .fc-unthemed .fc-list-view,
+html[data-mint-theme="dark"] .fc-unthemed .fc-popover,
+html[data-mint-theme="dark"] .fc-unthemed .fc-row,
+html[data-mint-theme="dark"] .fc-unthemed tbody,
+html[data-mint-theme="dark"] .fc-unthemed td,
+html[data-mint-theme="dark"] .fc-unthemed th,
+html[data-mint-theme="dark"] .fc-unthemed thead {
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .fc-unthemed tbody {
+    background-color: var(--mint-bg-surface);
+}
+
+html[data-mint-theme="dark"] td.fc-widget-header,
+html[data-mint-theme="dark"] td.fc-widget-header table > thead > tr > th {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-heading) !important;
+}
+
+html[data-mint-theme="dark"] .fc table,
+html[data-mint-theme="dark"] .fc tbody,
+html[data-mint-theme="dark"] .fc-unthemed table,
+html[data-mint-theme="dark"] .fc-unthemed tbody {
+    background-color: transparent !important;
+}
+
+html[data-mint-theme="dark"] .fc-view-container,
+html[data-mint-theme="dark"] .fc-view {
+    background-color: var(--mint-bg-surface);
+}
+
+html[data-mint-theme="dark"] .fc-bg table > tbody > tr .fc-today,
+html[data-mint-theme="dark"] .fc-bg td.fc-today {
+    background-color: var(--mint-today-highlight) !important;
+}
+
+html[data-mint-theme="dark"] .fc-content-skeleton,
+html[data-mint-theme="dark"] .fc-content-skeleton table,
+html[data-mint-theme="dark"] .fc-content-skeleton tbody,
+html[data-mint-theme="dark"] .fc-content-skeleton tr,
+html[data-mint-theme="dark"] .fc-content-skeleton td,
+html[data-mint-theme="dark"] .fc-content-skeleton .fc-today {
+    background-color: transparent !important;
+}
+
+html[data-mint-theme="dark"] td.fc-day-top.fc-other-month {
+    background-color: var(--mint-bg-surface-alt) !important;
+}
+
+/* ─── Dropdown toggles ──────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .dropdown-toggle,
+html[data-mint-theme="dark"] .btn-group > .btn.dropdown-toggle {
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .btn-primary.dropdown-toggle,
+html[data-mint-theme="dark"] .navbar .dropdown-toggle {
+    background-color: var(--mint-bg-navbar) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text-on-primary) !important;
+}
+
+/* ─── Badges & status labels ────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .label,
+html[data-mint-theme="dark"] .badge {
+    background-color: transparent !important;
+    color: var(--mint-badge-text) !important;
+}
+
+html[data-mint-theme="dark"] .label-success { background-color: var(--mint-alert-success-bg) !important; color: var(--mint-alert-success-text) !important; }
+html[data-mint-theme="dark"] .label-info    { background-color: var(--mint-alert-info-bg) !important;    color: var(--mint-alert-info-text) !important; }
+html[data-mint-theme="dark"] .label-warning { background-color: var(--mint-alert-warning-bg) !important; color: var(--mint-alert-warning-text) !important; }
+html[data-mint-theme="dark"] .label-danger  { background-color: var(--mint-alert-danger-bg) !important;  color: var(--mint-alert-danger-text) !important; }
+
+/* ─── Pagination numbers & task states ──────────────────────────────────── */
+
+html[data-mint-theme="dark"] .pageNumbers,
+html[data-mint-theme="dark"] .pagebtnSub,
+html[data-mint-theme="dark"] .pageNumber,
+html[data-mint-theme="dark"] .dashletPanel .pageNumbers {
+    color: var(--mint-text) !important;
+    background-color: transparent !important;
+}
+
+html[data-mint-theme="dark"] .overdueTask,
+html[data-mint-theme="dark"] .dashletPanel .overdueTask {
+    color: var(--mint-text-muted) !important;
+}
+
+/* ─── Dashlet — header center column ───────────────────────── */
+
+html[data-mint-theme="dark"] .dashletcontainer .hd .hd-center,
+html[data-mint-theme="dark"] .yui-module .hd .hd-center,
+html[data-mint-theme="dark"] .yui-panel .hd .hd-center {
+    background-color: var(--mint-bg-panel-header) !important;
+}
+
+/* ─── Work Schedule Manager ─────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .TWSListFooter .TimePanel .TimePanelMiddle,
+html[data-mint-theme="dark"] .TimePanelMiddle,
+html[data-mint-theme="dark"] .TimePanelMiddle td,
+html[data-mint-theme="dark"] .TimePanelMiddle th {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .TimePanel .time-cell.orangeColor {
+    /* common-for-dashlets.scss hardcodes #C27163 (+ a light-mode box-shadow)
+       for logged-time blocks. --mint-ws-orange-bg is darkened by blending it
+       toward the --mint-bg-surface-alt (#2a2a2a) it sits on above, so it
+       reads as a muted accent on the dark bar instead of a too-bright,
+       unrelated tone. The shadow (tuned for a light background) is dropped -
+       it's invisible on dark and served no purpose there. */
+    background-color: var(--mint-ws-orange-bg);
+    box-shadow: none;
+}
+
+html[data-mint-theme="dark"] .TimePanel .time-cell.orangeColor:hover {
+    background-color: var(--mint-ws-orange-bg-hover);
+}
+
+html[data-mint-theme="dark"] .toolbar_container__action_buttons_container img {
+    /* twsdashlet_*.png are near-black line icons - brightness-based
+       var(--mint-icon-filter) can't lighten black pixels (0 * n = 0), so they
+       stayed invisible on the dark panel. Invert them instead, same as the
+       other action icons below (.acceptMeeting a img). */
+    filter: saturate(0) invert(1);
+}
+
+html[data-mint-theme="dark"] .toolbar img {
+    filter: var(--mint-icon-filter);
+}
+
+/* ─── Work Schedule Manager — calendar event colors ─────────────────────── */
+
+html[data-mint-theme="dark"] .fc-event.fc-event-workschedule {
+    /* Cal.js sets border/text colors inline (e.g. #007D30, #005189) tuned
+       for a light background. brightness() lightens them (unlike the
+       near-black PNGs above, these are already saturated, non-black
+       colors, so multiplying works) so they stay readable on the dark
+       calendar surface. */
+    filter: brightness(1.7) saturate(1.15);
+}
+
+html[data-mint-theme="dark"] .fc-event.fc-event-workschedule .fc-bg {
+    /* fullcalendar.css overlays every event with a white 25%-opacity layer,
+       meant to lighten the tint on a light theme. On dark it washes the
+       event out and fights with the now-brighter text above. Darken it
+       instead so the background stays muted and the text keeps contrast. */
+    background: #000;
+    opacity: .4;
+}
+
+/* ─── Absences in Office — calendar event colors (dark mode only) ───────── */
+
+html[data-mint-theme="dark"] #calendar .fc-event {
+    /* Fallback for absence types with no WorkSchedule-color equivalent below
+       (e.g. child_care). LeaveOfAbsence.php's pastel colors (holiday #ffff99,
+       sick #f08475, ...) are tuned for a white calendar; on the dark surface
+       they read as blown-out/too bright, so darken + boost saturation. */
+    filter: brightness(.6) saturate(1.6);
+}
+
+/* Types with a direct equivalent in the Calendar module's WorkSchedule
+   palette (Cal.js) reuse those exact colors instead, via the className
+   LeaveOfAbsence.php now attaches per type - so e.g. "delegacja" reads as
+   the same red here and in the Calendar. #calendar gives these higher
+   specificity than the fallback filter above regardless of source order. */
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-blue {
+    background-color: color-mix(in srgb, var(--mint-ws-event-home) 10%, transparent) !important;
+    border-color: var(--mint-ws-event-home) !important;
+    color: var(--mint-ws-event-home) !important;
+    filter: brightness(1.7) saturate(1.15);
+}
+
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-yellow {
+    background-color: color-mix(in srgb, var(--mint-status-warn-bg) 10%, transparent) !important;
+    border-color: var(--mint-status-warn-bg) !important;
+    color: var(--mint-status-warn-bg) !important;
+    filter: brightness(1.7) saturate(1.15);
+}
+
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-red {
+    background-color: color-mix(in srgb, var(--mint-status-error-bg) 10%, transparent) !important;
+    border-color: var(--mint-status-error-bg) !important;
+    color: var(--mint-status-error-bg) !important;
+    filter: brightness(1.7) saturate(1.15);
+}
+
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-blue .fc-bg,
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-yellow .fc-bg,
+html[data-mint-theme="dark"] #calendar .fc-event.fc-event-ws-red .fc-bg {
+    background: #000;
+    opacity: .4;
+}
+
+/* ─── Calendar — extended fixes ─────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] hr.fc-divider,
+html[data-mint-theme="dark"] .fc-divider.fc-widget-header,
+html[data-mint-theme="dark"] .fc-unthemed hr.fc-divider {
+    background-color: var(--mint-border) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .fc-toolbar .fc-state-default {
+    background-color: var(--mint-bg-input) !important;
+    background-image: none !important;
+    color: var(--mint-text-input) !important;
+}
+
+/* "Go to date" trigger button and calendar settings modal */
+html[data-mint-theme="dark"] #goto_date_trigger,
+html[data-mint-theme="dark"] .modal-calendar-settings,
+html[data-mint-theme="dark"] .modal-calendar-settings .btn {
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text) !important;
+}
+
+/* ─── qTip tooltips ─────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .qtip-default {
+    background-color: var(--mint-bg-panel) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .qtip-default .qtip-titlebar {
+    background-color: var(--mint-qtip-title-bg) !important;
+    color: var(--mint-qtip-title-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .qtip-default .qtip-content {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+}
+
+/* ─── EditView tabs (User Settings) ────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .content #EditView_tabs .tab-content,
+html[data-mint-theme="dark"] #EditView_tabs .tab-content,
+html[data-mint-theme="dark"] #EditView_tabs .yui-content,
+html[data-mint-theme="dark"] #EditView_tabs > div.yui-content {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #EditView_tabs .nav.nav-tabs {
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #EditView_tabs .nav.nav-tabs > li > a {
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text-muted) !important;
+}
+
+html[data-mint-theme="dark"] #EditView_tabs .nav.nav-tabs > li.active > a {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-bottom-color: var(--mint-bg-surface) !important;
+}
+
+html[data-mint-theme="dark"] #EditView div.action_buttons input[type=button].button.primary,
+html[data-mint-theme="dark"] #EditView div.action_buttons input[type=submit].button.primary {
+    background-color: var(--mint-secondary-dark);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] #EditView div.action_buttons input[type=button].button.primary:hover,
+html[data-mint-theme="dark"] #EditView div.action_buttons input[type=submit].button.primary:hover {
+    background-color: var(--mint-secondary);
+}
+
+html[data-mint-theme="dark"] #EditView div.action_buttons .button,
+html[data-mint-theme="dark"] #EditView #CANCEL, 
+html[data-mint-theme="dark"] #CANCEL_HEADER, 
+html[data-mint-theme="dark"] #CANCEL_FOOTER {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-secondary);
+    border-color: var(--mint-secondary-dark);
+}
+
+html[data-mint-theme="dark"] #EditView div.action_buttons .button:hover,
+html[data-mint-theme="dark"] #EditView #CANCEL:hover, 
+html[data-mint-theme="dark"] #CANCEL_HEADER:hover, 
+html[data-mint-theme="dark"] #CANCEL_FOOTER:hover {
+    background-color: var(--mint-secondary-dark);
+        border-color: var(--mint-secondary-dark);
+        color: var(--mint-text);
+        text-decoration: none;
+}
+
+/* ─── Comprehensive legacy module catch-all ─────────────────────────────── */
+
+html[data-mint-theme="dark"] .adminGroupTop,
+html[data-mint-theme="dark"] .admin-panel,
+html[data-mint-theme="dark"] .admin-panel-bg,
+html[data-mint-theme="dark"] #adminGroupTop {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .adminActionTD,
+html[data-mint-theme="dark"] .adminGroupRow td {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #sugarHome table,
+html[data-mint-theme="dark"] #sugarHome td,
+html[data-mint-theme="dark"] #sugarHome th {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .module-title,
+html[data-mint-theme="dark"] .module-title-2 {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text-heading) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .list-view-top,
+html[data-mint-theme="dark"] .searchFormContainer,
+html[data-mint-theme="dark"] #SearchForm,
+html[data-mint-theme="dark"] .search_form_name {
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .listViewBody {
+    background-color: var(--mint-bg-surface);
+    color: var(--mint-text);
+}
+
+html[data-mint-theme="dark"] select {
+      background-image: 
+      linear-gradient(45deg, transparent 50%, white 50%), 
+      linear-gradient(135deg, white 50%, transparent 50%), 
+      linear-gradient(to right, var(--mint-primary), var(--mint-primary));
+}
+
+html[data-mint-theme="dark"] select option {
+    background-color: var(--mint-bg-dropdown);
+    color: var(--mint-text-dropdown);
+}
+
+/* ─── Dropdown menus — extended elements ───────────────────────────────── */
+
+html[data-mint-theme="dark"] .content #tab-actions > .dropdown-menu {
+    background-color: var(--mint-bg-dropdown);
+    border-color: var(--mint-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+html[data-mint-theme="dark"] .content #tab-actions > .dropdown-menu li {
+    color: var(--mint-text-dropdown);
+    background-color: var(--mint-bg-dropdown);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .content #tab-actions > .dropdown-menu li input {
+    color: var(--mint-text-dropdown);
+    background-color: var(--mint-bg-surface);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] ul.dropdown-menu > li.dropdown-header {
+    color: var(--mint-text-muted);
+}
+
+html[data-mint-theme="dark"] ul.dropdown-menu > li.disabled > a,
+html[data-mint-theme="dark"] ul.dropdown-menu > li.disabled > a:hover {
+    color: var(--mint-text-muted);
+    background-color: transparent;
+}
+
+html[data-mint-theme="dark"] ul.dropdown-menu > li > a {
+    color: var(--mint-text-dropdown);
+}
+
+html[data-mint-theme="dark"] ul.dropdown-menu > li > a:hover,
+html[data-mint-theme="dark"] ul.dropdown-menu > li > a:focus {
+    background-color: var(--mint-bg-dropdown-hover);
+    color: var(--mint-text-dropdown);
+}
+
+html[data-mint-theme="dark"] .open > .dropdown-toggle,
+html[data-mint-theme="dark"] .btn-group.open > .dropdown-toggle {
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+}
+
+/* ─── Meeting accept/decline action icons ───────────────────────────────── */
+
+html[data-mint-theme="dark"] .acceptMeeting a img {
+    filter: saturate(0) invert(1);
+}
+
+/* ─── YUI configureDashlet panel ────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .yui-skin-sam.masked #dlg.SuiteP-configureDashlet.yui-module.yui-overlay.yui-panel .bd {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+/* ─── Checkboxes — dark background with white checkmark ─────────────────── */
+
+html[data-mint-theme="dark"] input[type="checkbox"] {
+    background: none;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px !important;
+    min-width: 14px;
+    background-color: #111;
+    border: 1px solid var(--mint-border-input);
+    border-radius: 2px;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    margin: unset !important;
+}
+
+html[data-mint-theme="dark"] input[type="checkbox"]:checked {
+    background-color: #111;
+    border-color: var(--mint-primary);
+}
+
+html[data-mint-theme="dark"] input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+html[data-mint-theme="dark"] input[type="checkbox"]:focus {
+    outline: 2px solid var(--mint-primary);
+    outline-offset: 1px;
+}
+
+/* ─── Detail view — dark background & white text, preserve rich text ────── */
+
+html[data-mint-theme="dark"] .content .detail-view,
+html[data-mint-theme="dark"] .content .detail-view .tab-content {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .detail-view-field {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .detail-view-field .htmlview,
+html[data-mint-theme="dark"] .detail-view-field .htmlview * {
+    color: inherit;
+    background-color: transparent;
+}
+
+/* ─── List / TWSList thead & header cells ───────────────────────────────── */
+
+html[data-mint-theme="dark"] .view thead td,
+html[data-mint-theme="dark"] .view thead th,
+html[data-mint-theme="dark"] .list tr th,
+html[data-mint-theme="dark"] .list tr th a:link,
+html[data-mint-theme="dark"] .TWSList tr th,
+html[data-mint-theme="dark"] .TWSList tr td,
+html[data-mint-theme="dark"] .TWSList tr th a:link,
+html[data-mint-theme="dark"] .TWSList tr th div {
+    color: var(--mint-text) !important;
+    background-color: var(--mint-bg-content) !important;
+    border-color: var(--mint-border) !important;
+}
+
+/* ─── Subpanel table pagination / action buttons ────────────────────────── */
+
+html[data-mint-theme="dark"] table.subpanel-table .pagination .action_buttons .button,
+html[data-mint-theme="dark"] table.subpanel-table .pagination .action_buttons input.button {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+/* ─── MintComments — muted metadata text ────────────────────────────────── */
+
+html[data-mint-theme="dark"] .mint-comments-message-body .mint-comments-message-deleted,
+html[data-mint-theme="dark"] .mint-comments-message-body .mint-comments-message-header .mint-comments-message-header-date {
+    color: var(--mint-text-muted) !important;
+}
+
+/* ─── Profile Settings ──────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .yui-module {
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .yui-module .bd, 
+html[data-mint-theme="dark"] .yui-panel .bd, 
+html[data-mint-theme="dark"] .yui-panel .ft {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-module .hd,
+html[data-mint-theme="dark"] .yui-panel .hd {
+    border-color: transparent !important;
+}
+
+html[data-mint-theme="dark"] .yui-calcontainer {
+    /* suitep-base/yui.scss hardcodes a white background + light border for
+       the date-picker's calendar table container. It sits nested inside
+       the (already dark-mode-covered) .yui-panel .bd, so in dark mode it
+       showed up as a bright white box/outline around the calendar. */
+    background-color: var(--mint-bg-surface-alt) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-navset .yui-content {
+    background: transparent;
+}
+
+html[data-mint-theme="dark"] .yui-navset .yui-content a img {
+    filter: invert(0.8);
+}
+
+html[data-mint-theme="dark"] .yui-navset .yui-nav a, 
+html[data-mint-theme="dark"] .yui-navset .yui-navset-top .yui-nav a {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .yui-navset .yui-nav li a em, 
+html[data-mint-theme="dark"] .yui-navset-top .yui-nav li a em, 
+html[data-mint-theme="dark"] .yui-navset-bottom .yui-nav li a em {
+    background-color: var(--mint-bg-surface-alt);
+    border-color: var(--mint-border);
+    color: var(--mint-primary);
+}
+
+html[data-mint-theme="dark"] .yui-navset .selected a em {
+    color: var(--mint-text) !important;
+    background-color: var(--mint-primary) !important;
+     border-color: var(--mint-primary) !important;
+}
+
+html[data-mint-theme="dark"] #settingsDialog table.view {
+    border-color: var(--mint-border);
+}
+
+/* Loading */
+html[data-mint-theme="dark"] #ajaxStatusDiv {
+    color: var(--mint-text-muted);
+    background-color: var(--mint-bg-surface) !important;
+}
+
+/* ─── YUI Layout ────────────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .yui-layout,
+html[data-mint-theme="dark"] .yui-layout-unit,
+html[data-mint-theme="dark"] .yui-layout-unit-left,
+html[data-mint-theme="dark"] .yui-layout-unit-right,
+html[data-mint-theme="dark"] .yui-layout-unit-top,
+html[data-mint-theme="dark"] .yui-layout-unit-bottom,
+html[data-mint-theme="dark"] .yui-layout-unit-center {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd,
+html[data-mint-theme="dark"] .yui-layout-unit > .yui-layout-hd {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-heading) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-bd,
+html[data-mint-theme="dark"] .yui-layout-unit > .yui-layout-bd {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-ft,
+html[data-mint-theme="dark"] .yui-layout-unit > .yui-layout-ft {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text-muted) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd h2,
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd h3,
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd a {
+    color: var(--mint-text-heading) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd .collapse,
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd .close,
+html[data-mint-theme="dark"] .yui-layout-unit .yui-layout-hd .yui-layout-clip {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-on-primary) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-clip {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text-muted) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-layout-clip .yui-layout-collapsed-icon,
+html[data-mint-theme="dark"] .yui-layout-clip span {
+    color: var(--mint-text) !important;
+    filter: var(--mint-icon-filter);
+}
+
+html[data-mint-theme="dark"] .yui-layout .yui-resize-handle,
+html[data-mint-theme="dark"] .yui-layout .yui-resize-handle-r,
+html[data-mint-theme="dark"] .yui-layout .yui-resize-handle-b {
+    background-color: var(--mint-border) !important;
+}
+
+/* ─── YUI Calendar nav & body ───────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] .yui-cal-nav {
+    background-color: var(--mint-bg-panel) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-cal-nav .yui-cal-nav-label,
+html[data-mint-theme="dark"] .yui-cal-nav label {
+    color: var(--mint-text-muted) !important;
+}
+
+html[data-mint-theme="dark"] .yui-cal-nav input[type="text"],
+html[data-mint-theme="dark"] .yui-cal-nav select {
+    background-color: var(--mint-bg-input) !important;
+    color: var(--mint-text-input) !important;
+    border-color: var(--mint-border-input) !important;
+}
+
+html[data-mint-theme="dark"] .yui-cal-nav .yui-cal-nav-btn button {
+    background-color: var(--mint-bg-surface-alt) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-cal-nav .yui-cal-nav-btn button:hover {
+    background-color: var(--mint-secondary-dark) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .calBody,
+html[data-mint-theme="dark"] .calbody,
+html[data-mint-theme="dark"] .yui-calendar .calBody {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .calweekdaycell,
+html[data-mint-theme="dark"] .calBody .calcell,
+html[data-mint-theme="dark"] .calBody td,
+html[data-mint-theme="dark"] .calbody td {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text-muted) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .calBody td.calcell.calcellhover,
+html[data-mint-theme="dark"] .calBody .calcellselected {
+    background-color: var(--mint-primary) !important;
+    color: var(--mint-text-on-primary) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .caltoday,
+html[data-mint-theme="dark"] .calBody td.caltoday {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-primary) !important;
+}
+
+html[data-mint-theme="dark"] .yui-calendar td.calcell.calcellhover,
+html[data-mint-theme="dark"] .yui-calendar td.calcell.calcellhover a {
+    background-color: var(--mint-bg-table-row-hover) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .calcell.calcellodevent,
+html[data-mint-theme="dark"] .calBody .oom {
+    color: var(--mint-text-muted) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .calheader,
+html[data-mint-theme="dark"] .calBody .calnavleft,
+html[data-mint-theme="dark"] .calBody .calnavright,
+html[data-mint-theme="dark"] .yui-calendar .calheader {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-heading) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .calheader a,
+html[data-mint-theme="dark"] .yui-calendar .calheader a {
+    color: var(--mint-text-heading) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .calroweven td,
+html[data-mint-theme="dark"] .calBody .calrowodd td {
+    background-color: var(--mint-bg-surface) !important;
+}
+
+html[data-mint-theme="dark"] .calBody .caldaysofweek th {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-muted) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-calendar td.calcell a {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] .yui-calendar td.calcell.selected,
+html[data-mint-theme="dark"] .yui-calendar td.calcell.selected a {
+    background-color: var(--mint-primary-light) !important;
+    color: var(--mint-primary) !important;
+}
+
+html[data-mint-theme="dark"] .yui-calendar td.calcell.today,
+html[data-mint-theme="dark"] .yui-calendar td.calcell.today a {
+    background-color: var(--mint-primary) !important;
+    border-color: var(--mint-primary) !important;
+    color: var(--mint-text) !important;
+}
+
+/* ─── Toolbox & LE Panel ────────────────────────────────────────────────── */
+
+html[data-mint-theme="dark"] #toolbox,
+html[data-mint-theme="dark"] .le_panel {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox .hd,
+html[data-mint-theme="dark"] .le_panel .hd,
+html[data-mint-theme="dark"] #toolbox .panel-heading,
+html[data-mint-theme="dark"] .le_panel .panel-heading {
+    background-color: var(--mint-bg-panel-header) !important;
+    color: var(--mint-text-heading) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox .bd,
+html[data-mint-theme="dark"] .le_panel .bd,
+html[data-mint-theme="dark"] #toolbox .panel-body,
+html[data-mint-theme="dark"] .le_panel .panel-body {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox h2,
+html[data-mint-theme="dark"] #toolbox h3,
+html[data-mint-theme="dark"] .le_panel h2,
+html[data-mint-theme="dark"] .le_panel h3 {
+    color: var(--mint-text-heading) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox a,
+html[data-mint-theme="dark"] .le_panel a {
+    color: var(--mint-secondary) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox a:hover,
+html[data-mint-theme="dark"] .le_panel a:hover {
+    color: var(--mint-primary) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox img,
+html[data-mint-theme="dark"] .le_panel img {
+    filter: invert(0.8);
+}
+
+html[data-mint-theme="dark"] #toolbox input[type="text"],
+html[data-mint-theme="dark"] .le_panel input[type="text"],
+html[data-mint-theme="dark"] #toolbox select,
+html[data-mint-theme="dark"] .le_panel select {
+    background-color: var(--mint-bg-input) !important;
+    color: var(--mint-text-input) !important;
+    border-color: var(--mint-border-input) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox ul,
+html[data-mint-theme="dark"] #toolbox li,
+html[data-mint-theme="dark"] .le_panel ul,
+html[data-mint-theme="dark"] .le_panel li {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox li:hover,
+html[data-mint-theme="dark"] .le_panel li:hover {
+    background-color: var(--mint-bg-table-row-hover) !important;
+}
+
+html[data-mint-theme="dark"] #toolbox .le_field {
+    color: var(--mint-secondary) !important;
+    font-weight: 600;
+}
+
+html[data-mint-theme="dark"] .le_panel .le_row {
+    background-color: var(--mint-bg-surface-alt) !important;
+}
+
+html[data-mint-theme="dark"] .le_panel .le_row .le_field span {
+    color: var(--mint-secondary) !important;
+    font-weight: 600;
+}
+
+/* Configure Tabs module */
+
+html[data-mint-theme="dark"] .add_table {
+    background-color: var(--mint-bg-surface);
+}
+html[data-mint-theme="dark"] .yui-dt-scrollable.yui-dt {
+    background-color: var(--mint-bg-surface) !important;
+}
+
+html[data-mint-theme="dark"] .yui-dt-scrollable .yui-dt-hd {
+    border-color: var(--mint-border);
+}
+
+html[data-mint-theme="dark"] .yui-dt-scrollable .yui-dt-bd {
+    background-color: var(--mint-bg-surface) !important;
+}
+
+html[data-mint-theme="dark"] .yui-dt-scrollable .yui-dt-bd .yui-dt-rec td {
+    color: var(--mint-secondary);
+}
+
+html[data-mint-theme="dark"] .yui-dt tr.yui-dt-even,
+html[data-mint-theme="dark"] .yui-dt tr.yui-dt-odd,
+html[data-mint-theme="dark"] .yui-dt-list tr.yui-dt-even,
+html[data-mint-theme="dark"] .yui-dt-list tr.yui-dt-odd {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+}
+
+html[data-mint-theme="dark"] #ygddfd {
+    background-color: var(--mint-bg-surface) !important;
+    color: var(--mint-text) !important;
+    border-color: var(--mint-border) !important;
+}
+
+html[data-mint-theme="dark"] .yui-dt th .yui-dt-liner {
+    background-color: var(--mint-bg-surface);
+}
+/* ─── Print media (undo dark for @print) ───────────────────────────────── */
+
+@media print {
+    html[data-mint-theme="dark"] body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    html[data-mint-theme="dark"] * {
+        background-color: transparent !important;
+        color: #000000 !important;
+        border-color: #dddddd !important;
+    }
+}
+
+/* ─── Bootstrap print @media fix (table cells forced white) ────────────── */
+
+@media print {
+    html[data-mint-theme="dark"] .table td,
+    html[data-mint-theme="dark"] .table th {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+}

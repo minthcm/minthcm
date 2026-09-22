@@ -85,18 +85,18 @@ if (isset($_POST['Users0emailAddress0'])) {
             $usr_id=$usr->retrieve_user_id($username);
             $usr->retrieve($usr_id);
             if (!$usr->isPrimaryEmail($useremail)) {
-                echo $mod_strings['LBL_PROVIDE_USERNAME_AND_EMAIL'];
+                echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
                 return;
             }
 
     	    if ($usr->portal_only || $usr->is_group){
-	            echo $mod_strings['LBL_PROVIDE_USERNAME_AND_EMAIL'];
+	            echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
 	            return;
     	    }
     	}
     	else
     	{
-    		echo  $mod_strings['LBL_PROVIDE_USERNAME_AND_EMAIL'];
+    		echo  $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
     		return;
     	}
     }
@@ -129,7 +129,7 @@ if (isset($_POST['Users0emailAddress0'])) {
 ///////  Check email address
 
     if (!preg_match($regexmail, (string) $usr->emailAddress->getPrimaryAddress($usr))) {
-        echo $mod_strings['ERR_EMAIL_INCORRECT'];
+        echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
         return;
     }
 
@@ -182,24 +182,24 @@ if (isset($_POST['Users0emailAddress0'])) {
     $result = $usr->sendEmailForPassword($emailTemp_id, $additionalData);
     if ($result['status'] == false && $result['message'] != '')
     {
-        echo $result['message'];
+        echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
         $new_pwd = '4';
         return;
     }
 
     if ($result['status'] == true)
     {
-        echo '1';
+        echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
     } else {
     	$new_pwd='4';
     	if ($current_user->is_admin){
     		$email_errors=$mod_strings['ERR_EMAIL_NOT_SENT_ADMIN'];
     		$email_errors.="\n-".$mod_strings['ERR_RECIPIENT_EMAIL'];
     		$email_errors.="\n-".$mod_strings['ERR_SERVER_STATUS'];
-    		echo $email_errors;
+			echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
     	}
     	else{
-            echo $mod_strings['LBL_EMAIL_NOT_SENT'];
+            echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
         }
     }
     return;

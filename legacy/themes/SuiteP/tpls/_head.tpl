@@ -46,6 +46,35 @@
 <!DOCTYPE html>
 <html {$langHeader} {$dirHeader} >
 <head>
+    <!-- MintHCM Theme Bridge: set data-mint-theme BEFORE CSS loads to prevent FOUC -->
+    {literal}
+    <script>
+    (function () {
+        var STORAGE_KEY = 'mint.theme.preference';
+        var pref = localStorage.getItem(STORAGE_KEY) || 'system';
+        var active;
+        if (pref === 'system') {
+            active = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        } else {
+            active = pref;
+        }
+        document.documentElement.setAttribute('data-mint-theme', active);
+
+        /* Immediately apply background to prevent white flash before CSS loads */
+        if (active === 'dark') {
+            document.documentElement.style.background = '#121212';
+        }
+
+        window.addEventListener('message', function (e) {
+            if (e.data && e.data.type === 'mint-theme' && typeof e.data.theme === 'string') {
+                document.documentElement.setAttribute('data-mint-theme', e.data.theme);
+                document.documentElement.style.background = e.data.theme === 'dark' ? '#121212' : '';
+            }
+        });
+    })();
+    </script>
+    {/literal}
+    <!-- End MintHCM Theme Bridge -->
     <link rel="SHORTCUT ICON" href="{$FAVICON_URL}">
     <meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
     <meta charset="utf-8">
@@ -117,6 +146,8 @@
     {/literal}
     {$SUGAR_CSS}
     <link rel="stylesheet" type="text/css" href="themes/SuiteP/css/colourSelector.php">
+    <link rel="stylesheet" type="text/css" href="themes/SuiteP/css/mint-theme-tokens.css">
+    <link rel="stylesheet" type="text/css" href="themes/SuiteP/css/dark-mode.css">
     <script type="text/javascript" src='{sugar_getjspath file="themes/SuiteP/js/jscolor.js"}'></script>
     <script type="text/javascript" src='{sugar_getjspath file="cache/include/javascript/sugar_field_grp.js"}'></script>
     <script type="text/javascript" src='{sugar_getjspath file="vendor/tinymce/tinymce/tinymce.min.js"}'></script>

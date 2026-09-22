@@ -21,6 +21,20 @@ interface NewsItem {
     reactions: MintReaction[]
     liked: boolean
     is_read: boolean | undefined
+    comments_count?: number
+}
+
+export interface NewsComment {
+    id: string
+    description: string
+    date_entered: string
+    reply_to_id: string | null
+    removed: boolean
+    assigned_user: {
+        id: string
+        full_name: string
+        photo: string | null
+    }
 }
 
 export const useMintWallStore = (key = 'mint') =>
@@ -31,18 +45,40 @@ export const useMintWallStore = (key = 'mint') =>
         const route = useRoute()
 
         const newsList = ref<NewsItem[]>([])
+        const commentsByNewsId = ref<Record<string, NewsComment[]>>({})
+        const commentsLoading = ref<Set<string>>(new Set())
 
         async function loadNews() {
             wallLoading.value = true
             newsList.value = []
-            const apiResponse = await mintApi.get('News/drawer/list')
-            if (apiResponse.data) {
-                for (const newsItem of apiResponse.data) {
-                    newsItem.is_read = isRead(newsItem.id)
-                    newsList.value.push(newsItem)
+            try {
+                const apiResponse = await mintApi.get('News/drawer/list')
+                if (apiResponse?.data) {
+                    for (const newsItem of apiResponse.data) {
+                        newsItem.is_read = isRead(newsItem.id)
+                        newsList.value.push(newsItem)
+                    }
                 }
+            } finally {
+                wallLoading.value = false
             }
-            wallLoading.value = false
+        }
+
+        async function fetchComments(newsId: string) {
+            commentsLoading.value = new Set(commentsLoading.value.add(newsId))
+            try {
+                const response = await mintApi.get(`comments/News/${newsId}`)
+                const all: NewsComment[] = response.data ?? []
+                commentsByNewsId.value = {
+                    ...commentsByNewsId.value,
+                    [newsId]: all
+                        .filter((c) => c.description && c.assigned_user)
+                        .sort((a, b) => a.date_entered.localeCompare(b.date_entered)),
+                }
+            } finally {
+                commentsLoading.value.delete(newsId)
+                commentsLoading.value = new Set(commentsLoading.value)
+            }
         }
 
         function isRead(newsItemId: string) {
@@ -105,16 +141,61 @@ export const useMintWallStore = (key = 'mint') =>
             const result = await mintApi.patch('News/update/readAlerts', { news_id: newsId })
             alertsStore.alerts = result.data?.alerts ?? []
             alertsStore.moreResults = result.data?.moreResults ?? false
+            const newsItem = newsList.value.find((item) => item.id === newsId)
+            if (newsItem) {
+                newsItem.is_read = true
+            }
+        }
+
+        async function addComment(newsId: string, description: string, replyToId?: string) {
+            const tempId = `temp-${Date.now()}`
+            const optimistic: NewsComment = {
+                id: tempId,
+                description,
+                date_entered: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                reply_to_id: replyToId ?? null,
+                removed: false,
+                assigned_user: {
+                    id: auth.user?.id ?? '',
+                    full_name: auth.user?.full_name ?? '',
+                    photo: auth.user?.photo ?? null,
+                },
+            }
+            const existing = commentsByNewsId.value[newsId] ?? []
+            commentsByNewsId.value = {
+                ...commentsByNewsId.value,
+                [newsId]: [...existing, optimistic],
+            }
+
+            try {
+                await mintApi.post(`comments/News/${newsId}`, {
+                    description,
+                    reply_to_id: replyToId ?? null,
+                })
+            } finally {
+                const response = await mintApi.get(`comments/News/${newsId}`)
+                const all: NewsComment[] = response.data ?? []
+                commentsByNewsId.value = {
+                    ...commentsByNewsId.value,
+                    [newsId]: all
+                        .filter((c) => c.description && c.assigned_user)
+                        .sort((a, b) => a.date_entered.localeCompare(b.date_entered)),
+                }
+            }
         }
 
         return {
             wallLoading,
             newsList,
+            commentsByNewsId,
+            commentsLoading,
             loadNews,
+            fetchComments,
             badge,
             reactToNews,
             deleteNewsReaction,
             readNewsAlertsFromLegacy,
             readNewsAlerts,
+            addComment,
         }
     })()

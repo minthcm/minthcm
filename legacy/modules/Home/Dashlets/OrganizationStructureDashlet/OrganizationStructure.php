@@ -46,6 +46,53 @@
 class OrganizationStructure
 {
     public $id;
+
+    /**
+     * Returns a JSON string of flat employee nodes for d3-org-chart.
+     *
+     * Replaces the old nested-tree format used by Treant.js.
+     * CustomOrganizationStructure can still override this method.
+     *
+     * JSON_HEX_TAG  — escapes < and > so </script> never appears in the output.
+     * JSON_PARTIAL_OUTPUT_ON_ERROR — returns valid JSON even when a field
+     *   contains an invalid UTF-8 sequence (replaces bad bytes with null),
+     *   preventing the silent json_encode(false) that causes a JS SyntaxError.
+     */
+    public function getTree(): string
+    {
+        require_once 'modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDataProvider.php';
+        $strings  = $this->getDashletStrings();
+        $provider = new OrganizationStructureDataProvider();
+        $encoded  = json_encode(
+            $provider->getData($strings['LBL_VIRTUAL_ROOT_NAME'] ?? 'Organisation'),
+            JSON_HEX_TAG | JSON_PARTIAL_OUTPUT_ON_ERROR
+        );
+        return $encoded !== false ? $encoded : '[]';
+    }
+
+    /**
+     * Loads and returns the dashlet language array for the current language,
+     * falling back to en_us when the requested language file is absent.
+     */
+    private function getDashletStrings(): array
+    {
+        $language = $GLOBALS['current_language'] ?? 'en_us';
+        $dashletStrings = [];
+        $path = "modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.{$language}.lang.php";
+        if (!file_exists($path)) {
+            $path = 'modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.en_us.lang.php';
+        }
+        require $path;
+        return $dashletStrings['OrganizationStructureDashlet'] ?? [];
+    }
+
+    /**
+     * @deprecated Since migration to d3-org-chart. getTree() no longer calls
+     *             this method — it delegates entirely to
+     *             OrganizationStructureDataProvider::getData().
+     *             Kept for backward compatibility with CustomOrganizationStructure
+     *             subclasses that may still override it.
+     */
     protected function getQuery()
     {
         $siteURL = $GLOBALS['sugar_config']['site_url'];
@@ -91,6 +138,13 @@ class OrganizationStructure
             WHERE u.employee_status IN ('Active', 'during_termination')  AND ou.group_type IN ('department', 'team')
 ";
     }
+    /**
+     * @deprecated Since migration to d3-org-chart. getTree() no longer calls
+     *             this method — it delegates entirely to
+     *             OrganizationStructureDataProvider::getData().
+     *             Kept for backward compatibility with CustomOrganizationStructure
+     *             subclasses that may still override it.
+     */
     protected function getDataBySQL()
     {
         global $db;
@@ -102,11 +156,25 @@ class OrganizationStructure
         };
         return $ous;
     }
+    /**
+     * @deprecated Since migration to d3-org-chart. getTree() no longer calls
+     *             this method — it delegates entirely to
+     *             OrganizationStructureDataProvider::getData().
+     *             Kept for backward compatibility with CustomOrganizationStructure
+     *             subclasses that may still override it.
+     */
     protected function getData()
     {
         return $this->getDataBySQL();
     }
 
+    /**
+     * @deprecated Since migration to d3-org-chart. getTree() no longer calls
+     *             this method — it delegates entirely to
+     *             OrganizationStructureDataProvider::getData().
+     *             Kept for backward compatibility with CustomOrganizationStructure
+     *             subclasses that may still override it.
+     */
     protected function buildTree(array &$elements, $parentId = '', $parent2 = false)
     {
         $branch = array();
@@ -135,46 +203,29 @@ class OrganizationStructure
         return $branch;
     }
 
-    public function getTree()
-    {
-        $organizationalunits = $this->getData();
-        $collapsable = false;
-        $r = array_values(array_unique(array_column($organizationalunits, 'image')));
-        if (count($r) == 0 || count($r) == 1 && empty($r[0])) {
-            $collapsable = true;
-        }
-
-        array_walk($organizationalunits, function (&$element, $key, $collapsable) {
-            $t = json_decode(stripslashes(htmlspecialchars_decode($element["text"])));
-            if ($t) {
-                $element["text"] = $t;
-            }
-//            if ($collapsable) {
-//                unset($element["image"]);
-//            } else {
-//                unset($element["collapsed"]);
-//                $element["collapsable"] = false;
-//            }
-            $element["collapsable"] = true;
-        }, $collapsable);
-        $tree = $this->buildTree($organizationalunits);
-        return json_encode($tree);
-    }
-
     public function displayFullScreen($id)
     {
-        require_once 'modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.php';
-        $OSD = new OrganizationStructureDashlet($id, []);
         $ss = new Sugar_Smarty();
-        $ss->assign('id', $this->id);
+        $ss->assign('id', $id);
         $ss->assign('height', '1500');
-        $ss->assign('use_image', true);
-        $ss->assign('rootElement', $OSD->getRootElement());
         $ss->assign('fullscreen', true);
+        $ss->assign('DASHLET_STRINGS', $this->getDashletStrings());
 
         $jsonTree = $this->getTree();
         $ss->assign('jsonTree', $jsonTree);
-        $str = $ss->fetch('modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.tpl');
-        return $str;
+
+        $themeObject = SugarThemeRegistry::current();
+        $logoUrl = explode('?', $themeObject->getImageURL('company_logo.png'))[0];
+        $ss->assign('logoUrl', $logoUrl);
+        $ss->assign('systemName', $GLOBALS['system_config']->settings['system_name'] ?? '');
+
+        $body = $ss->fetch('modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.tpl');
+
+        $siteUrl = rtrim($GLOBALS['sugar_config']['site_url'] ?? '', '/');
+        $faviconUrl = htmlspecialchars($siteUrl . '/favicon.ico', ENT_QUOTES, 'UTF-8');
+
+        return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+            . '<link rel="icon" href="' . $faviconUrl . '">'
+            . '</head><body>' . $body . '</body></html>';
     }
 }

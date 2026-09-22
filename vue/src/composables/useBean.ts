@@ -224,6 +224,9 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
                 const dateValueParts = (value as string).split(' ');
                 const dateUserFormat = DateTime.fromFormat(dateValueParts[0], preferences.user?.date_format || 'yyyy-MM-dd');
                 let timeUserFormat = '00:00';
+                if (dateValueParts[2]) {
+                    dateValueParts[1] += ' ' + dateValueParts[2]
+                }
                 if(dateValueParts[1]){
                     timeUserFormat = DateTime.fromFormat(dateValueParts[1], preferences.user?.time_format).setZone('UTC').toFormat('HH:mm');
                 }
@@ -351,7 +354,10 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         return links.value.get(name)
     }
 
-    async function save(options?: { editCycles?: boolean; onCyclicComplete?: () => void }) {
+    const duplicateDetected = ref<boolean>(false)
+    const duplicateCount = ref<number>(0)
+    const duplicatedRecords = ref<any[]>([])
+    async function save(force = false, options?: { editCycles?: boolean; onCyclicComplete?: () => void }) {
         isDirty.value = true
         if (!isValid.value) {
             return {
@@ -376,13 +382,33 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
                     reader.readAsDataURL(filesToSave.value[fileField])
                 })
             }
-            const response = await mintApi.patch(`${module}/Update${id ? `/${id}` : ''}`, {
-                record_data: getAttributesToSave(),
-                files,
-                links: Object.fromEntries([...links.value].filter(([, link]) => !link.isFake.value).map(([name, link]) => [name, link.getChanges()]))
-            })
+            
+            let response;
+            try {
+                response = await mintApi.patch(`${module}/Update${id ? `/${id}` : ''}`, {
+                    record_data: getAttributesToSave(),
+                    files,
+                    links: Object.fromEntries([...links.value].filter(([, link]) => !link.isFake.value).map(([name, link]) => [name, link.getChanges()])),
+                    force_save: force
+                });
+            } catch (error: any) {
+                if (error.response?.status === 409) {
+                    duplicateDetected.value = true;
+                    duplicateCount.value = error.response.data.duplicates_info?.count || 0;
+                    duplicatedRecords.value = error.response.data.duplicates_info?.records || [];
+                    return { status: false, error: 'duplicate_detected' }
+                } else {
+                    throw error;
+                }
+            }
+            
             if (!id && response.data.id) {
-                router.push({
+                duplicateDetected.value = false
+                duplicateCount.value = 0
+                duplicatedRecords.value = []
+                // Replace rather than push: the record now exists, so the form that created it is
+                // not a place the browser's back button should be able to return to. #191870
+                router.replace({
                     name: 'record',
                     params: {
                         module,
@@ -390,6 +416,9 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
                     },
                 })
             } else if ([200, 201].includes(response.status)) {
+                duplicateDetected.value = false
+                duplicateCount.value = 0
+                duplicatedRecords.value = []
                 await retrieve()
             }
             if (options?.editCycles) {
@@ -514,6 +543,12 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         return await mintApi.delete(`${module}/${id}`)
     }
 
+    async function clearDuplicateState() {
+        duplicateDetected.value = false
+        duplicateCount.value = 0
+        duplicatedRecords.value = []
+    }
+
     const fieldsValues = computed(() => {
         const values: { [key: string]: any } = {}
         Object.keys(fields.value).forEach((fieldName) => {
@@ -584,10 +619,14 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         save,
         markDeleted,
         fieldDefs,
+        duplicateDetected,
+        duplicateCount,
+        duplicatedRecords,
         setAttributesFromQuery,
         loadRelationship,
         createFakeLink,
         setAttributesFromBeanId,
         originalId,
+        clearDuplicateState,
     }
 }

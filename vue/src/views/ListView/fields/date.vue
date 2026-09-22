@@ -1,73 +1,98 @@
 <template>
-    <v-menu v-model="menu" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
-        <template v-slot:activator="{ props }">
-            <v-text-field
-                v-model="formattedDate"
-                variant="outlined"
-                :label="input.label"
-                prepend-inner-icon="mdi-calendar"
-                v-bind="props"
-                autocomplete="off"
-                :error="!isValidDate"
-                hide-details
-                density="compact"
-                :disabled="disabled"
-            />
-        </template>
-        <VueDatePicker
-            @update:model-value="(val) => (value = DateTime.fromJSDate(val).toSQLDate())"
-            inline
-            :enable-time-picker="false"
-            :format="format"
-            :locale="locale"
-            :select-text="languages.label('LBL_ESLIST_SELECT_DATE')"
-        />
-    </v-menu>
+    <div class="mint-date-field-detail">
+        <v-text-field
+            v-model="dateValue"
+            variant="outlined"
+            :label="input.label"
+            autocomplete="off"
+            :error="!isValidDate"
+            hide-details
+            density="compact"
+            :disabled="disabled"
+        >
+            <template #append-inner>
+                <v-menu v-model="datePickerMenu" offset="16" :close-on-content-click="false">
+                    <template v-slot:activator="{ props }">
+                        <v-icon class="mint-date-field-btn" v-bind="props">mdi-calendar</v-icon>
+                    </template>
+                    <v-date-picker v-model="pickerValue" hide-actions :first-day-of-week="firstDayOfWeek">
+                        <template #header></template>
+                    </v-date-picker>
+                </v-menu>
+            </template>
+        </v-text-field>
+    </div>
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { DateTime } from 'luxon'
-import { ref, computed, watch } from 'vue'
-import { useLanguagesStore } from '@/store/languages'
-import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
+import { usePreferencesStore } from '@/store/preferences'
+import { useMintDate } from '@/composables/useMintDate'
 
-const languages = useLanguagesStore();
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps(['input', 'disabled'])
-const value = ref(props.input?.value)
-const menu = ref(false)
+const preferences = usePreferencesStore()
+const datePickerMenu = ref(false)
+const model = ref(useMintDate(props.input?.value))
+
 const isValidDate = computed(() => {
-    return !value.value || value.value.length === 10
+    return !model.value.formatted.db_date || model.value.formatted.db_date.length === 10
 })
-const locale = computed(() => languages.currentLanguage.split('_')[0]);
 
-const formattedDate = computed({
+const firstDayOfWeek = computed(() => preferences.user?.first_day_of_week ?? 1)
+
+const dateValue = computed({
     get() {
-        if (value.value) {
-            const date = format(new Date(value.value))
-            return date ?? ''
-        }
-        return ''
+        return model.value.isValid ? model.value.formatted.user_date : ''
     },
-    set(newValue) {
-        const date = DateTime.fromFormat(newValue, 'dd.MM.yyyy').toSQLDate()
-        if (date) {
-            value.value = DateTime.fromFormat(newValue, 'dd.MM.yyyy').toSQLDate()
+    set(newVal) {
+        datePickerMenu.value = false
+        if (!newVal?.trim()) {
+            model.value.clear()
+            return
+        }
+        const dt = DateTime.fromFormat(newVal, preferences.userDateFormat || 'yyyy-MM-dd', { zone: 'utc' })
+        if (dt.isValid) {
+            model.value.set(dt)
+            emit('update:modelValue', model.value.formatted.db_date)
         }
     },
 })
 
-function format(date: Date) {
-    const dt = DateTime.fromJSDate(date)
-    return dt.toFormat('dd.MM.yyyy')
-}
+const pickerValue = computed({
+    get() {
+        return model.value.isValid ? model.value.formatted.js_date : new Date()
+    },
+    set(newVal) {
+        const dt = DateTime.fromJSDate(newVal)
+        if (!dt.isValid) {
+            return
+        }
+        const year = dt.year
+        const month = String(dt.month).padStart(2, '0')
+        const day = String(dt.day).padStart(2, '0')
+        const dateString = `${year}-${month}-${day}`
 
-watch(value, () => {
-    if (isValidDate.value) {
-        emit('update:modelValue', value.value)
-    }
+        model.value.set(dateString)
+        datePickerMenu.value = false
+        emit('update:modelValue', model.value.formatted.db_date)
+    },
 })
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.mint-date-field-detail {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    .mint-date-field-btn {
+        transition: all 100ms ease-out;
+        cursor: pointer;
+        &:hover {
+            color: rgb(var(--v-theme-on-surface));
+        }
+    }
+}
+</style>

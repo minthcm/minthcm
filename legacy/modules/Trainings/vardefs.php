@@ -302,6 +302,13 @@ $dictionary['Trainings'] = array(
             'relationship_type' => 'one-to-many',
         ),
     ),
+    'indices' => array(
+        array(
+            'name' => 'idx_trainings_user_deleted_start',
+            'type' => 'index',
+            'fields' => array('assigned_user_id', 'deleted', 'date_start'),
+        ),
+    ),
     'optimistic_locking' => true,
     'unified_search' => true,
 );

@@ -153,11 +153,12 @@ async function changeLanguage(lang = 'en_us') {
     }
 }
 .auth-footer-link{
-    color: rgb(20,93,123);
+    color: rgb(var(--v-theme-secondary));
+    font-weight: bold;
     text-decoration: none;
 }
 .auth-footer-link:hover{
-    color: rgb(8,56,75);
+    color: rgb(var(--v-theme-secondary-dark));
 }
 </style>
 

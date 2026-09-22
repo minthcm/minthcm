@@ -46,6 +46,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 ?>
+<?php
+global $current_user;
+if(!is_admin($current_user)){
+    echo translate('LBL_MINT4_NO_ACCESS_TO_MODULE');
+    return;
+}
+?>
 Sorry!  The <FONT COLOR="#000099"><strong><?php global $currentModule; echo $currentModule; ?></strong></FONT> module has not yet been implemented.  
 <P></P>
 <strong>Stay tuned </strong>for an upcoming release of <A href="https://minthcm.org/">MintHCM</A>!

@@ -535,4 +535,18 @@ class SavedSearch extends SugarBean
             }
         }
     }
+
+    public function bean_implements($interface)
+    {
+        if ('ACL' == $interface) {
+            return true;
+        }
+        return false;
+    }
+
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
+    {
+        global $current_user;
+        return is_admin($current_user);
+    }
 }

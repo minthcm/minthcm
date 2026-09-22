@@ -32,4 +32,27 @@ $routes = array(
             ],
         ],
     ],
+    "updateStatus" => [
+        "method" => "PATCH",
+        "path" => "/update/status",
+        "class" => UpdateAction::class,
+        "desc" => "Update news status and generate user news records on publish",
+        "function" => 'updateStatus',
+        "options" => [
+            'auth' => true,
+        ],
+        "pathParams" => [],
+        "bodyParams" => [
+            "news_id" => [
+                "type" => StringType::class,
+                "required" => true,
+                "example" => '"223dee27-b9e7-432a-8da9-c84cc0770035"',
+            ],
+            "status" => [
+                "type" => StringType::class,
+                "required" => true,
+                "example" => '"published"',
+            ],
+        ],
+    ],
 );

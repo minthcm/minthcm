@@ -64,6 +64,20 @@ class ReactionRepository extends MintEntityRepository
         ]);
     }
 
+    public function getParentReactions(string $parent_type, string $parent_id): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.assigned_user_link', 'u')
+            ->addSelect('u')
+            ->where('r.parent_type = :parent_type')
+            ->andWhere('r.parent_id = :parent_id')
+            ->andWhere('r.deleted = 0')
+            ->setParameter('parent_type', $parent_type)
+            ->setParameter('parent_id', $parent_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function deleteUserReaction($parent_type, $parent_id, $user_id)
     {
         $qb = $this->createQueryBuilder('r');

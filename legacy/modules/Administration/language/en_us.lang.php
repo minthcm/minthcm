@@ -615,6 +615,7 @@ $mod_strings = array(
    'LBL_QR_CLEARDASHLET' => 'Clearing MintHCM Dashlet files from cache...done',
    'LBL_QR_CLEARTEMPLATE' => 'Clearing Template files from cache...done',
    'LBL_QR_CLEARVADEFS' => 'Clearing Vardefs from cache...done',
+   'LBL_QR_CLEARRECORDVIEWDEFS' => 'Clearing RecordView definitions from cache...done',
    'LBL_QR_CLEARJS' => 'Clearing JS files from cache...done',
    'LBL_QR_CLEARJSLANG' => 'Clearing JS Language files from cache...done',
    'LBL_QR_CLEARLANG' => 'Clearing language files from cache...done',

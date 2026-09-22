@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -49,8 +48,9 @@ namespace MintHCM\Api\Controllers;
 use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Entities\Reactions;
 use MintHCM\Api\Repositories\ReactionRepository;
-use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response;
+use Throwable;
 
 class ReactionsController
 {
@@ -59,6 +59,31 @@ class ReactionsController
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function get(Request $request, Response $response, array $args): Response
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $parent_id = $request->getAttribute('parent_id');
+        $parent_type = $request->getAttribute('parent_type');
+
+        /** @var ReactionRepository */
+        $repository = $this->entityManager->getRepository(Reactions::class);
+        $reactions = $repository->getParentReactions($parent_type, $parent_id);
+
+        $result = array_map(fn(Reactions $reaction) => [
+            'type' => $reaction->reaction_type,
+            'user' => $reaction->assigned_user_link ? [
+                'id' => $reaction->assigned_user_link->id,
+                'name' => $reaction->assigned_user_link->getFullName(),
+            ]
+            : null,
+        ], $reactions);
+
+        $result = array_values(array_filter($result, fn($r) => $r['user'] !== null));
+
+        $response->getBody()->write(json_encode($result));
+        return $response;
     }
 
     public function react(Request $request, Response $response, array $args): Response
@@ -92,7 +117,7 @@ class ReactionsController
         $entity->parent_id = $parent_id;
         $entity->reaction_type = $reaction_type;
         $repository->save($entity, true);
-        
+
         return $response;
     }
 
@@ -105,7 +130,7 @@ class ReactionsController
 
         /** @var ReactionRepository */
         $repository = $this->entityManager->getRepository(Reactions::class);
-         
+
         /** @var Reactions */
         $entity = $repository->getUserReactionToParent($parent_type, $parent_id, $current_user->id);
         if (empty($entity)) {
@@ -117,11 +142,14 @@ class ReactionsController
             return $response;
         }
 
-        if (!$repository->delete($entity, true)) {
+        try {
+            $repository->delete($entity, true);
+        } catch (Throwable $e) {
             $response = $response->withStatus(500);
+            $response->getBody()->write(json_encode(['error' => 'Failed to delete reaction']));
             return $response;
         }
-        
+
         return $response;
     }
 }

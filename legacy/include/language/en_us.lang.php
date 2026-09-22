@@ -222,6 +222,7 @@ $app_list_strings = array(
         'Tasks' => 'Task',
         'SalaryRanges' => 'Salary Range',
         'EmployeeCertificates' => 'Employee Certificate',
+        'WorkSchedules' => 'Work Schedule',
     ),
     'checkbox_dom' => array(
         '' => '',
@@ -1518,6 +1519,7 @@ $app_strings = array(
     'LBL_LINK_ACTIONS' => 'ACTIONS',
     'LBL_CLOSE_ACTIVITY_HEADER' => 'Confirm',
     'LBL_CLOSE_ACTIVITY_CONFIRM' => 'Do you want to close this #module#?',
+    'LBL_DEFER_ACTIVITY_CONFIRM' => 'Do you want to defer this #module#?',
     'LBL_INVALID_FILE_EXTENSION' => 'Invalid File Extension',
 
     'ERR_AJAX_LOAD' => 'An error has occurred:',
@@ -2323,6 +2325,7 @@ $app_strings = array(
     'LBL_ESLIST_TO' => 'Date to',
     'LBL_ESLIST_EQUAL' => 'Equals',
     'LBL_ESLIST_NOT_EQUAL' => 'Doesn\'t equal',
+    'LBL_ESLIST_ON_DAY' => 'On day',
     'LBL_ESLIST_CONTAIN' => 'Contains',
     'LBL_ESLIST_NOT_CONTAIN' => 'Doesn\'t contain',
     'LBL_ESLIST_GREATER_OR_EQUAL' => 'Greater than/Equal',
@@ -2356,6 +2359,7 @@ $app_strings = array(
     'LBL_ESLIST_MY_FAVORITES' => 'Only my favorites',
     'LBL_ESLIST_ADD_MASSUPDATE_ROW' => 'Add mass update row',
     'LBL_ESLIST_ERROR_MASSUPDATE' => 'There was an error performing the bulk update',
+    'LBL_MASSUPDATE_PARTIAL_INFO' => 'records updated',
     //MOBILE START
     'LBL_ID_FF_SELECT' => 'Select',
     'LBL_INSTANCE_ADDRESS' => 'Server Address',
@@ -4867,6 +4871,15 @@ $app_strings['LBL_KUDOS_ERROR'] = 'An error occurred. Try again later.';
 $app_strings['LBL_KUDOS_CHARACTERS_WARNING'] = 'Maximum number of characters is 255';
 $app_strings['LBL_KUDOS_EMPTY_MESSAGE'] = 'Enter a message, please';
 $app_strings['LBL_MINT4_WALL_READ_MORE'] = 'Read More';
+$app_strings['LBL_MINT4_WALL_COLLAPSE'] = 'Show less';
+$app_strings['LBL_MINT4_WALL_OPEN_FULL'] = 'Open full view';
+$app_strings['LBL_MINT4_WALL_COMMENTS'] = 'Comments';
+$app_strings['LBL_MINT4_WALL_NO_COMMENTS'] = 'No comments yet. Be the first!';
+$app_strings['LBL_MINT4_WALL_LEAVE_COMMENT'] = 'Leave your comment here...';
+$app_strings['LBL_MINT4_WALL_REPLY_PLACEHOLDER'] = 'Write your reply...';
+$app_strings['LBL_MINT4_WALL_REPLY_BTN'] = 'Reply';
+$app_strings['LBL_MINT4_WALL_SEND_BTN'] = 'Send';
+$app_strings['LBL_MINT4_WALL_CANCEL_BTN'] = 'Cancel';
 
 $app_strings['LBL_YEARS'] = 'Years';
 
@@ -5076,3 +5089,9 @@ $app_list_strings['moduleListSingular']['MCPSettings'] = 'MCP Setting';
 $app_strings['LBL_LOGIN_AS'] = 'Login As';
 $app_strings['LBL_LOGOUT_AS'] = 'Logout As';
 $app_strings['LBL_MASQUERADE_USER_INACTIVE'] = 'Cannot login as an inactive user.';
+
+$app_strings['LBL_DUPLICATE_DETECTED'] = '$count $module duplicate(s) found.';
+$app_strings['LBL_FORCE_SAVE_BUTTON_LABEL'] = 'Ignore duplicate and save';
+
+$app_strings['LBL_MINT_RECORDVIEW_MOBILE_SWITCH_RECORD'] = 'Record';
+$app_strings['LBL_MINT_RECORDVIEW_MOBILE_SWITCH_SIDEPANEL'] = 'Statistics';

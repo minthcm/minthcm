@@ -3,6 +3,8 @@ import { MassAction } from '../MassAction'
 import MintPopupAlert from '@/components/MintPopups/MintPopupAlert.vue'
 import { useLanguagesStore } from '@/store/languages'
 export class MassConfirmation extends MassAction {
+    protected static readonly actionName = 'MassConfirmation'
+
     public async execute() {
         const popupsStore = usePopupsStore()
         const languages = useLanguagesStore()

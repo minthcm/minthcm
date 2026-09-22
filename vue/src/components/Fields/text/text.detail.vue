@@ -3,9 +3,9 @@
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
             <div>
-                <div v-for="line in (value || '').split('\n')" :key="line">{{ line }}</div>
-                <a 
-                    v-if="(props.modelValue?.length > lengthToCrop) || (linesNumber >= linesToCrop)" 
+                <MdPreview language="en-US" :modelValue="value" :sanitize="sanitize" />
+                <a
+                    v-if="(props.modelValue?.length > lengthToCrop) || (linesNumber >= linesToCrop)"
                     @click="toggleExpanded"
                 >{{ languages.label(expanded ? 'LBL_COLLAPSE' : 'LBL_EXPAND') }}
                     <v-icon :icon="expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
@@ -23,6 +23,9 @@ import { onMounted } from 'vue'
 import router from '@/router';
 import { modulesApi } from '@/api/modules.api';
 import { useLocalStorageStore } from '@/store/localStorage';
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css';
+import DOMPurify from 'dompurify'
 
 async function loadExpandedPreference() {
     if (!props.defs?.name) {
@@ -62,6 +65,8 @@ const value = computed(() => {
 })
 
 const linesNumber = computed(() => (props.modelValue || '').split('\n').length)
+
+const sanitize = (html: string) => DOMPurify.sanitize(html)
 </script>
 
 <style scoped lang="scss">

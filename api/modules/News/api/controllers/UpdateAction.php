@@ -46,6 +46,8 @@
 
 namespace MintHCM\Modules\News\api\controllers;
 
+use MintHCM\Data\BeanFactory;
+use MintHCM\Utils\LegacyConnector;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 use Slim\Exception\HttpBadRequestException;
@@ -89,5 +91,34 @@ class UpdateAction
         $sql = "SELECT id FROM usersnews WHERE news_id = {$db->quoted($news_id)} AND deleted = 0 AND assigned_user_id = {$db->quoted($user_id)}";
         $result = $db->getOne($sql);
         return ($result) ? $result : '';
+    }
+
+    public function updateStatus(Request $request, Response $response, array $args): Response
+    {
+        $news_id = $request->getAttribute('news_id');
+        $status = $request->getAttribute('status');
+        $allowed_statuses = ['published', 'archived', 'draft'];
+
+        if (empty($news_id) || empty($status) || !in_array($status, $allowed_statuses, true)) {
+            throw new HttpBadRequestException($request);
+        }
+
+        $news = BeanFactory::getBean('News', $news_id);
+
+        if (empty($news) || empty($news->id)) {
+            return $response->withStatus(404);
+        }
+
+        $news->news_status = $status;
+        $news->save();
+
+        if ($status === 'published' && $news->news_type === 'announcement') {
+            $update_news_by_prospect_lists = new LegacyConnector('UpdateNewsByProspectLists', 'modules/ProspectLists/UpdateNewsByProspectLists.php');
+            $update_news_by_prospect_lists->updateSpecificNews($news_id);
+        }
+
+        $response = $response->withHeader('Content-type', 'application/json');
+        $response->getBody()->write(json_encode(['news_status' => $news->news_status]));
+        return $response->withStatus(200);
     }
 }

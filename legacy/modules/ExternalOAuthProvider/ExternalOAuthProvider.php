@@ -18,7 +18,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Affero General Public License along with
  * this program; if not, see http://www.gnu.org/licenses or write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
@@ -75,7 +75,6 @@ class ExternalOAuthProvider extends Basic
     public $token_type_mapping;
     public $redirect_uri_type;
 
-
     /**
      * @inheritDoc
      */
@@ -104,7 +103,6 @@ class ExternalOAuthProvider extends Basic
 
         $this->keepWriteOnlyFieldValues();
 
-
         return parent::save($check_notify);
     }
 
@@ -124,7 +122,7 @@ class ExternalOAuthProvider extends Basic
             return true;
         }
 
-        if ($this->type !== 'personal') {
+        if ('personal' !== $this->type) {
             return true;
         }
 
@@ -135,7 +133,6 @@ class ExternalOAuthProvider extends Basic
         if ($this->created_by === $current_user->id) {
             return true;
         }
-
 
         return false;
     }
@@ -157,7 +154,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function bean_implements($interface)
     {
-        if ($interface === 'ACL') {
+        if ('ACL' === $interface) {
             return true;
         }
 
@@ -170,31 +167,7 @@ class ExternalOAuthProvider extends Basic
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
         global $current_user;
-
-        $isNotAllowAction = $this->isNotAllowedAction($view);
-        if ($isNotAllowAction === true) {
-            return false;
-        }
-
-        if (!$this->hasAccessToPersonalAccount()) {
-            $this->logPersonalAccountAccessDenied("ACLAccess-$view");
-
-            return false;
-        }
-
-        $isPersonal = $this->type === 'personal';
-        $isAdmin = is_admin($current_user);
-
-        if ($isPersonal === true && $this->hasAccessToPersonalAccount()) {
-            return true;
-        }
-
-        $isAdminOnlyAction = $this->isAdminOnlyAction($view);
-        if (!$isPersonal && !$isAdmin && $isAdminOnlyAction === true) {
-            return false;
-        }
-
-        return parent::ACLAccess($view, $is_owner, $in_group);
+        return is_admin($current_user);
     }
 
     /**
@@ -227,7 +200,7 @@ class ExternalOAuthProvider extends Basic
             $ifListForExport
         );
 
-        if(is_admin($current_user)) {
+        if (is_admin($current_user)) {
             if ($return_array) {
                 return $ret_array;
             }
@@ -262,7 +235,7 @@ class ExternalOAuthProvider extends Basic
         }
 
         foreach ($this->field_defs as $field => $field_def) {
-            if (empty($field_def['display']) || $field_def['display'] !== 'writeonly') {
+            if (empty($field_def['display']) || 'writeonly' !== $field_def['display']) {
                 continue;
             }
 
@@ -366,8 +339,8 @@ class ExternalOAuthProvider extends Basic
                 'access_token' => $this->getAccessTokenMapping(),
                 'expires_in' => $this->getExpiresInMapping(),
                 'refresh_token' => $this->getRefreshTokenMapping(),
-                'token_type' => $this->getTokenTypeMapping()
-            ]
+                'token_type' => $this->getTokenTypeMapping(),
+            ],
         ];
     }
 
@@ -445,7 +418,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getRefreshTokenRequestGrant(): string
     {
-        if (empty($this->refresh_token_request_grant)){
+        if (empty($this->refresh_token_request_grant)) {
             return 'refresh_token';
         }
 
@@ -457,7 +430,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getTokenRequestGrant(): string
     {
-        if (empty($this->get_token_request_grant)){
+        if (empty($this->get_token_request_grant)) {
             return 'authorization_code';
         }
 
@@ -469,7 +442,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getAccessTokenMapping(): string
     {
-        if (empty($this->access_token_mapping)){
+        if (empty($this->access_token_mapping)) {
             return 'access_token';
         }
 
@@ -481,7 +454,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getRefreshTokenMapping(): string
     {
-        if (empty($this->refresh_token_mapping)){
+        if (empty($this->refresh_token_mapping)) {
             return 'refresh_token';
         }
 
@@ -493,7 +466,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getExpiresInMapping(): string
     {
-        if (empty($this->expires_in_mapping)){
+        if (empty($this->expires_in_mapping)) {
             return 'expires_in';
         }
 
@@ -505,7 +478,7 @@ class ExternalOAuthProvider extends Basic
      */
     public function getTokenTypeMapping(): string
     {
-        if (empty($this->token_type_mapping)){
+        if (empty($this->token_type_mapping)) {
             return '';
         }
         return $this->token_type_mapping;

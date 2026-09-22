@@ -11,11 +11,15 @@ import { useMintWallStore } from '@/components/MintWall/MintWallStore'
 import { mintApi } from '@/api/api'
 import { useBackendStore } from '@/store/backend'
 import { useLegacyIframeStore } from '@/store/legacyIframe'
+import { useThemeStore } from '@/store/theme'
+import { useReturnLocationStore } from '@/store/returnLocation'
 
 const route = useRoute()
 const router = useRouter()
 const url = useUrlStore()
 const wall = useMintWallStore()
+const themeStore = useThemeStore()
+const returnLocation = useReturnLocationStore()
 
 onMounted(async () => {
     // messages from legacy iframe
@@ -28,6 +32,14 @@ onBeforeUnmount(() => {
 })
 
 async function handleMessageEvent(e: MessageEvent) {
+    if (e.data?.type === 'mint-theme-preference') {
+        const value = e.data.preference
+        if (typeof value === 'string' && value.length > 0) {
+            await themeStore.setPreference(value)
+        }
+        return
+    }
+
     const eventId = e.data?.eventId
     const eventName = e.data?.eventName
     const eventData = e.data?.data
@@ -50,6 +62,17 @@ async function handleMessageEvent(e: MessageEvent) {
     if (resolved.meta?.auth === false) {
         router.go(0) //refresh
     } else {
+        // Remember the legacy view being left behind, so closing the record returns to it instead
+        // of falling back to the module list. #191870
+        returnLocation.capture({
+            path: route.path,
+            // Built here rather than by whoever navigates back, because this component is what puts
+            // the legacy view state into the address: onIframeLoad writes it with history.pushState,
+            // deliberately bypassing the router. So route.fullPath does not know about it - only the
+            // live address does.
+            routerLocation: window.location.hash.replace(/^#/, '') || route.fullPath,
+            recordPath: resolved.path,
+        })
         router.push(path)
 
         if (route.path === path.match(/[^\?]*/i)[0]) {
@@ -114,6 +137,15 @@ const backend = useBackendStore()
 
 const legacyIframeStore = useLegacyIframeStore()
 
+function pushThemeToIframe() {
+    legacyIframe.value?.contentWindow?.postMessage(
+        { type: 'mint-theme', theme: themeStore.activeTheme },
+        location.origin,
+    )
+}
+
+watch(() => themeStore.activeTheme, pushThemeToIframe)
+
 function onIframeLoad() {
     const iframe = legacyIframe.value
     if (!iframe) {
@@ -139,6 +171,7 @@ function onIframeLoad() {
             history.pushState(null, null, fullHash)
         }
     }
+    pushThemeToIframe()
 }
 async function reloadModuleMenu() {
     const iframe = legacyIframe.value

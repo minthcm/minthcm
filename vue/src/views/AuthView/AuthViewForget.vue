@@ -4,7 +4,6 @@
         <MintStatusBox v-if="forgetSuccess" type="success">{{
             languages.label('LBL_MINT4_AUTH_FORGET_SUCCESS')
         }}</MintStatusBox>
-        <MintStatusBox v-else-if="forgetError" type="error">{{ languages.label(forgetError) }}</MintStatusBox>
         <template v-if="!forgetSuccess">
             <v-text-field
                 v-model="authViewStore.username"
@@ -37,7 +36,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { AxiosError } from 'axios'
 import { useLanguagesStore } from '@/store/languages'
 import MintButton from '@/components/MintButtons/MintButton.vue'
 import MintStatusBox from '@/components/MintStatusBoxes/MintStatusBox.vue'
@@ -49,7 +47,6 @@ const languages = useLanguagesStore()
 
 const email = ref('')
 const forgetSuccess = ref(false)
-const forgetError = ref('')
 const isSubmiting = ref(false)
 
 onMounted(() => {
@@ -60,15 +57,14 @@ onMounted(() => {
 })
 
 async function handleForgetBtnClick() {
-    forgetError.value = ''
     try {
         await mintApi.post('forget_password', {
             username: authViewStore.username,
             email: email.value,
         }, { rawError: true })
-        forgetSuccess.value = true
-    } catch (err) {
-        forgetError.value = (err as AxiosError<{ message: string }>).response?.data?.message ?? ''
+    } catch {
+        // Silently swallow errors to prevent user enumeration
     }
+    forgetSuccess.value = true
 }
 </script>

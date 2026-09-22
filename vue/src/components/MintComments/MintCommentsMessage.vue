@@ -398,7 +398,7 @@ function handleReplyEditorClose(success = false) {
 
     .mint-comments-message-deleted {
         font-style: italic;
-        color: #0008;
+        color: var(--mint-text-muted);
         letter-spacing: 0.43px;
         font-size: 0.9em;
         margin: 16px 0px;
@@ -428,7 +428,7 @@ function handleReplyEditorClose(success = false) {
 
             .mint-comments-message-edited {
                 font-style: italic;
-                color: #0008;
+                color: var(--mint-text-muted);
                 letter-spacing: 0.43px;
                 font-size: 11px;
                 font-weight: 400;
@@ -439,7 +439,7 @@ function handleReplyEditorClose(success = false) {
             font-size: 12px;
             letter-spacing: 0.4px;
             font-weight: 400;
-            color: rgba(0, 0, 0, 0.6);
+            color: var(--mint-text-muted);
         }
     }
 }

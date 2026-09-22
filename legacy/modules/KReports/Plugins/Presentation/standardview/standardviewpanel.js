@@ -154,12 +154,26 @@ Ext.define( "SpiceCRM.KReporter.Designer.presentationplugins.standardviewpanel",
          dataIndex: "result_column_description",
          sortable: !1,
          width: 200,
-         editor: {
-            xtype: "textfield"
+         editor: { xtype: "textfield" },
+         renderer: function ( a ) {
+            if ( !a || "" === a ) return a;
+            try {
+               var decoded;
+               try { decoded = decodeURIComponent( atob( a ) ); } catch ( b ) { decoded = atob( a ); }
+               var tmp = document.createElement( "div" );
+               tmp.innerHTML = decoded;
+               return tmp.textContent || tmp.innerText || "";
+            } catch ( e ) { return a; }
          }
       } ],
    plugins: [ Ext.create( "Ext.grid.plugin.CellEditing", {
-         clicksToEdit: 1
+         clicksToEdit: 1,
+         listeners: {
+            beforeedit: function ( plugin, ctx ) {
+               if ( "result_column_description" !== ctx.column.initialConfig.dataIndex ) return;
+               return SpiceCRM.KReporter.openHtmlEditorPopup( ctx, "result_column_description" );
+            }
+         }
       } ) ],
    sm: new Ext.selection.RowModel,
    viewConfig: {

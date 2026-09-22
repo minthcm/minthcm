@@ -97,4 +97,5 @@ $mod_strings = array(
     'LBL_PHOTO' => "Photo",
     'LBL_PANEL_NEWS' => 'News',
     'LBL_PANEL_BASIC' => 'Basic',
+    'LBL_DETAILS' => 'Basic',
 );

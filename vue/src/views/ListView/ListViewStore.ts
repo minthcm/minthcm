@@ -4,7 +4,6 @@ import { useUrlStore } from '@/store/url'
 import { useLanguagesStore } from '@/store/languages'
 import { FilterRow } from './ListViewFilterRow.vue'
 import { MassUpdateRow } from './ListViewMassUpdateRow.vue'
-import { getAllTypesMatchingTo } from './operators'
 import { useRouter } from 'vue-router'
 import { usePopupsStore } from '@/store/popups'
 import MintPopupRelate from '@/components/MintPopups/MintPopupRelate.vue'
@@ -427,11 +426,11 @@ export const useListViewStore = defineStore('listview', () => {
     }
 
     let optionsWatchTimer: ReturnType<typeof setTimeout> | null = null
+
     watch(
         options,
         () => {
             if (isInit.value) {
-                //getData()
                 if (optionsWatchTimer) clearTimeout(optionsWatchTimer)
                 optionsWatchTimer = setTimeout(() => getData(), 30)
             }
@@ -690,6 +689,7 @@ export const useListViewStore = defineStore('listview', () => {
         isHeaderIndeterminate,
         selectedOnPageCount,
         selectAll,
-        clearAllSelection
+        clearAllSelection,
+        setFilters,
     }
 })

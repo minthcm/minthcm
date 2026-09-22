@@ -120,6 +120,13 @@ $dictionary['Kudos'] = array(
         ),
 
     ),
+    'indices' => array(
+        array(
+            'name' => 'idx_kudos_employee_deleted_entered',
+            'type' => 'index',
+            'fields' => array('employee_id', 'deleted', 'date_entered'),
+        ),
+    ),
     'optimistic_locking' => true,
     'unified_search' => true,
 );

@@ -479,7 +479,7 @@ class KReport extends SugarBean
     public function get_list_view_data()
     {
         $ld = $this->get_list_view_array();
-        $ld['DESCRIPTION'] = html_entity_decode($this->description);
+        $ld['DESCRIPTION'] = strip_tags(html_entity_decode($this->description));
         return $ld;
     }
 
@@ -1537,7 +1537,9 @@ class KReport extends SugarBean
         if ('0' == $snapshotid || 'current' == $snapshotid) {
             $retArray = $this->getContextselectionResult($parameters, $getcount, $additionalFilter, $additionalGroupBy);
         } else {
-            $query = 'SELECT data FROM kreportsnapshotsdata WHERE snapshot_id = \'' . $snapshotid . '\'';
+            // Mint start #192564 - snapshotid comes straight from the request
+            $query = 'SELECT data FROM kreportsnapshotsdata WHERE snapshot_id = \'' . $this->db->quote($snapshotid) . '\'';
+            // Mint end #192564
 
             // check if we only need the count than we shortcut here
             if ($getcount) {
@@ -1545,13 +1547,19 @@ class KReport extends SugarBean
             }
 
             // limit the query if requested
+            // Mint start #192564 - start / limit come straight from the request; normalise to
+            // non-negative integers. 'start' may be unset even when 'limit' is set, so resolve it
+            // once instead of reading it inside the 'limit' branch
+            $startValue = isset($parameters['start']) ? max(0, (int) $parameters['start']) : 0;
+
             if (isset($parameters['start']) && '' != $parameters['start']) {
-                $query .= ' AND record_id >= ' . $parameters['start'];
+                $query .= ' AND record_id >= ' . $startValue;
             }
 
             if (isset($parameters['limit']) && '' != $parameters['limit']) {
-                $query .= ' AND record_id < ' . ($parameters['start'] + $parameters['limit']);
+                $query .= ' AND record_id < ' . ($startValue + max(0, (int) $parameters['limit']));
             }
+            // Mint end #192564
 
             $query .= ' ORDER BY record_id ASC';
 
@@ -1734,8 +1742,11 @@ class KReport extends SugarBean
 
     public function deleteSnapshot($snapshotId)
     {
-        $this->db->query("DELETE FROM kreportsnapshotsdata WHERE snapshot_id = '$snapshotId'");
-        $this->db->query("DELETE FROM kreportsnapshots WHERE id = '$snapshotId'");
+        // Mint start #192564
+        $safeSnapshotId = $this->db->quote($snapshotId);
+        $this->db->query("DELETE FROM kreportsnapshotsdata WHERE snapshot_id = '$safeSnapshotId'");
+        $this->db->query("DELETE FROM kreportsnapshots WHERE id = '$safeSnapshotId'");
+        // Mint end #192564
     }
 
     public function getListFields()

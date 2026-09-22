@@ -50,6 +50,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $module = $_POST['module'];
 $action = $_POST['action'];
 if ($module != '' && $action != '') {
+    if (!preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $module) || !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $action)) {
+        die('Invalid request');
+    }
     try {
         //require api file from custom/modules
         if (file_exists("custom/modules/{$module}/api/{$module}Api.php")) {

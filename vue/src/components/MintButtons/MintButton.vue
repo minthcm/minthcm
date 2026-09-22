@@ -71,40 +71,40 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
     background: transparent;
     &:hover {
         color: rgb(var(--v-theme-secondary-dark));
-        background: #e0ece9;
+        background: rgb(var(--v-theme-primary-light));
     }
     &.disabled {
         cursor: default;
-        color: #8b8b8b;
+        color: var(--mint-text-disabled);
         background: transparent;
     }
 }
 .mint-button-text-danger {
-    color: #ac0221;
+    color: var(--mint-danger);
     background: transparent;
     &:hover {
-        background: #e0ece9;
+        background: rgb(var(--v-theme-primary-light));
     }
     &.disabled {
         cursor: default;
-        color: #8b8b8b;
+        color: var(--mint-text-disabled);
         background: transparent;
     }
 }
 
 .mint-button-regular {
-    color: rgb(var(--v-theme-secondary-dark));
-    background: #e0ece9;
+    color: rgb(var(--v-theme-secondary));
+    background: rgb(var(--v-theme-primary-light));
     &:hover {
-        background: #9ec4bc;
+        background: var(--mint-button-regular-hover);
     }
     &.disabled {
         cursor: default;
-        color: #8b8b8b;
-        background: #e0e0e0;
+        color: var(--mint-text-disabled);
+        background: var(--mint-bg-disabled);
     }
     &.active {
-        color: #f5fbfa;
+        color: rgb(var(--v-theme-primary-lighter));
         background: rgb(var(--v-theme-secondary));
     }
     &:focus-visible {
@@ -114,32 +114,32 @@ const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
 }
 
 .mint-button-primary {
-    color: #f5fbfa !important;
+    color: rgb(var(--v-theme-primary-lighter)) !important;
     background: rgb(var(--v-theme-secondary));
     &:hover {
         background: rgb(var(--v-theme-secondary-dark));
     }
     &.disabled {
         cursor: default;
-        color: #e0e0e0;
-        background: #8b8b8b;
+        color: var(--mint-bg-disabled);
+        background: var(--mint-text-disabled);
     }
 }
 
 .mint-button-nav {
     color: rgb(var(--v-theme-secondary));
-    background: #f5fbfa;
+    background: rgb(var(--v-theme-primary-lighter));
     &:hover {
         color: rgb(var(--v-theme-secondary-dark));
-        background: #e0ece9;
+        background: rgb(var(--v-theme-primary-light));
     }
     &.disabled {
         cursor: default;
-        color: #8b8b8b;
-        background: #e0e0e0;
+        color: var(--mint-text-disabled);
+        background: var(--mint-bg-disabled);
     }
     &.active {
-        color: #f5fbfa;
+        color: rgb(var(--v-theme-primary-lighter));
         background: rgb(var(--v-theme-secondary));
     }
 }

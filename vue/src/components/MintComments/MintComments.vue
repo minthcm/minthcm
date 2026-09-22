@@ -46,8 +46,7 @@ store.fetchInitialData()
     font-family: Barlow;
     position: relative;
     padding: 32px;
-    min-width: 740px;
-    max-width: 740px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 48px;

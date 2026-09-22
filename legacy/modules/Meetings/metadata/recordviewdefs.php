@@ -13,6 +13,24 @@ $viewdefs['Meetings'] = [
                         'name' => 'DuplicateMeetings',
                         'skipFields' => ['repeat','status'],
                     ],
+                    [
+                        'key' => 'CloseMeeting',
+                        'label' => 'LBL_CLOSE_BUTTON_TITLE',
+                        'icon' => 'mdi-check',
+                        'acl' => 'edit',
+                        'type' => 'confirm',
+                        'confirm' => [
+                            'body' => 'LBL_CLOSE_MEETING_CONFIRM_BODY',
+                        ],
+                        'api_route' => 'Meetings/closeMeeting',
+                        'customVisibility' => [
+                            'operator' => 'AND',
+                            'conditions' => [
+                                ['field' => 'status', 'operator' => '!=', 'value' => 'Held'],
+                            ],
+                        ],
+                        'onSuccess' => 'reload',
+                    ],
                 ],
                 'sections' => [
                     'basic' => [

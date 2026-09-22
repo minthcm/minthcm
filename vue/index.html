@@ -8,6 +8,20 @@
     <meta name="googlebot" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MintHCM</title>
+    <!-- MintHCM Dark Mode Anti-FOUC: runs before any CSS to prevent white flash -->
+    <script>
+    (function () {
+        var STORAGE_KEY = 'mint.theme.preference';
+        var pref = localStorage.getItem(STORAGE_KEY) || 'system';
+        var active = pref === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : pref;
+        document.documentElement.setAttribute('data-mint-theme', active);
+        if (active === 'dark') {
+            document.documentElement.style.background = '#121212';
+        }
+    })();
+    </script>
 </head>
 
 <body>

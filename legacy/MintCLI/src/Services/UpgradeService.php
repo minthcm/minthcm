@@ -237,6 +237,8 @@ class UpgradeService
             return false;
         }
 
+        (new OAuth2RepairPermissionsService())->repair();
+
         $this->output->writeln("  <info>Ownership and permissions set successfully.</info>");
         return true;
     }
@@ -302,25 +304,33 @@ class UpgradeService
             return false;
         }
 
-        foreach ($files as $file) {
-            $this->output->writeln("  Running migration: " . basename($file));
-            $cmd = sprintf(
-                'mysql -h %s -P %s -u %s -p%s %s < %s 2>&1',
-                escapeshellarg($db_config['host']),
-                escapeshellarg($db_config['port']),
-                escapeshellarg($db_config['user']),
-                escapeshellarg($db_config['pass']),
-                escapeshellarg($db_config['name']),
-                escapeshellarg($file)
-            );
-            exec($cmd, $out, $code);
-            if ($code !== 0) {
-                $error = 'Migration ' . basename($file) . ' failed: ' . implode("\n", $out);
-                $this->last_error = $error;
-                $this->output->writeln("  <error>{$error}</error>");
-                $this->logError($error);
-                return false;
+        // Password is passed through the process environment instead of the command
+        // string: exec() runs the command via /bin/sh -c, so a MYSQL_PWD=... prefix
+        // would stay visible in the sh process cmdline (ps aux) for the whole run.
+        putenv('MYSQL_PWD=' . $db_config['pass']);
+
+        try {
+            foreach ($files as $file) {
+                $this->output->writeln("  Running migration: " . basename($file));
+                $cmd = sprintf(
+                    'mysql -h %s -P %s -u %s %s < %s 2>&1',
+                    escapeshellarg($db_config['host']),
+                    escapeshellarg($db_config['port']),
+                    escapeshellarg($db_config['user']),
+                    escapeshellarg($db_config['name']),
+                    escapeshellarg($file)
+                );
+                exec($cmd, $out, $code);
+                if ($code !== 0) {
+                    $error = 'Migration ' . basename($file) . ' failed: ' . implode("\n", $out);
+                    $this->last_error = $error;
+                    $this->output->writeln("  <error>{$error}</error>");
+                    $this->logError($error);
+                    return false;
+                }
             }
+        } finally {
+            putenv('MYSQL_PWD');
         }
 
         $this->output->writeln('  <info>All migrations completed.</info>');
@@ -416,19 +426,18 @@ class UpgradeService
         $original_url = trim(shell_exec('git remote get-url origin 2>/dev/null') ?? '');
         $auth_url     = preg_replace('#^(https?://)#', '$1' . rawurlencode($this->git_user) . ':' . rawurlencode($this->git_pass) . '@', $original_url);
 
-        exec('git remote set-url origin ' . escapeshellarg($auth_url) . ' 2>&1', $out, $code);
-        if ($code !== 0) {
-            $this->last_error = 'Could not set authenticated remote URL.';
-            $this->output->writeln('  <error>Could not configure git credentials.</error>');
-            return false;
+        try {
+            exec('git remote set-url origin ' . escapeshellarg($auth_url) . ' 2>&1', $out, $code);
+            if ($code !== 0) {
+                $this->last_error = 'Could not set authenticated remote URL.';
+                $this->output->writeln('  <error>Could not configure git credentials.</error>');
+                return false;
+            }
+
+            return $this->exec($cmd, $label);
+        } finally {
+            exec('git remote set-url origin ' . escapeshellarg($original_url) . ' 2>/dev/null');
         }
-
-        $result = $this->exec($cmd, $label);
-
-        // Always restore original URL — even on failure
-        exec('git remote set-url origin ' . escapeshellarg($original_url) . ' 2>/dev/null');
-
-        return $result;
     }
 
     private function exec(string $cmd, string $label): bool

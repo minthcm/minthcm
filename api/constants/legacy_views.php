@@ -403,7 +403,7 @@ return [
     ],
     'News' => [
         'list' => false,
-        'record' => true,
+        'record' => false,
     ],
     'UsersNews' => [
         'list' => false,

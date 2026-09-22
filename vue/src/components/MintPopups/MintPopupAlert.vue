@@ -2,13 +2,14 @@
     <div class="mint-popup-alert">
         <span>{{ props.data.text }}</span>
         <div class="mint-popup-alert-buttons">
-            <v-btn @click="handleConfirm()" color="secondary">{{ languages.label('LBL_OK') }}</v-btn>
+            <MintButton @click="handleConfirm()" :text="languages.label('LBL_OK')" variant="primary" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useLanguagesStore } from '@/store/languages'
+import MintButton from '@/components/MintButtons/MintButton.vue'
 
 interface Props {
     data: {

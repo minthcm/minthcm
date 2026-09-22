@@ -30,7 +30,12 @@ class MintHCMPopupClass {
             if ( typeof this.options.noCloseButton !== 'undefined' && this.options.noCloseButton ) {
                 $( '.MintHCMPopup-header' ).removeClass( 'MintHCMPopup-close' );
             } else {
-                $( '#' + this.id + '_close' ).click( this.close );
+                $( '#' + this.id + '_close' ).click( this.close ).on( 'keydown', function ( e ) {
+                    if ( e.key === 'Enter' || e.key === ' ' ) {
+                        e.preventDefault();
+                        $( this ).trigger( 'click' );
+                    }
+                } );
             }
             if ( typeof this.options.css !== 'undefined' && this.options.css ) {
                 $( '#' + this.id + '> .MintHCMPopup-container' ).css( this.options.css );
@@ -39,7 +44,7 @@ class MintHCMPopupClass {
         };
 
         this.getBody = function () {
-            var body = _.template( '<div class="MintHCMPopup-container"><div class="MintHCMPopup-header MintHCMPopup-close"><div class="MintHCMPopup-title"><input id="<%= id %>_hidenId" type="hidden" value="<%= id %>"></input><%= title %></div><span id="<%=id %>_close" class="suitepicon suitepicon-action-clear"></span><div style="clear: both;"></div></div><div class="MintHCMPopup-body"><%= body %></div><div class="MintHCMPopup-buttons"><%= buttons %></div></div>' );
+            var body = _.template( '<div class="MintHCMPopup-container"><div class="MintHCMPopup-header MintHCMPopup-close"><div class="MintHCMPopup-title"><input id="<%= id %>_hidenId" type="hidden" value="<%= id %>"></input><%= title %></div><span id="<%=id %>_close" class="suitepicon suitepicon-action-clear" tabindex="0" role="button"></span><div style="clear: both;"></div></div><div class="MintHCMPopup-body"><%= body %></div><div class="MintHCMPopup-buttons"><%= buttons %></div></div>' );
             return body( {
                 title: this.title,
                 body: this.body,

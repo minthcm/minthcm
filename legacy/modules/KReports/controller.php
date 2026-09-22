@@ -126,10 +126,12 @@ class KReportsController extends SugarController
     {
         global $db;
 
-        $returnArray['count'] = $db->getRowCount($db->query('SELECT id, name FROM teams WHERE deleted = \'0\'  AND name like \'' . $_REQUEST['query'] . '%\''));
+        $safeQuery = $db->quote($_REQUEST['query']);
+
+        $returnArray['count'] = $db->getRowCount($db->query('SELECT id, name FROM teams WHERE deleted = \'0\'  AND name like \'' . $safeQuery . '%\''));
 
         //if(isset($_REQUEST['query']) && $_REQUEST['query'] != '')
-        $teamResult = $db->query('SELECT id, name, name_2 FROM teams WHERE deleted = \'0\' AND name like \'' . $_REQUEST['query'] . '%\' LIMIT ' . $_REQUEST['start'] . ',' . $_REQUEST['limit']);
+        $teamResult = $db->limitQuery('SELECT id, name, name_2 FROM teams WHERE deleted = \'0\' AND name like \'' . $safeQuery . '%\'', $_REQUEST['start'], $_REQUEST['limit']);
         //else
         //    $usersResult = $db->query('SELECT id, user_name FROM users WHERE deleted = \'0\' AND status = \'Active\'');
 
@@ -145,10 +147,12 @@ class KReportsController extends SugarController
     {
         global $db;
 
-        $returnArray['count'] = $db->getRowCount($db->query('SELECT id, name FROM securitygroups WHERE deleted = \'0\'  AND name like \'' . $_REQUEST['query'] . '%\''));
+        $safeQuery = $db->quote($_REQUEST['query']);
+
+        $returnArray['count'] = $db->getRowCount($db->query('SELECT id, name FROM securitygroups WHERE deleted = \'0\'  AND name like \'' . $safeQuery . '%\''));
 
         //if(isset($_REQUEST['query']) && $_REQUEST['query'] != '')
-        $teamResult = $db->query('SELECT id, name FROM securitygroups WHERE deleted = \'0\' AND name like \'' . $_REQUEST['query'] . '%\' LIMIT ' . $_REQUEST['start'] . ',' . $_REQUEST['limit']);
+        $teamResult = $db->limitQuery('SELECT id, name FROM securitygroups WHERE deleted = \'0\' AND name like \'' . $safeQuery . '%\'', $_REQUEST['start'], $_REQUEST['limit']);
         //else
         //    $usersResult = $db->query('SELECT id, user_name FROM users WHERE deleted = \'0\' AND status = \'Active\'');
 
@@ -165,8 +169,10 @@ class KReportsController extends SugarController
         global $db;
         require_once 'modules/KOrgObjects/KOrgObject.php';
         $thisOrgObject = new KOrgObject();
-        $returnArray['count'] = $db->getRowCount($db->query($thisOrgObject->getEditViewOrgUnitQuery('KReports', $_REQUEST['query'])));
-        $queryObj = $db->query($thisOrgObject->getEditViewOrgUnitQuery('KReports', $_REQUEST['query']) . ' LIMIT ' . $_REQUEST['start'] . ',' . $_REQUEST['limit']);
+        $safeQuery = $db->quote($_REQUEST['query']);
+        $orgUnitQuery = $thisOrgObject->getEditViewOrgUnitQuery('KReports', $safeQuery);
+        $returnArray['count'] = $db->getRowCount($db->query($orgUnitQuery));
+        $queryObj = $db->limitQuery($orgUnitQuery, $_REQUEST['start'], $_REQUEST['limit']);
         while ($korgobjectrecord = $db->fetchByAssoc($queryObj)) {
             $returnArray['data'][] = array('value' => $korgobjectrecord['id'], 'text' => $korgobjectrecord['name']);
         }
@@ -214,13 +220,15 @@ class KReportsController extends SugarController
                 $fieldName = $fieldArray[1];
             }
 
-            $query_res = $db->limitQuery("SELECT id, " . $fieldName . " FROM $thisModule->table_name WHERE " . (!empty($_REQUEST['query']) ? "name like '%" . $_REQUEST['query'] . "%' AND" : "") . " deleted='0' ORDER BY name ASC", (!empty($_REQUEST['start']) ? $_REQUEST['start'] : 0), (!empty($_REQUEST['limit']) ? $_REQUEST['limit'] : 25));
+            $safeQuery = $db->quote($_REQUEST['query']);
+
+            $query_res = $db->limitQuery("SELECT id, " . $fieldName . " FROM $thisModule->table_name WHERE " . (!empty($_REQUEST['query']) ? "name like '%" . $safeQuery . "%' AND" : "") . " deleted='0' ORDER BY name ASC", (!empty($_REQUEST['start']) ? $_REQUEST['start'] : 0), (!empty($_REQUEST['limit']) ? $_REQUEST['limit'] : 25));
             while ($thisEntry = $db->fetchByAssoc($query_res)) {
                 $returnArray['data'][] = array('itemid' => $thisEntry['id'], 'itemtext' => $thisEntry[$fieldName]);
             }
 
             // get count
-            $totalRec = $db->fetchByAssoc($db->query("SELECT count(*) as count FROM $thisModule->table_name WHERE " . (!empty($_REQUEST['query']) ? "name like '%" . $_REQUEST['query'] . "%' AND" : "") . " deleted='0'"));
+            $totalRec = $db->fetchByAssoc($db->query("SELECT count(*) as count FROM $thisModule->table_name WHERE " . (!empty($_REQUEST['query']) ? "name like '%" . $safeQuery . "%' AND" : "") . " deleted='0'"));
             $returnArray['total'] = $totalRec['count'];
         }
 

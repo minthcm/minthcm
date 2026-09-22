@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import MintWysiwyg from '@/components/MintWysiwyg.vue'
 import { MintComment, useMintCommentsStore } from './MintCommentsStore'
@@ -86,7 +86,7 @@ import MintButton from '@/components/MintButtons/MintButton.vue'
 import { useAuthStore } from '@/store/auth'
 import { useLanguagesStore } from '@/store/languages'
 import MintCommentsUsersHint from './MintCommentsUsersHint.vue'
-import { RawEditorSettings as TinymceConfig } from 'tinymce'
+import { RawEditorOptions as TinymceConfig } from 'tinymce'
 
 interface Props {
     mode: 'new' | 'edit' | 'reply'
@@ -103,6 +103,10 @@ const languages = useLanguagesStore()
 
 const tinymceConfig: TinymceConfig = {
     height: 280,
+    plugins: 'lists emoticons',
+    toolbar_mode: 'wrap',
+    toolbar: 'bold italic underline strikethrough | numlist bullist | emoticons',
+    menubar: false,
     content_style: `
         @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap'); body { font-family: Barlow; }
         blockquote {
@@ -121,11 +125,15 @@ const description = ref(initialDescription)
 const userQuery = ref<null | string>(null)
 const isPrimaryButtonDisabled = computed(() => !description.value)
 
-onMounted(() => {
-    if (props.mode === 'reply' && wysiwyg.value?.tinymceEditor) {
-        wysiwyg.value.tinymceEditor?.focus()
-    }
-})
+watch(
+    () => wysiwyg.value?.tinymceEditor,
+    (editor) => {
+        if (editor && props.mode === 'reply') {
+            editor.focus()
+        }
+    },
+    { once: true },
+)
 
 async function addNewComment() {
     if (description.value) {

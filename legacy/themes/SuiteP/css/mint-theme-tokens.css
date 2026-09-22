@@ -1,0 +1,272 @@
+/**
+ * MintHCM Theme Tokens
+ *
+ * One source of truth for theme color definitions.
+ * These CSS custom properties are consumed by:
+ *   - legacy/themes/SuiteP/css/dark-mode.css (legacy dark mode overrides)
+ *   - vue/src/main.scss (any global non-Vuetify styles)
+ *
+ * For Vue components, Vuetify generates its own --v-theme-* properties from
+ * the color values defined in vue/src/plugins/vuetify.ts.
+ * The brand color values (--mint-primary etc.) are kept in sync with vuetify.ts.
+ *
+ * The active theme is signalled by the data-mint-theme attribute on <html>,
+ * set by App.vue (Vue) and theme-bridge.js (legacy).
+ *
+ * To add a new theme: add a new html[data-mint-theme="<name>"] block below,
+ * register the theme in vuetify.ts, and add the option to UserThemeController.php.
+ */
+
+/* ─── Light theme ───────────────────────────────────────────────────────── */
+html[data-mint-theme="light"] {
+    color-scheme: light;
+
+    /* Brand — must match vue/src/plugins/vuetify.ts light theme */
+    --mint-primary:          #00654e;
+    --mint-primary-light:    #e0ecea;
+    --mint-primary-lighter:  #f5fbfa;
+    --mint-secondary:        #145d7b;
+    --mint-secondary-dark:   #08384B;
+    --mint-activity:         #7555D6;
+
+    /* Page layout */
+    --mint-bg-page:          #eaeaea;
+    --mint-bg-content:       #ffffff;
+    --mint-bg-surface:       #ffffff;
+    --mint-bg-surface-alt:   #f5f5f5;
+    --mint-bg-navbar:        #009976;
+
+    /* Text */
+    --mint-text:             #585858;
+    --mint-text-muted:       #888888;
+    --mint-text-on-primary:  #ffffff;
+    --mint-text-heading:     #444444;
+
+    /* Borders */
+    --mint-border:           #dddddd;
+    --mint-border-input:     #cccccc;
+
+    /* Inputs */
+    --mint-bg-input:         #ffffff;
+    --mint-text-input:       #585858;
+
+    /* Dropdowns */
+    --mint-bg-dropdown:      #ffffff;
+    --mint-text-dropdown:    #585858;
+    --mint-bg-dropdown-hover: #eaeaea;
+
+    /* Panels / cards */
+    --mint-bg-panel:         #ffffff;
+    --mint-bg-panel-header:  #eeeeee;
+
+    /* Tables */
+    --mint-bg-table-row:     transparent;
+    --mint-bg-table-row-alt: #f9f9f9;
+    --mint-bg-table-row-hover: #eaeaea;
+
+    /* Modals */
+    --mint-bg-modal:         #ffffff;
+
+    /* Subpanels */
+    --mint-bg-subpanel:      #f5f5f5;
+
+    /* Alerts */
+    --mint-alert-info-bg:      #d9edf7;
+    --mint-alert-info-text:    #31708f;
+    --mint-alert-info-border:  #bce8f1;
+    --mint-alert-success-bg:   #dff0d8;
+    --mint-alert-success-text: #3c763d;
+    --mint-alert-success-border: #d6e9c6;
+    --mint-alert-warning-bg:   #fcf8e3;
+    --mint-alert-warning-text: #8a6d3b;
+    --mint-alert-warning-border: #faebcc;
+    --mint-alert-danger-bg:    #f2dede;
+    --mint-alert-danger-text:  #a94442;
+    --mint-alert-danger-border: #ebccd1;
+
+    /* Badges & labels */
+    --mint-badge-bg:           #777777;
+    --mint-badge-text:         #ffffff;
+
+    /* Calendar */
+    --mint-today-highlight:    #fcf8e3;
+    --mint-fc-event-border:    #00654e;
+    --mint-event-opacity:      1;
+
+    /* Work Schedule Manager — calendar event colors (mirrors the inline hex
+       Cal.js sets per ws_type; --mint-status-warn-bg/-error-bg already cover
+       the holiday/delegation colors, this is the missing "home" one) */
+    --mint-ws-event-home:      #005189;
+
+    /* Work Schedule Manager — logged-time cell accent (mirrors
+       $color-mint-orange / $color-mint-orange-lighter in Mint/color-palette.scss) */
+    --mint-ws-orange-bg:       #C27163;
+    --mint-ws-orange-bg-hover: #D98664;
+
+    /* qTip tooltips */
+    --mint-qtip-title-bg:      #eeeeee;
+    --mint-qtip-title-text:    #444444;
+
+    /* Icons / images in toolbars */
+    --mint-icon-filter:        none;
+
+    /* Interactive states (buttons, inputs) */
+    --mint-danger:             #ac0221;
+    --mint-danger-text:        #fcf5f6;
+    --mint-button-regular-hover: #9ec4bc;
+    --mint-text-disabled:      #8b8b8b;
+    --mint-bg-disabled:        #e0e0e0;
+
+    /* Footer */
+    --mint-bg-footer:          #dddddd;
+
+    /* Status boxes (MintStatusBox Vue component) */
+    --mint-status-error-bg:        #ac0221;
+    --mint-status-error-text:      #fcf5f6;
+    --mint-status-error-bg-inv:    #fcf5f6;
+    --mint-status-error-text-inv:  #ac0221;
+    --mint-status-ok-bg:           #097c31;
+    --mint-status-ok-text:         #f5faf7;
+    --mint-status-ok-bg-inv:       #f5faf7;
+    --mint-status-ok-text-inv:     #006222;
+    --mint-status-warn-bg:         #b0a900;
+    --mint-status-warn-text:       #fcfcf5;
+    --mint-status-warn-bg-inv:     #fcfcf5;
+    --mint-status-warn-text-inv:   #6b6500;
+
+    /* Navigation sidebar overlays */
+    --mint-nav-drawer-bg:              #00000010;
+    --mint-nav-item-hover-bg:          #0000001f;
+    --mint-nav-action-hover-bg:        #00000044;
+    --mint-nav-on-primary-text:        #ffffffaf;
+    --mint-nav-on-primary-text-active: #ffffff;
+    --mint-nav-shrinker-bg:            rgba(0, 0, 0, 0.039);
+    --mint-nav-scrim:                  rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Dark theme ────────────────────────────────────────────────────────── */
+html[data-mint-theme="dark"] {
+    color-scheme: dark;
+
+    /* Brand — must match vue/src/plugins/vuetify.ts dark theme */
+    --mint-primary:          #00997a;
+    --mint-primary-light:    #0d2e28;
+    --mint-primary-lighter:  #112924;
+    --mint-secondary:        #3a9fc4;
+    --mint-secondary-dark:   #1a6a8a;
+    --mint-activity:         #9b7ee8;
+
+    /* Page layout */
+    --mint-bg-page:          #121212;
+    --mint-bg-content:       #1e1e1e;
+    --mint-bg-surface:       #1e1e1e;
+    --mint-bg-surface-alt:   #2a2a2a;
+    --mint-bg-navbar:        #1a2e29;
+
+    /* Text */
+    --mint-text:             #e0e0e0;
+    --mint-text-muted:       #9e9e9e;
+    --mint-text-on-primary:  #ffffff;
+    --mint-text-heading:     #cccccc;
+
+    /* Borders */
+    --mint-border:           #3a3a3a;
+    --mint-border-input:     #4a4a4a;
+
+    /* Inputs */
+    --mint-bg-input:         #2a2a2a;
+    --mint-text-input:       #e0e0e0;
+
+    /* Dropdowns */
+    --mint-bg-dropdown:      #252525;
+    --mint-text-dropdown:    #e0e0e0;
+    --mint-bg-dropdown-hover: #2a2a2a;
+
+    /* Panels / cards */
+    --mint-bg-panel:         #1e1e1e;
+    --mint-bg-panel-header:  #252525;
+
+    /* Tables */
+    --mint-bg-table-row:     transparent;
+    --mint-bg-table-row-alt: #252525;
+    --mint-bg-table-row-hover: #2a2a2a;
+
+    /* Modals */
+    --mint-bg-modal:         #1e1e1e;
+
+    /* Subpanels */
+    --mint-bg-subpanel:      #252525;
+
+    /* Alerts */
+    --mint-alert-info-bg:      #1a2a3a;
+    --mint-alert-info-text:    #7eb8d4;
+    --mint-alert-info-border:  #1e3a5a;
+    --mint-alert-success-bg:   #1a2a1a;
+    --mint-alert-success-text: #6dbf6d;
+    --mint-alert-success-border: #1e4a1e;
+    --mint-alert-warning-bg:   #2a2010;
+    --mint-alert-warning-text: #d4a832;
+    --mint-alert-warning-border: #4a3a10;
+    --mint-alert-danger-bg:    #2a1010;
+    --mint-alert-danger-text:  #d46868;
+    --mint-alert-danger-border: #4a1a1a;
+
+    /* Badges & labels */
+    --mint-badge-bg:           #2a2a2a;
+    --mint-badge-text:         #e0e0e0;
+
+    /* Calendar */
+    --mint-today-highlight:    #1a2e29;
+    --mint-fc-event-border:    #00997a;
+    --mint-event-opacity:      0.9;
+
+    /* Work Schedule Manager — calendar event colors (same brand value as
+       light; dark-mode.css brightens it further via filter) */
+    --mint-ws-event-home:      #005189;
+
+    /* Work Schedule Manager — logged-time cell accent, darkened toward
+       --mint-bg-surface-alt so it doesn't blow out on the dark bar */
+    --mint-ws-orange-bg:       #85554c;
+    --mint-ws-orange-bg-hover: #92614d;
+
+    /* qTip tooltips */
+    --mint-qtip-title-bg:      #252525;
+    --mint-qtip-title-text:    #cccccc;
+
+    /* Icons / images in toolbars */
+    --mint-icon-filter:        brightness(2.5) saturate(1.2);
+
+    /* Interactive states (buttons, inputs) */
+    --mint-danger:             #c0392b;
+    --mint-danger-text:        #fce4e1;
+    --mint-button-regular-hover: #1a4a40;
+    --mint-text-disabled:      #666666;
+    --mint-bg-disabled:        #3a3a3a;
+
+    /* Footer */
+    --mint-bg-footer:          #1e1e1e;
+
+    /* Status boxes (MintStatusBox Vue component) */
+    /* Icon strip keeps brand red; content area uses dark surface */
+    --mint-status-error-bg:        #ac0221;
+    --mint-status-error-text:      #fcf5f6;
+    --mint-status-error-bg-inv:    #2a1010;
+    --mint-status-error-text-inv:  #d46868;
+    --mint-status-ok-bg:           #097c31;
+    --mint-status-ok-text:         #f5faf7;
+    --mint-status-ok-bg-inv:       #1a2a1a;
+    --mint-status-ok-text-inv:     #6dbf6d;
+    --mint-status-warn-bg:         #b0a900;
+    --mint-status-warn-text:       #fcfcf5;
+    --mint-status-warn-bg-inv:     #2a2010;
+    --mint-status-warn-text-inv:   #d4a832;
+
+    /* Navigation sidebar overlays */
+    --mint-nav-drawer-bg:              #00000010;
+    --mint-nav-item-hover-bg:          #0000001f;
+    --mint-nav-action-hover-bg:        #00000044;
+    --mint-nav-on-primary-text:        #ffffffaf;
+    --mint-nav-on-primary-text-active: #ffffff;
+    --mint-nav-shrinker-bg:            rgba(0, 0, 0, 0.039);
+    --mint-nav-scrim:                  rgba(0, 0, 0, 0.3);
+}

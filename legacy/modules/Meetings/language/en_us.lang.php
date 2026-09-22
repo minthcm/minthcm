@@ -215,4 +215,6 @@ $mod_strings = array(
    'LBL_REPEAT_UNTIL_COMMENT' => 'Repeat until specified date.',
    'LBL_REPEAT_COUNT_COMMENT' => 'Number of recurrence.',
    'LBL_REPEAT_PARENT_ID_COMMENT' => 'ID of the first element of recurring records.',
+   'LBL_CLOSE_MEETING_CONFIRM_BODY' => 'Are you sure you want to close this meeting? Its status will be set to Held.',
+   'LBL_CLOSE_MEETING_SUCCESS' => 'Meeting closed.',
 );

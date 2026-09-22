@@ -34,6 +34,7 @@ class ListAction
             unset($row['author_photo']);
             $row['reactions'] = json_decode(html_entity_decode($row['reactions_json']), true);
             unset($row['reactions_json']);
+            $row['comments_count'] = (int)($row['comments_count'] ?? 0);
             $response[] = $row;
         }
         chdir('../api/');
@@ -60,7 +61,8 @@ class ListAction
                         'id', r.assigned_user_id,
                         'name', CONCAT_WS(' ', ru.first_name, ru.last_name)
                     )
-                ))) reactions_json
+                ))) reactions_json,
+                COALESCE(cc.comments_count, 0) comments_count
             FROM news n
             LEFT JOIN users u
 				ON u.deleted = 0 AND u.id = n.created_by
@@ -71,6 +73,12 @@ class ListAction
                 LEFT JOIN users ru
                     ON ru.id = r.assigned_user_id
                     AND ru.deleted = 0
+                LEFT JOIN (
+                    SELECT parent_id, COUNT(*) AS comments_count
+                    FROM comments
+                    WHERE parent_type = 'News' AND deleted = 0
+                    GROUP BY parent_id
+                ) cc ON cc.parent_id = n.id
             WHERE
                 n.deleted = 0
                 AND n.id IN (SELECT news_id FROM usersnews WHERE assigned_user_id = '{$current_user->id}' AND deleted = 0)

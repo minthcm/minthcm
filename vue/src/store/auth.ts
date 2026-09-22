@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { useLanguagesStore } from './languages'
 import { mintApi } from '@/api/api'
 import { responseErrorHandler } from '@/api/interceptors/response-error-handler'
+import { clearWidgetFetchCache } from '@/components/MintSidepanel/useWidgetFetch'
 
 export interface User {
     id: string
@@ -47,6 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function logout() {
         const response = await mintApi.post('logout')
+        clearWidgetFetchCache()
         if (response.status == 200 && response.data?.redirect_url) {
             location.href = response.data.redirect_url
             return

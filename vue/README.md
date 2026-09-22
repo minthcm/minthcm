@@ -13,9 +13,11 @@ Welcome to the MintHCM frontend documentation. This guide will help you understa
 ### Components & Views
 5. [Field System](./documentation/09-fields.md) - Dynamic field rendering and customization
 6. [Working with Beans](./documentation/10-working-with-beans.md) - CRUD operations and record management
+7. [Sidepanel & Widgets](./documentation/13-sidepanel.md) - Record-view side panel and its data widgets
+8. [User Theme System](./documentation/14-user-theme.md) - Light/dark/system theme preference, Vuetify integration, legacy CSS bridge
 
 ### Customization
-7. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
+9. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
 
 ---
 

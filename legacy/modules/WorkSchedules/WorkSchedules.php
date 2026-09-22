@@ -296,6 +296,9 @@ class WorkSchedules extends Basic
     private function setNameBeforeSave()
     {
         global $app_list_strings;
+        if(empty($app_list_strings)){
+            $app_list_strings = return_app_list_strings_language(get_current_language());
+        }
 
         $type = $app_list_strings['workschedule_type_list'][$this->type];
         $db_formatted_date = DateFormatter::getDateInDatabaseFormat($this->schedule_date);
@@ -488,5 +491,10 @@ class WorkSchedules extends Basic
             return true;
 }
         return false;
+    }
+
+    public function accept() {
+        $this->supervisor_acceptance = 'accepted';
+        $this->save();
     }
 }

@@ -35,161 +35,6 @@ abbr, acronym {
 }
 
 
-.Treant {
-    position: relative;
-    overflow: hidden;
-    padding: 0 !important;
-    background-color: #f7f7f7;
-}
-
-.Treant>.node, .Treant>.pseudo {
-    position: absolute;
-    display: block;
-    visibility: hidden;
-}
-
-.Treant.loaded .node, .Treant.loaded .pseudo {
-    visibility: visible;
-}
-
-.Treant>.pseudo {
-    width: 0;
-    height: 0;
-    border: none;
-    padding: 0;
-}
-
-.Treant .collapse-switch {
-    width: 3px;
-    height: 3px;
-    display: block;
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    cursor: pointer;
-}
-
-.Treant .collapse-switch:hover, .Treant .collapse-switch:active, .Treant .collapse-switch:focus {
-    text-decoration: none;
-}
-
-.Treant>.node img {
-    border: none;
-    float: left;
-}
-
-.Treant>.node {
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-    height: auto !important;
-}
-
-.Treant .collapse-switch {
-    width: 10px;
-    height: 10px;
-}
-
-.Treant .collapse-switch:before {
-    content: "\f101";
-}
-
-.Treant .collapsed .collapse-switch {
-    width: 10px;
-    height: 10px;
-}
-
-.Treant .collapsed .collapse-switch:before {
-    content: "\f106";
-}
-
-.Treant .node.collapsed .collapse-switch {
-    background: none;
-}
-
-.chart {
-    margin: 5px;
-    width: 100%;
-}
-
-.Treant {
-    color: #6a6a6a;
-}
-
-.Treant>p {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-.node-name {
-    font-size: 12px;
-}
-
-.node-title {
-    font-weight: bold;
-}
-
-a.node-title {
-    text-decoration: underline;
-}
-
-.Treant p {
-    font-size: 12px;
-}
-
-.osNode {
-    padding: 2px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #ffffff;
-    border: 1px solid #000;
-    width: 200px;
-    font-family: Tahoma;
-    font-size: 12px;
-}
-
-.osNode img {
-    margin-right: 10px;
-}
-
-.node.osNode.company, .company {
-    padding: 4px;
-    width: 150px;
-}
-
-.node.osNode.company img, .company img {
-    width: 150px;
-}
-
-.department {
-    background-color: #f3dfd7;
-}
-
-.team {
-    background-color: #e3f9ff;
-}
-
-.rootWithImage img {
-    height: 100%;
-    width: 100%;
-}
-
-.rootWithImage img.face {
-    height: 100%;
-    width: 100%;
-    border-radius:0%;
-}
-
-img.face {
-    width: 40px;
-    border-radius: 50%;
-    height: 40px;
-    object-fit: cover;
-}
-
 #structure_full_screen{
     position:absolute;
     z-index: 1;
@@ -197,14 +42,255 @@ img.face {
     margin-top: 5px;
     margin-left: 5px;
 	color: #ccc;
+    cursor: pointer;
 }
 
 #structure_full_screen > img {
     width: 40px;
     border: 1px solid #aaa;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 #structure_full_screen > img:hover {
-    border: 1px solid #f77;
+    border: 1px solid #aaa;
+}
+
+/* ============================================================
+   Organization Chart — d3-org-chart  (MintHCM design system)
+   ============================================================ */
+
+/* ── Fade-in on render ─────────────────────────────────────── */
+@keyframes os-fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0);   }
+}
+
+.org-chart-foreign-object-div {
+    animation: os-fade-in 0.22s ease both;
+}
+
+/* ── Container ─────────────────────────────────────────────── */
+.os-chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(160deg, #f5fbfa 0%, #edf5f2 100%);
+    box-sizing: border-box;
+}
+
+.os-chart-container > svg,
+.svg-chart-container {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* ── SVG connector lines ───────────────────────────────────── */
+.os-chart-container .link {
+    stroke: #a8d5c8 !important;
+    stroke-width: 1.5px !important;
+    fill: none;
+}
+
+/* ── Node card ─────────────────────────────────────────────── */
+.os-node-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow:
+        0 1px 3px  rgba(0, 101, 78, .07),
+        0 4px 16px rgba(0, 101, 78, .09);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: "Barlow", "Segoe UI", system-ui, Arial, sans-serif;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+
+
+.os-node-card:hover {
+    box-shadow:
+        0 4px 12px  rgba(0, 101, 78, .12),
+        0 12px 32px rgba(0, 101, 78, .17);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* ── Avatar wrapper ────────────────────────────────────────── */
+.os-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.os-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(0, 101, 78, .28);
+    box-shadow: 0 0 0 3px rgba(0, 101, 78, .08);
+    display: block;
+}
+
+/* Fallback initials circle when no photo is available */
+.os-avatar-fallback {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00654e 0%, #145d7b 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: 2px solid rgba(0, 101, 78, .2);
+    box-shadow: 0 0 0 3px rgba(0, 101, 78, .08);
+}
+
+/* ── Content column ────────────────────────────────────────── */
+.os-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* ── Name ──────────────────────────────────────────────────── */
+.os-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f2d23;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Position ──────────────────────────────────────────────── */
+.os-position {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 400;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Department badge ──────────────────────────────────────── */
+.os-badge {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* default: mint-tinted */
+    background: rgba(0, 101, 78, .10);
+    color: #00654e;
+}
+
+/* department → blue */
+.os-badge--department {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* team → mint green */
+.os-badge--team {
+    background: rgba(0, 101, 78, .12);
+    color: #00654e;
+}
+
+/* business_unit → teal-secondary */
+.os-badge--business_unit {
+    background: rgba(20, 93, 123, .12);
+    color: #145d7b;
+}
+
+/* ── Virtual root / company header node ─────────────────────── */
+.os-node-card--root {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+    color: #00654e;
+    box-shadow:
+        0 2px 8px  rgba(0, 101, 78, .28),
+        0 8px 28px rgba(0, 101, 78, .22);
+    cursor: default;
+}
+
+.os-node-card--root:hover {
+    transform: none;
+    box-shadow:
+        0 2px 8px  rgba(0, 101, 78, .28),
+        0 8px 28px rgba(0, 101, 78, .22);
+}
+
+/* Inner flex container for logo + name */
+.os-root-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* White pill wrapping the company logo */
+.os-root-logo-wrap {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 6px;
+    padding: 3px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 160px;
+}
+
+.os-root-logo {
+    max-height: 26px;
+    max-width: 130px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Company name label */
+.os-root-name {
+    color: #00654e;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    max-width: 90%;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .20);
 }

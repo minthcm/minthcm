@@ -72,6 +72,20 @@ class KReportQueryArray
 
         $this->addParams = $addParams;
 
+        // Mint start #192564
+        // start / limit come from the request and are concatenated straight into LIMIT / TOP() /
+        // ROWNUM further down (build_query_strings, get_query_string), where they cannot be quoted
+        // as values - normalise them to integers here, at the single point they enter the object
+        // negatives are clamped too - a negative offset would produce invalid SQL, not just a bad page
+        if (isset($this->addParams['start'])) {
+            $this->addParams['start'] = max(0, (int) $this->addParams['start']);
+        }
+
+        if (isset($this->addParams['limit'])) {
+            $this->addParams['limit'] = max(0, (int) $this->addParams['limit']);
+        }
+        // Mint end #192564
+
         // handle the context if the value is set
         if (isset($this->addParams['context']) && '' != $this->addParams['context']) {
             $this->queryContext = $this->context_to_array($this->addParams['context']);
@@ -751,10 +765,22 @@ class KReportQuery
 
         //2011-03-21 sort override params
         if (isset($addParams['sortid']) && isset($addParams['sortseq'])) {
-            $this->sortOverride = array(
-                'sortid' => $addParams['sortid'],
-                'sortseq' => $addParams['sortseq'],
-            );
+            // Mint start #192564
+            // sortid / sortseq come from the request and end up in ORDER BY as SQL *identifiers*,
+            // so quoting them as values is not an option - validate instead and drop an override
+            // that does not look like a field id / sort direction. ORDER BY accepts subqueries,
+            // so an unvalidated value here is a blind SQLi vector.
+            $sortId = (string) $addParams['sortid'];
+            $sortSeq = strtoupper(trim((string) $addParams['sortseq']));
+
+            // /D so that '$' cannot be satisfied by a trailing newline
+            if (preg_match('/^[A-Za-z0-9_.]+$/D', $sortId) && in_array($sortSeq, array('ASC', 'DESC'), true)) {
+                $this->sortOverride = array(
+                    'sortid' => $sortId,
+                    'sortseq' => $sortSeq,
+                );
+            }
+            // Mint end #192564
         }
 
         if (isset($addParams['exclusiveGrouping'])) {
@@ -1555,7 +1581,9 @@ class KReportQuery
                 //special treatment for fied values where we do not have a path
                 if ($this->get_fieldname_by_fieldid($filterFieldId) == '') {
                     ('' == $this->havingString) ? $this->havingString = 'HAVING ' : $this->havingString .= ' AND ';
-                    $this->havingString .= $filterFieldId . " = '" . $filterFieldValue . "'";
+                    // Mint start #192564 - $filterFieldId is a select alias (identifier), the value is data
+                    $this->havingString .= $filterFieldId . " = '" . $db->quote((string) $filterFieldValue) . "'";
+                    // Mint end #192564
                 } else {
                     $whereOperatorWhere = $this->getWhereOperatorClause('equals', $this->get_fieldname_by_fieldid($filterFieldId), $filterFieldId, $this->get_fieldpath_by_fieldid($filterFieldId), $filterFieldValue, '', '', '');
                     if ('' != $whereOperatorWhere) {
@@ -1678,7 +1706,7 @@ class KReportQuery
 
     public function getWhereOperatorClause($operator, $fieldname, $fieldid, $path, $value, $valuekey, $valueto, $valuetokey = '', $jointype = '')
     {
-        global $current_user;
+        global $current_user, $db;
 
         // initialize
         $thisWhereString = '';
@@ -1752,10 +1780,42 @@ class KReportQuery
             }
         }
 
+        // Mint start #192564
+        // Filter values reach this method straight from the request (whereConditions, whereClause,
+        // dynamicoptions, selectedfilters) and are concatenated into the WHERE string below, so they
+        // have to be escaped. This is the single choke point for that: it sits after every
+        // reassignment of $value / $valueto above, and before the kreporter eval path, which returns
+        // early and would otherwise stay unescaped.
+        $quoteWhereValue = function ($input) use ($db) {
+            if (is_array($input)) {
+                return array_map(function ($item) use ($db) {
+                    return $db->quote((string) $item);
+                }, $input);
+            }
+
+            return $db->quote((string) $input);
+        };
+
+        // kept unescaped for the varchar 'between' handling below, which increments the last character
+        $rawValueto = $valueto;
+
+        $value = $quoteWhereValue($value);
+        $valueto = $quoteWhereValue($valueto);
+        // Mint end #192564
+
         // 2012-11-24 special handling for kreporttype fields that have a select eval set
         if (('kreporter' == $this->joinSegments[$path]['object']->field_defs[$fieldname]['type']) && is_array($this->joinSegments[$path]['object']->field_defs[$fieldname]['eval'])) {
             //2013-01-22 added {tc}replacement with custom join
-            $selString = preg_replace(array('/{t}/', '/{tc}/', '/{p1}/', '/{p2}/'), array($this->joinSegments[$path]['alias'], $this->joinSegments[$path]['customjoin'], $value, $valueto), $this->joinSegments[$path]['object']->field_defs[$fieldname]['eval']['selection'][$operator]);
+            // Mint start #192564
+            // str_replace instead of preg_replace - the patterns are plain literals, and a
+            // preg_replace replacement string collapses '\\' back to '\', which would undo the
+            // escaping of {p1} / {p2} and let a trailing backslash break out of the SQL literal
+            $selString = str_replace(
+                array('{t}', '{tc}', '{p1}', '{p2}'),
+                array($this->joinSegments[$path]['alias'], $this->joinSegments[$path]['customjoin'], $value, $valueto),
+                $this->joinSegments[$path]['object']->field_defs[$fieldname]['eval']['selection'][$operator]
+            );
+            // Mint end #192564
             return $selString;
         }
 
@@ -1854,7 +1914,13 @@ class KReportQuery
                 } elseif ('varchar' == $this->fieldNameMap[$fieldid]['type'] || 'name' == $this->fieldNameMap[$fieldid]['type']) {
                     //2012-11-24 change so we increae the last char by one ord numkber and change to a smaller than
                     // this is more in the logic of the user
-                    $valueto = substr($valueto, 0, strlen($valueto) - 1) . chr(ord($valueto[strlen($valueto) - 1]) + 1);
+                    // Mint start #192564
+                    // increment the last character of the raw value and escape the result - doing it on
+                    // the already escaped value would operate on a backslash inserted by quoting
+                    if ('' !== (string) $rawValueto) {
+                        $valueto = $db->quote(substr($rawValueto, 0, strlen($rawValueto) - 1) . chr(ord($rawValueto[strlen($rawValueto) - 1]) + 1));
+                    }
+                    // Mint end #192564
                     $thisWhereString .= ' >= \'' . $value . '\' AND ' . $this->get_field_name($path, $fieldname, $fieldid) . '<\'' . $valueto . '\'';
                 } else {
                     $thisWhereString .= ' >= \'' . $value . '\' AND ' . $this->get_field_name($path, $fieldname, $fieldid) . '<=\'' . $valueto . '\'';

@@ -19,6 +19,9 @@ Welcome to the MintHCM API documentation. This guide will help you understand th
 13. [MintLogic](./13-mintlogic.md) - Dynamic form logic and validation
 14. [MCP Login Flow](./14-mcp-login-flow.md) - OAuth2 consent flow for MCP clients
 15. [Mass Actions](./15-mass-actions.md) - Executing actions on multiple records, select-all mechanism
+16. [Sidepanel Endpoints](./16-sidepanel.md) - Read-only summary endpoints backing the record-view sidepanel widgets
+17. [User Theme Preference](./17-user-theme.md) - Storing and serving the user's color-scheme preference
+18. [RecordView Extensions](./18-recordview-extensions.md) - Additive recordviewdefs extensions, per-module cache, and lazy-build
 
 ## Overview
 
@@ -41,6 +44,8 @@ The API provides a clean, modern interface for client applications while maintai
 - **OAuth2 consent for MCP clients**: See [MCP Login Flow](./14-mcp-login-flow.md)
 - **Execute actions on multiple records**: See [Mass Actions](./15-mass-actions.md)
 - **Authentication methods (core / LDAP / SAML / OIDC)**: See [Middlewares — Authentication Methods](./11-middlewares.md#authentication-methods)
+- **Store/read the user's theme preference**: See [User Theme Preference](./17-user-theme.md)
+- **Add a panel/button/sidepanel to a module without editing its recordviewdefs.php**: See [RecordView Extensions](./18-recordview-extensions.md)
 
 ## Project Philosophy
 

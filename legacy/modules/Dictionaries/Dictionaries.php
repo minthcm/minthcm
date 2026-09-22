@@ -76,10 +76,7 @@ class Dictionaries extends Basic
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
         global $current_user;
-        if ($current_user->isAdmin() || in_array($view, ['view'])) { // MintHCM #98749
-            return true;
-        }
-        return false;
+        return is_admin($current_user);
     }
 
     public function save($check_notify = false)

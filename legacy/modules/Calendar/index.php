@@ -59,15 +59,13 @@ $views = array("agendaDay" => array(),"basicDay" => array(), "basicWeek" => arra
 global $cal_strings, $current_language;
 $cal_strings = return_module_language($current_language, 'Calendar');
 
-if(empty($_REQUEST['view'])) {
-    if (isset($_SESSION['CALENDAR_VIEW']) && in_array($_SESSION['CALENDAR_VIEW'], $views)) {
-        $_REQUEST['view'] = $_SESSION['CALENDAR_VIEW'];
-    } else {
-        $_REQUEST['view'] = SugarConfig::getInstance()->get('calendar.default_view','agendaWeek');
-    }
+// The request is the single source of truth for the calendar view state. Keeping a second copy
+// in the session made the view type invisible in the URL, so it could neither be restored on
+// return from a record nor carried by a copied link. Without a view in the request the calendar
+// opens on the configured default view at today's date.
+if (empty($_REQUEST['view'])) {
+    $_REQUEST['view'] = SugarConfig::getInstance()->get('calendar.default_view', 'agendaWeek');
 }
-
-	$_SESSION['CALENDAR_VIEW'] = $_REQUEST['view'];
 
 $cal = new Calendar($_REQUEST['view'], array(), $views);
 

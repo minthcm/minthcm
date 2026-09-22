@@ -150,4 +150,8 @@ $mod_strings = array(
     'LBL_ACCEPTANCE_ACTION_ERROR' => 'An error occured while trying to accept this work schedule',
     'LBL_UNDO_ACCEPTANCE_ACTION_ERROR' => 'An error occured while trying to undo acceptance for this work schedule',
     'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
+    'LBL_MASS_ACCEPTANCE' => 'Accept supervisor',
+    'LBL_MASSACCEPTANCE_POPUP_TEXT' => 'Saving record {current} of {total}...',
+    'LBL_MASSACCEPTANCE_POPUP_ERROR' => 'Mass acceptance could not be completed. {accepted} accepted, {skipped} skipped before the error.',
+    'LBL_MASSACCEPTANCE_SUMMARY' => 'Mass acceptance completed: {accepted} accepted, {skipped} skipped',
 );

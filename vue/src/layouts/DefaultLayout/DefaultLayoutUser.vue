@@ -91,7 +91,7 @@ const menuItems = computed<MenuListItem[]>(() => {
     transition: all 150ms ease-in-out;
     text-transform: capitalize;
     color: rgb(var(--v-theme-secondary));
-    background: #f5fbfa;
+    background: rgb(var(--v-theme-primary-lighter));
     border-radius: 50px;
     display: flex;
     align-items: center;
@@ -102,11 +102,11 @@ const menuItems = computed<MenuListItem[]>(() => {
 
     &:hover {
         color: rgb(var(--v-theme-secondary-dark));
-        background: #e0ece9;
+        background: rgb(var(--v-theme-primary-light));
     }
 
     &.active {
-        color: #f5fbfa;
+        color: rgb(var(--v-theme-primary-lighter));
         background: rgb(var(--v-theme-secondary));
     }
 

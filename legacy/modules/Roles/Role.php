@@ -10,7 +10,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -38,10 +38,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -49,13 +49,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
  * Description:
  */
-
-
-
-
-
-
-
 
 #[\AllowDynamicProperties]
 class Role extends SugarBean
@@ -111,8 +104,8 @@ class Role extends SugarBean
     public function set_module_relationship($role_id, &$mod_ids, $allow)
     {
         foreach ($mod_ids as $mod_id) {
-            if ($mod_id != '') {
-                $this->set_relationship('roles_modules', array( 'module_id'=>$mod_id, 'role_id'=>$role_id, 'allow'=>$allow ));
+            if ('' != $mod_id) {
+                $this->set_relationship('roles_modules', array('module_id' => $mod_id, 'role_id' => $role_id, 'allow' => $allow));
             }
         }
     }
@@ -126,8 +119,8 @@ class Role extends SugarBean
     public function set_user_relationship($role_id, &$user_ids)
     {
         foreach ($user_ids as $user_id) {
-            if ($user_id != '') {
-                $this->set_relationship('roles_users', array( 'user_id'=>$user_id, 'role_id'=>$role_id ));
+            if ('' != $user_id) {
+                $this->set_relationship('roles_users', array('user_id' => $user_id, 'role_id' => $role_id));
             }
         }
     }
@@ -142,8 +135,6 @@ class Role extends SugarBean
     {
         $userArray = array();
         global $app_list_strings;
-
-
 
         $sql = "SELECT role_id FROM roles_users WHERE user_id='$user_id'";
 
@@ -171,7 +162,7 @@ class Role extends SugarBean
 
         $returnArray = array();
 
-        foreach ($moduleList as $key=>$val) {
+        foreach ($moduleList as $key => $val) {
             if (array_key_exists($val, $allowed)) {
                 continue;
             }
@@ -185,22 +176,34 @@ class Role extends SugarBean
     {
         // First, get the list of IDs.
 
-
-
         $query = "SELECT user_id as id FROM roles_users WHERE role_id='$this->id' AND deleted=0";
 
-        $user =  BeanFactory::newBean('Users');
+        $user = BeanFactory::newBean('Users');
         return $this->build_related_list($query, $user);
     }
 
     public function check_user_role_count($user_id)
     {
-        $query =  "SELECT count(*) AS num FROM roles_users WHERE ";
+        $query = "SELECT count(*) AS num FROM roles_users WHERE ";
         $query .= "user_id='$user_id' AND deleted=0";
         $result = $this->db->query($query);
 
         $row = $this->db->fetchByAssoc($result);
 
         return $row['num'];
+    }
+
+    public function bean_implements($interface)
+    {
+        if ('ACL' == $interface) {
+            return true;
+        }
+        return false;
+    }
+
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set'): bool
+    {
+        global $current_user;
+        return is_admin($current_user);
     }
 }

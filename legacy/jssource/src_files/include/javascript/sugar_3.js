@@ -4946,89 +4946,70 @@ SUGAR.append(SUGAR.util, {
   },
 
   closeActivityPanel: {
-    show: function ( module, id, new_status, viewType, parentContainerId, childElement = '' ) {
-      if (SUGAR.util.closeActivityPanel.panel)
-        SUGAR.util.closeActivityPanel.panel.destroy();
+    show: async function ( module, id, new_status, viewType, parentContainerId, childElement = '' ) {
       var singleModule = SUGAR.language.get("app_list_strings", "moduleListSingular")[module];
       singleModule = (typeof(singleModule) != 'undefined') ? singleModule.toLowerCase() : '';
       var closeText = SUGAR.language.get("app_strings", "LBL_CLOSE_ACTIVITY_CONFIRM").replace("#module#", singleModule);
-      SUGAR.util.closeActivityPanel.panel =
-        new YAHOO.widget.SimpleDialog("closeActivityDialog",
-          {
-            width: "300px",
-            fixedcenter: true,
-            visible: false,
-            draggable: false,
-            close: true,
-            text: closeText,
-            constraintoviewport: true,
-            buttons: [{
-              text: SUGAR.language.get("app_strings", "LBL_EMAIL_OK"), handler: function () {
-                //	alert("DELETE!");
 
-                if (SUGAR.util.closeActivityPanel.panel)
-                  SUGAR.util.closeActivityPanel.panel.hide();
+      // MintHCM #191488 - confirmation popup moved to the new UI via the LegacyEventManager bridge
+      var confirmed = await window.LegacyEventManager.emit('ShowConfirm', { text: closeText });
+      if (!confirmed) {
+        return;
+      }
 
-                ajaxStatus.showStatus(SUGAR.language.get('app_strings', 'LBL_SAVING'));
-                var args = "action=save&id=" + id + "&record=" + id + "&status=" + new_status + "&module=" + module;
+      ajaxStatus.showStatus(SUGAR.language.get('app_strings', 'LBL_SAVING'));
+      var args = "action=save&id=" + id + "&record=" + id + "&status=" + new_status + "&module=" + module;
 
-                //SuiteCRM bug #618
-                //The bug fix above (42361) has been taken out as the 'search_form' element it tries to find
-                //is never found in the dashlet.  This means that the entire page was always reloaded whenever
-                //a meeting or call was removed.  The callback below will only refresh the entire page if the
-                //parent container cannot be found, else it will refresh just the dashlet panel to reflect the
-                //updated data
-                var callback = {
-                  success: function () {
-                    //If the parent entry is not found, refresh the entire page
-                                            /* MintHCM #122649 START */
-                                            var parent;
-                                            // parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + id ) );
-                                            if(childElement.length != 0){
-                                                parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + childElement.id ) );
-                                                if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
-                                                    // childElement was provided but dashlet already refreshed (race condition on double-click) — do nothing
-                                                    ajaxStatus.hideStatus();
-                                                    return;
-                                                }
-                                               }
-                                            /* MintHCM #122649 END */
-                                           if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
-                                              window.location.reload( true )
-                                           } else {
-                      //else just refresh the parent panel using the SUGAR.mysugar.retrieveDashlet method
-                      // MintHCM START - preserve current dashlet page after close
-                      var dashletId = parent.attr('id').replace("dashlet_entire_", "");
-                      var currentPageUrl = parent.find('[data-current-page-url]').attr('data-current-page-url') || undefined;
-                      SUGAR.mySugar.retrieveDashlet(dashletId, currentPageUrl);
-                      // MintHCM END
-                    }
-                  }
+      //SuiteCRM bug #618
+      //The bug fix above (42361) has been taken out as the 'search_form' element it tries to find
+      //is never found in the dashlet.  This means that the entire page was always reloaded whenever
+      //a meeting or call was removed.  The callback below will only refresh the entire page if the
+      //parent container cannot be found, else it will refresh just the dashlet panel to reflect the
+      //updated data
+      var callback = {
+        success: function () {
+          //If the parent entry is not found, refresh the entire page
+                                  /* MintHCM #122649 START */
+                                  var parent;
+                                  // parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + id ) );
+                                  if(childElement.length != 0){
+                                      parent = $( 'div[id^="dashlet_entire_"]' ).has( $( "#" + childElement.id ) );
+                                      if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
+                                          // childElement was provided but dashlet already refreshed (race condition on double-click) — do nothing
+                                          ajaxStatus.hideStatus();
+                                          return;
+                                      }
+                                     }
+                                  /* MintHCM #122649 END */
+                                 if ( jQuery.isEmptyObject(parent) || parent.length === 0 ) {
+                                    window.location.reload( true )
+                                 } else {
+            //else just refresh the parent panel using the SUGAR.mysugar.retrieveDashlet method
+            // MintHCM START - preserve current dashlet page after close
+            var dashletId = parent.attr('id').replace("dashlet_entire_", "");
+            var currentPageUrl = parent.find('[data-current-page-url]').attr('data-current-page-url') || undefined;
+            SUGAR.mySugar.retrieveDashlet(dashletId, currentPageUrl);
+            // MintHCM END
+          }
+        }
 
-                }
-                YAHOO.util.Connect.asyncRequest('POST', 'index.php', callback, args);
-
-
-              }, isDefault: true
-            },
-              {
-                text: SUGAR.language.get("app_strings", "LBL_EMAIL_CANCEL"), handler: function () {
-                SUGAR.util.closeActivityPanel.panel.hide();
-              }
-              }]
-          });
-
-      SUGAR.util.closeActivityPanel.panel.setHeader(SUGAR.language.get("app_strings", "LBL_CLOSE_ACTIVITY_HEADER"));
-      SUGAR.util.closeActivityPanel.panel.render(document.body);
-      SUGAR.util.closeActivityPanel.panel.show();
-         // MintHCM 114934 START
-         $("#closeActivityDialog .container-close").text(SUGAR.language.get( "app_strings", "LNK_CLOSE"));
-         $("#closeActivityDialog .container-close").css("margin-right","10px");
-        // MintHCM 114934 END
+      }
+      YAHOO.util.Connect.asyncRequest('POST', 'index.php', callback, args);
     }
   },
 
-  setActivityStatus: function (module, id, newStatus, childElement) {
+  setActivityStatus: async function (module, id, newStatus, childElement, requireConfirm = false) {
+    if (requireConfirm) {
+      // MintHCM #191488 - confirmation popup moved to the new UI via the LegacyEventManager bridge
+      var singleModule = SUGAR.language.get("app_list_strings", "moduleListSingular")[module];
+      singleModule = (typeof(singleModule) != 'undefined') ? singleModule.toLowerCase() : '';
+      var confirmLabel = (newStatus === 'Deferred') ? 'LBL_DEFER_ACTIVITY_CONFIRM' : 'LBL_CLOSE_ACTIVITY_CONFIRM';
+      var confirmText = SUGAR.language.get("app_strings", confirmLabel).replace("#module#", singleModule);
+      var confirmed = await window.LegacyEventManager.emit('ShowConfirm', { text: confirmText });
+      if (!confirmed) {
+        return;
+      }
+    }
     ajaxStatus.showStatus(SUGAR.language.get('app_strings', 'LBL_SAVING'));
     var args = "action=save&id=" + id + "&record=" + id + "&status=" + newStatus + "&module=" + module;
     var callback = {

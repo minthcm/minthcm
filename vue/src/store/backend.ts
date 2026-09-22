@@ -9,6 +9,7 @@ import { useLanguagesStore, Languages } from './languages'
 import { AxiosError } from 'axios'
 import { useModulesStore, ModulesDefs } from './modules'
 import { usePreferencesStore } from './preferences'
+import { useThemeStore } from './theme'
 import { Settings } from 'luxon'
 import { mintApi } from '@/api/api'
 
@@ -47,6 +48,7 @@ export const useBackendStore = defineStore('backend', () => {
     const languages = useLanguagesStore()
     const modules = useModulesStore()
     const preferences = usePreferencesStore()
+    const theme = useThemeStore()
 
     const initData = ref<InitResponse | null>(null)
     const isInit = ref(false)
@@ -137,6 +139,7 @@ export const useBackendStore = defineStore('backend', () => {
                 localStorage.getItem('currentLang') ?? initData.value.global?.default_language ?? 'en_us'
             modules.modulesDefs = initData.value?.modules ?? {}
             preferences.user = initData.value.preferences
+            theme.init(initData.value.preferences?.theme ?? 'system')
             
             if (typeof caches !== "undefined") {
             Settings.defaultLocale = languages.currentLanguage.split('_')[0] ?? 'en'

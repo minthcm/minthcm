@@ -1,6 +1,7 @@
 <template>
     <div ref="wrapperRef">
         <component
+            v-if="!(props.view === 'detail' && props.defs?.hide_detail)"
             v-bind="{
                 ...$attrs,
                 ...( !['fieldset', 'date', 'age', 'datetime', 'datetimecombo', 'relate', 'parent'].includes(props.defs?.type) ? { name: props.defs.name } : {} )

@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -9,7 +8,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +36,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -48,10 +47,11 @@ namespace MintHCM\Api\Controllers;
 
 use Doctrine\ORM\EntityManagerInterface;
 use MintHCM\Api\Entities\Comments;
-use Slim\Psr7\Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use MintHCM\Modules\Comments\AccessChecker;
 use MintHCM\Api\Entities\Users;
+use MintHCM\Data\BeanFactory;
+use MintHCM\Modules\Comments\AccessChecker;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response;
 
 class CommentsController
 {
@@ -68,8 +68,7 @@ class CommentsController
         $parent_id = $request->getAttribute('parent_id');
         $parent_type = $request->getAttribute('parent_type');
 
-        chdir('../legacy');
-        $parent = \BeanFactory::getBean($parent_type, $parent_id);
+        $parent = BeanFactory::getBean($parent_type, $parent_id);
         if (empty($parent->id)) {
             $response = $response->withStatus(404);
             return $response;
@@ -77,7 +76,6 @@ class CommentsController
         if (!$parent->ACLAccess('view')) {
             return $response->withStatus(403);
         }
-        chdir('../api');
 
         /** @var Users[] */
         $users = $this->entityManager->getRepository(Users::class)->getActiveUsers();
@@ -109,8 +107,7 @@ class CommentsController
         $parent_id = $request->getAttribute('parent_id');
         $parent_type = $request->getAttribute('parent_type');
 
-        chdir('../legacy');
-        $parent = \BeanFactory::getBean($parent_type, $parent_id);
+        $parent = BeanFactory::getBean($parent_type, $parent_id);
         if (empty($parent->id)) {
             $response = $response->withStatus(404);
             return $response;
@@ -118,8 +115,6 @@ class CommentsController
         if (!$parent->ACLAccess('view')) {
             return $response->withStatus(403);
         }
-        chdir('../api');
-
         $comments = $this->getParentComments($parent_id, $parent_type);
 
         $response->getBody()->write(json_encode($comments));
@@ -136,8 +131,7 @@ class CommentsController
         $description = $request->getAttribute('description');
         $reply_to_id = $request->getAttribute('reply_to_id');
 
-        chdir('../legacy');
-        $parent = \BeanFactory::getBean($parent_type, $parent_id);
+        $parent = BeanFactory::getBean($parent_type, $parent_id);
         if (empty($parent->id)) {
             $response = $response->withStatus(404);
             return $response;
@@ -147,7 +141,7 @@ class CommentsController
             $response = $response->withStatus(403);
             return $response;
         }
-        $comment = \BeanFactory::newBean('Comments');
+        $comment = BeanFactory::newBean('Comments');
         $comment->description = $description;
         $comment->assigned_user_id = $current_user->id;
         $comment->parent_id = $parent_id;
@@ -156,8 +150,6 @@ class CommentsController
             $comment->reply_to_id = $reply_to_id;
         }
         $comment->save(false);
-        chdir('../api');
-
         return $response;
     }
 
@@ -169,9 +161,8 @@ class CommentsController
         $comment_id = $request->getAttribute('id');
         $attributes = $request->getAttribute('attributes');
 
-        chdir('../legacy');
-        $parent = \BeanFactory::getBean($parent_type, $parent_id);
-        $comment = \BeanFactory::getBean('Comments', $comment_id);
+        $parent = BeanFactory::getBean($parent_type, $parent_id);
+        $comment = BeanFactory::getBean('Comments', $comment_id);
         if (empty($parent->id) || empty($comment->id)) {
             $response = $response->withStatus(404);
             return $response;
@@ -185,8 +176,6 @@ class CommentsController
             }
         }
         $comment->save(false);
-        chdir('../api');
-
         $response = $response->withStatus(200);
         return $response;
     }
@@ -207,17 +196,17 @@ class CommentsController
             $parsed_comment = [
                 'id' => $comment->id,
                 'description' => $comment->description,
-                'reply_to_id' => $comment->reply_to_id,
-                'date_entered' => !empty($comment->date_entered) ? $comment->date_entered->format('Y-m-d H:i:s') : null,
+                'reply_to_id' => $comment->reply_to_id !== null ? current($this->entityManager->getUnitOfWork()->getEntityIdentifier($comment->reply_to_id)) : null,
+                'date_entered' => $comment->date_entered !== null ? $comment->date_entered->format('Y-m-d H:i:s') : null,
                 'pinned' => boolval($comment->pinned),
-                'date_edited' => !empty($comment->date_edited) ? $comment->date_edited->format('Y-m-d H:i:s'): null,
+                'date_edited' => $comment->date_edited !== null ? $comment->date_edited->format('Y-m-d H:i:s') : null,
                 'removed' => boolval($comment->removed),
             ];
 
             if ($comment->assigned_user_link instanceof Users) {
                 $parsed_comment['assigned_user'] = [
                     'id' => $comment->assigned_user_link->id,
-                    'name' => $comment->assigned_user_link->getFullName(),
+                    'full_name' => $comment->assigned_user_link->getFullName(),
                     'photo' => $comment->assigned_user_link->photo,
                 ];
             }

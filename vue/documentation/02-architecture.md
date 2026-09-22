@@ -392,6 +392,60 @@ Store State Updated
 Component Re-renders (automatic)
 ```
 
+### Returning From a Record
+
+Records are often opened from a legacy view that holds view state the shell cannot see - the
+calendar's view type and date range being the motivating case. Two mechanisms bring the user back
+to exactly that view, and they solve different halves of the problem.
+
+**1. View state in the URL (`legacyQueryToHash`)**
+
+A route can declare which query parameters of its legacy page belong in the app's address:
+
+```ts
+{
+    path: '/Calendar',
+    component: LegacyView,
+    meta: {
+        legacyUrl: 'legacy/index.php?module=Calendar',
+        legacyQueryToHash: ['view', 'action', 'year', 'month', 'day'],
+    },
+}
+```
+
+The bridge is bidirectional and lives in `LegacyView.vue`:
+
+- `legacyUrl` (computed) injects the address hash into the iframe `src`, so a refresh or a pasted
+  link reopens the legacy page in the same state;
+- `onIframeLoad` lifts those parameters back out of the iframe URL into the address via
+  `history.pushState`, so each in-iframe navigation becomes a browser history entry.
+
+> `onIframeLoad` deliberately writes history directly instead of calling `router.push`. `legacyUrl`
+> is reactive to the route, so routing there would reload the iframe, which would fire
+> `onIframeLoad` again - an endless reload loop.
+
+**2. Return location (`store/returnLocation.ts`)**
+
+The URL cannot carry everything. The dashboard is a single legacy page whose dashlets have no
+address of their own, and `router.back()` is unavailable after a refresh on the record or an entry
+from a link. So the place being left is captured explicitly:
+
+```
+legacy view --emit('CaptureReturnLocation', viewState)--> reportViewState()
+legacy view --postMessage(record URL)--> LegacyView --capture({path, hash, recordPath})--> store
+record: back arrow / cancel of a new record --> consume() --> router.push(origin)
+```
+
+The store is backed by `sessionStorage`: the location must survive a refresh on the record but must
+not outlive the tab, otherwise a remembered view would leak into a later visit. A `router.afterEach`
+guard drops the location as soon as the user navigates outside the captured journey, so entering a
+module from the menu is never affected by it.
+
+Legacy views that have extra state to preserve report it through the `CaptureReturnLocation` legacy
+event; the payload is opaque to the shell and handed straight back to the legacy side on return
+(the calendar dashlet is restored this way, via a `mint-restore-calendar-dashlet` message that
+refreshes that one dashlet and leaves the rest of the dashboard alone).
+
 ## Module System
 
 MintHCM uses a **module-based architecture** where each business entity (Users, Candidates, etc.) is a module.

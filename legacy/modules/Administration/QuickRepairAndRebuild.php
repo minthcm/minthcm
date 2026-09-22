@@ -47,6 +47,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 use Api\Core\Config\ApiConfig;
 
 require_once 'lib/Search/ElasticSearch/MappingsGenerator.php';
+// requireWithCustom() gives a full-file override point at custom/include/RecordView/RecordViewDefsCache.php.
+SugarAutoLoader::requireWithCustom('include/RecordView/RecordViewDefsCache.php');
 
 #[\AllowDynamicProperties]
 class RepairAndClear
@@ -122,6 +124,7 @@ class RepairAndClear
                 $this->clearXMLfiles();
                 $this->clearSearchCache();
                 $this->clearExternalAPICache();
+                $this->clearRecordViewDefs();
                 $this->rebuildExtensions();
                 $this->rebuildAuditTables();
                 $this->generateMappings();
@@ -314,6 +317,24 @@ class RepairAndClear
             }
         } else {
             $this->_clearCache(sugar_cached('modules/'), 'vardefs.php');
+        }
+    }
+    /**
+     * Removes cached, merged recordviewdefs.php files from cache/modules/<module>/. Rebuilt on
+     * the next read (lazy-build) or by rebuildExtensions() -> ModuleInstaller::rebuild_recordviewdefs().
+     */
+    public function clearRecordViewDefs()
+    {
+        global $mod_strings;
+        if ($this->show_output) {
+            echo "<h3>{$mod_strings['LBL_QR_CLEARRECORDVIEWDEFS']}</h3>";
+        }
+        if (!empty($this->module_list) && is_array($this->module_list) && !in_array(translate('LBL_ALL_MODULES'), $this->module_list)) {
+            foreach ($this->module_list as $module_name_singular) {
+                RecordViewDefsCache::clear($this->_getModuleNamePlural($module_name_singular));
+            }
+        } else {
+            RecordViewDefsCache::clear();
         }
     }
     public function clearJsFiles()

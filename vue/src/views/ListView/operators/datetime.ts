@@ -1,4 +1,5 @@
 import dateTimeInput from '../inputs/datetime'
+import dateInput from '../inputs/date'
 import numericInput from '../inputs/numeric'
 
 export default {
@@ -12,6 +13,11 @@ export default {
         not: true,
         inputs: [dateTimeInput],
         filters: [{ op: 'range', value: { gte: '{0}', lte: '{0}' } }],
+    },
+    on_day: {
+        label: 'LBL_ESLIST_ON_DAY',
+        inputs: [dateInput],
+        filters: [{ op: 'range', value: { gte: '{0} 00:00:00', lte: '{0} 23:59:59' } }],
     },
 
     previous_week: {

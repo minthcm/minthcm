@@ -2,7 +2,7 @@
     <div>
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
-            <MdPreview language="en-US" :modelValue="decodeHTML(props.modelValue)"/>
+            <MdPreview language="en-US" :modelValue="decodeHTML(props.modelValue)" :sanitize="sanitize"/>
         </div>
     </div>
 </template>
@@ -11,6 +11,7 @@
 import { MdPreview } from 'md-editor-v3'
 import { FieldProps } from '../Field.model';
 import 'md-editor-v3/lib/style.css';
+import DOMPurify from 'dompurify'
 
 const props = defineProps<FieldProps>()
 
@@ -19,6 +20,8 @@ const decodeHTML = (text: string) => {
     txt.innerHTML = text
     return txt.value
 }
+
+const sanitize = (html: string) => DOMPurify.sanitize(html)
 </script>
 
 <style scoped lang="scss">

@@ -136,4 +136,8 @@ $mod_strings = array(
     'LBL_CURRENCY_NAME_COMMENT' => 'Currency name field used in the candidature process.',
     'LBL_POSITION_NAME_COMMENT' => 'Job position related to this recruitment.',
    'LBL_SECURITYGROUPS_SUBPANEL_TITLE' => 'Organizational Units',
+    'LBL_ERROR_LOADING_DATA' => 'Error loading data',
+    'LBL_REFRESH' => 'Refresh',
+    'LBL_WIDGET_CANDIDATURE_STATUSES_TITLE' => 'Candidatures by Status',
+    'LBL_WIDGET_CANDIDATURE_STATUSES_EMPTY' => 'No candidatures yet',
 );

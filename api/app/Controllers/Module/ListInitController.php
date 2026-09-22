@@ -123,8 +123,14 @@ class ListInitController
         foreach (static::METADATA_FILES as $file) {
             $file = str_replace('{module}', $this->module, $file);
             if (file_exists($file)) {
+                $acl_module_name = null;
                 include $file;
                 $this->metadata = $ESListViewDefs[$this->module];
+                if (empty($this->bean) && !empty($acl_module_name)) {
+                    chdir('../legacy/');
+                    $this->bean = \BeanFactory::newBean($acl_module_name);
+                    chdir('../api/');
+                }
                 break;
             }
         }

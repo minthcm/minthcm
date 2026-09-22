@@ -106,6 +106,8 @@ class OrganizationStructureDashlet extends Dashlet
         $ss->assign('height', $this->height);
         $ss->assign('rootElement', $this->getRootElement());
         $ss->assign('fullscreen', false);
+        $ss->assign('logoUrl', $this->getLogo());
+        $ss->assign('systemName', $GLOBALS['system_config']->settings['system_name'] ?? '');
 
         $lang = strtolower(substr($GLOBALS['current_language'], 0, 2));
         SugarAutoLoader::requireWithCustom('modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructure.php');

@@ -103,7 +103,9 @@ const coreRoutes: Array<RouteRecordRaw> = [
             isLegacy: true,
             legacyUrl: 'legacy/index.php?module=Calendar',
             auth: true,
-            legacyQueryToHash: ['view', 'action'],
+            // The date range travels with the view type so that a refresh keeps the week the user
+            // was on and the address can be copied into another tab. #191870
+            legacyQueryToHash: ['view', 'action', 'year', 'month', 'day'],
         },
     },
     {

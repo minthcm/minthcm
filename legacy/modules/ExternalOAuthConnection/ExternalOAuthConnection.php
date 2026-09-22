@@ -61,7 +61,6 @@ class ExternalOAuthConnection extends Basic
     public $refresh_token;
     public $type;
 
-
     /**
      * @inheritDoc
      */
@@ -90,7 +89,6 @@ class ExternalOAuthConnection extends Basic
 
         $this->keepWriteOnlyFieldValues();
 
-
         return parent::save($check_notify);
     }
 
@@ -110,7 +108,7 @@ class ExternalOAuthConnection extends Basic
             return true;
         }
 
-        if ($this->type !== 'personal') {
+        if ('personal' !== $this->type) {
             return true;
         }
 
@@ -121,7 +119,6 @@ class ExternalOAuthConnection extends Basic
         if ($this->created_by === $current_user->id) {
             return true;
         }
-
 
         return false;
     }
@@ -143,7 +140,7 @@ class ExternalOAuthConnection extends Basic
      */
     public function bean_implements($interface)
     {
-        if ($interface === 'ACL') {
+        if ('ACL' === $interface) {
             return true;
         }
 
@@ -156,39 +153,7 @@ class ExternalOAuthConnection extends Basic
     public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set')
     {
         global $current_user;
-
-        $isNotAllowAction = $this->isNotAllowedAction($view);
-        if ($isNotAllowAction === true) {
-            return false;
-        }
-
-        if (!$this->hasAccessToPersonalAccount()) {
-            $this->logPersonalAccountAccessDenied("ACLAccess-$view");
-
-            return false;
-        }
-
-        $isPersonal = $this->type === 'personal';
-        $isAdmin = is_admin($current_user);
-
-        if ($isPersonal === true && $this->hasAccessToPersonalAccount()) {
-            return true;
-        }
-
-        $isAdminOnlyAction = $this->isAdminOnlyAction($view);
-        if (!$isPersonal && !$isAdmin && $isAdminOnlyAction === true) {
-            return false;
-        }
-
-        $hasActionAclsDefined = has_group_action_acls_defined('ExternalOAuthConnection', 'view');
-        $isSecurityGroupBasedAction = $this->isSecurityGroupBasedAction($view);
-
-        if (!$isPersonal && !$isAdmin && !$hasActionAclsDefined && $isSecurityGroupBasedAction === true) {
-            return false;
-        }
-
-
-        return parent::ACLAccess($view, $is_owner, $in_group);
+        return is_admin($current_user);
     }
 
     /**
@@ -229,7 +194,7 @@ class ExternalOAuthConnection extends Basic
 
             $hasActionAclsDefined = has_group_action_acls_defined('ExternalOAuthConnection', 'list');
 
-            if($hasActionAclsDefined === false && !is_admin($current_user)) {
+            if (false === $hasActionAclsDefined && !is_admin($current_user)) {
                 $showGroupRecords = '';
             }
 
@@ -254,7 +219,7 @@ class ExternalOAuthConnection extends Basic
         }
 
         foreach ($this->field_defs as $field => $field_def) {
-            if (empty($field_def['display']) || $field_def['display'] !== 'writeonly') {
+            if (empty($field_def['display']) || 'writeonly' !== $field_def['display']) {
                 continue;
             }
 

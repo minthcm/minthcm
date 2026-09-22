@@ -189,7 +189,7 @@ $dictionary['WorkSchedules'] = array(
          'name' => 'type',
          'vname' => 'LBL_TYPE',
          'type' => 'enum',
-         'massupdate' => 0,
+         'massupdate' => true,
          'default' => 'office',
          'no_default' => false,
          'comments' => '',
@@ -607,6 +607,11 @@ $dictionary['WorkSchedules'] = array(
         'name' => 'idx_workschedule_date_end',
         'type' => 'index',
         'fields' => array('date_end'),
+      ),
+      array(
+        'name' => 'idx_workschedule_leave_lookup',
+        'type' => 'index',
+        'fields' => array('assigned_user_id', 'deleted', 'type', 'date_start'),
       ),
    ),
    'relationships' => array(

@@ -82,10 +82,32 @@ if ( !defined('sugarEntry') || !sugarEntry ) {
      
       // View Tools #51728 START
       public function action_markPopupAsDeleted() {
-         global $db;
-         $sql = "UPDATE reminders_invitees SET deleted=1 WHERE id='{$_REQUEST['record']}'";
-         $resut = $db->query($sql);
-         echo json_encode($resut);
+         global $current_user;
+
+         $recordId = isset($_REQUEST['record']) && is_string($_REQUEST['record']) ? $_REQUEST['record'] : '';
+         $isValidator = new \SuiteCRM\Utility\SuiteValidator();
+         if (!$isValidator->isValidId($recordId)) {
+            echo json_encode(false);
+            die();
+         }
+
+         $invitee = BeanFactory::getBean('Reminders_Invitees', $recordId);
+         if (empty($invitee)) {
+            echo json_encode(false);
+            die();
+         }
+
+         // The invitee row must belong to the logged in user. Deliberately stricter than
+         // the popup generator in Reminder::addNotifications(), which matches on
+         // related_invitee_module_id alone - here the row must also be a 'Users' invitee.
+         if ($invitee->related_invitee_module !== 'Users' || $invitee->related_invitee_module_id !== $current_user->id) {
+            echo json_encode(false);
+            die();
+         }
+
+         $invitee->mark_deleted($invitee->id);
+
+         echo json_encode(true);
          die();
       }
 

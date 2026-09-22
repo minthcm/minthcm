@@ -28,7 +28,9 @@ import { useLanguagesStore } from '@/store/languages'
 import { useAuthStore } from '@/store/auth'
 import { MintReaction } from '../MintReactions/MintReactions'
 
-const props = defineProps(['newsItem'])
+const props = defineProps<{
+    newsItem: { id: string; reactions?: MintReaction[]; comments_count?: number }
+}>()
 const auth = useAuthStore()
 const languages = useLanguagesStore()
 const store = useMintWallStore()
@@ -43,5 +45,3 @@ const currentUserReactionType = computed(() => {
     return props.newsItem.reactions?.find((reaction: MintReaction) => reaction.user.id === auth.user?.id)?.type
 })
 </script>
-
-<style scoped lang="scss"></style>

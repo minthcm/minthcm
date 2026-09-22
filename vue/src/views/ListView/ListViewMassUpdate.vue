@@ -53,6 +53,7 @@
 <script setup lang="ts">
     import { useListViewStore } from './ListViewStore'
     import { useLanguagesStore } from '@/store/languages'
+    import { useStatusBoxesStore } from '@/store/statusBoxes'
     import { ref } from 'vue'
     import MintButton from '@/components/MintButtons/MintButton.vue'
     import ListViewMassUpdateRow from './ListViewMassUpdateRow.vue'
@@ -83,6 +84,12 @@
         })).executeMassUpdate()
         isLoading.value = false
         if (result.data.success) {
+            if (result.data.updated !== undefined && result.data.total !== undefined) {
+                useStatusBoxesStore().showStatus('massupdate-partial', {
+                    type: result.data.updated < result.data.total ? 'info' : 'success',
+                    message: `${result.data.updated} / ${result.data.total} ${languages.label('LBL_MASSUPDATE_PARTIAL_INFO')}`,
+                })
+            }
             store.setMassUpdate(false)
             store.getData()
         } else {

@@ -41,20 +41,20 @@ const props = defineProps<Props>()
     position: relative;
     flex-grow: 1;
     display: flex;
-    border-left: thin solid #dbdbdb;
+    border-left: thin solid var(--mint-border);
     > div {
         flex: 1;
         display: flex;
-        border-right: thin solid #dbdbdb;
+        border-right: thin solid var(--mint-border);
         .scheduler-timeline-hour {
             position: absolute;
             padding-left: 4px;
-            color: #00000099;
+            color: rgba(var(--v-theme-on-surface), 0.6);
         }
         > div:not(.scheduler-timeline-hour) {
             flex: 1;
             &:not(:last-child) {
-                border-right: thin dashed #dbdbdb;
+                border-right: thin dashed var(--mint-border);
             }
         }
     }

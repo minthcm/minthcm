@@ -63,9 +63,7 @@ private static $paused = false;
  * Constructor for TrackerManager.  Declared private for singleton pattern.
  *
  */
-// FIXME [CR #181880]: Changing constructor from private to public breaks the Singleton pattern.
-// Consider using TrackerManager::getInstance() instead of direct instantiation.
-public function __construct() {
+private function __construct() {
 	require('modules/Trackers/config.php');
 	$this->metadata = $tracker_config;
     self::$monitor_id = create_guid();

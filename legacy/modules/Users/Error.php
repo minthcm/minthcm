@@ -53,16 +53,23 @@ global $app_strings;
 echo "<br><br>";
 
 if(isset($_REQUEST['ie_error']) && $_REQUEST['ie_error'] == 'true') {
-	echo '<a href="index.php?module=Users&action=EditView&record='.$_REQUEST['id'].'">'.$mod_strings['ERR_IE_FAILURE1'].'</a><br>';
+	// MintHCM #GHSA-qw6v-vrc7-f79x Start
+	$safeId = preg_replace('/[^A-Za-z0-9\-_]/', '', (string)($_REQUEST['id'] ?? ''));
+	echo '<a href="index.php?module=Users&action=EditView&record='.$safeId.'">'.$mod_strings['ERR_IE_FAILURE1'].'</a><br>';
+	// MintHCM #GHSA-qw6v-vrc7-f79x End
 	echo $mod_strings['ERR_IE_FAILURE2'];
 } else {
     ?>
 <span class='error'><?php if (isset($_REQUEST['error_string'])) {
         LoggerManager::getLogger()->warn('Passing error string in request is deprecated. Please update your code.');
-        echo getAppString($_REQUEST['error_string']);
+        // MintHCM #GHSA-qw6v-vrc7-f79x Start
+        echo htmlspecialchars(getAppString($_REQUEST['error_string']), ENT_QUOTES, 'UTF-8');
+        // MintHCM #GHSA-qw6v-vrc7-f79x End
     } else {
         LoggerManager::getLogger()->warn('Passing error string in request is deprecated. Please update your code.');
-        echo isset($request['error_string']) ? getAppString($request['error_string']) : null;
+        // MintHCM #GHSA-qw6v-vrc7-f79x Start
+        echo isset($request['error_string']) ? htmlspecialchars(getAppString($request['error_string']), ENT_QUOTES, 'UTF-8') : null;
+        // MintHCM #GHSA-qw6v-vrc7-f79x End
     } ?>
 <br><br>
 <?php echo $app_strings['NTC_CLICK_BACK']; }?>

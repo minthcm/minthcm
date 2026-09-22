@@ -20,6 +20,15 @@ class FilesController
                 require_once('include/upload_file.php');
                 $fileManager = new \UploadFile('file');
                 if ($fileManager->confirm_upload()) {
+                    $parent = \BeanFactory::getBean($module, $record_id);
+                    if (!$parent || empty($parent->id)) {
+                        chdir('../api');
+                        return $response->withStatus(404);
+                    }
+                    if (!$parent->ACLAccess('edit')) {
+                        chdir('../api');
+                        return $response->withStatus(403);
+                    }
                     $file = \BeanFactory::newBean('Files');
                     $file->document_name = $fileManager->get_stored_file_name();
                     $file->parent_type = $module;
@@ -27,6 +36,10 @@ class FilesController
                     $file->filename = $fileManager->get_stored_file_name();
                     $file->file_mime_type = $fileManager->get_mime_type();
                     $file->assigned_user_id = $current_user->id;
+                    if (!$file->ACLAccess('edit')) {
+                        chdir('../api');
+                        return $response->withStatus(403);
+                    }
                     if ($file->save(false) && $fileManager->final_move($file->id)) {
                         $result = [
                             'id' => $file->id,

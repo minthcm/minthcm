@@ -10,7 +10,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -38,10 +38,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -56,18 +56,16 @@ class ACLRole extends SugarBean
     public $disable_row_level_security = true;
     public $disable_custom_fields = true;
     public $relationship_fields = array(
-                                    'user_id'=>'users'
-                                );
+        'user_id' => 'users',
+    );
 
     public $created_by;
-
 
     // bug 16790 - missing get_summary_text method led Tracker to display SugarBean's "base implementation"
     public function get_summary_text()
     {
-        return (string)$this->name;
+        return (string) $this->name;
     }
-
 
     /**
      * function setAction($role_id, $action_id, $access)
@@ -80,11 +78,10 @@ class ACLRole extends SugarBean
      */
     public function setAction($role_id, $action_id, $access)
     {
-        $relationship_data = array('role_id'=>$role_id, 'action_id'=>$action_id,);
-        $additional_data = array('access_override'=>$access);
+        $relationship_data = array('role_id' => $role_id, 'action_id' => $action_id);
+        $additional_data = array('access_override' => $access);
         $this->set_relationship('acl_roles_actions', $relationship_data, true, true, $additional_data);
     }
-
 
     /**
      * static  getUserRoles($user_id)
@@ -98,10 +95,10 @@ class ACLRole extends SugarBean
 
         //if we don't have it loaded then lets check against the db
         $additional_where = '';
-        $query = "SELECT acl_roles.* ".
-            "FROM acl_roles ".
-            "INNER JOIN acl_roles_users ON acl_roles_users.user_id = '$user_id' ".
-                "AND acl_roles_users.role_id = acl_roles.id AND acl_roles_users.deleted = 0 ".
+        $query = "SELECT acl_roles.* " .
+            "FROM acl_roles " .
+            "INNER JOIN acl_roles_users ON acl_roles_users.user_id = '$user_id' " .
+            "AND acl_roles_users.role_id = acl_roles.id AND acl_roles_users.deleted = 0 " .
             "WHERE acl_roles.deleted=0 ";
 
         $result = DBManagerFactory::getInstance()->query($query);
@@ -129,15 +126,15 @@ class ACLRole extends SugarBean
      */
     public static function getUserRoleNames($user_id)
     {
-        $user_roles = sugar_cache_retrieve("RoleMembershipNames_".$user_id);
+        $user_roles = sugar_cache_retrieve("RoleMembershipNames_" . $user_id);
 
         if (!$user_roles) {
             //if we don't have it loaded then lets check against the db
             $additional_where = '';
-            $query = "SELECT acl_roles.* ".
-                "FROM acl_roles ".
-                "INNER JOIN acl_roles_users ON acl_roles_users.user_id = '$user_id' ".
-                    "AND acl_roles_users.role_id = acl_roles.id AND acl_roles_users.deleted = 0 ".
+            $query = "SELECT acl_roles.* " .
+                "FROM acl_roles " .
+                "INNER JOIN acl_roles_users ON acl_roles_users.user_id = '$user_id' " .
+                "AND acl_roles_users.role_id = acl_roles.id AND acl_roles_users.deleted = 0 " .
                 "WHERE acl_roles.deleted=0 ";
 
             $result = DBManagerFactory::getInstance()->query($query);
@@ -147,12 +144,11 @@ class ACLRole extends SugarBean
                 $user_roles[] = $row['name'];
             }
 
-            sugar_cache_put("RoleMembershipNames_".$user_id, $user_roles);
+            sugar_cache_put("RoleMembershipNames_" . $user_id, $user_roles);
         }
 
         return $user_roles;
     }
-
 
     /**
      * static getAllRoles($returnAsArray = false)
@@ -189,7 +185,7 @@ class ACLRole extends SugarBean
      * @param GUID $role_id
      * @return array of actions
      */
-    public function getRoleActions($role_id, $type='module')
+    public function getRoleActions($role_id, $type = 'module')
     {
         global $beanList;
         //if we don't have it loaded then lets check against the db
@@ -198,12 +194,12 @@ class ACLRole extends SugarBean
         $query = "SELECT acl_actions.*";
         //only if we have a role id do we need to join the table otherwise lets use the ones defined in acl_actions as the defaults
         if (!empty($role_id)) {
-            $query .=" ,acl_roles_actions.access_override ";
+            $query .= " ,acl_roles_actions.access_override ";
         }
-        $query .=" FROM acl_actions ";
+        $query .= " FROM acl_actions ";
 
         if (!empty($role_id)) {
-            $query .=		" LEFT JOIN acl_roles_actions ON acl_roles_actions.role_id = '$role_id' AND  acl_roles_actions.action_id = acl_actions.id AND acl_roles_actions.deleted = 0";
+            $query .= " LEFT JOIN acl_roles_actions ON acl_roles_actions.role_id = '$role_id' AND  acl_roles_actions.action_id = acl_actions.id AND acl_roles_actions.deleted = 0";
         }
         $query .= " WHERE acl_actions.deleted=0 ORDER BY acl_actions.category, acl_actions.name";
         $result = $db->query($query);
@@ -258,18 +254,18 @@ class ACLRole extends SugarBean
         //we need to delete the actions relationship by hand (special case)
         $date_modified = DBManagerFactory::getInstance()->convert("'" . TimeDate::getInstance()->nowDb() . "'",
             'datetime');
-        $query =  "UPDATE acl_roles_actions SET deleted=1 , date_modified=$date_modified WHERE role_id = '$id' AND deleted=0";
+        $query = "UPDATE acl_roles_actions SET deleted=1 , date_modified=$date_modified WHERE role_id = '$id' AND deleted=0";
         $this->db->query($query);
         parent::mark_relationships_deleted($id);
     }
 
     /**
      *  toArray()
-        * returns this role as an array
-        *
-        * @return array of fields with id, name, description
-        */
-    public function toArray($dbOnly = false, $stringOnly = false, $upperKeys=false)
+     * returns this role as an array
+     *
+     * @return array of fields with id, name, description
+     */
+    public function toArray($dbOnly = false, $stringOnly = false, $upperKeys = false)
     {
         $array_fields = array('id', 'name', 'description');
         $arr = array();
@@ -284,15 +280,29 @@ class ACLRole extends SugarBean
     }
 
     /**
-    * fromArray($arr)
-    * converts an array into an role mapping name value pairs into files
-    *
-    * @param Array $arr
-    */
+     * fromArray($arr)
+     * converts an array into an role mapping name value pairs into files
+     *
+     * @param Array $arr
+     */
     public function fromArray($arr)
     {
-        foreach ($arr as $name=>$value) {
+        foreach ($arr as $name => $value) {
             $this->$name = $value;
         }
+    }
+
+    public function bean_implements($interface)
+    {
+        if ('ACL' == $interface) {
+            return true;
+        }
+        return false;
+    }
+
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set'): bool
+    {
+        global $current_user;
+        return is_admin($current_user);
     }
 }

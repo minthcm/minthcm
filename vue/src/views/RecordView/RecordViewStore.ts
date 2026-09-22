@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, unref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useModulesStore } from '@/store/modules'
@@ -17,6 +17,7 @@ interface Panel {
 interface RecordViewDefs {
     order: string[]
     panels: { [key: string]: Panel }
+    sidepanel?: boolean | string[]
 }
 
 export interface Bean {
@@ -120,14 +121,20 @@ export const useRecordViewStore = defineStore('recordview', () => {
                 label: subpanelDefs[key].properties?.title_key || '',
                 inlineButtons: Object.entries(subpanelDefs[key].columns ?? {})
                     .filter(([col, props]) => props.usage !== 'query_only' && !props?.type)
-                    .map(([col, props]) => ({
-                        ...(props || {}),
-                        name: col,
-                        widget_class: props?.widget_class || '',
-                } as MintInlineButton)),
+                    .map(
+                        ([col, props]) =>
+                            ({
+                                ...(props || {}),
+                                name: col,
+                                widget_class: props?.widget_class || '',
+                            } as MintInlineButton),
+                    ),
                 sortBy: subpanelDefs[key].properties?.sort_by || '',
                 sortOrder: subpanelDefs[key].properties?.sort_order || '',
-                filters: subpanelDefs[key].properties?.filters && Object.keys(subpanelDefs[key].properties?.filters).length ? subpanelDefs[key].properties?.filters : {},
+                filters:
+                    subpanelDefs[key].properties?.filters && Object.keys(subpanelDefs[key].properties?.filters).length
+                        ? subpanelDefs[key].properties?.filters
+                        : {},
                 columns: Object.entries(subpanelDefs[key].columns ?? {})
                     .filter(([col, props]) => props.usage !== 'query_only')
                     .map(([col, props]) => ({
@@ -150,7 +157,7 @@ export const useRecordViewStore = defineStore('recordview', () => {
     })
 
     const getSubpanelByKey = (subpanelKey: string) => {
-        return subpanels.value.find(sp => sp.key === subpanelKey)
+        return subpanels.value.find((sp) => sp.key === subpanelKey)
     }
 
     async function fetchSubpanelsData() {
@@ -165,10 +172,10 @@ export const useRecordViewStore = defineStore('recordview', () => {
                     if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
                         link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
                     }
-                    
+
                     if (link) {
                         await link.fetchRelatedRecords(subpanel.key, subpanel.paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder)
-                        
+
                         if (!subpanelsData.value) {
                             subpanelsData.value = {}
                         }
@@ -181,11 +188,17 @@ export const useRecordViewStore = defineStore('recordview', () => {
                 } finally {
                     subpanelsLoading.value[subpanel.key] = false
                 }
-            })
+            }),
         )
     }
 
-    async function fetchSubpanelRecords(subpanelKey: string, paginateBy: number, page: number, sortBy: string = '', sortOrder: string = '') {
+    async function fetchSubpanelRecords(
+        subpanelKey: string,
+        paginateBy: number,
+        page: number,
+        sortBy = '',
+        sortOrder = '',
+    ) {
         const subpanel = getSubpanelByKey(subpanelKey)
         const getSubpanelData = subpanel?.properties?.get_subpanel_data?.toString()
 
@@ -199,7 +212,7 @@ export const useRecordViewStore = defineStore('recordview', () => {
                 return
             }
             await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder)
-            
+
             if (!subpanelsData.value) {
                 subpanelsData.value = {}
             }
@@ -270,6 +283,15 @@ export const useRecordViewStore = defineStore('recordview', () => {
         bean.value.updateFields(updatedValues)
     }
 
+    const sidepanelWidgets = computed<string[]>(() => {
+        if (defs.value && !Array.isArray(defs.value) && Array.isArray(defs.value.sidepanel)) {
+            return defs.value.sidepanel
+        }
+        return []
+    })
+
+    const hasSidepanel = computed(() => sidepanelWidgets.value.length > 0 && !unref(bean.value.isNew))
+
     return {
         defs,
         view,
@@ -291,5 +313,7 @@ export const useRecordViewStore = defineStore('recordview', () => {
         addSkeletonRecord,
         removeSkeletonRecord,
         subpanelsLoading,
+        hasSidepanel,
+        sidepanelWidgets,
     }
 })

@@ -4,6 +4,8 @@ import { storeToRefs } from 'pinia'
 
 
 export class Update extends MassAction {
+    protected static readonly actionName = 'Update'
+
     public async execute() {
         useListViewStore().setMassUpdate(true)
         return false

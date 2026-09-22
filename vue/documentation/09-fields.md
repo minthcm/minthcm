@@ -141,6 +141,7 @@ export const fieldConfig = {
         'datetimecombo': 'datetime',    // datetimecombo → datetime
         'ColoredEnum': 'enum',          // ColoredEnum → enum
         'image': 'file',                // image → file
+        'html': 'richtext',             // html → richtext
     },
 
     // Default type when resolution fails
@@ -564,6 +565,26 @@ File upload:
 - Progress indication
 - File preview
 - Multiple files support
+
+### Richtext Field
+
+Rich text (HTML) content, backed by the `html` vardef type:
+
+```vue
+<Field
+    :defs="{
+        type: 'html',
+        name: 'content_of_announcement'
+    }"
+    :view="'edit'"
+    v-model="news.content_of_announcement"
+/>
+```
+
+**Features:**
+- Edit view uses `MintWysiwyg` (TinyMCE) for formatting
+- Detail view sanitizes the stored HTML with DOMPurify before rendering (`v-html`) and shows the record's `image` field above the content, if one exists
+- List view strips tags and truncates to 100 characters
 
 ## Field Options
 

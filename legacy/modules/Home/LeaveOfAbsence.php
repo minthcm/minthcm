@@ -172,6 +172,20 @@ $typeToColor = array(
    'excused_absence' => '#adff2f',
    'child_care' => '#e66ec4',
 );
+// Mint: dark mode only (see dark-mode.css .fc-event-ws-*) - lets these events
+// reuse the exact same WorkSchedule colors as the Calendar module (Cal.js)
+// instead of the pastel $typeToColor above, which stays light-mode-only.
+$typeToWorkscheduleColorClass = array(
+   'home' => 'fc-event-ws-blue',
+   'holiday' => 'fc-event-ws-yellow',
+   'overtime' => 'fc-event-ws-yellow',
+   'leave_at_request' => 'fc-event-ws-yellow',
+   'sick' => 'fc-event-ws-red',
+   'sick_care' => 'fc-event-ws-red',
+   'delegation' => 'fc-event-ws-red',
+   'occasional_leave' => 'fc-event-ws-red',
+   'excused_absence' => 'fc-event-ws-red',
+);
 $result = array();
 global $app_list_strings;
 $users_events = array();
@@ -191,6 +205,7 @@ while ( $event = $db->fetchByAssoc($sql_result) ) {
          "allDay" => true,
          "editable" => false,
          "eventTextColor" => '#000',
+         "className" => $typeToWorkscheduleColorClass[$event['type']] ?? '',
       );
    } else {
       $pdId = $users_events[$yesterday_key];

@@ -47,7 +47,7 @@ namespace MintHCM\Modules\Trackers\api\controllers;
 
 use MintHCM\Data\BeanFactory;
 use MintHCM\Data\MintDateTime;
-use MintHCM\Utils\LegacyConnector;
+use MintHCM\Utils\LegacyStaticConnector;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
@@ -75,15 +75,11 @@ class RecordViewAction
         if (empty($bean->id) || $bean->id !== $record) {
             return;
         }
-        // FIXME [CR #181880]: chdir() pattern is fragile and error-prone depending on execution context.
-        // Also, $trackerManager is reassigned from LegacyConnector object to static getInstance() result
-        // which is confusing. Consider refactoring to avoid chdir() and clarify variable usage.
-        // a mój komentarz jest taki, że zamiast zmieniać konstruktor TrackerManager z private na public, lepiej byłoby dodać jakiś
-        // LegacyStaticConnector, który by udostępniał tylko statyczne metody, a wtedy nie byłoby problemu z Singletonem, bo nie byłoby potrzeby tworzenia instancji
-        $trackerManager = $trackerManager::getInstance();
-        chdir('../legacy');
+        $trackerManager = new LegacyStaticConnector(
+            'TrackerManager',
+            'modules/Trackers/TrackerManager.php'
+        );
         if ($monitor = $trackerManager->getMonitor('tracker')) {
-            chdir('../api');
             $monitor->setValue('date_modified', (new MintDateTime('now'))->toDatabaseDateFormat());
             $monitor->setValue('user_id', $current_user->id);
             $monitor->setValue('module_name', $bean->module_name);
@@ -91,9 +87,7 @@ class RecordViewAction
             $monitor->setValue('item_id', $bean->id);
             $monitor->setValue('item_summary', $bean->get_summary_text());
             $monitor->setValue('visible', $bean->tracker_visibility);
-            chdir('../legacy');
             $trackerManager->saveMonitor($monitor, true, true);
-            chdir('../api');
         }
     }
 

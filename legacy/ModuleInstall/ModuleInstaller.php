@@ -45,6 +45,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
+// Path relative to legacy/ (this class is only ever loaded with that cwd). requireWithCustom()
+// gives a full-file override point at custom/include/RecordView/RecordViewDefsCache.php.
+SugarAutoLoader::requireWithCustom('include/RecordView/RecordViewDefsCache.php');
 
 /*
  * ModuleInstaller - takes an installation package from files in the custom/Extension/X directories, and moves them into custom/X to install them.
@@ -1823,11 +1826,23 @@ class ModuleInstaller
 
         $this->rebuild_languages($sugar_config['languages']);
         $this->rebuild_extensions();
+        $this->rebuild_recordviewdefs();
         $this->rebuild_dashletcontainers();
         $this->rebuild_relationships();
         $this->rebuild_tabledictionary();
         $this->reset_opcodes();
         sugar_cache_reset();
+    }
+
+    /**
+     * Rebuilds the cached, merged recordviewdefs.php for every module -- source definition
+     * (custom/ override or base file) plus all files found in
+     * custom/Extension/modules/<module>/recordview/. See RecordViewDefsCache.
+     */
+    public function rebuild_recordviewdefs()
+    {
+        $this->log(translate('LBL_MI_REBUILDING') . ' recordviewdefs...');
+        RecordViewDefsCache::refreshAll();
     }
 
     /*

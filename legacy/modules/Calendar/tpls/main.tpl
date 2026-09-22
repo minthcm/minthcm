@@ -111,6 +111,7 @@
 		CAL.cells_per_day = {$cells_per_day};
 		CAL.current_params = {literal}{}{/literal};
 		CAL.dashlet = "{$dashlet}";
+		CAL.dashlet_id = "{$dashlet_id}";
 		CAL.grid_start_ts = {$grid_start_ts};
 		CAL.scroll_slot = {$scroll_slot};
 
@@ -132,6 +133,14 @@
 		CAL.year = {$year};
 		CAL.month = {$month};
 		CAL.day = {$day};
+
+		{literal}
+		// #191870 - a dashlet asks the Vue shell whether it should return to a previously shown
+		// date range. Placed here because CAL.dashlet_id is only known once this block has run.
+		if (typeof CAL.request_dashlet_restore === 'function') {
+			CAL.request_dashlet_restore();
+		}
+		{/literal}
 
 		CAL.print = {$isPrint};
 

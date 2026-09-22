@@ -199,9 +199,12 @@ class CyclicRecordsSaver
 
     /**
      * Propagate the current state of the parent bean onto the cyclic children
-     * whose IDs are listed in $ids.  Fields in UPDATE_SKIP_FIELDS (dates,
-     * repeat settings, identity columns) are intentionally preserved on each
-     * child.
+     * whose IDs are listed in $ids. Identity/repeat-rule fields in
+     * UPDATE_SKIP_FIELDS are left untouched on each child, but date_start/
+     * date_end are recalculated from the parent's (possibly changed)
+     * date_start using the same repeat_type/repeat_interval/repeat_count
+     * rules as record creation, so the whole occurrence sequence shifts
+     * together with the parent instead of only its time-of-day.
      *
      * @param string[] $ids
      * @return int number of records updated
@@ -209,19 +212,41 @@ class CyclicRecordsSaver
     public function updateFromPlan(array $ids): int
     {
         $updated = 0;
-
-        // Bean datetime values are in user-local format after SugarCRM's retrieve() conversion.
-        // Use timedate->to_db() to get the actual UTC strings before parsing with DateTime.
         $parent_date_start = new DateTime($this->timedate->to_db($this->bean->date_start));
         $parent_date_end = new DateTime($this->timedate->to_db($this->bean->date_end));
         $parent_duration = $parent_date_start->diff($parent_date_end);
         $parent_related_ids = $this->getRelatedIds();
 
+        $child_beans = [];
         foreach ($ids as $child_id) {
             $child_bean = BeanFactory::getBean($this->bean->module_name, $child_id);
             if (empty($child_bean->id)) {
                 continue;
             }
+            $child_beans[] = $child_bean;
+        }
+        // Order matches the original occurrence sequence, independent of the
+        // (unordered) IDs the frontend sent, so it can be zipped against the
+        // freshly-recalculated sequence of start dates below.
+        usort(
+            $child_beans,
+            fn($a, $b) => strcmp($this->timedate->to_db($a->date_start), $this->timedate->to_db($b->date_start))
+        );
+
+        // Recompute the whole occurrence sequence from the parent's new
+        // date_start/repeat_* rules, the same way plan() does for creation,
+        // instead of patching only the time-of-day onto each child's stale date.
+        $next_start_date_objects = $this->calculateStartDates(clone $parent_date_start);
+        foreach ($next_start_date_objects as $next_start_date_object) {
+            $next_start_date_object->setTime(
+                (int) $parent_date_start->format('H'),
+                (int) $parent_date_start->format('i'),
+                (int) $parent_date_start->format('s'),
+            );
+        }
+
+        foreach ($child_beans as $index => $child_bean) {
+            $child_id = $child_bean->id;
             foreach ($this->bean->field_defs as $key => $value) {
                 if (
                     in_array($key, static::UPDATE_SKIP_FIELDS)
@@ -231,20 +256,35 @@ class CyclicRecordsSaver
                 }
                 $child_bean->$key = $this->bean->$key;
             }
-            // Propagate time-of-day from parent, keeping each child's unique calendar date.
-            // Child's date_start is also user-local after retrieve, convert to UTC first.
-            $child_start = new DateTime($this->timedate->to_db($child_bean->date_start));
-            $child_start->setTime(
-                (int) $parent_date_start->format('H'),
-                (int) $parent_date_start->format('i'),
-                (int) $parent_date_start->format('s'),
-            );
+            if (isset($next_start_date_objects[$index])) {
+                $child_start = clone $next_start_date_objects[$index];
+            } else {
+                // Fewer occurrences than before (e.g. repeat_count was lowered):
+                // no recalculated date exists for this child, so only shift its
+                // time-of-day to avoid leaving it on a nonsensical date.
+                $child_start = new DateTime($this->timedate->to_db($child_bean->date_start));
+                $child_start->setTime(
+                    (int) $parent_date_start->format('H'),
+                    (int) $parent_date_start->format('i'),
+                    (int) $parent_date_start->format('s'),
+                );
+            }
             $child_end = clone $child_start;
             $child_end->add($parent_duration);
             // Store UTC strings directly; save() will not re-convert values matching the DB datetime pattern.
             $child_bean->date_start = $child_start->format('Y-m-d H:i:s');
             $child_bean->date_end = $child_end->format('Y-m-d H:i:s');
-            $child_bean->save();
+            try {
+                $save_result = $child_bean->save();
+            } catch (\Throwable $e) {
+                $GLOBALS['log']->error(
+                    "CyclicRecordsSaver::updateFromPlan: failed to save child {$child_id}: " . $e->getMessage(),
+                );
+                continue;
+            }
+            if (empty($save_result)) {
+                continue;
+            }
             $this->syncRelationshipFields($child_bean, $parent_related_ids);
             $updated++;
         }

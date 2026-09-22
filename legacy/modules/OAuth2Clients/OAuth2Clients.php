@@ -7,7 +7,7 @@
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
- * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM, 
+ * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,10 +35,10 @@
  * Section 5 of the GNU Affero General Public License version 3.
  *
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM" 
- * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo. 
- * If the display of the logos is not reasonably feasible for technical reasons, the 
- * Appropriate Legal Notices must display the words "Powered by SugarCRM" and 
+ * these Appropriate Legal Notices must retain the display of the "Powered by SugarCRM"
+ * logo and "Supercharged by SuiteCRM" logo and "Reinvented by MintHCM" logo.
+ * If the display of the logos is not reasonably feasible for technical reasons, the
+ * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
 
@@ -92,7 +92,7 @@ class OAuth2Clients extends SugarBean
      */
     public function get_summary_text()
     {
-        return (string)$this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -123,12 +123,30 @@ class OAuth2Clients extends SugarBean
         $amount = $_REQUEST['duration_amount'];
         $value = 1;
         switch ($_REQUEST['duration_unit']) {
-            case 'month': $value = $amount * 30 * 24 * 60 * 60; break;
-            case 'week': $value = $amount * 7 * 24 * 60 * 60; break;
-            case 'day': $value = $amount * 24 * 60 * 60; break;
-            case 'hour': $value = $amount * 60 * 60; break;
-            case 'minute': $value = $amount * 60; break;
+            case 'month':$value = $amount * 30 * 24 * 60 * 60;
+                break;
+            case 'week':$value = $amount * 7 * 24 * 60 * 60;
+                break;
+            case 'day':$value = $amount * 24 * 60 * 60;
+                break;
+            case 'hour':$value = $amount * 60 * 60;
+                break;
+            case 'minute':$value = $amount * 60;
+                break;
         }
         $this->duration_value = $value;
+    }
+    public function bean_implements($interface)
+    {
+        if ('ACL' == $interface) {
+            return true;
+        }
+        return false;
+    }
+
+    public function ACLAccess($view, $is_owner = 'not_set', $in_group = 'not_set'): bool
+    {
+        global $current_user;
+        return is_admin($current_user);
     }
 }

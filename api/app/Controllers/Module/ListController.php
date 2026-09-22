@@ -48,6 +48,8 @@ namespace MintHCM\Api\Controllers\Module;
 use Doctrine\ORM\EntityManagerInterface;
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Elasticsearch\Common\Exceptions\InvalidArgumentException;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
+use MintHCM\Data\BeanFactory;
 use MintHCM\Lib\Search\ElasticSearch\ESListACLHelper;
 use MintHCM\Lib\Search\Search;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -80,6 +82,13 @@ class ListController
     {
         $this->request = $request;
         $response = $response->withHeader('Content-type', 'application/json');
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        preg_match('/(?<=\/)([^\/]+)/m', $route->getPattern(), $matches);
+        $bean = BeanFactory::newBean($matches[0]);
+        if (empty($bean) || !$bean->ACLAccess('list')) {
+            return $response->withStatus(403);
+        }
 
         $current_time_zone = date_default_timezone_get();
         date_default_timezone_set('UTC');
@@ -214,6 +223,15 @@ class ListController
             $search_manager->setElasticACL(!is_admin($current_user));
             $search_manager->setQuery($this->params);
             $this->search_result = $search_manager->search(true);
+        } catch (Missing404Exception $e) {
+            $offset = max($this->params['from'], 0);
+            $this->search_result = new class($offset) {
+                private int $offset;
+                public function __construct(int $offset) { $this->offset = $offset; }
+                public function getTotal(): int { return 0; }
+                public function getCurrentOffset(): int { return $this->offset; }
+                public function getBeansAsJsonArray(): array { return []; }
+            };
         } catch (BadRequest400Exception $e) {
             throw new HttpBadRequestException($this->request, $e->getMessage());
         } catch (InvalidArgumentException $e) {

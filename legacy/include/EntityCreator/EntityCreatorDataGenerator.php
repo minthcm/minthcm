@@ -31,6 +31,8 @@ class EntityCreatorDataGenerator
         'long' => 'bigint',
         'mediumtext' => 'text',
         'dynamicenum' => 'string',
+        'html' => 'text',
+        'longhtml' => 'text',
     ];
 
     public const SKIP_TYPES = [
@@ -218,7 +220,7 @@ class EntityCreatorDataGenerator
         $bean = BeanFactory::getBean($this->moduleName);
         if ($bean) {
             $bean->load_relationship($fieldName);
-            return $bean->$fieldName->def || false;
+            return $bean->$fieldName->def ?? false;
         }
 
         return false;
@@ -236,7 +238,6 @@ class EntityCreatorDataGenerator
 
     protected function createRelationshipField($relationshipDef, $relationshipName)
     {
-        global $entityCreator;
         $dictionary = EntityCreatorManager::$dictionary;
         $relationshipField = [
             'name' => '',
@@ -246,16 +247,14 @@ class EntityCreatorDataGenerator
 
         $relationshipSide = '';
         $targetSide = '';
-        foreach ($relationshipDef as $key => $value) {
-            if (
-                $value == $this->moduleName
-                || ('Employees' == $this->moduleName && 'Users' == $value)
-                || ('Users' == $this->moduleName && 'Employees' == $value)
-            ) {
-                $relationshipSide = explode('_', $key)[0];
-                $targetSide = 'lhs' === $relationshipSide ? 'rhs' : 'lhs';
-                break;
-            }
+        $lhsModule = $relationshipDef['lhs_module'] ?? null;
+        $rhsModule = $relationshipDef['rhs_module'] ?? null;
+        if ($this->isOwnModule($lhsModule)) {
+            $relationshipSide = 'lhs';
+            $targetSide = 'rhs';
+        } elseif ($this->isOwnModule($rhsModule)) {
+            $relationshipSide = 'rhs';
+            $targetSide = 'lhs';
         }
 
         $targetFieldName = $this->getRelationshipLinkFieldName($relationshipDef, $targetSide, $relationshipName);
@@ -283,6 +282,17 @@ class EntityCreatorDataGenerator
         }
 
         if (empty($dictionary[$target['module']]) || empty($dictionary[$module['module']])) {
+            return;
+        }
+
+        // Flex-relate (parent_type/parent_id) relationship without a join table: generate it only when both
+        // modules declare a link field for it, otherwise mappedBy/inversedBy would point to a non-existent
+        // property (e.g. dozens of "<module>_alerts" relationships with no reverse link in Alerts).
+        if (!empty($relationshipDef['relationship_role_column'])
+            && empty($relationshipDef['join_table'])
+            && empty($targetFieldName)
+        ) {
+            $this->ensureTargetEntityCreated($target['module']);
             return;
         }
 
@@ -331,18 +341,39 @@ class EntityCreatorDataGenerator
         }
 
         $this->data['relationshipFields'][] = $relationshipField;
-        if (!in_array($target['module'], $entityCreator['CreatingEntities']) && !empty($dictionary[$target['module']])) {
-            $entityCreator['CreatingEntities'][] = $target['module'];
-            try {
-                (new EntityCreator($target['module'], $dictionary[$target['module']]))->run();
-                (new CustomEntityCreator($target['module'], $dictionary[$target['module']]))->run();
-            } catch (Throwable $e) {
-                $msg = "EntityCreator: failed to create related entity '{$target['module']}': " . $e->getMessage();
-                $GLOBALS['log']->fatal($msg);
-                if (!EntityCreatorManager::$errorShown) {
-                    echo "EntityCreator: An error occurred while creating entities. Please check the admin logs.<br/>\n";
-                    EntityCreatorManager::$errorShown = true;
-                }
+        $this->ensureTargetEntityCreated($target['module']);
+    }
+
+    protected function isOwnModule(?string $module): bool
+    {
+        if (empty($module)) {
+            return false;
+        }
+
+        return $module === $this->moduleName
+            || ('Users' === $this->moduleName && 'Employees' === $module)
+            || ('Employees' === $this->moduleName && 'Users' === $module);
+    }
+
+    protected function ensureTargetEntityCreated(string $targetModule): void
+    {
+        global $entityCreator;
+        $dictionary = EntityCreatorManager::$dictionary;
+
+        if (in_array($targetModule, $entityCreator['CreatingEntities']) || empty($dictionary[$targetModule])) {
+            return;
+        }
+
+        $entityCreator['CreatingEntities'][] = $targetModule;
+        try {
+            (new EntityCreator($targetModule, $dictionary[$targetModule]))->run();
+            (new CustomEntityCreator($targetModule, $dictionary[$targetModule]))->run();
+        } catch (Throwable $e) {
+            $msg = "EntityCreator: failed to create related entity '{$targetModule}': " . $e->getMessage();
+            $GLOBALS['log']->fatal($msg);
+            if (!EntityCreatorManager::$errorShown) {
+                echo "EntityCreator: An error occurred while creating entities. Please check the admin logs.<br/>\n";
+                EntityCreatorManager::$errorShown = true;
             }
         }
     }

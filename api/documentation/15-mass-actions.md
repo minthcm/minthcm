@@ -80,6 +80,7 @@ The `filter` body parameter mirrors the ListView filter state:
 | `Export` | `api/data/MassActions/Actions/Export.php` | Export to CSV via legacy `export.php` |
 | `Merge` | `api/data/MassActions/Actions/Merge.php` | Merge records via legacy `MergeRecords` |
 | `MassConfirmation` | `api/data/MassActions/Actions/MassConfirmation.php` | WorkSchedules mass confirmation |
+| `MassAcceptance` | `api/data/MassActions/Actions/MassAcceptance.php` | WorkSchedules mass supervisor-acceptance (batched, with progress UI) |
 
 ### Export and Merge: Session Bridge
 
@@ -122,4 +123,50 @@ class Archive extends MassAction
 
 2. Register the action in the module's `massActions` config so the frontend shows it in the mass actions menu.
 
+3. Add a matching `actionName` static property on the **frontend** action class. The Vue `MassAction` base uses `static readonly actionName` (not `this.constructor.name`) to build the request URL — production builds minify class names, so `this.constructor.name` becomes unreliable:
+
+```typescript
+// vue/src/business/MassActions/Actions/Archive.ts
+import { MassAction } from '../MassAction'
+
+export class Archive extends MassAction {
+    protected static readonly actionName = 'Archive'
+
+    public async execute(): Promise<boolean> {
+        // ...
+    }
+}
+```
+
+The string MUST equal the PHP class name on the backend (without the `Actions\\` namespace prefix), because the backend routes by `POST /{module}/MassActions/{actionName}`.
+
 `$this->ids` is always a resolved array of IDs — the `all` expansion happens in the base constructor before `execute()` is called.
+
+## Batched Actions with Progress UI
+
+For long-running actions (e.g., processing dozens or hundreds of records), send the IDs to the backend in **batches** instead of a single request. The backend processes each batch and returns per-batch statistics; the frontend aggregates them and shows a progress popup.
+
+Pattern (`MassAcceptance` is the reference implementation):
+
+**Backend** returns per-batch stats — counts of accepted, skipped, and IDs that errored:
+
+```php
+// api/data/MassActions/Actions/MassAcceptance.php
+public function execute()
+{
+    $accepted = 0; $skipped = 0; $errors = [];
+    foreach ($this->ids as $id) {
+        $bean = BeanFactory::getBean($this->module_name, $id);
+        if (empty($bean) || !$bean->canBeAccepted()) { $skipped++; continue; }
+        try { $bean->accept(); $accepted++; }
+        catch (Exception $e) {
+            $GLOBALS['log']->error("Mass acceptance failed for {$bean->id}: " . $e->getMessage());
+            $errors[] = $bean->id;
+            $skipped++;
+        }
+    }
+    return ['accepted' => $accepted, 'skipped' => $skipped, 'errors' => $errors];
+}
+```
+
+**Frontend** iterates in batches and pushes per-batch results into a reactive state bound to a `v-progress-linear` popup. After all batches complete, show a summary with `{accepted}` / `{skipped}` placeholders resolved from `languages.label(...)`. Reference component: `vue/src/components/MintPopups/MintPopupMassAcceptance.vue`.

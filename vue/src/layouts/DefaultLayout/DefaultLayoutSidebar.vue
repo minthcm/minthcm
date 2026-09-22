@@ -9,7 +9,7 @@
         :rail="!mdAndDown && shrinked"
         permanent
         width="260"
-        color="transparent"
+        :color="'var(--mint-nav-drawer-bg)'"
         floating="true"
         rail-width="76"
         v-model="ux.sideMenu"
@@ -595,6 +595,13 @@ watch(
 }
 </style>
 <style scoped lang="scss">
+.nav-list,
+.flex-grow-1 {
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
 .nav-list {
     padding-left: 0px;
     padding-right: 16px;
@@ -703,7 +710,7 @@ watch(
 
     &:hover,
     &.keyboard-hovered {
-        background: #0000001f;
+        background: var(--mint-nav-item-hover-bg);
         .nav-title {
             transform: translateX(-8px);
             color: rgb(var(--v-theme-secondary-dark));
@@ -728,13 +735,13 @@ watch(
 
 .nav-item.module-action {
     &:hover {
-        background: #0004;
+        background: var(--mint-nav-action-hover-bg);
     }
     .nav-title {
-        color: #ffffffaf;
+        color: var(--mint-nav-on-primary-text);
     }
     &:hover .nav-title {
-        color: #fff;
+        color: var(--mint-nav-on-primary-text-active);
     }
     &:focus-visible {
         box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6);
@@ -747,7 +754,7 @@ watch(
 
 .nav-title {
     transition: all 150ms ease-in-out;
-    color: #ffffffaf;
+    color: var(--mint-nav-on-primary-text);
     font-weight: 600;
     font-size: 16px;
 }

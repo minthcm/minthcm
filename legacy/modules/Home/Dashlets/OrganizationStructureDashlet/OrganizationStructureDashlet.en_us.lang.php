@@ -58,5 +58,8 @@ $dashletStrings['OrganizationStructureDashlet'] = array(
    'LBL_CONFIGURE_TITLE' => 'Dashlet Title',
    'LBL_USE_IMAGE' => 'Use Image in root',
    'LBL_CONFIGURE_HEIGHT' => 'Height',
-    'LBL_BUTTON_OPEN_FULLSCREEN' => 'Open in Fullscreen',
+   'LBL_BUTTON_OPEN_FULLSCREEN' => 'Open in Fullscreen',
+   'LBL_FULLSCREEN_ALT' => 'Fullscreen mode',
+   'LBL_NO_EMPLOYEES_FOUND' => 'No employees found.',
+   'LBL_VIRTUAL_ROOT_NAME' => 'Organisation',
 );
