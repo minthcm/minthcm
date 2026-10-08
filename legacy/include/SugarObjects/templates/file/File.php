@@ -164,12 +164,13 @@ class File extends Basic
      */
     public function deleteAttachment($isDuplicate = 'false')
     {
-        if ($this->ACLAccess('edit')) {
-            if ($isDuplicate === 'true') {
-                return true;
-            }
-            $removeFile = "upload://{$this->id}";
+        if (!$this->ACLAccess('edit')) {
+            return false;
         }
+        if ($isDuplicate === 'true') {
+            return true;
+        }
+        $removeFile = "upload://{$this->id}";
         if (file_exists($removeFile)) {
             if (!unlink($removeFile)) {
                 $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");

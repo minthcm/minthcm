@@ -62,7 +62,14 @@ class FilesController
             chdir('../legacy');
             $file = \BeanFactory::getBean('Files', $attr['file_id'] ?? null);
             if ($file && !empty($file->id)) {
-                $file->deleteAttachment();
+                if (!$file->ACLAccess('delete')) {
+                    chdir('../api');
+                    return $response->withStatus(403);
+                }
+                if (!$file->deleteAttachment()) {
+                    chdir('../api');
+                    return $response->withStatus(500);
+                }
                 $file->mark_deleted($file->id);
             }
             chdir('../api');

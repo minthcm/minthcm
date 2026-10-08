@@ -19,10 +19,20 @@ class ESSearchResults extends \SuiteCRM\Search\SearchResults {
             foreach ((array) $beans as $bean) {
                 $obj = BeanFactory::getBean($module, $bean);
 
-                // if a search found a bean but MintHCM does not, it could happens
-                // maybe the bean is deleted but elsasticsearch is not re-indexing yet.
-                // so at this point we trying to rebuild the index and try again to get bean:
                 if (! $obj) {
+                    // A search found the bean's ID but MintHCM does not. Distinguish why before
+                    // deciding whether a full repairElasticsearchIndex() is warranted:
+                    // - if the bean exists but is soft-deleted, ES just hasn't caught up with the
+                    //   delete yet (background schedulers/hooks will reconcile it) — skip it.
+                    // - if the bean doesn't exist at all (not even soft-deleted), the index truly
+                    //   references a stale/orphaned ID — repair and retry once.
+                    $deletedObj = BeanFactory::getBean($module, $bean, [], false);
+
+                    if ($deletedObj && $deletedObj->deleted) {
+                        $parsed[$module][] = false;
+                        continue;
+                    }
+
                     SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer::repairElasticsearchIndex();
                     $obj = BeanFactory::getBean($module, $bean);
                 }

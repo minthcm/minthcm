@@ -643,6 +643,7 @@ $mod_strings = array(
         'decimal' => 'Decimal',
         'image' => 'Image',
         'wysiwyg' => 'WYSIWYG',
+        'markdown' => 'Markdown',
     ),
     'labelTypes' => array(
         "frequently_used" => "Frequently used labels",

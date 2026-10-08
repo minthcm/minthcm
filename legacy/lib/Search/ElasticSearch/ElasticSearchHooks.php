@@ -140,11 +140,30 @@ class ElasticSearchHooks
         try {
             $this->reIndex($bean);
         } catch (SearchException $exception) {
+            // Configuration-level failure (e.g. ES disabled) — retrying won't help.
             $this->handleError($exception);
         } catch (\Exception $exception) {
-            $this->handleError($exception);
+            $this->retryOnce($bean);
         } catch (\Throwable $throwable) {
-            $this->handleError($throwable);
+            $this->retryOnce($bean);
+        }
+    }
+
+    /**
+     * A record whose ES delete/index call fails (e.g. transient network timeout) has no other
+     * safety net: scheduled reindex jobs only look at live DB rows via get_list(), so they never
+     * see (and never retry) a delete for a record that's already gone. One retry meaningfully
+     * reduces the chance of orphaning a record in the index without introducing a persistent
+     * retry queue.
+     *
+     * @param SugarBean $bean
+     */
+    private function retryOnce(SugarBean $bean)
+    {
+        try {
+            $this->reIndex($bean);
+        } catch (\Throwable $retryException) {
+            $this->handleError($retryException);
         }
     }
 

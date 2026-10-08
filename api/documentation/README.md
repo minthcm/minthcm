@@ -22,6 +22,7 @@ Welcome to the MintHCM API documentation. This guide will help you understand th
 16. [Sidepanel Endpoints](./16-sidepanel.md) - Read-only summary endpoints backing the record-view sidepanel widgets
 17. [User Theme Preference](./17-user-theme.md) - Storing and serving the user's color-scheme preference
 18. [RecordView Extensions](./18-recordview-extensions.md) - Additive recordviewdefs extensions, per-module cache, and lazy-build
+19. [Error Handling](./19-error-handling.md) - Exception handler, dev/prod response modes, logging
 
 ## Overview
 

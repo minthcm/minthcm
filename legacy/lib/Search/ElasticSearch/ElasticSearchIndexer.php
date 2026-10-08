@@ -273,10 +273,98 @@ class ElasticSearchIndexer extends AbstractIndexer
         $type = $totalRecordsCount === $indexedRecordsCount ? Logger::DEBUG : Logger::WARNING;
         $this->logger->log($type, sprintf('Indexed %d/%d %s', $indexedRecordsCount, $totalRecordsCount, $module));
 
+        if ($isDifferential) {
+            try {
+                $this->removeOrphanedRecords($module, $tableName);
+            } catch (Exception $exception) {
+                $this->logger->error("Failed to remove orphaned records for module $module");
+                $this->logger->error($exception);
+            }
+        }
+
         $this->putMeta($module, [
             'module_name' => $module,
         ]);
         $this->indexedModulesCount++;
+    }
+
+    /**
+     * Removes records from the index that no longer exist as live rows in the database — either
+     * they were soft-deleted (deleted=1) or the row is gone entirely. indexModule() above only
+     * ever adds/updates documents; nothing else in the indexing cycle reconciles the index against
+     * deletions, so without this step a record whose delete-from-ES call failed (and whose retry
+     * also failed) would be orphaned in the index permanently.
+     *
+     * @param string $module
+     * @param string $tableName
+     */
+    protected function removeOrphanedRecords(string $module, string $tableName): void
+    {
+        $index = static::getIndexPrefix() . '_' . strtolower($module);
+        if (!$this->client->indices()->exists(['index' => $index])) {
+            return;
+        }
+
+        $db = \DBManagerFactory::getInstance();
+        $batchSize = $this->getBatchSize();
+        $totalRemoved = 0;
+        $orphanedIds = [];
+        $searchAfter = null;
+
+        do {
+            $body = [
+                '_source' => false,
+                'size' => $batchSize,
+                'query' => ['match_all' => new \stdClass()],
+                'sort' => [['_id' => 'asc']],
+            ];
+            if ($searchAfter !== null) {
+                $body['search_after'] = $searchAfter;
+            }
+
+            $result = $this->client->search([
+                'index' => $index,
+                'body' => $body,
+            ]);
+
+            $hits = $result['hits']['hits'] ?? [];
+            if (empty($hits)) {
+                break;
+            }
+
+            $indexedIds = array_map(static function ($hit) {
+                return $hit['_id'];
+            }, $hits);
+
+            $liveIdsResult = $db->query(
+                "SELECT id FROM $tableName WHERE id IN ({$db->implodeQuoted($indexedIds)}) AND deleted = 0"
+            );
+            $liveIds = [];
+            while ($row = $db->fetchByAssoc($liveIdsResult)) {
+                $liveIds[$row['id']] = true;
+            }
+
+            foreach ($indexedIds as $id) {
+                if (!isset($liveIds[$id])) {
+                    $orphanedIds[] = $id;
+                }
+            }
+
+            $searchAfter = end($hits)['sort'];
+        } while (count($hits) === $batchSize);
+
+        foreach (array_chunk($orphanedIds, $batchSize) as $orphanedIdsChunk) {
+            $params = ['client' => ['ignore' => [404]]];
+            foreach ($orphanedIdsChunk as $orphanedId) {
+                $params['body'][] = ['delete' => ['_index' => $index, '_id' => $orphanedId]];
+            }
+            $this->sendBatch($params);
+            $totalRemoved += count($orphanedIdsChunk);
+        }
+
+        if ($totalRemoved > 0) {
+            $this->logger->info("Removed $totalRemoved orphaned record(s) from index for module $module");
+        }
     }
 
     /**

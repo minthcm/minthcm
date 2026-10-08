@@ -33,6 +33,7 @@ class EntityCreatorDataGenerator
         'dynamicenum' => 'string',
         'html' => 'text',
         'longhtml' => 'text',
+        'markdown' => 'text',
     ];
 
     public const SKIP_TYPES = [

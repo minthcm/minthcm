@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -7,7 +9,7 @@
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
  * Copyright (C) 2011 - 2018 SalesAgility Ltd.
- *
+*
  * MintHCM is a Human Capital Management software based on SuiteCRM developed by MintHCM,
  * Copyright (C) 2018-2024 MintHCM
  *
@@ -42,9 +44,11 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 
-$minthcm_version = '4.3.4';
-$minthcm_timestamp = '2026-10-08 15:09:31';
+// Auto-discovered by FieldViewer::getLayout() default branch for the 'markdown' field type.
+// Reuses the plain textarea "Add Field" form in Studio — markdown fields need no extra
+// configuration options beyond what a regular textarea field already offers.
+function get_body($ss, $vardef)
+{
+    return $ss->fetch('modules/DynamicFields/templates/Fields/Forms/text.tpl');
+}

@@ -47,7 +47,6 @@ namespace SuiteCRM\Search;
 use BeanFactory;
 use LoggerManager;
 use SugarBean;
-use SuiteCRM\Exception\Exception;
 use SuiteCRM\Exception\InvalidArgumentException;
 
 if (!defined('sugarEntry') || !sugarEntry) {
@@ -122,7 +121,6 @@ class SearchResults
      * Fetches the results (originally just module->id) as Beans.
      *
      * @return array
-     * @throws Exception
      * @see getHits()
      */
     public function getHitsAsBeans(): array
@@ -134,16 +132,31 @@ class SearchResults
             foreach ((array)$beans as $bean) {
                 $obj = BeanFactory::getBean($module, $bean);
 
-                // if a search found a bean but MintHCM does not, it could happens
-                // maybe the bean is deleted but elsasticsearch is not re-indexing yet.
-                // so at this point we trying to rebuild the index and try again to get bean:
                 if (!$obj) {
+                    // A search found the bean's ID but MintHCM did not. Distinguish why before
+                    // deciding whether a full repairElasticsearchIndex() is warranted:
+                    // - if the bean exists but is soft-deleted, ES just hasn't caught up with the
+                    //   delete yet (background schedulers/hooks will reconcile it) — skip it.
+                    // - if the bean doesn't exist at all (not even soft-deleted), the index truly
+                    //   references a stale/orphaned ID — repair and retry once.
+                    $deletedObj = BeanFactory::getBean($module, $bean, [], false);
+
+                    if ($deletedObj && $deletedObj->deleted) {
+                        LoggerManager::getLogger()->warn(
+                            "Bean not found while resolving search hit (soft-deleted, ES not yet in sync): $module [$bean]. Skipping."
+                        );
+                        continue;
+                    }
+
                     ElasticSearch\ElasticSearchIndexer::repairElasticsearchIndex();
                     $obj = BeanFactory::getBean($module, $bean);
                 }
 
                 if (!$obj) {
-                    throw new Exception('Error retrieving bean: ' . $module . ' [' . $bean . ']');
+                    LoggerManager::getLogger()->warn(
+                        "Bean not found while resolving search hit, even after index repair: $module [$bean]. Skipping."
+                    );
+                    continue;
                 }
 
                 $obj->load_relationships();

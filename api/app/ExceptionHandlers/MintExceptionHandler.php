@@ -57,18 +57,48 @@ class MintExceptionHandler
         bool $logErrors,
         bool $logErrorDetails
     ): Response {
+        global $sugar_config;
+
         $code = $exception->getCode();
         if (!is_int($code) || $code < 100 || $code > 599) {
             $code = 500;
         }
+
+        if (!empty($GLOBALS['log'])) {
+            $GLOBALS['log']->error(sprintf(
+                "%s in %s:%d\n%s",
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine(),
+                $exception->getTraceAsString()
+            ));
+        }
+
+        $isDevMode = (bool)($sugar_config['developerMode'] ?? false);
+
         $response = (new Response)->withStatus($code);
-        $response->getBody()->write(json_encode([
-            'message' => $exception->getMessage(),
-            'code' => $code ?: 500,
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'stack' => $exception->getTraceAsString(),
-        ], JSON_PRETTY_PRINT));
+
+        if ($isDevMode) {
+            $body = [
+                'message' => $exception->getMessage(),
+                'code' => $code,
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'stack' => $exception->getTraceAsString(),
+            ];
+        } elseif ($code >= 500) {
+            $body = [
+                'message' => 'Internal Server Error',
+                'code' => $code,
+            ];
+        } else {
+            $body = [
+                'message' => $exception->getMessage(),
+                'code' => $code,
+            ];
+        }
+
+        $response->getBody()->write(json_encode($body, JSON_PRETTY_PRINT));
         return $response;
     }
 }

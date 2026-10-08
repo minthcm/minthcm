@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -42,9 +41,37 @@
  * Appropriate Legal Notices must display the words "Powered by SugarCRM" and
  * "Supercharged by SuiteCRM" and "Reinvented by MintHCM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 
-$minthcm_version = '4.3.4';
-$minthcm_timestamp = '2026-10-08 15:09:31';
+require_once('include/MVC/Controller/SugarController.php');
+
+#[\AllowDynamicProperties]
+class FilesController extends SugarController
+{
+    /**
+     * Files-specific attachment authorization for #192537 / GHSA-hgmw-4wvp-mjq2.
+     *
+     * The base SugarController::action_deleteattachment() performs no ACL check of its own.
+     * For Files this action is reachable two ways: (a) the "Remove" button on the uploadfile
+     * field in Files' own EditView (legacy/include/SugarFields/Fields/File/EditView.tpl via
+     * SugarFieldFile.js), used to swap out the attached file while editing the record, and
+     * (b) a direct forged POST bypassing the UI entirely. Either way it only clears/unlinks
+     * the attachment and saves the bean — unlike FilesController::deleteFile() (Slim) and
+     * FilesApi::removeFile() (legacy dropzone), it never calls mark_deleted() on the record.
+     * That makes it the same "replace attachment while editing" operation that Notes/
+     * AOS_Products gate on ACLAccess('edit') (see Notes/controller.php action_editview()),
+     * not the record-destroying "delete" those two endpoints perform — so it is gated here on
+     * 'edit', consistent with that precedent, rather than 'delete' like the other two paths.
+     */
+    protected function action_deleteattachment()
+    {
+        if (!empty($this->bean->id) && !$this->bean->ACLAccess('edit')) {
+            ob_clean();
+            echo json_encode(false);
+            sugar_cleanup(true);
+
+            return;
+        }
+
+        parent::action_deleteattachment();
+    }
+}

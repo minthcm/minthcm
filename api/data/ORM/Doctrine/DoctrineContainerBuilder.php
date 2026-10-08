@@ -52,6 +52,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use MintHCM\Data\ORM\Doctrine\Filter\SoftDeleteFilter;
 use MintHCM\Data\ORM\Doctrine\MintEventManager\MintEventManager;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
@@ -80,11 +81,12 @@ class DoctrineContainerBuilder extends ContainerBuilder
     protected function addSettings()
     {
         global $mint_config;
+        global $sugar_config;
 
         $this->addDefinitions([
             'settings' => [
                 'doctrine' => [
-                    'dev_mode' => true,
+                    'dev_mode' => (bool)($sugar_config['developerMode'] ?? false),
                     'cache_path' => __DIR__ . '/../../../cache/doctrine',
                     'proxy_path' => __DIR__ . '/../../../cache/doctrine/orm/Proxies',
                     'entity_paths' => [__DIR__ . '/../../Entities/'],
@@ -105,6 +107,9 @@ class DoctrineContainerBuilder extends ContainerBuilder
                     $doctrineSettings['proxy_path'],
                     new FilesystemAdapter('', 0, $doctrineSettings['cache_path'] ?? null)
                 );
+                if (!$doctrineSettings['dev_mode']) {
+                    $config->setAutoGenerateProxyClasses(ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
+                }
                 $config->addFilter('soft_delete', SoftDeleteFilter::class);
                 $config->setDefaultRepositoryClassName(MintEntityRepository::class);
                 $config->setRepositoryFactory(new MintRepositoryFactory());

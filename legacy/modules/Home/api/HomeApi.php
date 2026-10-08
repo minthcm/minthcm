@@ -90,11 +90,7 @@ class HomeApi {
       // the legitimate way to read your own user record is /api/users/{id} or the
       // EditView/DetailView. Even an admin can read every user via this endpoint because
       // ACL on Users allows it; restrict to current user only.
-      // FIXME [CR #192223]: `$moduleName` (uppercase N) is undefined — local var is `$module_name`.
-      // The condition `null === 'Users'` is always false, so this Users restriction never fires.
-      // Real vuln (user_hash exfiltration) is still blocked by clean_sensitive_data() below,
-      // but this defense-in-depth check does nothing. Tracked in #192223+1.
-      if ($moduleName === 'Users' && $bean->id !== $current_user->id) {
+      if ($module_name === 'Users' && $bean->id !== $current_user->id) {
          return null;
       }
 

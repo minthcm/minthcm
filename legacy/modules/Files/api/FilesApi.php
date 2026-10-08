@@ -25,7 +25,12 @@ class FilesApi
     {
         $file = BeanFactory::getBean('Files', $args['record'] ?? null);
         if ($file && !empty($file->id)) {
-            $file->deleteAttachment();
+            if (!$file->ACLAccess('delete')) {
+                return false;
+            }
+            if (!$file->deleteAttachment()) {
+                return false;
+            }
             $file->mark_deleted($file->id);
         }
     }
