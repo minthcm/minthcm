@@ -46,6 +46,9 @@
  * THIS CLASS IS FOR DEVELOPERS TO MAKE CUSTOMIZATIONS IN
  */
 require_once('modules/OutboundEmailAccounts/OutboundEmailAccounts_sugar.php');
+
+use SuiteCRM\Utility\SuiteValidator;
+
 #[\AllowDynamicProperties]
 class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
 {
@@ -134,6 +137,10 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
 
         if ($this->auth_type === 'no_auth') {
             $this->mail_smtppass = '';
+            // The login has to go with the password, otherwise the credential-based fallback
+            // in SugarPHPMailer::resolveAuthType() would turn AUTH back on for an account
+            // the user explicitly set to no_auth.
+            $this->mail_smtpuser = '';
             $this->mail_smtpauth_req = 0;
             $this->external_oauth_connection_id = '';
         }
@@ -449,7 +456,8 @@ HTML;
         $adminNotifyFromAddress = $admin->settings['notify_fromaddress'];
         isValidEmailAddress($adminNotifyFromAddress);
         $adminNotifyFromName = $admin->settings['notify_fromname'];
-        $record = SuiteValidator::isValidId($_REQUEST['record'] ?? '') ? ($_REQUEST['record'] ?? '') : '';
+        $isValidator = new SuiteValidator();
+        $record = $isValidator->isValidId($_REQUEST['record'] ?? '') ? ($_REQUEST['record'] ?? '') : '';
         $html = <<<HTML
 			<input id="sendTestOutboundEmailSettingsBtn" type="button" class="button" value="{$APP['LBL_EMAIL_TEST_OUTBOUND_SETTINGS']}" onclick="testOutboundSettings();">
 			<script type="text/javascript" src="cache/include/javascript/sugar_grp_yui_widgets.js"></script>

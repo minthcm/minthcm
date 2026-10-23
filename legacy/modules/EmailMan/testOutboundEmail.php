@@ -74,7 +74,12 @@ if (empty($_REQUEST['mail_smtppass'])) {
 
 if (!empty($_REQUEST['mail_smtppass'])) {
     $pass = $_REQUEST['mail_smtppass'];
-} elseif (isset($_REQUEST['mail_type'])) {
+} elseif (isset($_REQUEST['mail_type']) && empty($_REQUEST['record'])) {
+    // This fallback only applies to the Admin > Email Settings screen (EmailMan/config.tpl),
+    // which never sends 'record'. When a specific OutboundEmailAccounts record IS being tested
+    // (record set), its own bean lookup above already resolved the correct password - falling
+    // through to the system/named mailer here would silently borrow someone else's credentials
+    // for a record that legitimately has none.
     $oe = new OutboundEmail();
     if (is_admin($current_user) && $_REQUEST['mail_type'] == 'system') {
         $oe = $oe->getSystemMailerSettings();
