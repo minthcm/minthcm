@@ -110,10 +110,6 @@ class AuthCodeService
             return hash_equals($codeChallenge, $calculatedChallenge);
         }
 
-        if ($method === 'plain') {
-            return hash_equals($codeChallenge, $codeVerifier);
-        }
-
         return false;
     }
 }

@@ -15,9 +15,11 @@ Welcome to the MintHCM frontend documentation. This guide will help you understa
 6. [Working with Beans](./documentation/10-working-with-beans.md) - CRUD operations and record management
 7. [Sidepanel & Widgets](./documentation/13-sidepanel.md) - Record-view side panel and its data widgets
 8. [User Theme System](./documentation/14-user-theme.md) - Light/dark/system theme preference, Vuetify integration, legacy CSS bridge
+9. [Admin Views](./documentation/15-admin-views.md) - Metadata-driven Administration pages
+10. [List View Panels](./documentation/16-list-view-panels.md) - Extra components under the list view, `crontab` field
 
 ### Customization
-9. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
+10. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
 
 ---
 

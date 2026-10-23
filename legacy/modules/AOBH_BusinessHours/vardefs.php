@@ -55,7 +55,7 @@ $dictionary['AOBH_BusinessHours'] = array(
             'massupdate' => 0,
             'default' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The time when the business or location opens on this day (e.g., 09:00)',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -78,7 +78,7 @@ $dictionary['AOBH_BusinessHours'] = array(
             'massupdate' => 0,
             'default' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The time when the business or location closes on this day (e.g., 17:00)',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -98,6 +98,7 @@ $dictionary['AOBH_BusinessHours'] = array(
             'name' => 'open_status',
             'vname' => 'LBL_OPEN',
             'type' => 'bool',
+            'comment' => 'Indicates whether the business or location is open on this day',
         ),
         'day' => array(
             'required' => false,
@@ -107,7 +108,7 @@ $dictionary['AOBH_BusinessHours'] = array(
             'massupdate' => 0,
             'default' => 'monday',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The day of the week for which these business hours apply (e.g., Monday, Tuesday)',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -131,3 +132,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('AOBH_BusinessHours', 'AOBH_BusinessHours', array('basic'));
+

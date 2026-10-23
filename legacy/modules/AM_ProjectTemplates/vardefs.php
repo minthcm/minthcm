@@ -66,7 +66,7 @@ $dictionary['AM_ProjectTemplates'] = array(
                 'merge_filter' => 'disabled',
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The name or title of the record',
                 'help' => '',
                 'duplicate_merge_dom_value' => '0',
                 'audited' => false,
@@ -82,7 +82,7 @@ $dictionary['AM_ProjectTemplates'] = array(
                 'massupdate' => 0,
                 'default' => 'Draft',
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'Project template status',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -106,7 +106,7 @@ $dictionary['AM_ProjectTemplates'] = array(
                 'massupdate' => 0,
                 'default' => 'High',
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'Project template priority',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -126,13 +126,12 @@ $dictionary['AM_ProjectTemplates'] = array(
                 'name' => 'description',
                 'vname' => 'LBL_DESCRIPTION',
                 'type' => 'text',
-                'comment' => 'Full text of the note',
+                'comment' => 'A detailed description of the record',
                 'rows' => '6',
                 'cols' => '80',
                 'required' => false,
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => 'Full text of the note',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -160,7 +159,7 @@ $dictionary['AM_ProjectTemplates'] = array(
                 'required' => false,
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The name of the user assigned to the record',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge_dom_value' => '0',
@@ -222,7 +221,7 @@ $dictionary['AM_ProjectTemplates'] = array(
             'required' => false,
             'reportable' => false,
             'default' => '0',
-            'comment' => ''
+            'comment' => 'Indicates whether the project template should override business hours'
         ),
 
     ),
@@ -236,3 +235,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AM_ProjectTemplates', 'AM_ProjectTemplates', array('basic', 'assignable'));
+

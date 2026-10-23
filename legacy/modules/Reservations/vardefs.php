@@ -67,7 +67,7 @@ $dictionary['Reservations'] = array(
          'merge_filter' => 'disabled',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The name or title of the record',
          'help' => '',
          'duplicate_merge_dom_value' => '0',
          'audited' => true,
@@ -82,7 +82,7 @@ $dictionary['Reservations'] = array(
          'type' => 'datetimecombo',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The date when the resource reservation begins, marking the start of the booking period for the associated delegation',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -104,7 +104,7 @@ $dictionary['Reservations'] = array(
          'type' => 'datetimecombo',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The date when the resource reservation ends, marking the conclusion of the booking period for the associated delegation',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -141,6 +141,7 @@ $dictionary['Reservations'] = array(
          'rname' => 'name',
          'required' => true,
          'vt_validation' => "AEM(callCustomApi('Resources','isReservable',{resource_id:\$resource_id}),'LBL_RESOURCE_NOT_FOR_RESERVATION_VALIDATION')",
+         'comment' => 'The name of the resource being reserved, such as a room, equipment, or asset required for the delegation',
       ),
       'resource_id' => array(
          'name' => 'resource_id',
@@ -151,6 +152,7 @@ $dictionary['Reservations'] = array(
          'isnull' => 'true',
          'dbType' => 'id',
          'vname' => 'LBL_RESOURCE_ID',
+         'comment' => 'The unique identifier of the resource being reserved, linking to the specific item or asset in the system',
       ),
       'delegations' => array(
          'name' => 'delegations',
@@ -173,6 +175,7 @@ $dictionary['Reservations'] = array(
          'table' => 'delegations',
          'module' => 'Delegations',
          'rname' => 'name',
+         'comment' => 'The name of the delegation for which the resource is reserved, typically referring to a business trip or assignment',
       ),
       'delegation_id' => array(
          'name' => 'delegation_id',
@@ -183,6 +186,7 @@ $dictionary['Reservations'] = array(
          'isnull' => 'true',
          'dbType' => 'id',
          'vname' => 'LBL_DELEGATION_ID',
+         'comment' => 'The unique identifier of the delegation for which the resource is reserved, linking the reservation to a specific business trip or assignment',
       ),
       'parent_type' => array(
          'name' => 'parent_type',
@@ -192,6 +196,7 @@ $dictionary['Reservations'] = array(
          'group' => 'parent_name',
          'options' => 'reservations_parent_type_list',
          'len' => 255,
+         'comment' => 'The module type of the parent record',
       ),
       'parent_name' => array(
          'name' => 'parent_name',
@@ -204,6 +209,7 @@ $dictionary['Reservations'] = array(
          'source' => 'non-db',
          'options' => 'reservations_parent_type_list',
          'required' => false,
+         'comment' => 'The name of the parent record',
       ),
       'parent_id' => array(
          'name' => 'parent_id',
@@ -211,6 +217,7 @@ $dictionary['Reservations'] = array(
          'type' => 'id',
          'group' => 'parent_name',
          'reportable' => false,
+         'comment' => 'The unique identifier of the parent record',
       ),
    ),
    'relationships' => array(
@@ -264,3 +271,5 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('Reservations', 'Reservations', array('basic', 'assignable', 'security_groups', 'employee_related'));
 
 $dictionary['Reservations']['fields']['employee_name']['required'] = true;
+$dictionary['Reservations']['fields']['employee_name']['comment'] = 'Name of the employee associated with this record';
+

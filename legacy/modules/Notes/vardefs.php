@@ -59,7 +59,7 @@ $dictionary['Note'] = array(
             'type' => 'id',
             'required' => true,
             'reportable' => true,
-            'comment' => 'Unique identifier',
+            'comment' => 'Record unique identifier',
         ],
 
         'date_entered' =>
@@ -67,7 +67,7 @@ $dictionary['Note'] = array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
-            'comment' => 'Date record created',
+            'comment' => 'The date when the record was created',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'readonly' => true,
@@ -78,7 +78,7 @@ $dictionary['Note'] = array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
-            'comment' => 'Date record last modified',
+            'comment' => 'The date when the record was last modified',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'readonly' => true,
@@ -87,7 +87,7 @@ $dictionary['Note'] = array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'Date record last indexed',
+            'comment' => 'The date when the record was indexed for search purposes',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -105,7 +105,7 @@ $dictionary['Note'] = array(
             'group' => 'modified_by_name',
             'dbType' => 'id',
             'reportable' => true,
-            'comment' => 'User who last modified record',
+            'comment' => 'The unique identifier of the user who last modified the record',
             'readonly' => true,
         ],
 
@@ -123,6 +123,7 @@ $dictionary['Note'] = array(
             'link' => 'modified_user_link',
             'duplicate_merge' => 'disabled',
             'readonly' => true,
+            'comment' => 'The name of the user who last modified the record',
         ],
 
         'created_by' =>
@@ -135,7 +136,7 @@ $dictionary['Note'] = array(
             'table' => 'users',
             'isnull' => 'false',
             'dbType' => 'id',
-            'comment' => 'User who created record',
+            'comment' => 'The unique identifier of the user who created the record',
             'readonly' => true,
         ],
 
@@ -154,6 +155,7 @@ $dictionary['Note'] = array(
             'duplicate_merge' => 'disabled',
             'importable' => 'false',
             'readonly' => true,
+            'comment' => 'The name of the user who created the record',
         ],
 
         'name' =>
@@ -165,7 +167,7 @@ $dictionary['Note'] = array(
             'len' => '255',
             'unified_search' => true,
             'full_text_search' => ['boost' => 3],
-            'comment' => 'Name of the note',
+            'comment' => 'The name or title of the record',
             'importable' => 'required',
             'required' => true,
         ],
@@ -176,7 +178,7 @@ $dictionary['Note'] = array(
             'vname' => 'LBL_FILE_MIME_TYPE',
             'type' => 'varchar',
             'len' => '100',
-            'comment' => 'Attachment MIME type',
+            'comment' => 'The MIME type of the attached file',
             'importable' => false,
         ],
 
@@ -190,7 +192,7 @@ $dictionary['Note'] = array(
             'function_params' => ['$this'],
             'source' => 'function',
             'reportable' => false,
-            'comment' => 'Path to file (can be URL)',
+            'comment' => 'The URL used to download the attached file',
             'importable' => false,
         ],
 
@@ -202,7 +204,7 @@ $dictionary['Note'] = array(
             'dbType' => 'varchar',
             'len' => '255',
             'reportable' => true,
-            'comment' => 'File name associated with the note (attachment)',
+            'comment' => 'The name of the attached file',
             'importable' => false,
         ],
         'filecontents' =>
@@ -211,6 +213,7 @@ $dictionary['Note'] = array(
             'vname' => 'LBL_FILE_CONTENTS',
             'type' => 'varchar',
             'source' => 'non-db',
+            'comment' => 'The binary contents of the attached file',
         ],
 
         'parent_type' =>
@@ -222,7 +225,7 @@ $dictionary['Note'] = array(
             'group' => 'parent_name',
             'options' => 'parent_type_display',
             'len' => '255',
-            'comment' => 'Sugar module the Note is associated with',
+            'comment' => 'The module type of the parent record',
         ],
 
         'parent_id' =>
@@ -232,7 +235,7 @@ $dictionary['Note'] = array(
             'type' => 'id',
             'required' => false,
             'reportable' => true,
-            'comment' => 'The ID of the Sugar item specified in parent_type',
+            'comment' => 'The unique identifier of the parent record',
         ],
 
         'portal_flag' =>
@@ -241,7 +244,7 @@ $dictionary['Note'] = array(
             'vname' => 'LBL_PORTAL_FLAG',
             'type' => 'bool',
             'required' => true,
-            'comment' => 'Portal flag indicator determines if note created via portal',
+            'comment' => 'Flag indicating whether the note is visible on the customer portal',
         ],
 
         'embed_flag' =>
@@ -250,7 +253,7 @@ $dictionary['Note'] = array(
             'vname' => 'LBL_EMBED_FLAG',
             'type' => 'bool',
             'default' => 0,
-            'comment' => 'Embed flag indicator determines if note embedded in email',
+            'comment' => 'Flag indicating whether the attached file should be embedded inline',
         ],
 
         'description' =>
@@ -258,7 +261,7 @@ $dictionary['Note'] = array(
             'name' => 'description',
             'vname' => 'LBL_DESCRIPTION',
             'type' => 'text',
-            'comment' => 'Full text of the note',
+            'comment' => 'A detailed description of the record',
             'rows' => 30,
             'cols' => 90,
         ],
@@ -271,7 +274,7 @@ $dictionary['Note'] = array(
             'required' => false,
             'default' => '0',
             'reportable' => false,
-            'comment' => 'Record deletion indicator',
+            'comment' => 'A flag indicating whether the record has been deleted',
         ],
 
         'parent_name' =>
@@ -284,6 +287,7 @@ $dictionary['Note'] = array(
             'type' => 'parent',
             'source' => 'non-db',
             'options' => 'record_type_display_notes',
+            'comment' => 'The name of the parent record',
         ],
         'show_preview' =>
         [
@@ -292,6 +296,7 @@ $dictionary['Note'] = array(
             'source' => 'non-db',
             'reportable' => false,
             'mass_update' => false,
+            'comment' => 'Flag indicating whether a preview of the attached file should be shown',
         ],
 
         'campaign_id' =>
@@ -301,6 +306,7 @@ $dictionary['Note'] = array(
             'type' => 'id',
             'reportable' => false,
             'source' => 'non-db',
+            'comment' => 'The unique identifier of the campaign associated with this record',
         ],
         'created_by_link' =>
         [
@@ -447,29 +453,3 @@ $dictionary['Note'] = array(
 VardefManager::createVardef('Notes', 'Note', array('assignable', 'security_groups',
 ));
 
-foreach ([
-    'id' => 'LBL_ID_COMMENT',
-    'date_entered' => 'LBL_DATE_ENTERED_COMMENT',
-    'date_modified' => 'LBL_DATE_MODIFIED_COMMENT',
-    'date_indexed' => 'LBL_DATE_INDEXED_COMMENT',
-    'modified_user_id' => 'LBL_MODIFIED_COMMENT',
-    'created_by' => 'LBL_CREATED_BY_COMMENT',
-    'name' => 'LBL_NOTE_SUBJECT_COMMENT',
-    'file_mime_type' => 'LBL_FILE_MIME_TYPE_COMMENT',
-    'file_url' => 'LBL_FILE_URL_COMMENT',
-    'filename' => 'LBL_FILENAME_COMMENT',
-    'filecontents' => 'LBL_FILE_CONTENTS_COMMENT',
-    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
-    'parent_id' => 'LBL_PARENT_ID_COMMENT',
-    'portal_flag' => 'LBL_PORTAL_FLAG_COMMENT',
-    'embed_flag' => 'LBL_EMBED_FLAG_COMMENT',
-    'description' => 'LBL_DESCRIPTION_COMMENT',
-    'deleted' => 'LBL_DELETED_COMMENT',
-    'parent_name' => 'LBL_RELATED_TO_COMMENT',
-    'show_preview' => 'LBL_SHOW_PREVIEW_COMMENT',
-    'campaign_id' => 'LBL_CAMPAIGN_ID_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Note']['fields'][$field])) {
-        $dictionary['Note']['fields'][$field]['comment'] = $commentLabel;
-    }
-}

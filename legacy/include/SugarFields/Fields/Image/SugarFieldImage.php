@@ -67,6 +67,13 @@ class SugarFieldImage extends SugarFieldFile
         $this->fillInOptions($vardef, $fakeDisplayParams);
 
         require_once('include/upload_file.php');
+        if(
+            !empty($_FILES[$prefix . $field . '_file']['tmp_name']) 
+            && !empty(file_get_contents($_FILES[$prefix . $field . '_file']['tmp_name']))
+            && in_array($bean->module_name, ['Employees', 'Users'])
+        ){
+            file_put_contents($_FILES[$prefix . $field . '_file']['tmp_name'], resizeImage(file_get_contents($_FILES[$prefix . $field . '_file']['tmp_name']), 240, 240));
+        }
         $upload_file = new UploadFile($prefix . $field . '_file');
         //remove file
         if (isset($_REQUEST['remove_file_' . $field]) && $params['remove_file_' . $field] == 1) {

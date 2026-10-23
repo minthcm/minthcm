@@ -62,3 +62,44 @@ if (file_exists('custom/metadata/emails_beansMetaData.php')) {
 } else {
     include('metadata/emails_beansMetaData.php');
 }
+
+if (isset($dictionary['EmailAddress']['fields']['id'])) {
+    $dictionary['EmailAddress']['fields']['id']['comment'] = 'Record unique identifier';
+}
+if (isset($dictionary['EmailAddress']['fields']['email_address'])) {
+    $dictionary['EmailAddress']['fields']['email_address']['comment'] = 'Email Address description';
+}
+if (isset($dictionary['EmailAddress']['fields']['email_address_caps'])) {
+    $dictionary['EmailAddress']['fields']['email_address_caps']['comment'] = 'Email Address Caps description';
+}
+if (isset($dictionary['EmailAddress']['fields']['invalid_email'])) {
+    $dictionary['EmailAddress']['fields']['invalid_email']['comment'] = 'Invalid Email description';
+}
+if (isset($dictionary['EmailAddress']['fields']['opt_out'])) {
+    $dictionary['EmailAddress']['fields']['opt_out']['comment'] = 'Opt Out description';
+}
+if (isset($dictionary['EmailAddress']['fields']['confirm_opt_in'])) {
+    $dictionary['EmailAddress']['fields']['confirm_opt_in']['comment'] = 'Confirm Opt In description';
+}
+if (isset($dictionary['EmailAddress']['fields']['confirm_opt_in_date'])) {
+    $dictionary['EmailAddress']['fields']['confirm_opt_in_date']['comment'] = 'Confirm Opt In Date description';
+}
+if (isset($dictionary['EmailAddress']['fields']['confirm_opt_in_sent_date'])) {
+    $dictionary['EmailAddress']['fields']['confirm_opt_in_sent_date']['comment'] = 'Confirm Opt In Sent Date description';
+}
+if (isset($dictionary['EmailAddress']['fields']['confirm_opt_in_fail_date'])) {
+    $dictionary['EmailAddress']['fields']['confirm_opt_in_fail_date']['comment'] = 'Confirm Opt In Fail Date description';
+}
+if (isset($dictionary['EmailAddress']['fields']['confirm_opt_in_token'])) {
+    $dictionary['EmailAddress']['fields']['confirm_opt_in_token']['comment'] = 'Confirm Opt In Token description';
+}
+if (isset($dictionary['EmailAddress']['fields']['date_created'])) {
+    $dictionary['EmailAddress']['fields']['date_created']['comment'] = 'Date Created description';
+}
+if (isset($dictionary['EmailAddress']['fields']['date_modified'])) {
+    $dictionary['EmailAddress']['fields']['date_modified']['comment'] = 'The date when the record was last modified';
+}
+if (isset($dictionary['EmailAddress']['fields']['deleted'])) {
+    $dictionary['EmailAddress']['fields']['deleted']['comment'] = 'A flag indicating whether the record has been deleted';
+}
+

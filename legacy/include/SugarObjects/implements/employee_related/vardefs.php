@@ -52,7 +52,7 @@ $vardefs = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'audited' => true,
-            'comment' => 'LBL_EMPLOYEE_ID_COMMENT',
+            'comment' => 'Employee record ID',
             'duplicate_merge' => 'disabled',
             'relationship' => strtolower($module) . '_employee',
         ),
@@ -77,7 +77,7 @@ $vardefs = array(
             'module' => 'Employees',
             'duplicate_merge' => 'disabled',
             'join_name' => 'employee_related',
-            'comment' => 'LBL_EMPLOYEE_NAME_COMMENT',
+            'comment' => 'Name of the employee',
         ),
         'employee_link' => array(
             'name' => 'employee_link',
@@ -106,3 +106,4 @@ $vardefs = array(
         ),
     ),
 );
+

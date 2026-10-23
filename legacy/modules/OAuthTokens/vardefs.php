@@ -56,7 +56,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
         'type' => 'id',
         'required'=>true,
         'reportable'=>true,
-        'comment' => 'Unique identifier'
+        'comment' => 'Record unique identifier'
       ),
       'secret' =>
       array(
@@ -65,7 +65,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'type' => 'varchar',
             'len' => 32,
             'required' => true,
-            'comment' => 'Secret key',
+            'comment' => 'The secret key used for authentication',
       ),
       'tstate' =>
       array(
@@ -75,7 +75,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'len' => 1,
             'options' => 'token_status',
             'required' => true,
-            'comment' => 'Token state',
+            'comment' => 'The current state of the token, such as active or revoked',
 
       ),
       'consumer' =>
@@ -84,7 +84,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'vname' => 'LBL_CONSUMER',
             'type' => 'id',
             'required' => true,
-            'comment' => 'Token related to the consumer',
+            'comment' => 'The name of the consumer application associated with this token',
       ),
       'token_ts' =>
       array(
@@ -92,7 +92,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'vname' => 'LBL_TOKEN_TS',
             'type' => 'long',
             'required' => true,
-            'comment' => 'Token timestamp',
+            'comment' => 'The timestamp when the token was issued',
             'function' => array('name' => 'displayDateFromTs', 'returns' => 'html', 'onListView' => true)
       ),
       'verify' =>
@@ -101,7 +101,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'vname' => 'LBL_VERIFY',
             'type' => 'varchar',
             'len' => 32,
-            'comment' => 'Token verification info',
+            'comment' => 'A flag indicating whether the token has been verified',
       ),
 //      'authdata' =>
 //      array (
@@ -118,7 +118,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
         'reportable'=>false,
         'required' => true,
         'isnull' => false,
-        'comment' => 'Record deletion indicator'
+        'comment' => 'A flag indicating whether the record has been deleted'
       ),
     'callback_url' =>
       array(
@@ -127,7 +127,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'type' => 'url',
             'len' => 255,
             'required' => false,
-            'comment' => 'Callback URL for Authorization',
+            'comment' => 'The callback URL associated with the token',
       ),
       'consumer_link' =>
       array(
@@ -152,7 +152,8 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'table' => 'oauth_consumer',
             'id_name' => 'consumer',
             'module'=>'OAuthKeys',
-            'duplicate_merge'=>'disabled'
+            'duplicate_merge'=>'disabled',
+            'comment' => 'The name of the consumer associated with this token',
       ),
      'assigned_user_id' =>
         array(
@@ -168,7 +169,7 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'isnull' => 'false',
             'dbType' => 'id',
             'audited'=>true,
-            'comment' => 'User ID assigned to record',
+            'comment' => 'The unique identifier of the user assigned to the record',
             'duplicate_merge'=>'disabled'
         ),
      'assigned_user_name' =>
@@ -183,7 +184,8 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
             'table' => 'users',
             'id_name' => 'assigned_user_id',
             'module'=>'Users',
-            'duplicate_merge'=>'disabled'
+            'duplicate_merge'=>'disabled',
+            'comment' => 'The name of the user assigned to the record',
      ),
      'assigned_user_link' =>
       array(
@@ -217,3 +219,4 @@ $dictionary['OAuthToken'] = array('table' => 'oauth_tokens',
            'relationship_type'=>'one-to-many')
            )
 );
+

@@ -59,7 +59,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'studio' => array('editview' => false),
             'len' => '11',
             'auto_increment' => true,
-            'comment' => 'The internal ID of the tracker used in a campaign; no longer used as of 4.2 (see campaign_trkrs)'
+            'comment' => 'The key used to track campaign activities and responses'
         ),
         'tracker_count' => array(
             'name' => 'tracker_count',
@@ -67,7 +67,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'type' => 'int',
             'len' => '11',
             'default' => '0',
-            'comment' => 'The number of accesses made to the tracker URL; no longer used as of 4.2 (see campaign_trkrs)'
+            'comment' => 'The number of trackers associated with this campaign'
         ),
         'name' => array(
             'name' => 'name',
@@ -75,7 +75,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'dbType' => 'varchar',
             'type' => 'name',
             'len' => '255',
-            'comment' => 'The name of the campaign',
+            'comment' => 'The name or title of the record',
             'importable' => 'required',
             'required' => true,
             'unified_search' => true,
@@ -87,15 +87,15 @@ $dictionary['Campaign'] = array('audited' => true,
             'type' => 'varchar',
             'len' => '255',
             'default' => 'http://',
-            'comment' => 'The URL referenced in the tracker URL; no longer used as of 4.2 (see campaign_trkrs)'
+            'comment' => 'The referral URL for tracking campaign sources'
         ),
-        'description' => array('name' => 'description', 'type' => 'none', 'comment' => 'inhertied but not used', 'source' => 'non-db'),
+        'description' => array('name' => 'description', 'type' => 'none', 'comment' => 'A detailed description of the record', 'source' => 'non-db'),
         'tracker_text' => array(
             'name' => 'tracker_text',
             'vname' => 'LBL_TRACKER_TEXT',
             'type' => 'varchar',
             'len' => '255',
-            'comment' => 'The text that appears in the tracker URL; no longer used as of 4.2 (see campaign_trkrs)'
+            'comment' => 'The text content used in campaign trackers'
         ),
 
         'start_date' => array(
@@ -103,7 +103,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'vname' => 'LBL_CAMPAIGN_START_DATE',
             'type' => 'date',
             'audited' => true,
-            'comment' => 'Starting date of the campaign',
+            'comment' => 'The start date of the campaign',
             'validation' => array('type' => 'isbefore', 'compareto' => 'end_date'),
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
@@ -113,7 +113,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'vname' => 'LBL_CAMPAIGN_END_DATE',
             'type' => 'date',
             'audited' => true,
-            'comment' => 'Ending date of the campaign',
+            'comment' => 'The end date of the campaign',
             'importable' => 'required',
             'required' => true,
             'enable_range_search' => true,
@@ -133,7 +133,7 @@ $dictionary['Campaign'] = array('audited' => true,
             ],
             'len' => 100,
             'audited' => true,
-            'comment' => 'Status of the campaign',
+            'comment' => 'The current status of the record',
             'importable' => 'required',
             'required' => true,
         ),
@@ -143,7 +143,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'type' => 'int',
             'default' => 0,
             'reportable' => true,
-            'comment' => 'Expected Click throughs manually entered by Campaign Manager'
+            'comment' => 'The number of times the campaign content was displayed or viewed'
         ),
         'currency_id' =>
             array(
@@ -155,35 +155,35 @@ $dictionary['Campaign'] = array('audited' => true,
                 'required' => false,
                 'do_report' => false,
                 'reportable' => false,
-                'comment' => 'Currency in use for the campaign'
+                'comment' => 'The unique identifier of the currency used for campaign budgeting'
             ),
         'budget' => array(
             'name' => 'budget',
             'vname' => 'LBL_CAMPAIGN_BUDGET',
             'type' => 'currency',
             'dbType' => 'double',
-            'comment' => 'Budgeted amount for the campaign'
+            'comment' => 'The allocated budget for the campaign'
         ),
         'expected_cost' => array(
             'name' => 'expected_cost',
             'vname' => 'LBL_CAMPAIGN_EXPECTED_COST',
             'type' => 'currency',
             'dbType' => 'double',
-            'comment' => 'Expected cost of the campaign'
+            'comment' => 'The anticipated cost of running the campaign'
         ),
         'actual_cost' => array(
             'name' => 'actual_cost',
             'vname' => 'LBL_CAMPAIGN_ACTUAL_COST',
             'type' => 'currency',
             'dbType' => 'double',
-            'comment' => 'Actual cost of the campaign'
+            'comment' => 'The actual cost incurred by the campaign'
         ),
         'expected_revenue' => array(
             'name' => 'expected_revenue',
             'vname' => 'LBL_CAMPAIGN_EXPECTED_REVENUE',
             'type' => 'currency',
             'dbType' => 'double',
-            'comment' => 'Expected revenue stemming from the campaign'
+            'comment' => 'The projected revenue from the campaign'
         ),
         'campaign_type' => array(
             'name' => 'campaign_type',
@@ -192,7 +192,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'options' => 'campaign_type_dom',
             'len' => 100,
             'audited' => true,
-            'comment' => 'The type of campaign',
+            'comment' => 'The type or category of the campaign (e.g., email, social media, direct mail)',
             'importable' => 'required',
             'required' => true,
         ),
@@ -200,13 +200,13 @@ $dictionary['Campaign'] = array('audited' => true,
             'name' => 'objective',
             'vname' => 'LBL_CAMPAIGN_OBJECTIVE',
             'type' => 'text',
-            'comment' => 'The objective of the campaign'
+            'comment' => 'The primary objective or goal of the campaign'
         ),
         'content' => array(
             'name' => 'content',
             'vname' => 'LBL_CAMPAIGN_CONTENT',
             'type' => 'text',
-            'comment' => 'The campaign description',
+            'comment' => 'The content or message delivered in the campaign',
             'inline_edit' => false
         ),
         'prospectlists' => array(
@@ -255,7 +255,7 @@ $dictionary['Campaign'] = array('audited' => true,
             'type' => 'enum',
             //'options' => 'campaign_status_dom',
             'len' => 100,
-            'comment' => 'Frequency of the campaign',
+            'comment' => 'The frequency at which the campaign is executed or repeated',
             'options' => 'newsletter_frequency_dom',
             'len' => 100,
         ),
@@ -301,12 +301,14 @@ $dictionary['Campaign'] = array('audited' => true,
                 'table' => 'surveys',
                 'module' => 'Surveys',
                 'rname' => 'name',
+                'comment' => 'The name of the survey associated with this campaign',
         ),
         "survey_id" => array(
                 'name' => 'survey_id',
                 'type' => 'id',
                 'reportable' => false,
                 'vname' => 'LBL_CAMPAIGN_SURVEYS',
+                'comment' => 'The unique identifier of the survey associated with this campaign',
         ),
         "surveyresponses_campaigns" => array(
                 'name' => 'surveyresponses_campaigns',
@@ -383,3 +385,4 @@ $dictionary['Campaign'] = array('audited' => true,
 );
 VardefManager::createVardef('Campaigns', 'Campaign', array('default', 'assignable', 'security_groups',
 ));
+

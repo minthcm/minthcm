@@ -7,11 +7,9 @@
     >
         <div class="mint-comments-message-main-comment">
             <div class="mint-comments-message-avatar" @click="openEmployeeDetailView(comment.assigned_user.id)">
-                <img
-                    v-if="comment.assigned_user.photo"
-                    :src="`legacy/index.php?entryPoint=download&type=Users&id=${comment.assigned_user.id}_photo`"
+                <MintAvatar
+                    :photo="comment.assigned_user?.photo ? comment.assigned_user.id + '_photo' : ''"
                 />
-                <v-icon v-else icon="mdi-account" />
             </div>
             <div class="mint-comments-message">
                 <div class="mint-comments-message-body" ref="commentBodyContainer">
@@ -129,6 +127,7 @@ import { useMintCommentsStore } from './MintCommentsStore'
 import { useAuthStore } from '@/store/auth'
 import MintCommentsEditor from './MintCommentsEditor.vue'
 import { useLanguagesStore } from '@/store/languages'
+import MintAvatar from '../MintAvatar.vue'
 
 interface Props {
     comment: MintComment

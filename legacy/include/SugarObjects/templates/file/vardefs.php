@@ -58,12 +58,14 @@ $vardefs = array(
             'required' => true,
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
+            'comment' => 'The human-readable name of the document',
         ),
         'name' => array(
             'name' => 'name',
             'source' => 'non-db',
             'type' => 'varchar',
             'db_concat_fields' => array(0 => 'document_name'),
+            'comment' => 'The name or title of the file record',
         ),
 
         'filename' => array(
@@ -74,18 +76,21 @@ $vardefs = array(
             'importable' => 'required',
             'len' => '255',
             'studio' => 'false',
+            'comment' => 'The physical filename of the stored file including its extension',
         ),
         'file_ext' => array(
             'name' => 'file_ext',
             'vname' => 'LBL_FILE_EXTENSION',
             'type' => 'varchar',
             'len' => 100,
+            'comment' => 'The file extension indicating the format of the file (e.g., pdf, docx)',
         ),
         'file_mime_type' => array(
             'name' => 'file_mime_type',
             'vname' => 'LBL_MIME',
             'type' => 'varchar',
             'len' => '100',
+            'comment' => 'The MIME type of the file indicating its content format (e.g., application/pdf)',
         ),
 
         'uploadfile' => array(
@@ -93,6 +98,7 @@ $vardefs = array(
             'vname' => 'LBL_FILE_UPLOAD',
             'type' => 'file',
             'source' => 'non-db',
+            'comment' => 'The uploaded file binary or reference stored in the system',
         ),
 
         'active_date' => array(
@@ -102,12 +108,14 @@ $vardefs = array(
             'required' => true,
             'importable' => 'required',
             'display_default' => 'now',
+            'comment' => 'The date from which the file or document becomes active and accessible',
         ),
 
         'exp_date' => array(
             'name' => 'exp_date',
             'vname' => 'LBL_DOC_EXP_DATE',
             'type' => 'date',
+            'comment' => 'The expiration date after which the file or document is no longer valid',
         ),
 
         'category_id' => array(
@@ -117,6 +125,7 @@ $vardefs = array(
             'len' => 100,
             'options' => 'document_category_dom',
             'reportable' => false,
+            'comment' => 'The unique identifier of the category to which this file belongs',
         ),
 
         'subcategory_id' => array(
@@ -126,6 +135,7 @@ $vardefs = array(
             'len' => 100,
             'options' => 'document_subcategory_dom',
             'reportable' => false,
+            'comment' => 'The unique identifier of the subcategory to which this file belongs',
         ),
 
         'status_id' => array(
@@ -135,6 +145,7 @@ $vardefs = array(
             'len' => 100,
             'options' => 'document_status_dom',
             'reportable' => false,
+            'comment' => 'The unique identifier representing the current status of the file',
         ),
 
         'status' => array(
@@ -142,7 +153,8 @@ $vardefs = array(
             'vname' => 'LBL_DOC_STATUS',
             'type' => 'varchar',
             'source' => 'non-db',
-            'Comment' => 'Document status for Meta-Data framework',
+            'comment' => 'The current status of the file record (e.g., active, expired, draft)',
         ),
     )
 );
+

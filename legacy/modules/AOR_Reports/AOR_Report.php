@@ -75,6 +75,12 @@ class AOR_Report extends Basic
     public $assigned_user_link;
     public $report_module;
 
+    // Per-request cache of group field ids already found invalid by build_group_report() - see
+    // cr.md Re-CR #1 WARNING: buildMultiGroupReport() calls build_group_report() once per group
+    // value with the same field id, so a known-invalid id can skip straight to the fallback
+    // instead of repeating the bean retrieve + relationship join work every time.
+    private static $invalidGroupFieldCache = [];
+
     public function __construct()
     {
         parent::__construct();
@@ -439,6 +445,10 @@ class AOR_Report extends Basic
         }
 
         if ($field_id != '' && empty($subgroup)) {
+            if (!empty(self::$invalidGroupFieldCache[$field_id])) {
+                return $this->build_report_html($offset, $links, $subgroup, create_guid(), $extra);
+            }
+
             $field = BeanFactory::newBean('AOR_Fields');
             $field->retrieve($field_id);
 
@@ -465,6 +475,19 @@ class AOR_Report extends Basic
                     );
                     $field_module = $new_field_module;
                 }
+            }
+
+            if (!array_key_exists((string) $field->field, $field_module->field_defs)) {
+                self::$invalidGroupFieldCache[$field_id] = true;
+                LoggerManager::getLogger()->warn(
+                    'AOR_Report: Invalid field value rejected in build_group_report: ' . $field->field
+                );
+                // Unlike the other 3 guards (which skip a single record inside a loop), this
+                // one has no enclosing loop to `continue` — the whole grouping is a single
+                // pass. Skip grouping entirely and fall back to the ungrouped report, the same
+                // path already used below when no group field is configured at all, instead of
+                // silently substituting 'id' and returning a mislabeled/mis-grouped report.
+                return $this->build_report_html($offset, $links, $subgroup, create_guid(), $extra);
             }
 
             $data = $field_module->field_defs[$field->field];
@@ -1266,6 +1289,14 @@ class AOR_Report extends Basic
                         $field_module = $new_field_module;
                     }
                 }
+                if (!array_key_exists((string) $field->field, $field_module->field_defs)) {
+                    LoggerManager::getLogger()->warn(
+                        'AOR_Report: Invalid field value rejected in build_report_query_select: ' . $field->field
+                    );
+                    ++$i;
+                    continue;
+                }
+
                 $data = $field_module->field_defs[$field->field];
 
                 if ($data['type'] == 'relate' && isset($data['id_name'])) {
@@ -1525,6 +1556,13 @@ class AOR_Report extends Basic
                 if (isset($aor_sql_operator_list[$condition->operator])) {
                     $where_set = false;
 
+                    if (!array_key_exists((string) $condition->field, $condition_module->field_defs)) {
+                        LoggerManager::getLogger()->warn(
+                            'AOR_Report: Invalid field value rejected in build_report_query_where: ' . $condition->field
+                        );
+                        continue;
+                    }
+
                     $data = $condition_module->field_defs[$condition->field];
 
                     if ($data['type'] == 'relate' && isset($data['id_name'])) {
@@ -1585,6 +1623,13 @@ class AOR_Report extends Basic
 
                     switch ($condition->value_type) {
                         case 'Field':
+                            if (!array_key_exists((string) $condition->value, $condition_module->field_defs)) {
+                                LoggerManager::getLogger()->warn(
+                                    'AOR_Report: Invalid value (Field type) rejected in build_report_query_where: ' . $condition->value
+                                );
+                                continue 2;
+                            }
+
                             $data = $condition_module->field_defs[$condition->value];
 
                             if ($data['type'] == 'relate' && isset($data['id_name'])) {
@@ -1654,6 +1699,13 @@ class AOR_Report extends Basic
                                         $value = 'Curdate()';
                                     }
                                 } else {
+                                    if (!array_key_exists((string) $params[0], $condition_module->field_defs)) {
+                                        LoggerManager::getLogger()->warn(
+                                            'AOR_Report: Invalid value (Date type) rejected in build_report_query_where: ' . $params[0]
+                                        );
+                                        continue 2;
+                                    }
+
                                     $data = $condition_module->field_defs[$params[0]];
                                     if ((isset($data['source']) && $data['source'] == 'custom_fields')) {
                                         $value = $condition_module->table_name . '_cstm.' . $params[0];
@@ -1687,6 +1739,17 @@ class AOR_Report extends Basic
                                         }
                                         $params[3] = 'hour';
                                     default:
+                                        // Defense layer #2 (layer #1 is AOR_Condition::save_lines()): $params[2]
+                                        // (interval amount) and $params[3] (interval unit) are concatenated raw
+                                        // into DATEADD()/DATE_ADD() below. Reached regardless of $params[0]
+                                        // (column, 'now' or 'today'), so validate independently here too.
+                                        $params[2] = (int) $params[2];
+                                        if (!in_array($params[3], ['day', 'hour', 'minute', 'second', 'month', 'year', 'week'], true)) {
+                                            LoggerManager::getLogger()->warn(
+                                                'AOR_Report: Invalid value (Date type) interval unit rejected in build_report_query_where: ' . $params[3]
+                                            );
+                                            continue 3;
+                                        }
                                         if ($sugar_config['dbconfig']['db_type'] === 'mssql') {
                                             $value = "DATEADD(" . $params[3] . ",  " . $app_list_strings['aor_date_operator'][$params[1]] . " $params[2], $value)";
                                         } else {

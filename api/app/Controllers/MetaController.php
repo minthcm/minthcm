@@ -120,6 +120,8 @@ class MetaController
         $data['recordview']['order'] = $viewdefs[$module]['order'];
         $data['recordview']['sidepanel'] = $viewdefs[$module]['sidepanel'] ?? false;
 
+        $this->resolveRecordViewFunctionOptions($data['recordview'], $module);
+
         chdir('../api/');
         return $data['recordview'];
     }
@@ -241,6 +243,49 @@ class MetaController
             }
         }
         return $array;
+    }
+
+    private function resolveRecordViewFunctionOptions(array &$recordview, string $module): void
+    {
+        if (empty($recordview['panels'])) {
+            return;
+        }
+
+        global $mod_strings, $current_language;
+        $mod_strings = return_module_language($current_language ?: 'en_us', $module);
+
+        foreach ($recordview['panels'] as &$panel) {
+            if (empty($panel['data']['sections'])) {
+                continue;
+            }
+            foreach ($panel['data']['sections'] as &$section) {
+                if (empty($section['fields'])) {
+                    continue;
+                }
+                foreach ($section['fields'] as &$row) {
+                    foreach ($row as &$field) {
+                        if (!is_array($field) || empty($field['function']) || !in_array($field['type'] ?? '', ['enum', 'multienum'], true)) {
+                            continue;
+                        }
+                        $func = $field['function'];
+                        $callable = $func['name'] ?? null;
+                        $params = $func['params'] ?? [];
+                        $result = null;
+
+                        if (is_array($callable) && count($callable) === 2) {
+                            $result = call_user_func($callable, ...$params);
+                        } elseif (is_string($callable) && function_exists($callable)) {
+                            $result = call_user_func($callable, ...$params);
+                        }
+
+                        if (!empty($result)) {
+                            $field['options'] = $result;
+                        }
+                        unset($field['function']);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -49,7 +49,7 @@ $dictionary['ScheduleReportsLogs'] = array(
          'massupdate' => 0,
          'default' => 'not run',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The current status of the record',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -72,7 +72,7 @@ $dictionary['ScheduleReportsLogs'] = array(
          'type' => 'datetimecombo',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Execute Data',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -106,6 +106,7 @@ $dictionary['ScheduleReportsLogs'] = array(
          'table' => 'schedulereports',
          'module' => 'ScheduleReports',
          'rname' => 'name',
+         'comment' => 'Name of the schedule report associated with this log entry',
       ),
       "schedule_report_id" => array(
          'name' => 'schedule_report_id',
@@ -115,7 +116,8 @@ $dictionary['ScheduleReportsLogs'] = array(
          'vname' => 'LBL_SCHEDULE_REPORT_ID',
          'rname' => 'id',
          'isnull' => 'true',
-         'dbType' => 'id'
+         'dbType' => 'id',
+         'comment' => 'Id of the schedule report associated with this log entry',
       ),
    ),
    'indices' => array(
@@ -144,3 +146,4 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('ScheduleReportsLogs', 'ScheduleReportsLogs', array( 'basic' ));
+

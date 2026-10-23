@@ -57,7 +57,7 @@ $dictionary['UsersNews'] = array(
          'massupdate' => 0,
          'default' => '0',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Flag indicating whether the news item has been read by the user',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -78,7 +78,7 @@ $dictionary['UsersNews'] = array(
          'type' => 'date',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The date from which the news item should no longer be displayed to the user',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -117,6 +117,7 @@ $dictionary['UsersNews'] = array(
          'rname' => 'name',
          'audited' => false,
          'required' => true,
+         'comment' => 'Name of the news item associated with this record',
       ),
       'news_id' =>
       array(
@@ -151,3 +152,4 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('UsersNews', 'UsersNews', array( 'basic', 'assignable', 'security_groups' ));
 
 $dictionary['UsersNews']['fields']['name']["vt_calculated"] = "concat(\$news_name,' - ',\$assigned_user_name)";
+$dictionary['UsersNews']['fields']['name']['comment'] = 'The name or title of the record';

@@ -114,7 +114,7 @@ git checkout -b fix/issue-123-short-description
 | PHP | 8.2 |
 | MySQL | 8.0 / MariaDB 10.5–10.11 |
 | Elasticsearch | 7.10–7.16 |
-| Node.js | 21 |
+| Node.js | 26 LTS (recommended) or 24.22.1+ |
 
 ### Quick Start
 
@@ -122,9 +122,10 @@ git checkout -b fix/issue-123-short-description
 # Install PHP dependencies
 composer install
 
-# Install frontend dependencies and build
+# Install frontend dependencies and build (Node version from .nvmrc)
+nvm install && nvm use
 cd vue
-npm install
+npm ci
 npm run build
 cd ..
 

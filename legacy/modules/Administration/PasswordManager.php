@@ -113,7 +113,7 @@ if (!empty($_POST['saveConfig'])) {
 
         // Save OIDC settings
         $oidcFields = ['OIDC_clientId', 'OIDC_clientSecret', 'OIDC_authorizationEndpoint',
-                       'OIDC_tokenEndpoint', 'OIDC_logoutEndpoint', 'OIDC_scope', 'OIDC_usernameClaim'];
+                       'OIDC_tokenEndpoint', 'OIDC_issuer', 'OIDC_logoutEndpoint', 'OIDC_scope', 'OIDC_usernameClaim'];
         foreach ($oidcFields as $field) {
             $configurator->config[$field] = isset($_POST[$field]) ? trim($_POST[$field]) : '';
         }

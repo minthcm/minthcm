@@ -67,6 +67,45 @@ class UsersController extends SugarController
         }
     }
 
+    /**
+     * Removes the OIDC subject bound to a user (#193558), so the next SSO login binds the
+     * account again — e.g. after the account was recreated in the IdP. Full administrators
+     * only, POST only, same-origin only (the change affects how the account authenticates).
+     */
+    protected function action_resetOidcBinding()
+    {
+        $record_id = (string) ($_POST['record'] ?? '');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !is_admin($GLOBALS['current_user']) || $record_id === ''
+            || !$this->isSameOriginRequest()) {
+            ACLController::displayNoAccess();
+            sugar_cleanup(true);
+            return;
+        }
+
+        require_once 'modules/Users/authentication/OIDCAuthenticate/OIDCSubjectBinder.php';
+        if ((new OIDCSubjectBinder())->unbind($record_id)) {
+            $GLOBALS['log']->info('OIDC subject binding of user ' . $record_id . ' reset by administrator ' . $GLOBALS['current_user']->id);
+        }
+        SugarApplication::redirect('index.php?module=Users&action=DetailView&record=' . urlencode($record_id));
+    }
+
+    /**
+     * CSRF guard for state-changing actions not covered by SugarApplication::checkHTTPReferer():
+     * the Origin header (or, when the browser sent none, the Referer) must point to the host of
+     * site_url. A request carrying neither header is refused.
+     */
+    private function isSameOriginRequest(): bool
+    {
+        $source = $_SERVER['HTTP_ORIGIN'] ?? '';
+        if ($source === '' || $source === 'null') {
+            $source = $_SERVER['HTTP_REFERER'] ?? '';
+        }
+        $source_host = strtolower((string) parse_url($source, PHP_URL_HOST));
+        $site_host = strtolower((string) parse_url((string) ($GLOBALS['sugar_config']['site_url'] ?? ''), PHP_URL_HOST));
+
+        return $source_host !== '' && $site_host !== '' && hash_equals($site_host, $source_host);
+    }
+
     private function currentUserEqualsRecordUser()
     {
         return $_REQUEST['record'] === $GLOBALS['current_user']->id;

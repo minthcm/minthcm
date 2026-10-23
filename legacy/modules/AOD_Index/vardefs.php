@@ -55,7 +55,7 @@ $dictionary['AOD_Index'] = array(
     'type' => 'datetimecombo',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'The date when the indexed record was last optimized for search performance',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -76,7 +76,7 @@ $dictionary['AOD_Index'] = array(
     'type' => 'varchar',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'The location or context of the indexed record, such as the module name or specific area within the application where the record is used',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -98,3 +98,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOD_Index', 'AOD_Index', array('basic','assignable'));
+

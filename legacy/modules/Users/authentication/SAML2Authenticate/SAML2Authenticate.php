@@ -109,7 +109,7 @@ class SAML2Authenticate extends SugarAuthenticate
             $errors = $auth->getErrors();
 
             if (!empty($errors)) {
-                print_r('<p>' . implode(', ', $errors) . '</p>');
+                $GLOBALS['log']->warn('SAML2Authenticate: response errors: ' . implode(', ', $errors) . '; reason: ' . $auth->getLastErrorReason());
             }
 
             if (!$auth->isAuthenticated()) {

@@ -91,6 +91,10 @@ class AOR_Field extends Basic
         require_once('modules/AOW_WorkFlow/aow_utils.php');
         require_once('modules/AOR_Reports/aor_utils.php');
 
+        // report_module doesn't change between lines - resolve the allowlist once, not per row.
+        $report_module_bean = BeanFactory::newBean($parent->report_module);
+        $allowed_fields = $report_module_bean ? array_keys($report_module_bean->field_defs) : [];
+
         if (!isset($post_data[$key . 'field'])) {
             $line_count = 0;
             LoggerManager::getLogger()->warn('AOR Field trying to save lines but post data key not found: ' . $key . 'field');
@@ -161,6 +165,15 @@ class AOR_Field extends Basic
                             'AOR_Field: Invalid sort_by value rejected: ' . $field->sort_by
                         );
                         $field->sort_by = '';
+                    }
+                }
+
+                if ($field->field !== null && $field->field !== '') {
+                    if (!in_array($field->field, $allowed_fields, true)) {
+                        LoggerManager::getLogger()->warn(
+                            'AOR_Field: Invalid field value rejected: ' . $field->field
+                        );
+                        $field->field = '';
                     }
                 }
 

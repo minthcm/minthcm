@@ -54,6 +54,7 @@ $dictionary['DashboardHistory'] = array(
          'type' => 'int',
          'name' => 'user_count',
          'vname' => 'LBL_USER_COUNT',
+         'comment' => 'User count',
          'massupdate' => false,
          'importable' => true,
          'default' => '0',
@@ -74,6 +75,7 @@ $dictionary['DashboardHistory'] = array(
          'type' => 'relate',
          'source' => 'non-db',
          'vname' => 'LBL_DASHBOARDMANAGER_NAME',
+         'comment' => 'Name of the dashboard manager associated with this record',
          'link' => 'dashboardmanager',
          'table' => 'dashboardmanager',
          'module' => 'DashboardManager',
@@ -83,6 +85,7 @@ $dictionary['DashboardHistory'] = array(
          'name' => 'dashboardmanager_id',
          'type' => 'id',
          'vname' => 'LBL_DASHBOARDMANAGER_ID',
+         'comment' => 'Id of the dashboard manager associated with this record',
          'link' => 'dashboardmanager',
          'table' => 'dashboardmanager',
          'module' => 'DashboardManager',
@@ -121,3 +124,5 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('DashboardHistory', 'DashboardHistory', array( 'basic', 'assignable' ));
+
+

@@ -56,13 +56,13 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'id',
             'required' => true,
             'reportable'=>true,
-            'comment' => 'Unique identifier'
+            'comment' => 'Record unique identifier'
             ),
         'campaign_id' => array(
             'name' => 'campaign_id',
             'vname' => 'LBL_CAMPAIGN_ID',
             'type' => 'id',
-            'comment' => 'Campaign identifier',
+            'comment' => 'The unique identifier of the campaign associated with this log entry',
             'reportable' => false,
             ),
         'target_tracker_key' => array(
@@ -70,7 +70,7 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'vname' => 'LBL_TARGET_TRACKER_KEY',
             'type' => 'varchar',
             'len' => '36',
-            'comment' => 'Identifier of Tracker URL',
+            'comment' => 'The key used to track the target in campaign activities',
             'reportable' => false,
             ),
         'target_id' => array(
@@ -78,7 +78,7 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'vname' => 'LBL_TARGET_ID',
             'type' => 'varchar',
             'len' => '36',
-            'comment' => 'Identifier of target record',
+            'comment' => 'The unique identifier of the target recipient in the campaign',
             'reportable' => false,
             ),
         'target_type' => array(
@@ -86,7 +86,7 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'vname' => 'LBL_TARGET_TYPE',
             'type' => 'varchar',
             'len' => 100,
-            'comment' => 'Descriptor of the target record type (e.g., Contact)'
+            'comment' => 'The type of target being tracked in the campaign log'
             ),
         'activity_type' => array(
             'name' => 'activity_type',
@@ -94,13 +94,13 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'enum',
             'options'=>'campainglog_activity_type_dom',
             'len' => 100,
-            'comment' => 'The activity that occurred (e.g., Viewed Message, Bounced, Opted out)'
+            'comment' => 'The type of activity performed in the campaign'
             ),
         'activity_date' => array(
             'name' => 'activity_date',
             'vname' => 'LBL_ACTIVITY_DATE',
             'type' => 'datetime',
-            'comment' => 'The date the activity occurred'
+            'comment' => 'The date when the campaign activity occurred'
             ),
         'related_id' => array(
             'name' => 'related_id',
@@ -108,12 +108,14 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'varchar',
             'len' => '36',
             'reportable' => false,
+            'comment' => 'The unique identifier of the related record in the campaign',
             ),
         'related_type' => array(
             'name' => 'related_type',
             'vname' => 'LBL_RELATED_TYPE',
             'type' => 'varchar',
             'len' => 100,
+            'comment' => 'The type of related record in the campaign',
             ),
         'archived' => array(
             'name' => 'archived',
@@ -121,7 +123,7 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'bool',
             'reportable'=>false,
             'default'=>'0',
-            'comment' => 'Indicates if item has been archived'
+            'comment' => 'A flag indicating whether the campaign log entry has been archived'
         ),
         'hits' => array(
             'name' => 'hits',
@@ -129,7 +131,7 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'int',
             'default'=>'0',
             'reportable'=>true,
-            'comment' => 'Number of times the item has been invoked (e.g., multiple click-thrus)'
+            'comment' => 'The number of times the campaign target was accessed or viewed'
         ),
         'list_id' => array(
             'name' => 'list_id',
@@ -137,32 +139,35 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'type' => 'id',
             'reportable' =>false,
             'len' => '36',
-            'comment' => 'The target list from which item originated'
+            'comment' => 'The unique identifier of the list containing the campaign targets'
         ),
         'deleted' => array(
             'name' => 'deleted',
             'vname' => 'LBL_DELETED',
             'type' => 'bool',
             'reportable'=>false,
-            'comment' => 'Record deletion indicator'
+            'comment' => 'A flag indicating whether the record has been deleted'
         ),
         'recipient_name' => array(
             'name' => 'recipient_name',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The name of the recipient who received the campaign communication',
         ),
         'recipient_email' => array(
             'name' => 'recipient_email',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The email address of the recipient who received the campaign communication',
         ),
         'marketing_name' => array(
             'name' => 'marketing_name',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The name of the marketing campaign associated with this log entry',
         ),
           'campaign_name1' => array(
             'name' => 'campaign_name1',
@@ -177,24 +182,28 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'link'=>'campaign',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'An alternative name for the campaign in the log entry',
         ),
         'campaign_name' => array(
             'name' => 'campaign_name',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The name of the campaign associated with this log entry',
         ),
         'campaign_objective' => array(
             'name' => 'campaign_objective',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The objective or goal of the campaign',
         ),
         'campaign_content' => array(
             'name' => 'campaign_content',
             'type' => 'varchar',
             'len' => '255',
             'source'=>'non-db',
+            'comment' => 'The content or message delivered in the campaign',
         ),
         'campaign'=> array(
             'name' => 'campaign',
@@ -214,24 +223,27 @@ $dictionary['CampaignLog'] = array('audited'=>false,
             'vname'=>'LBL_RELATED_NAME',
             'name'=>'related_name',
             'reportable'=>false,
+            'comment' => 'The name of the related record in the campaign',
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
+            'comment' => 'The date when the record was last modified',
         ),
         'more_information'=> array(
             'name'=>'more_information',
             'vname'=>'LBL_MORE_INFO',
             'type'=>'varchar',
             'len'=>'100',
+            'comment' => 'Additional information recorded for this campaign log entry',
         ),
         'marketing_id' => array(
             'name' => 'marketing_id',
             'vname' => 'LBL_MARKETING_ID',
             'type' => 'id',
             'reportable' =>false,
-            'comment' => 'ID of marketing email this entry is associated with',
+            'comment' => 'The unique identifier of the marketing campaign associated with this log entry',
         ),
         'created_contact'=> array(
             'name' => 'created_contact',
@@ -328,3 +340,4 @@ $dictionary['CampaignLog'] = array('audited'=>false,
         ),
     )
 );
+

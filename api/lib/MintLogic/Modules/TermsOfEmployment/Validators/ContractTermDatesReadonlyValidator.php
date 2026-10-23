@@ -19,7 +19,10 @@ class ContractTermDatesReadonlyValidator extends Validator
                     'term_ending_date' => false,
                 ];
             }
-            if (!empty($db->fetchByAssoc($db->query($this->getDifferentTermsOfEmploymentIdsByTermDatesDataSQL($bean->contract_id, $bean->term_starting_date, $bean->term_ending_date))))) {
+            $contract_id = $bean->contract_id ?? $info['contract_id'] ?? '';
+            $term_starting_date = $bean->term_starting_date ?? $info['term_starting_date'] ?? '';
+            $term_ending_date = $bean->term_ending_date ?? $info['term_ending_date'] ?? '';
+            if (!empty($contract_id) && !empty($db->fetchByAssoc($db->query($this->getDifferentTermsOfEmploymentIdsByTermDatesDataSQL($contract_id, $term_starting_date, $term_ending_date))))) {
                 return [
                     'contract_name' => true,
                     'term_starting_date' => true,

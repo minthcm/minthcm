@@ -51,7 +51,7 @@ $vardefs = array(
             'options' => 'salutation_dom',
             'massupdate' => false,
             'len' => '255',
-            'comment' => 'LBL_SALUTATION_COMMENT'
+            'comment' => 'Salutation used to address the contact, for example Mister or Miss'
         ),
         'first_name' => array(
             'name' => 'first_name',
@@ -60,7 +60,7 @@ $vardefs = array(
             'len' => '100',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'LBL_FIRST_NAME_COMMENT',
+            'comment' => 'First name of the contact',
             'merge_filter' => 'selected',
 
         ),
@@ -71,7 +71,7 @@ $vardefs = array(
             'len' => '100',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'LBL_LAST_NAME_COMMENT',
+            'comment' => 'Last name of the contact',
             'merge_filter' => 'selected',
             'required' => true,
             'importable' => 'required',
@@ -89,7 +89,7 @@ $vardefs = array(
             'len' => '255',
             'db_concat_fields' => array(0 => 'first_name', 1 => 'last_name'),
             'importable' => 'false',
-            'comment' => 'LBL_NAME_COMMENT'
+            'comment' => 'Full name'
         ),
         'full_name' => array(
             'name' => 'full_name',
@@ -103,21 +103,20 @@ $vardefs = array(
             'len' => '510',
             'db_concat_fields' => array(0 => 'first_name', 1 => 'last_name'),
             'studio' => array('listview' => false),
-            'comment' => 'LBL_NAME_COMMENT'
+            'comment' => 'Full name'
         ),
         'title' => array(
             'name' => 'title',
             'vname' => 'LBL_TITLE',
             'type' => 'varchar',
             'len' => '100',
-            'comment' => 'LBL_TITLE_COMMENT'
+            'comment' => 'Job title or position of the contact'
         ),
         'photo' => array(
             'name' => 'photo',
             'vname' => 'LBL_PHOTO',
             'type' => 'image',
             'massupdate' => false,
-            'comments' => '',
             'help' => '',
             'importable' => false,
             'reportable' => true,
@@ -126,14 +125,14 @@ $vardefs = array(
             'width' => '160',
             'height' => '160',
 			'studio' => array('listview' => true),
-            'comment' => 'LBL_PHOTO_COMMENT'
+            'comment' => 'Profile photo of the contact'
         ),
         'department' => array(
             'name' => 'department',
             'vname' => 'LBL_DEPARTMENT',
             'type' => 'varchar',
             'len' => '255',
-            'comment' => 'LBL_DEPARTMENT_COMMENT',
+            'comment' => 'Department where the contact works',
             'merge_filter' => 'enabled',
         ),
         'do_not_call' => array(
@@ -142,7 +141,7 @@ $vardefs = array(
             'type' => 'bool',
             'default' => '0',
             'audited' => true,
-            'comment' => 'LBL_DO_NOT_CALL_COMMENT'
+            'comment' => 'Indicates whether the contact should not be called'
         ),
         'phone_home' => array(
             'name' => 'phone_home',
@@ -152,7 +151,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_PHONE_HOME_COMMENT',
+            'comment' => 'Home phone number of the contact',
             'merge_filter' => 'enabled',
         ),
         //bug 42902
@@ -169,6 +168,7 @@ $vardefs = array(
             'vname' => 'LBL_ANY_EMAIL',
             'studio' => array('visible' => false, 'searchview' => true),
             'importable' => false,
+            'comment' => 'The primary email address of the person',
         ),
         'phone_mobile' => array(
             'name' => 'phone_mobile',
@@ -178,7 +178,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_PHONE_MOBILE_COMMENT',
+            'comment' => 'Mobile phone number of the contact',
             'merge_filter' => 'enabled',
         ),
         'phone_work' => array(
@@ -190,7 +190,7 @@ $vardefs = array(
             'audited' => true,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_PHONE_WORK_COMMENT',
+            'comment' => 'Work phone number of the contact',
             'merge_filter' => 'enabled',
         ),
         'phone_other' => array(
@@ -201,7 +201,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_PHONE_OTHER_COMMENT',
+            'comment' => 'Additional phone number of the contact',
             'merge_filter' => 'enabled',
         ),
         'phone_fax' => array(
@@ -212,7 +212,7 @@ $vardefs = array(
             'len' => 100,
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_PHONE_FAX_COMMENT',
+            'comment' => 'Fax number of the contact',
             'merge_filter' => 'enabled',
         ),
         'email1' => array(
@@ -230,7 +230,7 @@ $vardefs = array(
             // bug 46859
             'full_text_search' => array('boost' => 3, 'analyzer' => 'whitespace'),
             //bug 54567
-            'comment' => 'LBL_EMAIL_ADDRESS_COMMENT'
+            'comment' => 'Email address widget of the contact'
         ),
         'email2' => array(
             'name' => 'email2',
@@ -244,6 +244,7 @@ $vardefs = array(
             'group' => 'email2',
             'merge_filter' => 'enabled',
             'studio' => 'false',
+            'comment' => 'The secondary email address of the person',
         ),
         'invalid_email' => array(
             'name' => 'invalid_email',
@@ -252,6 +253,7 @@ $vardefs = array(
             'type' => 'bool',
             'massupdate' => false,
             'studio' => 'false',
+            'comment' => 'A flag indicating whether the primary email address is invalid or undeliverable',
         ),
         'email_opt_out' => array(
             'name' => 'email_opt_out',
@@ -260,6 +262,7 @@ $vardefs = array(
             'type' => 'bool',
             'massupdate' => false,
             'studio' => 'false',
+            'comment' => 'A flag indicating whether the person has opted out of email communications',
         ),
         'lawful_basis' => array(
             'name' => 'lawful_basis',
@@ -267,7 +270,6 @@ $vardefs = array(
             'type' => 'multienum',
             'massupdate' => true,
             'no_default' => false,
-            'comments' => '',
             'inline_edit' => true,
             'reportable' => true,
             'merge_filter' => 'enabled',
@@ -276,7 +278,7 @@ $vardefs = array(
             'options' => 'lawful_basis_dom',
             'audited' => true,
             'importable' => true,
-            'comment' => 'LBL_LAWFUL_BASIS_COMMENT'
+            'comment' => 'Legal basis for processing the contact\'s personal data'
         ),
         'date_reviewed' => array(
             'name' => 'date_reviewed',
@@ -285,7 +287,7 @@ $vardefs = array(
             'massupdate' => true,
             'audited' => true,
             'importable' => true,
-            'comment' => 'LBL_DATE_REVIEWED_COMMENT'
+            'comment' => 'Date when the legal basis was last reviewed'
         ),
         'lawful_basis_source' => array(
             'name' => 'lawful_basis_source',
@@ -293,7 +295,6 @@ $vardefs = array(
             'type' => 'enum',
             'massupdate' => true,
             'no_default' => false,
-            'comments' => '',
             'inline_edit' => true,
             'reportable' => true,
             'merge_filter' => 'enabled',
@@ -302,7 +303,7 @@ $vardefs = array(
             'options' => 'lawful_basis_source_dom',
             'audited' => true,
             'importable' => true,
-            'comment' => 'LBL_LAWFUL_BASIS_SOURCE_COMMENT'
+            'comment' => 'Source of the legal basis for data processing'
         ),
         'primary_address_street' => array(
             'name' => 'primary_address_street',
@@ -311,7 +312,7 @@ $vardefs = array(
             'len' => '150',
             'group' => 'primary_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_PRIMARY_ADDRESS_STREET_COMMENT',
+            'comment' => 'Street address of the primary residence',
         ),
         'primary_address_street_2' => array(
             'name' => 'primary_address_street_2',
@@ -319,6 +320,7 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'source' => 'non-db',
+            'comment' => 'The second line of the primary address street, used for suite or apartment numbers',
         ),
         'primary_address_street_3' => array(
             'name' => 'primary_address_street_3',
@@ -326,6 +328,7 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'source' => 'non-db',
+            'comment' => 'The third line of the primary address street for additional address details',
         ),
         'primary_address_city' => array(
             'name' => 'primary_address_city',
@@ -334,7 +337,7 @@ $vardefs = array(
             'len' => '100',
             'group' => 'primary_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_PRIMARY_ADDRESS_CITY_COMMENT',
+            'comment' => 'City of the primary residence',
         ),
         'primary_address_state' => array(
             'name' => 'primary_address_state',
@@ -343,7 +346,7 @@ $vardefs = array(
             'len' => '100',
             'group' => 'primary_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_PRIMARY_ADDRESS_STATE_COMMENT',
+            'comment' => 'State or region of the primary residence',
         ),
         'primary_address_postalcode' => array(
             'name' => 'primary_address_postalcode',
@@ -352,7 +355,7 @@ $vardefs = array(
             'len' => '20',
             'group' => 'primary_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_PRIMARY_ADDRESS_POSTALCODE_COMMENT',
+            'comment' => 'Postal code of the primary residence',
 
         ),
         'primary_address_country' => array(
@@ -361,7 +364,7 @@ $vardefs = array(
             'type' => 'varchar',
             'group' => 'primary_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_PRIMARY_ADDRESS_COUNTRY_COMMENT',
+            'comment' => 'Country of the primary residence',
         ),
         'alt_address_street' => array(
             'name' => 'alt_address_street',
@@ -370,7 +373,7 @@ $vardefs = array(
             'len' => '150',
             'group' => 'alt_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ALT_ADDRESS_STREET_COMMENT',
+            'comment' => 'Street address of the alternate residence',
         ),
         'alt_address_street_2' => array(
             'name' => 'alt_address_street_2',
@@ -378,6 +381,7 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'source' => 'non-db',
+            'comment' => 'The second line of the alternate address street, used for suite or apartment numbers',
         ),
         'alt_address_street_3' => array(
             'name' => 'alt_address_street_3',
@@ -385,6 +389,7 @@ $vardefs = array(
             'type' => 'varchar',
             'len' => '150',
             'source' => 'non-db',
+            'comment' => 'The third line of the alternate address street for additional address details',
         ),
         'alt_address_city' => array(
             'name' => 'alt_address_city',
@@ -393,7 +398,7 @@ $vardefs = array(
             'len' => '100',
             'group' => 'alt_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ALT_ADDRESS_CITY_COMMENT',
+            'comment' => 'City of the alternate residence',
         ),
         'alt_address_state' => array(
             'name' => 'alt_address_state',
@@ -402,7 +407,7 @@ $vardefs = array(
             'len' => '100',
             'group' => 'alt_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ALT_ADDRESS_STATE_COMMENT',
+            'comment' => 'State or region of the alternate residence',
         ),
         'alt_address_postalcode' => array(
             'name' => 'alt_address_postalcode',
@@ -411,7 +416,7 @@ $vardefs = array(
             'len' => '20',
             'group' => 'alt_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ALT_ADDRESS_POSTALCODE_COMMENT',
+            'comment' => 'Postal code of the alternate residence',
         ),
         'alt_address_country' => array(
             'name' => 'alt_address_country',
@@ -419,7 +424,7 @@ $vardefs = array(
             'type' => 'varchar',
             'group' => 'alt_address',
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ALT_ADDRESS_COUNTRY_COMMENT',
+            'comment' => 'Country of the alternate residence',
         ),
         'assistant' => array(
             'name' => 'assistant',
@@ -429,7 +434,7 @@ $vardefs = array(
             'unified_search' => true,
             'full_text_search' => array('boost' => 2),
             'merge_filter' => 'enabled',
-            'comment' => 'LBL_ASSISTANT_COMMENT',
+            'comment' => 'Name of the contact\'s assistant',
         ),
         'assistant_phone' => array(
             'name' => 'assistant_phone',
@@ -440,7 +445,7 @@ $vardefs = array(
             'group' => 'assistant',
             'unified_search' => true,
             'full_text_search' => array('boost' => 1),
-            'comment' => 'LBL_ASSISTANT_PHONE_COMMENT',
+            'comment' => 'Phone number of the contact\'s assistant',
             'merge_filter' => 'enabled',
         ),
 
@@ -471,6 +476,7 @@ $vardefs = array(
             'studio' => false,
             'reportable' => false,
             'massupdate' => false,
+            'comment' => 'Additional non-primary email addresses associated with the person',
         ),
     ),
     'relationships' => array(
@@ -504,3 +510,4 @@ $vardefs = array(
         ),
     )
 );
+

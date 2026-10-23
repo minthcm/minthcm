@@ -41,24 +41,28 @@ $dictionary['SecurityGroup'] = [
             'source' => 'non-db',
             'Importable' => false,
             'duplicate_merge' => 'disabled',
+            'comment' => 'Editable user-relationship fields that are not inherited from the parent security group',
         ],
         'securitygroup_noninherit_id' => [
             'name' => 'securitygroup_noninherit_id',
             'type' => 'varchar',
             'source' => 'non-db',
             'vname' => 'LBL_securitygroup_noninherit_id',
+            'comment' => 'The unique identifier of the non-inherited security group relationship',
         ],
         'securitygroup_noninheritable' => [
             'name' => 'securitygroup_noninheritable',
             'type' => 'bool',
             'source' => 'non-db',
             'vname' => 'LBL_SECURITYGROUP_NONINHERITABLE',
+            'comment' => 'Flag indicating whether this user-group assignment is excluded from inheritance',
         ],
         'securitygroup_primary_group' => [
             'name' => 'securitygroup_primary_group',
             'type' => 'bool',
             'source' => 'non-db',
             'vname' => 'LBL_PRIMARY_GROUP',
+            'comment' => 'Flag indicating whether this is the user\'s primary security group',
         ],
         'group_type' => [
             'required' => false,
@@ -66,9 +70,9 @@ $dictionary['SecurityGroup'] = [
             'vname' => 'LBL_GROUP_TYPE',
             'type' => 'enum',
             'massupdate' => false,
-            'default' => 'standard',
+            'default' => 'business_unit',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The type of the security group (e.g. standard, department)',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -104,6 +108,7 @@ $dictionary['SecurityGroup'] = [
             'table' => 'positions',
             'module' => 'Positions',
             'rname' => 'name',
+            'comment' => 'The name of the position that leads this security group',
         ),
         'position_leader_id' => array(
             'name' => 'position_leader_id',
@@ -144,6 +149,7 @@ $dictionary['SecurityGroup'] = [
             'required' => false,
             'reportable' => false,
             'audited' => true,
+            'comment' => 'The unique identifier of the parent record',
         ),
         'parent_name' => array(
             'name' => 'parent_name',
@@ -161,6 +167,7 @@ $dictionary['SecurityGroup'] = [
             'unified_search' => true,
             'importable' => 'true',
             'vt_validation' => "AEM(callCustomApi('SecurityGroups', 'checkSubordinatedGroups', {id:\$id, parent_id:\$parent_id}), 'LBL_PARENT_GROUP_ERROR')",
+            'comment' => 'The name of the parent record',
         ),
         "current_manager" => array(
             'name' => 'current_manager',
@@ -188,6 +195,7 @@ $dictionary['SecurityGroup'] = [
             'reportable' => true,
             'massupdate' => false,
             'duplicate_merge' => 'enabled',
+            'comment' => 'The name of the employee currently managing this security group',
         ),
         "current_manager_id" => array(
             'name' => 'current_manager_id',
@@ -196,6 +204,7 @@ $dictionary['SecurityGroup'] = [
             'vname' => 'LBL_CURRENT_MANAGER_ID',
             'audited' => false,
             'reportable' => true,
+            'comment' => 'The unique identifier of the employee currently managing this security group',
         ),
         "onboardingoffboardingelements" => array(
             'name' => 'onboardingoffboardingelements',
@@ -271,3 +280,4 @@ $dictionary["SecurityGroup"]["fields"]["securitygroups_rooms"] = array (
     'vname' => 'LBL_RELATIONSHIP_ROOMS_NAME',
     'side' => 'right',
  );
+

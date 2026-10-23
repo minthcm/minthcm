@@ -55,7 +55,7 @@ $dictionary['ExitInterviews'] = array(
             'type' => 'datetimecombo',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The start date of the record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -79,7 +79,7 @@ $dictionary['ExitInterviews'] = array(
             'type' => 'datetimecombo',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The end date of the record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -104,7 +104,7 @@ $dictionary['ExitInterviews'] = array(
             'massupdate' => '1',
             'default' => 'planned',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The current status of the record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -169,6 +169,7 @@ $dictionary['ExitInterviews'] = array(
             'module' => 'Offboardings',
             'rname' => 'name',
             'required' => false,
+            'comment' => 'Name of the offboarding process associated with this exit interview',
         ),
         'offboarding_id' =>
         array(
@@ -206,3 +207,4 @@ VardefManager::createVardef('ExitInterviews', 'ExitInterviews',
     'security_groups'
     )
 );
+

@@ -56,7 +56,7 @@ $dictionary['AOR_Report'] = array(
         'massupdate' => 0,
         'default' => '',
         'no_default' => false,
-        'comments' => '',
+        'comment' => 'The module or data source for which this Advanced Open Report (AOR) is configured and generated',
         'help' => '',
         'importable' => 'true',
         'duplicate_merge' => 'disabled',
@@ -81,6 +81,7 @@ $dictionary['AOR_Report'] = array(
         'massupdate' => 0,
         'default' => 2,
         'no_default' => false,
+        'comment' => 'The number of graphs or charts displayed per row in the report layout and visualization',
     ),
 
     'field_lines' =>
@@ -96,6 +97,7 @@ $dictionary['AOR_Report'] = array(
         'duplicate_merge_dom_value' => 0,
         'audited' => false,
         'reportable' => false,
+        'comment' => 'The number of field lines or rows configured for displaying data fields in the report',
         'function' =>
         array(
             'name' => 'display_field_lines',
@@ -116,6 +118,7 @@ $dictionary['AOR_Report'] = array(
         'duplicate_merge_dom_value' => 0,
         'audited' => false,
         'reportable' => false,
+        'comment' => 'The number of condition lines or filter criteria applied to query and filter the report data',
         'function' =>
         array(
             'name' => 'display_condition_lines',
@@ -202,3 +205,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOR_Reports', 'AOR_Report', array('basic','assignable','security_groups'));
+

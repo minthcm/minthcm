@@ -57,7 +57,7 @@ $dictionary['Appraisals'] = array(
             'type' => 'date',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The date of the appraisal',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -80,7 +80,7 @@ $dictionary['Appraisals'] = array(
             'type' => 'ColoredEnum',
             'dbType' => 'varchar',
             'massupdate' => '1',
-            'comments' => '',
+            'comment' => 'The current status of the record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -109,7 +109,7 @@ $dictionary['Appraisals'] = array(
             'vname' => 'LBL_TYPE',
             'type' => 'enum',
             'massupdate' => '1',
-            'comments' => '',
+            'comment' => 'The type or category of the appraisal',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -176,6 +176,7 @@ $dictionary['Appraisals'] = array(
             'table' => 'candidatures',
             'module' => 'Candidatures',
             'rname' => 'name',
+            'comment' => 'Name of the candidature associated with this appraisal',
         ),
         'candidature_id' => array(
             'name' => 'candidature_id',
@@ -186,6 +187,7 @@ $dictionary['Appraisals'] = array(
             'isnull' => 'true',
             'dbType' => 'id',
             'vname' => 'LBL_CANDIDATURE_ID',
+            'comment' => 'Id of the candidature associated with this appraisal',
         ),
         'positions' => array(
             'name' => 'positions',
@@ -208,6 +210,7 @@ $dictionary['Appraisals'] = array(
             'table' => 'positions',
             'module' => 'Positions',
             'rname' => 'name',
+            'comment' => 'Name of position associated with this appraisal',
         ),
         'position_id' => array(
             'name' => 'position_id',
@@ -218,6 +221,7 @@ $dictionary['Appraisals'] = array(
             'isnull' => 'true',
             'dbType' => 'id',
             'vname' => 'LBL_POSITION_ID',
+            'comment' => 'Id of position associated with this appraisal',
         ),
         'evaluators' => array(
             'name' => 'evaluators',
@@ -241,6 +245,7 @@ $dictionary['Appraisals'] = array(
             'module' => 'Employees',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'Name of the evaluator associated with this appraisal',
         ),
         'evaluator_id' => array(
             'name' => 'evaluator_id',
@@ -251,6 +256,7 @@ $dictionary['Appraisals'] = array(
             'isnull' => 'true',
             'dbType' => 'id',
             'vname' => 'LBL_EVALUATOR_ID',
+            'comment' => 'Id of the evaluator associated with this appraisal',
         ),
         'appraisalitems' => array(
             'name' => 'appraisalitems',
@@ -275,6 +281,7 @@ $dictionary['Appraisals'] = array(
             'audited' => false,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'Inline view of appraisal items associated with this appraisal',
             'function' =>
             array(
                 'name' => 'displayInlineAppraisalItems',
@@ -340,5 +347,7 @@ VardefManager::createVardef('Appraisals', 'Appraisals',
     array('basic', 'assignable', 'employee_related', 'security_groups'));
 
 $dictionary["Appraisals"]["fields"]['employee_name']['vt_required']      = "equals(\$type,'other')";
+$dictionary["Appraisals"]["fields"]['employee_name']['comment']          = 'Name of the employee associated with this record';
 $dictionary["Appraisals"]["fields"]['candidature_name']['vt_dependency'] = "not(equals(\$type,'other'))";
 $dictionary["Appraisals"]["fields"]['candidature_name']['vt_required']   = "equals(\$type,'recruiting')";
+

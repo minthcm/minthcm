@@ -3,6 +3,7 @@ import { useDropzoneStore } from './MintDropzoneStore';
 import { useLanguagesStore } from '@/store/languages';
 import { useBackendStore } from '@/store/backend';
 import { useACL } from '@/composables/useACL';
+import { decodeHtmlEntities } from '@/utils/html';
 
 class MintDropzone {
     module: string
@@ -104,7 +105,7 @@ class MintDropzone {
     private addTooltip(element, file) {
         const tooltip = document.createElement('div');
         tooltip.classList.add('dz-filename-tooltip');
-        tooltip.innerHTML = file.name;
+        tooltip.textContent = decodeHtmlEntities(file.name);
         element.after(tooltip);
     }
 

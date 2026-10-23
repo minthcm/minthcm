@@ -61,6 +61,7 @@ $dictionary['EmployeeCertificates'] = array(
             'options' => 'date_range_search_dom',
             'enable_range_search' => '1',
             'validation' => array('type' => 'isbefore', 'compareto' => 'end_date'),
+            'comment' => 'The date on which the certificate is valid from',
         ),
         'end_date' => array(
             'name' => 'end_date',
@@ -74,6 +75,7 @@ $dictionary['EmployeeCertificates'] = array(
             'importable' => true,
             'options' => 'date_range_search_dom',
             'enable_range_search' => '1',
+            'comment' => 'The date on which the certificate expires',
         ),
         'status' => array(
             'required' => false,
@@ -96,6 +98,7 @@ $dictionary['EmployeeCertificates'] = array(
             'options' => 'certificates_status_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The current status of the record',
         ),
         "candidate" => array(
             'name' => 'candidate',
@@ -124,6 +127,7 @@ $dictionary['EmployeeCertificates'] = array(
             'massupdate' => false,
             'duplicate_merge' => 'enabled',
             'vt_validation' => 'AEM(ifElse(and(empty($candidate_id),empty($employee_id)),false,true), \'LBL_CANDIDATE_OR_EMPLOYEE_HAVE_TO_BE_SET\')',
+            'comment' => 'Name of the candidate associated with this record',
         ),
         "candidate_id" => array(
             'name' => 'candidate_id',
@@ -132,6 +136,7 @@ $dictionary['EmployeeCertificates'] = array(
             'vname' => 'LBL_RELATIONSHIP_CANDIDATE_ID',
             'audited' => false,
             'reportable' => true,
+            'comment' => 'The unique identifier of the candidate associated with this record',
         ),
         "certificates" => array(
             'name' => 'certificates',
@@ -156,6 +161,7 @@ $dictionary['EmployeeCertificates'] = array(
             'reportable' => true,
             'audited' => true,
             'required' => true,
+            'comment' => 'Name of the certificate associated with this record',
         ),
         "certificate_id" => array(
             'name' => 'certificate_id',
@@ -169,6 +175,7 @@ $dictionary['EmployeeCertificates'] = array(
             'rname' => 'id',
             'isnull' => 'true',
             'dbType' => 'id',
+            'comment' => 'The unique identifier of the certificate associated with this record',
         ),
         'attempts_number' => array(
             'name' => 'attempts_number',
@@ -185,11 +192,12 @@ $dictionary['EmployeeCertificates'] = array(
             ),
             'min' => 0,
             'max' => false,
-            'duplicate_merge' => 'enabled',    
-            'size' => 30,    
+            'duplicate_merge' => 'enabled',
+            'size' => 30,
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'disable_num_format' => true,
+            'comment' => 'The number of attempts made to obtain the certificate',
         ),
         'points_scored' => array(
             'name' => 'points_scored',
@@ -206,11 +214,12 @@ $dictionary['EmployeeCertificates'] = array(
             ),
             'min' => 0,
             'max' => false,
-            'duplicate_merge' => 'enabled',    
-            'size' => 30,    
+            'duplicate_merge' => 'enabled',
+            'size' => 30,
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
             'disable_num_format' => true,
+            'comment' => 'The number of points scored while obtaining the certificate',
         ),
     ),
     'relationships' => array(
@@ -245,7 +254,15 @@ VardefManager::createVardef('EmployeeCertificates', 'EmployeeCertificates',
 
 $dictionary['EmployeeCertificates']['fields']['name']['readonly'] = "true";
 $dictionary['EmployeeCertificates']['fields']['name']['audited'] = false;
+$dictionary['EmployeeCertificates']['fields']['name']['related_fields'] = array(
+    'certificate_name',
+    'employee_name',
+);
+$dictionary['EmployeeCertificates']['fields']['name']['comment'] = 'The name or title of the record';
 $dictionary['EmployeeCertificates']['fields']['employee_name']['required'] = false;
 $dictionary['EmployeeCertificates']['fields']['employee_name']['audited'] = true;
 $dictionary['EmployeeCertificates']['fields']['employee_name']['vt_validation'] = 'AEM(ifElse(and(empty($candidate_id),empty($employee_id)),false,true), \'LBL_CANDIDATE_OR_EMPLOYEE_HAVE_TO_BE_SET\')';
+$dictionary['EmployeeCertificates']['fields']['employee_name']['comment'] = 'Name of the employee associated with this record';
 $dictionary['EmployeeCertificates']['fields']['employee_id']['audited'] = false;
+$dictionary['EmployeeCertificates']['fields']['employee_id']['comment'] = 'Id of the employee associated with this record';
+

@@ -67,6 +67,7 @@ class Configurator {
       'OIDC_clientSecret',
       'OIDC_authorizationEndpoint',
       'OIDC_tokenEndpoint',
+      'OIDC_issuer',
       'OIDC_logoutEndpoint',
       'OIDC_scope',
       'OIDC_usernameClaim',

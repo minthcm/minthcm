@@ -16,6 +16,7 @@ declare module 'vue-router' {
         isLegacy?: boolean
         legacyUrl?: string
         auth: boolean
+        adminOnly?: boolean
         layout?: Component
         entryPoint?: boolean
         legacyQueryToHash?: string[]
@@ -139,6 +140,15 @@ const coreRoutes: Array<RouteRecordRaw> = [
             isLegacy: true,
             legacyUrl: 'legacy/index.php?module=MergeRecords',
             auth: true,
+        },
+    },
+    {
+        path: '/Administration/:viewName',
+        name: 'admin-view',
+        component: () => import('@/views/AdminView/AdminView.vue'),
+        meta: {
+            auth: true,
+            adminOnly: true,
         },
     },
     {

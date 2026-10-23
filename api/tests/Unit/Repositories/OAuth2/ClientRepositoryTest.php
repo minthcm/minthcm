@@ -107,6 +107,54 @@ final class ClientRepositoryTest extends TestCase
         self::assertFalse($repository->validateClient('client-1', 'plain-secret', 'frontend'));
     }
 
+    public function testRejectsEmptySecretForConfidentialClient(): void
+    {
+        $client = new Client();
+        $client->secret = '';
+        $client->is_confidential = true;
+        $client->allowed_grant_type = 'password';
+
+        $repository = $this->createClientRepository();
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => 'client-1', 'deleted' => false])
+            ->willReturn($client);
+
+        self::assertFalse($repository->validateClient('client-1', '', 'password'));
+    }
+
+    public function testRejectsMissingSecretWithoutTypeError(): void
+    {
+        $client = new Client();
+        $client->secret = 'plain-secret';
+        $client->is_confidential = true;
+        $client->allowed_grant_type = 'password';
+
+        $repository = $this->createClientRepository();
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => 'client-1', 'deleted' => false])
+            ->willReturn($client);
+
+        self::assertFalse($repository->validateClient('client-1', null, 'password'));
+    }
+
+    public function testAcceptsPlaintextSecretForFrontendGrant(): void
+    {
+        $client = new Client();
+        $client->secret = hash('sha256', 'plain-secret');
+        $client->is_confidential = true;
+        $client->allowed_grant_type = 'frontend';
+
+        $repository = $this->createClientRepository();
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => 'client-1', 'deleted' => false])
+            ->willReturn($client);
+
+        self::assertTrue($repository->validateClient('client-1', hash('sha256', 'plain-secret'), 'frontend'));
+    }
+
     private function createClientRepository(): ClientRepository&MockObject
     {
         return $this->getMockBuilder(ClientRepository::class)

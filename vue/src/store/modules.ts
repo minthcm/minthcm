@@ -85,6 +85,8 @@ export interface FieldVardef {
     name: string
     type: string
     label: string
+    inputType?: string
+    config_key?: string
     id_name?: string
     type_name?: string
     options?: string | Record<string, string>
@@ -93,8 +95,12 @@ export interface FieldVardef {
     readonly?: boolean
     properties?: PropertiesObject
     filters?: { [moduleName: string]: filterDef[] } | filterDef[]
-    comment?: string,
+    comment?: string
     hide_detail?: boolean
+    additional_info?: string
+    upload_handler?: string
+    static_value?: string
+    visible_when?: Array<{ field: string; value: any }>
 }
 
 interface PropertiesObject {

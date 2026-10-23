@@ -53,27 +53,27 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
                 'required' => true,
                 'type' => 'id',
                 'reportable' => false,
-            'comment' => 'Unique identifier',
+            'comment' => 'Record unique identifier',
             ),
         'date_entered' => array(
                 'name' => 'date_entered',
                 'vname' => 'LBL_DATE_ENTERED',
                 'type' => 'datetime',
                 'required' => true,
-            'comment' => 'Date record created',
+            'comment' => 'The date when the record was created',
             ),
         'date_modified' => array(
                 'name' => 'date_modified',
                 'vname' => 'LBL_DATE_MODIFIED',
                 'type' => 'datetime',
                 'required' => true,
-            'comment' => 'Date record last modified',
+            'comment' => 'The date when the record was last modified',
             ),
         'date_indexed' => array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'Date record last indexed',
+            'comment' => 'The date when the record was indexed for search purposes',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -90,7 +90,7 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
                 'required' => false,
                 'len' => 36,
                 'reportable' => true,
-            'comment' => 'User who last modified record',
+            'comment' => 'The unique identifier of the user who last modified the record',
             ),
         'created_by' => array(
                 'name' => 'created_by',
@@ -102,27 +102,27 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
                 'isnull' => 'false',
                 'dbType' => 'id',
                 'len' => 36,
-            'comment' => 'User who created record',
+            'comment' => 'The unique identifier of the user who created the record',
             ),
         'name' => array(
                 'name' => 'name',
                 'type' => 'varchar',
                 'vname' => 'LBL_NAME',
                 'len' => 150,
-            'comment' => 'The role name',
+            'comment' => 'The name or title of the record',
             ),
         'description' => array(
                 'name' => 'description',
                 'vname' => 'LBL_DESCRIPTION',
                 'type' => 'text',
-            'comment' => 'The role description',
+            'comment' => 'A detailed description of the record',
             ),
         'deleted' => array(
                 'name' => 'deleted',
                 'vname' => 'LBL_DELETED',
                 'type' => 'bool',
                 'reportable' => false,
-            'comment' => 'Record deletion indicator',
+            'comment' => 'A flag indicating whether the record has been deleted',
             ),
         'users' => array(
                 'name' => 'users',
@@ -156,3 +156,4 @@ $dictionary['ACLRole'] = array('table' => 'acl_roles', 'comment' => 'ACL Role de
     ),
 
 );
+

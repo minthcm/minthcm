@@ -78,7 +78,6 @@ $dictionary['Recruitments'] = array(
             'duplicate_on_record_copy' => 'always',
             'massupdate' => false,
             'no_default' => false,
-            'comments' => '',
             'readonly' => true,
             'help' => '',
             'duplicate_merge_dom_value' => '3',
@@ -87,12 +86,12 @@ $dictionary['Recruitments'] = array(
             'calculated' => true,
             'enforced' => true,
             'size' => '20',
+            'comment' => 'The name or title of the record',
         ),
         'end_date' => array(
             'name' => 'end_date',
             'label' => 'LBL_END_DATE',
             'vname' => 'LBL_END_DATE',
-            'comments' => '',
             'help' => '',
             'type' => 'date',
             'audited' => true,
@@ -108,12 +107,12 @@ $dictionary['Recruitments'] = array(
             'dependency' => '',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The date when the recruitment process or project is scheduled to end',
         ),
         'announcement' => array(
             'name' => 'announcement',
             'label' => 'LBL_ANNOUNCEMENT',
             'vname' => 'LBL_ANNOUNCEMENT',
-            'comments' => '',
             'help' => '',
             'type' => 'url',
             'max_size' => '255',
@@ -135,6 +134,7 @@ $dictionary['Recruitments'] = array(
                 'enabled' => false,
             ),
             'dependency' => '',
+            'comment' => 'The announcement or job posting details for the recruitment',
         ),
         'project_status' => array(
             'required' => false,
@@ -143,7 +143,6 @@ $dictionary['Recruitments'] = array(
             'massupdate' => false,
             'default' => 'for_approval',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'type' => 'ColoredEnum',
             'dbType' => 'varchar',
@@ -166,12 +165,12 @@ $dictionary['Recruitments'] = array(
             ],
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The current status of the recruitment project (e.g., planning, active, completed)',
         ),
         'start_date' => array(
             'name' => 'start_date',
             'label' => 'LBL_START_DATE',
             'vname' => 'LBL_START_DATE',
-            'comments' => '',
             'help' => '',
             'type' => 'date',
             'max_size' => null,
@@ -187,12 +186,12 @@ $dictionary['Recruitments'] = array(
             'required' => true,
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The date when the recruitment process or project is scheduled to begin',
         ),
         'start_work_date' => array(
             'name' => 'start_work_date',
             'label' => 'LBL_START_WORK_DATE',
             'vname' => 'LBL_START_WORK_DATE',
-            'comments' => '',
             'help' => '',
             'type' => 'date',
             'max_size' => null,
@@ -208,12 +207,12 @@ $dictionary['Recruitments'] = array(
             'dependency' => '',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The proposed start date for the new employee\'s work assignment',
         ),
         'vacancy' => array(
             'name' => 'vacancy',
             'label' => 'LBL_VACANCY',
             'vname' => 'LBL_VACANCY',
-            'comments' => '',
             'help' => '',
             'type' => 'int',
             'max_size' => '255',
@@ -234,6 +233,7 @@ $dictionary['Recruitments'] = array(
             'vt_dependency' => 'not(equals($recruitment_type,\'continuous\'))',
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
+            'comment' => 'Details about the job vacancy being filled through this recruitment',
         ),
         'employees_number' => array(
             'name' => 'employees_number',
@@ -252,6 +252,7 @@ $dictionary['Recruitments'] = array(
             'readonly' => true,
             'enable_range_search' => true,
             'options' => 'numeric_range_search_dom',
+            'comment' => 'The number of employees needed or targeted for this recruitment',
         ),
         "candidatures" => array(
             'name' => 'candidatures',
@@ -289,6 +290,7 @@ $dictionary['Recruitments'] = array(
             'module' => 'Positions',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the position being recruited for',
         ),
         "position_id" => array(
             'name' => 'position_id',
@@ -299,6 +301,7 @@ $dictionary['Recruitments'] = array(
             'rname' => 'id',
             'isnull' => 'true',
             'dbType' => 'id',
+            'comment' => 'The unique identifier of the position being recruited for',
         ),
         "calls" => array(
             'name' => 'calls',
@@ -355,6 +358,7 @@ $dictionary['Recruitments'] = array(
             'audited' => false,
             'massupdate' => false,
             'duplicate_merge' => false,
+            'comment' => 'The version number of the recruitment record or process',
         ),
         'recruitment_channels' => array(
             'required' => false,
@@ -378,6 +382,7 @@ $dictionary['Recruitments'] = array(
             'studio' => 'visible',
             'dependency' => false,
             'isMultiSelect' => true,
+            'comment' => 'The channels or methods used for recruitment (e.g., job boards, social media, referrals)',
         ),
         'recruitment_type' => array(
             'required' => true,
@@ -387,7 +392,6 @@ $dictionary['Recruitments'] = array(
             'massupdate' => false,
             'default' => '',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -402,6 +406,7 @@ $dictionary['Recruitments'] = array(
             'options' => 'recruitment_type_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The type or category of recruitment (e.g., internal, external, replacement)',
         ),
         'salary_from' => array(
             'required' => true,
@@ -425,6 +430,7 @@ $dictionary['Recruitments'] = array(
             'enforced' => false,
             'calculated' => false,
             'formula' => '',
+            'comment' => 'The minimum salary offered for the position in the original currency',
         ),
         'salary_from_usdollar' => array(
             'required' => false,
@@ -447,6 +453,7 @@ $dictionary['Recruitments'] = array(
             'enforced' => false,
             'calculated' => false,
             'formula' => '',
+            'comment' => 'The minimum salary offered for the position converted to US dollars',
         ),
         'salary_to' => array(
             'required' => true,
@@ -470,6 +477,7 @@ $dictionary['Recruitments'] = array(
             'enforced' => false,
             'calculated' => false,
             'formula' => '',
+            'comment' => 'The maximum salary offered for the position in the original currency',
         ),
         'salary_to_usdollar' => array(
             'required' => false,
@@ -492,6 +500,7 @@ $dictionary['Recruitments'] = array(
             'enforced' => false,
             'calculated' => false,
             'formula' => '',
+            'comment' => 'The maximum salary offered for the position converted to US dollars',
         ),
         'currency_id' => array(
             'name' => 'currency_id',
@@ -500,7 +509,7 @@ $dictionary['Recruitments'] = array(
             'vname' => 'LBL_CURRENCY',
             'function' => array('name' => 'getCurrencyDropDown', 'returns' => 'html'),
             'reportable' => false,
-            'comment' => 'Currency used for display purposes',
+            'comment' => 'The unique identifier of the currency used for salary amounts',
         ),
         'currency_name' => array(
             'name' => 'currency_name',
@@ -515,6 +524,7 @@ $dictionary['Recruitments'] = array(
             'function' => array('name' => 'getCurrencyNameDropDown', 'returns' => 'html'),
             'studio' => 'false',
             'duplicate_merge' => 'disabled',
+            'comment' => 'The name of the currency used for salary amounts',
         ),
         'currency_symbol' => array(
             'name' => 'currency_symbol',
@@ -529,6 +539,7 @@ $dictionary['Recruitments'] = array(
             'function' => array('name' => 'getCurrencySymbolDropDown', 'returns' => 'html'),
             'studio' => 'false',
             'duplicate_merge' => 'disabled',
+            'comment' => 'The symbol of the currency used for salary amounts',
         ),
     ),
     'relationships' => array(
@@ -595,27 +606,3 @@ if (!class_exists('VardefManager')) {
 }
 VardefManager::createVardef('Recruitments', 'Recruitments', array('basic', 'assignable', 'security_groups'));
 
-foreach ([
-    'name' => 'LBL_NAME_COMMENT',
-    'end_date' => 'LBL_END_DATE_COMMENT',
-    'announcement' => 'LBL_ANNOUNCEMENT_COMMENT',
-    'project_status' => 'LBL_PROJECT_STATUS_COMMENT',
-    'start_date' => 'LBL_START_DATE_COMMENT',
-    'start_work_date' => 'LBL_START_WORK_DATE_COMMENT',
-    'vacancy' => 'LBL_VACANCY_COMMENT',
-    'employees_number' => 'LBL_EMPLOYEES_NUMBER_COMMENT',
-    'version' => 'LBL_VERSION_COMMENT',
-    'recruitment_channels' => 'LBL_RECRUITMENT_CHANNELS_COMMENT',
-    'recruitment_type' => 'LBL_RECRUITMENT_TYPE_COMMENT',
-    'salary_from' => 'LBL_SALARY_FROM_COMMENT',
-    'salary_from_usdollar' => 'LBL_SALARY_FROM_USDOLLAR_COMMENT',
-    'salary_to' => 'LBL_SALARY_TO_COMMENT',
-    'salary_to_usdollar' => 'LBL_SALARY_TO_USDOLLAR_COMMENT',
-    'currency_id' => 'LBL_CURRENCY_ID_COMMENT',
-    'currency_name' => 'LBL_CURRENCY_NAME_COMMENT',
-    'position_name' => 'LBL_POSITION_NAME_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Recruitments']['fields'][$field])) {
-        $dictionary['Recruitments']['fields'][$field]['comment'] = $commentLabel;
-    }
-}

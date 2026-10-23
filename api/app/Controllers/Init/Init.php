@@ -91,6 +91,7 @@ class Init
 
     public function getFullData($only_minimum_data = false)
     {
+        global $sugar_config, $current_user;
         $rebuild_array = json_decode(base64_decode($this->mintRebuildID), true) ?? [];
 
         $response_body = [];
@@ -136,10 +137,32 @@ class Init
         $response_body['masquerade_user_id'] = $_SESSION['masquerade_user_id'] ?? null;
         $response_body['masquerade_admin_name'] = $_SESSION['masquerade_admin_name'] ?? null;
         $response_body['system_name'] = $GLOBALS['system_config']->settings['system_name'];
-        global $sugar_config;
         $response_body['upload_maxsize'] = $sugar_config['upload_maxsize'] ?? '3000000';
+        if (!empty($current_user->id) && $current_user->isAdmin()) {
+            $response_body['document_root'] = realpath(__DIR__ . '/../../../../legacy') ?: '';
+            $response_body['web_server_user'] = $this->getWebServerUser();
+        }
         $response_body['field_variables']['ColoredEnum']['options_colors'] = ConstantsLoader::getConstants('colored_enum');
+
+        if (!empty($current_user->id) && $current_user->isAdmin()) {
+            $response_body['adminViews'] = $this->loadAdminViewsMeta();
+        }
+
         return $response_body;
+    }
+
+    private function getWebServerUser(): string
+    {
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+        $user = function_exists('exec') ? exec('whoami') : '';
+        if (empty($user) && function_exists('posix_getpwuid') && function_exists('posix_geteuid')) {
+            $usr = posix_getpwuid(posix_geteuid());
+            $user = $usr['name'] ?? '';
+        }
+        return $cache = $user ?: '';
     }
 
     public function getCurrentUserData()
@@ -264,6 +287,26 @@ class Init
             file_exists('modules/' . $module . '/metadata/' . $view . 'viewdefs.php')
             || file_exists('custom/modules/' . $module . '/metadata/' . $view . 'viewdefs.php')
         );
+    }
+
+    private function loadAdminViewsMeta(): array
+    {
+        $result = [];
+        $admins_dir = __DIR__ . '/../../../../legacy/modules/Administration/metadata/admins';
+        if (!is_dir($admins_dir)) {
+            return $result;
+        }
+        foreach (scandir($admins_dir) ?: [] as $file) {
+            if (!str_ends_with($file, '.php')) {
+                continue;
+            }
+            $viewdefs = [];
+            include $admins_dir . '/' . $file;
+            if (!empty($viewdefs['Administration'])) {
+                $result = array_merge($result, $viewdefs['Administration']);
+            }
+        }
+        return $result;
     }
 
     private function getMenuForAllModules($modules_data, $modules)

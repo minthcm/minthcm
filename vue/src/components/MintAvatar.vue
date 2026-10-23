@@ -1,6 +1,11 @@
 <template>
-    <div class="mint-avatar">
-        <img v-if="photoSrc" :src="photoSrc" />
+    <div class="mint-avatar" 
+        :style="{
+            '--avatar-width': props?.width || null,
+            '--avatar-height': props?.height || null
+        }"
+    >
+        <img v-if="photoSrc" :src="photoSrc" loading="lazy"/>
         <v-icon v-else :icon="props.icon ?? 'mdi-account'" />
     </div>
 </template>
@@ -11,6 +16,8 @@ import { computed } from 'vue'
 interface Props {
     photo?: string | null
     icon?: string
+    width?: string
+    height?: string
 }
 
 const props = defineProps<Props>()
@@ -25,9 +32,9 @@ const photoSrc = computed(() => {
 
 <style scoped lang="scss">
 .mint-avatar {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
+    width: var(--avatar-width, 32px);
+    min-width: var(--avatar-width, 32px);
+    height: var(--avatar-height, 32px);
     border-radius: 50%;
     display: flex;
     align-items: center;

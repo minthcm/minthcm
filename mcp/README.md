@@ -54,6 +54,25 @@ sequenceDiagram
 - Flows live for 15 minutes (`OAuth2Server::FLOW_TTL_SECONDS`). Expired flows are garbage-collected on the next `redirectToLogin()` call.
 - Concurrent flows do not collide: each authorization gets its own random `flow_id` and its own slot in `$_SESSION['oauth_flows']`.
 - `Cancel` routes through `McpController::deny()` which re-validates the redirect_uri against the registered client, so it cannot be turned into an open redirect even if the session were tampered with.
+- PKCE is mandatory and only `S256` is accepted — `/authorize` rejects `code_challenge_method=plain` (`OAuth2Server::PKCE_METHOD`).
+- An authorization code can only be redeemed by the client it was issued to (`client_id` checked at `/token`).
+
+### Dynamic Client Registration (RFC 7591)
+
+`POST <site_url>/mcp/oauth/register` is open (no authentication) so MCP clients can register themselves. `ClientRegistrationValidator` accepts only what the authorization code flow needs and rejects the rest with HTTP 400 (`invalid_redirect_uri` / `invalid_client_metadata`):
+
+- `redirect_uris` — required, non-empty; each URI must be `https://…`, or `http://` on a loopback host (`127.0.0.1`, `localhost`, `[::1]`, any port); no fragment. Custom URI schemes of native apps (e.g. `myapp://`) are rejected.
+- `grant_types` — only `authorization_code` and `refresh_token` (default: both).
+- `response_types` — only `code`.
+- `client_name` — control characters removed, truncated to 100 characters.
+
+To switch open registration off, set in `legacy/config_override.php`:
+
+```php
+$sugar_config['mcp_oauth_dynamic_registration_enabled'] = false;
+```
+
+`/register` then returns HTTP 403 `access_denied` and `registration_endpoint` disappears from the authorization server metadata. Clients must be created manually (Admin → OAuth2 Clients & Tokens).
 
 ## Server Configuration
 

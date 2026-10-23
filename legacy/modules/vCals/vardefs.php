@@ -56,50 +56,58 @@ $dictionary['vCal'] = array('table' => 'vcals'
     'type' => 'id',
     'required'=>true,
     'reportable'=>false,
+    'comment' => 'Record unique identifier',
   ),
-     'deleted' => 
+     'deleted' =>
   array (
     'name' => 'deleted',
     'vname' => 'LBL_DELETED',
     'type' => 'bool',
     'required' => false,
     'reportable'=>false,
+    'comment' => 'A flag indicating whether the record has been deleted',
   ),
-  'date_entered' => 
+  'date_entered' =>
   array (
     'name' => 'date_entered',
     'vname' => 'LBL_DATE_ENTERED',
     'type' => 'datetime',
+    'comment' => 'The date when the record was created',
   ),
-  'date_modified' => 
+  'date_modified' =>
   array (
     'name' => 'date_modified',
     'vname' => 'LBL_DATE_MODIFIED',
     'type' => 'datetime',
+    'comment' => 'The date when the record was last modified',
   ),
-    'user_id' => 
+    'user_id' =>
   array (
     'name' => 'user_id',
     'type' => 'id',
 	'required'=>true,
 	'reportable'=>false,
+	'comment' => 'The unique identifier of the user associated with this calendar entry',
   ),
-    'type' => 
+    'type' =>
   array (
     'name' => 'type',
     'type' => 'varchar',
     'len' => 100,
+    'comment' => 'The type of calendar entry, such as event, task, or reminder',
   ),
-  'source' => 
+  'source' =>
   array (
     'name' => 'source',
     'type' => 'varchar',
     'len' => 100,
+    'comment' => 'The source of the calendar data, such as an external calendar provider or import method',
   ),
-  'content' => 
+  'content' =>
   array (
     'name' => 'content',
     'type' => 'text',
+    'comment' => 'The detailed content or description of the calendar entry, including event details or notes',
   ),
   
 
@@ -110,3 +118,4 @@ $dictionary['vCal'] = array('table' => 'vcals'
                                                       )
 
                             );
+

@@ -64,7 +64,7 @@
                                 {if isset($COLNUM[$j][$i])}
                                     <td width="20%" scope="row">
                                         <span class="{if $ICONS[$j][$i]|strpos:'fa-'===0}fas {$ICONS[$j][$i]}{else}suitepicon suitepicon-admin-{$ICONS[$j][$i]}{/if}"></span>
-                                        <a id='{$ID_TAB[$j][$i]}' href='{$ITEM_URL[$j][$i]}' class="tabDetailViewDL2Link">{$ITEM_HEADER_LABEL[$j][$i]}</a>
+                                        <a id='{$ID_TAB[$j][$i]}' href='{$ITEM_URL[$j][$i]}'{if isset($ITEM_TARGET[$j][$i])} target='{$ITEM_TARGET[$j][$i]}'{/if} class="tabDetailViewDL2Link">{$ITEM_HEADER_LABEL[$j][$i]}</a>
                                     </td>
                                     <td width="30%">{$ITEM_DESCRIPTION[$j][$i]}</td>
                                 {else}

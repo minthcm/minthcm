@@ -122,7 +122,7 @@ class SugarFieldRelate extends SugarFieldBase {
           && "SecurityGroups" == $vardef['module']
       ){
         $displayParams['initial_filter'] = '';
-        $group_types = ['business_unit', 'department', 'team', 'other', 'standard'];
+        $group_types = ['business_unit', 'department', 'team', 'other'];
         foreach($group_types as $group_type){
             $displayParams['initial_filter'] .= "&group_type_advanced[]={$group_type}";
         }

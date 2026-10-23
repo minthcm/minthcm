@@ -69,6 +69,7 @@ $dictionary['Candidates'] = array(
             'audited' => true,
             'duplicate_merge' => 'enabled',
             'size' => 30,
+            'comment' => 'Flag indicating whether the candidate agreed to be contacted by a recruiter',
         ),
         'first_name' => array(
             'name' => 'first_name',
@@ -82,6 +83,7 @@ $dictionary['Candidates'] = array(
             'full_text_search' => array('enabled' => true, 'boost' => 3),
             'merge_filter' => 'selected',
             'audited' => true,
+            'comment' => 'The candidate\'s given or first name',
         ),
         'last_name' => array(
             'name' => 'last_name',
@@ -95,6 +97,7 @@ $dictionary['Candidates'] = array(
             'required' => true,
             'importable' => 'required',
             'audited' => true,
+            'comment' => 'The candidate\'s family or surname',
         ),
         'phone_mobile' => array(
             'name' => 'phone_mobile',
@@ -107,6 +110,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The candidate\'s mobile or cellular phone number for immediate contact',
         ),
         "candidatures" => array(
             'name' => 'candidatures',
@@ -142,6 +146,7 @@ $dictionary['Candidates'] = array(
             'importable' => 'true',
             'enforced' => '',
             'dependency' => '',
+            'comment' => 'Flag indicating whether the candidate is willing to relocate',
         ),
         "calls" => array(
             'name' => 'calls',
@@ -198,6 +203,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The street address of the candidate\'s primary residence or mailing address',
         ),
         'primary_address_city' => array(
             'name' => 'primary_address_city',
@@ -208,6 +214,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The city component of the candidate\'s primary address',
         ),
         'primary_address_state' => array(
             'name' => 'primary_address_state',
@@ -218,6 +225,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The state or province component of the candidate\'s primary address',
         ),
         'primary_address_postalcode' => array(
             'name' => 'primary_address_postalcode',
@@ -228,6 +236,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The postal or ZIP code component of the candidate\'s primary address',
         ),
         'primary_address_country' => array(
             'name' => 'primary_address_country',
@@ -238,6 +247,7 @@ $dictionary['Candidates'] = array(
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
             'default' => '',
+            'comment' => 'The country component of the candidate\'s primary address',
         ),
         'alt_address_street' => array(
             'name' => 'alt_address_street',
@@ -249,6 +259,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The street address of the candidate\'s alternate address',
         ),
         'alt_address_city' => array(
             'name' => 'alt_address_city',
@@ -259,6 +270,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The city component of the candidate\'s alternate address',
         ),
         'alt_address_state' => array(
             'name' => 'alt_address_state',
@@ -269,6 +281,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The state or province component of the candidate\'s alternate address',
         ),
         'alt_address_postalcode' => array(
             'name' => 'alt_address_postalcode',
@@ -279,6 +292,7 @@ $dictionary['Candidates'] = array(
             'merge_filter' => 'enabled',
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
+            'comment' => 'The postal or ZIP code component of the candidate\'s alternate address',
         ),
         'alt_address_country' => array(
             'name' => 'alt_address_country',
@@ -289,6 +303,7 @@ $dictionary['Candidates'] = array(
             'duplicate_on_record_copy' => 'always',
             'audited' => true,
             'default' => '',
+            'comment' => 'The country component of the candidate\'s alternate address',
         ),
         'birthdate' => array(
             'name' => 'birthdate',
@@ -304,6 +319,7 @@ $dictionary['Candidates'] = array(
             'importable' => true,
             'options' => 'date_range_search_dom',
             'enable_range_search' => '1',
+            'comment' => 'The candidate\'s date of birth',
         ),
         'github' => array(
             'name' => 'github',
@@ -321,6 +337,7 @@ $dictionary['Candidates'] = array(
                 'boost' => '0',
                 'enabled' => false,
             ),
+            'comment' => 'The URL of the candidate\'s GitHub profile',
         ),
         'linkedin' => array(
             'name' => 'linkedin',
@@ -338,6 +355,7 @@ $dictionary['Candidates'] = array(
                 'boost' => '0',
                 'enabled' => false,
             ),
+            'comment' => 'The URL of the candidate\'s LinkedIn profile',
         ),
         'x_service' => array(
             'name' => 'x_service',
@@ -354,6 +372,7 @@ $dictionary['Candidates'] = array(
                 'boost' => '0',
                 'enabled' => false,
             ),
+            'comment' => 'The URL of the candidate\'s X (Twitter) profile',
         ),
         'facebook' => array(
             'name' => 'facebook',
@@ -370,6 +389,7 @@ $dictionary['Candidates'] = array(
                 'boost' => '0',
                 'enabled' => false,
             ),
+            'comment' => 'The URL of the candidate\'s Facebook profile',
         ),
         'potential' => array(
             'required' => false,
@@ -393,6 +413,7 @@ $dictionary['Candidates'] = array(
             'options' => 'potential_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The assessed potential level of the candidate',
         ),
         'm_accept_status_fields' => array(
             'name' => 'm_accept_status_fields',
@@ -410,6 +431,7 @@ $dictionary['Candidates'] = array(
             'hideacl' => true,
             'duplicate_merge' => 'disabled',
             'studio' => false,
+            'comment' => 'The meeting acceptance status related to this candidate',
         ),
         'c_accept_status_fields' => array(
             'name' => 'c_accept_status_fields',
@@ -427,6 +449,7 @@ $dictionary['Candidates'] = array(
             'hideacl' => true,
             'duplicate_merge' => 'disabled',
             'studio' => false,
+            'comment' => 'The call acceptance status related to this candidate',
         ),
         'accept_status_id' => array(
             'name' => 'accept_status_id',
@@ -436,6 +459,7 @@ $dictionary['Candidates'] = array(
             'studio' => array(
                 'listview' => false,
             ),
+            'comment' => 'The unique identifier of the acceptance status record',
         ),
         'accept_status_name' => array(
             'massupdate' => false,
@@ -445,6 +469,7 @@ $dictionary['Candidates'] = array(
             'vname' => 'LBL_LIST_ACCEPT_STATUS',
             'options' => 'dom_meeting_accept_status',
             'importable' => 'false',
+            'comment' => 'The name of the acceptance status',
         ),
 		'meetings' => array(
             'name' => 'meetings',
@@ -500,6 +525,7 @@ $dictionary['Candidates'] = array(
             'table' => 'users',
             'module' => 'Users',
             'rname' => 'name',
+            'comment' => 'Name of the employee associated with this record',
         ),
         "employee_id" => array(
             'name' => 'employee_id',
@@ -529,6 +555,7 @@ $dictionary['Candidates'] = array(
             'default' => '0',
             'audited' => true,
             'mass_update' => false,
+            'comment' => 'Flag indicating whether the candidate should not be called',
         ),
         'last_time_contact' => array(
             'name' => 'last_time_contact',
@@ -547,6 +574,7 @@ $dictionary['Candidates'] = array(
             'enforced' => false,
             'enable_range_search' => true,
             'duplicate_on_record_copy' => 'no',
+            'comment' => 'The date and time the candidate was last contacted',
         ),
         'date_planned_contact' => array(
             'name' => 'date_planned_contact',
@@ -564,6 +592,7 @@ $dictionary['Candidates'] = array(
             'unified_search' => false,
             'enable_range_search' => true,
             'duplicate_on_record_copy' => 'no',
+            'comment' => 'The date and time planned for the next contact with the candidate',
         ),
         'e_invite_status_fields' => [
             'name' => 'e_invite_status_fields',
@@ -734,38 +763,4 @@ $dictionary['Candidates']['fields']['lawful_basis_source']['audited'] = false;
 $dictionary['Candidates']['fields']['lawful_basis_source']['reportable'] = false;
 $dictionary['Candidates']['fields']['lawful_basis']['audited'] = false;
 $dictionary['Candidates']['fields']['lawful_basis']['reportable'] = false;
-foreach([
-    'recr_contact_agree' => 'LBL_RECR_CONTACT_AGREE_COMMENT',
-    'first_name' => 'LBL_FIRST_NAME_COMMENT',
-    'last_name' => 'LBL_LAST_NAME_COMMENT',
-    'phone_mobile' => 'LBL_PHONE_MOBILE_COMMENT',
-    'relocation' => 'LBL_RELOCATION_COMMENT',
-    'primary_address_street' => 'LBL_PRIMARY_ADDRESS_STREET_COMMENT',
-    'primary_address_city' => 'LBL_PRIMARY_ADDRESS_CITY_COMMENT',
-    'primary_address_state' => 'LBL_PRIMARY_ADDRESS_STATE_COMMENT',
-    'primary_address_postalcode' => 'LBL_PRIMARY_ADDRESS_POSTALCODE_COMMENT',
-    'primary_address_country' => 'LBL_PRIMARY_ADDRESS_COUNTRY_COMMENT',
-    'alt_address_street' => 'LBL_ALT_ADDRESS_STREET_COMMENT',
-    'alt_address_city' => 'LBL_ALT_ADDRESS_CITY_COMMENT',
-    'alt_address_state' => 'LBL_ALT_ADDRESS_STATE_COMMENT',
-    'alt_address_postalcode' => 'LBL_ALT_ADDRESS_POSTALCODE_COMMENT',
-    'alt_address_country' => 'LBL_ALT_ADDRESS_COUNTRY_COMMENT',
-    'birthdate' => 'LBL_BIRTHDATE_COMMENT',
-    'github' => 'LBL_GITHUB_COMMENT',
-    'linkedin' => 'LBL_LINKEDIN_COMMENT',
-    'x_service' => 'LBL_X_SERVICE_COMMENT',
-    'facebook' => 'LBL_FACEBOOK_COMMENT',
-    'potential' => 'LBL_POTENTIAL_COMMENT',
-    'm_accept_status_fields' => 'LBL_LIST_ACCEPT_STATUS_M_COMMENT',
-    'c_accept_status_fields' => 'LBL_LIST_ACCEPT_STATUS_C_COMMENT',
-    'accept_status_id' => 'LBL_LIST_ACCEPT_STATUS_ID_COMMENT',
-    'accept_status_name' => 'LBL_LIST_ACCEPT_STATUS_COMMENT',
-    'employee_name' => 'LBL_EMPLOYEE_NAME_COMMENT',
-    'do_not_call' => 'LBL_DO_NOT_CALL_COMMENT',
-    'last_time_contact' => 'LBL_LAST_TIME_CONTACT_COMMENT',
-    'date_planned_contact' => 'LBL_DATE_PLANNED_CONTACT_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Candidates']['fields'][$field])) {
-        $dictionary['Candidates']['fields'][$field]['comment'] = $commentLabel;
-    }
-}
+

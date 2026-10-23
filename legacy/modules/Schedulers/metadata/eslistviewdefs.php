@@ -8,6 +8,7 @@ $ESListViewDefs['Schedulers'] = [
             'default' => true,
         ],
         'job_interval' => [
+            'type' => 'crontab',
             'default' => true,
         ],
         'date_time_start' => [
@@ -18,5 +19,10 @@ $ESListViewDefs['Schedulers'] = [
         ],
     ],
     'search' => [
+        'name' => [],
+        'status' => [],
+    ],
+    'panels' => [
+        'Schedulers',
     ],
 ];

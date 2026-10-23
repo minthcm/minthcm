@@ -2,13 +2,9 @@
     <div class="header">
         <MintButton @click="store.formReset" icon="mdi-arrow-left" size="large" />
         <p v-html="languages.label('LBL_KUDOS_TO')" />
-        <div class="photo-container">
-            <img
-                v-if="store.form?.user?.photo"
-                :src="`legacy/index.php?entryPoint=download&type=Users&id=${store.form.user.id}_photo`"
-            />
-            <v-icon v-else icon="mdi-account" />
-        </div>
+        <MintAvatar
+            :photo="store.form.user?.photo ? store.form.user.id + '_photo' : null"
+        />
         <p>
             <span
                 :class="{
@@ -79,6 +75,7 @@
 import { useLanguagesStore } from '@/store/languages'
 import { useMintKudosStore } from './MintKudosStore'
 import MintButton from '../MintButtons/MintButton.vue'
+import MintAvatar from '../MintAvatar.vue'
 
 const store = useMintKudosStore()
 const languages = useLanguagesStore()
@@ -134,11 +131,6 @@ const rules = [
     & i {
         font-size: 32px;
     }
-}
-img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 50%;
 }
 * {
     color: rgba(var(--v-theme-on-surface), var(--v-large-emphasis-opacity));

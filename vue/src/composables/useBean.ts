@@ -10,6 +10,7 @@ import { mintApi } from '@/api/api'
 import { DateTime } from 'luxon'
 import { MintDate, useMintDate } from '@/composables/useMintDate'
 import { usePopupsStore } from '@/store/popups'
+import { decodeHtmlEntities } from '@/utils/html'
 import { useStatusBoxesStore } from '@/store/statusBoxes'
 import { useLanguagesStore } from '@/store/languages'
 import { cyclicRecordsApi, CyclicRecordDatePair } from '@/api/cyclicRecords.api'
@@ -147,12 +148,13 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         return modulesStore.modules[module]?.vardefs ?? {}
     })
 
+    // Display name: stored values may contain HTML entities (e.g. O&#039;Brien), so decode them to plain text.
     const name = computed(() => {
         if (syncAttributes.value.name) {
-            return syncAttributes.value.name
+            return decodeHtmlEntities(syncAttributes.value.name)
         }
         if (syncAttributes.value.first_name || syncAttributes.value.last_name) {
-            return `${syncAttributes.value.first_name} ${syncAttributes.value.last_name}`
+            return decodeHtmlEntities(`${syncAttributes.value.first_name} ${syncAttributes.value.last_name}`)
         }
         return id
     })

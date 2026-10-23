@@ -54,7 +54,7 @@ $dictionary['Favorites'] = array(
             'required' => false,
             'reportable' => false,
             'audited' => true,
-            'comment' => 'Favorite ID of the parent of this account',
+            'comment' => 'The unique identifier of the parent record',
         ),
 
         'parent_type' => array(
@@ -66,7 +66,7 @@ $dictionary['Favorites'] = array(
             'group' => 'parent_name',
             'options' => 'parent_type_display',
             'len' => 255,
-            'comment' => 'The Sugar object to which the call is related',
+            'comment' => 'The module type of the parent record',
         ),
 
     ),

@@ -57,7 +57,6 @@ $dictionary['Offboardings'] = array(
             'massupdate' => '1',
             'default' => 'in_progress',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -76,6 +75,7 @@ $dictionary['Offboardings'] = array(
             ],
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The current status of the record',
         ),
         'date_start' =>
         array(
@@ -85,7 +85,6 @@ $dictionary['Offboardings'] = array(
             'type' => 'datetimecombo',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -99,6 +98,7 @@ $dictionary['Offboardings'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'dbType' => 'datetime',
+            'comment' => 'The start date of the record',
         ),
         'offboardingtemplate' =>
         array(
@@ -124,6 +124,7 @@ $dictionary['Offboardings'] = array(
             'module' => 'OffboardingTemplates',
             'rname' => 'name',
             'required' => false,
+            'comment' => 'Name of the offboarding template associated with this record',
         ),
         'offboardingtemplate_id' =>
         array(
@@ -211,3 +212,4 @@ VardefManager::createVardef('Offboardings', 'Offboardings',
     'security_groups'
     )
 );
+

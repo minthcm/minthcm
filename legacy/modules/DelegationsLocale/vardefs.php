@@ -46,7 +46,6 @@ $dictionary['DelegationsLocale'] = array(
          'vname' => 'LBL_REGIMEN_VALUE',
          'type' => 'currency',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -57,6 +56,7 @@ $dictionary['DelegationsLocale'] = array(
          'len' => 26,
          'size' => '20',
          'enable_range_search' => false,
+         'comment' => 'Regimen Value',
       ),
       'currency_id' => array(
          'required' => false,
@@ -64,7 +64,6 @@ $dictionary['DelegationsLocale'] = array(
          'vname' => 'LBL_CURRENCY',
          'type' => 'id',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -79,6 +78,7 @@ $dictionary['DelegationsLocale'] = array(
             'name' => 'getCurrencyDropDown',
             'returns' => 'html',
          ),
+         'comment' => 'Id of the currency associated with this record',
       ),
       'accommodation_value' => array(
          'required' => true,
@@ -86,7 +86,6 @@ $dictionary['DelegationsLocale'] = array(
          'vname' => 'LBL_ACCOMMODATION_VALUE',
          'type' => 'currency',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -97,11 +96,11 @@ $dictionary['DelegationsLocale'] = array(
          'len' => 26,
          'size' => '20',
          'enable_range_search' => false,
+         'comment' => 'Accommodation Value',
       ),
       'archival' => array(
          'name' => 'archival',
          'vname' => 'LBL_ARCHIVAL',
-         'comments' => '',
          'help' => '',
          'type' => 'bool',
          'required' => false,
@@ -111,6 +110,7 @@ $dictionary['DelegationsLocale'] = array(
          'duplicate_merge' => 'disabled',
          'reportable' => true,
          'importable' => true,
+         'comment' => 'Archival',
       ),
       "delegations" => array(
          'name' => 'delegations',
@@ -135,3 +135,4 @@ VardefManager::createVardef('DelegationsLocale', 'DelegationsLocale', array(
    'assignable',
    'security_groups'
 ));
+

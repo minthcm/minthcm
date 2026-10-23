@@ -63,6 +63,7 @@ $dictionary['Task'] = array(
             'importable' => 'required',
             'required' => 'true',
             'audited' => true,
+            'comment' => 'The name or title of the record',
         ),
         'status' => array(
             'name' => 'status',
@@ -81,6 +82,7 @@ $dictionary['Task'] = array(
             'required' => 'true',
             'default' => 'Not Started',
             'audited' => true,
+            'comment' => 'The current status of the record',
         ),
         'date_due_flag' => array(
             'name' => 'date_due_flag',
@@ -89,6 +91,7 @@ $dictionary['Task'] = array(
             'default' => 0,
             'group' => 'date_due',
             'studio' => false,
+            'comment' => 'Flag indicating whether the task has a due date',
         ),
         'date_due' => array(
             'name' => 'date_due',
@@ -100,6 +103,7 @@ $dictionary['Task'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'audited' => true,
+            'comment' => 'Indicates the due date for the task',
         ),
         'time_due' => array(
             'name' => 'time_due',
@@ -111,6 +115,7 @@ $dictionary['Task'] = array(
             'massupdate' => false,
             'audited' => true,
             'inline_edit' => false,
+            'comment' => 'Indicates the due time for the task',
         ),
         'date_start_flag' => array(
             'name' => 'date_start_flag',
@@ -119,6 +124,7 @@ $dictionary['Task'] = array(
             'group' => 'date_start',
             'default' => 0,
             'studio' => false,
+            'comment' => 'Flag indicating whether the task has a start date',
         ),
         'date_start' => array(
             'name' => 'date_start',
@@ -131,6 +137,7 @@ $dictionary['Task'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'audited' => true,
+            'comment' => 'The start date of the record',
         ),
         'parent_type' => array(
             'name' => 'parent_type',
@@ -141,7 +148,7 @@ $dictionary['Task'] = array(
             'options' => 'parent_type_display',
             'required' => false,
             'len' => '255',
-            'comment' => 'The Sugar object to which the call is related',
+            'comment' => 'The module type of the parent record',
             'options' => 'parent_type_display',
             'audited' => true,
         ),
@@ -157,6 +164,7 @@ $dictionary['Task'] = array(
             'source' => 'non-db',
             'options' => 'parent_type_display',
             'audited' => true,
+            'comment' => 'The name of the parent record',
         ),
 
         'parent_id' => array(
@@ -165,6 +173,7 @@ $dictionary['Task'] = array(
             'group' => 'parent_name',
             'reportable' => false,
             'vname' => 'LBL_PARENT_ID',
+            'comment' => 'The unique identifier of the parent record',
         ),
         'priority' => array(
             'name' => 'priority',
@@ -173,6 +182,7 @@ $dictionary['Task'] = array(
             'options' => 'task_priority_dom',
             'len' => 100,
             'audited' => true,
+            'comment' => 'The priority level assigned to the this record',
         ),
         'users' => array(
             'name' => 'users',
@@ -243,6 +253,7 @@ $dictionary['Task'] = array(
             'audited' => true,
             'reportable' => true,
             'vt_dependency' => "equals(\$parent_type,'Onboardings')",
+            'comment' => 'The list of checklist items associated with the task',
         ),
     )
     ,
@@ -314,22 +325,6 @@ VardefManager::createVardef('Tasks', 'Task', array(
 
 $dictionary['Task']['fields']['assigned_user_id']['audited'] = false;
 $dictionary['Task']['fields']['assigned_user_name']['audited'] = true;
+$dictionary['Task']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
+$dictionary['Task']['fields']['assigned_user_name']['comment'] = 'The name of the user assigned to the record';
 
-foreach ([
-    'name' => 'LBL_SUBJECT_COMMENT',
-    'status' => 'LBL_STATUS_COMMENT',
-    'date_due_flag' => 'LBL_DATE_DUE_FLAG_COMMENT',
-    'date_due' => 'LBL_DUE_DATE_COMMENT',
-    'time_due' => 'LBL_DUE_TIME_COMMENT',
-    'date_start_flag' => 'LBL_DATE_START_FLAG_COMMENT',
-    'date_start' => 'LBL_START_DATE_COMMENT',
-    'parent_type' => 'LBL_PARENT_TYPE_COMMENT',
-    'parent_name' => 'LBL_PARENT_NAME_COMMENT',
-    'parent_id' => 'LBL_PARENT_ID_COMMENT',
-    'priority' => 'LBL_PRIORITY_COMMENT',
-    'checklist' => 'LBL_CHECKLIST_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Task']['fields'][$field])) {
-        $dictionary['Task']['fields'][$field]['comment'] = $commentLabel;
-    }
-}

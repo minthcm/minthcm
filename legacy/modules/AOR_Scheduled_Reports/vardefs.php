@@ -55,7 +55,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
             'dbType' => 'varchar',
             'massupdate' => 0,
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The scheduling configuration or frequency for automatically running the report',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -74,6 +74,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
             'type' => 'readonly',
             'required' => false,
             'reportable' => false,
+            'comment' => 'The date and time when the scheduled report was last executed or generated',
         ),
         'status' => array(
             'name' => 'status',
@@ -85,6 +86,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
             'required' => false,
             'reportable' => false,
             'importable' => 'required',
+            'comment' => 'The current operational status of the scheduled report',
         ),
         'email_recipients' =>
             array(
@@ -98,6 +100,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
                 'duplicate_merge_dom_value' => 0,
                 'audited' => false,
                 'reportable' => false,
+                'comment' => 'The list of email addresses or user identifiers who will receive the generated report via email',
                 'function' =>
                     array(
                         'name' => 'display_email_lines',
@@ -129,12 +132,14 @@ $dictionary['AOR_Scheduled_Reports'] = array(
             'table' => 'aor_reports',
             'module' => 'AOR_Reports',
             'rname' => 'name',
+            'comment' => 'The display name of the associated AOR (Advanced Open Report) that is being scheduled for execution',
         ),
         "aor_report_id" => array(
             'name' => 'aor_report_id',
             'type' => 'id',
             'reportable' => false,
             'vname' => 'LBL_AOR_REPORT_ID',
+            'comment' => 'The unique identifier of the associated AOR (Advanced Open Report) that is being scheduled for execution',
         ),
 
 
@@ -148,3 +153,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOR_Scheduled_Reports', 'AOR_Scheduled_Reports', ['basic', 'security_groups']);
+

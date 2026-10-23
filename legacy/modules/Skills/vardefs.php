@@ -83,3 +83,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Skills', 'Skills', array('basic', 'assignable', 'security_groups', 'employee_related'));
+

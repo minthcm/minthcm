@@ -55,7 +55,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'vname' => 'LBL_ID',
             'type' => 'id',
             'required' => true,
-            'comment' => 'Unique identifier',
+            'comment' => 'Record unique identifier',
             'reportable' => false,
             'massupdate' => false,
             'inline_edit' => false,
@@ -78,6 +78,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name or title of the record',
         ],
         'type' => [
             'name' => 'type',
@@ -91,6 +92,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The type of external OAuth provider',
         ],
         'connector' => [
             'name' => 'connector',
@@ -108,6 +110,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The connector class used to integrate with this external OAuth provider',
         ],
         'redirect_uri' => [
             'name' => 'redirect_uri',
@@ -126,6 +129,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The redirect URI registered with the external OAuth provider for this connection',
         ],
         'redirect_uri_type' => [
             'name' => 'redirect_uri_type',
@@ -141,6 +145,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The format used to generate the redirect URI',
         ],
         'client_id' => [
             'name' => 'client_id',
@@ -153,6 +158,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The client identifier registered with the external OAuth provider',
         ],
         'client_secret' => [
             'name' => 'client_secret',
@@ -169,6 +175,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'sensitive' => true,
             'api-visible' => false,
             'db_encrypted' => true,
+            'comment' => 'The client secret registered with the external OAuth provider',
         ],
         'scope' => [
             'name' => 'scope',
@@ -182,6 +189,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The OAuth scopes requested from the external provider',
         ],
         'url_authorize' => [
             'name' => 'url_authorize',
@@ -194,6 +202,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The authorization endpoint URL of the external OAuth provider',
         ],
         'authorize_url_options' => [
             'name' => 'authorize_url_options',
@@ -209,6 +218,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Additional options appended to the authorization URL request',
         ],
         'url_access_token' => [
             'name' => 'url_access_token',
@@ -221,6 +231,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The access token endpoint URL of the external OAuth provider',
         ],
         'extra_provider_params' => [
             'name' => 'extra_provider_params',
@@ -235,6 +246,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Additional custom parameters sent to the external OAuth provider',
         ],
         'get_token_request_grant' => [
             'name' => 'get_token_request_grant',
@@ -248,6 +260,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The OAuth grant type used when requesting an access token',
         ],
         'get_token_request_options' => [
             'name' => 'get_token_request_options',
@@ -262,6 +275,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Additional options included in the access token request',
         ],
         'refresh_token_request_grant' => [
             'name' => 'refresh_token_request_grant',
@@ -275,6 +289,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The OAuth grant type used when refreshing an access token',
         ],
         'refresh_token_request_options' => [
             'name' => 'refresh_token_request_options',
@@ -289,6 +304,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Additional options included in the refresh token request',
         ],
         'access_token_mapping' => [
             'name' => 'access_token_mapping',
@@ -302,6 +318,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The response field name mapped to the access token value',
         ],
         'expires_in_mapping' => [
             'name' => 'expires_in_mapping',
@@ -315,6 +332,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The response field name mapped to the token expiration value',
         ],
         'refresh_token_mapping' => [
             'name' => 'refresh_token_mapping',
@@ -328,6 +346,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The response field name mapped to the refresh token value',
         ],
         'token_type_mapping' => [
             'name' => 'token_type_mapping',
@@ -340,6 +359,7 @@ $dictionary['ExternalOAuthProvider'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The response field name mapped to the token type value',
         ],
     ],
     'relationships' => [
@@ -347,3 +367,4 @@ $dictionary['ExternalOAuthProvider'] = [
 ];
 
 VardefManager::createVardef('ExternalOAuthProvider', 'ExternalOAuthProvider', ['basic', 'security_groups']);
+

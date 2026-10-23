@@ -72,3 +72,5 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('Problems', 'Problems', array( 'basic', 'assignable', 'security_groups', 'employee_related' ));
 
 $dictionary['Problems']['fields']['name']['audited'] = true;
+$dictionary['Problems']['fields']['name']['comment'] = 'The name or title of the record';
+

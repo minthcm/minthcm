@@ -232,6 +232,7 @@ function make_sugar_config(&$sugar_config)
             'jpg',
             'jpeg',
             'svg',
+            'webp',
         ],
         'upload_dir' => $upload_dir, // this must be set!!
         'upload_maxsize' => empty($upload_maxsize) ? 30000000 : $upload_maxsize,
@@ -515,6 +516,7 @@ function get_sugar_config_defaults(): array
                 'jpg',
                 'jpeg',
                 'svg',
+                'webp',
             'bmp',
             ],
             'allowed_preview' => [
@@ -5593,6 +5595,16 @@ function verify_image_file($path, $jpeg = false)
             if (file_put_contents($path, $image)) {
                 return true;
             }
+        } elseif ('image/webp' == $filetype && function_exists('imagewebp')) {
+            // re-encode webp the same way as png to strip any non-image payload
+            imagealphablending($img, false);
+            imagesavealpha($img, true);
+            ob_start();
+            imagewebp($img);
+            $image = ob_get_clean();
+            if (file_put_contents($path, $image)) {
+                return true;
+            }
         } else {
             return false;
         }
@@ -5614,7 +5626,7 @@ function verify_image_file($path, $jpeg = false)
 function verify_uploaded_image($path, $jpeg_only = false)
 {
     global $sugar_config;
-    $supportedExtensions = $sugar_config['image_ext'] ?? ['image/jpeg', 'image/png', 'image/gif' , 'tmp' => 'tmp'];
+    $supportedExtensions = $sugar_config['image_ext'] ?? ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'tmp' => 'tmp'];
 
     if (!$jpeg_only) {
         $supportedExtensions['png'] = 'image/png';
@@ -6366,6 +6378,7 @@ function has_valid_image_extension($fieldName, $name)
         'jpg',
         'jpeg',
         'svg',
+        'webp',
     ];
 
     if (isset($sugar_config['valid_image_ext']) && is_array($sugar_config['valid_image_ext'])){
@@ -6393,7 +6406,8 @@ function has_valid_image_mime_type(string $mimeType): bool
         'png',
         'jpg',
         'jpeg',
-        'svg'
+        'svg',
+        'webp',
     ];
 
     if (isset($sugar_config['valid_image_ext']) && is_array($sugar_config['valid_image_ext'])){
@@ -6934,3 +6948,41 @@ function formatDecimalInConfigSettings($decimalValue, $userSetting = false) {
     return str_replace('.', $dec_sep, $decimalValue);
 }
 
+function resizeImage($image_data, $max_height, $max_width)
+{
+    $source = imagecreatefromstring($image_data); 
+    if (!$source) { 
+        return $image_data; 
+    } 
+
+    $src_width = imagesx($source);
+    $src_height = imagesy($source);
+
+    $scale = min($max_width / $src_width, $max_height / $src_height, 1);
+    $new_width = (int) ($src_width * $scale);
+    $new_height = (int) ($src_height * $scale);
+
+    $destination = imagecreatetruecolor($new_width, $new_height);
+
+    imagealphablending($destination, false);
+    imagesavealpha($destination, true);
+
+    imagecopyresampled(
+        $destination,
+        $source,
+        0, 0, 0, 0,
+        $new_width,
+        $new_height,
+        $src_width,
+        $src_height
+    );
+
+    ob_start();
+    imagewebp($destination, null, 70);
+    $resized = ob_get_clean();
+
+    $source = null;
+    $destination = null;
+    
+    return $resized;
+}

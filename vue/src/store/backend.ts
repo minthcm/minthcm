@@ -32,6 +32,7 @@ interface InitResponse {
     quick_create: QuickCreate[]
     global: any
     legacy_views: { [module: string]: LegacyView }
+    adminViews?: { [viewName: string]: any }
     mintRebuildID: string
     responseType: string
     systemName: string
@@ -39,6 +40,8 @@ interface InitResponse {
     field_variables: string[]
     masquerade_user_id: string | null
     masquerade_admin_name: string | null
+    document_root: string
+    web_server_user: string
 }
 export const useBackendStore = defineStore('backend', () => {
     const router = useRouter()

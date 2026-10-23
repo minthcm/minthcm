@@ -74,3 +74,4 @@ VardefManager::createVardef(
     'AOK_Knowledge_Base_Categories',
     array('basic', 'assignable')
 );
+

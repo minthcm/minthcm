@@ -35,7 +35,7 @@ $dictionary['AOW_Processed'] = array(
     'vname' => 'LBL_AOW_WORKFLOW_ID',
     'type' => 'id',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'Related AOW Workflow Id, linking this processed record to the specific workflow instance that was executed',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -55,7 +55,7 @@ $dictionary['AOW_Processed'] = array(
     'vname' => 'LBL_AOW_WORKFLOW',
     'type' => 'relate',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'Related AOW Workflow name associated with this processed record',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -80,7 +80,7 @@ $dictionary['AOW_Processed'] = array(
     'vname' => 'LBL_BEAN_ID',
     'type' => 'id',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The unique identifier of the parent record',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -104,6 +104,7 @@ $dictionary['AOW_Processed'] = array(
     'group'=>'parent_name',
     'source'=>'non-db',
     'options'=> 'moduleList',
+    'comment' => 'The name of the parent record',
   ),
 
   'parent_type' =>
@@ -114,7 +115,7 @@ $dictionary['AOW_Processed'] = array(
     'type' => 'parent_type',
     'dbType'=>'varchar',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'Module name of the parent record',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -138,7 +139,7 @@ $dictionary['AOW_Processed'] = array(
     'type' => 'enum',
     'massupdate' => 0,
     'default' => 'Pending',
-    'comments' => '',
+    'comment' => 'The current status of the processed workflow',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -189,3 +190,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOW_Processed', 'AOW_Processed', array('basic'));
+

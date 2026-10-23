@@ -15,12 +15,9 @@
                 :aria-description="languages.label('LBL_MINT_USER_MENU_COMMENT')"
                 aria-describedby="user-menu-button-help"
             >
-                <img
-                    v-if="auth.user?.photo"
-                    class="user-avatar"
-                    :src="`legacy/index.php?entryPoint=download&type=Users&id=${auth.user?.id}_photo`"
+                <MintAvatar
+                    :photo="auth.user?.photo ? auth.user?.id + '_photo' : null"
                 />
-                <v-icon v-else icon="mdi-account" class="user-default-avatar" />
                 <span v-if="!$vuetify.display.mdAndDown">
                     {{ auth.user?.first_name || auth.user?.last_name }}
                 </span>
@@ -36,6 +33,7 @@ import { computed } from 'vue'
 import { useAuthStore } from '@/store/auth'
 import { useLanguagesStore } from '@/store/languages'
 import MintMenuList, { MenuListItem } from '@/components/MintMenuList.vue'
+import MintAvatar from '@/components/MintAvatar.vue'
 
 const auth = useAuthStore()
 const languages = useLanguagesStore()

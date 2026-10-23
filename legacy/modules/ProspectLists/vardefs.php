@@ -56,6 +56,7 @@ $dictionary['ProspectList'] = array(
             'type' => 'id',
             'required' => true,
             'reportable' => false,
+            'comment' => 'Record unique identifier',
         ),
         'name' => array(
             'name' => 'name',
@@ -65,6 +66,7 @@ $dictionary['ProspectList'] = array(
             'importable' => 'required',
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
+            'comment' => 'The name or title of the record',
         ),
         'list_type' => array(
             'name' => 'list_type',
@@ -73,24 +75,27 @@ $dictionary['ProspectList'] = array(
             'options' => 'prospect_list_type_dom',
             'len' => 100,
             'importable' => 'required',
+            'comment' => 'Type of prospect list',
         ),
         'date_entered' => array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
             'readonly' => true,
+            'comment' => 'The date when the record was created',
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
             'readonly' => true,
+            'comment' => 'The date when the record was last modified',
         ),
         'date_indexed' => array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'Date record last indexed',
+            'comment' => 'The date when the record was indexed for search purposes',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -107,6 +112,7 @@ $dictionary['ProspectList'] = array(
             'dbType' => 'id',
             'reportable' => true,
             'readonly' => true,
+            'comment' => 'The unique identifier of the user who last modified the record',
         ),
         'modified_by_name' => array(
             'name' => 'modified_by_name',
@@ -119,6 +125,7 @@ $dictionary['ProspectList'] = array(
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
             'readonly' => true,
+            'comment' => 'The name of the user who last modified the record',
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -130,6 +137,7 @@ $dictionary['ProspectList'] = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'readonly' => true,
+            'comment' => 'The unique identifier of the user who created the record',
         ),
         'created_by_name' => array(
             'name' => 'created_by_name',
@@ -142,6 +150,7 @@ $dictionary['ProspectList'] = array(
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
             'readonly' => true,
+            'comment' => 'The name of the user who created the record',
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -149,17 +158,20 @@ $dictionary['ProspectList'] = array(
             'type' => 'bool',
             'required' => false,
             'reportable' => false,
+            'comment' => 'A flag indicating whether the record has been deleted',
         ),
         'description' => array(
             'name' => 'description',
             'vname' => 'LBL_DESCRIPTION',
             'type' => 'text',
+            'comment' => 'A detailed description of the record',
         ),
         'domain_name' => array(
             'name' => 'domain_name',
             'vname' => 'LBL_DOMAIN_NAME',
             'type' => 'varchar',
             'len' => '255',
+            'comment' => 'Name of the domain associated with this record',
         ),
         'entry_count' =>
             array(
@@ -168,6 +180,7 @@ $dictionary['ProspectList'] = array(
                 'source' => 'non-db',
                 'vname' => 'LBL_LIST_ENTRIES',
                 'readonly' => true,
+                'comment' => 'Entry count',
             ),
         'prospects' =>
             array(
@@ -218,6 +231,7 @@ $dictionary['ProspectList'] = array(
             'type' => 'varchar',
             'len' => '36',
             'source' => 'non-db',
+            'comment' => 'Id of the marketing associated with this record',
         ),
         'marketing_name' => array(
             'name' => 'marketing_name',
@@ -225,6 +239,7 @@ $dictionary['ProspectList'] = array(
             'type' => 'varchar',
             'len' => '255',
             'source' => 'non-db',
+            'comment' => 'Name of the marketing associated with this record',
         ),
         'candidates' => array(
             'name' => 'candidates',
@@ -252,6 +267,7 @@ $dictionary['ProspectList'] = array(
             'default' => 0,
             'duplicate_merge' => 'enabled',
             'size' => 30,
+            'comment' => 'Automatic update',
         ),
         'kreports' => array(
             'name' => 'kreports',
@@ -275,6 +291,7 @@ $dictionary['ProspectList'] = array(
             'reportable' => true,
             'rname' => 'id',
             'isnull' => 'true',
+            'comment' => 'Id of the kreport associated with this record',
         ),
         'kreport_name' => array(
             'name' => 'kreport_name',
@@ -294,6 +311,7 @@ $dictionary['ProspectList'] = array(
             'audited' => true,
             'vt_dependency' => 'equals($automatic_update,true)',
             'vt_required' => 'equals($automatic_update,true)',
+            'comment' => 'Name of the kreport associated with this record',
         ),
         "news" => array(
             'name' => 'news',
@@ -338,3 +356,4 @@ $dictionary['ProspectList'] = array(
 VardefManager::createVardef('ProspectLists', 'ProspectList', array(
     'assignable', 'security_groups',
 ));
+

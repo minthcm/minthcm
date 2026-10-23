@@ -40,6 +40,7 @@ $dictionary['Comments'] = array(
             'audited' => true,
             'importable' => 'true',
             'reportable' => true,
+            'comment' => 'The unique identifier of the comment this comment is a reply to',
         ),
         'reply_to_name' => array(
             'name' => 'reply_to_name',
@@ -56,6 +57,7 @@ $dictionary['Comments'] = array(
             'importable' => 'true',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The name of the comment this comment is a reply to',
         ),
         'news' => array(
             'name' => 'news',
@@ -75,6 +77,7 @@ $dictionary['Comments'] = array(
             'group' => 'parent_name',
             'options' => 'parent_type_display_comments',
             'len' => 255,
+            'comment' => 'The module type of the parent record',
         ),
         'parent_name' => array(
             'name' => 'parent_name',
@@ -86,6 +89,7 @@ $dictionary['Comments'] = array(
             'group' => 'parent_name',
             'source' => 'non-db',
             'options' => 'parent_type_display_comments',
+            'comment' => 'The name of the parent record',
         ),
         'parent_id' => array(
             'name' => 'parent_id',
@@ -93,6 +97,7 @@ $dictionary['Comments'] = array(
             'type' => 'id',
             'group' => 'parent_name',
             'reportable' => false,
+            'comment' => 'The unique identifier of the parent record',
         ),
         'pinned' => array(
             'name' => 'pinned',
@@ -102,6 +107,7 @@ $dictionary['Comments'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => 'false',
+            'comment' => 'Flag indicating whether the comment has been pinned',
         ),
         'removed' => array(
             'name' => 'removed',
@@ -111,6 +117,7 @@ $dictionary['Comments'] = array(
             'reportable' => false,
             'audited' => true,
             'importable' => 'false',
+            'comment' => 'Flag indicating whether the comment has been removed',
         ),
         'date_edited' => array(
             'name' => 'date_edited',
@@ -120,6 +127,7 @@ $dictionary['Comments'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => 'false',
+            'comment' => 'The date and time when the comment was last edited',
         ),
         'reactions' => array(
             'name' => 'reactions',
@@ -162,3 +170,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Comments', 'Comments', array('basic', 'assignable'));
+

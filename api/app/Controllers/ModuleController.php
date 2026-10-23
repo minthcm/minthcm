@@ -546,6 +546,14 @@ class ModuleController
             }
             $base64_decoded = base64_decode(str_replace($base64_prefix, '', $base64), true);
 
+            if (
+                $field_type === 'image' 
+                && $base64_decoded !== false
+                && in_array($bean->module_name, ['Employees', 'Users'])
+            ) {
+                $base64_decoded = resizeImage($base64_decoded, 240, 240);
+            }
+
             $tmp_file = tmpfile();
             fwrite($tmp_file, $base64_decoded);
             $tmp_file_path = stream_get_meta_data($tmp_file)['uri'];

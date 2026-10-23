@@ -53,6 +53,7 @@ $dictionary['Alert'] = array(
          'type' => 'bool',
          'massupdate' => false,
          'studio' => 'false',
+         'comment' => 'Indicates whether the alert has been read by the user',
       ),
       'is_closed' => array(
          'name' => 'is_closed',
@@ -60,6 +61,7 @@ $dictionary['Alert'] = array(
          'type' => 'bool',
          'massupdate' => false,
          'studio' => 'false',
+         'comment' => 'Indicates whether the alert has been closed or dismissed',
       ),
       'target_module' => array(
          'name' => 'target_module',
@@ -67,6 +69,7 @@ $dictionary['Alert'] = array(
          'type' => 'varchar',
          'massupdate' => false,
          'studio' => 'false',
+         'comment' => 'The module or system component that the alert is related to',
       ),
       'type' => array(
          'name' => 'type',
@@ -74,6 +77,7 @@ $dictionary['Alert'] = array(
          'type' => 'varchar',
          'massupdate' => false,
          'studio' => 'false',
+         'comment' => 'The type or category of the alert (e.g., notification, warning, error)',
       ),
       'url_redirect' => array(
          'name' => 'url_redirect',
@@ -81,6 +85,7 @@ $dictionary['Alert'] = array(
          'type' => 'varchar',
          'massupdate' => false,
          'studio' => 'false',
+         'comment' => 'The URL to redirect to when the alert is clicked or accessed',
       ),
       'reminder_id' => array(
          'name' => 'reminder_id',
@@ -88,7 +93,7 @@ $dictionary['Alert'] = array(
          'required' => false,
          'reportable' => false,
          'studio' => 'false',
-         'comment' => 'The id of the reminder that created this alert',
+         'comment' => 'The unique identifier of the associated reminder record',
       ),
       'alert_type' => array(
          'required' => false,
@@ -97,7 +102,7 @@ $dictionary['Alert'] = array(
          'type' => 'enum',
          'massupdate' => false,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The specific type of alert for classification and handling',
          'help' => '',
          'importable' => true,
          'duplicate_merge' => 'disabled',
@@ -124,6 +129,7 @@ $dictionary['Alert'] = array(
          'studio' => true,
          'massupdate' => false,
          'readonly' => true,
+         'comment' => 'The name of the parent record',
       ),
       'parent_type' => array(
          'name' => 'parent_type',
@@ -133,7 +139,7 @@ $dictionary['Alert'] = array(
          'group' => 'parent_name',
          'options' => 'parent_type_display_notifications',
          'len' => 100,
-         'comment' => 'Module notification is associated with.',
+         'comment' => 'The module type of the parent record',
          'studio' => array(
             'searchview' => false,
             'wirelesslistview' => false
@@ -145,7 +151,7 @@ $dictionary['Alert'] = array(
          'type' => 'id',
          'group' => 'parent_name',
          'reportable' => false,
-         'comment' => 'ID of item indicated by parent_type.',
+         'comment' => 'The unique identifier of the parent record',
          'studio' => array(
             'searchview' => false
          ),
@@ -179,3 +185,4 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('Alerts', 'Alert', array('basic', 'assignable'));
+

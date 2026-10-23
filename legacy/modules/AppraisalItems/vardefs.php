@@ -55,7 +55,7 @@ $dictionary['AppraisalItems'] = array(
             'type' => 'enum',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The value or rating assigned to the appraisal item',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -79,7 +79,7 @@ $dictionary['AppraisalItems'] = array(
             'type' => 'parent',
             'massupdate' => 0,
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The name of the parent record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -104,7 +104,7 @@ $dictionary['AppraisalItems'] = array(
             'type' => 'parent_type',
             'massupdate' => 0,
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The module type of the parent record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -126,7 +126,7 @@ $dictionary['AppraisalItems'] = array(
             'type' => 'id',
             'massupdate' => 0,
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The unique identifier of the parent record',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -161,12 +161,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Appraisals',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the appraisal that this item belongs to',
         ),
         'appraisal_id' => array(
             'name' => 'appraisal_id',
             'type' => 'id',
             'relationship' => 'appraisals_appraisalitems',
             'vname' => 'LBL_APPRAISAL_ID',
+            'comment' => 'The unique identifier of the appraisal that this item belongs to',
         ),
 
         'competency' => array(
@@ -191,12 +193,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Competencies',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the competency being evaluated in this appraisal item',
         ),
         'competency_id' => array(
             'name' => 'competency_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_competencies',
             'vname' => 'LBL_COMPETENCY_ID',
+            'comment' => 'The unique identifier of the competency being evaluated in this appraisal item',
         ),
         'knowledge' => array(
             'name' => 'knowledge',
@@ -220,12 +224,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Knowledge',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the knowledge area being assessed in this appraisal item',
         ),
         'knowledge_id' => array(
             'name' => 'knowledge_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_knowledge',
             'vname' => 'LBL_KNOWLEDGE_ID',
+            'comment' => 'The unique identifier of the knowledge area being assessed in this appraisal item',
         ),
         'skill' => array(
             'name' => 'skill',
@@ -249,12 +255,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Skills',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the skill being evaluated in this appraisal item',
         ),
         'skill_id' => array(
             'name' => 'skill_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_skills',
             'vname' => 'LBL_SKILL_ID',
+            'comment' => 'The unique identifier of the skill being evaluated in this appraisal item',
         ),
         'attitude' => array(
             'name' => 'attitude',
@@ -278,12 +286,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Attitudes',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the attitude being assessed in this appraisal item',
         ),
         'attitude_id' => array(
             'name' => 'attitude_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_attitudes',
             'vname' => 'LBL_ATTITUDES_ID',
+            'comment' => 'The unique identifier of the attitude being assessed in this appraisal item',
         ),
         'responsibiliti' => array(
             'name' => 'responsibiliti',
@@ -307,12 +317,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Responsibilities',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the responsibility being evaluated in this appraisal item',
         ),
         'responsibiliti_id' => array(
             'name' => 'responsibiliti_id',
             'type' => 'id',
             'relationship' => 'responsibilities_positions',
             'vname' => 'LBL_RESPONSIBILITI_ID',
+            'comment' => 'The unique identifier of the responsibility being evaluated in this appraisal item',
         ),
         'goal' => array(
             'name' => 'goal',
@@ -336,12 +348,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'Goals',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the goal associated with this appraisal item',
         ),
         'goal_id' => array(
             'name' => 'goal_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_goals',
             'vname' => 'LBL_GOAL_ID',
+            'comment' => 'The unique identifier of the goal associated with this appraisal item',
         ),
         'responsibilityactivitie' => array(
             'name' => 'responsibilityactivitie',
@@ -365,12 +379,14 @@ $dictionary['AppraisalItems'] = array(
             'module' => 'ResponsibilityActivities',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the responsibility activity being evaluated in this appraisal item',
         ),
         'responsibilityactivitie_id' => array(
             'name' => 'responsibilityactivitie_id',
             'type' => 'id',
             'relationship' => 'appraisalitems_responsibilityactivities',
             'vname' => 'LBL_RESPONSIBILITYACTIVITIE_ID',
+            'comment' => 'The unique identifier of the responsibility activity being evaluated in this appraisal item',
         ),
     ),
     'relationships' => array(
@@ -393,3 +409,5 @@ if (!class_exists('VardefManager')) {
 VardefManager::createVardef('AppraisalItems', 'AppraisalItems', array('basic', 'assignable', 'security_groups'));
 
 $dictionary['AppraisalItems']['fields']['name']['vt_calculated'] = 'concat($appraisal_name, " - ", $parent_name)';
+$dictionary['AppraisalItems']['fields']['name']['comment'] = 'The name or title of the record';
+

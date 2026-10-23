@@ -2,7 +2,7 @@
     <div>
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
-            <div>{{ props.field.model }}</div>
+            <div>{{ props.defs.inputType === 'password' ? '••••••••' : props.field.model }}</div>
         </div>
     </div>
 </template>

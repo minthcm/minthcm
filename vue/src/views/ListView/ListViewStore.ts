@@ -35,6 +35,7 @@ interface Defs {
     columns: object
     search: object
     massupdate: object
+    panels?: string[]
 }
 
 export type Mode = 'list' | 'relate'

@@ -57,14 +57,14 @@ $dictionary['CampaignTracker'] = array(
             'type' => 'id',
             'required' => true,
             'reportable' => false,
-            'comment' => 'Unique identifier'
+            'comment' => 'Record unique identifier'
         ),
         'tracker_name' => array(
             'name' => 'tracker_name',
             'vname' => 'LBL_TRACKER_NAME',
             'type' => 'varchar',
             'len' => '255',
-            'comment' => 'The name of the campaign tracker'
+            'comment' => 'name of the tracker, which is used to identify the tracker in the campaign'
         ),
         'tracker_url' => array(
             'name' => 'tracker_url',
@@ -72,7 +72,7 @@ $dictionary['CampaignTracker'] = array(
             'type' => 'varchar',
             'len' => '255',
             'default' => 'http://',
-            'comment' => 'The URL that represents the landing page when the tracker URL in the campaign email is clicked'
+            'comment' => 'The target URL that the tracker redirects to when clicked in the campaign'
         ),
         'tracker_key' => array(
             'name' => 'tracker_key',
@@ -82,7 +82,7 @@ $dictionary['CampaignTracker'] = array(
             'auto_increment' => true,
             'required' => true,
             'studio' => array('editview' => false),
-            'comment' => 'Internal key to uniquely identifier the tracker URL'
+            'comment' => 'The tracker key'
         ),
         'campaign_id' => array(
             'name' => 'campaign_id',
@@ -90,28 +90,28 @@ $dictionary['CampaignTracker'] = array(
             'type' => 'id',
             'required' => false,
             'reportable' => false,
-            'comment' => 'The ID of the campaign'
+            'comment' => 'The unique identifier of the campaign associated with this record'
         ),
         'date_entered' => array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
             'required' => true,
-            'comment' => 'Date record created'
+            'comment' => 'The date when the record was created'
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
             'required' => true,
-            'comment' => 'Date record last modified'
+            'comment' => 'The date when the record was last modified'
         ),
         'modified_user_id' => array(
             'name' => 'modified_user_id',
             'vname' => 'LBL_MODIFIED_USER_ID',
             'dbType' => 'id',
             'type' => 'id',
-            'comment' => 'User who last modified record'
+            'comment' => 'The unique identifier of the user who last modified the record'
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -120,7 +120,7 @@ $dictionary['CampaignTracker'] = array(
             'table' => 'users',
             'isnull' => 'false',
             'dbType' => 'id',
-            'comment' => 'User ID who created record'
+            'comment' => 'The unique identifier of the user who created the record'
         ),
         'is_optout' => array(
             'name' => 'is_optout',
@@ -129,7 +129,7 @@ $dictionary['CampaignTracker'] = array(
             'required' => true,
             'default' => '0',
             'reportable' => false,
-            'comment' => 'Indicator whether tracker URL represents an opt-out link'
+            'comment' => 'Flag indicating whether the tracker URL represents an opt-out link'
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -138,7 +138,7 @@ $dictionary['CampaignTracker'] = array(
             'required' => false,
             'default' => '0',
             'reportable' => false,
-            'comment' => 'Record deletion indicator'
+            'comment' => 'A flag indicating whether the record has been deleted'
         ),
         'campaign' => array(
             'name' => 'campaign',

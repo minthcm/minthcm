@@ -164,7 +164,7 @@ class ListController
         }
         $this->params = $params;
     }
-    protected function getParsedFilters(Request $request)
+    protected function getParsedFilters(Request $request, string $module = ''): array
     {
         $filters = ['filter' => [], 'must_not' => [], 'must' => []];
         $searchPhrase = $request->getAttribute('searchPhrase');

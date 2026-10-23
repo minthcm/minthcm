@@ -55,7 +55,7 @@ $dictionary['OAuthKey'] = array('table' => 'oauth_consumer',
             'vname' => 'LBL_CONSKEY',
             'type' => 'varchar',
             'required' => true,
-            'comment' => 'Consumer public key',
+            'comment' => 'The OAuth consumer key used to identify the client application',
             'importable' => 'required',
             'massupdate' => 0,
             'reportable'=>false,
@@ -68,7 +68,7 @@ $dictionary['OAuthKey'] = array('table' => 'oauth_consumer',
             //'type' => 'encrypt',
             'type' => 'varchar',
               'required' => true,
-            'comment' => 'Consumer secret key',
+            'comment' => 'The OAuth consumer secret used to authenticate the client application',
             'importable' => 'required',
             'massupdate' => 0,
             'reportable'=>false,
@@ -94,3 +94,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('OAuthKeys', 'OAuthKey', array('basic','assignable'));
+

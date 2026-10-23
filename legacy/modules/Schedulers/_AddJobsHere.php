@@ -69,7 +69,6 @@ require_once 'include/Services/NormalizeRecords/NormalizeRecords.php';
  * dropdown menu.
  */
 $job_strings = array(
-   0 => 'refreshJobs',
    1 => 'pollMonitoredInboxes',
    2 => 'runMassEmailCampaign',
    3 => 'pruneDatabase',
@@ -88,13 +87,13 @@ $job_strings = array(
    18 => 'runElasticSearchIndexerScheduler',
 );
 
-/**
- * Job 0 refreshes all job schedulers at midnight
- * DEPRECATED
- */
-function refreshJobs() {
-   return true;
-}
+$job_classes = array(
+   'GenerateAppraisalAppraisalItemsJob',
+   'GenerateOnboardingOffboardingJob',
+   'MassConfirmationJob',
+   'RepairPrivateGroupsJob',
+   'LastNextContactsQueueJob',
+);
 
 /**
  * Job 1

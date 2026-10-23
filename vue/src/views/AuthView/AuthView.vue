@@ -85,7 +85,7 @@ onMounted(() => {
         }
 
         if (!defaultLang) {
-            defaultLang = "en_US"
+            defaultLang = preferences.fallbackLanguage
         }
         changeLanguage(defaultLang)
     }

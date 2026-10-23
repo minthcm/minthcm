@@ -132,4 +132,15 @@ class LegacyConnector
             chdir($old_cwd);
         }
     }
+
+    public static function runCallable(callable $fn): mixed
+    {
+        $old_cwd = getcwd();
+        chdir('../legacy/');
+        try {
+            return $fn();
+        } finally {
+            chdir($old_cwd);
+        }
+    }
 }

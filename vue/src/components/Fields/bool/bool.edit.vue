@@ -21,8 +21,6 @@ const props = defineProps<FieldProps>()
     :deep(.v-selection-control) {
         justify-content: space-between;
         flex-direction: row-reverse;
-    }
-    :deep(.v-selection-control--dirty) {
         padding-right: 8px;
     }
     :deep(.v-label) {

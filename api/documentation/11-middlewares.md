@@ -100,6 +100,8 @@ Standard username + password authentication against the `users` table. This is t
 - **Config:** `$sugar_config['authenticationClass']` is unset or `'SugarAuthenticate'`
 - **Login flow:** `POST /api/login` with `username`, `password`, and `client_secret` → OAuth2 token pair (access + refresh)
 - **Implementation:** `legacy/modules/Users/authentication/SugarAuthenticate/`
+- **The `frontend` client secret is public by design.** The SPA fetches it from the unauthenticated `POST /api/getInternalFrontendToken` and sends it back with the login request. A browser application cannot keep a secret, so this value is not a credential — the user's password (or a pending SSO handshake in the same session) is. Do not report or "fix" its exposure; decision: GHSA-h46x-ffpv-f4g3 / #187657, reconfirmed in #193558.
+- **Client secret check:** `ClientRepository::validateClient()` compares the stored secret (plaintext or its sha256 hash; the frontend grant accepts only the stored value) with `hash_equals()`. A confidential client with an empty stored secret never authenticates.
 
 ### LDAP (LDAPAuthenticate)
 
@@ -168,15 +170,16 @@ Federated SSO via an external Identity Provider (IdP) using the SAML 2.0 protoco
 Federated SSO via an external Identity Provider (IdP) using the OpenID Connect authorization code flow. Implemented without a third-party library — the class talks to the IdP's authorization and token endpoints directly.
 
 - **Config toggle:** Set `$sugar_config['authenticationClass'] = 'OIDCAuthenticate';` in `config_override.php`
-- **OIDC settings** (stored in `config` table, editable via Admin → Password Management): `OIDC_clientId`, `OIDC_clientSecret`, `OIDC_authorizationEndpoint`, `OIDC_tokenEndpoint`, `OIDC_logoutEndpoint` (optional), `OIDC_scope` (default `openid profile email`), `OIDC_usernameClaim` (default `preferred_username`)
+- **OIDC settings** (stored in `config` table, editable via Admin → Password Management): `OIDC_clientId`, `OIDC_clientSecret`, `OIDC_authorizationEndpoint`, `OIDC_tokenEndpoint`, `OIDC_issuer` (required — the IdP `issuer`; ID tokens from any other issuer are rejected), `OIDC_logoutEndpoint` (optional), `OIDC_scope` (default `openid profile email`), `OIDC_usernameClaim` (default `preferred_username`)
 - **Login flow:**
-  1. The frontend detects OIDC is active and the user is redirected to the IdP's authorization endpoint (`OIDCAuthenticate::pre_login()` builds the URL and stores a CSRF `state` value in both the session and a short-lived `oidc_state` cookie)
+  1. The frontend detects OIDC is active and the user is redirected to the IdP's authorization endpoint (`OIDCAuthenticate::pre_login()` builds the URL and stores a CSRF `state` value and an ID-token `nonce` in both the session and short-lived `oidc_state` / `oidc_nonce` cookies)
   2. The IdP redirects back to MintHCM's login URL with `?code=...&state=...`
-  3. `OIDCAuthenticate::pre_login()` validates `state`, exchanges the code for tokens at the token endpoint, and decodes the ID token to resolve the username from the configured claim
-  4. `OIDCAuthenticateUser::loadUserOnLogin()` matches the resolved username to a `users` record
+  3. `OIDCAuthenticate::pre_login()` validates `state`, exchanges the code for tokens at the token endpoint, decodes the ID token and validates its claims with `OIDCIdTokenValidator` (`iss`, `aud`/`azp`, `exp`, `iat`, `nonce`; the signature is not checked — the token comes from the token endpoint over TLS, as OpenID Connect Core §3.1.3.7 allows), then resolves the username from the configured claim
+  4. `OIDCAuthenticateUser::loadUserOnLogin()` matches the resolved username to a `users` record and checks the ID token `sub` with `OIDCSubjectBinder`
   5. An OAuth2 token pair is issued as with any other login
 - **Logout flow:** `POST /api/logout` triggers RP-Initiated Logout against `OIDC_logoutEndpoint` when configured, passing `id_token_hint` and `post_logout_redirect_uri`.
-- **User matching:** the resolved username is matched against `User::findUserPassword($name)`. Users must exist in MintHCM with `external_auth_only = 1` — OIDC does not auto-provision accounts.
+- **User matching:** the resolved username is matched against `User::findUserPassword($name)`. Users must exist in MintHCM — OIDC does not auto-provision accounts.
+- **Subject binding (nOAuth protection):** the username claim (`preferred_username`, `email`) is mutable at the IdP, so the first successful OIDC login stores the immutable `sub` claim in `users.oidc_subject` (trust on first use); every later login must present the same `sub`, and one `sub` cannot be bound to two accounts. `OIDCSubjectBinder` is the only writer of the field (`api-visible => false`, dropped from the legacy edit form). Reset a binding — after the account was recreated in the IdP or the IdP changed — with the **Reset SSO binding** button on the user record (full administrators) or `php MintCLI users:resetOidcBinding --user=<user_name>|--all [--force]`.
 - **Implementation:** `legacy/modules/Users/authentication/OIDCAuthenticate/`
 - **API-side check:** `AuthHelper::isOIDCOn()` reads `$sugar_config['authenticationClass']`.
 

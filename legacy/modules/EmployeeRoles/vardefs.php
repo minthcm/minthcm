@@ -71,6 +71,7 @@ $dictionary['EmployeeRoles'] = array(
          'size' => '20',
          'options' => 'role_status',
          'default' => 'active',
+         'comment' => 'The current status of the record',
       ),
       'employees' => array(
          'name' => 'employees',

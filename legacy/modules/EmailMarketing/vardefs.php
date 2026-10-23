@@ -55,6 +55,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_NAME',
         'type' => 'id',
         'required'=>true,
+        'comment' => 'Unique identifier for the email marketing record',
     ),
     'deleted' => array(
         'name' => 'deleted',
@@ -62,6 +63,7 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'bool',
         'required' => false,
         'reportable'=>false,
+        'comment' => 'Flag indicating whether the email marketing record has been deleted',
     ),
     'date_entered' =>
     array(
@@ -69,6 +71,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_DATE_ENTERED',
         'type' => 'datetime',
         'required'=>true,
+        'comment' => 'Date and time when the email marketing record was created',
     ),
     'date_modified' =>
     array(
@@ -76,6 +79,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_DATE_MODIFIED',
         'type' => 'datetime',
          'required'=>true,
+        'comment' => 'Date and time when the email marketing record was last modified',
     ),
     'modified_user_id' =>
     array(
@@ -86,7 +90,8 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'assigned_user_name',
         'table' => 'users',
         'isnull' => 'false',
-        'dbType' => 'id'
+        'dbType' => 'id',
+        'comment' => 'Unique identifier of the user who last modified the email marketing record',
     ),
     'created_by' =>
     array(
@@ -97,7 +102,8 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'assigned_user_name',
         'table' => 'users',
         'isnull' => 'false',
-        'dbType' => 'id'
+        'dbType' => 'id',
+        'comment' => 'Unique identifier of the user who created the email marketing record',
     ),
     'name' =>
     array(
@@ -106,7 +112,8 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'varchar',
         'len' => '255',
         'importable' => 'required',
-        'required' => true
+        'required' => true,
+        'comment' => 'Name or title of the email marketing campaign or template',
     ),
     'from_name' =>  //starting from 4.0 from_name is obsolete..replaced with inbound_email_id
     array(
@@ -115,7 +122,8 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'varchar',
         'len' => '100',
         'importable' => 'required',
-        'required' => true
+        'required' => true,
+        'comment' => 'Display name used in the "From" field of the email marketing message',
     ),
     'from_addr' =>
     array(
@@ -124,7 +132,8 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'varchar',
         'len' => '100',
         'importable' => 'required',
-        'required' => true
+        'required' => true,
+        'comment' => 'Email address used in the "From" field of the email marketing message',
     ),
     'reply_to_name' =>
     array(
@@ -132,6 +141,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_REPLY_NAME',
         'type' => 'varchar',
         'len' => '100',
+        'comment' => 'Display name used in the "Reply-To" field of the email marketing message',
     ),
     'reply_to_addr' =>
     array(
@@ -139,6 +149,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_REPLY_ADDR',
         'type' => 'varchar',
         'len' => '100',
+        'comment' => 'Email address used in the "Reply-To" field of the email marketing message',
     ),
     'inbound_email_id' =>
     array(
@@ -146,6 +157,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_FROM_MAILBOX',
         'type' => 'varchar',
         'len' => '36',
+        'comment' => 'Unique identifier of the inbound email account associated with this email marketing record',
     ),
     'date_start' =>
     array(
@@ -153,7 +165,8 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_DATE_START',
         'type' => 'datetime',
         'importable' => 'required',
-        'required' => true
+        'required' => true,
+        'comment' => 'Scheduled start date for the email marketing campaign',
         ),
 
     'template_id' =>
@@ -163,6 +176,7 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'id',
         'required'=>true,
         'importable' => 'required',
+        'comment' => 'Unique identifier of the email template used in the marketing campaign',
     ),
     'status' =>
     array(
@@ -173,6 +187,7 @@ $dictionary['EmailMarketing'] = array(
         'required'=>true,
         'options' => 'email_marketing_status_dom',
         'importable' => 'required',
+        'comment' => 'Current status of the email marketing campaign (e.g., active, inactive, completed)',
     ),
     'campaign_id' =>
     array(
@@ -181,6 +196,7 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'id',
         'isnull' => true,
         'required'=>false,
+        'comment' => 'Unique identifier of the campaign associated with this email marketing record',
     ),
 
         'outbound_email_id'=> array(
@@ -189,6 +205,7 @@ $dictionary['EmailMarketing'] = array(
             'type' => 'id',
             'isnull' => true,
             'required'=>false,
+            'comment' => 'Unique identifier of the outbound email account used for sending the marketing emails',
         ),
 
     'all_prospect_lists' => array(
@@ -196,6 +213,7 @@ $dictionary['EmailMarketing'] = array(
         'vname' => 'LBL_ALL_PROSPECT_LISTS',
         'type' => 'bool',
         'default'=> 0,
+        'comment' => 'Flag indicating whether the email marketing is sent to all available prospect lists',
     ),
 //no-db-fields.
     'template_name' =>
@@ -212,6 +230,7 @@ $dictionary['EmailMarketing'] = array(
         'link'=>'emailtemplate',
         'len' => '255',
         'source'=>'non-db',
+        'comment' => 'Name of the email template used in the marketing campaign',
     ),
     'prospect_list_name' =>
     array(
@@ -220,6 +239,7 @@ $dictionary['EmailMarketing'] = array(
         'type' => 'varchar',
         'len'=>100,
         'source'=>'non-db',
+        'comment' => 'Name of the prospect list targeted by this email marketing campaign',
     ),
 
 //related fields.
@@ -262,3 +282,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('EmailMarketing', 'EmailMarketing', ['security_groups']);
+

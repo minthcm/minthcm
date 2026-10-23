@@ -29,10 +29,13 @@ $viewdefs['TermsOfEmployment'] = [
                             [
                                 'name',
                                 'contract_name',
-                                'position_name',
+                                
                             ],
                             [
+                                'position_name',
                                 'date_of_signing',
+                            ],
+                            [
                                 'term_starting_date',
                                 'term_ending_date',
                             ],
@@ -54,7 +57,7 @@ $viewdefs['TermsOfEmployment'] = [
                             ],
                             [
                                 'employer_cost',
-                                ['name' => 'currency_id'],
+                                'currency_id',
                             ],
                         ],
                     ],

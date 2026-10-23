@@ -90,7 +90,6 @@ $dictionary['KTemplates'] = array(
          'vname' => 'LBL_TEMPLATE',
          'type' => 'text',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -102,6 +101,7 @@ $dictionary['KTemplates'] = array(
          'source' => 'non-db',
          'rows' => '8',
          'cols' => '30',
+         'comment' => 'Name of the template file used for generating the report output, which defines the layout and structure of the report presentation',
       ),
       'fields' =>
       array(
@@ -110,7 +110,6 @@ $dictionary['KTemplates'] = array(
          'vname' => 'LBL_FIELDS',
          'type' => 'varchar',
          'massupdate' => 0,
-         'comments' => 'placeholder for tree in editview',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -120,6 +119,7 @@ $dictionary['KTemplates'] = array(
          'len' => '255',
          'size' => '20',
          'source' => 'non-db',
+         'comment' => 'Fields',
       ),
       'relatedmodule' =>
       array(
@@ -129,7 +129,6 @@ $dictionary['KTemplates'] = array(
          'type' => 'enum',
          'massupdate' => 0,
          'default' => 'selectmodule',
-         'comments' => 'indicates module this template is created for',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -142,6 +141,7 @@ $dictionary['KTemplates'] = array(
          'studio' => 'visible',
          'dependency' => false,
          'function' => 'getKReportsArrayList',
+         'comment' => 'Related module record',
       ),
       'preview' =>
       array(
@@ -151,7 +151,6 @@ $dictionary['KTemplates'] = array(
          'type' => 'iframe',
          'massupdate' => '0',
          'default' => $sugar_config['site_url'] . '/modules/KReports/Plugins/Integration/kpdfexport/templates/{id}.html',
-         'comments' => NULL,
          'help' => NULL,
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -165,6 +164,7 @@ $dictionary['KTemplates'] = array(
          'gen' => '1',
          'link_target' => '200',
          'height' => '600',
+         'comment' => 'Preview',
       ),
    ),
    'relationships' => array(
@@ -175,3 +175,4 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('KTemplates', 'KTemplates', array( 'basic' ));
+

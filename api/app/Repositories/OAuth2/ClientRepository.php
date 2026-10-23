@@ -73,18 +73,25 @@ class ClientRepository extends MintEntityRepository implements ClientRepositoryI
 
         $allow_refresh_token = $grantType === 'refresh_token' && in_array($client->allowed_grant_type, ['password', 'mobile', 'frontend']);
 
-        if (
-            (
-                $client->secret === $clientSecret
-                || (
-                    $grantType !== 'frontend'
-                    && $client->secret === hash('sha256', $clientSecret)
-                )
-            )
-            && ($grantType === $client->allowed_grant_type || $allow_refresh_token)
-        ) {
-            return true;
+        return $this->isSecretValid($client, (string) $clientSecret, $grantType)
+            && ($grantType === $client->allowed_grant_type || $allow_refresh_token);
+    }
+
+    /**
+     * Compares secrets in constant time. The stored secret may be the plaintext value or its
+     * sha256 hash; the hashed form is not accepted for the frontend grant.
+     */
+    private function isSecretValid(Client $client, string $client_secret, ?string $grant_type): bool
+    {
+        $stored_secret = (string) $client->secret;
+        if ($client->isConfidential() && $stored_secret === '') {
+            return false;
         }
-        return false;
+
+        return hash_equals($stored_secret, $client_secret)
+            || (
+                $grant_type !== 'frontend'
+                && hash_equals($stored_secret, hash('sha256', $client_secret))
+            );
     }
 }

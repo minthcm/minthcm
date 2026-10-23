@@ -3,7 +3,7 @@
         <label>{{ props.label }}</label>
         <div class="detail-field-row">
             <div>
-                <MdPreview language="en-US" :modelValue="value" :sanitize="sanitize" />
+                <MdPreview language="en-US" :modelValue="value" :sanitize="sanitize" :theme="mdTheme" />
                 <a
                     v-if="(props.modelValue?.length > lengthToCrop) || (linesNumber >= linesToCrop)"
                     @click="toggleExpanded"
@@ -26,6 +26,7 @@ import { useLocalStorageStore } from '@/store/localStorage';
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import DOMPurify from 'dompurify'
+import { useThemeStore } from '@/store/theme'
 
 async function loadExpandedPreference() {
     if (!props.defs?.name) {
@@ -41,6 +42,8 @@ onMounted(() => {
 const props = defineProps<FieldProps<string>>()
 const languages = useLanguagesStore()
 const localStorage = useLocalStorageStore()
+const themeStore = useThemeStore()
+const mdTheme = computed<'light' | 'dark'>(() => (themeStore.activeTheme === 'dark' ? 'dark' : 'light'))
 
 const lengthToCrop = 180
 const linesToCrop = 4
@@ -84,6 +87,21 @@ a {
     display: block;
     &:hover {
         cursor: pointer;
+    }
+}
+
+:deep(.md-editor) {
+    --md-bk-color: rgb(var(--v-theme-surface));
+    --md-color: rgb(var(--v-theme-on-surface));
+}
+
+:deep(.md-editor-preview) {
+    background-color: rgb(var(--v-theme-surface));
+    color: rgb(var(--v-theme-on-surface));
+
+    p,
+    li {
+        line-height: 1.6;
     }
 }
 </style>

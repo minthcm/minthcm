@@ -54,7 +54,6 @@ $dictionary['DashboardManager'] = array(
             'vname' => 'LBL_ENCODED_PAGES',
             'type' => 'text',
             'massupdate' => 0,
-            'comments' => '',
             'help' => '',
             'importable' => 'false',
             'duplicate_merge' => 'disabled',
@@ -67,6 +66,7 @@ $dictionary['DashboardManager'] = array(
             'studio' => 'visible',
             'rows' => '4',
             'cols' => '20',
+            'comment' => 'The encoded (serialized) dashboard page layout data',
         ),
         'encoded_dashlets' => array(
             'required' => false,
@@ -75,7 +75,6 @@ $dictionary['DashboardManager'] = array(
             'type' => 'text',
             'dbType' => 'mediumtext',
             'massupdate' => 0,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -88,6 +87,7 @@ $dictionary['DashboardManager'] = array(
             'studio' => 'visible',
             'rows' => '4',
             'cols' => '20',
+            'comment' => 'The encoded (serialized) configuration of the dashlets on the dashboard',
         ),
         'is_loaded' => array(
             'type' => 'bool',
@@ -98,6 +98,7 @@ $dictionary['DashboardManager'] = array(
             'importable' => true,
             'default' => '0',
             'no_default' => false,
+            'comment' => 'Flag indicating whether the dashboard has been loaded',
         ),
         'business_role' => array(
             'name' => 'business_role',
@@ -112,6 +113,7 @@ $dictionary['DashboardManager'] = array(
             'massupdate' => true,
             'required' => false,
             'vt_validation' => 'callCustomApi(\'DashboardManager\',\'validateUniqueRole\',{id:$id, business_role:$business_role},true,\'LBL_ROLE_EXISTS\')',
+            'comment' => 'The business role associated with this dashboard',
         ),
         "dashboardbackups" => array(
             'name' => 'dashboardbackups',
@@ -216,3 +218,6 @@ VardefManager::createVardef('DashboardManager', 'DashboardManager', array('basic
 
 $dictionary['DashboardManager']['fields']['name']['audited'] = true;
 $dictionary['DashboardManager']['fields']['assigned_user_id']['audited'] = true;
+$dictionary['DashboardManager']['fields']['name']['comment'] = 'The name or title of the record';
+$dictionary['DashboardManager']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
+

@@ -55,7 +55,7 @@ $dictionary['AOD_IndexEvent'] = array(
     'type' => 'varchar',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'Error message or details describing any issues encountered during the indexing event, if applicable',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -76,7 +76,7 @@ $dictionary['AOD_IndexEvent'] = array(
     'massupdate' => 0,
     'default' => '0',
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'A flag indicating whether the indexing event was successful or encountered an error',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -92,6 +92,7 @@ $dictionary['AOD_IndexEvent'] = array(
     'type' => 'id',
     'reportable' => false,
     'vname' => 'LBL_RECORD_ID',
+    'comment' => 'Related record unique identifier',
   ),
   'record_module' => array(
     'required' => false,
@@ -100,7 +101,7 @@ $dictionary['AOD_IndexEvent'] = array(
     'type' => 'varchar',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'Related record module name',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -126,3 +127,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOD_IndexEvent', 'AOD_IndexEvent', array('basic','assignable'));
+

@@ -1,0 +1,23 @@
+{
+  "php": {
+    "min": "8.2",
+    "max": "8.2.99"
+  },
+  "mysql": {
+    "min": "8.0"
+  },
+  "elasticsearch": {
+    "min": "7.10",
+    "max": "7.16.99"
+  },
+  "node": {
+    "min": "24.22.1"
+  },
+  "disk_space_mb": 3072,
+  "from_versions": [
+    "4.3.2",
+    "4.3.3",
+    "4.3.4"
+  ],
+  "notes": "Before upgrading, ensure you have a FULL BACKUP of your database and files. Profile photos are now stored as WebP - PHP GD extension must have WebP support."
+}

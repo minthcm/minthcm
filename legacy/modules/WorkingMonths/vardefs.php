@@ -48,7 +48,7 @@ $dictionary['WorkingMonths'] = array(
          'type' => 'int',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The year for which the working months are defined',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -79,7 +79,7 @@ $dictionary['WorkingMonths'] = array(
          'massupdate' => 0,
          'default' => 'january',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The specific months within the year that are designated as working months, typically represented as a list or range of month numbers',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -102,7 +102,7 @@ $dictionary['WorkingMonths'] = array(
          'type' => 'int',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'List of working days within the defined working months, which may include specific dates or a pattern of days',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -132,7 +132,7 @@ $dictionary['WorkingMonths'] = array(
          'type' => 'int',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The standard working hours for the defined working months, which may include start and end times or total hours per day',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -164,3 +164,4 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('WorkingMonths', 'WorkingMonths', array( 'basic', 'assignable', 'security_groups' ));
+

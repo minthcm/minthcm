@@ -55,3 +55,35 @@ if (file_exists('custom/metadata/emails_beansMetaData.php')) {
     require_once('metadata/emails_beansMetaData.php');
 }
 $dictionary['EmailText'] = $dictionary['emails_text'];
+
+if (isset($dictionary['EmailText']['fields']['email_id'])) {
+    $dictionary['EmailText']['fields']['email_id']['comment'] = 'Foriegn key to emails table';
+}
+if (isset($dictionary['EmailText']['fields']['from_addr'])) {
+    $dictionary['EmailText']['fields']['from_addr']['comment'] = 'Email address of person who send the email';
+}
+if (isset($dictionary['EmailText']['fields']['reply_to_addr'])) {
+    $dictionary['EmailText']['fields']['reply_to_addr']['comment'] = 'reply to email address';
+}
+if (isset($dictionary['EmailText']['fields']['to_addrs'])) {
+    $dictionary['EmailText']['fields']['to_addrs']['comment'] = 'Email address(es) of person(s) to receive the email';
+}
+if (isset($dictionary['EmailText']['fields']['cc_addrs'])) {
+    $dictionary['EmailText']['fields']['cc_addrs']['comment'] = 'Email address(es) of person(s) to receive a carbon copy of the email';
+}
+if (isset($dictionary['EmailText']['fields']['bcc_addrs'])) {
+    $dictionary['EmailText']['fields']['bcc_addrs']['comment'] = 'Email address(es) of person(s) to receive a blind carbon copy of the email';
+}
+if (isset($dictionary['EmailText']['fields']['description'])) {
+    $dictionary['EmailText']['fields']['description']['comment'] = 'Email body in plain text';
+}
+if (isset($dictionary['EmailText']['fields']['description_html'])) {
+    $dictionary['EmailText']['fields']['description_html']['comment'] = 'Email body in HTML format';
+}
+if (isset($dictionary['EmailText']['fields']['raw_source'])) {
+    $dictionary['EmailText']['fields']['raw_source']['comment'] = 'Full raw source of email';
+}
+if (isset($dictionary['EmailText']['fields']['deleted'])) {
+    $dictionary['EmailText']['fields']['deleted']['comment'] = '';
+}
+

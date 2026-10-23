@@ -55,7 +55,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'vname' => 'LBL_ID',
             'type' => 'id',
             'required' => true,
-            'comment' => 'Unique identifier',
+            'comment' => 'Record unique identifier',
             'reportable' => false,
             'massupdate' => false,
             'inline_edit' => false,
@@ -78,6 +78,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name or title of the record',
         ),
         'type' => [
             'name' => 'type',
@@ -91,6 +92,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The type of external OAuth connection',
         ],
         'client_id' => [
             'name' => 'client_id',
@@ -104,6 +106,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The client identifier issued by the external OAuth provider for this connection',
         ],
         'client_secret' => [
             'name' => 'client_secret',
@@ -121,6 +124,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'sensitive' => true,
             'api-visible' => false,
             'db_encrypted' => true,
+            'comment' => 'The client secret issued by the external OAuth provider for this connection',
         ],
         'token_type' => [
             'name' => 'token_type',
@@ -134,6 +138,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The type of the OAuth token issued by the provider (e.g. Bearer)',
         ],
         'expires_in' => [
             'name' => 'expires_in',
@@ -148,6 +153,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The number of seconds until the access token expires',
         ],
         'access_token' => [
             'name' => 'access_token',
@@ -164,6 +170,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'sensitive' => true,
             'api-visible' => false,
             'db_encrypted' => true,
+            'comment' => 'The OAuth access token used to authenticate requests to the external provider',
         ],
         'refresh_token' => [
             'name' => 'refresh_token',
@@ -180,6 +187,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'sensitive' => true,
             'api-visible' => false,
             'db_encrypted' => true,
+            'comment' => 'The OAuth refresh token used to obtain a new access token when it expires',
         ],
         'external_oauth_provider' => [
             'name' => 'external_oauth_provider',
@@ -214,6 +222,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The unique identifier of the external OAuth provider this connection uses',
         ],
         'external_oauth_provider_name' => [
             'name' => 'external_oauth_provider_name',
@@ -235,6 +244,7 @@ $dictionary['ExternalOAuthConnection'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the external OAuth provider this connection uses',
         ],
     ],
     'relationships' => [
@@ -251,3 +261,4 @@ $dictionary['ExternalOAuthConnection'] = [
 ];
 
 VardefManager::createVardef('ExternalOAuthConnection', 'ExternalOAuthConnection', ['basic', 'security_groups']);
+

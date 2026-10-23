@@ -58,6 +58,7 @@ $dictionary['OAuth2Clients'] = [
             'required' => true,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'Record unique identifier',
         ],
         'name' => [
             'name' => 'name',
@@ -67,6 +68,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'inline_edit' => false,
             'duplicate_merge' => 'disabled',
+            'comment' => 'The name or title of the record',
         ],
         'secret' => [
             'name' => 'secret',
@@ -77,6 +79,7 @@ $dictionary['OAuth2Clients'] = [
             'api-visible' => false,
             'inline_edit' => false,
             'len' => '4000',
+            'comment' => 'The client secret used to authenticate the OAuth2 client',
         ],
         'new_secret' => [
             'name' => 'new_secret',
@@ -87,6 +90,7 @@ $dictionary['OAuth2Clients'] = [
             'inline_edit' => false,
             'len' => '4000',
             'source' => 'non-db',
+            'comment' => 'The new, hashed client secret pending activation',
         ],
         'redirect_url' => [
             'name' => 'redirect_url',
@@ -95,6 +99,7 @@ $dictionary['OAuth2Clients'] = [
             'required' => false,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The URL to which the user is redirected after authorization',
 
         ],
         'is_confidential' => [
@@ -105,6 +110,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'Flag indicating whether the client is confidential and can securely store its secret',
         ],
         'allowed_grant_type' => [
             'name' => 'allowed_grant_type',
@@ -116,6 +122,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The OAuth2 grant type allowed for this client',
         ],
         'duration_value' => [
             'name' => 'duration_value',
@@ -126,6 +133,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The numeric value of the token duration',
         ],
         'duration_amount' => [
             'name' => 'duration_amount',
@@ -136,6 +144,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The amount of time units used to calculate the token duration',
         ],
         'duration_unit' => [
             'name' => 'duration_unit',
@@ -147,6 +156,7 @@ $dictionary['OAuth2Clients'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The unit of time (e.g. hours, days) used to calculate the token duration',
         ],
         'oauth2tokens' => [
             'name' => 'oauth2tokens',
@@ -170,7 +180,7 @@ $dictionary['OAuth2Clients'] = [
             'isnull' => 'false',
             'dbType' => 'id',
             'audited' => true,
-            'comment' => 'User ID assigned to record',
+            'comment' => 'The unique identifier of the user assigned to the record',
             'duplicate_merge' => 'disabled'
         ],
         'assigned_user_name' => [
@@ -186,6 +196,7 @@ $dictionary['OAuth2Clients'] = [
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
             'required' => true,
+            'comment' => 'The name of the user assigned to the record',
         ],
         'assigned_user_link' => [
             'name' => 'assigned_user_link',
@@ -235,3 +246,4 @@ VardefManager::createVardef(
         'default',
     ]
 );
+

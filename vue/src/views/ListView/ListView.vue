@@ -7,11 +7,14 @@
             <ListViewTable />
             <ListViewMassUpdate v-if="store.isMassUpdate" />
         </div>
+        <template v-for="(panel, idx) in modulePanelComponents" :key="idx">
+            <component :is="panel" :module="module" />
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, type Component } from 'vue'
 import ListViewHeader from './ListViewHeader.vue'
 import ListViewTable from './ListViewTable.vue'
 import { useListViewStore, Mode } from './ListViewStore'
@@ -21,6 +24,19 @@ import { useACL } from '@/composables/useACL'
 import ListViewFilters from './ListViewFilters.vue'
 import { filterDef } from '@/utils/qsOperatorsTypes'
 import ListViewMassUpdate from './ListViewMassUpdate.vue'
+
+const panelRegistry = import.meta.glob<{ default: Component }>('@/components/ListViewPanels/*.vue', { eager: true })
+const customPanelRegistry = import.meta.glob<{ default: Component }>('@/custom/components/ListViewPanels/*.vue', { eager: true })
+
+function resolvePanel(name: string): Component | null {
+    const customKey = Object.keys(customPanelRegistry).find((k) => k.endsWith(`/${name}.vue`))
+    if (customKey) return customPanelRegistry[customKey].default
+
+    const coreKey = Object.keys(panelRegistry).find((k) => k.endsWith(`/${name}.vue`))
+    if (coreKey) return panelRegistry[coreKey].default
+
+    return null
+}
 
 const url = useUrlStore()
 const store = useListViewStore()
@@ -38,6 +54,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const module = computed(() => props.module ?? url.module)
 const moduleName = computed(() => languages.languages.app_list_strings?.moduleList?.[module.value])
+const modulePanelComponents = computed(() => {
+    const panelNames: string[] = store.defs?.panels ?? []
+    return panelNames.map((name: string) => resolvePanel(name)).filter(Boolean) as Component[]
+})
 
 onMounted(async () => {
     if (store.module !== module.value) {

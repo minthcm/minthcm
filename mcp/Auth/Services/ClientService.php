@@ -42,6 +42,12 @@ class ClientService
      */
     public function registerClient(array $input): array
     {
+        $validationError = (new ClientRegistrationValidator())->validate($input);
+        if ($validationError !== null) {
+            logEvent('OAuth client registration rejected', ['error' => $validationError['error_description']]);
+            return ['status' => 400] + $validationError;
+        }
+
         // Required fields for MCP clients
         $registrationData = $this->prepareClientRegistrationData($input);
 
@@ -160,10 +166,10 @@ class ClientService
      */
     private function prepareClientRegistrationData(array $input): array
     {
-        $clientName = $input['client_name'] ?? 'MCP Client';
-        $redirectUris = $input['redirect_uris'] ?? [];
-        $grantTypes = $input['grant_types'] ?? ['authorization_code', 'refresh_token'];
-        $responseTypes = $input['response_types'] ?? ['code'];
+        $clientName = (new ClientRegistrationValidator())->sanitizeClientName($input['client_name'] ?? null, 'MCP Client');
+        $redirectUris = array_values($input['redirect_uris']);
+        $grantTypes = array_values($input['grant_types'] ?? ClientRegistrationValidator::ALLOWED_GRANT_TYPES);
+        $responseTypes = ClientRegistrationValidator::ALLOWED_RESPONSE_TYPES;
         $scope = $input['scope'] ?? 'openid profile mcp:read mcp:write';
 
         // Generate client_id

@@ -107,7 +107,7 @@ $admin_option_defs['Administration']['configphp_settings'] = [
     'Administration',
     'LBL_CONFIGURE_SETTINGS_TITLE',
     'LBL_CONFIGURE_SETTINGS',
-    './index.php?module=Configurator&action=EditView',
+    'javascript:parent.location.hash="/Administration/ConfiguratorSettings"',
     'system-settings'
 ];
 $admin_option_defs['Administration']['currencies_management'] = [
@@ -121,7 +121,7 @@ $admin_option_defs['Administration']['languages'] = [
     'Currencies',
     'LBL_MANAGE_LANGUAGES',
     'LBL_LANGUAGES',
-    './index.php?module=Administration&action=Languages&view=default',
+    'javascript:parent.location.hash="/Administration/LanguageSettings"',
     'languages'
 ];
 $admin_option_defs['Administration']['locale'] = [
@@ -149,7 +149,7 @@ $admin_option_defs['Administration']['elastic_search'] = [
     'ElasticSearchIndexerSettings',
     'LBL_ELASTIC_SEARCH_SETTINGS',
     'LBL_ELASTIC_SEARCH_SETTINGS_DESC',
-    './index.php?module=Administration&action=ElasticSearchSettings',
+    'javascript:parent.location.hash="/Administration/ElasticsearchSettings"',
     'global-search'
 ];
 $admin_option_defs['Administration']['scheduler'] = [

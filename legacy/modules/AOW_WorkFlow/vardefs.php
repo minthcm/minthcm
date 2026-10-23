@@ -56,7 +56,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'enum',
                 'massupdate' => 0,
                 'default' => '',
-                'comments' => '',
+                'comment' => 'The module or data source for which this Advanced Open Workflow (AOW) is configured and executed',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -79,7 +79,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'enum',
                 'massupdate' => 0,
                 'default' => '0',
-                'comments' => '',
+                'comment' => 'The event or trigger that initiates the workflow execution, such as record creation, update, or deletion',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -102,7 +102,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'enum',
                 'massupdate' => 1,
                 'default' => 'Active',
-                'comments' => '',
+                'comment' => 'The current operational status of the workflow, indicating whether it is active, inactive, or in draft mode',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -125,7 +125,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'enum',
                 'massupdate' => 0,
                 'default' => 'Always',
-                'comments' => '',
+                'comment' => 'The specific conditions or criteria that must be met for the workflow to execute',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -147,6 +147,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'bool',
                 'default' => '0',
                 'reportable' => false,
+                'comment' => 'A flag indicating whether the workflow can be executed multiple times for the same record or event',
             ),
         'condition_lines' =>
             array(
@@ -162,6 +163,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'audited' => false,
                 'reportable' => false,
                 'inline_edit' => false,
+                'comment' => 'The number of condition lines or filter criteria applied to determine when the workflow should run',
                 'function' =>
                     array(
                         'name' => 'display_condition_lines',
@@ -183,6 +185,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'audited' => false,
                 'reportable' => false,
                 'inline_edit' => false,
+                'comment' => 'The number of action lines or operations that the workflow will perform when triggered',
                 'function' =>
                     array(
                         'name' => 'display_action_lines',
@@ -224,6 +227,7 @@ $dictionary['AOW_WorkFlow'] = array(
                 'type' => 'bool',
                 'default' => '0',
                 'reportable' => false,
+                'comment' => 'A flag indicating whether the workflow should be executed during data import operations',
             ),
     ),
     'relationships' => array(
@@ -272,3 +276,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOW_WorkFlow', 'AOW_WorkFlow', array('basic', 'assignable', 'security_groups'));
+

@@ -67,6 +67,7 @@ $dictionary['Requests'] = array(
             'size' => '20',
             'options' => 'requests_status_list',
             'studio' => 'visible',
+            'comment' => 'The current status of the record',
         ),
         'type' => array(
             'required' => false,
@@ -91,6 +92,7 @@ $dictionary['Requests'] = array(
                 'additional_params' => 'Requests-type',
                 'include' => 'include/utils/getDictionary.php'
             ],
+            'comment' => 'The request type',
         ),
         'comments' => array(
             'name' => 'comments',
@@ -119,6 +121,7 @@ $dictionary['Requests'] = array(
                 'returns' => 'html',
                 'include' => 'modules/Comments/RelatedComments.php',
             ),
+            'comment' => 'Comments Widget',
         ),
         'training' => array(
             'name' => 'training',
@@ -142,6 +145,7 @@ $dictionary['Requests'] = array(
             'reportable' => true,
             'rname' => 'id',
             'isnull' => 'true',
+            'comment' => 'Id of the training associated with this record',
         ),
         'training_name' => array(
             'name' => 'training_name',
@@ -160,6 +164,7 @@ $dictionary['Requests'] = array(
             'audited' => true,
             'size' => 30,
             'vt_dependency' => "equals(\$type, 'request_training')",
+            'comment' => 'Name of the training associated with this record',
         ),
         'benefit' => array(
             'name' => 'benefit',
@@ -183,6 +188,7 @@ $dictionary['Requests'] = array(
             'reportable' => true,
             'rname' => 'id',
             'isnull' => 'true',
+            'comment' => 'Id of the benefit associated with this record',
         ),
         'benefit_name' => array(
             'name' => 'benefit_name',
@@ -201,6 +207,7 @@ $dictionary['Requests'] = array(
             'audited' => true,
             'size' => 30,
             'vt_dependency' => "equals(\$type, 'request_benefit')",
+            'comment' => 'Name of the benefit associated with this record',
         ),
     ),
     'relationships' => array(
@@ -242,3 +249,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Requests', 'Requests', array('basic', 'assignable', 'security_groups', 'employee_related'));
+

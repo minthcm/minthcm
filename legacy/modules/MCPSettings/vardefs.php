@@ -57,6 +57,7 @@ $dictionary['MCPSettings'] = array(
             'audited' => false,
             'reportable' => false,
             'source' => 'non-db',
+            'comment' => 'A list of MCP tools or operations that are disallowed',
         ),
         'max_pagination_limit' => array(
             'name' => 'max_pagination_limit',
@@ -67,6 +68,7 @@ $dictionary['MCPSettings'] = array(
             'reportable' => false,
             'default' => 100,
             'source' => 'non-db',
+            'comment' => 'The maximum number of records that can be returned in a single paginated MCP response',
         ),
     ),
     'optimistic_locking' => true,
@@ -77,3 +79,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('MCPSettings', 'MCPSettings', array());
+

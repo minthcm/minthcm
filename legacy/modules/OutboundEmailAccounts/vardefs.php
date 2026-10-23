@@ -54,7 +54,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'vname' => 'LBL_ID',
             'type' => 'id',
             'required' => true,
-            'comment' => 'Unique identifier',
+            'comment' => 'Record unique identifier',
             'reportable' => false,
             'massupdate' => false,
             'inline_edit' => false,
@@ -84,6 +84,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name or title of the record',
         ],
         'type' => [
             'name' => 'type',
@@ -100,6 +101,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The type of the outbound email account, such as system or user',
         ],
         'user_id' => [
             'name' => 'user_id',
@@ -112,6 +114,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The unique identifier of the user associated with this record',
         ],
         'owner' => [
             'name' => 'owner',
@@ -148,6 +151,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the user who owns this outbound email account',
         ],
         'smtp_from_name' => [
             'name' => 'smtp_from_name',
@@ -160,6 +164,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The display name used in the From field of outgoing emails',
         ],
         'smtp_from_addr' => [
             'name' => 'smtp_from_addr',
@@ -172,6 +177,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The email address used in the From field of outgoing emails',
         ],
         'reply_to_name' => [
             'name' => 'reply_to_name',
@@ -183,6 +189,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The display name used in the Reply-To field of outgoing emails',
         ],
         'reply_to_addr' => [
             'name' => 'reply_to_addr',
@@ -194,6 +201,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The email address used in the Reply-To field of outgoing emails',
         ],
         'signature' => [
             'name' => 'signature',
@@ -206,6 +214,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The email signature appended to outgoing messages sent from this account',
         ],
         'mail_sendtype' => [
             'name' => 'mail_sendtype',
@@ -220,6 +229,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The protocol used to send mail, such as SMTP',
         ],
         'mail_smtptype' => [
             'name' => 'mail_smtptype',
@@ -234,6 +244,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The SMTP provider type used for sending mail, such as Gmail or other',
         ],
         'mail_smtpserver' => [
             'name' => 'mail_smtpserver',
@@ -247,6 +258,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The hostname of the SMTP server used to send mail',
         ],
         'mail_smtpport' => [
             'name' => 'mail_smtpport',
@@ -260,6 +272,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The port number of the SMTP server used to send mail',
         ],
         'mail_smtpuser' => [
             'name' => 'mail_smtpuser',
@@ -272,6 +285,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The username used to authenticate with the SMTP server',
         ],
         'mail_smtppass' => [
             'name' => 'mail_smtppass',
@@ -289,6 +303,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The password used to authenticate with the SMTP server',
         ],
         'mail_smtpauth_req' => [
             'name' => 'mail_smtpauth_req',
@@ -301,6 +316,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Flag indicating whether the SMTP server requires authentication',
         ],
         'mail_smtpssl' => [
             'name' => 'mail_smtpssl',
@@ -315,13 +331,14 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The SSL/TLS encryption setting used for the SMTP connection',
         ],
         'date_entered' => [
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
             'group' => 'created_by_name',
-            'comment' => 'Date record created',
+            'comment' => 'The date when the record was created',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'reportable' => false,
@@ -336,7 +353,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
             'group' => 'modified_by_name',
-            'comment' => 'Date record last modified',
+            'comment' => 'The date when the record was last modified',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'reportable' => false,
@@ -357,7 +374,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'group' => 'modified_by_name',
             'dbType' => 'id',
             'reportable' => true,
-            'comment' => 'User who last modified record',
+            'comment' => 'The unique identifier of the user who last modified the record',
             'reportable' => false,
             'massupdate' => false,
             'inline_edit' => false,
@@ -382,6 +399,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the user who last modified the record',
         ],
         'created_by' => [
             'name' => 'created_by',
@@ -393,7 +411,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'isnull' => 'false',
             'dbType' => 'id',
             'group' => 'created_by_name',
-            'comment' => 'User who created record',
+            'comment' => 'The unique identifier of the user who created the record',
             'reportable' => false,
             'massupdate' => false,
             'inline_edit' => false,
@@ -419,6 +437,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the user who created the record',
         ],
         'deleted' => [
             'name' => 'deleted',
@@ -431,7 +450,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Record deletion indicator',
+            'comment' => 'A flag indicating whether the record has been deleted',
         ],
         'created_by_link' => [
             'name' => 'created_by_link',
@@ -476,7 +495,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'module' => 'Users',
             'isnull' => 'false',
             'dbType' => 'id',
-            'comment' => 'User ID assigned to record',
+            'comment' => 'The unique identifier of the user assigned to the record',
             'duplicate_merge' => 'disabled',
             'reportable' => false,
             'massupdate' => false,
@@ -502,6 +521,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the user assigned to the record',
         ],
         'assigned_user_link' => [
             'name' => 'assigned_user_link',
@@ -530,7 +550,6 @@ $dictionary["OutboundEmailAccounts"] = [
             'type' => 'function',
             'source' => 'non-db',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'duplicate_merge' => 'disabled',
             'duplicate_merge_dom_value' => '0',
@@ -549,6 +568,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Displays the control used to change the SMTP account password',
         ],
         'sent_test_email_btn' => [
             'required' => false,
@@ -557,7 +577,6 @@ $dictionary["OutboundEmailAccounts"] = [
             'type' => 'function',
             'source' => 'non-db',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'duplicate_merge' => 'disabled',
             'duplicate_merge_dom_value' => '0',
@@ -576,6 +595,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Displays the button used to send a test email with this account',
         ],
         // MintHCM Start
         'mail_authtype' => [
@@ -583,18 +603,21 @@ $dictionary["OutboundEmailAccounts"] = [
             'type' => 'varchar',
             'len' => 20,
             'reportable' => false,
+            'comment' => 'The authentication type used to connect to the mail server',
         ],
         'eapm_id' => [
             'name' => 'eapm_id',
             'type' => 'char',
             'len' => 36,
             'reportable' => false,
+            'comment' => 'The unique identifier of the related external account (EAPM) connection',
         ],
         'authorized_account' => [
             'name' => 'authorized_account',
             'type' => 'varchar',
             'len' => 100,
             'reportable' => false,
+            'comment' => 'The email address of the externally authorized account used for sending mail',
         ],
         // MintHCM End
         'auth_type' => [
@@ -609,6 +632,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The authentication method used for the outbound email account, such as OAuth2 or password',
         ],
         'external_oauth_connection' => [
             'name' => 'external_oauth_connection',
@@ -643,6 +667,7 @@ $dictionary["OutboundEmailAccounts"] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The unique identifier of the external OAuth connection used to authenticate this account',
         ],
         'external_oauth_connection_name' => [
             'name' => 'external_oauth_connection_name',
@@ -728,3 +753,4 @@ $dictionary["OutboundEmailAccounts"] = [
 ];
 
 VardefManager::createVardef('OutboundEmailAccounts', 'OutboundEmailAccounts', ['security_groups']);
+

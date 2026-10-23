@@ -84,8 +84,4 @@ $mod_strings = array(
    'LBL_ONBOARDINGTEMPLATE_ID' => 'Onboarding Template (ID)',
    'LBL_RELATIONSHIP_TRAININGS_NAME' => 'Trainings',
    'LBL_RELATIONSHIP_TASKS_NAME' => 'Tasks',
-   'LBL_STATUS_COMMENT' => 'Current onboarding status.',
-   'LBL_DATE_START_COMMENT' => 'Date and time when the onboarding process starts.',
-   'LBL_ONBOARDINGTEMPLATE_NAME_COMMENT' => 'Name of the onboarding template used for this process.',
-   'LBL_ONBOARDINGTEMPLATE_ID_COMMENT' => 'Technical identifier of the onboarding template.',
 );

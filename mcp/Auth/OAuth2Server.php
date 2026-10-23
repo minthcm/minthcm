@@ -83,15 +83,14 @@ class OAuth2Server
             'token_endpoint' => $oauthBase . '/token',
             // RECOMMENDED
             'jwks_uri' => $oauthBase . '/jwks',
-            'registration_endpoint' => $oauthBase . '/register',
             'scopes_supported' => ['openid', 'profile', 'email', 'mcp:read', 'mcp:write'],
             'response_types_supported' => ['code'],
-            'code_challenge_methods_supported' => ['S256'],
+            'code_challenge_methods_supported' => [self::PKCE_METHOD],
             'grant_types_supported' => ['authorization_code', 'refresh_token'],
             // Required by OIDC Discovery 1.0 §3 — Bun/Claude Code SDK validates these as arrays.
             'subject_types_supported' => ['public'],
             'id_token_signing_alg_values_supported' => ['RS256'],
-        ];
+        ] + ($this->isDynamicRegistrationEnabled() ? ['registration_endpoint' => $oauthBase . '/register'] : []);
     }
 
     /**
@@ -141,7 +140,7 @@ class OAuth2Server
         ];
 
         if (!$this->validateAuthorizationParams($normalized)) {
-            return $this->createError(400, 'invalid_request', 'Missing required parameters');
+            return $this->createError(400, 'invalid_request', 'Missing required parameters or unsupported code_challenge_method (only S256)');
         }
 
         chdir('../legacy');
@@ -238,10 +237,23 @@ class OAuth2Server
     {
         return !empty($params['clientId']) &&
             !empty($params['redirectUri']) &&
-            !empty($params['codeChallenge']);
+            !empty($params['codeChallenge']) &&
+            $params['codeChallengeMethod'] === self::PKCE_METHOD;
+    }
+
+    /**
+     * Dynamic client registration (RFC 7591) is open to anyone. Administrators may switch it
+     * off with $sugar_config['mcp_oauth_dynamic_registration_enabled'] = false (default: on).
+     */
+    private function isDynamicRegistrationEnabled(): bool
+    {
+        return ($GLOBALS['sugar_config']['mcp_oauth_dynamic_registration_enabled'] ?? true) !== false;
     }
 
     public const FLOW_TTL_SECONDS = 900;
+
+    /** The only PKCE method accepted (OAuth 2.1); 'plain' gives no protection against code interception. */
+    public const PKCE_METHOD = 'S256';
 
     private function redirectToLogin(
         string $clientId,
@@ -338,6 +350,11 @@ class OAuth2Server
             return $this->createError(400, 'invalid_grant', 'Invalid authorization code');
         }
 
+        // RFC 6749 §4.1.3: the code may only be redeemed by the client it was issued to.
+        if (!hash_equals((string) $authCodeData['client_id'], (string) $params['clientId'])) {
+            return $this->createError(400, 'invalid_grant', 'Authorization code was issued to another client');
+        }
+
         // Validate PKCE
         if (!$this->authCodeService->validatePKCE(
             $authCodeData['code_challenge'],
@@ -388,10 +405,35 @@ class OAuth2Server
     {
         return [
             'code' => $_POST['code'] ?? '',
-            'clientId' => $_POST['client_id'] ?? '',
+            'clientId' => $this->getTokenRequestClientId(),
             'redirectUri' => $_POST['redirect_uri'] ?? '',
             'codeVerifier' => $_POST['code_verifier'] ?? '',
         ];
+    }
+
+    /**
+     * Client ID of a token request: from the body, or — for client_secret_basic clients, which
+     * may send it only in the header — from HTTP Basic credentials (RFC 6749 §2.3.1).
+     */
+    private function getTokenRequestClientId(): string
+    {
+        $clientId = (string) ($_POST['client_id'] ?? '');
+        if ($clientId !== '') {
+            return $clientId;
+        }
+        if (!empty($_SERVER['PHP_AUTH_USER'])) {
+            return urldecode((string) $_SERVER['PHP_AUTH_USER']);
+        }
+
+        $authorization = (string) ($_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '');
+        if (stripos($authorization, 'Basic ') !== 0) {
+            return '';
+        }
+        $credentials = base64_decode(substr($authorization, 6), true);
+        if ($credentials === false || strpos($credentials, ':') === false) {
+            return '';
+        }
+        return urldecode(strstr($credentials, ':', true));
     }
 
     /**
@@ -477,6 +519,10 @@ class OAuth2Server
      */
     public function handleClientRegistration(array $input): array
     {
+        if (!$this->isDynamicRegistrationEnabled()) {
+            return $this->createError(403, 'access_denied', 'Dynamic client registration is disabled');
+        }
+
         $result = $this->clientService->registerClient($input);
 
         if (isset($result['error'])) {

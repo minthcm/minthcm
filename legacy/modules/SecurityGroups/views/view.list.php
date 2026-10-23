@@ -11,7 +11,7 @@ class SecurityGroupsViewList extends ViewList
     public function preDisplay()
     {
         $squery = new StoreQuery();
-        $squery->query = array('group_type' => array('standard', 'business_unit', 'department', 'team', 'other'), 'module' => 'SecurityGroups', 'searchFormTab' => 'advanced_search', 'query' => 'true', 'action' => 'index');
+        $squery->query = array('group_type' => array('business_unit', 'department', 'team', 'other'), 'module' => 'SecurityGroups', 'searchFormTab' => 'advanced_search', 'query' => 'true', 'action' => 'index');
         $squery->SaveQuery('SecurityGroups');
         parent::preDisplay();
     }

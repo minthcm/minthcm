@@ -58,6 +58,7 @@ $dictionary['Kudos'] = array(
             'bean_name' => 'announced',
             'vname' => 'LBL_ANNOUNCED',
             'audited' => true,
+            'comment' => 'Flag indicating whether the kudos has been announced',
         ),
         'announcement_date' => array(
             'required' => false,
@@ -68,6 +69,7 @@ $dictionary['Kudos'] = array(
             'options' => 'date_range_search_dom',
             'audited' => true,
             'inline_edit' => false,
+            'comment' => 'The date and time when the kudos was announced',
         ),
         "private" => array(
             'name' => 'private',
@@ -75,6 +77,7 @@ $dictionary['Kudos'] = array(
             'bean_name' => 'private',
             'vname' => 'LBL_PRIVATE',
             'audited' => true,
+            'comment' => 'Flag indicating whether the kudos is private and not publicly visible',
         ),
         'alerts' => array(
             'name' => 'alerts',

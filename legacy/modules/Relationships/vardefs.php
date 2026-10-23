@@ -55,6 +55,7 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_ID',
                 'type' => 'id',
                 'required'=>true,
+                'comment' => 'Record unique identifier',
             ),
 
             'relationship_name' =>
@@ -65,6 +66,7 @@ $dictionary['Relationship'] =
                 'required'=>true,
                 'len' => 150,
                 'importable' => 'required',
+                'comment' => 'Relationship Name',
             ),
             'lhs_module' =>
             array(
@@ -72,7 +74,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_LHS_MODULE',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 100
+                'len' => 100,
+                'comment' => 'Left Hand Side Module',
             ),
             'lhs_table' =>
             array(
@@ -80,7 +83,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_LHS_TABLE',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Left Hand Side Table',
             ),
             'lhs_key' =>
             array(
@@ -88,7 +92,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_LHS_KEY',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Left Hand Side Key',
             ),
             'rhs_module' =>
             array(
@@ -96,7 +101,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_RHS_MODULE',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 100
+                'len' => 100,
+                'comment' => 'Right Hand Side Module',
             ),
             'rhs_table' =>
             array(
@@ -104,7 +110,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_RHS_TABLE',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Right Hand Side Table',
             ),
             'rhs_key' =>
             array(
@@ -112,56 +119,64 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_RHS_KEY',
                 'type' => 'varchar',
                 'required'=>true,
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Right Hand Side Key',
             ),
             'join_table' =>
             array(
                 'name' => 'join_table',
                 'vname' => 'LBL_JOIN_TABLE',
                 'type' => 'varchar',
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Join Table',
             ),
             'join_key_lhs' =>
             array(
                 'name' => 'join_key_lhs',
                 'vname' => 'LBL_JOIN_KEY_LHS',
                 'type' => 'varchar',
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Join Key Left Hand Side',
             ),
             'join_key_rhs' =>
             array(
                 'name' => 'join_key_rhs',
                 'vname' => 'LBL_JOIN_KEY_RHS',
                 'type' => 'varchar',
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Join Key Right Hand Side',
             ),
             'relationship_type' =>
             array(
                 'name' => 'relationship_type',
                 'vname' => 'LBL_RELATIONSHIP_TYPE',
                 'type' => 'varchar',
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Relationship Type',
             ),
             'relationship_role_column' =>
             array(
                 'name' => 'relationship_role_column',
                 'vname' => 'LBL_RELATIONSHIP_ROLE_COLUMN',
                 'type' => 'varchar',
-                'len' => 64
+                'len' => 64,
+                'comment' => 'Relationship Role Column',
             ),
             'relationship_role_column_value' =>
             array(
                 'name' => 'relationship_role_column_value',
                 'vname' => 'LBL_RELATIONSHIP_ROLE_COLUMN_VALUE',
                 'type' => 'varchar',
-                'len' => 50
+                'len' => 50,
+                'comment' => 'Relationship Role Column Value',
             ),
             'reverse' =>
             array(
                 'name' => 'reverse',
                 'vname' => 'LBL_REVERSE',
                 'type' => 'bool',
-                'default' => '0'
+                'default' => '0',
+                'comment' => 'Flag indicating whether the relationship is reversed',
             ),
             'deleted' =>
             array(
@@ -169,7 +184,8 @@ $dictionary['Relationship'] =
                 'vname' => 'LBL_DELETED',
                 'type' => 'bool',
                 'reportable'=>false,
-                'default' => '0'
+                'default' => '0',
+                'comment' => 'A flag indicating whether the record has been deleted',
             ),
 
     )
@@ -178,3 +194,4 @@ $dictionary['Relationship'] =
        array('name' =>'idx_rel_name', 'type' =>'index', 'fields'=>array('relationship_name')),
     )
 );
+

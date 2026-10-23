@@ -56,7 +56,7 @@ $dictionary['SurveyQuestionOptions'] = array(
             'type'                      => 'int',
             'massupdate'                => 0,
             'no_default'                => false,
-            'comments'                  => '',
+            'comment'                   => 'The display order of this option among the other options for the survey question',
             'help'                      => '',
             'importable'                => 'true',
             'duplicate_merge'           => 'disabled',
@@ -105,12 +105,14 @@ $dictionary['SurveyQuestionOptions'] = array(
             'table'   => 'surveyquestions',
             'module'  => 'SurveyQuestions',
             'rname'   => 'name',
+            'comment' => 'Name of the survey question associated with this question option',
         ),
         "survey_question_id"                            => array(
             'name'       => 'survey_question_id',
             'type'       => 'id',
             'reportable' => false,
             'vname'      => 'LBL_SURVEYQUESTIONS_SURVEYQUESTIONOPTIONS_FROM_SURVEYQUESTIONOPTIONS_TITLE',
+            'comment'    => 'Id of the survey question associated with this option',
         ),
     ),
     'relationships'      => array(),
@@ -125,3 +127,4 @@ VardefManager::createVardef(
     'SurveyQuestionOptions',
     array('basic', 'assignable', 'security_groups')
 );
+

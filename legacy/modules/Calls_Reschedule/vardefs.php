@@ -55,7 +55,7 @@ $dictionary['Calls_Reschedule'] = array(
     'type' => 'enum',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'The reason why the call was rescheduled',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -78,7 +78,7 @@ $dictionary['Calls_Reschedule'] = array(
     'type' => 'id',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'The unique identifier of the call assigned to the record',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -99,7 +99,7 @@ $dictionary['Calls_Reschedule'] = array(
     'type' => 'relate',
     'massupdate' => 0,
     'no_default' => false,
-    'comments' => '',
+    'comment' => 'The name of the call assigned to the record',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -127,3 +127,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('Calls_Reschedule', 'Calls_Reschedule', array('basic','assignable'));
+

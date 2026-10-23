@@ -1,0 +1,1 @@
+import t from"./MintComments-BuwYAfn4.js";import{d as o,b as e,e as r}from"./index-D-IdadTJ.js";import"./MintCommentsMessage-BDThFgGE.js";import"./MintCommentsUsersHint-CDxP0dzC.js";import"./MintCommentsEditor-D2cmMh5G.js";const f=o({__name:"MintPanelComments",props:{data:{}},setup(m){return(n,p)=>(e(),r(t))}});export{f as default};

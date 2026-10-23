@@ -78,6 +78,7 @@ $dictionary['Applications'] = array(
             'rejected' => 'red',
          ],
          'studio' => 'visible',
+         'comment' => 'The current status of the record',
       ),
       'type' => array(
          'required' => true,
@@ -100,6 +101,7 @@ $dictionary['Applications'] = array(
          'size' => '20',
          'options' => 'applications_type_list',
          'studio' => 'visible',
+         'comment' => 'The type of application',
       ),
    ),
    'relationships' => array(
@@ -112,3 +114,4 @@ if ( !class_exists('VardefManager') ) {
    require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Applications', 'Applications', array( 'basic', 'assignable', 'security_groups', 'employee_related' ));
+

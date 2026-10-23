@@ -66,6 +66,6 @@
     "vue-cli-plugin-vuetify": "~2.5.8"
   },
   "engines": {
-    "node": "~21"
+    "node": "^26.12.1 || ^24.22.1"
   }
 }

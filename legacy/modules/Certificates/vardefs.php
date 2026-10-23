@@ -78,6 +78,7 @@ $dictionary['Certificates'] = array(
             'name' => 'attempts_number',
             'vname' => 'LBL_ATTEMPTS_NUMBER',
             'label' => 'LBL_ATTEMPTS_NUMBER',
+            'comment' => 'The number of attempts allowed for the certification process or exam',
             'type' => 'int',
             'importable' => 'true',
             'reportable' => true,
@@ -99,6 +100,7 @@ $dictionary['Certificates'] = array(
             'name' => 'duration',
             'vname' => 'LBL_DURATION',
             'label' => 'LBL_DURATION',
+            'comment' => 'The duration of the certification process or exam',
             'type' => 'int',
             'importable' => 'true',
             'reportable' => true,
@@ -120,6 +122,7 @@ $dictionary['Certificates'] = array(
             'name' => 'pass_rate',
             'vname' => 'LBL_PASS_RATE',
             'label' => 'LBL_PASS_RATE',
+            'comment' => 'The required pass rate or score to successfully obtain the certificate',
             'type' => 'int',
             'importable' => 'true',
             'reportable' => true,
@@ -150,3 +153,5 @@ if (!class_exists('VardefManager')) {
 }
 VardefManager::createVardef('Certificates', 'Certificates',
     array('basic', 'assignable', 'security_groups'));
+
+

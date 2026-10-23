@@ -910,15 +910,15 @@ class Scheduler extends SugarBean
         $sched7->save();
 
         $sched8 = BeanFactory::newBean('Schedulers');
-        $sched8->name               = $mod_strings['LBL_OOTB_LUCENE_INDEX'];
-        $sched8->job                = 'function::aodIndexUnindexed';
+        $sched8->name               = $mod_strings['LBL_OOTB_ELASTIC_INDEX_MISSING'];
+        $sched8->job                = 'function::indexMissingElasticsearchRecords';
         $sched8->date_time_start    = create_date(2015, 1, 1) . ' ' . create_time(0, 0, 1);
         $sched8->date_time_end      = null;
-        $sched8->job_interval       = "0::0::*::*::*";
+        $sched8->job_interval       = '*/5::*::*::*::*';
         $sched8->status             = 'Active';
         $sched8->created_by         = '1';
         $sched8->modified_user_id   = '1';
-        $sched8->catch_up           = '0';
+        $sched8->catch_up           = '1';
         $sched8->save();
 
         $sched9 = BeanFactory::newBean('Schedulers');
@@ -1030,7 +1030,7 @@ class Scheduler extends SugarBean
         $sched19->save();
 
         $sched20 = new Scheduler();
-        $sched20->name = $mod_strings['LBL_SEND_KUDOS'];
+        $sched20->name = $mod_strings['LBL_SENDKUDOS'];
         $sched20->job = 'function::sendKudos';
         $sched20->date_time_start = create_date(2015, 1, 1) . ' ' . create_time(0, 0, 1);
         $sched20->date_time_end = null;
@@ -1127,6 +1127,13 @@ class Scheduler extends SugarBean
             self::$job_strings = array('url::' => 'URL');
             foreach ($job_strings as $k => $v) {
                 self::$job_strings['function::' . $v] = $mod_strings['LBL_' . strtoupper($v)];
+            }
+
+            // job classes
+            if (!empty($job_classes)) {
+                foreach ($job_classes as $className) {
+                    self::$job_strings['class::' . $className] = $mod_strings['LBL_' . strtoupper($className)] ?? $className;
+                }
             }
         }
         return self::$job_strings;

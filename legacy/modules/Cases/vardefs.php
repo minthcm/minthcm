@@ -264,7 +264,6 @@ $dictionary['Case'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',

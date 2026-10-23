@@ -251,15 +251,30 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
                 }
             }
         }
+        $is_profile_photo = isset($image_field, $module)
+            && in_array($module, ['Employees', 'Users'], true)
+            && ($focus->field_defs[$image_field]['type'] ?? '') === 'image';
 
+        if ($is_profile_photo) {
+            $last_modified = filemtime($download_location);
+            $etag = '"' . md5($download_location . $last_modified) . '"';
+
+            if (
+                ($_SERVER['HTTP_IF_NONE_MATCH'] ?? null) === $etag
+                || (
+                    isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+                    && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $last_modified
+                )
+            ) {
+                header('HTTP/1.1 304 Not Modified');
+                exit;
+            }
+        }
         if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/MSIE/", (string) $_SERVER['HTTP_USER_AGENT'])) {
             $name = urlencode($name);
             $name = str_replace("+", "_", $name);
         }
 
-        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-        header('Cache-Control: post-check=0, pre-check=0', false);
-        header('Pragma: no-cache');
         if (isset($_REQUEST['isTempFile']) && ($_REQUEST['type'] == "SugarFieldImage")) {
             $mime = getimagesize($download_location);
             if (!empty($mime)) {
@@ -294,6 +309,15 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         // disable content type sniffing in MSIE
         header("X-Content-Type-Options: nosniff");
         header("Content-Length: " . filesize($local_location));
+        if ($is_profile_photo) {
+            header("ETag: $etag");
+            header("Last-Modified: " . gmdate('D, d M Y H:i:s', $last_modified) . " GMT");
+            header('Cache-Control: private, max-age=86400');
+        } else {
+            header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+            header('Cache-Control: post-check=0, pre-check=0', false);
+            header('Pragma: no-cache');
+        }
         header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 2592000));
         set_time_limit(0);
 

@@ -575,6 +575,10 @@
                                                             <td align="left" valign="middle"><input name="OIDC_tokenEndpoint" size="80" type="text" value="{$config.OIDC_tokenEndpoint}"></td>
                                                         </tr>
                                                         <tr>
+                                                            <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_ISSUER} {sugar_help text=$MOD.LBL_OIDC_ISSUER_DESC}</td>
+                                                            <td align="left" valign="middle"><input name="OIDC_issuer" size="80" type="text" value="{$config.OIDC_issuer|escape:'html':'UTF-8'}"></td>
+                                                        </tr>
+                                                        <tr>
                                                             <td scope="row" valign="middle" nowrap>{$MOD.LBL_OIDC_LOGOUT_ENDPOINT} {sugar_help text=$MOD.LBL_OIDC_LOGOUT_ENDPOINT_DESC}</td>
                                                             <td align="left" valign="middle"><input name="OIDC_logoutEndpoint" size="80" type="text" value="{$config.OIDC_logoutEndpoint}"></td>
                                                         </tr>

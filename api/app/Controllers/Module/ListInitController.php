@@ -199,6 +199,7 @@ class ListInitController
             'search' => $this->prepareSearchDefs(),
             'massupdate' => $this->prepareMassUpdateDefs(),
             'defaultSort' => $this->prepareDefaultSort(),
+            'panels' => $this->preparePanels(),
         ];
     }
 
@@ -232,6 +233,11 @@ class ListInitController
     protected function prepareDefaultSort()
     {
         return $this->metadata["defaultSort"] ?? [];
+    }
+
+    protected function preparePanels()
+    {
+        return $this->metadata["panels"] ?? [];
     }
 
     protected function prepareSearchDefs()

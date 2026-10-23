@@ -56,7 +56,7 @@ $dictionary['Allocations'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The mode or method of allocation, which could indicate how resources are allocated',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -81,7 +81,7 @@ $dictionary['Allocations'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The date from which the allocation is effective or valid',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -97,7 +97,7 @@ $dictionary['Allocations'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The date to which the allocation is effective or valid',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -113,7 +113,7 @@ $dictionary['Allocations'] = array(
             'vname' => 'LBL_RELATIONSHIP_WORKPLACES',
             'id_name' => 'workplace_id',
          ),
-         "workplace_name" => array(                       
+         "workplace_name" => array(
             'required' => true,
             'name' => 'workplace_name',
             'type' => 'relate',
@@ -124,6 +124,7 @@ $dictionary['Allocations'] = array(
             'module' => 'Workplaces',
             'table' => 'workplaces',
             'rname' => 'name',
+            'comment' => 'Name of the workplace associated with this allocation',
             'vt_validation' => array(
                 "AEM(callCustomApi('Allocations','checkWorkplaceStatus', {workplace_id: \$workplace_id, mode: \$mode}),'LBL_ERR_WORKPLACE_STATUS')",
                 "AEM(callCustomApi('Allocations','checkWorkplacePeriods',{id: \$id, workplace_id: \$workplace_id, mode: \$mode, date_from: \$date_from, date_to: \$date_to}),'LBL_ERR_WORKPLACE_PERIODS')",
@@ -134,6 +135,7 @@ $dictionary['Allocations'] = array(
             'relationship' => 'workplaces_allocations',
             'type' => 'id',
             'vname' => 'LBL_RELATIONSHIP_WORKPLACES_ID',
+            'comment' => 'Id of the workplace associated with this allocation',
          ),
          "allocations_employees" => array(
             'name' => 'allocations_employees',                          
@@ -172,6 +174,9 @@ VardefManager::createVardef('Allocations', 'Allocations',
 
 $dictionary['Allocations']['fields']['assigned_user_name']['required'] = true;
 $dictionary['Allocations']['fields']['assigned_user_name']['audited'] = true;
+$dictionary['Allocations']['fields']['assigned_user_name']['comment'] = 'The name of the user assigned to the record';
 $dictionary['Allocations']['fields']['assigned_user_id']['audited'] = false;
+$dictionary['Allocations']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
 $dictionary['Allocations']['fields']['name']['audited'] = true;
+$dictionary['Allocations']['fields']['name']['comment'] = 'The name or title of the record';
 

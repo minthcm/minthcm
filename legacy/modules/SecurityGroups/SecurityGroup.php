@@ -313,7 +313,7 @@ LIMIT 1";
                     . 'inner join securitygroups g on u.securitygroup_id = g.id and g.deleted = 0 and (g.noninheritable is null or g.noninheritable <> 1) '
                     . "left join securitygroups_records d on d.securitygroup_id = u.securitygroup_id and d.record_id = '$recordId' and d.module = '$focus->module_dir' and d.deleted = 0 "
                     . "where d.id is null and u.user_id = '$currentUserId' and u.deleted = 0 and (u.noninheritable is null or u.noninheritable <> 1)"
-                    . "and (g.group_type = 'standard' or (g.group_type = 'private' and g.assigned_user_id = '$focus->assigned_user_id'))";
+                    . "and ((g.group_type = 'private' and g.assigned_user_id = '$focus->assigned_user_id'))";
             $GLOBALS['log']->debug("SecuritySuite: Inherit from Creator: $query");
             $focus->db->query($query, true);
          }
@@ -346,7 +346,7 @@ LIMIT 1";
                        . 'inner join securitygroups g on u.securitygroup_id = g.id and g.deleted = 0 and (g.noninheritable is null or g.noninheritable <> 1) '
                        . "left join securitygroups_records d on d.securitygroup_id = u.securitygroup_id and d.record_id = '$focus->id' and d.module = '$focus->module_dir' and d.deleted = 0 "
                        . "where d.id is null and u.user_id = '$assigned_user_id' and u.deleted = 0  and (u.noninheritable is null or u.noninheritable <> 1)"
-                       . "and (g.group_type = 'standard' or (g.group_type = 'private' and g.assigned_user_id = '$focus->assigned_user_id'))";
+                       . "and ((g.group_type = 'private' and g.assigned_user_id = '$focus->assigned_user_id'))";
                $GLOBALS['log']->debug("SecuritySuite: Inherit from Assigned: $query");
                $focus->db->query($query, true);
             }

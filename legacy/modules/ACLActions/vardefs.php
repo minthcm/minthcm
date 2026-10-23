@@ -57,7 +57,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'required'=>true,
     'type' => 'id',
     'reportable'=>false,
-    'comment' => 'Unique identifier'
+    'comment' => 'Record unique identifier'
   ),
    'date_entered' =>
   array(
@@ -65,7 +65,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'vname' => 'LBL_DATE_ENTERED',
     'type' => 'datetime',
     'required'=>true,
-    'comment' => 'Date record created'
+    'comment' => 'The date when the record was created'
   ),
   'date_modified' =>
   array(
@@ -73,7 +73,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'vname' => 'LBL_DATE_MODIFIED',
     'type' => 'datetime',
     'required'=>true,
-    'comment' => 'Date record last modified'
+    'comment' => 'The date when the record was last modified'
   ),
     'modified_user_id' =>
   array(
@@ -88,7 +88,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'required'=> false,
     'len' => 36,
     'reportable'=>true,
-    'comment' => 'User who last modified record'
+    'comment' => 'The unique identifier of the user who last modified the record'
   ),
     'created_by' =>
   array(
@@ -101,7 +101,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'isnull' => 'false',
     'dbType' => 'id',
     'len' => 36,
-    'comment' => 'User ID who created record'
+    'comment' => 'The unique identifier of the user who created the record'
   ),
    'name' =>
   array(
@@ -109,7 +109,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'type' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 150,
-    'comment' => 'Name of the allowable action (view, list, delete, edit)'
+    'comment' => 'The name or title of the record'
   ),
    'category' =>
   array(
@@ -118,7 +118,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'type' => 'varchar',
     'len' =>100,
     'reportable'=>true,
-    'comment' => 'Category of the allowable action (usually the name of a module)'
+    'comment' => 'The module or category name for which this ACL action defines permissions (e.g., Accounts, Contacts, or a custom module)'
   ),
     'acltype' =>
   array(
@@ -127,7 +127,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'type' => 'varchar',
     'len' =>100,
     'reportable'=>true,
-    'comment' => 'Specifier for Category, usually "module"'
+    'comment' => 'The type of ACL action, such as module-level access, record-level permissions, or field-specific controls'
   ),
   'aclaccess' =>
   array(
@@ -136,7 +136,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'type' => 'int',
     'len'=>3,
     'reportable'=>true,
-    'comment' => 'Number specifying access priority; highest access "wins"'
+    'comment' => 'The access level granted by this ACL action, typically a numeric value or descriptive equivalent'
   ),
   'deleted' =>
   array(
@@ -144,7 +144,7 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
     'vname' => 'LBL_DELETED',
     'type' => 'bool',
     'reportable'=>false,
-    'comment' => 'Record deletion indicator'
+    'comment' => 'A flag indicating whether the record has been deleted'
   ),
   'roles' =>
   array(
@@ -162,3 +162,4 @@ $dictionary['ACLAction'] = array('table' => 'acl_actions', 'comment' => 'Determi
        array('name' =>'idx_category_name', 'type' =>'index', 'fields'=>array('category', 'name')),                                                   )
 
                             );
+

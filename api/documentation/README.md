@@ -23,6 +23,8 @@ Welcome to the MintHCM API documentation. This guide will help you understand th
 17. [User Theme Preference](./17-user-theme.md) - Storing and serving the user's color-scheme preference
 18. [RecordView Extensions](./18-recordview-extensions.md) - Additive recordviewdefs extensions, per-module cache, and lazy-build
 19. [Error Handling](./19-error-handling.md) - Exception handler, dev/prod response modes, logging
+20. [Admin Views](./20-admin-views.md) - Metadata-driven Administration pages
+21. [List View Panels and Meta](./21-list-view-panels-and-meta.md) - Extra list view panels, function-based record view options, Schedulers on Vue views
 
 ## Overview
 
@@ -47,6 +49,7 @@ The API provides a clean, modern interface for client applications while maintai
 - **Authentication methods (core / LDAP / SAML / OIDC)**: See [Middlewares — Authentication Methods](./11-middlewares.md#authentication-methods)
 - **Store/read the user's theme preference**: See [User Theme Preference](./17-user-theme.md)
 - **Add a panel/button/sidepanel to a module without editing its recordviewdefs.php**: See [RecordView Extensions](./18-recordview-extensions.md)
+- **Add an Administration page**: See [Admin Views](./20-admin-views.md)
 
 ## Project Philosophy
 

@@ -54,13 +54,15 @@ $dictionary['Role'] = array('table' => 'roles'
     'required'=>true,
     'type' => 'id',
     'reportable'=>false,
+    'comment' => 'Record unique identifier',
   ),
    'date_entered' =>
   array(
     'name' => 'date_entered',
     'vname' => 'LBL_DATE_ENTERED',
     'type' => 'datetime',
-    'required'=>true
+    'required'=>true,
+    'comment' => 'The date when the record was created',
   ),
   'date_modified' =>
   array(
@@ -68,6 +70,7 @@ $dictionary['Role'] = array('table' => 'roles'
     'vname' => 'LBL_DATE_MODIFIED',
     'type' => 'datetime',
     'required'=>true,
+    'comment' => 'The date when the record was last modified',
   ),
     'modified_user_id' =>
   array(
@@ -82,6 +85,7 @@ $dictionary['Role'] = array('table' => 'roles'
     'required'=> false,
     'len' => 36,
     'reportable'=>true,
+    'comment' => 'The unique identifier of the user who last modified the record',
   ),
     'created_by' =>
   array(
@@ -94,6 +98,7 @@ $dictionary['Role'] = array('table' => 'roles'
     'isnull' => 'false',
     'dbType' => 'id',
     'len' => 36,
+    'comment' => 'The unique identifier of the user who created the record',
   ),
    'name' =>
   array(
@@ -102,18 +107,21 @@ $dictionary['Role'] = array('table' => 'roles'
     'vname' => 'LBL_NAME',
     'len' => 150,
     'importable' => 'required',
+    'comment' => 'The name or title of the record',
   ),
    'description' =>
   array(
     'name' => 'description',
     'vname' => 'LBL_DESCRIPTION',
     'type' => 'text',
+    'comment' => 'A detailed description of the record',
   ),
   'modules' =>
   array(
     'name' => 'modules',
     'vname' => 'LBL_MODULES',
     'type' => 'text',
+    'comment' => 'The list of modules this role grants access permissions for',
   ),
   'deleted' =>
   array(
@@ -121,6 +129,7 @@ $dictionary['Role'] = array('table' => 'roles'
     'vname' => 'LBL_DELETED',
     'type' => 'bool',
     'reportable'=>false,
+    'comment' => 'A flag indicating whether the record has been deleted',
   ),
   'users' =>
   array(
@@ -138,3 +147,4 @@ $dictionary['Role'] = array('table' => 'roles'
                                                    )
 
                             );
+

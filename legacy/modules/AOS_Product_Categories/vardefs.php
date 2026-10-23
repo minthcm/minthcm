@@ -56,7 +56,6 @@ $dictionary['AOS_Product_Categories'] = array(
                 'massupdate' => '0',
                 'default' => '0',
                 'no_default' => false,
-                'comments' => '',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',

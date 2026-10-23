@@ -53,7 +53,6 @@ $dictionary['EAPM'] = array(
     'vname' => 'LBL_PASSWORD',
     'type' => 'encrypt',
     'massupdate' => 0,
-    'comments' => '',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -63,6 +62,7 @@ $dictionary['EAPM'] = array(
     'len' => '255',
     'size' => '20',
     'write_only' => true,
+    'comment' => 'The password used to authenticate with the external application',
   ),
   'url' =>
   array (
@@ -71,7 +71,6 @@ $dictionary['EAPM'] = array(
     'vname' => 'LBL_URL',
     'type' => 'varchar',
     'massupdate' => 0,
-    'comments' => '',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -80,6 +79,7 @@ $dictionary['EAPM'] = array(
     'reportable' => true,
     'len' => '255',
     'size' => '20',
+    'comment' => 'The URL endpoint of the external application',
   ),
   'application' =>
   array (
@@ -88,7 +88,6 @@ $dictionary['EAPM'] = array(
     'vname' => 'LBL_APPLICATION',
     'type' => 'enum',
     'massupdate' => 0,
-    'comments' => '',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -100,6 +99,7 @@ $dictionary['EAPM'] = array(
     'function' => 'getEAPMExternalApiDropDown',
     'studio' => 'visible',
     'default' => 'webex',
+    'comment' => 'The external application this account is connected to',
   ),
   'name' =>
   array (
@@ -112,20 +112,20 @@ $dictionary['EAPM'] = array(
     'full_text_search' => array('boost' => 3),
     'importable' => 'required',
     'massupdate' => 0,
-    'comments' => '',
     'help' => '',
     'duplicate_merge' => 'disabled',
     'duplicate_merge_dom_value' => '0',
     'audited' => false,
     'reportable' => true,
     'size' => '20',
+    'comment' => 'The name or title of the record',
   ),
 	  'api_data' =>
 	  array (
 	    'name' => 'api_data',
 	    'vname' => 'LBL_API_DATA',
 	    'type' => 'text',
-	    'comment' => 'Any API data that the external API may wish to store on a per-user basis',
+	    'comment' => 'Additional data returned by the external application API',
 	    'rows' => 6,
 	    'cols' => 80,
 	  ),
@@ -139,6 +139,7 @@ $dictionary['EAPM'] = array(
         'audited' => false,
         'reportable' => false,
         'studio' => 'hidden',
+        'comment' => 'The OAuth consumer key used to authenticate with the external application',
 	  ),
 	  'consumer_secret' => array(
 	  	'name' => 'consumer_secret',
@@ -150,6 +151,7 @@ $dictionary['EAPM'] = array(
         'audited' => false,
         'reportable' => false,
         'studio' => 'hidden',
+        'comment' => 'The OAuth consumer secret used to authenticate with the external application',
 	  ),
 	  'oauth_token' => array(
 	  	'name' => 'oauth_token',
@@ -161,6 +163,7 @@ $dictionary['EAPM'] = array(
         'reportable' => false,
     	'required' => false,
         'studio' => 'hidden',
+        'comment' => 'The OAuth access token used to authenticate with the external application',
 	  ),
 	  'oauth_secret' => array(
 	  	'name' => 'oauth_secret',
@@ -172,6 +175,7 @@ $dictionary['EAPM'] = array(
         'reportable' => false,
     	'required' => false,
         'studio' => 'hidden',
+        'comment' => 'The OAuth token secret used to authenticate with the external application',
 	  ),
 	  'validated' => array(
         'required' => false,
@@ -179,6 +183,7 @@ $dictionary['EAPM'] = array(
         'vname' => 'LBL_VALIDATED',
         'type' => 'bool',
 	    'default' => false,
+	    'comment' => 'Flag indicating whether the external account connection has been validated',
 	  ),
       'note' => array(
           'name' => 'note',
@@ -190,6 +195,7 @@ $dictionary['EAPM'] = array(
           'studio' => 'hidden',
           'type' => 'varchar',
           'source' => 'non-db',
+          'comment' => 'Additional notes about the external account connection',
       ),
 
 ),
@@ -208,3 +214,4 @@ if (!class_exists('VardefManager')){
         require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('EAPM','EAPM', array('basic','assignable'));
+

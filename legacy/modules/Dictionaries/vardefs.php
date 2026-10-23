@@ -56,6 +56,7 @@ $dictionary['Dictionaries'] = array(
             'audited' => true,
             'reportable' => true,
             'default' => true,
+            'comment' => 'Flag indicating whether the record is active',
         ),
         'list_type' => array(
             'required' => true,
@@ -70,6 +71,7 @@ $dictionary['Dictionaries'] = array(
             'displayParams' => array(
                 'readonly' => true,
             ),
+            'comment' => 'List Type',
         ),
         'list_module' => array(
             'name' => 'list_module',
@@ -79,6 +81,7 @@ $dictionary['Dictionaries'] = array(
             'audited' => true,
             'len' => '100',
             'reportable' => true,
+            'comment' => 'The module associated with this dictionary entry',
 
         ),
     ),
@@ -96,3 +99,4 @@ VardefManager::createVardef('Dictionaries', 'Dictionaries',
         'basic',
     )
 );
+

@@ -70,6 +70,7 @@ $dictionary['Positions'] = array(
             'dbType' => 'varchar',
             'required' => false,
             'massupdate' => true,
+            'comment' => 'The current status of the record',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
             'duplicate_merge_dom_value' => '1',
@@ -115,6 +116,7 @@ $dictionary['Positions'] = array(
             'type' => 'relate',
             'source' => 'non-db',
             'vname' => 'LBL_SECURITYGROUPS_LEADER_NAME',
+            'comment' => 'Name of the security group leader associated with this record',
             'save' => true,
             'id_name' => 'securitygroup_leader_id',
             'link' => 'securitygroups_leader',
@@ -150,6 +152,7 @@ $dictionary['Positions'] = array(
             'type' => 'relate',
             'source' => 'non-db',
             'vname' => 'LBL_POSITIONS_SUPERVISION_NAME',
+            'comment' => 'Name of the positions supervision associated with this record',
             'save' => true,
             'id_name' => 'positions_supervision_id',
             'link' => 'positions_supervision',
@@ -166,6 +169,7 @@ $dictionary['Positions'] = array(
             'rname' => 'id',
             'isnull' => 'true',
             'dbType' => 'id',
+            'comment' => 'If of the positions supervision associated with this record',
         ),
         'positions_supervision_left' => array(
             'name' => 'positions_supervision_left',
@@ -214,6 +218,7 @@ $dictionary['Positions'] = array(
             'type' => 'relate',
             'source' => 'non-db',
             'vname' => 'LBL_ONBOARDINGTEMPLATE_NAME',
+            'comment' => 'Name of the onboarding template associated with this record',
             'save' => true,
             'id_name' => 'onboardingtemplate_id',
             'link' => 'onboardingtemplates',
@@ -228,6 +233,7 @@ $dictionary['Positions'] = array(
             'vname' => 'LBL_ONBOARDINGTEMPLATE_ID',
             'rname' => 'id',
             'dbType' => 'id',
+            'comment' => 'If of the onboarding template associated with this record',
         ),
         'offboardingtemplates' => array(
             'name' => 'offboardingtemplates',
@@ -244,6 +250,7 @@ $dictionary['Positions'] = array(
             'type' => 'relate',
             'source' => 'non-db',
             'vname' => 'LBL_OFFBOARDINGTEMPLATE_NAME',
+            'comment' => 'Name of the offboarding template associated with this record',
             'save' => true,
             'id_name' => 'offboardingtemplate_id',
             'link' => 'offboardingtemplates',
@@ -258,6 +265,7 @@ $dictionary['Positions'] = array(
             'vname' => 'LBL_OFFBOARDINGTEMPLATE_ID',
             'rname' => 'id',
             'dbType' => 'id',
+            'comment' => 'If of the offboarding template associated with this record',
         ),
         'benefits' => array(
             'name' => 'benefits',
@@ -404,3 +412,5 @@ if (!class_exists('VardefManager')) {
 VardefManager::createVardef('Positions', 'Positions', array('basic', 'assignable', 'security_groups'));
 
 $dictionary['Positions']['fields']['name']['audited'] = true;
+$dictionary['Positions']['fields']['name']['comment'] = 'The name or title of the record';
+

@@ -54,6 +54,7 @@ $dictionary['Reminder'] = array(
             'required' => false,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'Flag indicating whether a popup notification should be shown for this reminder',
         ),
         'email' => array(
             'name' => 'email',
@@ -62,6 +63,7 @@ $dictionary['Reminder'] = array(
             'required' => false,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'Flag indicating whether an email notification should be sent for this reminder',
         ),
         'email_sent' => array(
             'name' => 'email_sent',
@@ -70,6 +72,7 @@ $dictionary['Reminder'] = array(
             'required' => false,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'Flag indicating whether the reminder email has already been sent',
         ),
         'timer_popup' => array(
             'name' => 'timer_popup',
@@ -79,6 +82,7 @@ $dictionary['Reminder'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The amount of time before the event at which the popup notification should be triggered',
         ),
         'timer_email' => array(
             'name' => 'timer_email',
@@ -88,6 +92,7 @@ $dictionary['Reminder'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The amount of time before the event at which the reminder email should be triggered',
         ),
         'related_event_module' => array(
             'name' => 'related_event_module',
@@ -97,6 +102,7 @@ $dictionary['Reminder'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The name of the module containing the event this reminder is related to',
         ),
         'related_event_module_id' => array(
             'name' => 'related_event_module_id',
@@ -105,6 +111,7 @@ $dictionary['Reminder'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The unique identifier of the related event record',
         ),
         'date_willexecute' => array(
             'name' => 'date_willexecute',
@@ -115,6 +122,7 @@ $dictionary['Reminder'] = array(
             'required' => false,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The scheduled time (in seconds before the event) at which the reminder will execute',
         ),
     ),
     'indices' => array(
@@ -137,3 +145,4 @@ if (!class_exists('VardefManager')){
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Reminders','Reminder', array('basic','assignable'));
+

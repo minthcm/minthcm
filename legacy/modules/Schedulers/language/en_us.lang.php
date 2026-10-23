@@ -56,7 +56,6 @@ $mod_strings = array(
    'LBL_OOTB_PRUNE' => 'Prune Database on 1st of Month',
    'LBL_OOTB_TRACKER' => 'Prune Tracker Tables',
    'LBL_OOTB_SUITEFEEDS' => 'Prune MintHCM Feed Tables',
-   'LBL_OOTB_LUCENE_INDEX' => 'Perform Lucene Index',
    'LBL_OOTB_OPTIMISE_INDEX' => 'Optimise AOD Index',
    'LBL_OOTB_SEND_EMAIL_REMINDERS' => 'Run Email Reminder Notifications',
    'LBL_OOTB_CLEANUP_QUEUE' => 'Clean Jobs Queue',
@@ -177,8 +176,17 @@ $mod_strings = array(
    'LBL_SEND_REPORTS' => "Send generated KReports PDFs",
 
    'LBL_SENDKUDOS' => 'Publish Kudos',
+   'LBL_INDEXMISSINGELASTICSEARCHRECORDS' => 'Index missing Elasticsearch records',
    'LBL_KUDOS_NOTIFICATION' => 'You received a kudos!',
    'LBL_UPDATENEWSBYPROSPECTLISTS' => 'Update news by Prospect Lists',
+
+   'LBL_GENERATEAPPRAISALAPPRAISALITEMSJOB' => 'Generate Appraisal Items',
+   'LBL_GENERATEONBOARDINGOFFBOARDINGJOB' => 'Generate Onboarding/Offboarding',
+   'LBL_MASSCONFIRMATIONJOB' => 'Mass Confirmation',
+   'LBL_REPAIRPRIVATEGROUPSJOB' => 'Repair Private Groups',
+   'LBL_LASTNEXTCONTACTSQUEUEJOB' => 'Last/Next Contacts Queue',
+   'LBL_AORSCHEDULEDREPORTJOB' => 'Run Scheduled Reports (class)',
+   'LBL_UPDATENEWSDISPLAYDATE' => 'Update News Display Date',
 
    'LBL_DATE_INDEXED' => 'Date Indexed',
 );

@@ -135,6 +135,9 @@ if (isset($_POST['user_name'])) {
     $focus->user_name = $_POST['user_name'];
 }
 
+// The OIDC subject binding is written only by OIDCSubjectBinder, never from the edit form
+unset($_POST['oidc_subject']);
+
 // if the user saved is a Regular User
 if (!$focus->is_group && !$focus->portal_only) {
     foreach ($focus->column_fields as $fieldName) {

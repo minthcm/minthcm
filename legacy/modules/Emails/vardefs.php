@@ -57,14 +57,14 @@ $dictionary['Email'] = array(
          'type' => 'bool',
          'required' => false,
          'reportable' => false,
-         'comment' => 'Emails which exists in the MintHCM but have been deleted from the email server',
+         'comment' => 'A flag indicating whether the email is orphaned (not properly linked to any related record)',
          'inline_edit' => false,
       ),
       'last_synced' => array(
          'name' => 'last_synced',
          'vname' => 'LBL_LAST_SYNCED',
          'type' => 'datetime',
-         'comment' => 'The last date and time the email was synced with the server',
+         'comment' => 'The date when the email was last synchronized with external email servers or systems',
          'inline_edit' => false,
          'required' => false,
          'reportable' => false,
@@ -75,6 +75,7 @@ $dictionary['Email'] = array(
          'source' => 'non-db',
          'inline_edit' => false,
          'vname' => 'LBL_FROM_ADDR_NAME',
+         'comment' => 'The display name associated with the sender\'s email address',
       ),
       'reply_to_addr' => array(
          'name' => 'reply_to_addr',
@@ -82,14 +83,16 @@ $dictionary['Email'] = array(
          'vname' => 'reply_to_addr',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The reply-to email address specified in the email headers',
       ),
       'to_addrs_names' => array(
          'name' => 'to_addrs_names',
          'type' => 'varchar',
-         'label' => 'LBL_TO_ADDRS_NAMES',
          'vname' => 'LBL_TO_ADDRS_NAMES',
+         'label' => 'LBL_TO_ADDRS_NAMES',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The names associated with the recipients listed in the \'To\' field',
       ),
       'cc_addrs_names' => array(
          'name' => 'cc_addrs_names',
@@ -97,6 +100,7 @@ $dictionary['Email'] = array(
          'vname' => 'cc_addrs_names',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The names associated with the recipients listed in the \'CC\' field',
       ),
       'bcc_addrs_names' => array(
          'name' => 'bcc_addrs_names',
@@ -104,6 +108,7 @@ $dictionary['Email'] = array(
          'vname' => 'bcc_addrs_names',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The names associated with the recipients listed in the \'BCC\' field',
       ),
       'imap_keywords' => array(
          'name' => 'imap_keywords',
@@ -111,6 +116,7 @@ $dictionary['Email'] = array(
          'vname' => 'LBL_IMAP_KEYWORDS',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'IMAP protocol keywords or flags associated with the email message',
       ),
       'raw_source' => array(
          'name' => 'raw_source',
@@ -118,6 +124,7 @@ $dictionary['Email'] = array(
          'vname' => 'raw_source',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The raw source content of the email message as received from the server',
       ),
       'description_html' => array(
          'name' => 'description_html',
@@ -125,6 +132,7 @@ $dictionary['Email'] = array(
          'vname' => 'description_html',
          'source' => 'non-db',
          'inline_edit' => false,
+         'comment' => 'The HTML-formatted version of the email description or body',
       ),
       'description' => array(
          'name' => 'description',
@@ -134,19 +142,21 @@ $dictionary['Email'] = array(
          'inline_edit' => false,
          'rows' => 6,
          'cols' => 80,
+         'comment' => 'A detailed description or body content of the email record',
       ),
       'date_sent_received' => array(
          'name' => 'date_sent_received',
          'vname' => 'LBL_DATE_SENT_RECEIVED',
          'type' => 'datetime',
          'inline_edit' => false,
+         'comment' => 'The date and time when the email was sent or received',
       ),
       'message_id' => array(
          'name' => 'message_id',
          'vname' => 'LBL_MESSAGE_ID',
          'type' => 'varchar',
          'len' => 255,
-         'comment' => 'ID of the email item obtained from the email transport system',
+         'comment' => 'The unique message identifier assigned by the email server or system',
          'inline_edit' => false,
       ),
       'name' => array(
@@ -156,7 +166,7 @@ $dictionary['Email'] = array(
          'dbType' => 'varchar',
          'required' => false,
          'len' => '255',
-         'comment' => 'The subject of the email',
+         'comment' => 'The name or title of the email record',
          'inline_edit' => false,
       ),
       'type' => array(
@@ -166,7 +176,7 @@ $dictionary['Email'] = array(
          'options' => 'dom_email_types',
          'len' => 100,
          'massupdate' => false,
-         'comment' => 'Type of email (ex: draft)',
+         'comment' => 'The type of email (inbound, outbound, archived, etc.)',
          'inline_edit' => false,
       ),
       'status' => array(
@@ -187,6 +197,7 @@ $dictionary['Email'] = array(
             'unread' => 'yellow',
          ],
          'inline_edit' => false,
+         'comment' => 'The current status of the email record (draft, sent, received, etc.)',
       ),
       'flagged' => array(
          'name' => 'flagged',
@@ -194,7 +205,7 @@ $dictionary['Email'] = array(
          'type' => 'bool',
          'required' => false,
          'reportable' => false,
-         'comment' => 'flagged status',
+         'comment' => 'A flag indicating whether the email has been flagged for follow-up or importance',
          'inline_edit' => false,
       ),
       'reply_to_status' => array(
@@ -203,7 +214,7 @@ $dictionary['Email'] = array(
          'type' => 'bool',
          'required' => false,
          'reportable' => false,
-         'comment' => 'I you reply to an email then reply to status of original email is set',
+         'comment' => 'The status of the reply-to functionality or reply tracking',
          'inline_edit' => false,
       ),
       'intent' => array(
@@ -212,7 +223,7 @@ $dictionary['Email'] = array(
          'type' => 'varchar',
          'len' => 100,
          'default' => 'pick',
-         'comment' => 'Target of action used in Inbound Email assignment',
+         'comment' => 'The intent or purpose of the email communication',
          'inline_edit' => false,
       ),
       'mailbox_id' => array(
@@ -222,6 +233,7 @@ $dictionary['Email'] = array(
          'len' => '36',
          'reportable' => false,
          'inline_edit' => false,
+         'comment' => 'The unique identifier of the mailbox or email account containing this message',
       ),
       'created_by_link' => array(
          'name' => 'created_by_link',
@@ -266,6 +278,7 @@ $dictionary['Email'] = array(
          'source' => 'non-db',
          'options' => 'record_type_display',
          'inline_edit' => false,
+         'comment' => 'The name of the parent record that this email is related to',
       ),
       'parent_type' => array(
          'name' => 'parent_type',
@@ -273,7 +286,7 @@ $dictionary['Email'] = array(
          'type' => 'varchar',
          'reportable' => false,
          'len' => 100,
-         'comment' => 'Identifier of Sugar module to which this email is associated (deprecated as of 4.2)',
+         'comment' => 'The module type of the parent record (e.g., Accounts, Contacts, Leads)',
          'inline_edit' => false,
       ),
       'parent_id' => array(
@@ -282,7 +295,7 @@ $dictionary['Email'] = array(
          'type' => 'id',
          'len' => '36',
          'reportable' => false,
-         'comment' => 'ID of Sugar object referenced by parent_type (deprecated as of 4.2)',
+         'comment' => 'The unique identifier of the parent record that this email is linked to',
          'inline_edit' => false,
       ),
       'indicator' => array(
@@ -301,6 +314,7 @@ $dictionary['Email'] = array(
             'include' => 'modules/Emails/include/displayIndicatorField.php',
             'onListView' => true
          ),
+         'comment' => 'A visual or status indicator for the email\'s importance or type',
       ),
       'subject' => array(
          'name' => 'subject',
@@ -318,6 +332,7 @@ $dictionary['Email'] = array(
             'include' => 'modules/Emails/include/displaySubjectField.php',
             'onListView' => true
          ),
+         'comment' => 'The subject line of the email message',
       ),
       'attachment' => array(
         'name' => 'attachment',
@@ -335,6 +350,7 @@ $dictionary['Email'] = array(
             'include' => 'modules/Emails/include/displayAttachmentField.php',
             'onListView' =>  true
         ),
+        'comment' => 'Information about files or documents attached to the email',
     ),
       'uid' => array(
          'name' => 'uid',
@@ -343,6 +359,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'The unique identifier assigned by the email server (UID)',
       ),
       'msgno' => array(
          'name' => 'msgno',
@@ -352,6 +369,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'The message sequence number within the mailbox',
       ),
       'folder' => array(
          'name' => 'folder',
@@ -361,6 +379,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'The folder or directory where the email is stored',
       ),
       'folder_type' => array(
          'name' => 'folder_type',
@@ -370,6 +389,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'The type of folder (inbox, sent, trash, custom folder, etc.)',
       ),
       'inbound_email_record' => array(
          'name' => 'inbound_email_record',
@@ -379,6 +399,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'Reference to the inbound email configuration record used for this message',
       ),
       'is_imported' => array(
          'name' => 'is_imported',
@@ -388,6 +409,7 @@ $dictionary['Email'] = array(
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
+         'comment' => 'A flag indicating whether the email was imported from an external source',
       ),
       'has_attachment' => array(
          'name' => 'has_attachment',
@@ -405,6 +427,7 @@ $dictionary['Email'] = array(
             'include' => 'modules/Emails/include/displayHasAttachmentField.php',
             'onListView' => true
          ),
+         'comment' => 'A flag indicating whether the email contains one or more attachments',
       ),
       'is_only_plain_text' => array(
          'name' => 'is_only_plain_text',
@@ -415,6 +438,7 @@ $dictionary['Email'] = array(
          'duplicate_merge' => 'disabled',
          'inline_edit' => false,
          'source' => 'non-db',
+         'comment' => 'A flag indicating whether the email content is plain text only (no HTML)',
       ),
       /* relationship collection attributes */
       /* added to support InboundEmail */
@@ -545,6 +569,7 @@ $dictionary['Email'] = array(
          'len' => 100,
          'options' => 'email_category_dom',
          'reportable' => true,
+         'comment' => 'The unique identifier of the category assigned to this email',
       ),
       "emails_email_templates" => array(
          'name' => 'emails_email_templates',
@@ -567,6 +592,7 @@ $dictionary['Email'] = array(
          'table' => 'email_templates',
          'module' => 'EmailTemplates',
          'rname' => 'name',
+         'comment' => 'Name of the email template used to generate this message',
       ),
       "emails_email_templates_idb" => array(
          'name' => 'emails_email_templates_idb',
@@ -594,6 +620,7 @@ $dictionary['Email'] = array(
             'include' => 'modules/Emails/include/displayEmailAddressOptInField.php',
             'onListView' => true
          ),
+         'comment' => 'The opt-in status for email communications and marketing preferences',
       ),
       "candidates" => array(
          'name' => 'candidates',
@@ -773,42 +800,4 @@ if(isset($dictionary["Email"]['fields']['date_sent'])) {
 }
 else if(isset($dictionary["Email"]['fields']['date_sent_received'])) {
     $dictionary["Email"]['indices']['dlnc_email']['fields'][] = 'date_sent_received';
-}
-
-foreach ([
-    'orphaned' => 'LBL_ORPHANED_COMMENT',
-    'last_synced' => 'LBL_LAST_SYNCED_COMMENT',
-    'from_addr_name' => 'LBL_FROM_ADDR_NAME_COMMENT',
-    'reply_to_addr' => 'LBL_REPLY_TO_ADDR_COMMENT',
-    'to_addrs_names' => 'LBL_TO_ADDRS_NAMES_COMMENT',
-    'cc_addrs_names' => 'LBL_CC_ADDRS_NAMES_COMMENT',
-    'bcc_addrs_names' => 'LBL_BCC_ADDRS_NAMES_COMMENT',
-    'imap_keywords' => 'LBL_IMAP_KEYWORDS_COMMENT',
-    'raw_source' => 'LBL_RAW_SOURCE_COMMENT',
-    'description_html' => 'LBL_DESCRIPTION_HTML_COMMENT',
-    'description' => 'LBL_DESCRIPTION_COMMENT',
-    'date_sent_received' => 'LBL_DATE_SENT_RECEIVED_COMMENT',
-    'message_id' => 'LBL_MESSAGE_ID_COMMENT',
-    'name' => 'LBL_SUBJECT_COMMENT',
-    'type' => 'LBL_LIST_TYPE_COMMENT',
-    'status' => 'LBL_STATUS_COMMENT',
-    'flagged' => 'LBL_EMAIL_FLAGGED_COMMENT',
-    'reply_to_status' => 'LBL_EMAIL_REPLY_TO_STATUS_COMMENT',
-    'intent' => 'LBL_INTENT_COMMENT',
-    'mailbox_id' => 'LBL_MAILBOX_ID_COMMENT',
-    'uid' => 'LBL_UID_COMMENT',
-    'msgno' => 'LBL_MSGNO_COMMENT',
-    'folder' => 'LBL_FOLDER_COMMENT',
-    'folder_type' => 'LBL_FOLDER_TYPE_COMMENT',
-    'inbound_email_record' => 'LBL_INBOUND_EMAIL_RECORD_COMMENT',
-    'is_imported' => 'LBL_IS_IMPORTED_COMMENT',
-    'is_only_plain_text' => 'LBL_IS_ONLY_PLAIN_TEXT_COMMENT',
-    'category_id' => 'LBL_CATEGORY_COMMENT',
-    'parent_name' => 'LBL_PARENT_NAME_COMMENT',
-    'subject' => 'LBL_SUBJECT_COMMENT',
-    'has_attachment' => 'LBL_HAS_ATTACHMENT_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Email']['fields'][$field])) {
-        $dictionary['Email']['fields'][$field]['comment'] = $commentLabel;
-    }
 }

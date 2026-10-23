@@ -98,6 +98,7 @@ $dictionary['Competencies'] = array(
             'id' => 'competencies_type',
             'name' => 'competencies_type',
             'vname' => 'LBL_COMPETENCIES_TYPE',
+            'comment' => 'The type or category of the competency',
             'type' => 'enum',
             'options' => 'competencies_type_list',
             'audited' => true,
@@ -127,3 +128,5 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Competencies', 'Competencies', array('basic', 'assignable', 'security_groups', 'employee_related'));
+
+

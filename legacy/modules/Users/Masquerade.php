@@ -7,7 +7,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 global $current_user;
 
 if (!empty($_SESSION['masquerade_admin_id'])) {
-    header('Location: ' . rtrim($GLOBALS['sugar_config']['site_url'] ?? '', '/') . '/');
+    // Action runs inside the legacy iframe - redirect the whole window, otherwise the frontend loads inside the iframe
+    if (ob_get_level()) {
+        ob_clean();
+    }
+    echo '<script>top.location.href=' . json_encode(rtrim($GLOBALS['sugar_config']['site_url'] ?? '', '/') . '/') . ';</script>';
     exit;
 }
 
@@ -21,7 +25,9 @@ if (is_admin($current_user) && !empty($_REQUEST['record']) && preg_match('/^[0-9
         global $app_strings;
         $error_msg = $app_strings['LBL_MASQUERADE_USER_INACTIVE'] ?? 'Cannot login as inactive user.';
         $back_url = 'index.php?module=Users&action=DetailView&record=' . htmlspecialchars($_REQUEST['record'], ENT_QUOTES, 'UTF-8');
-        ob_clean();
+        if (ob_get_level()) {
+            ob_clean();
+        }
         echo '<script>alert(' . json_encode($error_msg) . '); top.location.href=' . json_encode($back_url) . ';</script>';
         exit;
     }
@@ -48,7 +54,9 @@ if (is_admin($current_user) && !empty($_REQUEST['record']) && preg_match('/^[0-9
 
         session_regenerate_id(true);
         session_write_close();
-        ob_clean();
+        if (ob_get_level()) {
+            ob_clean();
+        }
 
         $site_url = rtrim($sugar_config['site_url'] ?? '', '/') . '/';
         echo '<script>top.location.href=' . json_encode($site_url) . ';</script>';

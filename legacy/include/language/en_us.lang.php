@@ -1527,6 +1527,7 @@ $app_strings = array(
     'ERR_AJAX_LOAD_FOOTER' => 'If this error persists, please have your administrator disable Ajax for this module',
     'ERR_DECIMAL_SEP_EQ_THOUSANDS_SEP' => 'The decimal separator cannot use the same character as the thousands separator.\\n\\n  Please change the values.',
     'ERR_DELETE_RECORD' => 'A record number must be specified to delete the contact.',
+    'ERR_SAVE_RECORD' => 'An error occurred while saving. Please try again.',
     'ERR_EXPORT_DISABLED' => 'Exports Disabled.',
     'ERR_EXPORT_TYPE' => 'Error exporting ',
     'ERR_INVALID_EMAIL_ADDRESS' => 'not a valid email address.',
@@ -4140,7 +4141,6 @@ $app_list_strings['appraisals_status_list'] = array(
 );
 
 $app_list_strings['group_type_list'] = array(
-    'standard' => 'Standard',
     'private' => 'Private',
     'company' => 'Company',
     'business_unit' => 'Business Unit',
@@ -4927,6 +4927,7 @@ $app_strings['twsdashlet_add_time'] = 'Add time';
 $app_strings['LBL_REQUIRED'] = 'Required';
 $app_strings['ERR_FIELD_REQUIRED'] = 'This field is required';
 $app_strings['ERR_NOT_UNIQUE'] = 'Record is not unique';
+$app_strings['ERR_INVALID_IMAGE_FILE'] = 'Please select a valid image file (JPG, PNG or GIF)';
 $app_strings['LBL_WORKSCHEDULE_LEAVE_CREATED'] = 'Get notified if Leave is created by your subordinate';
 $app_strings['LBL_WORKSCHEDULES_DAY_VALID'] = 'Get notified if not closed Work Schedule exists';
 $app_strings['LBL_WORKSCHEDULES_NOT_PLANNED_FOR_TWO_WEEKS'] = 'Get notified if Work Schedule is not planned for two weeks';
@@ -5095,3 +5096,23 @@ $app_strings['LBL_FORCE_SAVE_BUTTON_LABEL'] = 'Ignore duplicate and save';
 
 $app_strings['LBL_MINT_RECORDVIEW_MOBILE_SWITCH_RECORD'] = 'Record';
 $app_strings['LBL_MINT_RECORDVIEW_MOBILE_SWITCH_SIDEPANEL'] = 'Statistics';
+
+// Configurator - logger file suffix options
+$app_list_strings['logger_file_suffix_dom'] = [
+    '' => 'None',
+    '%m_%Y' => 'Month_Year',
+    '%d_%m' => 'Day_Month',
+    '%m_%d_%y' => 'Month_Day_Year',
+];
+
+// Configurator - logger level options
+$app_list_strings['logger_level_dom'] = [
+    'debug' => 'Debug',
+    'info' => 'Info',
+    'warn' => 'Warning',
+    'deprecated' => 'Deprecated',
+    'error' => 'Error',
+    'fatal' => 'Fatal',
+    'security' => 'Security',
+    'off' => 'Off',
+];

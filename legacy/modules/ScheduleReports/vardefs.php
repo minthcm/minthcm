@@ -58,7 +58,7 @@ $dictionary['ScheduleReports'] = array(
          'massupdate' => '1',
          'default' => 'every_day',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Frequency Performance',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -82,7 +82,7 @@ $dictionary['ScheduleReports'] = array(
          'massupdate' => 0,
          'default' => '1',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Flag indicating whether the schedule report is active',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -103,7 +103,7 @@ $dictionary['ScheduleReports'] = array(
          'massupdate' => 0,
          'default' => 'Default',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Id of the template associated with this record',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -129,7 +129,7 @@ $dictionary['ScheduleReports'] = array(
          'massupdate' => 0,
          'default' => 'Default',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Id of the email template associated with this record',
          'help' => '',
          'importable' => 'false',
          'duplicate_merge' => 'disabled',
@@ -153,7 +153,7 @@ $dictionary['ScheduleReports'] = array(
          'vname' => 'LBL_DATE_SEND',
          'type' => 'date',
          'massupdate' => 0,
-         'comments' => '',
+         'comment' => 'Date Send',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -196,6 +196,7 @@ $dictionary['ScheduleReports'] = array(
          'table' => 'kreports',
          'module' => 'KReports',
          'rname' => 'name',
+         'comment' => 'Name of the kreport associated with this record',
       ),
       "kreport_id" => array(
          'name' => 'kreport_id',
@@ -206,7 +207,8 @@ $dictionary['ScheduleReports'] = array(
          'vname' => 'LBL_SCHEDULEREPORTS_KREPORTS_FROM_SCHEDULEREPORTS_TITLE',
          'rname' => 'id',
          'isnull' => 'true',
-         'dbType' => 'id'
+         'dbType' => 'id',
+         'comment' => 'Id of the kreport associated with this record',
       ),
       'users' => array(
          'name' => 'users',
@@ -244,3 +246,4 @@ if ( !class_exists('VardefManager') ) {
    require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('ScheduleReports', 'ScheduleReports', array( 'basic', 'assignable' ));
+

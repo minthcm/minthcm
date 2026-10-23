@@ -4,9 +4,10 @@
             :label="props.label"
             variant="outlined"
             density="compact"
-            hide-details
+            hide-details="auto"
             :modelValue="file"
-            :error="props.state === 'error'"
+            :error="props.state === 'error' || !!validationError"
+            :error-messages="validationError ? [validationError] : []"
             @update:modelValue="(v) => updateModelValue(v)"
             @click:clear="() => updateModelValue(null)"
             :prepend-icon="isImage ? 'mdi-image' : 'mdi-paperclip'"
@@ -25,15 +26,18 @@
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { FieldProps } from '../Field.model'
 import { usePopupsStore } from '@/store/popups'
+import { useLanguagesStore } from '@/store/languages'
 import MintPopupImage from '@/components/MintPopups/MintPopupImage.vue'
 
 const props = defineProps<FieldProps<File>>()
 const emit = defineEmits<{
     (e: 'update:modelValue', value: File): void
 }>()
+const languages = useLanguagesStore()
 
 const file = ref<File>(getEmptyFile())
 const localObjectUrl = ref<string | null>(null)
+const validationError = ref<string | null>(null)
 
 onMounted(() => {
     if (props.field.model) {
@@ -54,10 +58,16 @@ function revokeObjectUrl() {
 
 async function updateModelValue(value: File | File[] | null) {
     revokeObjectUrl()
+    validationError.value = null
     if (!value) {
         file.value = getEmptyFile()
     } else {
-        file.value = Array.isArray(value) ? value[0] : value
+        const selected = Array.isArray(value) ? value[0] : value
+        if (isImage.value && selected.size > 0 && !selected.type.startsWith('image/')) {
+            validationError.value = languages.label('ERR_INVALID_IMAGE_FILE')
+            return
+        }
+        file.value = selected
         if (isImage.value && file.value.size > 0) {
             localObjectUrl.value = URL.createObjectURL(file.value)
         }
@@ -70,11 +80,22 @@ const isImage = computed(() => {
     return props.defs.type === 'image'
 })
 
+const imageUrlPattern = /\.(png|jpg|jpeg|gif|webp)$/i
+
 const previewUrl = computed(() => {
     if (localObjectUrl.value) {
         return localObjectUrl.value
     }
-    if (!props.data?.bean?.attributes?.id || !file.value.name) {
+    // Admin / no-bean context: model is a server-side URL returned by the API
+    if (!props.data?.bean?.attributes?.id) {
+        // Check file.value.name first (set by onMounted / watch), then fall back to raw model
+        const name = file.value?.name || (props.field.model as unknown as string) || ''
+        if (name && imageUrlPattern.test(name)) {
+            return name
+        }
+        return null
+    }
+    if (!file.value.name) {
         return null
     }
     const beanId = props.data.bean.attributes.id
@@ -98,11 +119,14 @@ function getEmptyFile(): File {
 watch(
     () => props.field.model,
     (newVal) => {
-        if (newVal !== file.value.name) {
+        if (newVal instanceof File) return  // already handled by updateModelValue
+        const strVal = typeof newVal === 'string' ? newVal : (newVal as any)?.name ?? ''
+        if (strVal !== file.value.name) {
             revokeObjectUrl()
-            file.value = newVal ? new File([], newVal) : getEmptyFile()
+            file.value = strVal ? new File([], strVal) : getEmptyFile()
         }
     },
+    { immediate: true },
 )
 </script>
 

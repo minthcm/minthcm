@@ -56,7 +56,6 @@ $dictionary[$module_name] = array(
             'type' => 'date',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -69,6 +68,7 @@ $dictionary[$module_name] = array(
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The date when the contract was signed by all parties involved',
         ),
         'contract_starting_date' =>
         array(
@@ -78,7 +78,6 @@ $dictionary[$module_name] = array(
             'type' => 'date',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -91,6 +90,7 @@ $dictionary[$module_name] = array(
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The date when the employment contract becomes effective and the employee begins work',
         ),
         'contract_ending_date' =>
         array(
@@ -100,7 +100,6 @@ $dictionary[$module_name] = array(
             'type' => 'date',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -113,6 +112,7 @@ $dictionary[$module_name] = array(
             'size' => '20',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The date when the employment contract expires or terminates, if applicable',
         ),
         'status' =>
         array(
@@ -123,7 +123,6 @@ $dictionary[$module_name] = array(
             'massupdate' => '1',
             'default' => 'active',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -138,6 +137,7 @@ $dictionary[$module_name] = array(
             'options' => 'contract_status_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The current status of the record',
         ),
         'contract_type' =>
         array(
@@ -148,7 +148,6 @@ $dictionary[$module_name] = array(
             'massupdate' => '1',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -163,6 +162,7 @@ $dictionary[$module_name] = array(
             'options' => 'contract_type_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The type of employment contract, such as permanent, temporary, fixed-term, or probationary',
         ),
         'daily_working_time' =>
         array(
@@ -173,7 +173,6 @@ $dictionary[$module_name] = array(
             'massupdate' => '1',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -188,6 +187,7 @@ $dictionary[$module_name] = array(
             'options' => 'daily_working_time_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The standard number of working hours per day as specified in the contract',
         ),
         'termsofemployment' => array(
             'name' => 'termsofemployment',
@@ -220,6 +220,7 @@ $dictionary[$module_name] = array(
             'table' => 'periodsofemployment',
             'module' => 'PeriodsOfEmployment',
             'rname' => 'name',
+            'comment' => 'The name or title of the period of employment associated with this contract',
         ),
         'periodofemployment_id' => array(
             'name' => 'periodofemployment_id',
@@ -230,6 +231,7 @@ $dictionary[$module_name] = array(
             'isnull' => 'true',
             'dbType' => 'id',
             'vname' => 'LBL_PERIODOFEMPLOYMENT_ID',
+            'comment' => 'The unique identifier of the period of employment record linked to this contract',
         ),
         'documents' => array(
             'name' => 'documents',
@@ -267,4 +269,5 @@ VardefManager::createVardef($module_name, $module_name,
 ));
 
 $dictionary[$module_name]['fields']['employee_name']['required'] = true;
+$dictionary[$module_name]['fields']['employee_name']['comment'] = 'Name of the employee associated with this record';
 

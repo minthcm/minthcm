@@ -58,6 +58,7 @@ $dictionary['OAuth2Codes'] = [
             'required' => true,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'Record unique identifier',
         ],
         'code' => [
             'name' => 'code',
@@ -68,6 +69,7 @@ $dictionary['OAuth2Codes'] = [
             'len' => 128,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The OAuth2 authorization code value',
         ],
         'client_id' => [
             'name' => 'client_id',
@@ -77,6 +79,7 @@ $dictionary['OAuth2Codes'] = [
             'len' => 128,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The unique identifier of the OAuth2 client this code was issued to',
         ],
         'user_id' => [
             'name' => 'user_id',
@@ -85,6 +88,7 @@ $dictionary['OAuth2Codes'] = [
             'required' => true,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The unique identifier of the user associated with this record',
         ],
         'scope' => [
             'name' => 'scope',
@@ -94,6 +98,7 @@ $dictionary['OAuth2Codes'] = [
             'len' => 255,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The space-separated list of OAuth2 permission scopes granted to this code',
         ],
         'code_challenge' => [
             'name' => 'code_challenge',
@@ -103,6 +108,7 @@ $dictionary['OAuth2Codes'] = [
             'len' => 255,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The PKCE code challenge sent by the client during authorization',
         ],
         'code_challenge_method' => [
             'name' => 'code_challenge_method',
@@ -112,6 +118,7 @@ $dictionary['OAuth2Codes'] = [
             'len' => 16,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The PKCE method used to derive the code challenge, such as plain or S256',
         ],
         'code_expires' => [
             'name' => 'code_expires',
@@ -120,6 +127,7 @@ $dictionary['OAuth2Codes'] = [
             'required' => true,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'The date and time when the authorization code expires',
         ],
         'used' => [
             'name' => 'used',
@@ -128,6 +136,7 @@ $dictionary['OAuth2Codes'] = [
             'default' => 0,
             'reportable' => false,
             'inline_edit' => false,
+            'comment' => 'Flag indicating whether the authorization code has already been used',
         ],
     ],
     'indices' => [
@@ -149,3 +158,4 @@ VardefManager::createVardef(
         'default',
     ]
 );
+

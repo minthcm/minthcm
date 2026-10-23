@@ -55,7 +55,7 @@ $dictionary['CompetencyRatings'] = array(
             'type' => 'enum',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'The rating value assigned to the competency',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -93,6 +93,7 @@ $dictionary['CompetencyRatings'] = array(
             'module' => 'Competencies',
             'rname' => 'name',
             'required' => true,
+            'comment' => 'The name of the related competency',
         ),
         'competency_id' => array(
             'name' => 'competency_id',
@@ -110,6 +111,7 @@ $dictionary['CompetencyRatings'] = array(
             'group' => 'parent_name',
             'options' => 'competency_ratings_type_list',
             'len' => 255,
+            'comment' => 'The module type of the parent record',
         ),
         'parent_name' => array(
             'name' => 'parent_name',
@@ -122,6 +124,7 @@ $dictionary['CompetencyRatings'] = array(
             'source' => 'non-db',
             'options' => 'competency_ratings_type_list',
             'required' => true,
+            'comment' => 'The name of the parent record',
         ),
         'parent_id' => array(
             'name' => 'parent_id',
@@ -129,6 +132,7 @@ $dictionary['CompetencyRatings'] = array(
             'type' => 'id',
             'group' => 'parent_name',
             'reportable' => false,
+            'comment' => 'The unique identifier of the parent record',
         ),
         'employee_roles' => array(
             'name' => 'employee_roles',
@@ -196,3 +200,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('CompetencyRatings', 'CompetencyRatings', array('basic', 'assignable', 'security_groups', 'employee_related'));
+

@@ -112,7 +112,6 @@ $dictionary['PDFTemplates'] = array(
             'vname' => 'LBL_TEMPLATE',
             'type' => 'text',
             'massupdate' => 0,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -124,6 +123,7 @@ $dictionary['PDFTemplates'] = array(
             'source' => 'non-db',
             'rows' => '8',
             'cols' => '30',
+            'comment' => 'The HTML content of the PDF template',
         ),
         'fields' =>
         array(
@@ -132,7 +132,6 @@ $dictionary['PDFTemplates'] = array(
             'vname' => 'LBL_FIELDS',
             'type' => 'varchar',
             'massupdate' => 0,
-            'comments' => 'placeholder for tree in editview',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -142,6 +141,7 @@ $dictionary['PDFTemplates'] = array(
             'len' => '255',
             'size' => '20',
             'source' => 'non-db',
+            'comment' => 'The list of module fields available for insertion into the PDF template',
         ),
         'is_default' =>
         array(
@@ -149,8 +149,8 @@ $dictionary['PDFTemplates'] = array(
             'vname' => 'LBL_IS_DEFAULT',
             'type' => 'bool',
             'default' => 0,
-            'comments' => 'preselected template in detailview select for pdf templates',
             'reportable' => false,
+            'comment' => 'Flag indicating whether this is the default template for its related module',
         ),
         'relatedmodule' =>
         array(
@@ -160,7 +160,6 @@ $dictionary['PDFTemplates'] = array(
             'type' => 'enum',
             'massupdate' => 0,
             'default' => 'selectmodule',
-            'comments' => 'indicates module this template is created for',
             'help' => '',
             'importable' => 'false',
             'duplicate_merge' => 'disabled',
@@ -172,6 +171,7 @@ $dictionary['PDFTemplates'] = array(
             'options' => 'pdf_module_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The module this PDF template is associated with',
         ),
         'type' =>
         array(
@@ -181,7 +181,6 @@ $dictionary['PDFTemplates'] = array(
             'type' => 'enum',
             'massupdate' => 0,
             'default' => 'standard',
-            'comments' => '',
             'help' => '',
             'importable' => 'false',
             'duplicate_merge' => 'disabled',
@@ -193,6 +192,7 @@ $dictionary['PDFTemplates'] = array(
             'options' => 'pdf_tempate_type_list',
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The type of the PDF template, such as standard',
         ),
         'orientation' =>
         array(
@@ -202,7 +202,6 @@ $dictionary['PDFTemplates'] = array(
             'type' => 'enum',
             'massupdate' => 0,
             'default' => 'P',
-            'comments' => 'default orientation of the page',
             'help' => '',
             'importable' => 'false',
             'duplicate_merge' => 'disabled',
@@ -213,6 +212,7 @@ $dictionary['PDFTemplates'] = array(
             'size' => '5',
             'options' => 'orientation_list',
             'dependency' => false,
+            'comment' => 'The page orientation of the generated PDF, such as portrait or landscape',
         ),
         'preview' =>
         array(
@@ -222,7 +222,6 @@ $dictionary['PDFTemplates'] = array(
             'type' => 'iframe',
             'massupdate' => '0',
             'default' => transformWithLeadingSlash($sugar_config['site_url']) . '/legacy/modules/PDFTemplates/templates/template-{id}.html',
-            'comments' => NULL,
             'help' => NULL,
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -236,6 +235,7 @@ $dictionary['PDFTemplates'] = array(
             'gen' => '1',
             'link_target' => '200',
             'height' => '600',
+            'comment' => 'Displays a live preview of the generated PDF template',
         ),
     ),
     'relationships' => array(),
@@ -245,3 +245,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('PDFTemplates', 'PDFTemplates', array('basic'));
+

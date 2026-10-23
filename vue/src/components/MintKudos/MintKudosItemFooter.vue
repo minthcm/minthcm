@@ -1,38 +1,34 @@
 <template>
     <div v-if="props.kudos.current_user_access && props.kudos.private">
         <div v-if="!props.kudos.current_user_is_author" class="d-flex align-center flex-wrap mt-4">
-            <div class="photo-container-small">
-                <img
-                    v-if="props.kudos.assigned_user.photo"
-                    :src="`legacy/index.php?entryPoint=download&type=Users&id=${props.kudos.assigned_user.id}_photo`"
-                />
-                <v-icon v-else icon="mdi-account" />
-            </div>
+            <MintAvatar
+                :photo="props.kudos.assigned_user?.photo ? props.kudos.assigned_user.id + '_photo' : null"
+                :width="'18px'"
+                :height="'18px'"
+            />
             <p
                 class="text-secondary font-weight-bold ml-2 text-caption user"
                 @click="store.openEmployeeDetailView(props.kudos.assigned_user.id)"
             >
-                {{ props.kudos.assigned_user.full_name }}
+                {{ assignedUserName }}
             </p>
         </div>
         <div class="mt-1 d-flex private">
-            <v-icon icon="mdi-eye-off" size="medium" class="mr-2" /><span v-html="privateKudosNotification" />
+            <v-icon icon="mdi-eye-off" size="medium" class="mr-2" /><span>{{ privateKudosNotification }}</span>
         </div>
     </div>
     <div v-if="!props.kudos.private">
         <div class="d-flex align-center flex-wrap mt-4">
-            <div class="photo-container-small">
-                <img
-                    v-if="props.kudos.assigned_user.photo"
-                    :src="`legacy/index.php?entryPoint=download&type=Users&id=${props.kudos.assigned_user.id}_photo`"
-                />
-                <v-icon v-else icon="mdi-account" />
-            </div>
+            <MintAvatar
+                :photo="props.kudos.assigned_user?.photo ? props.kudos.assigned_user.id + '_photo' : null"
+                :width="'18px'"
+                :height="'18px'"
+            />
             <p
                 class="text-secondary font-weight-bold ml-2 text-caption user"
                 @click="store.openEmployeeDetailView(props.kudos.assigned_user.id)"
             >
-                {{ props.kudos.assigned_user.full_name }}
+                {{ assignedUserName }}
             </p>
         </div>
     </div>
@@ -42,38 +38,27 @@
 import { computed } from 'vue'
 import { useMintKudosStore } from '@/components/MintKudos/MintKudosStore'
 import { useLanguagesStore } from '@/store/languages'
+import MintAvatar from '../MintAvatar.vue'
+import { decodeHtmlEntities } from '@/utils/html'
 
 const props = defineProps(['kudos'])
 const store = useMintKudosStore()
 const languages = useLanguagesStore()
+
+const assignedUserName = computed(() => decodeHtmlEntities(props.kudos.assigned_user.full_name))
 
 const privateKudosNotification = computed(() => {
     if (props.kudos.current_user_is_gifted) {
         return languages.label('LBL_KUDOS_PRIVATE_TEXT_ONLY_YOU')
     } else {
         return languages.label('LBL_KUDOS_PRIVATE_TEXT_ON_MESSAGE', null, {
-            name: props.kudos.employee.first_name ? props.kudos.employee.first_name : props.kudos.employee.full_name,
+            name: decodeHtmlEntities(props.kudos.employee.first_name || props.kudos.employee.full_name),
         })
     }
 })
 </script>
 
 <style scoped lang="scss">
-.photo-container-small {
-    width: 18px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    & i {
-        font-size: 18px;
-    }
-}
-
-img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 50%;
-}
 .kudos-item {
     margin-bottom: 15px;
     padding: 12px;

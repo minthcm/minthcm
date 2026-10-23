@@ -91,3 +91,8 @@ VardefManager::createVardef('ResponsibilityActivities', 'ResponsibilityActivitie
 $dictionary['ResponsibilityActivities']['fields']['name']['audited'] = true;
 $dictionary['ResponsibilityActivities']['fields']['assigned_user_id']['audited'] = false;
 $dictionary['ResponsibilityActivities']['fields']['assigned_user_name']['audited'] = true;
+
+$dictionary['ResponsibilityActivities']['fields']['name']['comment'] = 'The name or title of the record';
+$dictionary['ResponsibilityActivities']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
+$dictionary['ResponsibilityActivities']['fields']['assigned_user_name']['comment'] = 'The name of the user assigned to the record';
+

@@ -56,7 +56,7 @@ $dictionary['Workplaces'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'Workplace mode in which employee will be working',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'enabled',
@@ -82,7 +82,7 @@ $dictionary['Workplaces'] = array(
             'massupdate' => '0',
             'default' => '',
             'no_default' => false,
-            'comments' => '',
+            'comment' => 'Informs whether the workplace is available for assignment to employees',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -125,12 +125,14 @@ $dictionary['Workplaces'] = array(
             'table' => 'rooms',
             'rname' => 'name',
             'vt_validation' => "AEM(callCustomApi('Workplaces','canSelectRoom', {room_id: \$room_id}),'LBL_ERR_CANT_SELECT_ROOM')",
+            'comment' => 'Related room name',
          ),
          "room_id" => array(
             'name' => 'room_id',
             'relationship' => 'rooms_workplaces',
             'type' => 'id',
             'vname' => 'LBL_RELATIONSHIP_ROOM_ID',
+            'comment' => 'Related room unique identifier',
          ),
          'files' => array(
             'name' => 'files',
@@ -171,8 +173,11 @@ VardefManager::createVardef('Workplaces', 'Workplaces',
 
 $dictionary['Workplaces']['fields']['assigned_user_name']['required'] = true;
 $dictionary['Workplaces']['fields']['assigned_user_name']['audited'] = true;
+$dictionary['Workplaces']['fields']['assigned_user_name']['comment'] = 'The name of the user assigned to the record';
 $dictionary['Workplaces']['fields']['assigned_user_id']['audited'] = false;
+$dictionary['Workplaces']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
 $dictionary['Workplaces']['fields']['name']['audited'] = true;
+$dictionary['Workplaces']['fields']['name']['comment'] = 'The name or title of the record';
 
 $dictionary["Workplaces"]["fields"]["workplaces_allocations"] = array (
     'name' => 'workplaces_allocations',
@@ -196,3 +201,4 @@ $dictionary["Workplaces"]["fields"]["workplaces_allocations"] = array (
  );
 
  $dictionary["Workplaces"]['indices'][] = array('name' => 'idx_del_room_id', 'type' => 'index', 'fields' => array( 'deleted','room_id'));
+

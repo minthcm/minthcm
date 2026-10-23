@@ -27,6 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once __DIR__ . '/../../../../modules/Users/authentication/SugarAuthenticate/SugarAuthenticate.php';
+require_once __DIR__ . '/OIDCIdTokenValidator.php';
 
 /**
  * Class OIDCAuthenticate
@@ -41,6 +42,7 @@ require_once __DIR__ . '/../../../../modules/Users/authentication/SugarAuthentic
  *   OIDC_clientSecret         – OAuth 2.0 client secret
  *   OIDC_authorizationEndpoint – IdP authorization endpoint URL
  *   OIDC_tokenEndpoint        – IdP token endpoint URL
+ *   OIDC_issuer               – Expected `iss` claim of the ID token (IdP issuer identifier)
  *   OIDC_scope                – Space-separated scopes (default: "openid profile email")
  *   OIDC_usernameClaim        – ID-token claim used as MintHCM username
  *                               (default: "preferred_username")
@@ -135,6 +137,7 @@ class OIDCAuthenticate extends SugarAuthenticate
         if (!$this->validateState()) {
             return '';
         }
+        $expected_nonce = $this->consumeNonce();
 
         $token_data = $this->fetchTokens($code);
         if (empty($token_data['id_token'])) {
@@ -148,6 +151,24 @@ class OIDCAuthenticate extends SugarAuthenticate
             return '';
         }
 
+        $validator = new OIDCIdTokenValidator();
+        $is_valid = $validator->validate(
+            $claims,
+            (string) ($sugar_config['OIDC_issuer'] ?? ''),
+            (string) ($sugar_config['OIDC_clientId'] ?? ''),
+            $expected_nonce,
+            time()
+        );
+        if (!$is_valid) {
+            $GLOBALS['log']->fatal('SECURITY: OIDCAuthenticate: id_token rejected – ' . $validator->getLastError());
+            return '';
+        }
+
+        if (!is_string($claims['sub'] ?? null) || $claims['sub'] === '') {
+            $GLOBALS['log']->error('OIDCAuthenticate: id_token has no sub claim');
+            return '';
+        }
+
         $username_claim = !empty($sugar_config['OIDC_usernameClaim']) ? $sugar_config['OIDC_usernameClaim'] : 'preferred_username';
         $username = $claims[$username_claim] ?? '';
 
@@ -158,6 +179,7 @@ class OIDCAuthenticate extends SugarAuthenticate
 
         $_SESSION['oidcUserdata'] = $claims;
         $_SESSION['oidcNameId'] = $username;
+        $_SESSION['oidcSubject'] = $claims['sub'];
         $_SESSION['oidcIdToken'] = $token_data['id_token'];
 
         return $username;
@@ -189,6 +211,18 @@ class OIDCAuthenticate extends SugarAuthenticate
     }
 
     /**
+     * Returns the nonce sent in the authorization request and clears it from the
+     * session and the browser cookie, so it cannot be replayed. Mirrors validateState().
+     */
+    private function consumeNonce(): string
+    {
+        $nonce = (string) ($_SESSION['oidc_nonce'] ?? $_COOKIE['oidc_nonce'] ?? '');
+        unset($_SESSION['oidc_nonce']);
+        $this->clearCookie('oidc_nonce');
+        return $nonce;
+    }
+
+    /**
      * Stores the CSRF state in a short-lived, browser-bound cookie (double-submit).
      * The value lives in the browser, so the binding survives loss of the server-side
      * session. SameSite=Lax keeps the cookie attached to the top-level GET redirect the
@@ -196,16 +230,7 @@ class OIDCAuthenticate extends SugarAuthenticate
      */
     private function setStateCookie(string $state): void
     {
-        if (!headers_sent()) {
-            setcookie('oidc_state', $state, [
-                'expires' => time() + self::OIDC_OAUTH_PENDING_TTL,
-                'path' => '/',
-                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ]);
-        }
-        $_COOKIE['oidc_state'] = $state;
+        $this->setShortLivedCookie('oidc_state', $state);
     }
 
     /**
@@ -213,10 +238,7 @@ class OIDCAuthenticate extends SugarAuthenticate
      */
     private function clearStateCookie(): void
     {
-        if (!headers_sent()) {
-            setcookie('oidc_state', '', ['expires' => time() - 3600, 'path' => '/']);
-        }
-        unset($_COOKIE['oidc_state']);
+        $this->clearCookie('oidc_state');
     }
 
     /**
@@ -226,16 +248,7 @@ class OIDCAuthenticate extends SugarAuthenticate
      */
     private function setAbortedCookie(): void
     {
-        if (!headers_sent()) {
-            setcookie('oidc_auth_aborted', '1', [
-                'expires' => time() + self::OIDC_OAUTH_PENDING_TTL,
-                'path' => '/',
-                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ]);
-        }
-        $_COOKIE['oidc_auth_aborted'] = '1';
+        $this->setShortLivedCookie('oidc_auth_aborted', '1');
     }
 
     /**
@@ -243,10 +256,32 @@ class OIDCAuthenticate extends SugarAuthenticate
      */
     private function clearAbortedCookie(): void
     {
+        $this->clearCookie('oidc_auth_aborted');
+    }
+
+    /**
+     * Sets an httponly cookie that lives as long as a pending OIDC handshake.
+     */
+    private function setShortLivedCookie(string $name, string $value): void
+    {
         if (!headers_sent()) {
-            setcookie('oidc_auth_aborted', '', ['expires' => time() - 3600, 'path' => '/']);
+            setcookie($name, $value, [
+                'expires' => time() + self::OIDC_OAUTH_PENDING_TTL,
+                'path' => '/',
+                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
         }
-        unset($_COOKIE['oidc_auth_aborted']);
+        $_COOKIE[$name] = $value;
+    }
+
+    private function clearCookie(string $name): void
+    {
+        if (!headers_sent()) {
+            setcookie($name, '', ['expires' => time() - 3600, 'path' => '/']);
+        }
+        unset($_COOKIE[$name]);
     }
 
     /**
@@ -304,8 +339,9 @@ class OIDCAuthenticate extends SugarAuthenticate
      * Decodes an ID token (JWT) payload without signature verification.
      *
      * Signature verification is intentionally skipped because the token was
-     * received directly from the IdP token endpoint over TLS, which provides
-     * equivalent authenticity guarantees for confidential clients.
+     * received directly from the IdP token endpoint over TLS, which OpenID Connect
+     * Core 1.0 (section 3.1.3.7) allows for confidential clients. The claims are
+     * still validated by OIDCIdTokenValidator in handleCallback().
      *
      * @param string $id_token  Compact JWT string.
      * @return array Decoded claims, or empty array on failure.
@@ -347,12 +383,18 @@ class OIDCAuthenticate extends SugarAuthenticate
         // in the browser, not server-side, yet stays bound to this user agent.
         $this->setStateCookie($state);
 
+        // Binds the ID token to this authorization request (checked in handleCallback()).
+        $nonce = bin2hex(random_bytes(32));
+        $_SESSION['oidc_nonce'] = $nonce;
+        $this->setShortLivedCookie('oidc_nonce', $nonce);
+
         return $auth_endpoint . '?' . http_build_query([
             'response_type' => 'code',
             'client_id' => $client_id,
             'redirect_uri' => $this->getRedirectUri(),
             'scope' => $scope,
             'state' => $state,
+            'nonce' => $nonce,
         ]);
     }
 
@@ -374,8 +416,8 @@ class OIDCAuthenticate extends SugarAuthenticate
             // Abort with an explicit error instead of redirecting to LoggedOut, which would
             // silently bounce back to the IdP and loop indefinitely, leaving the user stuck
             // with no feedback.
-            $GLOBALS['log']->fatal('SECURITY: OIDC identity "' . $_SESSION['oidcNameId'] . '" is not permitted to log in (no matching active user)');
-            unset($_SESSION['oidcUserdata'], $_SESSION['oidcNameId'], $_SESSION['oidcIdToken']);
+            $GLOBALS['log']->fatal('SECURITY: OIDC identity "' . $_SESSION['oidcNameId'] . '" is not permitted to log in (no matching active user or OIDC subject mismatch)');
+            unset($_SESSION['oidcUserdata'], $_SESSION['oidcNameId'], $_SESSION['oidcIdToken'], $_SESSION['oidcSubject']);
             $_SESSION['login_error'] = 'Your account is not permitted to sign in via single sign-on. Please contact your administrator.';
             $_SESSION['oidc_auth_aborted'] = true;
             $this->setAbortedCookie();

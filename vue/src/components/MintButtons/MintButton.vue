@@ -12,9 +12,9 @@
         :disabled="disabled"
     >
         <v-progress-circular v-if="loading" :size="props.size" indeterminate />
-        <v-icon v-if="props.icon" :icon="props.icon" :size="props.size" />
+        <v-icon v-else-if="props.icon" :icon="props.icon" :size="props.size" />
         <div v-if="props.text" v-text="props.text" class="mx-auto" />
-        <v-icon v-if="props.appendIcon" :icon="props.appendIcon" :size="props.size" />
+        <v-icon v-if="props.appendIcon && !loading" :icon="props.appendIcon" :size="props.size" />
         <v-tooltip v-if="props.tooltip?.trim()" activator="parent" location="top">{{ props.tooltip }}</v-tooltip>
     </button>
 </template>
@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
     active: false,
 })
 
-const isIcon = computed(() => (props.icon || props.appendIcon) && !props.text)
+const isIcon = computed(() => (props.icon || props.appendIcon || props.loading) && !props.text)
 </script>
 
 <style scoped lang="scss">

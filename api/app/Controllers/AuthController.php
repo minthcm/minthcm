@@ -68,6 +68,13 @@ class AuthController
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * Returns the secret of the `frontend` OAuth2 client without authentication.
+     *
+     * The secret is public by design: the SPA is a public client, so the value cannot be kept
+     * confidential and must not be treated as such. Decision: GHSA-h46x-ffpv-f4g3 / #187657,
+     * reconfirmed in #193558.
+     */
     public function getInternalFrontendToken(Request $request, Response $response, array $args): Response
     {
         $response = $response->withHeader('Content-type', 'application/json');

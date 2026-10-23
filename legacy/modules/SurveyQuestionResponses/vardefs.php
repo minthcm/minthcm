@@ -52,16 +52,19 @@ $dictionary['SurveyQuestionResponses'] = array(
             'name'  => 'answer',
             'vname' => 'LBL_ANSWER',
             'type'  => 'text',
+            'comment' => 'The answer provided by the respondent for the survey question, which can be of various data types such as text, numeric, boolean, or datetime depending on the question type',
         ),
         'answer_bool'                                   => array(
             'name'  => 'answer_bool',
             'vname' => 'LBL_ANSWER_BOOL',
             'type'  => 'bool',
+            'comment' => 'Flag indicating whether the answer is a boolean value (true/false)',
         ),
         'answer_datetime'                               => array(
             'name'  => 'answer_datetime',
             'vname' => 'LBL_ANSWER_DATETIME',
             'type'  => 'datetime',
+            'comment' => 'For answers that are of datetime type, this field captures the date and time value provided as the response',
         ),
         "surveyquestionoptions_surveyquestionresponses" => array(
             'name'         => 'surveyquestionoptions_surveyquestionresponses',
@@ -95,12 +98,14 @@ $dictionary['SurveyQuestionResponses'] = array(
             'table'   => 'surveyquestions',
             'module'  => 'SurveyQuestions',
             'rname'   => 'name',
+            'comment' => 'Name of the survey question associated with this response',
         ),
         "surveyquestion_id"                             => array(
             'name'       => 'surveyquestion_id',
             'type'       => 'id',
             'reportable' => false,
             'vname'      => 'LBL_SURVEYQUESTIONS_SURVEYQUESTIONRESPONSES_FROM_SURVEYQUESTIONRESPONSES_TITLE',
+            'comment'    => 'Id of the survey question associated with this response',
         ),
         "surveyresponse"                                => array(
             'name'         => 'surveyresponse',
@@ -125,12 +130,14 @@ $dictionary['SurveyQuestionResponses'] = array(
             'table'   => 'surveyresponses',
             'module'  => 'SurveyResponses',
             'rname'   => 'name',
+            'comment' => 'Name of the survey response associated with this question response',
         ),
         "surveyresponse_id"                             => array(
             'name'       => 'surveyresponse_id',
             'type'       => 'id',
             'reportable' => false,
             'vname'      => 'LBL_SURVEYRESPONSES_SURVEYQUESTIONRESPONSES_FROM_SURVEYQUESTIONRESPONSES_TITLE',
+            'comment'    => 'Id of the survey response associated with this question response',
         ),
     ),
     'relationships'      => array(),
@@ -145,3 +152,4 @@ VardefManager::createVardef(
     'SurveyQuestionResponses',
     array('basic', 'assignable', 'security_groups')
 );
+

@@ -37,7 +37,7 @@ $viewdefs['Employees'] = [
                                 'position_name',
                                 [
                                     'name' => 'photo',
-                                    'type' => 'file',
+                                    'type' => 'image',
                                 ],
                             ],
                             [

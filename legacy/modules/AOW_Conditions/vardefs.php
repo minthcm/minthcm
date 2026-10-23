@@ -35,7 +35,7 @@ $dictionary['AOW_Condition'] = array(
     'vname' => 'LBL_AOW_WORKFLOW_ID',
     'type' => 'id',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The unique identifier of the Advanced Open Workflow (AOW) that this condition belongs to',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -54,7 +54,7 @@ $dictionary['AOW_Condition'] = array(
     'vname' => 'LBL_ORDER',
     'type' => 'int',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The sequential order in which this condition is evaluated within the workflow\'s condition set',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -74,6 +74,7 @@ $dictionary['AOW_Condition'] = array(
     'type' => 'longtext',
     'vname' => 'LBL_MODULE_PATH',
     'isnull' => true,
+    'comment' => 'The module path or relationship chain that specifies which module and related records the field belongs to',
   ),
   'field' =>
   array(
@@ -82,7 +83,7 @@ $dictionary['AOW_Condition'] = array(
     'vname' => 'LBL_FIELD',
     'type' => 'enum',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The specific field name from the selected module that this condition will evaluate',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -105,7 +106,7 @@ $dictionary['AOW_Condition'] = array(
     'type' => 'enum',
     'massupdate' => 0,
     'default' => '',
-    'comments' => '',
+    'comment' => 'The comparison operator used in the condition (equals, not equals, greater than, less than, contains, etc.)',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -127,7 +128,7 @@ $dictionary['AOW_Condition'] = array(
     'vname' => 'LBL_VALUE_TYPE',
     'type' => 'varchar',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The type of value being compared (static value, dynamic field reference, parameter, or function result)',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -146,7 +147,7 @@ $dictionary['AOW_Condition'] = array(
     'vname' => 'LBL_VALUE',
     'type' => 'varchar',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The actual value, field reference, or expression that the selected field will be compared against',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -184,3 +185,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOW_Conditions', 'AOW_Condition', array('basic'));
+

@@ -79,6 +79,10 @@ if (isset($_POST['Users0emailAddress0'])) {
 }
 
     $usr= new user();
+    // Username + email without an authorized session is the self-service "forgot password"
+    // request: it may only send a reset link, never set a new password (#193558). An administrator
+    // (e.g. creating a user from EditView) or the user themselves keeps the generated password.
+    $is_self_service_request = false;
     if(isset($username) && $username != '' && isset($useremail) && $useremail != '')
     {
         if ($username != '' && $useremail != ''){
@@ -93,6 +97,9 @@ if (isset($_POST['Users0emailAddress0'])) {
 	            echo $GLOBALS['app_strings']['LBL_MINT4_AUTH_FORGET_SUCCESS'];
 	            return;
     	    }
+
+            $is_self_service_request = empty($current_user->id)
+                || (!is_admin($current_user) && $current_user->id !== $usr->id);
     	}
     	else
     	{
@@ -135,7 +142,7 @@ if (isset($_POST['Users0emailAddress0'])) {
 
 ///////
 ///////////////////////////////////////////////////
-    $isLink = isset($_POST['link']) && $_POST['link'] == '1';
+    $isLink = $is_self_service_request || (isset($_POST['link']) && $_POST['link'] == '1');
     // if i need to generate a password (not a link)
     $password = $isLink ? '' : User::generatePassword();
 
@@ -153,13 +160,12 @@ if (isset($_POST['Users0emailAddress0'])) {
         $hashedKey = User::getPasswordHash($key);
         $url = $GLOBALS['sugar_config']['site_url'] . "/index.php?entryPoint=Changenewpassword&guid=$guid&key=$key";
         $time_now = TimeDate::getInstance()->nowDb();
-        $userID = $usr->retrieve_user_id($username);
-        $q = "INSERT INTO users_password_link (id, keyhash, username, date_generated, user_id) VALUES('" .
-            $guid . "','" .
-            $hashedKey . "','" .
-            $username . "','" .
-            $time_now . "','" .
-            $userID . "') ";
+        $q = "INSERT INTO users_password_link (id, keyhash, username, date_generated, user_id) VALUES(" .
+            $usr->db->quoted($guid) . "," .
+            $usr->db->quoted($hashedKey) . "," .
+            $usr->db->quoted(from_html($usr->user_name)) . "," .
+            $usr->db->quoted($time_now) . "," .
+            $usr->db->quoted($usr->id) . ")";
         $usr->db->query($q);
     }
 

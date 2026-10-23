@@ -54,7 +54,7 @@ $dictionary['TemplateSectionLine'] = array(
                 'type' => 'varchar',
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The path to the thumbnail image representing the template section line',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -74,7 +74,7 @@ $dictionary['TemplateSectionLine'] = array(
                 'type' => 'varchar',
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The name of the group this template section line belongs to',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -94,7 +94,7 @@ $dictionary['TemplateSectionLine'] = array(
                 'type' => 'int',
                 'massupdate' => 0,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The display order of the template section line',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -116,3 +116,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('TemplateSectionLine', 'TemplateSectionLine', array('basic'));
+

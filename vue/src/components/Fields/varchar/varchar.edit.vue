@@ -7,6 +7,7 @@
         :name="props.defs.name"
         v-model="props.field.model"
         :error="props.state === 'error'"
+        :type="props.defs.inputType || 'text'"
         @update:modelValue="(v) => $emit('update:modelValue', v)"
         :autocomplete="autocompleteValue"
     />

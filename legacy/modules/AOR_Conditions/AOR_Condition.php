@@ -86,6 +86,10 @@ class AOR_Condition extends Basic
     {
         require_once('modules/AOW_WorkFlow/aow_utils.php');
 
+        // report_module doesn't change between lines - resolve the allowlist once, not per row.
+        $report_module_bean = BeanFactory::newBean($parent->report_module);
+        $allowed_fields = $report_module_bean ? array_keys($report_module_bean->field_defs) : [];
+
         $postData = null;
         if (isset($post_data[$key . 'field'])) {
             $postData = $post_data[$key . 'field'];
@@ -141,6 +145,62 @@ class AOR_Condition extends Basic
                         }
                     }
                 }
+
+                if ($condition->field !== null && $condition->field !== '' && !in_array($condition->field, $allowed_fields, true)) {
+                    LoggerManager::getLogger()->warn(
+                        'AOR_Condition: Invalid field value rejected: ' . $condition->field
+                    );
+                    $condition->field = '';
+                }
+
+                // value holds a column name (not a literal) when value_type is 'Field' -
+                // same injection shape as `field`, needs the same allowlist.
+                if ($condition->value_type === 'Field' && $condition->value !== null && $condition->value !== '' && !in_array($condition->value, $allowed_fields, true)) {
+                    LoggerManager::getLogger()->warn(
+                        'AOR_Condition: Invalid value (Field type) rejected: ' . $condition->value
+                    );
+                    $condition->value = '';
+                }
+
+                // When value_type is 'Date', value is base64(serialize([$params[0..3]])) and
+                // $params[0] holds either a literal keyword ('now'/'today') or a column name -
+                // same injection shape as `field`/`Field` above, needs the same allowlist.
+                // $params[2] (interval amount) and $params[3] (interval unit) also reach raw SQL
+                // concatenation in AOR_Report.php's DATEADD()/DATE_ADD() branch, so both are validated
+                // here too (defense layer #1 - the runtime guard in AOR_Report.php is layer #2).
+                if ($condition->value_type === 'Date' && $condition->value !== null && $condition->value !== '') {
+                    $dateParams = @unserialize(base64_decode((string) $condition->value), ['allowed_classes' => false]);
+                    $dateParamsValid = is_array($dateParams) && isset($dateParams[0]);
+
+                    if ($dateParamsValid
+                        && !in_array($dateParams[0], ['now', 'today'], true)
+                        && !in_array($dateParams[0], $allowed_fields, true)
+                    ) {
+                        LoggerManager::getLogger()->warn(
+                            'AOR_Condition: Invalid value (Date type) rejected: ' . $dateParams[0]
+                        );
+                        $dateParamsValid = false;
+                    }
+
+                    // 'business_hours' is a legitimate $params[3] value handled by its own branch in
+                    // AOR_Report::build_report_query_where(); every other value must be a known SQL
+                    // interval unit to be safe for raw concatenation into DATEADD()/DATE_ADD().
+                    $allowedDateUnits = ['day', 'hour', 'minute', 'second', 'month', 'year', 'week', 'business_hours'];
+                    if ($dateParamsValid && isset($dateParams[3]) && !in_array($dateParams[3], $allowedDateUnits, true)) {
+                        LoggerManager::getLogger()->warn(
+                            'AOR_Condition: Invalid value (Date type) interval unit rejected: ' . $dateParams[3]
+                        );
+                        $dateParamsValid = false;
+                    }
+
+                    if (!$dateParamsValid) {
+                        $condition->value = base64_encode(serialize(['', '', '', '']));
+                    } elseif (isset($dateParams[2])) {
+                        $dateParams[2] = (int) $dateParams[2];
+                        $condition->value = base64_encode(serialize($dateParams));
+                    }
+                }
+
                 // Period must be saved as a string instead of a base64 encoded datetime.
                 // Overwriting value
                 if ((!isset($condition->parenthesis) || !$condition->parenthesis) && isset($condition->value_type) && $condition->value_type == 'Period') {

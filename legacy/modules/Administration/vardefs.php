@@ -55,7 +55,7 @@ $dictionary['Administration'] = array(
          'type' => 'id',
          'required' => true,
          'reportable' => false,
-         'comment' => 'Unique identifier'
+         'comment' => 'Record unique identifier'
       ),
       'category' =>
       array(
@@ -63,7 +63,7 @@ $dictionary['Administration'] = array(
          'vname' => 'LBL_LIST_SYMBOL',
          'type' => 'varchar',
          'len' => '32',
-         'comment' => 'Settings are grouped under this category; arbitraily defined based on requirements'
+         'comment' => 'The category or type of the administration setting, used for grouping related settings together'
       ),
       'name' =>
       array(
@@ -71,14 +71,14 @@ $dictionary['Administration'] = array(
          'vname' => 'LBL_LIST_NAME',
          'type' => 'varchar',
          'len' => '32',
-         'comment' => 'The name given to the setting'
+         'comment' => 'The name or title of the record'
       ),
       'value' =>
       array(
          'name' => 'value',
          'vname' => 'LBL_LIST_RATE',
          'type' => 'text',
-         'comment' => 'The value given to the setting'
+         'comment' => 'The value associated with the administration setting, which can be a string, number, boolean, or serialized data depending on the setting\'s purpose'
       ),
    ),
    'indices' => array(
@@ -173,3 +173,4 @@ $dictionary['UpgradeHistory'] = array(
       array( 'name' => 'upgrade_history_md5_uk', 'type' => 'unique', 'fields' => array( 'md5sum' ) ),
    ),
 );
+

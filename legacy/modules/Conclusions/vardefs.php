@@ -83,6 +83,7 @@ $dictionary['Conclusions'] = array(
          'type' => 'relate',
          'source' => 'non-db',
          'vname' => 'LBL_MEETING_NAME',
+         'comment' => 'Name of the meeting associated with this record',
          'save' => true,
          'id_name' => 'meeting_id',
          'link' => 'meetings',
@@ -100,6 +101,7 @@ $dictionary['Conclusions'] = array(
          'relationship' => 'conclusions_meetings',
          'type' => 'id',
          'vname' => 'LBL_MEETING_ID',
+         'comment' => 'Id of the meeting associated with this record',
          'audited' => false,
          'reportable' => false,
       ),
@@ -124,3 +126,5 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('Conclusions', 'Conclusions', array( 'basic', 'assignable', 'security_groups', 'employee_related' ));
 
 $dictionary['Conclusions']['fields']['name']['audited'] = true;
+
+

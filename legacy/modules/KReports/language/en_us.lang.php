@@ -836,7 +836,7 @@ $mod_strings = array(
     'LBL_KSNAPSHOT' => 'Snapshot',
     'LBL_TAKING_SNAPSHOT' => 'taking snapshot ... ',
     'LBL_GROUPING' => 'Grouping',
-    'LBL_PICK_DATETIME' => 'choose Date/Time'
+    'LBL_PICK_DATETIME' => 'choose Date/Time',
 
 );
 
@@ -1070,6 +1070,8 @@ $mod_strings['LBL_VISUALIZATION_PARAMS'] = 'Visualization Params';
 $mod_strings['LBL_WHERECONDITION'] = 'Where Condition';
 $mod_strings['LBL_WHEREGROUPS'] = 'Where Groups';
 $mod_strings['LBL_PROSPECTLISTS'] = "Prospect Lists";
+
 $mod_strings['LBL_UNION_MODULES'] = 'Union Modules';
 $mod_strings['LBL_FILTER_DESCRIPTION'] = "Description (useful for AI)";
 $mod_strings['LBL_RESULT_COLUMN_DESCRIPTION'] = "Description (useful for AI)";
+

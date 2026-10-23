@@ -458,8 +458,8 @@ function selectItem(event: KeyboardEvent) {
             }
             break
         case ' ':
-            event.preventDefault()
             if (selectedItem.value) {
+                event.preventDefault()
                 navigateToModule(selectedItem.value)
             }
             break
@@ -483,10 +483,8 @@ onUnmounted(() => {
 
 watch(
     () => filterModulesQuery.value,
-    (newValue) => {
-        if (newValue === '') {
-            selectedItem.value = ''
-        }
+    () => {
+        selectedItem.value = ''
     },
 )
 

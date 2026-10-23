@@ -50,6 +50,4 @@ $mod_strings = array(
     'LBL_EMPLOYEE_ID' => 'Employee ID',
     'LBL_EMPLOYEE_NAME' => 'Employee',
     'LBL_EMPLOYEE' => 'Employee',
-    'LBL_EMPLOYEE_ID_COMMENT' => 'Employee record ID',
-    'LBL_EMPLOYEE_NAME_COMMENT' => 'Name of the employee',
 );

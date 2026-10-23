@@ -66,7 +66,7 @@
                 'massupdate' => '0',
                 'default' => '',
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The street address of the event location',
                 'help' => 'Location address',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -87,7 +87,7 @@
                 'massupdate' => '0',
                 'default' => null,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The city of the event location',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -108,7 +108,7 @@
                 'massupdate' => '0',
                 'default' => null,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The country of the event location',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -129,7 +129,7 @@
                 'massupdate' => '0',
                 'default' => null,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The postal code of the event location',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -150,7 +150,7 @@
                 'massupdate' => '0',
                 'default' => null,
                 'no_default' => false,
-                'comments' => '',
+                'comment' => 'The state or province of the event location',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -171,7 +171,7 @@
                 'massupdate' => '0',
                 'default' => '',
                 'no_default' => false,
-                'comments' => 'The maximum amount of people the location can cater for.',
+                'comment' => 'The maximum number of attendees the event location can accommodate',
                 'help' => 'The capacity of the event location',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -234,3 +234,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('FP_Event_Locations', 'FP_Event_Locations', array('basic', 'assignable', 'security_groups'));
+

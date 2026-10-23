@@ -59,13 +59,13 @@ $dictionary['Project'] = array(
             'required' => true,
             'type' => 'id',
             'reportable' => true,
-            'comment' => 'Unique identifier'
+            'comment' => 'Record unique identifier'
         ),
         'date_entered' => array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
-            'comment' => 'Date record created',
+            'comment' => 'The date when the record was created',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
         ),
@@ -73,7 +73,7 @@ $dictionary['Project'] = array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
-            'comment' => 'Date record last modified',
+            'comment' => 'The date when the record was last modified',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
         ),
@@ -81,7 +81,7 @@ $dictionary['Project'] = array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'Date record last indexed',
+            'comment' => 'The date when the record was indexed for search purposes',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -98,7 +98,7 @@ $dictionary['Project'] = array(
             'table' => 'users',
             'isnull' => false,
             'reportable' => true,
-            'comment' => 'User assigned to this record'
+            'comment' => 'The unique identifier of the user assigned to the record'
         ),
         'modified_user_id' => array(
             'name' => 'modified_user_id',
@@ -110,7 +110,7 @@ $dictionary['Project'] = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'reportable' => true,
-            'comment' => 'User who last modified record'
+            'comment' => 'The unique identifier of the user who last modified the record'
         ),
         'modified_by_name' =>
             array(
@@ -124,7 +124,8 @@ $dictionary['Project'] = array(
                 'id_name' => 'modified_user_id',
                 'module' => 'Users',
                 'link' => 'modified_user_link',
-                'duplicate_merge' => 'disabled'
+                'duplicate_merge' => 'disabled',
+                'comment' => 'The name of the user who last modified the record',
             ),
         'created_by' => array(
             'name' => 'created_by',
@@ -135,7 +136,7 @@ $dictionary['Project'] = array(
             'table' => 'users',
             'isnull' => 'false',
             'dbType' => 'id',
-            'comment' => 'User who created record',
+            'comment' => 'The unique identifier of the user who created the record',
         ),
         'created_by_name' =>
             array(
@@ -151,6 +152,7 @@ $dictionary['Project'] = array(
                 'module' => 'Users',
                 'duplicate_merge' => 'disabled',
                 'importable' => 'false',
+                'comment' => 'The name of the user who created the record',
             ),
         'name' => array(
             'name' => 'name',
@@ -161,7 +163,7 @@ $dictionary['Project'] = array(
             'len' => 50,
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'Project name',
+            'comment' => 'The name or title of the record',
             'importable' => 'required',
             'required' => true,
         ),
@@ -170,7 +172,7 @@ $dictionary['Project'] = array(
             'vname' => 'LBL_DESCRIPTION',
             'required' => false,
             'type' => 'text',
-            'comment' => 'Project description'
+            'comment' => 'A detailed description of the record'
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -179,7 +181,7 @@ $dictionary['Project'] = array(
             'required' => false,
             'reportable' => false,
             'default' => '0',
-            'comment' => 'Record deletion indicator'
+            'comment' => 'A flag indicating whether the record has been deleted'
         ),
         'estimated_start_date' =>
             array(
@@ -192,6 +194,7 @@ $dictionary['Project'] = array(
                 'required' => true,
                 'enable_range_search' => true,
                 'options' => 'date_range_search_dom',
+                'comment' => 'The estimated start date of the record',
             ),
         'estimated_end_date' =>
             array(
@@ -203,6 +206,7 @@ $dictionary['Project'] = array(
                 'required' => true,
                 'enable_range_search' => true,
                 'options' => 'date_range_search_dom',
+                'comment' => 'The estimated end date of the record',
             ),
         'status' =>
             array(
@@ -218,6 +222,7 @@ $dictionary['Project'] = array(
                     'On_Hold' => 'yellow',
                     'Completed' => 'green',
                 ],
+                'comment' => 'The current status of the record',
             ),
 
         'priority' =>
@@ -226,6 +231,7 @@ $dictionary['Project'] = array(
                 'vname' => 'LBL_PRIORITY',
                 'type' => 'enum',
                 'options' => 'projects_priority_options',
+                'comment' => 'The priority level assigned to the this record',
             ),
         'total_estimated_effort' =>
             array(
@@ -233,6 +239,7 @@ $dictionary['Project'] = array(
                 'type' => 'int',
                 'source' => 'non-db',
                 'vname' => 'LBL_LIST_TOTAL_ESTIMATED_EFFORT',
+                'comment' => 'The total estimated effort for the project, typically calculated as the sum of the estimated effort of all related project tasks',
             ),
         'total_actual_effort' =>
             array(
@@ -240,6 +247,7 @@ $dictionary['Project'] = array(
                 'type' => 'int',
                 'source' => 'non-db',
                 'vname' => 'LBL_LIST_TOTAL_ACTUAL_EFFORT',
+                'comment' => 'The total actual effort for the project, typically calculated as the sum of the actual effort of all related project tasks',
             ),
         'quotes' =>
             array(
@@ -361,6 +369,7 @@ $dictionary['Project'] = array(
                 'link' => 'users',
                 'len' => '255',
                 'source' => 'non-db',
+                'comment' => 'The name of the user assigned to the record',
             ),
         'cases' =>
             array(
@@ -425,6 +434,7 @@ $dictionary['Project'] = array(
                 'table' => 'am_projecttemplates',
                 'module' => 'AM_ProjectTemplates',
                 'rname' => 'name',
+                'comment' => 'Am Projecttemplates Project 1 Name description',
             ),
         'am_projecttemplates_project_1am_projecttemplates_ida' =>
             array(
@@ -462,7 +472,7 @@ $dictionary['Project'] = array(
             'required' => false,
             'reportable' => false,
             'default' => '0',
-            'comment' => ''
+            'comment' => 'The flag indicating whether to override business hours for the project'
         ),
     ),
     'indices' => array(
@@ -521,3 +531,4 @@ $dictionary['Project'] = array(
 
 VardefManager::createVardef('Project', 'Project', array('security_groups',
 ));
+

@@ -35,7 +35,7 @@ $dictionary['AOW_Action'] = array(
     'vname' => 'LBL_WORKFLOW_ID',
     'type' => 'id',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'AOW Workflow Id',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -54,7 +54,7 @@ $dictionary['AOW_Action'] = array(
     'vname' => 'LBL_ORDER',
     'type' => 'int',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'Order of the action within the workflow sequence, determining when this action is executed in relation to other actions',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -75,7 +75,7 @@ $dictionary['AOW_Action'] = array(
     'vname' => 'LBL_ACTION',
     'type' => 'enum',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The specific action or operation to be performed, such as creating a record, sending an email, or updating a field',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -96,6 +96,7 @@ $dictionary['AOW_Action'] = array(
     'type' => 'longtext',
     'vname' => 'LBL_PARAMETERS',
     'isnull' => true,
+    'comment' => 'Additional parameters or options that modify how the action is executed, such as field values, target modules, or conditions for execution',
   ),
   'aow_workflow' =>
   array(
@@ -132,3 +133,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOW_Actions', 'AOW_Action', array('basic'));
+

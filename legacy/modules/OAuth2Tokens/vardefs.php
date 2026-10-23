@@ -59,6 +59,7 @@ $dictionary['OAuth2Tokens'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'Record unique identifier',
         ],
         'token_is_revoked' => [
             'name' => 'token_is_revoked',
@@ -67,6 +68,7 @@ $dictionary['OAuth2Tokens'] = [
             'required' => true,
             'reportable' => false,
             'api-visible' => false,
+            'comment' => 'Flag indicating whether the access token has been revoked',
         ],
         'token_type' => [
             'name' => 'token_type',
@@ -76,6 +78,7 @@ $dictionary['OAuth2Tokens'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The type of the access token, typically Bearer',
         ],
         'access_token_expires' => [
             'name' => 'access_token_expires',
@@ -85,6 +88,7 @@ $dictionary['OAuth2Tokens'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The date and time when the access token expires',
         ],
         'access_token' => [
             'name' => 'access_token',
@@ -95,6 +99,7 @@ $dictionary['OAuth2Tokens'] = [
             'api-visible' => false,
             'len' => '4000',
             'inline_edit' => false,
+            'comment' => 'The value of the OAuth2 access token',
         ],
         'refresh_token' => [
             'name' => 'refresh_token',
@@ -105,6 +110,7 @@ $dictionary['OAuth2Tokens'] = [
             'api-visible' => false,
             'len' => '4000',
             'inline_edit' => false,
+            'comment' => 'The value of the OAuth2 refresh token used to obtain a new access token',
         ],
         'refresh_token_expires' => [
             'name' => 'refresh_token_expires',
@@ -114,6 +120,7 @@ $dictionary['OAuth2Tokens'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The date and time when the refresh token expires',
         ],
         'grant_type' => [
             'name' => 'grant_type',
@@ -125,6 +132,7 @@ $dictionary['OAuth2Tokens'] = [
             'reportable' => false,
             'api-visible' => false,
             'inline_edit' => false,
+            'comment' => 'The OAuth2 grant type used to issue this token',
         ],
         'scope' => [
             'name' => 'scope',
@@ -135,6 +143,7 @@ $dictionary['OAuth2Tokens'] = [
             'api-visible' => false,
             'len' => '1024',
             'inline_edit' => false,
+            'comment' => 'The space-separated list of OAuth2 permission scopes granted to this token',
         ],
         'state' => [
             'name' => 'state',
@@ -145,6 +154,7 @@ $dictionary['OAuth2Tokens'] = [
             'api-visible' => false,
             'len' => '1024',
             'inline_edit' => false,
+            'comment' => 'The opaque state value passed by the client to prevent cross-site request forgery',
         ],
         'oauth2client_name' => [
             'required' => false,
@@ -164,6 +174,7 @@ $dictionary['OAuth2Tokens'] = [
             'quicksearch' => 'enabled',
             'reportable' => true,
             'inline_edit' => false,
+            'comment' => 'The name of the OAuth2 client this token belongs to',
         ],
         'oauth2clients' => [
             'name' => 'oauth2clients',
@@ -186,6 +197,7 @@ $dictionary['OAuth2Tokens'] = [
             'vname' => 'LBL_CLIENT_ID',
             'massupdate' => false,
             'inline_edit' => false,
+            'comment' => 'The unique identifier of the OAuth2 client this token belongs to',
         ],
         'assigned_user_id' => [
             'name' => 'assigned_user_id',
@@ -200,7 +212,7 @@ $dictionary['OAuth2Tokens'] = [
             'isnull' => 'false',
             'dbType' => 'id',
             'audited' => true,
-            'comment' => 'User ID assigned to record',
+            'comment' => 'The unique identifier of the user assigned to the record',
             'duplicate_merge' => 'disabled',
             'inline_edit' => false,
         ],
@@ -217,6 +229,7 @@ $dictionary['OAuth2Tokens'] = [
             'module' => 'Users',
             'duplicate_merge' => 'disabled',
             'inline_edit' => false,
+            'comment' => 'The name of the user assigned to the record',
         ],
         'assigned_user_link' => [
             'name' => 'assigned_user_link',
@@ -259,3 +272,4 @@ VardefManager::createVardef(
 
     ]
 );
+

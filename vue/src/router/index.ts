@@ -34,6 +34,9 @@ router.beforeEach(async (to, from) => {
         sessionStorage.setItem('auth_redirect', to.fullPath)
         return { name: 'auth-login', query: { redirect: to.path } }
     }
+    if (to.meta?.adminOnly && !auth.user?.is_admin) {
+        return { name: 'dashboard' }
+    }
     if (auth.user?.id && to.name === 'auth-login') {
         const redirect = sessionStorage.getItem('auth_redirect')
         if (redirect && redirect !== to.fullPath) {

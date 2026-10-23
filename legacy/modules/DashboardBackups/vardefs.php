@@ -55,7 +55,6 @@ $dictionary['DashboardBackups'] = array(
             'vname' => 'LBL_ENCODED_PAGES',
             'type' => 'text',
             'massupdate' => 0,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -68,6 +67,7 @@ $dictionary['DashboardBackups'] = array(
             'studio' => 'visible',
             'rows' => '4',
             'cols' => '20',
+            'comment' => 'Encoded Pages',
         ),
         'encoded_dashlets' => array(
             'required' => false,
@@ -76,7 +76,6 @@ $dictionary['DashboardBackups'] = array(
             'type' => 'text',
             'dbType' => 'mediumtext',
             'massupdate' => 0,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -89,6 +88,7 @@ $dictionary['DashboardBackups'] = array(
             'studio' => 'visible',
             'rows' => '4',
             'cols' => '20',
+            'comment' => 'Encoded Dashlets',
         ),
         "dashboardmanager" => array(
             'name' => 'dashboardmanager',
@@ -109,6 +109,7 @@ $dictionary['DashboardBackups'] = array(
             'table' => 'dashboardmanager',
             'module' => 'DashboardManager',
             'rname' => 'name',
+            'comment' => 'Name of the dashboard manager associated with this record',
         ),
         "dashboardmanager_id" => array(
             'name' => 'dashboardmanager_id',
@@ -122,6 +123,7 @@ $dictionary['DashboardBackups'] = array(
             'massupdate' => false,
             'duplicate_merge' => 'disabled',
             'hideacl' => true,
+            'comment' => 'Id of the dashboard manager associated with this record',
         ),
         "dashboardhistory" => array(
             'name' => 'dashboardhistory',
@@ -142,6 +144,7 @@ $dictionary['DashboardBackups'] = array(
             'table' => 'dashboardhistory',
             'module' => 'DashboardHistory',
             'rname' => 'name',
+            'comment' => 'Name of the dashboard history associated with this record',
         ),
         "dashboardhistory_id" => array(
             'name' => 'dashboardhistory_id',
@@ -155,6 +158,7 @@ $dictionary['DashboardBackups'] = array(
             'massupdate' => false,
             'duplicate_merge' => 'disabled',
             'hideacl' => true,
+            'comment' => 'Id of the dashboard history associated with this record',
         ),
     ),
     'relationships' => array(
@@ -166,3 +170,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('DashboardBackups', 'DashboardBackups', array('basic', 'assignable'));
+

@@ -48,6 +48,7 @@ namespace MintHCM\Api;
 
 use MintHCM\Api\ExceptionHandlers\Doctrine\DoctrineConnectionExceptionHandler;
 use MintHCM\Api\ExceptionHandlers\MintExceptionHandler;
+use MintHCM\Api\Middlewares\Admin\AdminMiddleware;
 use MintHCM\Api\Middlewares\Auth\AuthMiddleware;
 use MintHCM\Api\Middlewares\Params\ParamsMiddleware;
 use MintHCM\Api\Middlewares\Parsers\JsonBodyParserMiddleware;
@@ -90,6 +91,7 @@ class ApiManager
         $this->app->addBodyParsingMiddleware();
         $this->app->add(CustomLoader::getObject(ParamsMiddleware::class));
         $this->app->add(CustomLoader::getObject(RouteAccessMiddleware::class));
+        $this->app->add(CustomLoader::getObject(AdminMiddleware::class));
         $this->app->add(CustomLoader::getObject(AuthMiddleware::class));
         $this->app->add(CustomLoader::getObject(JsonBodyParserMiddleware::class));
     }

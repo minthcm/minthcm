@@ -90,7 +90,6 @@ $dictionary['Costs'] = array(
          'type' => 'enum',
          'massupdate' => 0,
          'default' => 'transport',
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -102,6 +101,7 @@ $dictionary['Costs'] = array(
          'options' => 'cost_type',
          'studio' => 'visible',
          'dependency' => false,
+         'comment' => 'The type or category of the cost (e.g., travel, accommodation, meals)',
       ),
       'cost_amount' => array(
          'required' => false,
@@ -109,7 +109,6 @@ $dictionary['Costs'] = array(
          'vname' => 'LBL_COST_AMOUNT',
          'type' => 'currency',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -119,6 +118,7 @@ $dictionary['Costs'] = array(
          'len' => 26,
          'size' => '20',
          'precision' => 2,
+         'comment' => 'The monetary amount of the cost in the original currency',
       ),
       'cost_amount_usdollars' => array(
          'required' => false,
@@ -126,7 +126,6 @@ $dictionary['Costs'] = array(
          'vname' => 'LBL_COST_AMOUNT_BASE',
          'type' => 'currency',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -136,6 +135,7 @@ $dictionary['Costs'] = array(
          'len' => 26,
          'size' => '20',
          'precision' => 2,
+         'comment' => 'The cost amount converted to US dollars for reporting purposes',
       ),
       'currency_id' => array(
          'required' => false,
@@ -143,7 +143,6 @@ $dictionary['Costs'] = array(
          'vname' => 'LBL_CURRENCY',
          'type' => 'id',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -157,6 +156,7 @@ $dictionary['Costs'] = array(
             'name' => 'getCurrencyDropDown',
             'returns' => 'html',
          ),
+         'comment' => 'The unique identifier of the currency used for the cost',
       ),
       'cost_date' => array(
          'required' => false,
@@ -164,7 +164,6 @@ $dictionary['Costs'] = array(
          'vname' => 'LBL_COST_DATE',
          'type' => 'date',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -174,6 +173,7 @@ $dictionary['Costs'] = array(
          'size' => '20',
          'enable_range_search' => true,
          'options' => 'date_range_search_dom',
+         'comment' => 'The date when the cost was incurred or recorded',
       ),
       'cost_city' => array(
          'required' => true,
@@ -181,7 +181,6 @@ $dictionary['Costs'] = array(
          'vname' => 'LBL_COST_CITY',
          'type' => 'varchar',
          'massupdate' => 0,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -190,6 +189,7 @@ $dictionary['Costs'] = array(
          'reportable' => true,
          'len' => '255',
          'size' => '20',
+         'comment' => 'The city where the cost was incurred during the business trip',
       ),
       'accommodation_no' => array(
          'required' => false,
@@ -198,7 +198,6 @@ $dictionary['Costs'] = array(
          'type' => 'enum',
          'dbType' => 'int',
          'massupdate' => 0,
-         'comments' => '',
          'default' => '',
          'help' => '',
          'importable' => 'true',
@@ -211,6 +210,7 @@ $dictionary['Costs'] = array(
          'disable_num_format' => '',
          'options' => 'accommodation_no_list',
          'vt_dependency' => "equals(\$type,'accommodation')",
+         'comment' => 'The accommodation number or reference for lodging costs',
       ),
       'type_of_meal' => array(
          'required' => true,
@@ -219,7 +219,6 @@ $dictionary['Costs'] = array(
          'type' => 'enum',
          'massupdate' => 0,
          'default' => '',
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -232,6 +231,7 @@ $dictionary['Costs'] = array(
          'studio' => 'visible',
          'dependency' => false,
          'vt_dependency' => "equals(\$type,'restaurant')",
+         'comment' => 'The type of meal (e.g., breakfast, lunch, dinner) for meal-related costs',
       ),
       "delegations" => array(
          'name' => 'delegations',
@@ -255,6 +255,7 @@ $dictionary['Costs'] = array(
          'audited' => true,
          'vt_required' => true,
          'vt_dependency' => "not(equals(\$type,'transport'))",
+         'comment' => 'The name of the delegation or business trip associated with the cost',
       ),
       "delegation_id" => array(
          'name' => 'delegation_id',
@@ -266,6 +267,7 @@ $dictionary['Costs'] = array(
          'isnull' => 'true',
          'dbType' => 'id',
          'vt_calculated' => "ifElse(equals(\$type,'transport'),'',\$delegation_id)",
+         'comment' => 'The unique identifier of the delegation associated with the cost',
       ),
       "transportations" => array(
          'name' => 'transportations',
@@ -290,6 +292,7 @@ $dictionary['Costs'] = array(
          'vt_required' => 'equals(1,1)',
          'required' => true,
          'vt_dependency' => "equals(\$type,'transport')",
+         'comment' => 'The name or description of the transportation method used (e.g., flight, train)',
       ),
       "transportation_id" => array(
          'name' => 'transportation_id',
@@ -301,6 +304,7 @@ $dictionary['Costs'] = array(
          'isnull' => 'true',
          'dbType' => 'id',
          'vt_calculated' => "ifElse(not(equals(\$type,'transport')),'',\$transportation_id)",
+         'comment' => 'The unique identifier of the transportation record associated with the cost',
       ),
    ),
    'relationships' => array(
@@ -348,3 +352,5 @@ VardefManager::createVardef('Costs', 'Costs', array( 'basic', 'assignable', 'sec
 $dictionary['Costs']['fields']['assigned_user_id']['required'] = true;
 $dictionary['Costs']['fields']['assigned_user_id']['vt_calculated'] = "ifElse(equals(\$type,'transport'),related(@assigned_user_id,#transportations),related(@assigned_user_id,#delegations))";
 $dictionary['Costs']['fields']['assigned_user_id']['massupdate'] = 0;
+$dictionary['Costs']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
+

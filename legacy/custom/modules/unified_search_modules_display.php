@@ -1,5 +1,5 @@
 <?php
-// created: 2024-12-12 15:06:49
+// created: 2026-04-14 16:16:03
 $unified_search_modules_display = array (
   'ACLRoles' => 
   array (
@@ -66,10 +66,6 @@ $unified_search_modules_display = array (
     'visible' => true,
   ),
   'Meetings' => 
-  array (
-    'visible' => true,
-  ),
-  'Tasks' => 
   array (
     'visible' => true,
   ),
@@ -353,6 +349,14 @@ $unified_search_modules_display = array (
   array (
     'visible' => true,
   ),
+  'AOS_PDF_Templates' => 
+  array (
+    'visible' => true,
+  ),
+  'Tasks' => 
+  array (
+    'visible' => true,
+  ),
   'CampaignTrackers' => 
   array (
     'visible' => false,
@@ -360,10 +364,6 @@ $unified_search_modules_display = array (
   'Trackers' => 
   array (
     'visible' => false,
-  ),
-  'AOS_PDF_Templates' => 
-  array (
-    'visible' => true,
   ),
   'AIPromptTemplates' =>
   array (

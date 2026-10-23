@@ -6,8 +6,7 @@
                 ...$attrs,
                 ...( !['fieldset', 'date', 'age', 'datetime', 'datetimecombo', 'relate', 'parent'].includes(props.defs?.type) ? { name: props.defs.name } : {} )
             }"
-            :aria-description="comment"
-            :aria-describedby="props.defs.name+'-help'"
+            :aria-describedby="`${props.defs.name}-${instanceId}-help`"
             :aria-label="label"
             :is="FieldComponent"
             :class="classList"
@@ -21,7 +20,7 @@
             :modelValue="props.field?.model ?? modelValue"
             :view="view"
         />
-        <p :id="`${props.defs.name}-help`" hidden>
+        <p :id="`${props.defs.name}-${instanceId}-help`" hidden>
             {{comment}}
         </p>
         <div v-if="errorMessage" class="field-error-message">
@@ -31,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, computed, watch, ref, nextTick } from 'vue'
+import { defineAsyncComponent, computed, watch, ref, nextTick, getCurrentInstance } from 'vue'
 import { useModulesStore } from '@/store/modules'
 import { fieldConfig } from '../Fields/Field.config'
 import { FieldProps, FieldState } from './Field.model'
@@ -41,6 +40,7 @@ const wrapperRef = ref<HTMLElement | null>(null)
 const props = defineProps<FieldProps>()
 const languagesStore = useLanguagesStore()
 const modulesStore = useModulesStore()
+const instanceId = getCurrentInstance()?.uid ?? 0
 
 const hasError = () => {
     return errorMessage.value || null
@@ -70,14 +70,12 @@ const label = computed(() => {
 
 const comment = computed(() => {
     if(props.defs.type === 'fieldset'){
-        return  languagesStore.label(modulesStore.currentModule?.vardefs[props.defs.properties?.fields[0].name]?.comment, modulesStore.currentModule?.name) ? 
-        languagesStore.label(modulesStore.currentModule?.vardefs[props.defs.properties?.fields[0].name]?.comment, modulesStore.currentModule?.name)
-        : modulesStore.currentModule?.vardefs[props.defs.properties?.fields[0].name]?.comment;
+        return modulesStore.currentModule?.vardefs[props.defs.properties?.fields?.[0]?.name]?.comment ?? '';
     }
-    if(!props.defs?.comment || !modulesStore.currentModule?.name){
+    if(!props.defs?.comment){
         return ''
     }
-    return languagesStore.label(props.defs.comment, modulesStore.currentModule?.name)
+    return props.defs.comment
 })
 
 const errorMessage = computed(() => {

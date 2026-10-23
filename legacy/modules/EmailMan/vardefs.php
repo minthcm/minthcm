@@ -51,7 +51,7 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'name' => 'date_entered',
         'vname' => 'LBL_DATE_ENTERED',
         'type' => 'datetime',
-        'comment' => 'Date record created',
+        'comment' => 'The date when the record was created',
         'enable_range_search' => true,
         'options' => 'date_range_search_dom',
     ),
@@ -59,7 +59,7 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'name' => 'date_modified',
         'vname' => 'LBL_DATE_MODIFIED',
         'type' => 'datetime',
-        'comment' => 'Date record last modified',
+        'comment' => 'The date when the record was last modified',
         'enable_range_search' => true,
         'options' => 'date_range_search_dom',
     ),
@@ -68,7 +68,7 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'vname' => 'LBL_USER_ID',
         'type' => 'id','len' => '36',
         'reportable' =>false,
-        'comment' => 'User ID representing assigned-to user',
+        'comment' => 'The unique identifier of the user associated with this record',
     ),
     'id' =>
     array(
@@ -77,21 +77,21 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'type' => 'int',
         'len' => '11',
         'auto_increment'=>true,
-        'comment' => 'Unique identifier',
+        'comment' => 'Record unique identifier',
     ),
     'campaign_id' => array(
         'name' => 'campaign_id',
         'vname' => 'LBL_CAMPAIGN_ID',
         'type' => 'id',
         'reportable' =>false,
-        'comment' => 'ID of related campaign',
+        'comment' => 'The unique identifier of the campaign associated with this record',
     ),
     'marketing_id' => array(
         'name' => 'marketing_id',
         'vname' => 'LBL_MARKETING_ID',
         'type' => 'id',
         'reportable' =>false,
-        'comment' => '',
+        'comment' => 'The unique identifier of the marketing campaign associated with this record',
     ),
     'list_id' => array(
         'name' => 'list_id',
@@ -99,12 +99,13 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'type' => 'id',
         'reportable' =>false,
         'len' => '36',
-        'comment' => 'Associated list',
+        'comment' => 'The unique identifier of the list associated with this record',
     ),
     'send_date_time' => array(
         'name' => 'send_date_time' ,
         'vname' => 'LBL_SEND_DATE_TIME',
         'type' => 'datetime',
+        'comment' => 'The date and time when the email was sent',
     ),
     'modified_user_id' => array(
         'name' => 'modified_user_id',
@@ -112,34 +113,34 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'type' => 'id',
         'reportable' =>false,
         'len' => '36',
-        'comment' => 'User ID who last modified record',
+        'comment' => 'The unique identifier of the user who last modified the record',
     ),
     'in_queue' => array(
         'name' => 'in_queue',
         'vname' => 'LBL_IN_QUEUE',
         'type' => 'bool',
         'default' => '0',
-        'comment' => 'Flag indicating if item still in queue',
+        'comment' => 'A flag indicating whether the email is in the sending queue',
     ),
     'in_queue_date' => array(
         'name' => 'in_queue_date',
         'vname' => 'LBL_IN_QUEUE_DATE',
         'type' => 'datetime',
-        'comment' => 'Datetime in which item entered queue',
+        'comment' => 'The date when the email was added to the sending queue',
     ),
     'send_attempts' => array(
         'name' => 'send_attempts',
         'vname' => 'LBL_SEND_ATTEMPTS',
         'type' => 'int',
         'default' => '0',
-        'comment' => 'Number of attempts made to send this item',
+        'comment' => 'The number of attempts made to send the email',
     ),
     'deleted' => array(
         'name' => 'deleted',
         'vname' => 'LBL_DELETED',
         'type' => 'bool',
         'reportable' =>false,
-        'comment' => 'Record deletion indicator',
+        'comment' => 'A flag indicating whether the record has been deleted',
                 'default' => '0',
     ),
     'related_id' => array(
@@ -147,42 +148,45 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'vname' => 'LBL_RELATED_ID',
         'type' => 'id',
         'reportable' =>false,
-        'comment' => 'ID of Sugar object to which this item is related',
+        'comment' => 'The unique identifier of the related record',
     ),
     'related_type' => array(
         'name' => 'related_type' ,
         'vname' => 'LBL_RELATED_TYPE',
         'type' => 'varchar',
         'len' => '100',
-        'comment' => 'Descriptor of the Sugar object indicated by related_id',
+        'comment' => 'The type of the related record',
     ),
-    
+
                 'related_confirm_opt_in' => array(
                     'name' => 'related_confirm_opt_in',
                     'vname' => 'LBL_RELATED_CONFIRM_OPT_IN',
                     'type' => 'bool',
                     'default' => 0,
                     'reportable' => false,
-                    'comment' => '',
+                    'comment' => 'A flag indicating whether the related record has confirmed opt-in',
                 ),
-    
+
                 'recipient_name' => array(
         'name' => 'recipient_name',
         'type' => 'varchar',
         'len' => '255',
         'source'=>'non-db',
+        'comment' => 'The name of the email recipient',
     ),
     'recipient_email' => array(
         'name' => 'recipient_email',
         'type' => 'varchar',
         'len' => '255',
         'source'=>'non-db',
+        'comment' => 'The email address of the recipient',
     ),
     'message_name' => array(
         'name' => 'message_name',
         'type' => 'varchar',
         'len' => '255',
         'source'=>'non-db',
+        'comment' => 'The name of the email message',
     ),
     'campaign_name' => array(
         'name' => 'campaign_name',
@@ -190,6 +194,7 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
         'type' => 'varchar',
         'len' => '50',
         'source'=>'non-db',
+        'comment' => 'The name of the campaign associated with this record',
     ),
 
 ), 'indices' => array(
@@ -199,3 +204,4 @@ array( 'table' => 'emailman', 'comment' => 'Email campaign queue', 'fields' => a
                     array('name' => 'idx_eman_relid_reltype_id', 'type' => 'index', 'fields'=> array('related_id', 'related_type', 'campaign_id')),
                     )
 );
+

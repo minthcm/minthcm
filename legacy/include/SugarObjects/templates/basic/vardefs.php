@@ -50,7 +50,7 @@ $vardefs = array(
             'type' => 'id',
             'required' => true,
             'reportable' => true,
-            'comment' => 'LBL_ID_COMMENT',
+            'comment' => 'Unique identifier',
             'inline_edit' => false,
         ),
         'name' => array(
@@ -67,14 +67,14 @@ $vardefs = array(
             'duplicate_merge' => 'enabled',
             //'duplicate_merge_dom_value' => '3',
             'merge_filter' => 'selected',
-            'comment' => 'LBL_NAME_COMMENT',
+            'comment' => 'The name or title of the record',
         ),
         'date_entered' => array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
             'group' => 'created_by_name',
-            'comment' => 'LBL_DATE_ENTERED_COMMENT',
+            'comment' => 'Date record created',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -85,7 +85,7 @@ $vardefs = array(
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
             'group' => 'modified_by_name',
-            'comment' => 'LBL_DATE_MODIFIED_COMMENT',
+            'comment' => 'Date record last modified',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -95,7 +95,7 @@ $vardefs = array(
             'name' => 'date_indexed',
             'vname' => 'LBL_DATE_INDEXED',
             'type' => 'datetime',
-            'comment' => 'LBL_DATE_INDEXED_COMMENT',
+            'comment' => 'Date record last indexed',
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'inline_edit' => false,
@@ -112,7 +112,7 @@ $vardefs = array(
             'group' => 'modified_by_name',
             'dbType' => 'id',
             'reportable' => true,
-            'comment' => 'LBL_MODIFIED_COMMENT',
+            'comment' => 'User who last modified record',
             'massupdate' => false,
             'inline_edit' => false,
             'readonly' => true,
@@ -132,7 +132,7 @@ $vardefs = array(
             'massupdate' => false,
             'inline_edit' => false,
             'readonly' => true,
-            'comment' => 'LBL_MODIFIED_NAME_COMMENT',
+            'comment' => 'Name of the user who last modified record',
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -147,7 +147,7 @@ $vardefs = array(
             'massupdate' => false,
             'inline_edit' => false,
             'readonly' => true,
-            'comment' => 'LBL_CREATED_COMMENT',
+            'comment' => 'User who created record',
         ),
         'created_by_name' => array(
             'name' => 'created_by_name',
@@ -165,7 +165,7 @@ $vardefs = array(
             'massupdate' => false,
             'inline_edit' => false,
             'readonly' => true,
-            'comment' => 'LBL_CREATED_COMMENT',
+            'comment' => 'User who created record',
         ),
         'description' => array(
             'name' => 'description',
@@ -173,7 +173,7 @@ $vardefs = array(
             'type' => 'text',
             'rows' => 6,
             'cols' => 80,
-            'comment' => 'LBL_DESCRIPTION_COMMENT',
+            'comment' => 'Full record description',
         ),
         'deleted' => array(
             'name' => 'deleted',
@@ -181,7 +181,7 @@ $vardefs = array(
             'type' => 'bool',
             'default' => '0',
             'reportable' => false,
-            'comment' => 'LBL_DELETED_COMMENT',
+            'comment' => 'Indicates whether record was deleted',
         ),
 
         /////////////////RELATIONSHIP LINKS////////////////////////////
@@ -243,3 +243,4 @@ $vardefs = array(
     ],
     'doctrineEntity' => [],
 );
+

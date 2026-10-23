@@ -65,6 +65,7 @@ import { useStatusBoxesStore } from '@/store/statusBoxes'
 import { useRouter } from 'vue-router'
 import { useACL, ACLView } from '@/composables/useACL'
 import { mintApi } from '@/api/api'
+import { decodeHtmlEntities } from '@/utils/html'
 
 const SIDEPANEL_WIDTH_KEY = 'mint-sidepanel-width'
 const SIDEPANEL_COLLAPSED_KEY = 'mint-sidepanel-collapsed'
@@ -227,7 +228,7 @@ watch(
     () => store.bean.syncAttributes,
     (newVal) => {
         if (!newVal.name || !newVal.module_name) return
-        document.title = `${newVal.name} | ${languages.label('LBL_MODULE_NAME', newVal.module_name)} | ${
+        document.title = `${decodeHtmlEntities(newVal.name)} | ${languages.label('LBL_MODULE_NAME', newVal.module_name)} | ${
             backend.initData?.systemName
         }`
     },

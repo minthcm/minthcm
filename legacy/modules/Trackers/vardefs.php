@@ -54,6 +54,7 @@ $dictionary['Tracker'] = array(
             'isnull' => 'false',
             'auto_increment' => true,
             'reportable'=>true,
+            'comment' => 'Record unique identifier',
         ),
 	    'monitor_id'=>array (
 		    'name' => 'monitor_id',
@@ -61,6 +62,7 @@ $dictionary['Tracker'] = array(
 		    'type' => 'id',
 		    'required'=>true,
 		    'reportable'=>false,
+		    'comment' => 'Id of the monitor associated with this record',
 	    ),
         'user_id'=>array(
             'name' => 'user_id',
@@ -68,6 +70,7 @@ $dictionary['Tracker'] = array(
 			'type' => 'varchar',
             'len' => '36',
             'isnull' => 'false',
+            'comment' => 'The unique identifier of the user associated with this record',
         ),
         'module_name'=>array(
             'name' => 'module_name',
@@ -75,6 +78,7 @@ $dictionary['Tracker'] = array(
             'type' => 'varchar',
             'len' => '255',
             'isnull' => 'false',
+            'comment' => 'Name of the tracked module',
         ),
         'item_id'=>array(
             'name' => 'item_id',
@@ -82,6 +86,7 @@ $dictionary['Tracker'] = array(
             'type' => 'varchar',
             'len' => '36',
             'isnull' => 'false',
+            'comment' => 'Id of the tracked item',
         ),
         'item_summary'=>array(
             'name' => 'item_summary',
@@ -89,12 +94,14 @@ $dictionary['Tracker'] = array(
             'type' => 'varchar',
             'len' => '255',
             'isnull' => 'false',
+            'comment' => 'Brief summary of the tracked item',
         ),
         'date_modified'=>array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_LAST_ACTION',
             'type' => 'datetime',
             'isnull' => 'false',
+            'comment' => 'The date when the record was last modified',
         ),
         'action'=>array(
             'name' => 'action',
@@ -102,6 +109,7 @@ $dictionary['Tracker'] = array(
             'type' => 'varchar',
             'len' => '255',
             'isnull' => 'false',
+            'comment' => 'Type of action performed (e.g., view, edit, delete)',
         ),
         'session_id'=>array(
             'name' => 'session_id',
@@ -109,8 +117,8 @@ $dictionary['Tracker'] = array(
             'type' => 'varchar',
             'len' => '36',
             'isnull' => 'true',
-            'exportable' => false
-
+            'exportable' => false,
+            'comment' => 'Session Id',
 
         ),
         'visible'=>array(
@@ -119,6 +127,7 @@ $dictionary['Tracker'] = array(
             'type' => 'bool',
             'len' => '1',
             'default' => '0',
+            'comment' => 'Informs whether the tracked item is visible to the user',
         ),
 	    'deleted' =>array (
 		    'name' => 'deleted',
@@ -126,7 +135,7 @@ $dictionary['Tracker'] = array(
 		    'type' => 'bool',
 		    'default' => '0',
 		    'reportable'=>false,
-		    'comment' => 'Record deletion indicator'
+		    'comment' => 'A flag indicating whether the record has been deleted'
 		),
 		'assigned_user_link'=>array (
 		    'name' => 'assigned_user_link',
@@ -212,3 +221,4 @@ $dictionary['Tracker'] = array(
 		   )
    	),
 );
+

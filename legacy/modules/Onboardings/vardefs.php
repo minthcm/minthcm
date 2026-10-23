@@ -57,7 +57,6 @@ $dictionary['Onboardings'] = array(
             'massupdate' => '1',
             'default' => 'in_progress',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -76,6 +75,7 @@ $dictionary['Onboardings'] = array(
             ],
             'studio' => 'visible',
             'dependency' => false,
+            'comment' => 'The current status of the record',
         ),
         'date_start' => array(
             'required' => false,
@@ -84,7 +84,6 @@ $dictionary['Onboardings'] = array(
             'type' => 'datetimecombo',
             'massupdate' => '1',
             'no_default' => false,
-            'comments' => '',
             'help' => '',
             'importable' => 'true',
             'duplicate_merge' => 'disabled',
@@ -98,6 +97,7 @@ $dictionary['Onboardings'] = array(
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
             'dbType' => 'datetime',
+            'comment' => 'The start date of the record',
         ),
         'onboardingtemplate' => array(
             'name' => 'onboardingtemplate',
@@ -121,6 +121,7 @@ $dictionary['Onboardings'] = array(
             'module' => 'OnboardingTemplates',
             'rname' => 'name',
             'required' => false,
+            'comment' => 'Name of the onboarding template associated with this record',
         ),
         'onboardingtemplate_id' => array(
             'name' => 'onboardingtemplate_id',
@@ -197,13 +198,3 @@ VardefManager::createVardef('Onboardings', 'Onboardings',
     )
 );
 
-foreach ([
-    'status' => 'LBL_STATUS_COMMENT',
-    'date_start' => 'LBL_DATE_START_COMMENT',
-    'onboardingtemplate_name' => 'LBL_ONBOARDINGTEMPLATE_NAME_COMMENT',
-    'onboardingtemplate_id' => 'LBL_ONBOARDINGTEMPLATE_ID_COMMENT',
-] as $field => $commentLabel) {
-    if (isset($dictionary['Onboardings']['fields'][$field])) {
-        $dictionary['Onboardings']['fields'][$field]['comment'] = $commentLabel;
-    }
-}

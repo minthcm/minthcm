@@ -50,12 +50,14 @@ $dictionary['AOR_Chart'] = array(
             'table' => 'aor_reports',
             'module' => 'AOR_Reports',
             'rname' => 'name',
+            'comment' => 'Related report name for this chart, linking the chart to a specific report definition',
         ),
         "aor_report_id" => array(
             'name' => 'aor_report_id',
             'type' => 'id',
             'reportable' => false,
             'vname' => 'LBL_AOR_REPORT_ID',
+            'comment' => 'Related report id for this chart, linking the chart to a specific report definition',
         ),
         'type' =>
             array(
@@ -67,6 +69,7 @@ $dictionary['AOR_Chart'] = array(
                 'len' => 100,
                 'size' => '20',
                 'options' => 'aor_chart_types',
+                'comment' => 'Type of the chart (e.g., bar, line, pie)',
             ),
         'x_field' =>
             array(
@@ -74,6 +77,7 @@ $dictionary['AOR_Chart'] = array(
                 'name' => 'x_field',
                 'vname' => 'LBL_X_FIELD',
                 'type' => 'int',
+                'comment' => 'X Field',
             ),
         'y_field' =>
             array(
@@ -81,6 +85,7 @@ $dictionary['AOR_Chart'] = array(
                 'name' => 'y_field',
                 'vname' => 'LBL_Y_FIELD',
                 'type' => 'int',
+                'comment' => 'Y Field',
             ),
     ),
     'relationships'=>array(
@@ -102,3 +107,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOR_Charts', 'AOR_Chart', array('basic'));
+

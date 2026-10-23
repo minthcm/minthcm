@@ -17,6 +17,7 @@ $dictionary['Reactions'] = array(
             'required' => true,
             'importable' => 'required',
             'options' => 'reaction_type_list',
+            'comment' => 'The type of reaction given to the parent record (e.g. like, kudos)',
         ),
         'parent_type' => array(
             'name' => 'parent_type',
@@ -26,6 +27,7 @@ $dictionary['Reactions'] = array(
             'group' => 'parent_name',
             'options' => 'parent_type_display_reactions',
             'len' => 255,
+            'comment' => 'The module type of the parent record',
         ),
         'parent_name' => array(
             'name' => 'parent_name',
@@ -38,6 +40,7 @@ $dictionary['Reactions'] = array(
             'source' => 'non-db',
             'options' => 'parent_type_display_reactions',
             'required' => true,
+            'comment' => 'The name of the parent record',
         ),
         'parent_id' => array(
             'name' => 'parent_id',
@@ -45,6 +48,7 @@ $dictionary['Reactions'] = array(
             'type' => 'id',
             'group' => 'parent_name',
             'reportable' => false,
+            'comment' => 'The unique identifier of the parent record',
         ),
         'news' => array(
             'name' => 'news',
@@ -82,3 +86,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Reactions', 'Reactions', array('basic', 'assignable'));
+

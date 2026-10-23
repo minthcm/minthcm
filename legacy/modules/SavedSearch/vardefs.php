@@ -47,51 +47,57 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 $dictionary['SavedSearch'] = array('table' => 'saved_search',
 'fields' => array (
-  'id' => 
+  'id' =>
   array (
     'name' => 'id',
     'vname' => 'LBL_NAME',
     'type' => 'id',
     'required'=>true,
     'reportable'=>false,
+    'comment' => 'Record unique identifier',
   ),
-  'name' => 
+  'name' =>
   array (
     'name' => 'name',
     'type' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 150,
+    'comment' => 'The name or title of the record',
   ),
-  'search_module' => 
+  'search_module' =>
   array (
     'name' => 'search_module',
     'type' => 'varchar',
     'vname' => 'LBL_MODULE',
     'len' => 150,
+    'comment' => 'Search Module',
   ),
-  'deleted' => 
+  'deleted' =>
   array (
     'name' => 'deleted',
     'vname' => 'LBL_CREATED_BY',
     'type' => 'bool',
     'required'=>true,
     'reportable'=>false,
+    'comment' => 'A flag indicating whether the record has been deleted',
   ),
-  'date_entered' => 
+  'date_entered' =>
   array (
     'name' => 'date_entered',
     'vname' => 'LBL_DATE_ENTERED',
     'type' => 'datetime',
     'required'=>true,
+    'comment' => 'The date when the record was created',
   ),
-  'date_modified' => 
+  'date_modified' =>
   array (
     'name' => 'date_modified',
     'vname' => 'LBL_DATE_MODIFIED',
     'type' => 'datetime',
     'required'=>true,
+    'comment' => 'The date when the record was last modified',
   ),
-  'assigned_user_id' => 
+  'assigned_user_id' =>
   array (
     'name' => 'assigned_user_id',
     'rname' => 'user_name',
@@ -103,8 +109,9 @@ $dictionary['SavedSearch'] = array('table' => 'saved_search',
     'dbType' => 'id',
     'reportable'=>true,
     'massupdate' => false,
+    'comment' => 'The unique identifier of the user assigned to the record',
   ),
-  'assigned_user_name' => 
+  'assigned_user_name' =>
   array (
     'name' => 'assigned_user_name',
     'vname' => 'LBL_ASSIGNED_TO_NAME',
@@ -113,20 +120,23 @@ $dictionary['SavedSearch'] = array('table' => 'saved_search',
     'massupdate' => false,
     'source'=>'non-db',
     'table' => 'users',
+    'comment' => 'The name of the user assigned to the record',
   ),
-  'contents' => 
+  'contents' =>
   array (
     'name' => 'contents',
     'type' => 'text',
     'vname' => 'LBL_DESCRIPTION',
     'isnull' => true,
+    'comment' => 'Contents',
   ),
-  'description' => 
+  'description' =>
   array (
     'name' => 'description',
     'type' => 'text',
     'vname' => 'LBL_DESCRIPTION',
     'isnull' => true,
+    'comment' => 'A detailed description of the record',
   ),
   'assigned_user_link' =>
   array (
@@ -154,3 +164,4 @@ $dictionary['SavedSearch'] = array('table' => 'saved_search',
 
 VardefManager::createVardef('SavedSearch','SavedSearch', array(
 ));
+

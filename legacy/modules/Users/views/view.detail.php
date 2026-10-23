@@ -129,6 +129,12 @@ class UsersViewDetail extends ViewDetail
         $this->dv->defs['templateMeta']['form']['buttons'][] = array('customCode' => '<input title="{$MOD.LBL_RESET_PREFERENCES}" class="button" LANGUAGE=javascript onclick="if(confirm(\'' . '{$MOD.LBL_RESET_PREFERENCES_WARNING_USER}' . '\')) window.location=\'index.php?module=Users&action=resetPreferences&reset_preferences=true&record={$fields.id.value}\';" type="button" name="password" value="{$MOD.LBL_RESET_PREFERENCES}">"');
         $this->dv->defs['templateMeta']['form']['buttons'][] = array('customCode' => '<input title="{$MOD.LBL_RESET_HOMEPAGE}" class="button" LANGUAGE=javascript onclick="if(confirm(\'' . '{$MOD.LBL_RESET_HOMEPAGE_WARNING}' . '\')) window.location=\'index.php?module=Users&action=DetailView&reset_homepage=true&record={$fields.id.value}\';" type="button" name="password" value="{$MOD.LBL_RESET_HOMEPAGE}">"');
 
+        // Reset of the OIDC subject binding (#193558): full administrators only, sent as POST.
+        // sugar_button appends the form submit itself; returning false on "Cancel" skips it.
+        if (is_admin($current_user) && !empty($this->bean->oidc_subject)) {
+            $this->dv->defs['templateMeta']['form']['buttons'][] = array('customCode' => '<input title="{$MOD.LBL_RESET_OIDC_BINDING}" class="button" id="reset_oidc_binding_button" type="button" name="reset_oidc_binding" onclick="if(!confirm(\'{$MOD.LBL_RESET_OIDC_BINDING_WARNING|escape:\'javascript\'}\')) return false; this.form.action.value=\'resetOidcBinding\';" value="{$MOD.LBL_RESET_OIDC_BINDING}">');
+        }
+
         $show_roles = (!($this->bean->is_group == '1' || $this->bean->portal_only == '1'));
         if (is_admin($this->bean)) {
             $show_roles = false;

@@ -55,7 +55,7 @@ $dictionary['SurveyQuestions'] = array(
             'type'                      => 'int',
             'massupdate'                => 0,
             'no_default'                => false,
-            'comments'                  => '',
+            'comment'                   => 'Order in which the question appears within the survey, with lower numbers indicating higher priority or earlier placement',
             'help'                      => '',
             'importable'                => 'true',
             'duplicate_merge'           => 'disabled',
@@ -79,7 +79,7 @@ $dictionary['SurveyQuestions'] = array(
             'type'                      => 'enum',
             'massupdate'                => 0,
             'no_default'                => false,
-            'comments'                  => '',
+            'comment'                   => 'Survey Question Type description, indicating the format of the question',
             'help'                      => '',
             'importable'                => 'true',
             'duplicate_merge'           => 'disabled',
@@ -100,6 +100,7 @@ $dictionary['SurveyQuestions'] = array(
             'name'     => 'happiness_question',
             'vname'    => 'LBL_HAPPINESS_QUESTION',
             'type'     => 'bool',
+            'comment'  => 'Flag indicating whether this question is used to measure employee happiness',
         ),
         "surveyquestions_surveyquestionoptions"   => array(
             'name'         => 'surveyquestions_surveyquestionoptions',
@@ -144,12 +145,14 @@ $dictionary['SurveyQuestions'] = array(
             'table'   => 'surveys',
             'module'  => 'Surveys',
             'rname'   => 'name',
+            'comment' => 'Name of the survey associated with this question',
         ),
         "survey_id"                               => array(
             'name'       => 'survey_id',
             'type'       => 'id',
             'reportable' => false,
             'vname'      => 'LBL_SURVEYS_SURVEYQUESTIONS_FROM_SURVEYQUESTIONS_TITLE',
+            'comment'    => 'Id of the survey associated with this question',
         ),
     ),
     'relationships'      => array(
@@ -179,3 +182,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('SurveyQuestions', 'SurveyQuestions', array('basic', 'assignable', 'security_groups'));
+

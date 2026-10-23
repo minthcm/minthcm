@@ -62,7 +62,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Unique identifier'
+            'comment' => 'Record unique identifier'
         ],
         'deleted' => [
             'name' => 'deleted',
@@ -76,7 +76,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Record deltion indicator'
+            'comment' => 'A flag indicating whether the record has been deleted'
         ],
         'date_entered' => [
             'name' => 'date_entered',
@@ -89,7 +89,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Date record created'
+            'comment' => 'The date when the record was created'
         ],
         'date_modified' => [
             'name' => 'date_modified',
@@ -102,7 +102,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Date record last modified'
+            'comment' => 'The date when the record was last modified'
         ],
         'modified_user_id' => [
             'name' => 'modified_user_id',
@@ -119,7 +119,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'User who last modified record'
+            'comment' => 'The unique identifier of the user who last modified the record'
         ],
         'modified_user_id_link' => [
             'name' => 'modified_user_id_link',
@@ -152,7 +152,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'User who created record'
+            'comment' => 'The unique identifier of the user who created the record'
         ],
         'owner_name' => [
             'name' => 'owner_name',
@@ -174,6 +174,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Name of the user who owns this record',
         ],
         'created_by_link' => [
             'name' => 'created_by_link',
@@ -203,7 +204,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Name given to the inbound email mailbox'
+            'comment' => 'The name or title of the record'
         ],
         'status' => [
             'name' => 'status',
@@ -219,7 +220,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Status of the inbound email mailbox (ex: Active or Inactive)'
+            'comment' => 'The current status of the record'
         ],
         'email_body_filtering' => [
             'name' => 'email_body_filtering',
@@ -230,7 +231,7 @@ $dictionary['InboundEmail'] = [
             'reportable' => false,
             'inline_edit' => false,
             'unified_search' => false,
-            'comment' => 'Set the filtering type for the emails body on listview'
+            'comment' => 'Controls whether filtering is applied to the body content of incoming emails to remove unwanted content or attachments'
         ],
         'server_url' => [
             'name' => 'server_url',
@@ -244,7 +245,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Mail server URL',
+            'comment' => 'The URL or address of the email server used for connecting to the inbound email account',
         ],
         'connection_string' => [
             'name' => 'connection_string',
@@ -258,7 +259,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Mail server Connection string',
+            'comment' => 'The connection string or parameters required to establish a connection with the email server',
         ],
         'email_user' => [
             'name' => 'email_user',
@@ -272,7 +273,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'User name allowed access to mail server'
+            'comment' => 'The username or account name used for authentication with the email server'
         ],
         'email_password' => [
             'name' => 'email_password',
@@ -290,7 +291,7 @@ $dictionary['InboundEmail'] = [
             'unified_search' => false,
             'sensitive' => true,
             'api-visible' => false,
-            'comment' => 'Password of user identified by email_user'
+            'comment' => 'The password associated with the email account for server authentication'
         ],
         'port' => [
             'name' => 'port',
@@ -306,7 +307,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'validation' => ['type' => 'range', 'min' => '110', 'max' => '65535'],
-            'comment' => 'Port used to access mail server'
+            'comment' => 'The network port number used for connecting to the email server (e.g., 993 for IMAP SSL)'
         ],
         'service' => [
             'name' => 'service',
@@ -320,7 +321,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => '',
+            'comment' => 'The type of email service or protocol being used (e.g., IMAP, POP3)',
         ],
         'mailbox' => [
             'name' => 'mailbox',
@@ -333,7 +334,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => ''
+            'comment' => 'The specific mailbox or folder name on the server where emails are retrieved from'
         ],
         'sentFolder' => [
             'name' => 'sentFolder',
@@ -345,6 +346,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the folder on the server where sent emails are stored',
         ],
         'trashFolder' => [
             'name' => 'trashFolder',
@@ -356,6 +358,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the folder on the server designated for deleted or trash emails',
         ],
         'delete_seen' => [
             'name' => 'delete_seen',
@@ -368,7 +371,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Delete email from server once read (seen)'
+            'comment' => 'Indicates whether emails marked as seen/read should be automatically deleted after processing'
         ],
         'move_messages_to_trash_after_import' => [
             'name' => 'move_messages_to_trash_after_import',
@@ -381,6 +384,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Controls whether imported messages are moved to the trash folder after successful import',
         ],
         'mailbox_type' => [
             'name' => 'mailbox_type',
@@ -393,7 +397,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => ''
+            'comment' => 'Specifies the type of mailbox configuration (e.g., personal, group, or bounce handling)'
         ],
         'template_id' => [
             'name' => 'template_id',
@@ -406,7 +410,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Template used for auto-reply'
+            'comment' => 'The unique identifier of the email template associated with this inbound email account'
         ],
         'stored_options' => [
             'name' => 'stored_options',
@@ -418,7 +422,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => ''
+            'comment' => 'Serialized or stored configuration options for the inbound email account settings'
         ],
         'group_id' => [
             'name' => 'group_id',
@@ -430,7 +434,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Group ID (unused)'
+            'comment' => 'The unique identifier of the group associated with this email account for access control'
         ],
         'is_personal' => [
             'name' => 'is_personal',
@@ -445,7 +449,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'massupdate' => '',
-            'comment' => 'Personal account flag'
+            'comment' => 'Indicates whether this inbound email account is configured for personal use'
         ],
         'groupfolder_id' => [
             'name' => 'groupfolder_id',
@@ -458,7 +462,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
-            'comment' => 'Unique identifier'
+            'comment' => 'The unique identifier of the group folder where emails are organized'
         ],
         'type' => [
             'name' => 'type',
@@ -472,6 +476,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The general type or category of the inbound email configuration',
         ],
         'auth_type' => [
             'name' => 'auth_type',
@@ -485,6 +490,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The authentication method used for connecting to the email server (e.g., basic, OAuth)',
         ],
         'protocol' => [
             'name' => 'protocol',
@@ -499,6 +505,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The communication protocol used for email retrieval (e.g., IMAP, POP3)',
         ],
         'is_ssl' => [
             'name' => 'is_ssl',
@@ -512,6 +519,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'Indicates whether SSL/TLS encryption is used for secure connections to the email server',
         ],
         'is_default' => [
             'name' => 'is_default',
@@ -526,6 +534,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'Indicates whether this inbound email account is set as the default for the user or system',
         ],
         'from_name' => [
             'name' => 'from_name',
@@ -538,6 +547,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The display name used in the "From" field for outgoing emails from this account',
         ],
         'from_addr' => [
             'name' => 'from_addr',
@@ -550,6 +560,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The email address used in the "From" field for outgoing emails from this account',
         ],
         'reply_to_name' => [
             'name' => 'reply_to_name',
@@ -562,6 +573,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The display name used in the "Reply-To" field for emails sent from this account',
         ],
         'reply_to_addr' => [
             'name' => 'reply_to_addr',
@@ -574,6 +586,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The email address used in the "Reply-To" field for emails sent from this account',
         ],
         'account_signature_id' => [
             'name' => 'account_signature_id',
@@ -591,6 +604,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The unique identifier of the email signature associated with this account',
         ],
         'filter_domain' => [
             'name' => 'filter_domain',
@@ -603,6 +617,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The domain name used for filtering incoming emails (e.g., to accept only emails from specific domains)',
         ],
         'email_num_autoreplies_24_hours' => [
             'name' => 'email_num_autoreplies_24_hours',
@@ -615,6 +630,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The maximum number of auto-replies allowed per 24-hour period to prevent spam loops',
         ],
         'is_auto_import' => [
             'name' => 'is_auto_import',
@@ -629,6 +645,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'Indicates whether emails are automatically imported from this account on a scheduled basis',
         ],
         'is_create_case' => [
             'name' => 'is_create_case',
@@ -643,6 +660,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'Controls whether incoming emails automatically create support cases or tickets',
         ],
         'allow_outbound_group_usage' => [
             'name' => 'allow_outbound_group_usage',
@@ -657,6 +675,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'Indicates whether this account can be used for outbound emails by group members',
         ],
         'distrib_method' => [
             'name' => 'distrib_method',
@@ -670,6 +689,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'The method used for distributing incoming emails among group members (e.g., round-robin, least busy)',
         ],
         'distribution_options' => [
             'name' => 'distribution_options',
@@ -687,6 +707,7 @@ $dictionary['InboundEmail'] = [
             'exportable' => false,
             'unified_search' => false,
             'source' => 'non-db',
+            'comment' => 'Additional options or settings for email distribution within the group',
         ],
         'distribution_user' => [
             'name' => 'distribution_user',
@@ -721,6 +742,7 @@ $dictionary['InboundEmail'] = [
             'unified_search' => false,
             'duplicate_merge' => 'disabled',
             'hideacl' => true,
+            'comment' => 'The unique identifier of the user responsible for email distribution',
         ],
         'distribution_user_name' => [
             'name' => 'distribution_user_name',
@@ -742,6 +764,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the user responsible for email distribution',
         ],
         'outbound_email' => [
             'name' => 'outbound_email',
@@ -776,6 +799,7 @@ $dictionary['InboundEmail'] = [
             'unified_search' => false,
             'duplicate_merge' => 'disabled',
             'hideacl' => true,
+            'comment' => 'The unique identifier of the outbound email account linked to this inbound account',
         ],
         'outbound_email_name' => [
             'name' => 'outbound_email_name',
@@ -797,6 +821,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the outbound email account linked to this inbound account',
         ],
         'autoreply_email_template' => [
             'name' => 'autoreply_email_template',
@@ -833,6 +858,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the email template used for automatic replies',
         ],
         'create_case_email_template' => [
             'name' => 'create_case_email_template',
@@ -867,6 +893,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The unique identifier of the template used when automatically creating cases from emails',
         ],
         'create_case_email_template_name' => [
             'name' => 'create_case_email_template_name',
@@ -888,6 +915,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the email template used when creating cases from incoming emails',
         ],
         'external_oauth_connection' => [
             'name' => 'external_oauth_connection',
@@ -922,6 +950,7 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The unique identifier of the external OAuth connection for authentication',
         ],
         'external_oauth_connection_name' => [
             'name' => 'external_oauth_connection_name',
@@ -943,18 +972,21 @@ $dictionary['InboundEmail'] = [
             'importable' => false,
             'exportable' => false,
             'unified_search' => false,
+            'comment' => 'The name of the external OAuth connection used for secure authentication',
         ],
 		'eapm_id' => [
             'name' => 'eapm_id',
             'vname' => 'LBL_EAPM_ID',
             'type' => 'id',
             'readonly' => true,
+            'comment' => 'The unique identifier of the External Account Provider Module (EAPM) configuration',
         ],
         'authorized_account' => [
             'name' => 'authorized_account',
             'vname' => 'LBL_AUTHORIZED_ACCOUNT',
             'type' => 'varchar',
             'readonly' => true,
+            'comment' => 'The authorized account details for external service integration',
         ],
         'email_provider' => [
             'name' => 'email_provider',
@@ -964,6 +996,7 @@ $dictionary['InboundEmail'] = [
             'len' => 20,
             'default' => 'other',
             'required' => true,
+            'comment' => 'The name or type of the email service provider (e.g., Gmail, Outlook)',
         ],
         'emails' => [
             'name' => 'emails',
@@ -1050,3 +1083,4 @@ $dictionary['InboundEmail'] = [
 ];
 
 VardefManager::createVardef('InboundEmail', 'InboundEmail', ['security_groups']);
+

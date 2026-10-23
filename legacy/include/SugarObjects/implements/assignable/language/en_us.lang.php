@@ -49,6 +49,4 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $mod_strings = array(
     'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
-    'LBL_ASSIGNED_TO_ID_COMMENT' => 'User ID assigned to record',
-    'LBL_ASSIGNED_TO_NAME_COMMENT' => 'Name of the assigned user to record',
 );

@@ -71,7 +71,7 @@ $vardefs = array(
             'audited' => true,
             'unified_search' => true,
             'full_text_search' => array('boost' => 3),
-            'comment' => 'The short description of the bug',
+            'comment' => 'The name or title describing the issue',
             'merge_filter' => 'selected',
             'required' => true,
             'importable' => 'required',
@@ -83,7 +83,7 @@ $vardefs = array(
             'type' => 'enum',
             'options' => strtolower($object_name) . '_type_dom',
             'len' => 255,
-            'comment' => 'The type of issue (ex: issue, feature)',
+            'comment' => 'The type or category of the issue',
             'merge_filter' => 'enabled',
         ),
 
@@ -94,7 +94,7 @@ $vardefs = array(
             'options' => strtolower($object_name) . '_status_dom',
             'len' => 100,
             'audited' => true,
-            'comment' => 'The status of the issue',
+            'comment' => 'The current status of the issue (e.g., open, in progress, closed)',
             'merge_filter' => 'enabled',
 
         ),
@@ -106,7 +106,7 @@ $vardefs = array(
             'options' => strtolower($object_name) . '_priority_dom',
             'len' => 100,
             'audited' => true,
-            'comment' => 'An indication of the priorty of the issue',
+            'comment' => 'The priority level assigned to the issue, indicating its urgency',
             'merge_filter' => 'enabled',
 
         ),
@@ -118,7 +118,7 @@ $vardefs = array(
             'options' => strtolower($object_name) . '_resolution_dom',
             'len' => 255,
             'audited' => true,
-            'comment' => 'An indication of how the issue was resolved',
+            'comment' => 'A description of how the issue was resolved or the resolution outcome',
             'merge_filter' => 'enabled',
 
         ),
@@ -128,7 +128,7 @@ $vardefs = array(
             'name' => 'work_log',
             'vname' => 'LBL_WORK_LOG',
             'type' => 'text',
-            'comment' => 'Free-form text used to denote activities of interest'
+            'comment' => 'A chronological log of work performed and time spent on the issue'
         ),
 
     ),
@@ -141,3 +141,4 @@ $vardefs = array(
     ),
 
 );
+

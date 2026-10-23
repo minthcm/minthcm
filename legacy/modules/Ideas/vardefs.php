@@ -57,7 +57,6 @@ $dictionary['Ideas'] = array(
          'massupdate' => '1',
          'default' => 'new',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -72,6 +71,7 @@ $dictionary['Ideas'] = array(
          'options' => 'idea_status_list',
          'studio' => 'visible',
          'dependency' => false,
+         'comment' => 'The current status of the record',
       ),
       'explanation' =>
       array(
@@ -81,7 +81,6 @@ $dictionary['Ideas'] = array(
          'type' => 'text',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -91,6 +90,7 @@ $dictionary['Ideas'] = array(
          'reportable' => true,
          'unified_search' => false,
          'merge_filter' => 'disabled',
+         'comment' => 'An explanation of the reasoning or justification behind the idea',
       ),
       "users" => array(
          'name' => 'users',
@@ -119,12 +119,14 @@ $dictionary['Ideas'] = array(
          ),
          'required' => true,
          'audited' => true,
+         'comment' => 'Name of the user associated with this record',
       ),
       "user_id" => array(
          'name' => 'user_id',
          'relationship' => 'users_ideas',
          'type' => 'id',
          'vname' => 'LBL_USER_ID',
+         'comment' => 'The unique identifier of the user associated with this record',
       ),
       "notes" => array(
          'name' => 'notes',
@@ -183,3 +185,7 @@ $dictionary['Ideas']['fields']['assigned_user_name']['required'] = true;
 $dictionary['Ideas']['fields']['assigned_user_name']['audited'] = true;
 $dictionary['Ideas']['fields']['assigned_user_id']['audited'] = false;
 $dictionary['Ideas']['fields']['name']['audited'] = true;
+$dictionary['Ideas']['fields']['description']['comment'] = 'A detailed description of the record';
+$dictionary['Ideas']['fields']['assigned_user_name']['comment'] = 'The name of the user assigned to the record';
+$dictionary['Ideas']['fields']['assigned_user_id']['comment'] = 'The unique identifier of the user assigned to the record';
+$dictionary['Ideas']['fields']['name']['comment'] = 'The name or title of the record';

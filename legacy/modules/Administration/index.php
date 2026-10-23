@@ -67,6 +67,7 @@ global $admin_group_header;  ///variable defined in the file above.
 $tab = array();
 $icons = array();
 $url = array();
+$target = array();
 $label_tab = array();
 $id_tab = array();
 $description = array();
@@ -122,6 +123,9 @@ foreach ($admin_group_header as $key=>$values) {
                 $colnum+=1;
                 $icons[$j][$i] = isset($admin_option[4]) ? $admin_option[4] : 'default';
                 $url[$j][$i] = $admin_option[3];
+                if (strpos($admin_option[3], '/#/') !== false) {
+                    $target[$j][$i] = '_parent';
+                }
                 $label = translate($admin_option[1],'Administration');
                 if(!empty($admin_option['additional_label']))$label.= ' '. $admin_option['additional_label'];
 
@@ -153,6 +157,7 @@ $sugar_smarty->assign("ADMIN_GROUP_HEADER", $admin_group_header_tab);
 $sugar_smarty->assign("GROUP_HEADER", $group);
 $sugar_smarty->assign("ICONS", $icons);
 $sugar_smarty->assign("ITEM_URL", $url);
+$sugar_smarty->assign("ITEM_TARGET", $target);
 $sugar_smarty->assign("ITEM_HEADER_LABEL",$label_tab);
 $sugar_smarty->assign("ITEM_DESCRIPTION", $description);
 $sugar_smarty->assign("COLNUM", $tab);

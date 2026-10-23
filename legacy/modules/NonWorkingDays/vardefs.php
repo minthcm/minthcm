@@ -54,7 +54,7 @@ $dictionary['NonWorkingDays'] = array(
          'vname' => 'LBL_DATE',
          'type' => 'date',
          'audited' => true,
-         'comment' => '',
+         'comment' => 'The calendar date designated as a non-working day',
          'importable' => 'required',
          'enable_range_search' => true,
          'options' => 'date_range_search_dom',
@@ -70,7 +70,8 @@ $dictionary['NonWorkingDays'] = array(
          'importable' => 'required',
          'options' => 'week_days_list',
          'duplicate_merge' => 'disabled',
-         'merge_filter' => 'disabled'
+         'merge_filter' => 'disabled',
+         'comment' => 'The day of the week corresponding to the non-working day',
       ),
    ),
    'indices' => array(),
@@ -82,3 +83,4 @@ if ( !class_exists('VardefManager') ) {
    require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('NonWorkingDays', 'NonWorkingDays', array( 'basic' ));
+

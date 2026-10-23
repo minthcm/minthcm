@@ -15,6 +15,7 @@ $dictionary['Files'] = array(
             'importable' => 'true',
             'reportable' => true,
             'audited' => false,
+            'comment' => 'The unique identifier of the parent record',
         ),
         'parent_type' => array(
             'name' => 'parent_type',
@@ -27,6 +28,7 @@ $dictionary['Files'] = array(
             'importable' => 'true',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The module type of the parent record',
         ),
         'parent_name' => array(
             'name' => 'parent_name',
@@ -44,6 +46,7 @@ $dictionary['Files'] = array(
             'audited' => true,
             'massupdate' => false,
             'sortable' => false,
+            'comment' => 'The name of the parent record',
         ),
         'candidature' => array(
             'name' => 'candidature',
@@ -125,6 +128,7 @@ $dictionary['Files'] = array(
             'reportable' => false,
             'audited' => false,
             'size' => 30,
+            'comment' => 'The file upload widget used to attach photos or documents to the record',
         ),
         'employee' => array(
             'name' => 'employee',

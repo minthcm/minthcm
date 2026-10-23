@@ -70,6 +70,7 @@ $dictionary['CareerPaths'] = array(
          'module' => 'Positions',
          'rname' => 'name',
          'required' => true,
+         'comment' => 'Name of position from which the employee is transitioning in this career path',
       ),
       'position_from_id' => array(
          'name' => 'position_from_id',
@@ -101,6 +102,7 @@ $dictionary['CareerPaths'] = array(
          'module' => 'Positions',
          'rname' => 'name',
          'required' => true,
+         'comment' => 'Name of position to which the employee is transitioning in this career path',
       ),
       'position_to_id' => array(
          'name' => 'position_to_id',
@@ -140,3 +142,4 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('CareerPaths', 'CareerPaths', array( 'basic', 'assignable', 'security_groups' ));
 
 $dictionary['CareerPaths']['fields']['name']['vt_calculated'] = 'concat($position_to_name)';
+

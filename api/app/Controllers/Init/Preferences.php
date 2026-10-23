@@ -50,6 +50,7 @@ use MintHCM\Api\Entities\Currencies;
 use MintHCM\Api\Entities\UserPreferences;
 use MintHCM\Api\Repositories\CurrenciesRepository;
 use MintHCM\Api\Repositories\UserPreferencesRepository;
+use MintHCM\Utils\LanguageUtils;
 use MintHCM\Utils\LuxonMapper;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
@@ -92,7 +93,7 @@ class Preferences
             'default_date_format' => $sugar_config["default_date_format"],
             'default_time_format' => $sugar_config["default_time_format"],
             'default_language' => $sugar_config["default_language"],
-            'languages' => $sugar_config["languages"],
+            'languages' => $this->getEnabledLanguages($sugar_config),
             'date_formats' => $sugar_config["date_formats"],
             'time_formats' => $sugar_config["time_formats"],
             'name_format' => $sugar_config["default_locale_name_format"],
@@ -112,6 +113,13 @@ class Preferences
             $global_settings['currencies'] = $this->getCurrenciesList();
         }
         return $global_settings;
+    }
+
+    protected function getEnabledLanguages(array $sugar_config): array
+    {
+        $all = $sugar_config['languages'] ?? [];
+        $disabled = LanguageUtils::parseDisabledLanguages($sugar_config['disabled_languages'] ?? '');
+        return array_diff_key($all, array_flip($disabled));
     }
 
     protected function getCurrenciesList()

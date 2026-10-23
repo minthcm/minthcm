@@ -56,6 +56,7 @@ $dictionary['DocumentRevision'] = array(
             'len' => '36',
             'required' => true,
             'reportable' => false,
+            'comment' => 'Record unique identifier',
         ),
 
         'change_log' => array(
@@ -63,6 +64,7 @@ $dictionary['DocumentRevision'] = array(
             'vname' => 'LBL_CHANGE_LOG',
             'type' => 'varchar',
             'len' => '255',
+            'comment' => 'A description of the changes made to the record in the change log',
         ),
 
         'document_id' => array(
@@ -72,6 +74,7 @@ $dictionary['DocumentRevision'] = array(
             'len' => '36',
             'required' => false,
             'reportable' => false,
+            'comment' => 'The unique identifier of the document',
         ),
         'doc_id' => array(
             'name' => 'doc_id',
@@ -104,6 +107,7 @@ $dictionary['DocumentRevision'] = array(
             'name' => 'date_entered',
             'vname' => 'LBL_DATE_ENTERED',
             'type' => 'datetime',
+            'comment' => 'The date when the record was created',
         ),
         'created_by' => array(
             'name' => 'created_by',
@@ -115,6 +119,7 @@ $dictionary['DocumentRevision'] = array(
             'isnull' => 'false',
             'dbType' => 'id',
             'source' => 'db',
+            'comment' => 'The unique identifier of the user who created the record',
         ),
         'filename' => array(
             'name' => 'filename',
@@ -125,18 +130,21 @@ $dictionary['DocumentRevision'] = array(
             'len' => '255',
             'allowEapm' => true,
             'linkModuleOverride' => 'Documents',
+            'comment' => 'The name of the file associated with the document',
         ),
         'file_ext' => array(
             'name' => 'file_ext',
             'vname' => 'LBL_FILE_EXTENSION',
             'type' => 'varchar',
             'len' => 100,
+            'comment' => 'The file extension indicating the file type',
         ),
         'file_mime_type' => array(
             'name' => 'file_mime_type',
             'vname' => 'LBL_MIME',
             'type' => 'varchar',
             'len' => '100',
+            'comment' => 'The MIME type of the file for proper handling and identification',
         ),
 
         'revision' => array(
@@ -145,6 +153,7 @@ $dictionary['DocumentRevision'] = array(
             'type' => 'varchar',
             'len' => 100,
             'importable' => 'required',
+            'comment' => 'The revision number or version of the document',
         ),
 
         'deleted' => array(
@@ -153,11 +162,13 @@ $dictionary['DocumentRevision'] = array(
             'type' => 'bool',
             'default' => 0,
             'reportable' => false,
+            'comment' => 'A flag indicating whether the record has been deleted',
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
+            'comment' => 'The date when the record was last modified',
         ),
         'documents' => array(
             'name' => 'documents',
@@ -193,6 +204,7 @@ $dictionary['DocumentRevision'] = array(
             'link' => 'created_by_link',
             'len' => '255',
             'source' => 'non-db',
+            'comment' => 'The name of the user who created the record',
         ),
         'latest_revision_id' => array(
             'name' => 'latest_revision_id',
@@ -200,6 +212,7 @@ $dictionary['DocumentRevision'] = array(
             'type' => 'varchar',
             'len' => '36',
             'source' => 'non-db',
+            'comment' => 'The unique identifier of the latest revision of the document',
         ),
         'document_name' => array(
             'name' => 'document_name',
@@ -207,6 +220,7 @@ $dictionary['DocumentRevision'] = array(
             'type' => 'varchar',
             'len' => '255',
             'source' => 'non-db',
+            'comment' => 'The name or title of the document',
         ),
         'latest_revision' => array(
             'name' => 'latest_revision',
@@ -214,6 +228,7 @@ $dictionary['DocumentRevision'] = array(
             'type' => 'varchar',
             'len' => '255',
             'source' => 'non-db',
+            'comment' => 'The latest revision or version of the document',
         ),
 
     ),
@@ -228,3 +243,4 @@ $dictionary['DocumentRevision'] = array(
         array('name' => 'documentrevision_mimetype', 'type' => 'index', 'fields' => array('file_mime_type')),
     )
 );
+

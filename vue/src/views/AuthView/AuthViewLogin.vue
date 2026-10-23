@@ -95,7 +95,7 @@ const checkCurrentLanguageExists = () => {
             }
         })
         if (!currentLanguageExists) {
-            languages.currentLanguage = 'en_us'
+            languages.currentLanguage = preferences.fallbackLanguage
             localStorage.setItem('currentLang', languages.currentLanguage)
             document.location.reload()
         }

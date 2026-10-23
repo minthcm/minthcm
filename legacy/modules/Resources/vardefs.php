@@ -57,7 +57,7 @@ $dictionary['Resources'] = array(
          'type' => 'enum',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The type of resource (e.g. equipment, material)',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'enabled',
@@ -90,7 +90,7 @@ $dictionary['Resources'] = array(
          'merge_filter' => 'disabled',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'The name or title of the record',
          'help' => '',
          'duplicate_merge_dom_value' => '1',
          'audited' => true,
@@ -106,7 +106,7 @@ $dictionary['Resources'] = array(
          'massupdate' => 0,
          'default' => '0',
          'no_default' => false,
-         'comments' => '',
+         'comment' => 'Flag indicating whether the resource is currently unavailable',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'enabled',
@@ -166,6 +166,7 @@ $dictionary['Resources'] = array(
          'table' => 'rooms',
          'module' => 'Rooms',
          'rname' => 'name',
+         'comment' => 'The name of the room this resource is assigned to',
        ),
        "room_id" => array (
          'name' => 'room_id',
@@ -198,3 +199,5 @@ if ( !class_exists('VardefManager') ) {
 VardefManager::createVardef('Resources', 'Resources', array('basic', 'assignable', 'security_groups', 'employee_related'));
 
 $dictionary["Resources"]["fields"]['description']['audited'] = true;
+$dictionary["Resources"]["fields"]['description']['comment'] = 'A detailed description of the record';
+

@@ -54,6 +54,7 @@ $dictionary['Reminder_Invitee'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The unique identifier of the reminder this invitee belongs to',
         ),
         'related_invitee_module' => array(
             'name' => 'related_invitee_module',
@@ -63,6 +64,7 @@ $dictionary['Reminder_Invitee'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The name of the module containing the invitee record (e.g. Users)',
         ),
         'related_invitee_module_id' => array(
             'name' => 'related_invitee_module_id',
@@ -71,6 +73,7 @@ $dictionary['Reminder_Invitee'] = array(
             'required' => true,
             'massupdate' => false,
             'studio' => false,
+            'comment' => 'The unique identifier of the invitee record',
         ),
     ),
     'indices' => array(
@@ -99,3 +102,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Reminders_Invitees', 'Reminder_Invitee', array('basic','assignable'));
+

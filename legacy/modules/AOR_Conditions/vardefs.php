@@ -34,7 +34,7 @@ $dictionary['AOR_Condition'] = array(
     'vname' => 'LBL_AOR_REPORT_ID',
     'type' => 'id',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The unique identifier of the Advanced Open Report (AOR) that this condition belongs to',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -53,7 +53,7 @@ $dictionary['AOR_Condition'] = array(
     'vname' => 'LBL_ORDER',
     'type' => 'int',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The sequential order in which this condition is evaluated within the report\'s filter criteria',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -72,11 +72,13 @@ $dictionary['AOR_Condition'] = array(
             'vname' => 'LBL_LOGIC_OP',
             'type' => 'varchar',
             'default_value' => 'AND',
+            'comment' => 'The logical operator used to combine this condition with other conditions in the report filter',
         ),
         'parenthesis' => array(
             'name' => 'parenthesis',
             'vname' => 'LBL_PARENTHESIS',
             'type' => 'varchar',
+            'comment' => 'Parentheses used for grouping and nesting conditions to control evaluation precedence in complex filters',
         ),
   'module_path' =>
   array(
@@ -84,6 +86,7 @@ $dictionary['AOR_Condition'] = array(
     'type' => 'longtext',
     'vname' => 'LBL_MODULE_PATH',
     'isnull' => true,
+    'comment' => 'The module path or relationship chain that specifies which module and related records the field belongs to',
   ),
   'field' =>
   array(
@@ -92,7 +95,7 @@ $dictionary['AOR_Condition'] = array(
     'vname' => 'LBL_FIELD',
     'type' => 'enum',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The specific field name from the selected module that this condition will evaluate',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -115,7 +118,7 @@ $dictionary['AOR_Condition'] = array(
     'type' => 'enum',
     'massupdate' => 0,
     'default' => '',
-    'comments' => '',
+    'comment' => 'The comparison operator used in the condition',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -138,7 +141,7 @@ $dictionary['AOR_Condition'] = array(
     'type' => 'enum',
     'massupdate' => 0,
     'default' => '',
-    'comments' => '',
+    'comment' => 'The type of value being compared (static value, dynamic field reference, parameter, or function result)',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -160,7 +163,7 @@ $dictionary['AOR_Condition'] = array(
     'vname' => 'LBL_VALUE',
     'type' => 'varchar',
     'massupdate' => 0,
-    'comments' => '',
+    'comment' => 'The actual value, field reference, or expression that the selected field will be compared against',
     'help' => '',
     'importable' => 'true',
     'duplicate_merge' => 'disabled',
@@ -179,7 +182,7 @@ $dictionary['AOR_Condition'] = array(
                 'vname' => 'LBL_PARAMETER',
                 'type' => 'bool',
                 'massupdate' => 0,
-                'comments' => '',
+                'comment' => 'Additional parameters or options that modify how the condition is evaluated',
                 'help' => '',
                 'importable' => 'true',
                 'duplicate_merge' => 'disabled',
@@ -217,3 +220,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOR_Conditions', 'AOR_Condition', array('basic'));
+

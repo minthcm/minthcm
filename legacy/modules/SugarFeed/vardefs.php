@@ -53,7 +53,7 @@ $dictionary['SugarFeed'] = array(
     'dbType' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 255,
-    'comment' => 'Name of the feed',
+    'comment' => 'The name or title of the record',
     'unified_search' => true,
     'full_text_search' => true,
     'audited' => true,
@@ -67,7 +67,7 @@ $dictionary['SugarFeed'] = array(
     'dbType' => 'text',
     'vname' => 'LBL_NAME',
     'len' => 255,
-    'comment' => 'Name of the feed',
+    'comment' => 'A detailed description of the record',
     'unified_search' => true,
     'full_text_search' => array('boost' => 1),
     'audited' => true,
@@ -81,7 +81,7 @@ $dictionary['SugarFeed'] = array(
     'type' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 100,
-    'comment' => 'related module',
+    'comment' => 'Related module name',
     'unified_search' => true,
     'full_text_search' => array('boost' => 1),
     'audited' => false,
@@ -94,7 +94,7 @@ $dictionary['SugarFeed'] = array(
     'type' => 'id',
     'vname' => 'LBL_NAME',
     'len' => 36,
-    'comment' => 'related module',
+    'comment' => 'Id of the related record',
     'unified_search' => true,
     'audited' => false,
     'merge_filter' => 'selected',  //field will be enabled for merge and will be a part of the default search criteria..other valid values for this property are enabled and disabled, default value is disabled.
@@ -106,20 +106,20 @@ $dictionary['SugarFeed'] = array(
     'type' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 255,
-    'comment' => 'Name of the feed',
+    'comment' => 'Link Url',
     'unified_search' => true,
     'full_text_search' => array('boost' => 1),
     'audited' => false,
     'merge_filter' => 'selected',  //field will be enabled for merge and will be a part of the default search criteria..other valid values for this property are enabled and disabled, default value is disabled.
                             //property value is case insensitive.
   ),
-   	 'link_type' => 
+   	 'link_type' =>
   array (
     'name' => 'link_type',
     'type' => 'varchar',
     'vname' => 'LBL_NAME',
     'len' => 30,
-    'comment' => 'Name of the feed',
+    'comment' => 'Link Type',
     'unified_search' => true,
     'full_text_search' => array('boost' => 1),
     'audited' => false,
@@ -144,3 +144,4 @@ $dictionary['SugarFeed'] = array(
 
 VardefManager::createVardef('SugarFeed','SugarFeed', array('basic',
 'assignable'));
+

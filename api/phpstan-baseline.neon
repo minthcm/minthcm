@@ -1039,12 +1039,6 @@ parameters:
 			path: app/Controllers/Module/ListController.php
 
 		-
-			message: '#^Method MintHCM\\Api\\Controllers\\Module\\ListController\:\:getParsedFilters\(\) invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: app/Controllers/Module/ListController.php
-
-		-
 			message: '#^Result of && is always false\.$#'
 			identifier: booleanAnd.alwaysFalse
 			count: 1

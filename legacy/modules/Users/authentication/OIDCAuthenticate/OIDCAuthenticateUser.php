@@ -27,6 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once __DIR__ . '/../../../../modules/Users/authentication/SugarAuthenticate/SugarAuthenticateUser.php';
+require_once __DIR__ . '/OIDCSubjectBinder.php';
 
 /**
  * Class OIDCAuthenticateUser
@@ -65,6 +66,12 @@ class OIDCAuthenticateUser extends SugarAuthenticateUser
         );
 
         if (empty($row)) {
+            return '';
+        }
+
+        $binder = new OIDCSubjectBinder();
+        if (!$binder->bind($row['id'], (string) ($_SESSION['oidcSubject'] ?? ''))) {
+            $GLOBALS['log']->fatal('SECURITY: OIDC subject does not match the subject bound to user "' . $name . '"');
             return '';
         }
 

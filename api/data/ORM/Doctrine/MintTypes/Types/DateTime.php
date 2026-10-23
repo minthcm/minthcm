@@ -16,7 +16,11 @@ class DateTime extends DateTimeType implements MintTypeInterface
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if ($value === null || $value instanceof MintDateTime) {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if ($value instanceof MintDateTime) {
             return $value;
         }
 

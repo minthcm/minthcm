@@ -58,7 +58,6 @@ $dictionary['Goals'] = array(
          'type' => 'datetimecombo',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -73,6 +72,7 @@ $dictionary['Goals'] = array(
          'options' => 'date_range_search_dom',
          'dbType' => 'datetime',
          'validation' => array( 'type' => 'isbefore', 'compareto' => 'date_end' ),
+         'comment' => 'The start date of the record',
       ),
       'date_end' =>
       array(
@@ -82,7 +82,6 @@ $dictionary['Goals'] = array(
          'type' => 'datetimecombo',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -96,6 +95,7 @@ $dictionary['Goals'] = array(
          'enable_range_search' => true,
          'options' => 'date_range_search_dom',
          'dbType' => 'datetime',
+         'comment' => 'The end date of the record',
       ),
       'status' =>
       array(
@@ -107,7 +107,6 @@ $dictionary['Goals'] = array(
          'massupdate' => '1',
          'default' => 'planned',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -128,6 +127,7 @@ $dictionary['Goals'] = array(
          ],
          'studio' => 'visible',
          'dependency' => false,
+         'comment' => 'The current status of the record',
       ),
       'appraisalitems' => array(
          'name' => 'appraisalitems',

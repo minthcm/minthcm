@@ -69,7 +69,6 @@ $dictionary['PeriodsOfEmployment'] = array(
          'merge_filter' => 'disabled',
          'massupdate' => 0,
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'duplicate_merge_dom_value' => '1',
          'audited' => true,
@@ -77,6 +76,7 @@ $dictionary['PeriodsOfEmployment'] = array(
          'reportable' => true,
          'size' => '20',
          'vt_readonly' => 'equals(1,1)',
+         'comment' => 'The name or title of the record',
       ),
       'period_ending_date' =>
       array(
@@ -85,7 +85,6 @@ $dictionary['PeriodsOfEmployment'] = array(
          'type' => 'date',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -99,6 +98,7 @@ $dictionary['PeriodsOfEmployment'] = array(
          'enable_range_search' => true,
          'dbType' => 'datetime',
          'options' => 'date_range_search_dom',
+         'comment' => 'The date on which this period of employment ends',
       ),
       'period_starting_date' =>
       array(
@@ -107,7 +107,6 @@ $dictionary['PeriodsOfEmployment'] = array(
          'type' => 'date',
          'massupdate' => '1',
          'no_default' => false,
-         'comments' => '',
          'help' => '',
          'importable' => 'true',
          'duplicate_merge' => 'disabled',
@@ -122,6 +121,7 @@ $dictionary['PeriodsOfEmployment'] = array(
          'dbType' => 'datetime',
          'validation' => array( 'type' => 'isbefore', 'compareto' => 'period_ending_date' ),
          'options' => 'date_range_search_dom',
+         'comment' => 'The date on which this period of employment starts',
       ),
       "contracts" => array(
          'name' => 'contracts',
@@ -149,3 +149,4 @@ VardefManager::createVardef('PeriodsOfEmployment', 'PeriodsOfEmployment', array(
    'employee_related'
         )
 );
+

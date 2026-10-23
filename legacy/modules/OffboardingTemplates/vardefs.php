@@ -93,3 +93,4 @@ VardefManager::createVardef('OffboardingTemplates', 'OffboardingTemplates',
         'security_groups',
     )
 );
+

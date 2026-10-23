@@ -63,6 +63,7 @@ $dictionary['SalaryRanges'] = array(
             ),
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The start date when the salary range becomes effective for the specified position',
         ),
         'end_date' => array(
             'name' => 'end_date',
@@ -74,6 +75,7 @@ $dictionary['SalaryRanges'] = array(
             'audited' => true,
             'enable_range_search' => true,
             'options' => 'date_range_search_dom',
+            'comment' => 'The end date when the salary range expires or is no longer applicable for the specified position',
         ),
         'gross_value_from' => array(
             'name' => 'gross_value_from',
@@ -92,6 +94,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The minimum gross salary value in the original currency for this salary range',
         ),
         'gross_value_from_usdollar' => array(
             'name' => 'gross_value_from_usdollar',
@@ -112,6 +115,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The minimum gross salary value converted to US dollars for reporting and comparison purposes',
         ),
         'gross_value_to' => array(
             'name' => 'gross_value_to',
@@ -130,6 +134,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The maximum gross salary value in the original currency for this salary range',
         ),
         'gross_value_to_usdollar' => array(
             'name' => 'gross_value_to_usdollar',
@@ -150,20 +155,22 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The maximum gross salary value converted to US dollars for reporting and comparison purposes',
         ),
         'currency_id' => array(
-            'name' => 'currency_id', 
-            'dbType' => 'id', 
-            'vname' => 'LBL_CURRENCY_ID', 
-            'type' => 'id', 
-            'function' => array( 
-                'name' => 'getCurrencyDropDown',  
-                'returns' => 'html', 
-            ), 
-            'function_bean' => 'Currencies', 
-            'required' => false, 
-            'reportable' => false, 
-            'importable' => false, 
+            'name' => 'currency_id',
+            'dbType' => 'id',
+            'vname' => 'LBL_CURRENCY_ID',
+            'type' => 'id',
+            'function' => array(
+                'name' => 'getCurrencyDropDown',
+                'returns' => 'html',
+            ),
+            'function_bean' => 'Currencies',
+            'required' => false,
+            'reportable' => false,
+            'importable' => false,
+            'comment' => 'The unique identifier of the currency used for the salary values in this range',
         ),
         'net_value_from' => array(
             'name' => 'net_value_from',
@@ -182,6 +189,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The minimum net salary value (after deductions) in the original currency for this salary range',
         ),
         'net_value_from_usdollar' => array(
             'name' => 'net_value_from_usdollar',
@@ -202,6 +210,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The minimum net salary value converted to US dollars for reporting and comparison purposes',
         ),
         'net_value_to' => array(
             'name' => 'net_value_to',
@@ -220,6 +229,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The maximum net salary value (after deductions) in the original currency for this salary range',
         ),
         'net_value_to_usdollar' => array(
             'name' => 'net_value_to_usdollar',
@@ -240,6 +250,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The maximum net salary value converted to US dollars for reporting and comparison purposes',
         ),
         'employer_costs_from' => array(
             'name' => 'employer_costs_from',
@@ -258,6 +269,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The minimum total employer costs (including benefits and taxes) in the original currency for this salary range',
         ),
         'employer_costs_from_usdollar' => array(
             'name' => 'employer_costs_from_usdollar',
@@ -278,6 +290,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The minimum total employer costs converted to US dollars for reporting and comparison purposes',
         ),
         'employer_costs_to' => array(
             'name' => 'employer_costs_to',
@@ -296,6 +309,7 @@ $dictionary['SalaryRanges'] = array(
             'importable' => 'required',
             'reportable' => true,
             'audited' => true,
+            'comment' => 'The maximum total employer costs (including benefits and taxes) in the original currency for this salary range',
         ),
         'employer_costs_to_usdollar' => array(
             'name' => 'employer_costs_to_usdollar',
@@ -316,6 +330,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => false,
             'audited' => false,
             'importable' => false,
+            'comment' => 'The maximum total employer costs converted to US dollars for reporting and comparison purposes',
         ),
         'positions' => array(
             'name' => 'positions',
@@ -337,6 +352,7 @@ $dictionary['SalaryRanges'] = array(
             'audited' => true,
             'importable' => true,
             'reportable' => true,
+            'comment' => 'The unique identifier of the position or job role to which this salary range applies',
         ),
         'position_name' => array(
             'name' => 'position_name',
@@ -353,6 +369,7 @@ $dictionary['SalaryRanges'] = array(
             'reportable' => true,
             'audited' => true,
             'required' => true,
+            'comment' => 'The name of the position or job role to which this salary range applies',
         ),
 
     ),
@@ -386,3 +403,7 @@ $dictionary['SalaryRanges']['fields']['name']['related_fields'] = array(
 );
 $dictionary['SalaryRanges']['fields']['name']['disable_num_format'] = 1;
 $dictionary['SalaryRanges']['fields']['description']['audited'] = true;
+
+$dictionary['SalaryRanges']['fields']['name']['comment'] = 'The name or title of the record';
+$dictionary['SalaryRanges']['fields']['description']['comment'] = 'A detailed description of the record';
+

@@ -2281,6 +2281,11 @@ EOQ;
             return;
         }
 
+        // The OIDC subject binding (#193558) is written only by OIDCSubjectBinder. It is restored
+        // straight from the database (BeanFactory may return this very instance from its cache),
+        // so a user cannot set or clear their own binding through a generic record save.
+        $this->oidc_subject = $this->db->getOne('SELECT oidc_subject FROM users WHERE id = ' . $this->db->quoted($this->id)) ?: null;
+
         $savedBean = BeanFactory::getBean('Users', $this->id);
 
         if (empty($savedBean->id)) {

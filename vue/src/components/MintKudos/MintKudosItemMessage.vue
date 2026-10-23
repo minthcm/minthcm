@@ -4,20 +4,21 @@
     </p>
     <div v-else class="caption private">
         <v-icon icon="mdi-eye-off" class="mr-2" />
-        <span v-html="privateKudosnotification" />
+        <span>{{ privateKudosnotification }}</span>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useLanguagesStore } from '@/store/languages'
 import { computed } from 'vue'
+import { decodeHtmlEntities } from '@/utils/html'
 
 const props = defineProps(['kudos'])
 const languages = useLanguagesStore()
 
 const privateKudosnotification = computed(() =>
     languages.label('LBL_KUDOS_PRIVATE_TEXT_ON_MESSAGE', undefined, {
-        name: props.kudos.employee.first_name ? props.kudos.employee.first_name : props.kudos.employee.full_name,
+        name: decodeHtmlEntities(props.kudos.employee.first_name || props.kudos.employee.full_name),
     }),
 )
 </script>

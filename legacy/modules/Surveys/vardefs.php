@@ -57,7 +57,7 @@ $dictionary['Surveys'] = array(
             'massupdate'                => 0,
             'default'                   => 'LBL_DRAFT',
             'no_default'                => false,
-            'comments'                  => '',
+            'comment'                   => 'The current status of the record',
             'help'                      => '',
             'importable'                => 'true',
             'duplicate_merge'           => 'disabled',
@@ -95,6 +95,7 @@ $dictionary['Surveys'] = array(
                 'returns' => 'html',
                 'include' => 'modules/Surveys/Lines/Lines.php'
             ),
+            'comment'                   => 'Controls how survey questions are displayed to respondents, such as layout or formatting options',
         ),
         'survey_url_display'       => array(
             'name'                      => 'survey_url_display',
@@ -113,6 +114,7 @@ $dictionary['Surveys'] = array(
                 'returns' => 'html',
                 'include' => 'modules/Surveys/Utils/utils.php'
             ),
+            'comment'                   => 'The URL where the survey can be accessed or displayed to participants',
         ),
 
         'submit_text'              => array(
@@ -122,6 +124,7 @@ $dictionary['Surveys'] = array(
             'type'       => 'varchar',
             'massupdate' => 0,
             'default'    => 'Submit',
+            'comment'    => 'The text displayed on the submit button for completing the survey',
         ),
         'satisfied_text'           => array(
             'required'   => false,
@@ -130,6 +133,7 @@ $dictionary['Surveys'] = array(
             'type'       => 'varchar',
             'massupdate' => 0,
             'default'    => 'Satisfied',
+            'comment'    => 'The text label for the satisfied response option in rating questions',
         ),
         'neither_text'             => array(
             'required'   => false,
@@ -138,6 +142,7 @@ $dictionary['Surveys'] = array(
             'type'       => 'varchar',
             'massupdate' => 0,
             'default'    => 'Neither Satisfied nor Dissatisfied',
+            'comment'    => 'The text label for the neither satisfied nor dissatisfied response option in rating questions',
         ),
         'dissatisfied_text'        => array(
             'required'   => false,
@@ -146,6 +151,7 @@ $dictionary['Surveys'] = array(
             'type'       => 'varchar',
             'massupdate' => 0,
             'default'    => 'Dissatisfied',
+            'comment'    => 'The text label for the dissatisfied response option in rating questions',
         ),
         "surveys_surveyquestions"  => array(
             'name'         => 'surveys_surveyquestions',
@@ -204,3 +210,4 @@ if (!class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('Surveys', 'Surveys', array('basic', 'assignable', 'security_groups'));
+

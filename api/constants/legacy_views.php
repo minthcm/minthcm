@@ -70,8 +70,8 @@ return [
         'record' => true,
     ],
     'Schedulers' => [
-        'list' => true,
-        'record' => true,
+        'list' => false,
+        'record' => false,
     ],
     'EmailTemplates' => [
         'list' => false,

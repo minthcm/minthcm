@@ -92,11 +92,33 @@ class ExternalAPIFactory
 
     /**
      * Get the list of available APIs
+     *
+     * Runs with the legacy root as the working directory, because the API discovery,
+     * the cache files and the custom language files all use paths relative to it.
+     * Without that, a call made from the API layer (working directory api/) finds no APIs
+     * and writes its files under api/.
+     *
      * @param bool $forceRebuild
      * @param bool $ignoreDisabled Should we ignore disabled status?
      * @return array
      */
     public static function loadFullAPIList($forceRebuild=false, $ignoreDisabled = false)
+    {
+        $previousDir = getcwd();
+        chdir(dirname(__DIR__, 2));
+        try {
+            return self::buildFullAPIList($forceRebuild, $ignoreDisabled);
+        } finally {
+            chdir($previousDir);
+        }
+    }
+
+    /**
+     * @param bool $forceRebuild
+     * @param bool $ignoreDisabled Should we ignore disabled status?
+     * @return array
+     */
+    protected static function buildFullAPIList($forceRebuild, $ignoreDisabled)
     {
         if (inDeveloperMode()) {
             static $beenHereBefore = false;
@@ -171,7 +193,9 @@ class ExternalAPIFactory
         rename(sugar_cached('include/externalAPI.cache-tmp.js'), sugar_cached('include/externalAPI.cache.js'));
 
 
-        if (!isset($GLOBALS['app_list_strings']['extapi_meeting_password']) || (is_array($GLOBALS['app_list_strings']['extapi_meeting_password']) && count(array_diff($meetingPasswordList, $GLOBALS['app_list_strings']['extapi_meeting_password'])) != 0)) {
+        // Sync the dropdown only when the application strings are loaded - otherwise
+        // (e.g. in API requests) a missing list does not mean it differs from the APIs list.
+        if (!empty($GLOBALS['app_list_strings']) && (!isset($GLOBALS['app_list_strings']['extapi_meeting_password']) || (is_array($GLOBALS['app_list_strings']['extapi_meeting_password']) && count(array_diff($meetingPasswordList, $GLOBALS['app_list_strings']['extapi_meeting_password'])) != 0))) {
             // Our meeting password list is different... we need to do something about this.
             require_once('modules/Administration/Common.php');
             $languages = get_languages();

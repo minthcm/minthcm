@@ -33,13 +33,10 @@ DirectoryIndex vue/dist/index.html
         Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
         Header set Pragma "no-cache"
         Header set Expires "Thu, 01 Jan 1970 00:00:00 GMT"
-    </Files>
-</IfModule>
-
-<IfModule mod_headers.c>
-    <Files "index.html">
-        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-        Header set Pragma "no-cache"
-        Header set Expires "Thu, 01 Jan 1970 00:00:00 GMT"
+        # Keep in sync with get_default_csp_directives() in legacy/include/utils.php
+        Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://www.gstatic.com; img-src 'self' data: blob:; font-src 'self' data: https://cdn.materialdesignicons.com https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; frame-src 'self' https:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+        Header set X-Content-Type-Options "nosniff"
+        Header set X-Frame-Options "SAMEORIGIN"
+        Header set Referrer-Policy "strict-origin-when-cross-origin"
     </Files>
 </IfModule>

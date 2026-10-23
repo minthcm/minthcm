@@ -65,18 +65,21 @@ $dictionary['SurveyResponses'] = array(
                 'returns' => 'html',
                 'include' => 'modules/SurveyResponses/Lines/Lines.php',
             ),
+            'comment' => 'A display-friendly representation of the respondent\'s answers to the survey questions, which may include formatting or summarization for easier interpretation',
         ),
         'happiness' => array(
             'name' => 'happiness',
             'vname' => 'LBL_HAPPINESS',
             'type' => 'int',
             'label' => 'LBL_HAPPINESS',
+            'comment' => 'Description of the happiness level of the respondent, typically based on their answers to specific survey questions designed to gauge satisfaction or sentiment',
         ),
         'email_response_sent' => array(
             'name' => 'email_response_sent',
             'vname' => 'LBL_EMAIL_RESPONSE_SENT',
             'type' => 'bool',
             'label' => 'LBL_EMAIL_RESPONSE_SENT',
+            'comment' => 'Indicates whether an email response has been sent to the respondent',
         ),
         "campaign" => array(
             'name' => 'campaign',
@@ -101,12 +104,14 @@ $dictionary['SurveyResponses'] = array(
             'table' => 'campaigns',
             'module' => 'Campaigns',
             'rname' => 'name',
+            'comment' => 'Name of the campaign associated with this record',
         ),
         "campaign_id" => array(
             'name' => 'campaign_id',
             'type' => 'id',
             'reportable' => false,
             'vname' => 'LBL_SURVEYRESPONSES_CAMPAIGNS_FROM_SURVEYRESPONSES_TITLE',
+            'comment' => 'The unique identifier of the campaign associated with this record',
         ),
         "surveyresponses_surveyquestionresponses" => array(
             'name' => 'surveyresponses_surveyquestionresponses',
@@ -141,12 +146,14 @@ $dictionary['SurveyResponses'] = array(
             'table' => 'surveys',
             'module' => 'Surveys',
             'rname' => 'name',
+            'comment' => 'Name of the survey associated with this record',
         ),
         "survey_id" => array(
             'name' => 'survey_id',
             'type' => 'id',
             'reportable' => false,
             'vname' => 'LBL_SURVEYS_SURVEYRESPONSES_FROM_SURVEYRESPONSES_TITLE',
+            'comment' => 'Id of the survey associated with this record',
         ),
     ),
     'relationships' => array(
@@ -177,3 +184,4 @@ if (!class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('SurveyResponses', 'SurveyResponses', array('basic', 'assignable', 'security_groups', 'employee_related'));
+

@@ -1,12 +1,8 @@
 <template>
     <div v-if="!props.kudos.current_user_is_gifted" class="d-flex align-center flex-wrap">
-        <div class="photo-container">
-            <img
-                v-if="props.kudos.employee.photo"
-                :src="`legacy/index.php?entryPoint=download&type=Users&id=${props.kudos.employee.id}_photo`"
-            />
-            <v-icon v-else icon="mdi-account" />
-        </div>
+        <MintAvatar
+            :photo="props.kudos.employee.photo ? props.kudos.employee.id + '_photo' : null"
+        />
         <p v-if="!props.kudos.current_user_is_author">
             <span
                 @click="store.openEmployeeDetailView(props.kudos.employee.id)"
@@ -16,7 +12,7 @@
                     'ml-1': props.kudos.employee.photo,
                     user: true,
                 }"
-                >{{ props.kudos.employee.full_name }}</span
+                >{{ employeeName }}</span
             >, kudos!
         </p>
         <div v-else class="d-flex">
@@ -24,8 +20,8 @@
                 <span
                     @click="store.openEmployeeDetailView(props.kudos.employee.id)"
                     class="text-secondary font-weight-bold mx-1 user"
-                    v-html="props.kudos.employee.full_name"
-                />
+                    >{{ employeeName }}</span
+                >
                 <span v-html="languages.label('LBL_USER_RECEIVED_KUDOS')" />
             </p>
         </div>
@@ -45,6 +41,8 @@ import { useMintKudosStore } from '@/components/MintKudos/MintKudosStore'
 import { useLanguagesStore } from '@/store/languages'
 import { computed } from 'vue'
 import MintUnreadDot from '../MintUnreadDot.vue'
+import MintAvatar from '../MintAvatar.vue'
+import { decodeHtmlEntities } from '@/utils/html'
 
 const store = useMintKudosStore()
 const languages = useLanguagesStore()
@@ -64,32 +62,11 @@ function editKudos() {
     store.form.kudosId = props.kudos.id
 }
 
+const employeeName = computed(() => decodeHtmlEntities(props.kudos.employee.full_name))
 const showDot = computed(() => props.kudos.is_read == 0)
 </script>
 
 <style scoped lang="scss">
-.photo-container {
-    width: 32px;
-    height: 32px;
-    & i {
-        font-size: 32px;
-    }
-    &-small {
-        width: 18px;
-        height: 18px;
-        display: flex;
-        justify-content: center;
-        i {
-            font-size: 18px;
-        }
-    }
-}
-
-img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 50%;
-}
 .user {
     cursor: pointer;
 }
