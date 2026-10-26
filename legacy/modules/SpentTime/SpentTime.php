@@ -214,17 +214,14 @@ class SpentTime extends Basic
 
     protected function getValidSpendTime()
     {
-        $date_start = new DateTime($this->date_start);
-        $date_end = new DateTime($this->date_end);
+        $date_start = getDateTimeObject($this->date_start);
+        $date_end = getDateTimeObject($this->date_end);
 
-        $interval = $date_end->diff($date_start);
+        if (!$date_start || !$date_end) {
+            return $this->spent_time;
+        }
 
-        $hour = $interval->format("%h");
-        $min = round($interval->format("%i") / 60, 2);
-
-        $expected_spent_time = $hour + $min;
-
-        return $expected_spent_time;
+        return $this->calculateSpentTime($date_start, $date_end);
     }
 
     protected function checkAccessForParentWorkScheduleIfExists($view)
@@ -265,14 +262,21 @@ class SpentTime extends Basic
         $obj->afterSpentTimeEdit($this);
     }
 
+    private function calculateSpentTime(\DateTime $date_start, \DateTime $date_end): float
+    {
+        $seconds = max($date_end->getTimestamp() - $date_start->getTimestamp(), 0);
+        return round($seconds / 3600, 2);
+    }
+
     private function updateDurationField()
     {
-        $date_start  = getDateTimeObject($this->date_start);
-        $date_end  = getDateTimeObject($this->date_end);
+        $date_start = getDateTimeObject($this->date_start);
+        $date_end = getDateTimeObject($this->date_end);
 
-        $interval = $date_end->diff($date_start);
+        if (!$date_start || !$date_end) {
+            return;
+        }
 
-        $this->duration_hours = $interval->format("%h");
-        $this->duration_minutes = $interval->format("%i");
+        $this->spent_time = $this->calculateSpentTime($date_start, $date_end);
     }
 }
