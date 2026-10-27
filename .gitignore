@@ -2,11 +2,17 @@ TS-MIGRATION.md
 .vscode/*
 .vscode/settings.json
 .vscode/launch.json
-.htaccess
+/.htaccess
 legacy/.htaccess
-legacy/upload
+legacy/upload/*
+!legacy/upload/index.html
 legacy/public/
 legacy/cache/**/*
+!legacy/cache/themes/
+!legacy/cache/themes/SuiteP/
+!legacy/cache/themes/SuiteP/css/
+!legacy/cache/themes/SuiteP/css/*/
+!legacy/cache/themes/SuiteP/css/*/style.css
 legacy/custom/blowfish/
 legacy/custom/modules/*/logic_hooks.php
 legacy/custom/modules/*/Ext/Vardefs/vardefs.ext.php
@@ -39,7 +45,6 @@ legacy/search_index.log
 legacy/suitecrm.log
 legacy/templates_c
 
-api/app/Config/AppConfig.php
 install/assets/status.json
 legacy/cache/include/javascript/sugar_field_grp.js
 legacy/cache/include/javascript/sugar_grp1.js
@@ -54,10 +59,8 @@ legacy/cache/include/javascript/sugar_grp_yui2.js
 legacy/cache/include/javascript/sugar_grp_yui_widgets.js
 legacy/include/javascript/sugar_3.js
 legacy/custom/modules/Positions/logic_hooks.php
-legacy/include/ViewTools/Expressions/VTExpression_getUploadMaxsize.php
 legacy/include/ViewTools/Expressions/documentation.html
 legacy/include/ViewTools/javascript/viewTools.cache.js
-legacy/include/SugarEmailAddress/SugarEmailAddress.js
 
 api/cache
 api/minthcm.log
@@ -69,6 +72,8 @@ legacy/custom/modules/Connectors/metadata/*
 
 # Generated Entity files (but keep OAuth2)
 api/app/Entities/*.php
+!api/app/Entities/Schedulers.php
+!api/app/Entities/UsersPasswordLink.php
 
 legacy/include/**/*.lang.php
 !legacy/include/**/en_us.lang.php
@@ -78,10 +83,11 @@ legacy/install/**/*.lang.php
 !legacy/install/**/en_us.lang.php
 legacy/modules/**/*.lang.php
 !legacy/modules/**/en_us.lang.php
+!legacy/modules/**/*.en_us.lang.php
+!legacy/modules/KReports/language/*.lang.php
 
 legacy/lib/Search/ElasticSearch/defaultParams.yml
 legacy/modules/ACLRoles/ACLRoles.js
-legacy/modules/Meetings/jsclass_scheduler.js
 legacy/reindexElastic.php
 legacy/vendor/cweagans/
 legacy/vendor/symplify/vendor-patches/
