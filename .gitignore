@@ -1,9 +1,11 @@
+TS-MIGRATION.md
 .vscode/*
 .vscode/settings.json
 .vscode/launch.json
 .htaccess
 legacy/.htaccess
 legacy/upload
+legacy/public/
 legacy/cache/**/*
 legacy/custom/blowfish/
 legacy/custom/modules/*/logic_hooks.php
@@ -50,6 +52,7 @@ legacy/cache/include/javascript/sugar_grp_project_template.js
 legacy/cache/include/javascript/sugar_grp_quickcomp.js
 legacy/cache/include/javascript/sugar_grp_yui2.js
 legacy/cache/include/javascript/sugar_grp_yui_widgets.js
+legacy/include/javascript/sugar_3.js
 legacy/custom/modules/Positions/logic_hooks.php
 legacy/include/ViewTools/Expressions/VTExpression_getUploadMaxsize.php
 legacy/include/ViewTools/Expressions/documentation.html
@@ -85,9 +88,15 @@ legacy/vendor/symplify/vendor-patches/
 legacy/vendor/bin/vendor-patches
 legacy/vendor/bin/vendor-patches.bat
 
+legacy/custom/blowfish/*
+
 #CLAUDE
 .claude/settings.local.json
 .claude/.env
 
-# msys2/cygwin crash dumps
-*.stackdump
+#PHPUnit
+api/.phpunit.result.cache
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+# Firebase
+legacy/include/Integrations/Firebase/Cache/
