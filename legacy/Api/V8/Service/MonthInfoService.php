@@ -99,20 +99,26 @@ class MonthInfoService
                 break;
             case 'Meetings':
                 $sql_query = "SELECT m.id, m.name, m.date_start, m.duration_hours, m.duration_minutes, m.date_end, m.type, m.status
-                    FROM meetings m INNER JOIN meetings_users mu ON m.id = mu.meeting_id
+                    FROM meetings m
+                    INNER JOIN meetings_users mu
+                        ON m.id = mu.meeting_id
+                        AND mu.user_id = '{$employee_id}'
+                        AND mu.deleted = 0
                     WHERE m.date_start >= '{$start_date}'
                         AND m.date_start < '{$end_date}'
                         AND m.deleted = 0
-                        AND mu.user_id = '{$employee_id}'
                     ORDER BY m.date_start ASC";
                 break;
             case 'Calls':
                 $sql_query = "SELECT c.id, c.name, c.date_start, c.duration_hours, c.duration_minutes, c.date_end, c.status
-                    FROM calls c INNER JOIN calls_users cu ON c.id = cu.call_id
+                    FROM calls c
+                    INNER JOIN calls_users cu
+                        ON c.id = cu.call_id
+                        AND cu.user_id = '{$employee_id}'
+                        AND cu.deleted = 0
                     WHERE c.date_start >= '{$start_date}'
                         AND c.date_start < '{$end_date}'
                         AND c.deleted = 0
-                        AND cu.user_id = '{$employee_id}'
                     ORDER BY c.date_start ASC";
                 break;
             case 'Tasks':
