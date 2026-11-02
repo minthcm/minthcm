@@ -14,6 +14,10 @@
  * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+// Mint start #193555
+require_once 'KREST/KRESTSqlGuard.php';
+// Mint end #193555
+
 class KRESTModuleHandler
 {
 
@@ -104,24 +108,30 @@ class KRESTModuleHandler
             $searchtermArray = explode(' ', $searchParams['searchterm']);
             foreach ($searchtermArray as $thisSearchterm) {
                 $searchTerms = array();
-                $searchTermFields = $searchParams['searchtermfields'] ? json_decode(html_entity_decode($searchParams['searchtermfields']), true) : [];
+                // Mint start #193555
+                $safeSearchterm = KRESTSqlGuard::escapeValue($thisSearchterm);
+                $searchTermFields = $searchParams['searchtermfields'] ? KRESTSqlGuard::decodeStringList($searchParams['searchtermfields']) : [];
                 if ($searchTermFields) {
                     foreach ($searchTermFields as $fieldName) {
+                        // Field names land in an identifier position - escaping cannot make
+                        // them safe, so they are checked against the bean's field_defs.
+                        $fieldName = KRESTSqlGuard::assertColumn($thisBean, $fieldName);
                         switch ($thisBean->$field_defs_field[$fieldName]['type']) {
                             case 'relate':
-                                $searchTerms[] = ($thisBean->field_defs[$fieldName]['join_name'] ?: $thisBean->field_defs[$fieldName]['table']) . '.' . $thisBean->field_defs[$fieldName]['rname'] . ' like \'%' . $thisSearchterm . '%\'';
+                                $searchTerms[] = ($thisBean->field_defs[$fieldName]['join_name'] ?: $thisBean->field_defs[$fieldName]['table']) . '.' . $thisBean->field_defs[$fieldName]['rname'] . ' like \'%' . $safeSearchterm . '%\'';
                                 break;
                             default:
-                                $searchTerms[] = $thisBean->table_name . '.' . $fieldName . ' like \'%' . $thisSearchterm . '%\'';
+                                $searchTerms[] = $thisBean->table_name . '.' . $fieldName . ' like \'%' . $safeSearchterm . '%\'';
                                 break;
                         }
                     }
                 } else {
                     foreach ($thisBean->field_defs as $fieldName => $fieldData) {
                         if ($fieldData['unified_search'] && $fieldData['source'] != 'non-db')
-                            $searchTerms[] = $thisBean->table_name . '.' . $fieldName . ' like \'%' . $thisSearchterm . '%\'';
+                            $searchTerms[] = $thisBean->table_name . '.' . $fieldName . ' like \'%' . $safeSearchterm . '%\'';
                     }
                 }
+                // Mint end #193555
 
                 if (count($searchTerms) > 0) {
                     if ($searchParams['whereclause'] != '')
@@ -162,14 +172,21 @@ class KRESTModuleHandler
 
         //  addd a sort criteria
         if (!empty($searchParams['sortfield'])) {
+            // Mint start #193555
+            // ORDER BY is an identifier position: the column comes from field_defs and the
+            // direction from a two-value list. strtoupper() alone was never a defence here.
+            $sortDirection = KRESTSqlGuard::assertSortDirection(
+                isset($searchParams['sortdirection']) ? $searchParams['sortdirection'] : null
+            );
             if (!json_decode(html_entity_decode($searchParams['sortfield']))) {
                 $searchParams['orderby'] = '';
                 $searchParams['orderby'] .= /* $thisBean->table_name . '.' . */
-                    $searchParams['sortfield'] . ' ' . ($searchParams['sortdirection'] ? strtoupper($searchParams['sortdirection']) : 'ASC');
+                    KRESTSqlGuard::assertQualifiedColumn($thisBean, $searchParams['sortfield']) . ' ' . $sortDirection;
             } else {
                 $sortObject = json_decode(html_entity_decode($searchParams['sortfield']));
-                $searchParams['orderby'] = $this->sort_object_handler($thisBean->table_name, $sortObject) . ' ' . ($searchParams['sortdirection'] ? strtoupper($searchParams['sortdirection']) : 'ASC');
+                $searchParams['orderby'] = $this->sort_object_handler($thisBean->table_name, $sortObject) . ' ' . $sortDirection;
             }
+            // Mint end #193555
         }
 
         $filterFields = array();
@@ -255,9 +272,14 @@ class KRESTModuleHandler
     {
         $condWhereClause = '';
         if (!empty($conditions['join'])) {
+            // Mint start #193555
+            // The connective is interpolated straight into the WHERE clause and arrives from
+            // the same client-controlled `searchfields` JSON as everything else here.
+            $logicalJoin = KRESTSqlGuard::assertLogicalJoin($conditions['join']);
+            // Mint end #193555
             foreach ($conditions['conditions'] as $condition) {
                 if ($condWhereClause != '')
-                    $condWhereClause .= ' ' . $conditions['join'] . ' ';
+                    $condWhereClause .= ' ' . $logicalJoin . ' ';
 
                 if (!empty($condition['join']))
                     $condWhereClause .= '(' . $this->buildConditionsWhereClause($bean, $condition, $addJoins) . ')';
@@ -273,38 +295,53 @@ class KRESTModuleHandler
     private
     function buildConditionWhereClause($bean, $condition, &$addJoins)
     {
+        // Mint start #193555
+        // Every element below comes straight from the `searchfields` JSON parameter and lands
+        // in an identifier or operator position, where escaping is not a defence. Each one is
+        // validated against the bean's own metadata or a closed list instead.
         // check if we have to add the table to the field name
-        $fieldName = $condition['field'];
+        // The field is deliberately restricted to the bean's own table even when `addjoin` is set:
+        // assertTable() admits any table in the schema, so filtering on a joined column would let
+        // any session probe arbitrary data (e.g. users.user_hash LIKE 'a%'). See SECURITY.md.
+        $fieldName = KRESTSqlGuard::assertQualifiedColumn($bean, $condition['field']);
         if (strpos($condition['field'], '.') === false)
-            $fieldName = $bean->table_name . '.' . $condition['field'];
+            $fieldName = $bean->table_name . '.' . $fieldName;
 
         // check if we have an aadditonal join
-        if (is_array(($condition['addjoin']))) {
+        if (isset($condition['addjoin']) && is_array($condition['addjoin'])) {
 
-            $addJoins .= ' ' . $condition['addjoin']['jointype'] . ' JOIN ' . $condition['addjoin']['jointable'] . ' ON ' . $bean->table_name . '.' .
-                $condition['addjoin']['joinid'] . ' = ' . $condition['addjoin']['jointable'] . '.' . $condition['addjoin']['jointableid'] . ' AND ' .
-                $condition['addjoin']['jointable'] . '.deleted = 0';
+            $joinType = KRESTSqlGuard::assertJoinType($condition['addjoin']['jointype']);
+            $joinTable = KRESTSqlGuard::assertTable($condition['addjoin']['jointable']);
+            $joinId = KRESTSqlGuard::assertColumn($bean, $condition['addjoin']['joinid']);
+            $joinTableId = KRESTSqlGuard::assertTableColumn($condition['addjoin']['jointableid'], $joinTable);
+
+            $addJoins .= ' ' . $joinType . ' JOIN ' . $joinTable . ' ON ' . $bean->table_name . '.' .
+                $joinId . ' = ' . $joinTable . '.' . $joinTableId . ' AND ' .
+                $joinTable . '.deleted = 0';
 
         }
 
-        switch ($condition['operator']) {
+        $operator = KRESTSqlGuard::assertOperator($condition['operator']);
+
+        switch ($operator) {
             case 'doy>=':
-                return 'DAYOFYEAR(' . $fieldName . ') >= ' . $condition['value'];
+                return 'DAYOFYEAR(' . $fieldName . ') >= ' . KRESTSqlGuard::toInt($condition['value']);
                 break;
             case 'doy<=':
-                return 'DAYOFYEAR(' . $fieldName . ') <= ' . $condition['value'];
+                return 'DAYOFYEAR(' . $fieldName . ') <= ' . KRESTSqlGuard::toInt($condition['value']);
                 break;
             case 'in':
             case 'not in':
-                return $fieldName . ' ' . $condition['operator'] . ' (' . $condition['value'] . ') ';
+                return $fieldName . ' ' . $operator . ' (' . KRESTSqlGuard::escapeValueList($condition['value']) . ') ';
                 break;
             case 'currentuser':
                 return $fieldName . ' = \'' . $GLOBALS['current_user']->id . '\'';
                 break;
             default:
-                return $fieldName . ' ' . $condition['operator'] . ' \'' . $condition['value'] . '\'';
+                return $fieldName . ' ' . $operator . ' \'' . KRESTSqlGuard::escapeValue($condition['value']) . '\'';
                 break;
         }
+        // Mint end #193555
     }
 
     public
@@ -1014,9 +1051,18 @@ class KRESTModuleHandler
     {
         switch ($sort_object->sortfunction) {
             case "distance":
-                return "POWER(SIN((" . $sort_object->sortparams->current_lat . " - abs(" . $table_name . "." . $sort_object->sortparams->lat_field . ")) * pi()/180 / 2), 2)
-              + COS(" . $sort_object->sortparams->current_lon . " * pi()/180 ) * COS(abs(" . $table_name . "." . $sort_object->sortparams->lat_field . ") * pi()/180)
-              * POWER(SIN((" . $sort_object->sortparams->current_lon . " - " . $table_name . "." . $sort_object->sortparams->lon_field . ") * pi()/180 / 2), 2)";
+                // Mint start #193555
+                // Coordinates are numeric literals, the *_field entries are column names -
+                // both arrive from the client inside the `sortfield` JSON.
+                $currentLat = KRESTSqlGuard::toFloat($sort_object->sortparams->current_lat);
+                $currentLon = KRESTSqlGuard::toFloat($sort_object->sortparams->current_lon);
+                $latField = KRESTSqlGuard::assertTableColumn($sort_object->sortparams->lat_field, $table_name);
+                $lonField = KRESTSqlGuard::assertTableColumn($sort_object->sortparams->lon_field, $table_name);
+
+                return "POWER(SIN((" . $currentLat . " - abs(" . $table_name . "." . $latField . ")) * pi()/180 / 2), 2)
+              + COS(" . $currentLon . " * pi()/180 ) * COS(abs(" . $table_name . "." . $latField . ") * pi()/180)
+              * POWER(SIN((" . $currentLon . " - " . $table_name . "." . $lonField . ") * pi()/180 / 2), 2)";
+                // Mint end #193555
                 break;
             default:
 

@@ -16,6 +16,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 require_once 'modules/KReports/utils.php';
+// Mint start #193555
+// Also instantiated outside KREST (include/AI/Tools/Traits/KReportTrait.php), where KREST/index.php never runs.
+require_once 'KREST/KRESTSqlGuard.php';
+// Mint end #193555
 
 #[\AllowDynamicProperties]
 class KReporterRESTHandler
@@ -225,23 +229,29 @@ class KReporterRESTHandler
         //begin handle search param
         if (isset($params['searchterm']) && !empty($params['searchterm'])) {
             if (isset($params['searchtermfields'])) {
+                // Mint start #193555
                 $whereParts = array();
-                $searchtermfields = json_decode($params['searchtermfields'], true);
+                $safeSearchterm = KRESTSqlGuard::escapeValue($params['searchterm']);
+                $searchtermfields = KRESTSqlGuard::decodeStringList($params['searchtermfields']);
                 foreach ($searchtermfields as $searchfield) {
-                    $whereParts[] = "users.$searchfield LIKE '%" . $params['searchterm'] . "%'";
+                    $safeField = KRESTSqlGuard::assertColumn($tmpBean, $searchfield);
+                    $whereParts[] = "users.$safeField LIKE '%" . $safeSearchterm . "%'";
                 }
+                // Mint end #193555
                 if (!empty($whereParts)) {
                     $where .= "(" . implode(" OR ", $whereParts) . ")";
                 }
 
             }
         }
+        // Mint start #193555
         if (isset($params['limit'])) {
-            $limit = $params['limit'];
+            $limit = KRESTSqlGuard::toInt($params['limit'], -1);
         }
         if (isset($params['start'])) {
-            $row_offset = $params['start'];
+            $row_offset = KRESTSqlGuard::toInt($params['start']);
         }
+        // Mint end #193555
         //end handle search param
 
         $users = $tmpBean->get_list($order_by, $where, $row_offset, $limit);
@@ -309,16 +319,21 @@ class KReporterRESTHandler
                 $fieldName = $fieldArray[1];
             }
 
+            // Mint start #193555
+            $safeQuery = KRESTSqlGuard::escapeValue($query);
             $query_res = $db->limitQuery("SELECT id, " . $fieldName . " FROM $thisModule->table_name WHERE " . (!empty($query)
-                ? "name like '%" . $query . "%' AND" : "") . " deleted='0' ORDER BY name ASC", (!empty($start)
-                ? $start : 0), (!empty($limit) ? $limit : 25));
+                ? "name like '%" . $safeQuery . "%' AND" : "") . " deleted='0' ORDER BY name ASC", KRESTSqlGuard::toInt($start),
+                (!empty($limit) ? KRESTSqlGuard::toInt($limit, 1) : 25));
+            // Mint end #193555
             while ($thisEntry = $db->fetchByAssoc($query_res)) {
                 $returnArray['data'][] = array('itemid' => $thisEntry['id'], 'itemtext' => $thisEntry[$fieldName]);
             }
 
             // get count
+            // Mint start #193555
             $totalRec = $db->fetchByAssoc($db->query("SELECT count(*) as count FROM $thisModule->table_name WHERE " . (!empty($query)
-                ? "name like '%" . $query . "%' AND" : "") . " deleted='0'"));
+                ? "name like '%" . $safeQuery . "%' AND" : "") . " deleted='0'"));
+            // Mint end #193555
             $returnArray['total'] = $totalRec['count'];
         }
 
@@ -683,7 +698,10 @@ class KReporterRESTHandler
 
         if (!empty($grouping)) {
             $groupedReturnArray = array();
-            $groupingDetail = $db->fetchByAssoc($db->query("SELECT * FROM kreportgroupings WHERE id = '$grouping'"));
+            // Mint start #193555
+            $safeGrouping = KRESTSqlGuard::escapeValue($grouping);
+            $groupingDetail = $db->fetchByAssoc($db->query("SELECT * FROM kreportgroupings WHERE id = '$safeGrouping'"));
+            // Mint end #193555
             $groupingMapping = json_decode(html_entity_decode($groupingDetail['mapping']), true);
 
             if ($groupingMapping['others']) {
@@ -1122,7 +1140,9 @@ class KReporterRESTHandler
 
         // if a filter is set evaluate it .. comes from the dashlet
         if (!empty($requestParams['filter'])) {
-            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . $requestParams['filter'] . "'"));
+            // Mint start #193555
+            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . KRESTSqlGuard::escapeValue($requestParams['filter']) . "'"));
+            // Mint end #193555
             $thisReport->whereOverride = json_decode(html_entity_decode($filter['selectedfilters']), true);
         }
 
@@ -1283,7 +1303,9 @@ class KReporterRESTHandler
 
         // if a filter is set evaluate it .. comes from the dashlet
         if (!empty($requestParams['filter'])) {
-            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . $requestParams['filter'] . "'"));
+            // Mint start #193555
+            $filter = $db->fetchByAssoc($db->query("SELECT selectedfilters FROM kreportsavedfilters WHERE id = '" . KRESTSqlGuard::escapeValue($requestParams['filter']) . "'"));
+            // Mint end #193555
             $thisReport->whereOverride = json_decode(html_entity_decode($filter['selectedfilters']), true);
         }
 
@@ -1400,7 +1422,9 @@ class KReporterRESTHandler
         global $db;
         $whereClause = "";
         if (!empty($params['assigneduserid'])) {
-            $whereClause = " AND (ksf.assigned_user_id='" . $params['assigneduserid'] . "' OR ksf.is_global > 0)";
+            // Mint start #193555
+            $whereClause = " AND (ksf.assigned_user_id='" . KRESTSqlGuard::escapeValue($params['assigneduserid']) . "' OR ksf.is_global > 0)";
+            // Mint end #193555
         }
 
         $results = array();
@@ -1426,11 +1450,13 @@ class KReporterRESTHandler
         }
 
         //get data
+        // Mint start #193555
         $records = $db->query("SELECT ksf.*, u.user_name FROM kreportsavedfilters ksf "
             . "INNER JOIN users u ON u.id = ksf.assigned_user_id "
-            . "WHERE ksf.deleted= 0 AND ksf.kreport_id='" . $params['reportid'] . "' "
+            . "WHERE ksf.deleted= 0 AND ksf.kreport_id='" . KRESTSqlGuard::escapeValue($params['reportid']) . "' "
             . $whereClause
             . " ORDER BY ksf.name ASC");
+        // Mint end #193555
 
         //prepare records
         while ($record = $db->fetchByAssoc($records)) {
@@ -1763,7 +1789,10 @@ class KReporterRESTHandler
         $order_by = "users.last_name ASC";
 
         if (!empty($params['userids'])) {
-            $where = "users.id IN('" . implode("','", json_decode($params['userids'], true)) . "')";
+            // Mint start #193555
+            $safeIds = KRESTSqlGuard::escapeValueList(KRESTSqlGuard::decodeStringList($params['userids']));
+            $where = "users.id IN(" . ('' !== $safeIds ? $safeIds : "''") . ")";
+            // Mint end #193555
             $callGetList = true;
         } elseif ('*' == $params['all']) {
             $where = "";
@@ -1771,7 +1800,10 @@ class KReporterRESTHandler
         }
 
         if (!empty($params['nameFilter'])) {
-            $where = " users.first_name like '%" . $params['nameFilter'] . "%' OR users.last_name like '%" . $params['nameFilter'] . "%' OR users.user_name like '%" . $params['nameFilter'] . "%' ";
+            // Mint start #193555
+            $safeNameFilter = KRESTSqlGuard::escapeValue($params['nameFilter']);
+            $where = " users.first_name like '%" . $safeNameFilter . "%' OR users.last_name like '%" . $safeNameFilter . "%' OR users.user_name like '%" . $safeNameFilter . "%' ";
+            // Mint end #193555
         }
 
         if ($callGetList) {
@@ -1815,11 +1847,17 @@ class KReporterRESTHandler
         $order_by = "contacts.last_name ASC";
 
         if (!empty($params['contactids'])) {
-            $where = "contacts.id IN('" . implode("','", json_decode($params['contactids'], true)) . "')";
+            // Mint start #193555
+            $safeIds = KRESTSqlGuard::escapeValueList(KRESTSqlGuard::decodeStringList($params['contactids']));
+            $where = "contacts.id IN(" . ('' !== $safeIds ? $safeIds : "''") . ")";
+            // Mint end #193555
             $callGetList = true;
         } elseif (!empty($params['like'])) {
-            $where = "contacts.last_name LIKE '" . $params['like'] . "%' "
-                . "OR contacts.first_name LIKE '" . $params['like'] . "%'";
+            // Mint start #193555
+            $safeLike = KRESTSqlGuard::escapeValue($params['like']);
+            $where = "contacts.last_name LIKE '" . $safeLike . "%' "
+                . "OR contacts.first_name LIKE '" . $safeLike . "%'";
+            // Mint end #193555
             $callGetList = true;
         }
         //get contact list
@@ -1865,7 +1903,10 @@ class KReporterRESTHandler
         $order_by = "kreports.name ASC";
 
         if (!empty($params['kreportids'])) {
-            $where = "kreports.id IN('" . implode("','", json_decode($params['kreportids'], true)) . "')";
+            // Mint start #193555
+            $safeIds = KRESTSqlGuard::escapeValueList(KRESTSqlGuard::decodeStringList($params['kreportids']));
+            $where = "kreports.id IN(" . ('' !== $safeIds ? $safeIds : "''") . ")";
+            // Mint end #193555
             $callGetList = true;
         } elseif ('*' == $params['all']) {
             $where = "";
@@ -1873,7 +1914,9 @@ class KReporterRESTHandler
         }
 
         if (!empty($params['nameFilter'])) {
-            $where = " kreports.name like '%" . $params['nameFilter'] . "%'";
+            // Mint start #193555
+            $where = " kreports.name like '%" . KRESTSqlGuard::escapeValue($params['nameFilter']) . "%'";
+            // Mint end #193555
             $callGetList = true;
         }
 
@@ -1903,8 +1946,10 @@ class KReporterRESTHandler
     public function saveNewDList($params)
     {
         $returnArray = array();
+        // Mint start #193555
         $q = "INSERT INTO kreportdlists (id, name, description) "
-            . "VALUES('" . $params['id'] . "','" . $params['name'] . "', null)";
+            . "VALUES('" . KRESTSqlGuard::escapeValue($params['id']) . "','" . KRESTSqlGuard::escapeValue($params['name']) . "', null)";
+        // Mint end #193555
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
         } else {
@@ -1918,9 +1963,11 @@ class KReporterRESTHandler
     {
 
         $returnArray = array();
+        // Mint start #193555
         $q = "UPDATE kreportdlists SET "
             . "deleted = 1 "
-            . "WHERE id='" . $params['id'] . "'";
+            . "WHERE id='" . KRESTSqlGuard::escapeValue($params['id']) . "'";
+        // Mint end #193555
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
         } else {
@@ -1933,10 +1980,12 @@ class KReporterRESTHandler
     public function updateDList($params)
     {
         $returnArray = array();
+        // Mint start #193555
         $q = "UPDATE kreportdlists SET "
         . "name = '" . $GLOBALS['db']->quote($params['name']) . "', "
         . "dlistdata = '" . $GLOBALS['db']->quote($params['dlistdata']) . "' "
-            . "WHERE id='" . $params['id'] . "'";
+            . "WHERE id='" . KRESTSqlGuard::escapeValue($params['id']) . "'";
+        // Mint end #193555
 
         if ($GLOBALS['db']->query($q)) {
             $returnArray = array('success' => 1, 'dlistid' => $params['id']);
