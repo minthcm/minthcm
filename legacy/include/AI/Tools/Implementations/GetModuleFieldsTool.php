@@ -398,10 +398,13 @@ class GetModuleFieldsTool extends AbstractTool implements ToolInterface
     }
 
     /**
-     * Resolves enum options from a vardef. First tries the static `options` key against
-     * `app_list_strings`; falls back to invoking a `function` callback for vardefs whose
-     * options are populated dynamically (e.g. `getDictionary` reading from the `dictionaries`
-     * table, `getCompanies` reading from securitygroups).
+     * Resolves enum options from a vardef. First tries invoking a `function` callback for
+     * vardefs whose options are populated dynamically (e.g. `getDictionary` reading live from
+     * the `dictionaries` table, `getCompanies` reading from securitygroups); falls back to the
+     * static `options` key against `app_list_strings` when there is no `function` or it yields
+     * nothing. This mirrors the frontend's own priority (MintLogic's `init_function_options`
+     * rule resolves `function` live and overrides the static `defs.options` in Field.vue), so
+     * MCP and the UI agree on what a field's valid/visible options are.
      *
      * Callbacks declaring `returns: 'html'` are skipped — those produce widget markup,
      * not key/value option maps.
@@ -413,11 +416,31 @@ class GetModuleFieldsTool extends AbstractTool implements ToolInterface
      */
     private function resolveEnumValues(array $field_def, array $app_list_strings): ?array
     {
+        $from_function = $this->tryResolveFromFunction($field_def);
+        if ($from_function !== null) {
+            return $from_function;
+        }
+
         $options_key = isset($field_def['options']) ? (string) $field_def['options'] : '';
         if ($options_key !== '' && !empty($app_list_strings[$options_key])) {
             return $this->getEnumValues($app_list_strings[$options_key]);
         }
 
+        return null;
+    }
+
+    /**
+     * Attempts to resolve enum options by invoking a vardef `function` callback (e.g.
+     * `getDictionary` reading live from the `dictionaries` table, `getCompanies` reading from
+     * securitygroups). Returns null when there is no usable `function` definition or it yields
+     * no options, so the caller can fall back to the static `options` key.
+     *
+     * @param array<string, mixed> $field_def
+     *
+     * @return array<string, string>|null
+     */
+    private function tryResolveFromFunction(array $field_def): ?array
+    {
         if (empty($field_def['function'])) {
             return null;
         }
@@ -450,7 +473,6 @@ class GetModuleFieldsTool extends AbstractTool implements ToolInterface
         // Standard SugarCRM signature for option-providing callbacks:
         // ($focus, $name, $value, $view, $additional_params).
         $values = $function_name(null, '', '', 'MCP', $additional_params);
-
         if (!is_array($values) || $values === []) {
             return null;
         }
