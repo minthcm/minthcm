@@ -1,6 +1,10 @@
 import { MassAction } from './MassAction'
+import { registerActionModules } from '../registerActionModules'
 
-const files = import.meta.glob('./Actions/*.ts', {
+const coreFiles = import.meta.glob('./Actions/*.ts', {
+    eager: true,
+})
+const customFiles = import.meta.glob('@/custom/business/MassActions/Actions/*.ts', {
     eager: true,
 })
 
@@ -10,12 +14,8 @@ interface Actions {
 
 const actions: Actions = {}
 
-for (const path in files) {
-    const file = files[path] as Actions
-    const name = path.match(/\.\/Actions\/(.*)\.ts$/)?.[1]
-    if (name && file) {
-        actions[name] = file.default ?? file[name]
-    }
-}
+// Custom is registered last on purpose -- it overrides the core action of the same name.
+registerActionModules(actions, coreFiles)
+registerActionModules(actions, customFiles)
 
 export default actions

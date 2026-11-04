@@ -46,21 +46,70 @@
 
 namespace MintHCM\Data\MassActions;
 
+use InvalidArgumentException;
+
 class MassActionLoader
 {
+    private const CORE_NAMESPACE_PREFIX = 'MintHCM\\';
+    private const CUSTOM_NAMESPACE_PREFIX = 'MintHCM\\Custom\\';
+    private const CORE_ACTIONS_NAMESPACE = 'MintHCM\\Data\\MassActions\\Actions\\';
+    private const CUSTOM_ACTIONS_NAMESPACE = 'MintHCM\\Custom\\Data\\MassActions\\Actions\\';
+
     public static function getAction($class, ...$args)
-    {   
-        if (strpos($class, '\\') === false) {
-            $class = 'MintHCM\Data\MassActions\Actions\\' . $class;
+    {
+        $resolved_class = self::resolveClass($class);
+
+        return new $resolved_class(...$args);
+    }
+
+    /**
+     * Resolves an action name -- a short name or a fully qualified one -- to the class to instantiate.
+     *
+     * Custom classes always win over their core counterparts, both when overriding an existing core
+     * action and when defining a brand new one that has no core counterpart at all.
+     */
+    private static function resolveClass(string $class): string
+    {
+        // A caller may pass a fully qualified name with a leading separator; without normalising it
+        // the prefix comparisons below would miss and the custom override would be skipped.
+        $class = ltrim($class, '\\');
+
+        $resolved_class = strpos($class, '\\') === false
+            ? self::resolveShortName($class)
+            : self::resolveCustomOverride($class);
+
+        if (!class_exists($resolved_class) || !is_subclass_of($resolved_class, MassAction::class)) {
+            throw new InvalidArgumentException("Class $resolved_class does not exist or is not a subclass of " . MassAction::class);
         }
-        if (!class_exists($class) || !is_subclass_of($class, 'MintHCM\Data\MassActions\MassAction')) {
-            throw new \InvalidArgumentException("Class $class does not exist or is not a subclass of MintHCM\Data\MassActions\MassAction");
+
+        return $resolved_class;
+    }
+
+    private static function resolveShortName(string $short_name): string
+    {
+        $core_class = self::CORE_ACTIONS_NAMESPACE . $short_name;
+        $custom_class = self::CUSTOM_ACTIONS_NAMESPACE . $short_name;
+
+        if (class_exists($custom_class)) {
+            return $custom_class;
         }
-        $classReflection = new \ReflectionClass($class);
-        $custom_class = str_replace('MintHCM', 'MintHCM\Custom', $classReflection->getName());
+
+        // Falling back to the core name even when it does not exist keeps the error message
+        // pointing at the action the caller actually asked for.
+        return $core_class;
+    }
+
+    private static function resolveCustomOverride(string $class): string
+    {
+        if (strpos($class, self::CUSTOM_NAMESPACE_PREFIX) === 0 || strpos($class, self::CORE_NAMESPACE_PREFIX) !== 0) {
+            return $class;
+        }
+
+        $custom_class = self::CUSTOM_NAMESPACE_PREFIX . substr($class, strlen(self::CORE_NAMESPACE_PREFIX));
         if (class_exists($custom_class) && is_subclass_of($custom_class, $class)) {
-            return new $custom_class(...$args);
+            return $custom_class;
         }
-        return new $class(...$args);
+
+        return $class;
     }
 }

@@ -91,7 +91,7 @@ The `filter` body parameter mirrors the ListView filter state:
 
 ## Creating a Custom Action
 
-1. Extend `MassAction` in `api/data/MassActions/Actions/` (or `api/custom/data/MassActions/Actions/`):
+1. Extend `MassAction` in `api/data/MassActions/Actions/` (core) or `api/custom/data/MassActions/Actions/` (customization — see [Custom actions in `api/custom/`](#custom-actions-in-apicustom) below):
 
 ```php
 <?php
@@ -141,6 +141,71 @@ export class Archive extends MassAction {
 The string MUST equal the PHP class name on the backend (without the `Actions\\` namespace prefix), because the backend routes by `POST /{module}/MassActions/{actionName}`.
 
 `$this->ids` is always a resolved array of IDs — the `all` expansion happens in the base constructor before `execute()` is called.
+
+## Custom actions in `api/custom/`
+
+`MassActionLoader::getAction()` resolves an action by its **short name** (e.g. `'Archive'`), checking the custom namespace first and the core namespace second. Whichever class it picks must be a subclass of `MintHCM\Data\MassActions\MassAction` — otherwise it throws `InvalidArgumentException`. The same custom-wins rule applies when a fully qualified core class name is passed in.
+
+Custom actions live in `api/custom/data/MassActions/Actions/` under the `MintHCM\Custom\Data\MassActions\Actions` namespace, mapped in `api/composer.json`:
+
+```json
+"MintHCM\\Custom\\Data\\": "custom/data/"
+```
+
+Run `cd api && composer dump-autoload` after adding the first class there (and on every instance the customization is deployed to).
+
+### Overriding a core action
+
+Same short name as the core action, extending the core class — here restricting the built-in `Export`
+to admins:
+
+```php
+<?php
+
+namespace MintHCM\Custom\Data\MassActions\Actions;
+
+use MintHCM\Data\MassActions\Actions\Export as CoreExport;
+
+class Export extends CoreExport
+{
+    public function hasAccess()
+    {
+        return $GLOBALS['current_user']->isAdmin();
+    }
+}
+```
+
+`'Export'` now resolves to the custom class everywhere, with no change to core files. The frontend action class keeps `actionName = 'Export'` — routing is unchanged. When a **fully qualified core class name** is passed instead of the short name, the custom class is used only if it actually extends that core class; a short name picks the custom class whenever one exists.
+
+### Adding a brand new action
+
+No core counterpart — extend `MassAction` directly:
+
+```php
+<?php
+
+namespace MintHCM\Custom\Data\MassActions\Actions;
+
+use MintHCM\Data\MassActions\MassAction;
+
+class SendToPayroll extends MassAction
+{
+    const ICON = 'mdi-cash-sync';
+    const LABEL = 'LBL_MASS_SEND_TO_PAYROLL';
+
+    public function execute()
+    {
+        // ...
+    }
+
+    public function hasAccess()
+    {
+        return true; // add ACL check as needed
+    }
+}
+```
+
+It is resolved by its short name `'SendToPayroll'`; the core namespace does not need a matching class. The matching frontend class goes in `vue/src/custom/business/MassActions/Actions/SendToPayroll.ts` with `protected static readonly actionName = 'SendToPayroll'` — custom frontend actions are picked up by the registry without touching core files (see [Customization Guide](../../vue/documentation/11-customization.md), section *Custom Business Logic*).
 
 ## Batched Actions with Progress UI
 

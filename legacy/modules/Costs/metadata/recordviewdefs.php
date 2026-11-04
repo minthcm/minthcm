@@ -7,6 +7,9 @@ $viewdefs['Costs'] = [
             'component' => 'MintPanelRecordDetails',
             'title' => 'LBL_CONTACT_INFORMATION',
             'data' => [
+                // This panel lists its whole action menu explicitly; the default actions
+                // (Audit / Delete / Duplicate) must not be merged in on top of it.
+                'includeDefaultActions' => false,
                 'actions' => [
                     'Audit',
                     'Delete',
