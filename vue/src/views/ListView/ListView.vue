@@ -4,8 +4,8 @@
         <div class="list-view-content">
             <ListViewFilters v-if="store.isInit"/>
             <ListViewHeader />
-            <ListViewTable />
             <ListViewMassUpdate v-if="store.isMassUpdate" />
+            <ListViewTable />
         </div>
         <template v-for="(panel, idx) in modulePanelComponents" :key="idx">
             <component :is="panel" :module="module" />
