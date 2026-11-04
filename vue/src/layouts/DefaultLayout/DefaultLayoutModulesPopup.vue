@@ -50,6 +50,7 @@ function handleTileClick(mod: Module) {
         padding: 8px 8px;
         align-items: center;
         color: rgb(var(--v-theme-secondary));
+        background: none;
         &:hover {
             color: rgb(var(--v-theme-secondary-dark));
             background: #e0ece9;

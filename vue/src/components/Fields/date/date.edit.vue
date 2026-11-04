@@ -19,6 +19,7 @@
                 <template v-slot:activator="{ props: menuProps }">
                     <v-btn
                     icon
+                    density="compact"
                     variant="text"
                     class="mint-date-field-btn"
                     v-bind="menuProps"

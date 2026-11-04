@@ -21,7 +21,7 @@
                 ></v-text-field>
             </div>
             <div class="mint-popup-buttons">
-                <v-btn @click="submitForm" color="primary" :loading="loading" :disabled="loading">
+                <v-btn @click="submitForm" color="primary" :loading="loading" :disabled="loading" class="text-uppercase">
                     {{ languagesStore.label('LBL_SUBMIT_BUTTON_LABEL', props.data.module_name) }}
                 </v-btn>
             </div>

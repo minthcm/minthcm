@@ -17,6 +17,15 @@ if (!(locales as any)[locale]) {
 }
 
 export default createVuetify({
+    // v4: breakpoint thresholds reduced — preserve v3 values explicitly
+    display: {
+        thresholds: {
+            md: 960,
+            lg: 1280,
+            xl: 1920,
+            xxl: 2560,
+        },
+    },
     locale: {
         locale,
         fallback: locale,

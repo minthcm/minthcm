@@ -36,6 +36,7 @@
                         v-if="recordModel.name"
                         icon
                         variant="text"
+                        density="compact"
                         @click="recordModel = { id: '', name: '' }"
                         @keydown.enter.prevent="recordModel = { id: '', name: '' }"
                         @keydown.space.prevent="recordModel = { id: '', name: '' }"
@@ -47,6 +48,7 @@
                         v-else
                         icon
                         variant="text"
+                        density="compact"
                         @click.stop="openRelatePopup"
                         @keydown.enter.prevent="openRelatePopup"
                         @keydown.space.prevent="openRelatePopup"

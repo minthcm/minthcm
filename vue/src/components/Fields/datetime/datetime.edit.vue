@@ -19,6 +19,7 @@
                     <v-btn
                         icon
                         variant="text"
+                        density="compact"
                         class="mint-date-field-btn"
                         v-bind="menuProps"
                         @keydown.enter.stop.prevent="datePickerMenu = true"
@@ -46,6 +47,7 @@
                         <v-btn
                             icon
                             variant="text"
+                            density="compact"
                             class="mint-date-field-btn"
                             v-bind="props"
                             @keydown.enter.stop.prevent="timePickerMenu = true"
