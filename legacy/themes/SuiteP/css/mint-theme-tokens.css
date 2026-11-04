@@ -134,8 +134,8 @@ html[data-mint-theme="light"] {
     --mint-status-warn-bg-inv:     #fcfcf5;
     --mint-status-warn-text-inv:   #6b6500;
 
-    /* Navigation sidebar overlays */
-    --mint-nav-drawer-bg:              #00000010;
+    /* Navigation sidebar — drawer-bg is the tint of the frosted glass layer */
+    --mint-nav-drawer-bg:              rgba(0, 0, 0, 0.039);
     --mint-nav-item-hover-bg:          #0000001f;
     --mint-nav-action-hover-bg:        #00000044;
     --mint-nav-on-primary-text:        #ffffffaf;
@@ -261,9 +261,9 @@ html[data-mint-theme="dark"] {
     --mint-status-warn-bg-inv:     #2a2010;
     --mint-status-warn-text-inv:   #d4a832;
 
-    /* Navigation sidebar overlays */
-    --mint-nav-drawer-bg:              #00000010;
-    --mint-nav-item-hover-bg:          #0000001f;
+    /* Navigation sidebar — on dark the glass lightens instead of darkening */
+    --mint-nav-drawer-bg:              rgba(255, 255, 255, 0.05);
+    --mint-nav-item-hover-bg:          rgba(255, 255, 255, 0.08);
     --mint-nav-action-hover-bg:        #00000044;
     --mint-nav-on-primary-text:        #ffffffaf;
     --mint-nav-on-primary-text-active: #ffffff;
