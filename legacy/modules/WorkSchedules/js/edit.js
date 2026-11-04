@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var redirected_from_calendar = $("#redirected_from_calendar").val();
     if (redirected_from_calendar == 1) {
-        createActivitySelectDialog();
         setCancelButton();
     }
 
@@ -211,72 +210,6 @@ function convertDateFieldToMoment(field_id) {
         }
     }
     return result;
-}
-
-function createActivitySelectDialog() {
-    $("body").prepend(
-        '<div id="activity-select-dialog"><p><b>' +
-            SUGAR.language.get("WorkSchedules", "LBL_ACTIVITY_SELECT_DIALOG") +
-            "</b></p></div>"
-    );
-    var return_module = $("#return_module").val();
-    $("#activity-select-dialog").dialog({
-        draggable: false,
-        position: { my: "center top+5%", at: "center top", of: "#pagecontent" },
-        width: 400,
-        buttons: [
-            {
-                text: SUGAR.language.get("WorkSchedules", "LBL_CREATE_MEETING"),
-                click: function () {
-                    var date_start = convertDateFieldToMoment("date_start");
-                    if ($("#previous_diff_minutes").val() == 30) {
-                        var date_end = date_start.clone();
-                        delete date_end._i;
-                        date_end.add(1, "h");
-                        var date_formatted = date_end.format(
-                            viewTools.date.getDateTimeFormat()
-                        );
-                        var url =
-                            "index.php?module=Meetings&action=EditView&return_module=" +
-                            return_module +
-                            "&date_start=" +
-                            $("#date_start").val() +
-                            "&date_end=" +
-                            date_formatted +
-                            "&assigned_user_id=" +
-                            $("#assigned_user_id").val();
-                    } else {
-                        var url =
-                            "index.php?module=Meetings&action=EditView&return_module=" +
-                            return_module +
-                            "&date_start=" +
-                            $("#date_start").val() +
-                            "&date_end=" +
-                            $("#date_end").val() +
-                            "&assigned_user_id=" +
-                            $("#assigned_user_id").val();
-                    }
-                    window.location.assign(url);
-                },
-            },
-            {
-                text: SUGAR.language.get("WorkSchedules", "LBL_CREATE_CALL"),
-                click: function () {
-                    var url =
-                        "index.php?module=Calls&action=EditView&return_module=" +
-                        return_module +
-                        "&date_start=" +
-                        $("#date_start").val() +
-                        "&assigned_user_id=" +
-                        $("#assigned_user_id").val();
-                    window.location.assign(url);
-                },
-            },
-        ],
-        open: function (event, ui) {
-            setTimeout("$('#activity-select-dialog').dialog('close')", 4000);
-        },
-    });
 }
 
 function validateWorkScheduleCreatedByPeriodicity() {
