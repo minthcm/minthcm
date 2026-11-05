@@ -63,7 +63,7 @@ class Install extends Command
         }
 
         $io->section('Verifying required app versions...');
-        $appVersionsStatus = $AppVerService->verifyAppVersions($userData['rebuildFrontend']);
+        $appVersionsStatus = $AppVerService->verifyAppVersions();
         if (!$appVersionsStatus['correctVersions']) {
             $io->error($appVersionsStatus['messages']);
             return Command::FAILURE;
@@ -78,13 +78,6 @@ class Install extends Command
         $installer->setupFilesPermissions();
         $backendInstallationStatus = $installer->installBackendApplication($userData);
         if (!$backendInstallationStatus) {
-            $io->error("An error occured while installing MintHCM. Check install.log file for more details.");
-            return Command::FAILURE;
-        }
-
-        $io->section('Installing UX...');
-        $frontendInstallationStatus = $installer->installFrontendApplication();
-        if (!$frontendInstallationStatus) {
             $io->error("An error occured while installing MintHCM. Check install.log file for more details.");
             return Command::FAILURE;
         }
@@ -155,8 +148,8 @@ class Install extends Command
         $ssl = $question->ask();
 
         $serverService = new ServerService();
-        $protocl = $ssl ? 'https://' : 'http://';
-        $url = $protocl . $serverService->getHostName() . $serverService->getDirectorySeparator() . $serverService->getScriptDirectory();
+        $protocol = $ssl ? 'https://' : 'http://';
+        $url = $protocol . $serverService->getHostName() . $serverService->getDirectorySeparator() . $serverService->getScriptDirectory();
 
         $question = new \MintHCM\MintCLI\Questions\SiteURL($QH, $input, $output);
         $question->setDefaultValue($url);
@@ -164,9 +157,6 @@ class Install extends Command
 
         $question = new \MintHCM\MintCLI\Questions\ApplicationRoot($QH, $input, $output);
         $rootDirectory = $question->ask();
-
-        $question = new \MintHCM\MintCLI\Questions\RebuildFrontend($QH, $input, $output);
-        $rebuildFrontend = $question->ask();
 
         return [
             'systemAdminName' => $systemAdminName,
@@ -185,7 +175,6 @@ class Install extends Command
             'ssl' => $ssl,
             'siteUrl' => $siteUrl,
             'rootDirectory' => $rootDirectory,
-            'rebuildFrontend' => $rebuildFrontend
         ];
     }
 }

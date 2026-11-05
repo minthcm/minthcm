@@ -129,10 +129,6 @@ class InstallController
                 return ["status" => 0, "message" => "Installation failed.", "error" => "Backend installation failed"];
             }
 
-            // Sudden progress jump due to backend doing a lot of other stuff
-            $this->service->setMintInstallStatus(20, "Starting frontend installation...");
-            $installer->installFrontendApplication();
-
             $this->service->setMintInstallStatus(21, "Setting up file permissions...");
             $installer->setupFilesPermissions();
 
