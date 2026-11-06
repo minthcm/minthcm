@@ -155,8 +155,8 @@ class SugarPHPMailer extends PHPMailer
             $this->Port = $oe->mail_smtpport;
             $this->setSecureProtocol($oe->mail_smtpssl);
             $this->initSMTPAuth(
-                $oe->mail_authtype ?? $oe->auth_type ?? '',
-                $oe->eapm_id ?? $oe->external_oauth_connection_id ?? '',
+                ($oe->mail_authtype ?? '') ?: ($oe->auth_type ?? ''),
+                ($oe->eapm_id ?? '') ?: ($oe->external_oauth_connection_id ?? ''),
                 $oe->mail_smtpuser ?? '',
                 $oe->mail_smtppass ?? '',
             );
@@ -194,8 +194,8 @@ class SugarPHPMailer extends PHPMailer
             $this->Port = $oe->mail_smtpport;
             $this->setSecureProtocol($oe->mail_smtpssl);
             $this->initSMTPAuth(
-                $oe->mail_authtype ?? $oe->auth_type ?? '',
-                $oe->eapm_id ?? $oe->external_oauth_connection_id ?? '',
+                ($oe->mail_authtype ?? '') ?: ($oe->auth_type ?? ''),
+                ($oe->eapm_id ?? '') ?: ($oe->external_oauth_connection_id ?? ''),
                 $oe->mail_smtpuser ?? '',
                 $oe->mail_smtppass ?? '',
             );
@@ -210,6 +210,8 @@ class SugarPHPMailer extends PHPMailer
         string $smtpUser,
         string $smtpPass,
     ): void {
+
+        $authType = $this->resolveAuthType($authType, $smtpUser, $smtpPass);
 
         if ($authType === 'oauth') {
             $this->initOAuth(
@@ -240,6 +242,26 @@ class SugarPHPMailer extends PHPMailer
             $this->Username = $smtpUser;
             $this->Password = $smtpPass;
         }
+    }
+
+    /**
+     * Resolves the effective SMTP authentication type.
+     *
+     * An explicit choice of oauth, oauth2 or basic always wins. Otherwise - when the account
+     * has no auth type stored, or is still left at no_auth - the presence of SMTP credentials
+     * decides. A server that needs no login has both fields empty, so AUTH stays off for it.
+     */
+    protected function resolveAuthType(string $authType, string $smtpUser, string $smtpPass): string
+    {
+        if (in_array($authType, ['oauth', 'oauth2', 'basic'], true)) {
+            return $authType;
+        }
+
+        if (trim($smtpUser) !== '' || trim($smtpPass) !== '') {
+            return 'basic';
+        }
+
+        return $authType;
     }
 
     public function initOAuth(
