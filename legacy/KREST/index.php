@@ -28,6 +28,9 @@ if (!defined('sugarEntry')) {
 
 require_once 'include/entryPoint.php';
 require_once 'KREST/KRESTManager.php';
+// Mint start #193555
+require_once 'KREST/KRESTSqlGuard.php';
+// Mint end #193555
 
 if (!class_exists('\Slim\App')) {
     require_once 'KREST/autoload.php';
@@ -39,6 +42,68 @@ $GLOBALS['app_list_strings'] = return_app_list_strings_language($GLOBALS['curren
 
 $app = new \Slim\App();
 $KRESTManager = new KRESTManager($app);
+
+// Mint start #193555
+/**
+ * Defence in depth: records SQL-injection probing against KREST endpoints.
+ *
+ * Detection and logging only - deliberately NOT blocking. KREST drives the
+ * KReports designer and viewer, whose saved filters and sortings legitimately
+ * carry punctuation-heavy values; rejecting on a character pattern here would
+ * break them. The actual protection is KRESTSqlGuard at each sink. This exists
+ * so that probing against a handler that has not yet adopted the guard is
+ * visible in the log rather than silent.
+ */
+$app->add(function ($req, $res, $next) {
+    $probePattern = '/(\bunion\b.{0,40}\bselect\b|\bsleep\s*\(|\bbenchmark\s*\(|\/\*|--\s|\bor\b\s+[\'"]?1[\'"]?\s*=\s*[\'"]?1)/i';
+
+    $suspicious = array();
+    foreach ((array)$req->getQueryParams() as $name => $value) {
+        if (is_scalar($value) && preg_match($probePattern, (string)$value)) {
+            $suspicious[] = $name;
+        }
+    }
+
+    if (!empty($suspicious)) {
+        $userId = isset($GLOBALS['current_user']->id) ? $GLOBALS['current_user']->id : 'anonymous';
+        $GLOBALS['log']->security('Possible SQL injection probe against KREST in parameter(s) '
+            . implode(', ', $suspicious)
+            . ' [' . $req->getMethod() . ' ' . $req->getUri()->getPath()
+            . '] [user ' . $userId . ']');
+    }
+
+    return $next($req, $res);
+});
+// Mint end #193555
+
+// Mint start #193555
+/**
+ * Turns a rejected request parameter into HTTP 400 instead of letting it
+ * surface as a generic 500.
+ *
+ * Added BEFORE the CORS middleware on purpose: Slim runs the most recently
+ * added middleware first, so the CORS layer ends up wrapping this one and still
+ * decorates the 400 response on the way out.
+ *
+ * Only KRESTInvalidInputException is handled here; every other throwable keeps
+ * going to Slim's default error handler untouched.
+ */
+$app->add(function ($req, $res, $next) {
+    try {
+        return $next($req, $res);
+    } catch (KRESTInvalidInputException $e) {
+        $GLOBALS['log']->security('KREST rejected a request parameter: ' . $e->getMessage()
+            . ' [' . $req->getMethod() . ' ' . (string)$req->getUri() . ']');
+
+        return $res->withStatus(400)->withJson(array(
+            'error' => array(
+                'code' => 'invalid_parameter',
+                'message' => $e->getMessage(),
+            ),
+        ));
+    }
+});
+// Mint end #193555
 
 $app->add(function ($req, $res, $next) use ($KRESTManager) {
     $KRESTManager->requestParams = $req->getParsedBody();

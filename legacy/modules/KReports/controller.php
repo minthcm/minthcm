@@ -411,6 +411,28 @@ class KReportsController extends SugarController
     public function action_export_to_pdf($report_id = null, $path = null, $template_id = null)
     {
         global $current_user;
+
+        // Mint start #193555
+        // template_id is attacker controlled and ends up as a path component in BOTH
+        // branches below: as a file name in the kpdfexport template, and as a directory
+        // name in TreeViewPDFPrinter, where it reaches Sugar_Smarty::fetch() - Smarty
+        // compiles and executes what it is handed, so an unchecked path there is worse
+        // than a file read. securexss() encodes quotes and angle brackets but leaves
+        // "../" and "/" untouched, so it is no help. Restricted here, once, to a bare
+        // template name before either branch can use it.
+        if (isset($_REQUEST['template_id'])
+            && !preg_match('/^[A-Za-z0-9_-]+$/', (string)$_REQUEST['template_id'])) {
+            $GLOBALS['log']->security('KReports export_to_pdf: rejected template_id "'
+                . $_REQUEST['template_id'] . '" - falling back to Default.');
+            $_REQUEST['template_id'] = 'Default';
+        }
+        if (null !== $template_id && !preg_match('/^[A-Za-z0-9_-]+$/', (string)$template_id)) {
+            $GLOBALS['log']->security('KReports export_to_pdf: rejected template_id argument "'
+                . $template_id . '" - falling back to Default.');
+            $template_id = 'Default';
+        }
+        // Mint end #193555
+
         if (null != $report_id) {
             $report_bean = BeanFactory::getBean('KReports', $report_id);
         } else {
@@ -436,13 +458,26 @@ class KReportsController extends SugarController
             } else {
                 $_REQUEST['template_id'] = $template_id;
             }
+            // Mint start #193555
+            // template_id was already restricted to a bare name at the top of this method;
+            // the resolved path is confirmed to sit inside the templates directory as well,
+            // so a symlink or a future change to that check cannot walk out of it.
+            $templateDir = 'modules/KReports/Plugins/Integration/kpdfexport/templates';
+
             $custom_template = false;
-            if (file_exists("modules/KReports/Plugins/Integration/kpdfexport/templates/{$_REQUEST['template_id']}.html")) {
+            $plik = '';
+            $templatePath = $templateDir . '/' . $_REQUEST['template_id'] . '.html';
+            $resolvedTemplate = realpath($templatePath);
+            $resolvedTemplateDir = realpath($templateDir);
+
+            if (false !== $resolvedTemplate && false !== $resolvedTemplateDir
+                && 0 === strpos($resolvedTemplate, $resolvedTemplateDir . DIRECTORY_SEPARATOR)) {
                 if ("Default" != $_REQUEST['template_id']) {
                     $custom_template = true;
                 }
-                $plik = file_get_contents("modules/KReports/Plugins/Integration/kpdfexport/templates/{$_REQUEST['template_id']}.html");
+                $plik = file_get_contents($resolvedTemplate);
             }
+            // Mint end #193555
             $tempEngine = new TemplateEngine($plik);
             if (!$custom_template) {
                 $top = $tempEngine->getTop();
