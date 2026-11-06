@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    removeStaleSpentTimePopups();
     checkComboDateStart();
     if ($('#EditView').parent().prop('className') == 'MintHCMPopup-body') {
         $('div .buttons #SAVE').hide();
@@ -10,6 +11,7 @@ function checkComboDateStart() {
     if (typeof combo_date_start !== 'undefined' && $("#date_start_hours").length > 0) {
         lockFields()
         setEvent();
+        bindDatesListeners();
         setDates();
 
     } else {
@@ -376,21 +378,41 @@ function getDateMinutesOptionValue(date_id, schedule_date_end_m) {
     return real_date_end_minutes;
 }
 
-function recalculateSpendTime() {
-    var date_start = moment($("#date_start").val(), viewTools.date.getDateTimeFormat());
-    if ($('#EditView').parent().prop('className') == 'MintHCMPopup-body') {
-        var date_start = moment($(".edit-view-row #date_start").val(), viewTools.date.getDateTimeFormat());
+function getSpentTimeForm() {
+    var popup_form = $('.MintHCMPopup').last().find('form#EditView');
+    if (popup_form.length > 0) {
+        return popup_form;
     }
-    var date_end = moment($("#date_end").val(), viewTools.date.getDateTimeFormat());
-    var spent_time = 0;
-    if (date_start._d.toString() != "Invalid Date" && date_end._d.toString() != "Invalid Date") {
-        spent_time = date_end.diff(date_start) / 1000 / 60 / 60;
-        if (spent_time < 0) {
-            spent_time = 0;
+    return $('form#EditView').last();
+}
+
+function removeStaleSpentTimePopups() {
+    var popups_with_form = $('.MintHCMPopup').has('form#EditView');
+    popups_with_form.slice(0, -1).remove();
+}
+
+function bindDatesListeners() {
+    var form = getSpentTimeForm();
+    ['date_start', 'date_end'].forEach(function (field_name) {
+        var hidden_input = form.find('input#' + field_name).get(0);
+        if (hidden_input) {
+            YAHOO.util.Event.removeListener(hidden_input, 'change', recalculateSpendTime);
+            YAHOO.util.Event.addListener(hidden_input, 'change', recalculateSpendTime);
         }
+    });
+}
+
+function recalculateSpendTime() {
+    var form = getSpentTimeForm();
+    var date_start = moment(form.find('input#date_start').val(), viewTools.date.getDateTimeFormat());
+    var date_end = moment(form.find('input#date_end').val(), viewTools.date.getDateTimeFormat());
+    var spent_time = 0;
+    if (date_start.isValid() && date_end.isValid()) {
+        spent_time = Math.max(date_end.diff(date_start, 'minutes') / 60, 0);
     }
-    $("#spent_time").val(spent_time);
-    parseTimeNumberValue($("#spent_time"));
+    var spent_time_field = form.find('#spent_time');
+    spent_time_field.val(spent_time);
+    parseTimeNumberValue(spent_time_field);
 }
 
 function convertClockTimeToFloatTime(element) {
