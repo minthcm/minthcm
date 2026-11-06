@@ -2,6 +2,9 @@
 
 namespace MintHCM\Api\Controllers;
 
+use MintHCM\Api\RecordView\RecordViewActionsMerger;
+use MintHCM\Utils\CustomLoader;
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
@@ -81,6 +84,7 @@ class MetaController
 
         $data = [];
         $views = [];
+        $actions_merger = CustomLoader::getObject(RecordViewActionsMerger::class);
         foreach ($viewdefs[$module]['panels'] as $panel => $panel_defs) {
             $data['recordview']['panels'][$panel]['component'] = $viewdefs[$module]['panels'][$panel]['component'];
             if ('MintPanelRecordDetails' === $panel_defs['component']) {
@@ -89,7 +93,12 @@ class MetaController
                     $data['recordview']['panels'][$panel]['data']['sections'][$section] = $viewdefs[$module]['panels'][$panel]['data']['sections'][$section];
                     $data['recordview']['panels'][$panel]['data']['sections'][$section]['fields'] = $this->mergeModuleFields($views[$panel][$section], $module_fields)['fields'];
                 }
-                $data['recordview']['panels'][$panel]['data']['actions'] = $viewdefs[$module]['panels'][$panel]['data']['actions'];
+                $panel_data = $viewdefs[$module]['panels'][$panel]['data'] ?? [];
+                $data['recordview']['panels'][$panel]['data']['actions'] = $actions_merger->merge(
+                    $panel_data['actions'] ?? [],
+                    $panel_data['includeDefaultActions'] ?? true,
+                    self::DEFAULT_ACTIONS
+                );
                 if (isset($viewdefs[$module]['panels'][$panel]['data']['headerComponents'])) {
                     $data['recordview']['panels'][$panel]['data']['headerComponents'] = $viewdefs[$module]['panels'][$panel]['data']['headerComponents'];
                 }
@@ -100,10 +109,6 @@ class MetaController
                         'collapsed' => true,
                     ];
                     $data['recordview']['panels'][$panel]['data']['sections']['other']['fields'] = $this->mergeModuleFields($views[$panel]['other'], $module_fields)['fields'];
-                }
-                
-                if (!isset($panel_defs['data']['actions'])) {
-                    $data['recordview']['panels'][$panel]['data']['actions'] = self::DEFAULT_ACTIONS;
                 }
 
                 continue;

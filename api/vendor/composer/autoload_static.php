@@ -69,6 +69,7 @@ class ComposerStaticInit7e06883b42b234786d0786e036dc6809
             'MintHCM\\Lib\\' => 12,
             'MintHCM\\Data\\' => 13,
             'MintHCM\\Custom\\Modules\\' => 23,
+            'MintHCM\\Custom\\Data\\' => 20,
             'MintHCM\\Custom\\Api\\' => 19,
             'MintHCM\\Api\\' => 12,
         ),
@@ -239,6 +240,10 @@ class ComposerStaticInit7e06883b42b234786d0786e036dc6809
         'MintHCM\\Custom\\Modules\\' => 
         array (
             0 => __DIR__ . '/../..' . '/custom/modules',
+        ),
+        'MintHCM\\Custom\\Data\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/custom/data',
         ),
         'MintHCM\\Custom\\Api\\' => 
         array (

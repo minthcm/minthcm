@@ -507,56 +507,122 @@ async function handleDelete(item: any) {
 
 ## Custom Business Logic
 
-Add custom actions for records.
+Record-level actions (the menu on a record view) are `BeanAction` subclasses. Core actions live in
+`vue/src/business/BeanActions/Actions/`; a deployment adds its own — or overrides a core one — in
+`vue/src/custom/business/BeanActions/Actions/`. **There is no registry to call**: both directories are
+scanned with `import.meta.glob` at build time, core first and custom second, so a custom file
+overrides the core action of the same name deterministically. The **file name** is the action name
+used in `recordviewdefs.php`.
 
-**File:** `custom/business/BeanActions/Actions/CustomAction.ts`
+### When you need a class at all
+
+Only for **named** actions. An action that just POSTs to an endpoint (optionally behind a confirm or
+prompt popup) is declared entirely in metadata with `api_route` and handled by `GenericApiAction` —
+no TypeScript and no frontend rebuild. See
+[Record View Definitions](12-recordviewdefs.md), section *Actions*. Write a class only when the action
+needs real client-side behavior (opening a window, navigating, driving a custom popup).
+
+### The `BeanAction` contract
+
+```typescript
+abstract class BeanAction {
+    public static readonly TITLE: string   // i18n key for the menu label
+    public static readonly ICON: string    // MDI icon, default 'mdi-circle-medium'
+    public static readonly ACL: string[]   // ACL actions required to show the item, e.g. ['edit']
+
+    protected bean: ReturnType<typeof useBean>   // current record: id, module, attributes, aclAccess
+    protected options: BeanActionOptions         // the action object from recordviewdefs (a plain string declaration yields {})
+
+    public abstract execute(): Promise<boolean>
+
+    public isAvailable(): boolean                // override for visibility beyond ACL
+    public toMenuListItem(): MenuListItem        // override to change how the item renders
+}
+```
+
+`TITLE`, `ICON` and `ACL` are **static** members, and `options` (`title`, `icon`, `acl`, plus anything
+else declared in metadata) overrides them per declaration.
+
+### Adding a custom action
+
+**File:** `vue/src/custom/business/BeanActions/Actions/SendToPayroll.ts`
 
 ```typescript
 import { BeanAction } from '@/business/BeanActions/BeanAction'
 import { mintApi } from '@/api/api'
+import { usePopupsStore } from '@/store/popups'
 
-export class CustomAction extends BeanAction {
-    name = 'custom_action'
-    label = 'Custom Action'
-    icon = 'mdi-star'
-    
-    async execute(module: string, id: string) {
-        try {
-            await mintApi.post(`${module}/${id}/custom-action`)
-            
-            this.showNotification({
-                type: 'success',
-                message: 'Custom action executed successfully!'
-            })
-            
-            // Refresh the record
-            await this.refresh()
-        } catch (error) {
-            this.showNotification({
-                type: 'error',
-                message: 'Custom action failed'
-            })
-        }
+export class SendToPayroll extends BeanAction {
+    public static readonly TITLE = 'LBL_SEND_TO_PAYROLL'
+    public static readonly ICON = 'mdi-cash-sync'
+    public static readonly ACL = ['edit']
+
+    public async execute(): Promise<boolean> {
+        const response = await mintApi.post('Employees/sendToPayroll', {
+            id: this.bean.id,
+            module: this.bean.module,
+        })
+
+        usePopupsStore().alert(response.data.message)
+
+        return response.data.success === true
     }
-    
-    isAvailable(module: string, record: any): boolean {
-        // Show only for specific modules
-        return ['Users', 'Candidates'].includes(module)
+
+    public isAvailable(): boolean {
+        return super.isAvailable() && this.bean.attributes?.status === 'Active'
     }
 }
 ```
 
-**Register action:**
+Export it either as a **named export matching the file name** (as above) or as the file's `default`
+export — the registry accepts both.
 
-```typescript
-// custom/business/BeanActions/index.ts
-import { CustomAction } from './Actions/CustomAction'
+Then reference it by file name in the module's `recordviewdefs.php`:
 
-export function registerCustomActions() {
-    // Register with action system
-    BeanActionRegistry.register(new CustomAction())
-}
+```php
+'actions' => [
+    'SendToPayroll',
+    // or, with per-declaration overrides:
+    ['name' => 'SendToPayroll', 'icon' => 'mdi-bank-transfer'],
+],
 ```
+
+Declaring it does **not** remove `Audit` / `Delete` / `Duplicate` — the backend merges declared actions
+on top of the defaults. See [Record View Definitions](12-recordviewdefs.md), section *Actions*, for the
+merge rules and the `includeDefaultActions` flag.
+
+### Overriding a core action
+
+Give the custom file the **same name** as the core one — e.g.
+`vue/src/custom/business/BeanActions/Actions/Duplicate.ts` replaces
+`vue/src/business/BeanActions/Actions/Duplicate.ts` everywhere, with no change to core files.
+
+### Rebuild
+
+Named actions are bundled at build time, so a new or changed class needs:
+
+```bash
+cd vue
+npm run build:repo
+```
+
+**Security:** `isAvailable()` and `customVisibility` only control what the UI shows. Any endpoint an
+action calls must independently re-check ACL, the record's existence and module, and every business
+precondition server-side.
+
+### Other action registries
+
+The same core-then-custom rule applies to the remaining action types:
+
+| Action type | Core | Custom |
+|---|---|---|
+| Record actions | `vue/src/business/BeanActions/Actions/` | `vue/src/custom/business/BeanActions/Actions/` |
+| Mass actions | `vue/src/business/MassActions/Actions/` | `vue/src/custom/business/MassActions/Actions/` |
+| Subpanel actions | `vue/src/business/SubpanelActions/Actions/` | `vue/src/custom/business/SubpanelActions/Actions/` |
+| Subpanel inline actions | `vue/src/business/SubpanelActions/InlineActions/` | `vue/src/custom/business/SubpanelActions/InlineActions/` |
+
+Mass actions additionally need a backend counterpart — see
+[Mass Actions](../../api/documentation/15-mass-actions.md), section *Custom actions in `api/custom/`*.
 
 ## Custom API Endpoints
 

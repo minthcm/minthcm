@@ -97,6 +97,24 @@ Each entry is a component name, dynamically imported from `@/components/{name}/{
 - a **string** — the class name of a `BeanAction` subclass in `vue/src/business/BeanActions/Actions/` (e.g. `'Audit'`), or an object `{ name, ...options }` passed to that class's constructor (e.g. `skipFields` for `Duplicate`);
 - a **generic action config** (object containing `api_route`) — recognized automatically and handled by `GenericApiAction` (`vue/src/business/BeanActions/GenericApiAction.ts`) without writing any TS code. Use this for simple "POST to an endpoint on click" actions with optional confirmation, a single text prompt, and visibility conditions.
 
+**Where the class lives (named actions only).** Core actions live in `vue/src/business/BeanActions/Actions/<Name>.ts`; a deployment adds its own — or overrides a core one — in `vue/src/custom/business/BeanActions/Actions/<Name>.ts`. Both directories are scanned at build time, core first and custom second, so a custom file with the same name deterministically replaces the core action. The **file name** is the action name used here in `actions`. Named actions require a frontend rebuild (`npm run build`); generic actions (`api_route`) do not, and are never looked up by class name.
+
+**Default actions and merging.** The backend merges the declared `actions` on top of the default ones (`Audit`, `Delete`, `Duplicate`) — declaring your own action never silently removes them:
+
+- no `actions` key at all, or `actions => []` → the three default actions;
+- declared actions are appended **after** the defaults;
+- a declaration reusing a default action's identifier replaces that default **in its original position** — e.g. `['name' => 'Audit', 'icon' => 'mdi-history']` stays first in the menu;
+- the identifier is `name` for a named action (the string itself for a plain string entry) and the **required** `key` for a generic action; a generic action declared without `key` is skipped;
+- when the same identifier appears twice, the **last** declaration wins;
+- `includeDefaultActions => false`, placed next to `actions` in the same panel `data`, drops the defaults and keeps only what the panel declares (without `actions` it yields an empty menu):
+
+```php
+'data' => [
+    'includeDefaultActions' => false,
+    'actions' => [ /* only these */ ],
+],
+```
+
 **Generic action config fields:**
 
 | Field | Type | Required | Description |
@@ -195,7 +213,7 @@ Displays related records (relationships).
 
 #### Subpanel Inline Action Buttons
 
-Each row in a subpanel can display action buttons (Edit, Remove, Delete). These come from the legacy subpanel definition's `_buttons` property (e.g. `subpaneldefs.php`) and are mapped to Vue action classes in `vue/src/business/SubpanelActions/InlineActions/`.
+Each row in a subpanel can display action buttons (Edit, Remove, Delete). These come from the legacy subpanel definition's `_buttons` property (e.g. `subpaneldefs.php`) and are mapped to Vue action classes in `vue/src/business/SubpanelActions/InlineActions/` (extensible from `vue/src/custom/business/SubpanelActions/InlineActions/`).
 
 **Available inline actions:**
 
@@ -212,11 +230,11 @@ Each row in a subpanel can display action buttons (Edit, Remove, Delete). These 
 
 **Extending with a custom inline action:**
 
-Create a new class in `vue/src/business/SubpanelActions/InlineActions/` extending `SubpanelAction`, then register its `widget_class` mapping in `MintSubpanelsInlineButtons.vue`.
+Create a new class extending `SubpanelAction` — in `vue/src/business/SubpanelActions/InlineActions/` for core, or `vue/src/custom/business/SubpanelActions/InlineActions/` for a deployment — then register its `widget_class` mapping in `MintSubpanelsInlineButtons.vue`.
 
 ```typescript
-// vue/src/business/SubpanelActions/InlineActions/MyAction.ts
-import { SubpanelAction } from '../SubpanelAction'
+// vue/src/custom/business/SubpanelActions/InlineActions/MyAction.ts
+import { SubpanelAction } from '@/business/SubpanelActions/SubpanelAction'
 
 export class MyAction extends SubpanelAction {
     public static readonly TITLE = 'LBL_MY_ACTION'
@@ -230,7 +248,7 @@ export class MyAction extends SubpanelAction {
 }
 ```
 
-The file is auto-discovered by `index.ts` via `import.meta.glob` — no registration needed beyond adding the `widget_class` mapping in `MintSubpanelsInlineButtons.vue`.
+The file is auto-discovered by `index.ts` via `import.meta.glob`, which scans the core directory first and the custom one second — so a custom file with the same name as a core inline action overrides it. No registration is needed beyond adding the `widget_class` mapping in `MintSubpanelsInlineButtons.vue`. The same applies to non-inline subpanel actions (`vue/src/custom/business/SubpanelActions/Actions/`). See [Customization Guide](11-customization.md), section *Custom Business Logic*.
 
 ### MintPanelFiles
 Displays file attachments.

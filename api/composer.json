@@ -7,7 +7,8 @@
             "MintHCM\\Custom\\Modules\\": "custom/modules/",
             "MintHCM\\Lib\\": "lib/",
             "MintHCM\\Utils\\": "utils/",
-            "MintHCM\\Data\\": "data/"
+            "MintHCM\\Data\\": "data/",
+            "MintHCM\\Custom\\Data\\": "custom/data/"
         },
         "files": [
             "configs/mint/config.php"

@@ -1,10 +1,17 @@
 import { SubpanelAction } from './SubpanelAction'
+import { registerActionModules } from '../registerActionModules'
 
-const files = import.meta.glob('./Actions/*.ts', {
+const coreFiles = import.meta.glob('./Actions/*.ts', {
     eager: true,
 })
-const inlineFiles = import.meta.glob('./InlineActions/*.ts', { 
-    eager: true 
+const customFiles = import.meta.glob('@/custom/business/SubpanelActions/Actions/*.ts', {
+    eager: true,
+})
+const coreInlineFiles = import.meta.glob('./InlineActions/*.ts', {
+    eager: true,
+})
+const customInlineFiles = import.meta.glob('@/custom/business/SubpanelActions/InlineActions/*.ts', {
+    eager: true,
 })
 
 interface Actions {
@@ -13,20 +20,11 @@ interface Actions {
 
 const actions: Actions = {}
 
-for (const path in files) {
-    const file = files[path] as Actions
-    const name = path.match(/\.\/Actions\/(.*)\.ts$/)?.[1]
-    if (name && file) {
-        actions[name] = file.default ?? file[name]
-    }
-}
-
-for (const path in inlineFiles) {
-    const file = inlineFiles[path] as Actions
-    const name = path.match(/\.\/InlineActions\/(.*)\.ts$/)?.[1]
-    if (name && file) {
-        actions[name] = file.default ?? file[name]
-    }
-}
+// Both registries share one map, so every core set has to be registered before any custom one --
+// otherwise a core inline action would overwrite a custom action of the same name.
+registerActionModules(actions, coreFiles)
+registerActionModules(actions, coreInlineFiles)
+registerActionModules(actions, customFiles)
+registerActionModules(actions, customInlineFiles)
 
 export default actions

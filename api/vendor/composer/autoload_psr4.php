@@ -37,6 +37,7 @@ return array(
     'MintHCM\\Lib\\' => array($baseDir . '/lib'),
     'MintHCM\\Data\\' => array($baseDir . '/data'),
     'MintHCM\\Custom\\Modules\\' => array($baseDir . '/custom/modules'),
+    'MintHCM\\Custom\\Data\\' => array($baseDir . '/custom/data'),
     'MintHCM\\Custom\\Api\\' => array($baseDir . '/custom/app'),
     'MintHCM\\Api\\' => array($baseDir . '/app'),
     'League\\Uri\\' => array($vendorDir . '/league/uri', $vendorDir . '/league/uri-interfaces'),
