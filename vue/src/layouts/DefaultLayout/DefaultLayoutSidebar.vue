@@ -9,7 +9,6 @@
         :rail="!mdAndDown && shrinked"
         permanent
         width="260"
-        :color="'var(--mint-nav-drawer-bg)'"
         floating="true"
         rail-width="76"
         v-model="ux.sideMenu"
@@ -324,7 +323,7 @@ function calculateModuleActionsAndShrinkerHeight() {
 }
 const ux = useUxStore()
 
-const { mdAndUp, mdAndDown } = useDisplay()
+const { mdAndDown } = useDisplay()
 
 const filterModulesQuery = ref('')
 const filteredModules = computed(() => {
@@ -505,11 +504,31 @@ watch(
         }
     }
 )
+
+// Keep the drawer state in sync with the viewport mode. The drawer is
+// `permanent`, so Vuetify never re-opens it on a breakpoint change: after
+// widening a narrow window the sidebar would stay hidden until a page reload.
+watch(mdAndDown, (isMobile) => {
+    ux.sideMenu = !isMobile
+})
 </script>
 <style lang="scss">
+// Single source of the sidebar background: frosted glass tinted by a theme
+// token. The drawer itself has no color, so there is never a second layer.
+@mixin sidebar-glass {
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    background: var(--mint-nav-drawer-bg);
+}
+
 .sidebar-nav {
     top: var(--v-top-nav-height) !important;
     max-height: calc(100vh - var(--v-top-nav-height));
+    // Vuetify paints the drawer with an opaque surface color by default; it
+    // must stay transparent so the glass layer is the only background.
+    &.v-navigation-drawer {
+        background: transparent;
+    }
     .v-navigation-drawer__content {
         overflow: hidden;
         display: flex;
@@ -518,16 +537,19 @@ watch(
 }
 .default-layout-sidebar {
     transition: all 0.3s ease;
+    // Fixed to the viewport like the drawer and the shrinker button: the
+    // document scrolls on <html>, so an absolute layer would scroll away with
+    // the page and the shrinker cut-out would drift off the button. Width 277px
+    // covers the drawer (260px) plus the half of the shrinker sticking out.
     &::before {
         top: var(--v-top-nav-height) !important;
         left: 0;
         width: 277px;
         height: calc(100vh - var(--v-top-nav-height));
         content: '';
-        backdrop-filter: blur(24px);
-        background: rgba(0, 0, 0, 0.039);
+        @include sidebar-glass;
         z-index: 0;
-        position: absolute;
+        position: fixed;
         transition: width 0.3s ease, mask 0.3s ease;
         mask: 
             radial-gradient(
@@ -545,30 +567,48 @@ watch(
 }
 .default-layout-sidebar-railed {
     transition: all 0.3s ease;
-    
-    // The frosted backdrop lives on the drawer content itself — not a wrapper
-    // ::before with an animated mask — so it always matches the drawer's real
-    // width (76px rail or 260px expanded-on-hover) and fully covers the menu,
-    // instead of leaving page content bleeding through where the mask fails to
-    // expand in sync with the drawer.
+
+    // The wrapper ::before is not used here: its mask cannot follow the drawer
+    // growing from the 76px rail to 260px on hover. Instead the glass is a layer
+    // inside the drawer (below its content, like Vuetify's __img), so it always
+    // has the drawer's real width. It sticks out 17px to the right and, like
+    // the wrapper ::before, keeps only a circle under the shrinker there — one
+    // glass layer, so the shrinker background is seamless with the sidebar.
+    // The circle centre is the drawer's right edge, where the shrinker sits.
     &::before {
         content: none;
     }
 
-    .sidebar-nav .v-navigation-drawer__content {
-        backdrop-filter: blur(24px);
-        background: rgba(0, 0, 0, 0.039);
+    .sidebar-nav::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: -17px;
+        z-index: -1;
+        pointer-events: none;
+        @include sidebar-glass;
+        mask:
+            radial-gradient(
+                circle 17px at calc(100% - 17px) calc(50vh - var(--v-top-nav-height)),
+                black 17px,
+                transparent 17px
+            ),
+            linear-gradient(
+                to right,
+                black 0 calc(100% - 17px),
+                transparent calc(100% - 17px) 100%
+            );
+        mask-composite: add;
     }
 }
 
-// On mobile the sidebar has only two states: fully hidden or fully expanded
-// (no icon rail, no hover expansion). The frosted wrapper ::before is not used
-// here — instead the backdrop lives on the drawer itself, so it appears only
-// while the drawer is open and never leaks a strip over the page background.
+// Mobile has no shrinker button/mask concern (full-width overlay only) but
+// should read as the same glass, not a lighter/whiter tint.
 .default-layout-sidebar-mobile {
     .sidebar-nav .v-navigation-drawer__content {
-        backdrop-filter: blur(24px);
-        background: rgba(var(--v-theme-surface), 0.85);
+        @include sidebar-glass;
     }
 }
 

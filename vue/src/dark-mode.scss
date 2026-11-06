@@ -25,4 +25,17 @@ html[data-mint-theme="dark"] {
         background: rgb(var(--v-theme-primary-light)) !important;
     }
 
+    /* Shrinker over the module-actions list — same green as the list above */
+    .shrinker.alternative-color {
+        background-color: rgb(var(--v-theme-primary-light)) !important;
+    }
+
+    /* Highlighted sidebar item — secondary-dark is unreadable on dark glass.
+       Module actions sit on the green list and keep their own text colors. */
+    .sidebar-nav .nav-item:not(.module-action):hover .nav-title,
+    .sidebar-nav .nav-item:not(.module-action).keyboard-hovered .nav-title,
+    .sidebar-nav .nav-item:not(.module-action):focus-visible .nav-title {
+        color: rgb(var(--v-theme-secondary));
+    }
+
 }
