@@ -17,7 +17,6 @@ $elasticsearchUsername = getenv('ELASTICSEARCH_USERNAME') ?: 'elastic';
 $elasticsearchPassword = getenv('ELASTICSEARCH_PASSWORD') ?: 'changeme';
 $installDemoData = getenv('INSTALL_DEMO_DATA') ?: 'no';
 $ssl = getenv('SSL') ?: 'no';
-$rebuildFrontend = getenv('REBUILD_FRONTEND') ?: 'no';
 $applicationRootDirectory = '/var/www/MintHCM';
 
 // Open the file in write mode or create it if it doesn't exist
@@ -47,7 +46,6 @@ fwrite($fileHandle, "$installDemoData\n");
 fwrite($fileHandle, "$ssl\n");
 fwrite($fileHandle, "$mintUrl\n");
 fwrite($fileHandle, "$applicationRootDirectory\n");
-fwrite($fileHandle, "$rebuildFrontend\n");
 
 // Close the file
 fclose($fileHandle);

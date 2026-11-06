@@ -108,41 +108,6 @@ class Installer
         return true;
     }
 
-    public function installFrontendApplication()
-    {
-        //chdir(self::FRONTEND_DIR);
-        //exec("npm install 2>&1", $installationResult, $installationStatus);
-        //chdir('../');
-        file_put_contents(self::INSTALL_LOG_FILE, "\n\nInstalling MintHCM UX...\n\n", FILE_APPEND);
-        //file_put_contents(self::INSTALL_LOG_FILE, implode("\n", $installationResult), FILE_APPEND);
-        // if ($installationStatus !== 0) {
-            // return false;
-        // }
-        return $this->moveFrontendFilesToPublic();
-        
-        return $this->buildFrontendApplication();
-    }
-
-    protected function moveFrontendFilesToPublic(){
-        $basePath = $this->serverService->getSystemBasePath($this->rootDirectory);
-        $basePath = $basePath == '/' ? '/api' : $basePath . '/api';
-        exec("cp -r vue/dist/* ./");
-        return true;
-    }
-
-    protected function buildFrontendApplication()
-    {
-        // chdir(self::FRONTEND_DIR);
-        // exec("npm run build:repo 2>&1", $buildingResult, $buildingStatus);
-        // chdir('../');
-        // file_put_contents(self::INSTALL_LOG_FILE, "\n\nBuilding MintHCM UX...\n\n", FILE_APPEND);
-        // file_put_contents(self::INSTALL_LOG_FILE, implode("\n", $buildingResult), FILE_APPEND);
-        // if ($buildingStatus !== 0) {
-            // return false;
-        // }
-        return true;
-    }
-
     public function reindexElastic()
     {
         $elasticSearchService = new ElasticSearchService;
