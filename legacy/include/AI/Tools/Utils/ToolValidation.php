@@ -128,11 +128,14 @@ class ToolValidation
     }
 
     /**
-     * Resolves the valid enum keys for a field definition. First tries the static `options` key
-     * against `app_list_strings`; falls back to invoking a `function` callback for vardefs whose
-     * options are populated dynamically (e.g. `getDictionary` reading from the `dictionaries`
-     * table), mirroring GetModuleFieldsTool::resolveEnumValues() so read and write agree on
-     * what values are valid.
+     * Resolves the valid enum keys for a field definition. First tries invoking a `function`
+     * callback for vardefs whose options are populated dynamically (e.g. `getDictionary` reading
+     * live from the `dictionaries` table); falls back to the static `options` key against
+     * `app_list_strings` when there is no `function` or it yields nothing. Mirrors
+     * GetModuleFieldsTool::resolveEnumValues() and the frontend's own priority (MintLogic's
+     * `init_function_options` rule resolves `function` live and overrides the static
+     * `defs.options` in Field.vue), so MCP read, MCP write, and the UI all agree on what values
+     * are valid/visible.
      *
      * Callbacks declaring `returns: 'html'` are skipped — those produce widget markup, not
      * key/value option maps.
@@ -144,48 +147,42 @@ class ToolValidation
      */
     private static function resolveEnumKeys(array $field_def, array $app_list_strings): ?array
     {
+        if (!empty($field_def['function'])) {
+            $function = $field_def['function'];
+            if (is_array($function)) {
+                $function_name = (string) ($function['name'] ?? '');
+                $include = (string) ($function['include'] ?? '');
+                $additional_params = $function['additional_params'] ?? '';
+                $returns = (string) ($function['returns'] ?? '');
+            } else {
+                $function_name = (string) $function;
+                $include = '';
+                $additional_params = '';
+                $returns = '';
+            }
+
+            if ($function_name !== '' && $returns !== 'html') {
+                if ($include !== '' && file_exists($include)) {
+                    require_once $include;
+                }
+
+                if (function_exists($function_name)) {
+                    // Standard SugarCRM signature for option-providing callbacks:
+                    // ($focus, $name, $value, $view, $additional_params).
+                    $values = $function_name(null, '', '', 'MCP', $additional_params);
+                    if (is_array($values) && $values !== []) {
+                        return array_map('strval', array_keys($values));
+                    }
+                }
+            }
+        }
+
         $options_key = isset($field_def['options']) ? (string) $field_def['options'] : '';
         if ($options_key !== '' && !empty($app_list_strings[$options_key])) {
             return array_keys($app_list_strings[$options_key]);
         }
 
-        if (empty($field_def['function'])) {
-            return null;
-        }
-
-        $function = $field_def['function'];
-        if (is_array($function)) {
-            $function_name = (string) ($function['name'] ?? '');
-            $include = (string) ($function['include'] ?? '');
-            $additional_params = $function['additional_params'] ?? '';
-            $returns = (string) ($function['returns'] ?? '');
-        } else {
-            $function_name = (string) $function;
-            $include = '';
-            $additional_params = '';
-            $returns = '';
-        }
-
-        if ($function_name === '' || $returns === 'html') {
-            return null;
-        }
-
-        if ($include !== '' && file_exists($include)) {
-            require_once $include;
-        }
-
-        if (!function_exists($function_name)) {
-            return null;
-        }
-
-        // Standard SugarCRM signature for option-providing callbacks:
-        // ($focus, $name, $value, $view, $additional_params).
-        $values = $function_name(null, '', '', 'MCP', $additional_params);
-        if (!is_array($values) || $values === []) {
-            return null;
-        }
-
-        return array_map('strval', array_keys($values));
+        return null;
     }
 
     /**
