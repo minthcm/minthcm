@@ -591,6 +591,10 @@ watch(
         display: block;
     }
 }
+
+.v-list--nav ul {
+    padding-inline-start: 0px !important;
+}
 </style>
 <style scoped lang="scss">
 .nav-list,
@@ -601,8 +605,7 @@ watch(
 }
 
 .nav-list {
-    padding-left: 0px;
-    padding-right: 16px;
+    padding-inline: 0px 16px !important;
     overflow-y: auto !important;
 }
 
@@ -670,8 +673,8 @@ watch(
 .nav-item {
     transition: all 150ms ease-out;
     border-radius: 0px 20px 20px 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 4px 0px !important;
+    padding-inline: 0px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -797,6 +800,7 @@ watch(
         outline-offset: 2px;
         border-radius: 50%;
     }
+    background: transparent;
 }
 
 .default-layout-sidebar,
@@ -832,12 +836,14 @@ watch(
     }
 }
 
-.shrinker-button.alternative-color
+.shrinker-button
 {
-    color: rgba(255, 255, 255, 0.686) !important;
-    &:hover {
-        color: white;
-    }
+    &.alternative-color {
+        color: rgba(255, 255, 255, 0.686) !important;
+        &:hover {
+            color: white !important;
+        }
+    }   
 }
 </style>
 

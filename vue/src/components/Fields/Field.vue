@@ -180,8 +180,21 @@ defineExpose({
             background: rgb(var(--v-theme-surface));
             color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
             opacity: 1;
-            padding: 0px 2px;
+            margin: 0;
+            padding: 0px 6px;
         }
+    }
+
+    &.field-state-required {
+        .v-field-label.v-field-label--floating {
+            background: rgb(var(--v-theme-surface));
+            margin: 0;
+            padding: 0px 6px;
+        }
+    }
+
+    .v-field--active.v-field--variant-outlined .v-field__outline__notch::before {
+        opacity: 0;
     }
 
     &.field-state-normal,

@@ -11,6 +11,7 @@
                 :aria-label="languages.label('LBL_KUDOS_NAVBAR_ITEM_' + item.toUpperCase())"
                 :aria-description="languages.label('LBL_KUDOS_NAVBAR_ITEM_' + item.toUpperCase() + '_COMMENT')"
                 :aria-describedby="'kudos-nav-item-' + item + '-help'"
+                class="kudos-nav-button"
             >
                 {{ languages.translateListValue(item, 'kudos_navbar_item_list') }}
             </button>
@@ -65,6 +66,10 @@ const handleClick = (item: NavOption) => {
         & .active {
             border-bottom: 2px solid rgb(var(--v-theme-secondary));
         }
+    }
+
+    .kudos-nav-button {
+        background: none;
     }
 }
 </style>

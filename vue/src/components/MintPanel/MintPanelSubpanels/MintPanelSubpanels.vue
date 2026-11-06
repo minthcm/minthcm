@@ -150,12 +150,11 @@ const changePage = (page: number, tableName: string, paginateBy: number) => {
             font-size: 12px;
             letter-spacing: 0.11px;
             font-weight: 400;
-            border-radius: 50%;
-            padding: 1px 1px 2px 1px;
-            min-width: 18px;
-            aspect-ratio: 1/1;
-            display: flex;
-            text-align: center;
+            border-radius: 999px;
+            height: 20px;
+            min-width: 20px;
+            padding: 0 4px 2px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
         }

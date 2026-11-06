@@ -13,7 +13,7 @@
                 @focus="isSearchBarFocused = true"
                 @blur="isSearchBarFocused = false"
             />
-            <v-btn @click="search()" class="search-button button primary">{{ languages.label('LBL_SEARCH') }}</v-btn>
+            <v-btn @click="search()" class="search-button button primary text-uppercase">{{ languages.label('LBL_SEARCH') }}</v-btn>
         </div>
         <div class="list-view-mode-list">
             <h1 v-text="languages.label('LBL_SEARCH_REAULTS_TITLE')" />
@@ -273,5 +273,11 @@ h1 {
 
 .module-icon {
     color: rgb(var(--v-theme-secondary));
+}
+
+.list-view-content {
+    :deep(.v-table__wrapper) {
+        border-radius: 16px 16px 0 0;
+    }
 }
 </style>

@@ -1,7 +1,5 @@
-@use 'vuetify' with (
-    $body-font-family: Barlow
-);
-    
+@use 'vuetify';
+
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap');
 
 /* ─── Anti-FOUC: applied before Vuetify JS initialises ─────────────────── */
@@ -9,6 +7,16 @@ html[data-mint-theme="dark"] .v-application {
     background-image: none;
     background-color: #121212;
     color-scheme: dark;
+}
+
+// v4: $body-font-family SCSS variable removed — font set via CSS instead
+body {
+    font-family: 'Barlow', sans-serif;
+}
+
+// v4: CSS reset no longer resets button border — add it back explicitly
+button {
+    border: none;
 }
 
 html {
@@ -34,6 +42,17 @@ html {
 ::-webkit-scrollbar-thumb {
     background: var(--mint-secondary, rgb(var(--v-theme-secondary)));
     border-radius: 5px;
+}
+
+// date/time picker: selected state
+.v-date-picker-month__day--selected:not(.v-date-picker-month__day--range-middle) .v-btn {
+    background-color: #757575;
+    color: #ffffff;
+}
+
+.v-time-picker-clock__item--active {
+    background-color: #757575;
+    color: #ffffff;
 }
 
 // list animation

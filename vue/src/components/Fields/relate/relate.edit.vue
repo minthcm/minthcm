@@ -18,6 +18,7 @@
                         <v-btn
                             v-if="model.name"
                             icon
+                            density="compact"
                             variant="text"
                             @click="model = { id: '', name: '' }"
                             @keydown.enter.prevent="model = { id: '', name: '' }"
@@ -29,6 +30,7 @@
                         <v-btn
                             v-else
                             icon
+                            density="compact"
                             variant="text"
                             @click.stop="openRelatePopup"
                             @keydown.enter.prevent="openRelatePopup"

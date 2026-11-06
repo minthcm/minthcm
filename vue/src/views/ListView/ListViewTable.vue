@@ -27,6 +27,7 @@
                     :model-value="store.isHeaderChecked"
                     :indeterminate="store.isHeaderIndeterminate"
                     @update:model-value="toggleHeader"
+                    class="list-checkbox"
                 />
             </div>
         </template>
@@ -35,6 +36,7 @@
                 <v-checkbox
                     :model-value="isRowSelected(item)"
                     @update:model-value="toggleRow(item)"
+                    class="list-checkbox"
                 />
             </div>
         </template>
@@ -406,6 +408,12 @@ function getItemActions(item: Record<string, unknown>) {
                 background-color: rgb(var(--v-theme-surface));
             }
         }
+    }
+
+    :deep(.list-checkbox) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 .v-data-table-footer {
