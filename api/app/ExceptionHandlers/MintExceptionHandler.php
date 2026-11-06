@@ -50,6 +50,15 @@ use Slim\Psr7\Response;
 
 class MintExceptionHandler
 {
+    public const GENERIC_SERVER_ERROR_MESSAGE = 'Internal Server Error';
+
+    /**
+     * Error details (file, line, stack) are returned only when the instance runs in developer mode
+     * ($sugar_config['developerMode']); the $displayErrorDetails flag of the Slim error middleware is
+     * not used. Without developer mode the response carries only the message and the code: client
+     * errors (4xx) keep their message - the frontend shows it, often as a label - while server errors
+     * (5xx) get a generic one, since theirs can expose internals. The details always go to the log.
+     */
     public function __invoke(
         Request $request,
         \Throwable $exception,
@@ -74,30 +83,19 @@ class MintExceptionHandler
             ));
         }
 
-        $isDevMode = (bool)($sugar_config['developerMode'] ?? false);
-
-        $response = (new Response)->withStatus($code);
-
-        if ($isDevMode) {
-            $body = [
-                'message' => $exception->getMessage(),
-                'code' => $code,
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                'stack' => $exception->getTraceAsString(),
-            ];
+        $body = [
+            'message' => $exception->getMessage(),
+            'code' => $code,
+        ];
+        if (!empty($sugar_config['developerMode'])) {
+            $body['file'] = $exception->getFile();
+            $body['line'] = $exception->getLine();
+            $body['stack'] = $exception->getTraceAsString();
         } elseif ($code >= 500) {
-            $body = [
-                'message' => 'Internal Server Error',
-                'code' => $code,
-            ];
-        } else {
-            $body = [
-                'message' => $exception->getMessage(),
-                'code' => $code,
-            ];
+            $body['message'] = self::GENERIC_SERVER_ERROR_MESSAGE;
         }
 
+        $response = (new Response)->withStatus($code)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($body, JSON_PRETTY_PRINT));
         return $response;
     }

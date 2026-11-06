@@ -60,11 +60,13 @@ return [
 
 ### 1. Hooks (Hook Points)
 
-Determine when a rule should be executed:
+Determine when a rule should be executed. `Hook` is a backed enum (`lib/MintLogic/Hook.php`):
 
-- `Hook::INIT` - On form initialization
-- `Hook::CHANGE` - On field value change
-- `Hook::ALL` - Always (both init and change)
+- `Hook::INIT` (`'init'`) - On form initialization (`getInitial()`)
+- `Hook::CHANGE` (`'change'`) - On field value change (`getChanged()`)
+- `Hook::ALL` (`'all'`) - Always (both init and change)
+
+A rule with `'hooks' => []` never runs. `[Hook::ALL]` alone already covers init and change.
 
 ### 2. Rules
 
@@ -131,22 +133,30 @@ Updates field values. Can be an array or a function:
 ```
 
 ##### `validation`
-Defines validators for specific fields:
+Defines validators for specific fields. A value can be a `Validator` class, a `Formula::validate(...)` expression or a list of them:
 ```php
 'validation' => [
     'field_name' => ValidationClass::class,
+    'other_field' => [
+        ValidationClass::class,
+        Formula::validate(Formula::equals('$other_field', 'test'), 'ERR_CANNOT_BE_TEST'),
+    ],
 ]
 ```
+Field-level validation results are returned in `logic.errors` of the init/change response. They are **not** run again when the record is saved — only `bean.validation` is enforced on save (see [API Integration](#api-integration)).
 
 ##### `options`
-Dynamically changes available options in enum fields:
+Dynamically changes available options in enum fields. The value is either the name of an `app_list_strings` list or a function returning the options:
 ```php
 'options' => [
-    'field_name' => function ($bean) {
+    'field_name' => 'name_of_the_list',
+    'other_field' => function ($bean) {
         return ['key1' => 'Label 1', 'key2' => 'Label 2'];
     },
 ]
 ```
+
+`lib/MintLogic/Modules/_example/logicdefs.php` documents every rule key with comments and is the best reference.
 
 ## Formulas - Helper Functions
 
@@ -197,9 +207,12 @@ Formula::not(Formula::equals('$field1', 'value'))
 
 ### Validation with Error Message
 
+The first argument is the **error condition**: when it evaluates to `true`, a `ValidationException` with the given label is thrown (`lib/MintLogic/Formulas/Validate.php`).
+
 ```php
+// Error when the field is empty
 Formula::validate(
-    Formula::notEmpty('$required_field'),
+    Formula::empty('$required_field'),
     'ERR_FIELD_REQUIRED'
 )
 ```
@@ -210,7 +223,9 @@ In formulas, you can reference field values using special syntax:
 
 - `$field_name` - current field value
 - `$new.field_name` - new field value (after change)
-- `$old.field_name` - old field value (before change)
+- `$old.field_name` - old field value (before change, from `fetched_row`)
+
+Only names that exist in the bean's `field_defs` are resolved (`lib/MintLogic/Parser.php`); any other string is used as a literal value.
 
 ## Usage Examples
 
@@ -222,7 +237,7 @@ The `transport_type` field appears only when `has_transport` is checked:
 return [
     'rules' => [
         'transport_visibility' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['has_transport'],
             'trigger' => Formula::equals('$has_transport', '1'),
             'logic' => [
@@ -243,7 +258,7 @@ The `rejection_reason` field is required only when status is `rejected`:
 return [
     'rules' => [
         'rejection_required' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['status'],
             'trigger' => Formula::equals('$status', 'rejected'),
             'logic' => [
@@ -258,13 +273,15 @@ return [
 
 ### Example 3: Automatic Value Update
 
-Automatically copying data from a related record:
+Automatically copying data from a related record (based on `Modules/Delegations/logicdefs.php`):
 
 ```php
+use MintHCM\Data\BeanFactory;
+
 return [
     'rules' => [
         'copy_currency' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['delegation_locale_name'],
             'logic' => [
                 'update' => function ($bean) {
@@ -326,7 +343,7 @@ Combining multiple conditions:
 return [
     'rules' => [
         'complex_logic' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['status', 'type', 'assigned_user_id'],
             'trigger' => Formula::and(
                 Formula::equals('$status', 'active'),
@@ -352,10 +369,10 @@ return [
 
 ### Example 7: Bean-Level Validation
 
-Validating the entire record before saving:
+Validating the entire record before saving (`Modules/Delegations/logicdefs.php`):
 
 ```php
-use MintHCM\Lib\MintLogic\Validators\DelegationValidator;
+use MintHCM\Lib\MintLogic\Modules\Delegations\Validators\DelegationValidator;
 
 return [
     'bean' => [
@@ -366,11 +383,11 @@ return [
 ];
 ```
 
-Example validator:
+Example validator (module validators live in `lib/MintLogic/Modules/{Module}/Validators/`):
 
 ```php
 <?php
-namespace MintHCM\Lib\MintLogic\Validators;
+namespace MintHCM\Lib\MintLogic\Modules\Delegations\Validators;
 
 use MintHCM\Lib\MintLogic\Exceptions\ValidationException;
 use MintHCM\Lib\MintLogic\Validator;
@@ -379,30 +396,30 @@ class DelegationValidator extends Validator
 {
     public function validate($bean, $field = null)
     {
-        if ($bean->date_from > $bean->date_to) {
-            throw new ValidationException('ERR_INVALID_DATE_RANGE');
+        // Real implementation: rejects a delegation with the same name and dates
+        if ($this->duplicateExists($bean)) {
+            throw new ValidationException('ERR_DELEGATION_EXISTS');
         }
     }
 }
 ```
 
+Bean-level validators can also be `Formula::validate(...)` expressions.
+
 ### Example 8: Default Value Initialization
 
-Setting the default user when creating a new record:
+Setting a default value when creating a new record. (The assigned user itself does not need a rule: the built-in BasicSet `assigned_user_init` already does this for every module, see [Basic Sets](#basic-sets).)
 
 ```php
 return [
     'rules' => [
-        'init' => [
+        'default_start_date' => [
             'hooks' => [Hook::INIT],
+            'trigger' => Formula::empty('$id'),   // new records only
             'logic' => [
                 'update' => function ($bean) {
-                    global $current_user;
-                    if (empty($bean->assigned_user_id)) {
-                        return [
-                            'assigned_user_id' => $current_user->id,
-                            'assigned_user_name' => $current_user->name,
-                        ];
+                    if (empty($bean->date_start)) {
+                        return ['date_start' => date('Y-m-d')];
                     }
                     return [];
                 },
@@ -412,13 +429,30 @@ return [
 ];
 ```
 
+## Basic Sets
+
+Rules in `lib/MintLogic/BasicSets/*.php` are applied to **every** module before the module's own rules:
+
+| Rule key | Hook | Purpose |
+|----------|------|---------|
+| `required_from_vardefs` | INIT | Marks fields with `required` in vardefs as required |
+| `readonly_from_vardefs` | INIT | Marks fields with `'readonly' => true` in vardefs as read-only |
+| `assigned_user_init` | INIT | Sets the current user as assigned user on new records |
+| `init_parent_fields` | INIT | Limits `parent` field module options to modules the user can list; read-only when the current parent module is not accessible |
+| `init_function_options` | INIT | Loads options of enum/multienum fields defined by a vardefs `function` |
+| `check_relate_module_access` | INIT | Makes relate fields read-only when the user has no access to the related module |
+
+A module (or custom) rule with the **same key** replaces the basic set rule for that module, e.g. define `'assigned_user_init' => []` to switch it off.
+
 ## Custom Validators
 
-You can create your own validators by extending the `Validator` class:
+You can create your own validators by extending the `Validator` class. Core module validators live in `lib/MintLogic/Modules/{Module}/Validators/` (namespace `MintHCM\Lib\MintLogic\Modules\{Module}\Validators`); generic ones in `lib/MintLogic/Validators/` (`IsUnique`, `IsInRange`, ...).
+
+For customizations put the class in an autoloadable custom namespace — `custom/lib/` is **not** autoloaded — e.g. `custom/modules/{Module}/Validators/` (namespace `MintHCM\Custom\Modules\{Module}\Validators`):
 
 ```php
 <?php
-namespace MintHCM\Lib\MintLogic\Validators;
+namespace MintHCM\Custom\Modules\Candidates\Validators;
 
 use MintHCM\Lib\MintLogic\Exceptions\ValidationException;
 use MintHCM\Lib\MintLogic\Validator;
@@ -428,57 +462,72 @@ class CustomValidator extends Validator
     public function validate($bean, $field = null)
     {
         // Your validation logic
-        if (/* condition not met */) {
+        if (empty($bean->{$field})) {
             throw new ValidationException('ERR_CUSTOM_VALIDATION');
         }
     }
 }
 ```
 
+The validator is instantiated with the bean (`new $class($bean)`) and `validate($bean, $field)` is called with the field name for field-level validation, or without it for bean-level validation. Throw `ValidationException` with a label; its default HTTP code is 422.
+
 ## API Integration
 
-MintLogic is automatically called by the API at the following points:
+MintLogic works on the legacy bean (`$entity->getMintBean()`) and is called by the API at the following points:
 
-1. **When fetching a record** - returns initial logic (`getInitial()`)
-2. **When changing values** - returns updated logic for changed fields (`getChanged()`)
-3. **Before saving** - validates the entire bean (`validateBean()`)
-
-Example API response with logic:
+1. **When fetching a record** (`POST /api/{Module}/Get[/{id}]`) - the record response contains the initial logic (`getInitial()`, rules with `INIT` or `ALL` hooks). Global search results also carry it.
+2. **When changing values** - the frontend calls `POST /api/{Module}/Logic[/{id}]` with body `attributes` (current form values) and `triggerFields` (changed fields); the response is `getChanged($triggerFields)` (rules with `CHANGE` or `ALL` hooks whose `triggerFields` intersect, or that have no `triggerFields`).
+3. **Before saving** (`ModuleController::create()`/`update()`) - `validateBean()` runs the `bean.validation` validators. On failure the API answers **422**:
 
 ```json
 {
-  "data": {
-    "id": "123",
+  "isValid": false,
+  "error": "ERR_DELEGATION_EXISTS"
+}
+```
+
+Example record response with logic (`ModuleController::mergeRecordData()`):
+
+```json
+{
+  "id": "123",
+  "module": "Candidates",
+  "attributes": {
     "name": "Example",
     "status": "active"
   },
+  "acl_access": { "edit": true, "delete": true, "view": true, "admin": false },
   "logic": {
     "rules": [
       {
         "key": "rule_name",
-        "trigger": true,
         "triggerFields": ["status"],
+        "trigger": true,
         "logic": {
+          "errors": {},
           "visible": {
             "special_field": true
-          },
-          "required": {
-            "required_field": true
           },
           "readonly": {
             "readonly_field": true
           },
+          "required": {
+            "required_field": true
+          },
           "update": {
             "calculated_field": "new_value"
           },
-          "errors": {},
           "options": {}
-        }
+        },
+        "hooks": ["init", "change"]
       }
     ]
-  }
+  },
+  "related_records": []
 }
 ```
+
+When `trigger` is `false`, `logic` is an empty array. Fields hidden with `visible => false` are also returned in `update` with `null`.
 
 ## Best Practices
 
@@ -504,6 +553,8 @@ api/custom/lib/MintLogic/{ModuleName}/*logicdefs.php
 2. Then loads all `*logicdefs.php` files from the custom directory
 3. Definitions are merged recursively using `array_merge_recursive()`
 
+⚠️ Because of `array_merge_recursive()`, a custom rule with the **same key** as a core rule does **not** replace it: the two definitions are merged into one (lists such as `hooks` and `triggerFields` are concatenated, scalar values like `trigger` become arrays, and closures are collected into lists). Use new, unique rule keys in custom files. To change a core rule, add a separate rule that sets the opposite state, or adjust the core file in a project branch. (Only [Basic Sets](#basic-sets) can be replaced by key.)
+
 ### Benefits
 
 - **Non-invasive customization** - You can add or extend logic without modifying core files
@@ -512,7 +563,7 @@ api/custom/lib/MintLogic/{ModuleName}/*logicdefs.php
 
 ### Example
 
-Standard file in `api/lib/MintLogic/Modules/Candidates/logicdefs.php`:
+Standard file in `api/lib/MintLogic/Modules/Candidates/logicdefs.php` (simplified):
 ```php
 return [
     'rules' => [
@@ -541,7 +592,7 @@ return [
 ];
 ```
 
-Both rules will be merged and active in the system.
+Both rules (with different keys) are active in the system.
 
 ## Migrating from View Tools to MintLogic
 
@@ -570,13 +621,13 @@ When migrating legacy modules from old views to new recordviewdefs-based views, 
 return [
     'rules' => [
         'field_show' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['type'],
             'trigger' => Formula::equals('$type', 'other'),
             'logic' => ['visible' => ['field_name' => true]],
         ],
         'field_hide' => [
-            'hooks' => [Hook::ALL, Hook::CHANGE],
+            'hooks' => [Hook::ALL],
             'triggerFields' => ['type'],
             'trigger' => Formula::notEquals('$type', 'other'),
             'logic' => ['visible' => ['field_name' => false]],
@@ -623,10 +674,11 @@ For complete recordview structure documentation, see: `vue/documentation/12-reco
 
 To debug MintLogic:
 
-1. Check the API response - `logic` section in JSON
-2. Use `var_dump()` or `error_log()` in update functions
-3. Check validation logs in case of errors
+1. Check the API response - `logic` section of the record response or of `POST /api/{Module}/Logic`
+2. Log from update/options functions with `$GLOBALS['log']->fatal(...)` or `error_log()` — do not `var_dump()`, it corrupts the JSON response
+3. Check the MintHCM log for exceptions thrown by validators or functions
 4. Test formulas separately using `Formula::executeOperator()`
+5. Remember that [Basic Sets](#basic-sets) also contribute rules (e.g. required/readonly flags from vardefs)
 
 ## Limitations
 

@@ -10,15 +10,16 @@ Entities are PHP classes that represent database tables. Each property maps to a
 
 **Important:** Entity classes in MintHCM are **automatically generated** from vardefs (variable definitions) during the "Quick Repair and Rebuild" process in the Administration Panel.
 
-> **Entities are NOT part of the repository.** As of the entity-generation rework, `api/app/Entities/*.php` files are **git-ignored** (see `.gitignore`) and produced locally during Quick Repair / build. Do not commit them. Reusable, hand-written entity behaviour now lives in **Traits** under `api/app/EntityTraits/` (see [Entity Traits](#entity-traits) below), which *are* versioned and referenced from vardefs. The only entity file still tracked is the OAuth2 entity.
+> **Entities are NOT part of the repository.** As of the entity-generation rework, `api/app/Entities/*.php` files are **git-ignored** (see `.gitignore`) and produced locally during Quick Repair / build. Do not commit them. Reusable, hand-written entity behaviour now lives in **Traits** under `api/app/EntityTraits/` (see [Entity Traits](#entity-traits) below), which *are* versioned and referenced from vardefs. The only entity files still tracked are `app/Entities/OAuth2/*`, `Schedulers.php` and `UsersPasswordLink.php` (see the exceptions in `.gitignore`).
 
 **How it works:**
 
-1. **Vardefs** define field structures in legacy MintHCM modules (located in `modules/{ModuleName}/vardefs.php`)
-2. Navigate to **Admin Panel** → **Repair** → **Quick Repair and Rebuild**
-3. The system scans all module vardefs
-4. **Entity Creator** automatically generates Doctrine Entity classes in `api/app/Entities/`
+1. **Vardefs** define field structures in legacy MintHCM modules (located in `legacy/modules/{ModuleName}/vardefs.php`)
+2. Navigate to **Admin Panel** → **Repair** → **Quick Repair and Rebuild** (`legacy/modules/Administration/QuickRepairAndRebuild.php` calls `EntityCreatorManager::createEntities()`)
+3. The system loads the vardefs of all modules in `$beanList` and generates an entity **only for dictionaries that contain a `doctrineEntity` key**
+4. **Entity Creator** (`legacy/include/EntityCreator/`) generates Doctrine Entity classes in `api/app/Entities/{Module}.php`
 5. Each module's vardefs are converted to Doctrine annotations, and any Traits declared in the vardefs are wired in via `use` statements
+6. If the module has a `_cstm` table with custom fields (`'source' => 'custom_fields'`, e.g. added in Studio), an additional `{Module}_cstm` entity is generated in `api/app/Entities/{Module}_cstm_custom.php` (see [Custom Fields (`_cstm`) Entities](#custom-fields-_cstm-entities))
 
 **Example vardefs to Entity conversion:**
 
@@ -34,7 +35,7 @@ $dictionary['Employee']['fields']['first_name'] = [
 /**
  * @ORM\Column(type="string", length="255")
  */
-public $first_name;
+protected $first_name;
 ```
 
 **When to regenerate entities:**
@@ -50,52 +51,69 @@ public $first_name;
 
 ### Entity Structure
 
+Generated entities extend `MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity` and declare their fields as `protected` properties. Reading and writing works through `MintEntity::__get()` / `__set()` (`$employee->first_name = 'John'`); `__set()` also converts values to the PHP type of the column and turns IDs assigned to association properties into Doctrine references. Fields of the `_cstm` entity are reachable the same way.
+
 ```php
 <?php
 
 namespace MintHCM\Api\Entities;
 
+// Auto-generated SectionUse section start
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity;
+use MintHCM\Api\EntityTraits\PersonTrait;
+// Auto-generated SectionUse section end
 
 /**
- * @ORM\Entity(repositoryClass="MintHCM\Api\Repositories\EmployeesRepository")
- * @ORM\Table(name="users")
+ * @ORM\Entity
+ * @ORM\Table(name="users", indexes={...})
+ * @property mixed $first_name
  */
-class Employees
+class Employees extends MintEntity
 {
+    // Auto-generated SectionTraits section start
+    use PersonTrait;   // provides getFullName(), getName(), getEmail1(), getSerialized()
+    // Auto-generated SectionTraits section end
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
-     * @ORM\Column(type="string", length="36")
+     * @ORM\Column(type="id", length="36")
      */
-    public $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length="255")
      */
-    public $first_name;
-
-    /**
-     * @ORM\Column(type="string", length="255")
-     */
-    public $last_name;
+    protected $first_name;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $date_entered;
-
-    // Helper methods
-    public function getFullName(): string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
+    protected $date_entered;
 }
 ```
 
+A module with a repository declared in vardefs gets `@ORM\Entity(repositoryClass="MintHCM\Api\Repositories\{Name}")` (e.g. `Users` → `UsersRepository`); otherwise the default `MintEntityRepository` is used.
+
+Mint-specific column types (`id`, `date`, `datetime`, `multienum`) are registered by `MintTypeManager` (`data/ORM/Doctrine/MintTypes/`).
+
+### Useful `MintEntity` Methods
+
+| Method | Purpose |
+|--------|---------|
+| `getSerialized(bool $json = false)` | Array (or JSON) of the entity's fields — use this for API output; `json_encode($entity)` gives `{}` because properties are protected |
+| `hasAccess(string $view)` | Legacy ACL check (`'view'`, `'edit'`, `'delete'`, ...) |
+| `getMintBean()` | Legacy bean (`MintBean`) for the entity, e.g. for MintLogic |
+| `getId()`, `getName()`, `getModuleName()` | Basic identity helpers |
+| `getRelatedPropertiesDefs()` / `getRelatedPropertiesNames()` | Association properties of the entity |
+| `hasCustomEntity()` / `isCustomEntity()` | Whether a `_cstm` entity is attached / this is a `_cstm` entity |
+
 ### Annotations Reference
+
+The Entity Creator writes these annotations from vardefs (relationships come from the vardefs `relationships`/`link` definitions). The snippets below are a Doctrine reference for reading generated files — do not hand-edit generated entities.
 
 #### @ORM\Entity
 
@@ -260,53 +278,49 @@ public function __construct()
 
 ### Entity Methods
 
-Entities can have helper methods:
+Hand-written helper methods must not be added to generated entity files (they are git-ignored and regenerated). Put them in an [Entity Trait](#entity-traits) declared in vardefs, e.g. `PersonTrait`:
 
 ```php
-class Employee
+// api/app/EntityTraits/PersonTrait.php (excerpt)
+trait PersonTrait
 {
     public function getFullName(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        // first_name + last_name
     }
 
-    public function isAdmin(): bool
+    public function getEmail1(): string
     {
-        return $this->is_admin === true;
-    }
-
-    public function getAge(): ?int
-    {
-        if (!$this->birth_date) {
-            return null;
-        }
-        return $this->birth_date->diff(new \DateTime())->y;
-    }
-
-    public function addDocument(Document $document): void
-    {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-            $document->employee = $this;
-        }
+        // primary e-mail address
     }
 }
 ```
 
 ## Repositories
 
-Repositories handle data retrieval and custom queries.
+Repositories handle data retrieval and custom queries. Get them from the entity manager — repositories cannot be injected into controllers directly:
+
+```php
+use MintHCM\Api\Entities\Employees;
+
+$repository = $entityManager->getRepository(Employees::class);
+$repository = $entityManager->getRepository('Employees');   // short names are resolved too
+```
+
+`MintRepositoryFactory` (`data/ORM/Doctrine/MintRepository/MintRepositoryFactory.php`) resolves short names in `MintHCM\Api\Entities` first, then in `MintHCM\Custom\Api\Entities`.
 
 ### Basic Repository
+
+Every entity uses `MintEntityRepository` (`data/ORM/Doctrine/MintRepository/MintEntityRepository.php`) unless its vardefs declare a dedicated repository (`doctrineEntity.repository`, class in `MintHCM\Api\Repositories\`, e.g. `UsersRepository`, `PositionsRepository`). Dedicated repositories extend `MintEntityRepository`:
 
 ```php
 <?php
 
 namespace MintHCM\Api\Repositories;
 
-use Doctrine\ORM\EntityRepository;
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
 
-class EmployeesRepository extends EntityRepository
+class PositionsRepository extends MintEntityRepository
 {
     // Custom methods go here
 }
@@ -314,7 +328,7 @@ class EmployeesRepository extends EntityRepository
 
 ### Built-In Methods
 
-All repositories inherit these from `EntityRepository`:
+All repositories inherit these from Doctrine's `EntityRepository`:
 
 ```php
 // Find by ID
@@ -324,116 +338,103 @@ $employee = $repository->find($id);
 $employees = $repository->findAll();
 
 // Find by criteria
-$active = $repository->findBy(['status' => 'Active']);
+$active = $repository->findBy(['employee_status' => 'Active']);
 $admin = $repository->findOneBy(['is_admin' => true]);
 
 // Count
 $total = $repository->count([]);
-$activeCount = $repository->count(['status' => 'Active']);
+$activeCount = $repository->count(['employee_status' => 'Active']);
 ```
+
+…and these from `MintEntityRepository`:
+
+| Method | Purpose |
+|--------|---------|
+| `getNewEntity()` | New, empty instance of the repository's entity |
+| `save($entity, bool $should_flush = false)` | Persist; for entities with legacy actions (default) the record is saved through the legacy SugarBean (logic hooks, custom fields), then refreshed and detached |
+| `delete($entity, bool $should_flush = false)` | Delete; for entities with legacy actions this is the legacy `mark_deleted()` (soft delete) |
+| `findWithRelatedFields(string $id, bool $with_deleted = false)` | Find with all association properties joined |
+| `getList(array $search_params = [], bool $check_acl = true)` | List data used by the list views (`EntitiesListTrait`) |
+| `getEntityShortName()` | Short class name (= module name) |
 
 ### Custom Query Methods
 
-Add methods for complex queries:
+Add query methods to a dedicated repository (core) or to a service class (customizations, see [Extending the API](./08-extending-api.md#creating-custom-services)):
 
 ```php
-class EmployeesRepository extends EntityRepository
+public function findActiveEmployees(): array
 {
-    public function findActiveEmployees(): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.status = :status')
-            ->setParameter('status', 'Active')
-            ->orderBy('e.last_name', 'ASC')
-            ->getQuery()
-            ->getResult();
+    return $this->createQueryBuilder('e')
+        ->where('e.employee_status = :status')
+        ->setParameter('status', 'Active')
+        ->orderBy('e.last_name', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
+public function searchByName(string $query): array
+{
+    return $this->createQueryBuilder('e')
+        ->where('e.first_name LIKE :query')
+        ->orWhere('e.last_name LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->setMaxResults(50)
+        ->getQuery()
+        ->getResult();
+}
+
+public function getPaginated(int $page = 1, int $limit = 20): array
+{
+    $qb = $this->createQueryBuilder('e')
+        ->orderBy('e.last_name', 'ASC')
+        ->setFirstResult(($page - 1) * $limit)
+        ->setMaxResults($limit);
+
+    return [
+        'data' => $qb->getQuery()->getResult(),
+        'total' => $this->count([]),
+        'page' => $page,
+        'limit' => $limit,
+    ];
+}
+
+public function countByStatus(): array
+{
+    $results = $this->createQueryBuilder('e')
+        ->select('e.employee_status AS status, COUNT(e.id) AS count')
+        ->groupBy('e.employee_status')
+        ->getQuery()
+        ->getResult();
+
+    $formatted = [];
+    foreach ($results as $result) {
+        $formatted[$result['status']] = $result['count'];
     }
 
-    public function findByDepartment(string $deptId): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.department_id = :deptId')
-            ->setParameter('deptId', $deptId)
-            ->orderBy('e.last_name', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function searchByName(string $query): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.first_name LIKE :query')
-            ->orWhere('e.last_name LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
-            ->setMaxResults(50)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function getPaginatedEmployees(int $page = 1, int $limit = 20): array
-    {
-        $offset = ($page - 1) * $limit;
-
-        $qb = $this->createQueryBuilder('e')
-            ->orderBy('e.last_name', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        return [
-            'data' => $qb->getQuery()->getResult(),
-            'total' => $this->count([]),
-            'page' => $page,
-            'limit' => $limit,
-        ];
-    }
-
-    public function getTopPerformers(int $limit = 10): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.performance_score >= :threshold')
-            ->setParameter('threshold', 90)
-            ->orderBy('e.performance_score', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function countByStatus(): array
-    {
-        $results = $this->createQueryBuilder('e')
-            ->select('e.status, COUNT(e.id) as count')
-            ->groupBy('e.status')
-            ->getQuery()
-            ->getResult();
-
-        $formatted = [];
-        foreach ($results as $result) {
-            $formatted[$result['status']] = $result['count'];
-        }
-
-        return $formatted;
-    }
+    return $formatted;
 }
 ```
 
 ### Joining Related Entities
 
+Association property names come from the generated entity (e.g. `reports_to_id` on `Employees`):
+
 ```php
-public function findWithDepartments(): array
+public function findWithManagers(): array
 {
     return $this->createQueryBuilder('e')
-        ->select('e, d')
-        ->join('e.department', 'd')
+        ->select('e, m')
+        ->leftJoin('e.reports_to_id', 'm')
         ->getQuery()
         ->getResult();
 }
 
-public function findByDepartmentName(string $deptName): array
+public function findByManagerLastName(string $lastName): array
 {
     return $this->createQueryBuilder('e')
-        ->join('e.department', 'd')
-        ->where('d.name = :name')
-        ->setParameter('name', $deptName)
+        ->join('e.reports_to_id', 'm')
+        ->where('m.last_name = :name')
+        ->setParameter('name', $lastName)
         ->getQuery()
         ->getResult();
 }
@@ -442,22 +443,12 @@ public function findByDepartmentName(string $deptName): array
 ### Aggregations
 
 ```php
-public function getTotalSalary(): float
+public function countAll(): int
 {
-    return (float) $this->createQueryBuilder('e')
-        ->select('SUM(e.salary)')
+    return (int) $this->createQueryBuilder('e')
+        ->select('COUNT(e.id)')
         ->getQuery()
         ->getSingleScalarResult();
-}
-
-public function getAverageSalaryByDepartment(): array
-{
-    return $this->createQueryBuilder('e')
-        ->select('d.name, AVG(e.salary) as avg_salary')
-        ->join('e.department', 'd')
-        ->groupBy('d.id')
-        ->getQuery()
-        ->getResult();
 }
 ```
 
@@ -469,147 +460,108 @@ public function findByCriteria(array $criteria): array
     $qb = $this->createQueryBuilder('e');
 
     if (!empty($criteria['status'])) {
-        $qb->andWhere('e.status = :status')
+        $qb->andWhere('e.employee_status = :status')
            ->setParameter('status', $criteria['status']);
     }
 
-    if (!empty($criteria['department_id'])) {
-        $qb->andWhere('e.department_id = :dept')
-           ->setParameter('dept', $criteria['department_id']);
-    }
-
-    if (!empty($criteria['hired_after'])) {
-        $qb->andWhere('e.hire_date >= :hired_after')
-           ->setParameter('hired_after', new \DateTime($criteria['hired_after']));
+    if (!empty($criteria['entered_after'])) {
+        $qb->andWhere('e.date_entered >= :entered_after')
+           ->setParameter('entered_after', new \DateTime($criteria['entered_after']));
     }
 
     if (!empty($criteria['search'])) {
         $qb->andWhere(
             $qb->expr()->orX(
                 $qb->expr()->like('e.first_name', ':search'),
-                $qb->expr()->like('e.last_name', ':search'),
-                $qb->expr()->like('e.email', ':search')
+                $qb->expr()->like('e.last_name', ':search')
             )
         )->setParameter('search', '%' . $criteria['search'] . '%');
     }
 
-    if (!empty($criteria['sort'])) {
-        $qb->orderBy('e.' . $criteria['sort'], $criteria['dir'] ?? 'ASC');
+    // Whitelist sort fields - never pass user input into DQL unchecked
+    if (in_array($criteria['sort'] ?? null, ['first_name', 'last_name', 'date_entered'], true)) {
+        $qb->orderBy('e.' . $criteria['sort'], ($criteria['dir'] ?? 'ASC') === 'DESC' ? 'DESC' : 'ASC');
     }
 
     if (!empty($criteria['limit'])) {
-        $qb->setMaxResults($criteria['limit']);
+        $qb->setMaxResults((int) $criteria['limit']);
     }
 
     return $qb->getQuery()->getResult();
 }
 ```
 
-## Using EntityManager
+## Saving and Deleting Entities
 
-The EntityManager handles entity persistence.
+Use the repository's `save()` / `delete()` for module records. They route through the legacy SugarBean (logic hooks, `_cstm` fields, relationships, soft delete), as `ModuleController` does.
 
 ### Creating Entities
 
 ```php
-use MintHCM\Api\Entities\Employee;
+use MintHCM\Api\Entities\Employees;
 
-public function createEmployee(array $data)
-{
-    $employee = new Employee();
-    $employee->first_name = $data['first_name'];
-    $employee->last_name = $data['last_name'];
-    $employee->email = $data['email'];
-    $employee->date_entered = new \DateTime();
+$repository = $entityManager->getRepository(Employees::class);
 
-    $em = $this->getEntityManager();
-    $em->persist($employee);
-    $em->flush();
+$employee = $repository->getNewEntity();
+$employee->first_name = $data['first_name'];
+$employee->last_name = $data['last_name'];
 
-    return $employee;
-}
+$repository->save($employee, true);
 ```
 
 ### Updating Entities
 
 ```php
-public function updateEmployee(string $id, array $data)
-{
-    $employee = $this->find($id);
+$employee = $repository->find($id);
 
-    if (!$employee) {
-        throw new \Exception('Employee not found');
-    }
-
-    if (isset($data['first_name'])) {
-        $employee->first_name = $data['first_name'];
-    }
-
-    if (isset($data['last_name'])) {
-        $employee->last_name = $data['last_name'];
-    }
-
-    $employee->date_modified = new \DateTime();
-
-    $this->getEntityManager()->flush();
-
-    return $employee;
+if (!$employee) {
+    throw new \InvalidArgumentException('Employee not found');
 }
+
+if (isset($data['first_name'])) {
+    $employee->first_name = $data['first_name'];
+}
+
+$repository->save($employee, true);
 ```
 
 ### Deleting Entities
 
 ```php
-public function deleteEmployee(string $id): void
-{
-    $employee = $this->find($id);
+$employee = $repository->find($id);
 
-    if (!$employee) {
-        throw new \Exception('Employee not found');
-    }
-
-    $em = $this->getEntityManager();
-    $em->remove($employee);
-    $em->flush();
+if ($employee) {
+    $repository->delete($employee);   // legacy mark_deleted(): sets deleted = 1
 }
 ```
 
+⚠️ `$entityManager->remove($entity); $entityManager->flush();` issues a SQL `DELETE` and bypasses legacy logic — do not use it for module records. Plain `persist()/flush()` likewise skips logic hooks. Entities can opt out of legacy actions by overriding the `LEGACY_ACTIONS` constant (default `true` in `MintEntity`).
+
 ### Soft Delete
 
+Records are soft-deleted (`deleted = 1`). The `soft_delete` Doctrine filter (`data/ORM/Doctrine/Filter/SoftDeleteFilter.php`) is enabled globally in `DoctrineContainerBuilder` and adds `deleted = 0` to every query on an entity that has a `deleted` field — `find()`, `findBy()` and query builders never return deleted rows, so you do not need a `deleted` condition.
+
+To read deleted rows, disable the filter temporarily:
+
 ```php
-public function softDelete(string $id): void
-{
-    $employee = $this->find($id);
-
-    if (!$employee) {
-        throw new \Exception('Employee not found');
-    }
-
-    $employee->deleted = true;
-    $employee->date_deleted = new \DateTime();
-
-    $this->getEntityManager()->flush();
-}
-
-public function findActive(): array
-{
-    return $this->findBy(['deleted' => false]);
-}
+$entityManager->getFilters()->disable('soft_delete');
+$all = $repository->findAll();
+$entityManager->getFilters()->enable('soft_delete');
 ```
 
 ## Extending Entities and Repositories
 
-Because the generated `api/app/Entities/*.php` files are git-ignored and regenerated on every build, **hand-written code must not live directly in an entity file** — it would not be versioned and would be lost. Reusable entity behaviour is instead placed in **Traits** (`api/app/EntityTraits/`) and referenced from the module's vardefs. New database-mapped properties still go through the `custom/` directory (see [Extending via Custom Directory](#extending-via-custom-directory)).
+Because the generated `api/app/Entities/*.php` files are git-ignored and regenerated on every build, **hand-written code must not live directly in an entity file** — it would not be versioned and would be lost. Reusable entity behaviour is instead placed in **Traits** (`api/app/EntityTraits/`) and referenced from the module's vardefs. New database-mapped fields are added as **custom fields** in vardefs/Studio, which produces a `_cstm` entity (see [Custom Fields (`_cstm`) Entities](#custom-fields-_cstm-entities)).
 
 ### Entity Traits
 
-Traits hold hand-written, reusable methods that the Entity Creator wires into the generated entity. Unlike inline entity code, Traits are committed to the repository and survive regeneration.
+Traits hold hand-written, reusable methods that the Entity Creator wires into the generated entity. Unlike inline entity code, Traits are committed to the repository and survive regeneration. Existing traits: `PersonTrait`, `UsersTrait`, `UserPreferencesTrait`.
 
 **How it works:**
 
 1. Create a trait in `api/app/EntityTraits/` under the `MintHCM\Api\EntityTraits` namespace. Name it `{ShortName}Trait` (e.g. `UsersTrait`, `PersonTrait`).
 2. Declare which traits a module uses in its vardefs under `doctrineEntity.traits`, using the **short name** (without the `Trait` suffix).
-3. On Quick Repair, the Entity Creator resolves each short name via `TraitNameResolver` (appends `Trait`, prepends the namespace), adds the `use` statement, and emits `use {Trait};` inside the generated class.
+3. On Quick Repair, the Entity Creator resolves each short name via `TraitNameResolver` (`legacy/include/EntityCreator/TraitNameResolver.php`: appends `Trait`, prepends the namespace for the `use` import), adds the import to `SectionUse`, and emits `use {Trait};` inside the class in `SectionTraits`.
 
 **Declaring traits in vardefs:**
 
@@ -618,8 +570,8 @@ Traits hold hand-written, reusable methods that the Entity Creator wires into th
 $dictionary['User'] = array(
     'table' => 'users',
     'doctrineEntity' => array(
-        'repository' => 'UsersRepository',
-        'traits' => array('Users'),   // -> MintHCM\Api\EntityTraits\UsersTrait
+        'repository' => 'UsersRepository',     // -> MintHCM\Api\Repositories\UsersRepository
+        'traits' => array('Users', 'Person'),  // -> UsersTrait, PersonTrait
     ),
     // ...
 );
@@ -640,6 +592,11 @@ trait UsersTrait
 
     public function checkPassword(string $password): bool
     {
+        // Delegates to MintHCM\Lib\Services\Auth\PasswordHash (md5 + bcrypt policy)
+    }
+
+    public function passwordNeedsRehash(): bool
+    {
         // ...
     }
 }
@@ -647,7 +604,7 @@ trait UsersTrait
 
 **The `person` template shortcut:** modules whose vardefs include `'templates' => array('person', ...)` automatically receive `PersonTrait` (providing `getFullName()`, `getName()`, `getEmail1()`, `getSerialized()`) — no explicit `traits` entry is needed. When `PersonTrait` is applied, the Entity Creator skips generating its own `getEmail1()`/`getSerialized()` to avoid duplicate declarations.
 
-**Note on Employees:** the `Employee` module reuses the `User` vardefs but overrides `doctrineEntity` to an empty array, so the `Employees` entity does not inherit the `UsersRepository` or `UsersTrait`.
+**Note on Employees:** the `Employee` module reuses the `User` vardefs but overrides `doctrineEntity` with `array('traits' => array('Person'))` (`legacy/modules/Employees/vardefs.php`), so the `Employees` entity uses `PersonTrait` but not the `UsersRepository` or `UsersTrait`.
 
 ### Understanding Protected Sections
 
@@ -657,341 +614,93 @@ The Entity Creator marks auto-generated sections with special comments:
 // Auto-generated SectionUse section start
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use MintHCM\Data\ORM\Doctrine\MintEntity\MintEntity;
+use MintHCM\Api\EntityTraits\PersonTrait;
 // Auto-generated SectionUse section end
+
+// Auto-generated SectionTraits section start
+use PersonTrait;
+// Auto-generated SectionTraits section end
 
 // Auto-generated SectionProperties section start
 /**
  * @ORM\Column(type="string", length="255")
  */
-public $first_name;
+protected $first_name;
 // Auto-generated SectionProperties section end
 
 // Auto-generated SectionMethods section start
 public function __construct()
 {
-    $this->documents = new ArrayCollection();
-}
-// Auto-generated SectionMethods section end
-```
-
-**Protected sections:**
-- `// Auto-generated Section{Name} section start` to `// Auto-generated Section{Name} section end`
-- Everything **inside** these sections will be regenerated
-- Everything **outside** these sections is safe to modify
-
-### Adding Custom Code Directly to Generated Entities
-
-> ⚠️ **Discouraged.** Since generated entity files are git-ignored and rebuilt from scratch, code added directly to a `*.php` entity file (even outside the auto-generated sections) is **not versioned and is lost on regeneration**. Use an [Entity Trait](#entity-traits) for reusable methods, or the [custom directory](#extending-via-custom-directory) for new mapped properties. The pattern below is retained only to explain the protected-section markers the generator emits.
-
-You can technically place code **outside** the auto-generated sections, but prefer Traits:
-
-**File:** `app/Entities/Users.php`
-
-```php
-<?php
-// Generated by the Entity Creator
-
-namespace MintHCM\Api\Entities;
-
-// Auto-generated SectionUse section start
-use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-// Auto-generated SectionUse section end
-
-// ✅ SAFE: Add custom imports here
-use App\Utils\PasswordHasher;
-
-/**
- * @ORM\Entity(repositoryClass="MintHCM\Api\Repositories\UsersRepository")
- * @ORM\Table(name="users")
- */
-class Users
-{
-    // Auto-generated SectionProperties section start
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length="36")
-     */
-    public $id;
-    
-    public $first_name;
-    public $last_name;
-    // Auto-generated SectionProperties section end
-    
-    // ✅ SAFE: Add custom properties here
-    private $cached_full_name;
-
-    // Auto-generated SectionMethods section start
-    public function __construct()
-    {
-        // Auto-generated initialization
-    }
-    // Auto-generated SectionMethods section end
-    
-    // ✅ SAFE: Add custom methods here
-    /**
-     * Get the full name with caching
-     */
-    public function getFullName(): string
-    {
-        if ($this->cached_full_name === null) {
-            $names = [];
-            if (!empty($this->first_name)) {
-                $names[] = $this->first_name;
-            }
-            if (!empty($this->last_name)) {
-                $names[] = $this->last_name;
-            }
-            $this->cached_full_name = implode(' ', $names);
-        }
-        
-        return $this->cached_full_name;
-    }
-    
-    /**
-     * Check if user is administrator
-     */
-    public function isAdmin(): bool
-    {
-        return $this->is_admin === true;
-    }
-    
-    /**
-     * Hash and set password
-     */
-    public function setPassword(string $plainPassword): void
-    {
-        $this->user_hash = PasswordHasher::hash($plainPassword);
-        $this->pwd_last_changed = new \DateTime();
-    }
-}
-```
-
-### Example: Real Users Entity with Custom Methods
-
-Methods such as `getIdentifier()`, `getFullName()` and `checkPassword()` used to be added directly to `app/Entities/Users.php`. They now live in `api/app/EntityTraits/UsersTrait.php` and `PersonTrait.php`, and the generator emits `use UsersTrait;` / `use PersonTrait;` into the `Users` entity based on its vardefs. The equivalent generated result looks like:
-
-```php
-// Auto-generated SectionMethods section start
-public function __construct()
-{
-    $this->reports_to_link = new ArrayCollection();
     $this->email_addresses = new ArrayCollection();
-    // ... other collections
-}
-
-public function getIdentifier(): string
-{
-    return $this->id;
 }
 // Auto-generated SectionMethods section end
-
-// ✅ Custom methods added here are safe from regeneration:
-
-/**
- * Get the fullname 
- *
- * @return string
- */
-public function getFullName(): string
-{
-    $names = [];
-    if (!empty($this->first_name)) {
-        $names[] = $this->first_name;
-    }
-    if (!empty($this->last_name)) {
-        $names[] = $this->last_name;
-    }
-
-    return !empty($names) ? implode(' ', $names) : '';
-}
-
-/**
- * Check that password matches existing hash
- * @param string $password Plaintext password
- */
-public function checkPassword(string $password): bool
-{
-    if (empty($this->user_hash)) {
-        return false;
-    }
-
-    $passwordMd5 = md5($password);
-    if ($this->user_hash[0] !== '$' && strlen($this->user_hash) === 32) {
-        // Legacy md5 password
-        return strtolower($passwordMd5) === $this->user_hash;
-    }
-
-    return password_verify(strtolower($passwordMd5), $this->user_hash);
-}
 ```
 
-### When to Use a Trait vs Custom Directory
+When an entity file already exists, the generator replaces only the content of these sections (`EntityCreator::updateExistingEntity()`); otherwise it writes the whole file from the templates in `legacy/include/EntityCreator/tpls/` (module-specific templates exist for `Users` and `UserPreferences`).
 
-**Use an Entity Trait (`api/app/EntityTraits/`, declared in vardefs):**
-- ✅ Adding helper methods (getFullName, isActive, etc.)
-- ✅ Adding business logic methods
-- ✅ Sharing behaviour across several entities (e.g. `PersonTrait`)
-- ✅ Any hand-written method that must survive regeneration and be versioned
-
-**Use custom directory extension:**
-- ✅ Adding new Doctrine-mapped properties (@ORM\Column)
-- ✅ Adding new relationships (@ORM\ManyToOne, etc.)
-- ✅ When you need to override existing auto-generated properties
-- ✅ For complex customizations that require namespace separation
-
-### Extending via Custom Directory
-
-For adding new database-mapped properties, use the `custom/` directory:
-
-**File:** `custom/app/Entities/Users.php`
-
-```php
-<?php
-
-namespace MintHCM\Custom\Api\Entities;
-
-use MintHCM\Api\Entities\Users as BaseUsers;
-use Doctrine\ORM\Mapping as ORM;
-
-class Users extends BaseUsers
-{
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    public $custom_field;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     */
-    public $bonus_amount;
-
-    public function getTotalCompensation(): float
-    {
-        return ($this->salary ?? 0) + ($this->bonus_amount ?? 0);
-    }
-}
-```
-
-**Using the custom entity:**
-
-```php
-use MintHCM\Utils\CustomLoader;
-use MintHCM\Api\Entities\Users;
-
-// CustomLoader automatically loads MintHCM\Custom\Api\Entities\Users if it exists
-$user = CustomLoader::getObject(Users::class);
-```
-
-### Best Practices for Entity Extension
-
-```php
-// ✅ GOOD: Add methods outside auto-generated sections
-class Users
-{
-    // Auto-generated SectionMethods section start
-    public function __construct() { }
-    // Auto-generated SectionMethods section end
-    
-    // Safe custom method
-    public function getDisplayName(): string
-    {
-        return $this->getFullName() ?: $this->user_name;
-    }
-}
-
-// ❌ BAD: Modifying inside auto-generated sections
-class Users
-{
-    // Auto-generated SectionProperties section start
-    public $first_name;
-    public $custom_field;  // ❌ Will be removed on regeneration!
-    // Auto-generated SectionProperties section end
-}
-
-// ✅ GOOD: Adding new properties via custom directory
-// custom/app/Entities/Users.php
-class Users extends BaseUsers
-{
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    public $custom_field;  // ✅ Safe in custom directory
-}
-```
+> ⚠️ Code placed outside the sections survives a local regeneration, but entity files are git-ignored, so such code is **not versioned** and is lost on a fresh build or install. Use an Entity Trait instead.
 
 ### Protected Section Reference
 
-The Entity Creator uses these protected sections:
+| Section Name | Purpose |
+|-------------|---------|
+| `SectionUse` | Import statements (`use ...`), including trait imports |
+| `SectionRepository` | `@ORM\Entity` / `@ORM\Table` annotations and `@property` hints |
+| `SectionTraits` | `use {Trait};` statements inside the class |
+| `SectionProperties` | Property declarations (`@ORM\Column`, associations) |
+| `SectionMethods` | Constructor and auto-generated methods |
 
-| Section Name | Purpose | Safe to Edit After? |
-|-------------|---------|---------------------|
-| `SectionUse` | Import statements (use ...) | Outside only |
-| `SectionRepository` | @ORM\Entity and @ORM\Table annotations | Outside only |
-| `SectionProperties` | Property declarations (@ORM\Column, etc.) | Outside only |
-| `SectionMethods` | Constructor and auto-generated methods | Outside only |
+Everything inside `// Auto-generated Section...` comments is overwritten on every Quick Repair.
 
-**Rule of thumb:** 
-- Inside `// Auto-generated Section...` comments = ❌ Will be overwritten
-- Outside `// Auto-generated Section...` comments = ✅ Safe to modify
+### Custom Fields (`_cstm`) Entities
+
+Custom fields (vardefs with `'source' => 'custom_fields'`, typically created in Studio) live in the legacy `{table}_cstm` table. When such a table and fields exist, Quick Repair generates a second entity, `{Module}_cstm` (file `api/app/Entities/{Module}_cstm_custom.php`, `CustomEntityCreator`), mapped to the `_cstm` table:
+
+- The `_cstm` entity has `id_c` as its ID and a `main_entity` one-to-one association to the main entity.
+- The main entity gets a `custom_entity` one-to-one association (`cascade={"persist", "remove"}`, `fetch="EAGER"`).
+- `MintEntity::__get()` / `__set()` fall back to the custom entity, so `$employee->my_custom_field_c` works like a regular field.
+- `CustomEntitySubscriber` (`data/ORM/Doctrine/MintEventManager/Subscribers/`) persists the custom entity together with the main one and copies the main ID into it.
+
+This is the supported way to add mapped fields to an entity. A hand-written subclass in `custom/app/Entities/` is **not** used by Doctrine for existing modules (repository lookup and annotations point to the core class).
+
+### When to Use What
+
+**Use an Entity Trait (`api/app/EntityTraits/`, declared in vardefs):**
+- ✅ Adding helper methods (getFullName, isActive, etc.)
+- ✅ Sharing behaviour across several entities (e.g. `PersonTrait`)
+- ✅ Any hand-written method that must survive regeneration and be versioned
+
+**Use custom fields (vardefs / Studio → `_cstm` entity):**
+- ✅ Adding new database-mapped fields to an existing module
+
+**Use a service class (`custom/app/...`, see [Extending the API](./08-extending-api.md#creating-custom-services)):**
+- ✅ Custom queries and business logic for customizations
 
 ### Extending a Repository
 
-**File:** `custom/app/Repositories/EmployeesRepository.php`
-
-```php
-<?php
-
-namespace MintHCM\Custom\Api\Repositories;
-
-use MintHCM\Api\Repositories\EmployeesRepository as BaseRepository;
-
-class EmployeesRepository extends BaseRepository
-{
-    public function findEligibleForBonus(): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.performance_score >= :threshold')
-            ->andWhere('e.bonus_amount IS NULL')
-            ->setParameter('threshold', 80)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function calculateAverageBonus(): float
-    {
-        return (float) $this->createQueryBuilder('e')
-            ->select('AVG(e.bonus_amount)')
-            ->where('e.bonus_amount IS NOT NULL')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-}
-```
+Dedicated repositories are selected by the `doctrineEntity.repository` vardefs key and must live in `MintHCM\Api\Repositories\` (`EntityCreator::REPOSITORY_FOLDER_PATH`). A subclass in `custom/app/Repositories/` is **not** picked up — neither Doctrine nor `MintRepositoryFactory` uses `CustomLoader`. For customizations, put query methods in a service class that receives `EntityManagerInterface` and builds queries with `$entityManager->getRepository('Module')->createQueryBuilder(...)`.
 
 ## Best Practices
 
 ### 1. Keep Entities Simple
 
 ```php
-// ✅ Good - entity is data structure + simple methods
-class Employee
+// ✅ Good - entity trait with simple, data-related methods
+trait PersonTrait
 {
-    public $id;
-    public $name;
-    
     public function getFullName(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        // first_name + last_name
     }
 }
 
-// ❌ Bad - business logic in entity
-class Employee
+// ❌ Bad - business logic in an entity trait
+trait EmployeeTrait
 {
     public function sendWelcomeEmail(): void
     {
-        // Complex email sending logic...
+        // Complex email sending logic... -> belongs in a service
     }
 }
 ```
@@ -999,7 +708,7 @@ class Employee
 ### 2. Complex Logic in Repositories
 
 ```php
-// ✅ Good - complex queries in repository
+// ✅ Good - complex queries in a repository (core) or a service (custom)
 public function findByCriteria(array $criteria): array
 {
     // Complex query builder logic
@@ -1015,13 +724,13 @@ $employees = $em->createQuery("...")->getResult();
 // ✅ Good
 public function findActiveEmployees(): array
 {
-    return $this->findBy(['status' => 'Active']);
+    return $this->findBy(['employee_status' => 'Active']);
 }
 
 // ❌ Bad
 public function findActiveEmployees()
 {
-    return $this->findBy(['status' => 'Active']);
+    return $this->findBy(['employee_status' => 'Active']);
 }
 ```
 
@@ -1030,8 +739,8 @@ public function findActiveEmployees()
 ```php
 // ✅ Good - clear, descriptive names
 public function findActiveEmployees(): array
-public function countByDepartment(string $deptId): int
-public function getTopPerformers(int $limit): array
+public function countByStatus(): array
+public function searchByName(string $query): array
 
 // ❌ Bad - unclear names
 public function getStuff(): array
@@ -1042,11 +751,11 @@ public function doQuery(): array
 
 ```php
 // ✅ Good - single query with join
-public function findWithDepartments(): array
+public function findWithManagers(): array
 {
     return $this->createQueryBuilder('e')
-        ->select('e, d')
-        ->join('e.department', 'd')
+        ->select('e, m')
+        ->leftJoin('e.reports_to_id', 'm')
         ->getQuery()
         ->getResult();
 }
@@ -1054,7 +763,7 @@ public function findWithDepartments(): array
 // ❌ Bad - N+1 queries
 $employees = $this->findAll();
 foreach ($employees as $employee) {
-    $department = $employee->department;  // Separate query!
+    $manager = $employee->reports_to_id?->last_name;  // Separate query per employee!
 }
 ```
 

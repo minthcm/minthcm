@@ -52,13 +52,19 @@ use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use MintHCM\Api\Entities\Users;
 use MintHCM\Api\Utils\AuthHelper;
 use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
+use MintHCM\Lib\Services\Auth\LoginThrottle;
+use MintHCM\Lib\Services\Auth\PasswordHash;
+use MintHCM\Utils\CustomLoader;
 
 class UsersRepository extends MintEntityRepository implements UserRepositoryInterface
 {
     /**
      * @inheritdoc
      *
-     * @throws \InvalidArgumentException If user does not exist or the password is invalid.
+     * Returns null for every failed attempt (unknown user, wrong password, LDAP reject), so the
+     * OAuth server answers with the same `invalid_grant` and nothing about the credentials leaks.
+     *
+     * @throws \League\OAuth2\Server\Exception\OAuthServerException When the login is throttled.
      */
     public function getUserEntityByUserCredentials(
         $username,
@@ -74,25 +80,63 @@ class UsersRepository extends MintEntityRepository implements UserRepositoryInte
         $is_sso_finalize = $this->shouldSkipCheckingPasswordForSAML($username)
             || $this->shouldSkipCheckingPasswordForOIDC($username);
 
+        // SSO finalize carries no password to guess, so it is not throttled.
+        $throttle = $is_sso_finalize ? null : $this->getLoginThrottle();
+        $ip = $throttle?->resolveClientIp($_SERVER) ?? '';
+        $throttle?->assertAllowed((string) $username, $ip);
+
         chdir('../legacy/');
         $is_ldap_enabled = $this->IsLdapOn();
         if (!$is_sso_finalize && $is_ldap_enabled && !(new \AuthenticationController('LDAPAuthenticate'))->authController->loginAuthenticate($username, $password, false, [])) {
             chdir('../api/');
-            throw new \InvalidArgumentException("The password is invalid: {$password} or username is invalid: {$username}");
+            $throttle?->registerFailure($ip);
+            return null;
         }
         chdir('../api/');
 
         /** @var Users */
         $user = $this->findOneBy(['user_name' => $username, 'deleted' => false]);
         if (!$user) {
-            throw new \InvalidArgumentException('No user found with this username: ' . $username);
+            $throttle?->registerFailure($ip);
+            return null;
         }
 
-        if (!$this->shouldSkipCheckingPassword($username) && $user->checkPassword($password) === false) {
-            throw new \InvalidArgumentException('The password is invalid: ' . $password);
+        $is_password_checked = !$this->shouldSkipCheckingPassword($username);
+        if ($is_password_checked && $user->checkPassword($password) === false) {
+            $throttle?->registerFailure($ip);
+            return null;
+        }
+
+        $throttle?->registerSuccess((string) $username);
+
+        if ($is_password_checked && $user->passwordNeedsRehash()) {
+            $this->upgradePasswordHash($user, (string) $password);
         }
 
         return $user;
+    }
+
+    protected function getLoginThrottle(): LoginThrottle
+    {
+        return CustomLoader::getObject(LoginThrottle::class);
+    }
+
+    /**
+     * Replaces an outdated hash (plain md5, old bcrypt cost) after a successful login. Only user_hash
+     * is written - User::setNewPassword() would also reset pwd_last_changed / system_generated_password.
+     * A failed write must not block the login, the hash is upgraded on a later one.
+     */
+    protected function upgradePasswordHash(Users $user, string $password): void
+    {
+        try {
+            $this->getEntityManager()->getConnection()->update(
+                'users',
+                ['user_hash' => CustomLoader::getObject(PasswordHash::class)->hashMd5(md5($password))],
+                ['id' => $user->getIdentifier()]
+            );
+        } catch (\Throwable $exception) {
+            $GLOBALS['log']->error('Password hash upgrade failed for user ' . $user->getIdentifier() . ': ' . $exception->getMessage());
+        }
     }
 
     /*

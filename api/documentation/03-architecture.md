@@ -11,7 +11,12 @@ The MintHCM API follows modern PHP architectural patterns while maintaining inte
        │ HTTP Request
        ▼
 ┌─────────────────────────────────────────┐
-│         Slim Framework Router           │
+│  Security headers + Error middleware    │
+└──────┬──────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────┐
+│     Slim Routing Middleware (match)     │
 └──────┬──────────────────────────────────┘
        │
        ▼
@@ -19,9 +24,10 @@ The MintHCM API follows modern PHP architectural patterns while maintaining inte
 │         Middleware Pipeline             │
 │  ┌────────────────────────────────────┐ │
 │  │  1. JSON Body Parser               │ │
-│  │  2. Authentication (JWT/OAuth2)    │ │
-│  │  3. Route Access Control           │ │
-│  │  4. Parameter Validation           │ │
+│  │  2. Authentication (OAuth2/session)│ │
+│  │  3. Admin-only check               │ │
+│  │  4. Route Access Control           │ │
+│  │  5. Parameter Validation           │ │
 │  └────────────────────────────────────┘ │
 └──────┬──────────────────────────────────┘
        │
@@ -35,7 +41,8 @@ The MintHCM API follows modern PHP architectural patterns while maintaining inte
        ▼                  ▼                 ▼
 ┌─────────────┐   ┌──────────────┐  ┌─────────────┐
 │ Repository  │   │    Entity    │  │   Legacy    │
-│  (Doctrine) │   │  (Doctrine)  │  │  Connector  │
+│  (Doctrine) │   │  (Doctrine)  │  │ (Connector/ │
+│             │   │              │  │ BeanFactory)│
 └──────┬──────┘   └──────┬───────┘  └──────┬──────┘
        │                 │                  │
        ▼                 ▼                  ▼
@@ -52,74 +59,88 @@ The MintHCM API follows modern PHP architectural patterns while maintaining inte
 While the API doesn't have traditional "views" (it returns JSON), it follows MVC concepts:
 
 - **Model**: Entities and Repositories (data layer)
-- **View**: JSON responses (via `MintResponse`)
+- **View**: JSON written to the PSR-7 response body
 - **Controller**: Controllers that handle HTTP requests
 
-**Example:**
+**Example** (simplified from `app/Controllers/PositionsController.php` pattern):
 
 ```php
-// Controller (app/Controllers/ModuleController.php)
-public function list(Request $request, Response $response, array $args): Response
-{
-    $module = $this->getModuleFromRoute($request);
-    
-    // Get data from repository/entity
-    $records = $this->repository->findByModule($module);
-    
-    // Return JSON response
-    return $response->withJson(['data' => $records]);
-}
-```
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Positions;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
-### 2. Dependency Injection (DI)
-
-The API uses **PHP-DI** container for automatic dependency injection.
-
-**How it works:**
-
-```php
-// Container automatically resolves dependencies
 class MyController
 {
-    private $repository;
-    
-    // Dependencies injected automatically via constructor
-    public function __construct(MyRepository $repository)
+    public function __construct(private EntityManagerInterface $entityManager) {}
+
+    public function detail(Request $request, Response $response, array $args): Response
     {
-        $this->repository = $repository;
+        // Model: entity loaded through its repository
+        $position = $this->entityManager->getRepository(Positions::class)->find($args['id']);
+
+        // View: JSON response
+        $response->getBody()->write(json_encode(['data' => $position?->getSerialized()]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
 
-**Configured in:** `app/Containers/Doctrine/DoctrineContainerBuilder.php`
+**Note:** Slim's `Slim\Psr7\Response` has no `withJson()` method. `utils/MintResponse.php` is legacy and unused (its namespace is not autoloadable) - always write JSON to the body as shown above.
+
+### 2. Dependency Injection (DI)
+
+The API uses a **PHP-DI** container. When a route is dispatched, `RouteManager::prepareConstructorArguments()` reads the controller's constructor and calls `$container->get(<type>)` for each parameter; `CustomLoader::getObject()` does the same (falling back to the extra arguments passed to it).
+
+**How it works:**
+
+```php
+use Doctrine\ORM\EntityManagerInterface;
+
+class MyController
+{
+    // Resolved from the container by type
+    public function __construct(private EntityManagerInterface $entityManager) {}
+
+    // Repositories are obtained from the EntityManager, not injected directly
+    // (PHP-DI cannot build a Doctrine repository on its own)
+}
+```
+
+**Configured in:** `data/ORM/Doctrine/DoctrineContainerBuilder.php` (`MintHCM\Data\ORM\Doctrine\DoctrineContainerBuilder`). It defines `EntityManagerInterface::class`; other classes are autowired by PHP-DI.
 
 ### 3. Repository Pattern
 
 Data access is abstracted through repositories, separating business logic from database operations.
 
 ```php
-// Entity (app/Entities/Employee.php)
+// Entity (app/Entities/Kudos.php) - auto-generated, extends MintEntity
 /**
- * @ORM\Entity(repositoryClass="MintHCM\Api\Repositories\EmployeeRepository")
+ * @ORM\Entity(repositoryClass="MintHCM\Api\Repositories\KudosRepository")
  */
-class Employee
+class Kudos extends MintEntity
 {
     // Properties map to database columns
 }
 
-// Repository (app/Repositories/EmployeeRepository.php)
-class EmployeeRepository extends EntityRepository
+// Repository (app/Repositories/KudosRepository.php)
+use MintHCM\Data\ORM\Doctrine\MintRepository\MintEntityRepository;
+
+class KudosRepository extends MintEntityRepository
 {
-    public function findActiveEmployees(): array
+    // Example custom query method
+    public function findNewest(int $limit): array
     {
-        return $this->createQueryBuilder('e')
-            ->where('e.status = :status')
-            ->setParameter('status', 'Active')
+        return $this->createQueryBuilder('k')
+            ->orderBy('k.date_entered', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
 }
 ```
+
+Entities without a `repositoryClass` get `MintEntityRepository` as their default repository.
 
 ### 4. Middleware Pipeline Pattern
 
@@ -129,17 +150,27 @@ Requests pass through a chain of middlewares before reaching controllers.
 
 ```php
 // app/ApiManager.php
+public function execute()
+{
+    $this->addBeforeRouteMiddlewares();
+    $this->app->addRoutingMiddleware();
+    $this->routeManager->execute();
+    $this->setErrorMiddleware();        // MintExceptionHandler + DoctrineConnectionExceptionHandler
+    $this->addAfterErrorMiddlewares();  // SecurityHeadersMiddleware
+}
+
 protected function addBeforeRouteMiddlewares()
 {
-    $this->app->addBodyParsingMiddleware();
-    $this->app->add(ParamsMiddleware::class);         // 4. Validate parameters
-    $this->app->add(RouteAccessMiddleware::class);    // 3. Check permissions
-    $this->app->add(AuthMiddleware::class);           // 2. Authenticate user
-    $this->app->add(JsonBodyParserMiddleware::class); // 1. Parse JSON body
+    $this->app->addBodyParsingMiddleware();                                  // 6. Slim body parsing
+    $this->app->add(CustomLoader::getObject(ParamsMiddleware::class));       // 5. Validate parameters
+    $this->app->add(CustomLoader::getObject(RouteAccessMiddleware::class));  // 4. Route `access` option
+    $this->app->add(CustomLoader::getObject(AdminMiddleware::class));        // 3. Route `admin_only` option
+    $this->app->add(CustomLoader::getObject(AuthMiddleware::class));         // 2. Authenticate user
+    $this->app->add(CustomLoader::getObject(JsonBodyParserMiddleware::class)); // 1. Parse JSON body
 }
 ```
 
-**Note:** Middlewares execute in reverse order (LIFO - Last In, First Out).
+**Note:** Slim executes middlewares in reverse order of adding (LIFO). The full order for a request, outermost first, is: `SecurityHeadersMiddleware` → error middleware → routing middleware (matches the route) → `JsonBodyParserMiddleware` → `AuthMiddleware` → `AdminMiddleware` → `RouteAccessMiddleware` → `ParamsMiddleware` → Slim body parsing → controller. The route is matched **before** the custom middlewares run, because they read the route definition via `RouteContext`.
 
 ### 5. Custom Loader Pattern
 
@@ -149,14 +180,17 @@ The **CustomLoader** pattern allows extending any class via the `custom/` direct
 // utils/CustomLoader.php
 public static function getObject($class, ...$args)
 {
-    // Check if custom version exists
-    $custom_class = str_replace('MintHCM', 'MintHCM\Custom', $class);
-    
+    // MintHCM\Api\X -> MintHCM\Custom\Api\X (custom/app/X.php)
+    $classReflection = new \ReflectionClass($class);
+    $custom_class = str_replace('MintHCM', 'MintHCM\Custom', $classReflection->getName());
     if (class_exists($custom_class) && is_subclass_of($custom_class, $class)) {
         $class = $custom_class;
     }
-    
-    return new $class(...$args);
+
+    // Each constructor parameter is resolved from the DI container by type;
+    // if the container cannot provide it, the next value from $args is used
+    $arguments = static::prepareConstructorArguments($class, $args);
+    return new $class(...$arguments);
 }
 ```
 
@@ -176,40 +210,51 @@ $controller = CustomLoader::getObject(MyController::class);
 The **LegacyConnector** bridges the API to legacy SuiteCRM/SugarCRM code.
 
 ```php
-// utils/LegacyConnector.php
+// utils/LegacyConnector.php (simplified)
 class LegacyConnector
 {
-    public function __construct($class_name, $link = null, $params = [])
+    public function __construct($class_name, $link = null, $params = array())
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');  // Switch to legacy directory
-        
-        if (isset($link)) {
-            require_once $link;
+        try {
+            if (isset($link)) {
+                require_once $link;
+            }
+            $this->class = new $class_name(...$params);
+        } finally {
+            chdir($old_cwd);  // Restore the previous working directory
         }
-        
-        $this->class = new $class_name(...$params);
-        
-        chdir('../api/');     // Switch back to API directory
     }
-    
+
     public function __call($name, $arguments)
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');
-        $response = $this->class->$name(...$arguments);
-        chdir('../api/');
-        
-        return $response;
+        try {
+            return $this->class->$name(...$arguments);
+        } finally {
+            chdir($old_cwd);
+        }
     }
+    // + __get, __set, __callStatic, callFunction(), runCallable()
 }
 ```
 
 **Usage:**
 
 ```php
-// Call legacy code from API
-$legacyBean = new LegacyConnector('SugarBean');
-$legacyBean->retrieve($id);
+use MintHCM\Utils\LegacyConnector;
+
+// Instantiate a legacy class and call it from the API
+$timeDate = new LegacyConnector('TimeDate', 'include/TimeDate.php');
+$now = $timeDate->nowDb();
+
+// Run any block of legacy code inside legacy/
+$result = LegacyConnector::runCallable(fn() => \BeanFactory::getBean('Employees', $id)->ACLAccess('edit'));
 ```
+
+For records, prefer `MintHCM\Data\BeanFactory` (chdir-safe, returns a `MintBean` wrapper).
 
 See [Legacy Integration](./07-legacy-integration.md) for more details.
 
@@ -243,21 +288,23 @@ Routes are defined declaratively in PHP arrays and registered automatically:
 
 ```php
 // app/Routes/routes/base.php
-$routes = [
-    'module.list' => [
-        'method' => 'GET',
-        'path' => '/module/{module}',
-        'class' => ModuleController::class,
-        'function' => 'list',
-    ],
-];
+$routes = array(
+    "global_search" => array(
+        "method" => "GET",
+        "path" => "/global_search",
+        "class" => GlobalSearchController::class,
+        "function" => "getData",
+        "options" => array('auth' => true),
+        // pathParams / queryParams / bodyParams ...
+    ),
+);
 ```
 
 The `RouteManager` automatically:
 1. Scans route directories
 2. Loads route definitions
 3. Registers routes with Slim
-4. Handles custom route overrides
+4. Lets a later location (e.g. `custom/app/Routes/routes/`) override a core route with the same key; a duplicate key in two files of the same location throws an exception
 
 See [Routing System](./05-routing.md) for details.
 
@@ -269,40 +316,38 @@ See [Routing System](./05-routing.md) for details.
 2. **Legacy Bootstrap** initializes SuiteCRM environment
 3. **Composer Autoloader** loads classes
 4. **Slim App** created with Doctrine container
-5. **ApiManager** configures middlewares and routes
-6. **Middleware Pipeline** processes request:
+5. **ApiManager** configures middlewares, routes and error handling
+6. **Routing middleware** matches the request to a route
+7. **Middleware Pipeline** processes request:
    - Parse JSON body
-   - Authenticate user
-   - Check route access
+   - Authenticate user (OAuth2 bearer token or legacy session)
+   - Check `admin_only` and `access` route options
    - Validate parameters
-7. **Router** matches request to route
 8. **Controller** executes business logic:
    - May call repositories
    - May call legacy code
    - May process data
-9. **Response** formatted and returned as JSON
-10. **Middlewares** process response (in reverse order)
+9. **Response** body written as JSON
+10. **Middlewares** process response (in reverse order; security headers are added last)
 11. **HTTP Response** sent to client
 
 ### Example Request Flow
 
 ```
-GET /api/Employees/123
+POST /api/Employees/Get/{uuid}
 
-1. index.php receives request
-2. Legacy environment initialized
-3. Slim app created
+1. index.php receives request, legacy environment initialized (include/entryPoint.php)
+2. Slim app created with the Doctrine/PHP-DI container
+3. Routing middleware matches route "Employees___get_record"
+   (generic module route from app/Routes/modules/module.php, prefixed with /Employees)
 4. Middlewares process request:
-   - JSON parser (no body for GET)
-   - Auth middleware validates JWT token
-   - Route access checks user permissions
-   - Params middleware validates "123"
-5. RouteManager finds route: Employees___detail
-6. ModuleController::detail() called
-7. Controller queries database via Doctrine:
-   $employee = $repository->find(123)
-8. Response formatted as JSON
-9. Response sent: {"data": {"id": "123", "name": "..."}}
+   - JSON parser parses the body
+   - AuthMiddleware validates the OAuth2 bearer token or the PHPSESSID session
+   - AdminMiddleware / RouteAccessMiddleware check route options
+   - ParamsMiddleware validates "id" and the body params ("links")
+5. ModuleController::getRecord() called
+6. Controller loads the record and writes JSON to the response body
+7. Response sent with Content-Type: application/json
 ```
 
 ## Key Components
@@ -319,8 +364,8 @@ Central application orchestrator:
 Handles route registration:
 - Scans route directories
 - Loads route files
-- Supports module-specific routes
-- Handles custom overrides
+- Supports module-specific routes (`{Module}___{key}` route names)
+- Lets custom route files override core routes by key
 
 ### CustomLoader
 
@@ -344,7 +389,7 @@ Bridges to legacy code:
 // ✅ Good - use constructor injection
 class MyController
 {
-    public function __construct(MyRepository $repo) { }
+    public function __construct(EntityManagerInterface $entityManager) { }
 }
 
 // ❌ Bad - don't create dependencies manually
@@ -352,7 +397,7 @@ class MyController
 {
     public function __construct()
     {
-        $this->repo = new MyRepository();
+        $this->entityManager = (new DoctrineContainerBuilder())->build()->get(EntityManagerInterface::class);
     }
 }
 ```
@@ -361,15 +406,15 @@ class MyController
 
 ```php
 // ✅ Good - delegate to services/repositories
-public function create(Request $request, Response $response): Response
+public function create(Request $request, Response $response, array $args): Response
 {
-    $data = $request->getParsedBody();
-    $employee = $this->employeeService->create($data);
-    return $response->withJson($employee);
+    $data = $this->myService->create($request->getParsedBody());
+    $response->getBody()->write(json_encode($data));
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
 }
 
 // ❌ Bad - too much logic in controller
-public function create(Request $request, Response $response): Response
+public function create(Request $request, Response $response, array $args): Response
 {
     // 50+ lines of validation, business logic, database queries...
 }
@@ -395,25 +440,9 @@ $manager = new ApiManager();
 
 ## Design Principles
 
-### SOLID Principles
-
-- **Single Responsibility**: Each class has one clear purpose
-- **Open/Closed**: Extensible via `custom/` without modifying core
-- **Liskov Substitution**: Custom classes can replace core classes
-- **Interface Segregation**: Slim interfaces, specific contracts
-- **Dependency Inversion**: Depend on abstractions (DI container)
-
-### DRY (Don't Repeat Yourself)
-
-- Shared utilities in `utils/`
-- Base controllers for common functionality
-- Reusable middlewares
-
-### KISS (Keep It Simple)
-
-- Clear, readable code over clever tricks
-- Standard patterns over custom solutions
-- Simple route definitions
+- **Open/Closed**: Extend via `custom/` (CustomLoader, custom route files, custom constants) without modifying core
+- **Substitutability**: A custom class is used only if it extends the core class (`is_subclass_of` check in `CustomLoader`)
+- **Shared code**: Reusable helpers live in `utils/`, `lib/Services/` and `data/`
 
 ## Next Steps
 

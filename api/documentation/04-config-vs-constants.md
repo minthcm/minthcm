@@ -8,9 +8,9 @@ Understanding the difference between configuration and constants is important fo
 |--------|-----------|---------------|
 | **Location** | `constants/` | `configs/` |
 | **Purpose** | Application-wide definitions | Runtime settings |
-| **Extensible** | ✅ Yes (via `custom/constants/`) | ❌ No |
+| **Extensible** | ✅ Yes (via `custom/constants/`) | Per instance only (`configs/mint/config_override.php`), not via `custom/` |
 | **Examples** | Module icons, menu items, enums | OAuth keys, database settings |
-| **File Type** | PHP arrays | Various (PHP, JSON, keys) |
+| **File Type** | PHP arrays | PHP (`$mint_config`), RSA key files |
 | **When to Use** | UI definitions, app behavior | Secrets, environment-specific |
 
 ## Constants
@@ -61,7 +61,7 @@ return [
 
 #### 2. global_search_excluded_modules.php
 
-Defines modules that should be excluded from global search results (but still indexed in ElasticSearch).
+Defines modules that should be excluded from global search results. The exclusion is applied at query time (`lib/Search/ElasticSearch/ElasticQuery.php`), so the modules stay indexed and no reindex is needed after a change.
 
 **File:** `constants/global_search_excluded_modules.php`
 
@@ -83,7 +83,7 @@ return [
 ];
 ```
 
-**Usage:** Used by ElasticSearch integration to filter out administrative/system modules from user-facing global search.
+**Usage:** Used by the ElasticSearch query builder to filter out administrative/system modules from user-facing global search.
 
 **Extension:** Add a file `custom/constants/global_search_excluded_modules/my_exclusions.php` to exclude additional modules.
 
@@ -97,18 +97,22 @@ Maps modules to their legacy view types (list and record views).
 <?php
 return [
     'ACLRoles' => [
+        'list' => false,   // Vue list view
+        'record' => true,  // legacy record view
+    ],
+    'Prospects' => [
         'list' => false,
         'record' => true,
-    ],
-    'Employees' => [
-        'list' => false,  // Uses new Vue list view
-        'record' => false, // Uses new Vue record view
     ],
     // ... more modules
 ];
 ```
 
-**Usage:** Determines whether to redirect to legacy views or use new Vue-based interfaces. Modules not listed default to new views.
+**Usage:** Determines whether the Vue router redirects to legacy views or uses Vue views (`backend.initData.legacy_views`). Keys: `list`, `record`, and optionally `popup` (relate popup, read by `vue/src/views/LegacyView/LegacyEventManager/LegacyEvents/OpenRelatePopup.ts`).
+
+The constant is post-processed in `app/Controllers/Init/Init.php` (`getLegacyViews()`):
+- **list** - a module without a `list` entry gets `false` (Vue list) only if it has `metadata/eslistviewdefs.php`; otherwise the value stays undefined and the Vue router falls back to the legacy list view.
+- **record** - a module without `metadata/recordviewdefs.php` always gets `true` (legacy record view), even if the constant says `false`.
 
 #### 4. list_constants.php
 
@@ -122,12 +126,18 @@ return array(
     "config" => array(
         "actions" => ["edit", "view", "delete"],
         "itemsPerPageOptions" => [5, 10, 20, 50, 100, 200, 500, 1000],
-        // ... more config
+        "defaultMaxItemsPerPage" => 20,
+        "otherElementsFixedHeight" => 360,
+    ),
+    'variables' => array(
+        "font" => array(/* primary, secondary */),
+        "color" => array(/* primary, secondary, light, dark, ... */),
+        // ...
     ),
 );
 ```
 
-**Usage:** Provides default settings for list view functionality, including available actions and pagination options.
+**Usage:** Provides default settings for list view functionality (available actions, pagination options, default page size) and the `variables` block (fonts, colors). Read by `ListInitController` and the ElasticSearch list classes.
 
 #### 5. menu_icons.php
 
@@ -156,10 +166,10 @@ Maps module names to their display icons.
 ```php
 <?php
 return array(
-    "Employees" => "account",
-    "Accounts" => "domain",
-    "Contacts" => "account-multiple",
-    "Leads" => "account-plus",
+    "Meetings" => "account-group",
+    "Notes" => "note",
+    "Calls" => "phone",
+    "Employees" => "account-tie",
     // ... more modules
 );
 ```
@@ -182,7 +192,9 @@ return array(
 );
 ```
 
-**Usage:** Populates the quick create dropdown menu with frequently used modules.
+**Usage:** Populates the quick create dropdown menu with frequently used modules (only modules available to the user are shown).
+
+**Important:** `quick_create` is loaded with `ConstantsLoader::getConstants('quick_create', true)` (`app/Controllers/Init/Init.php`). If any file exists in `custom/constants/quick_create/`, the custom entries **replace** the core list instead of being merged - list every module you want in the menu.
 
 ### How Constants Are Loaded
 
@@ -195,27 +207,32 @@ class ConstantsLoader
     private const NORMAL_PATH = 'constants/';
     private const CUSTOM_PATH = 'custom/constants/';
 
-    public static function getConstants(string $name): array | false
+    public static function getConstants(string $name, bool $only_custom_if_exist = false): array | false
     {
         $file_path = self::NORMAL_PATH . $name . '.php';
         $custom_files_path = self::CUSTOM_PATH . $name . '/';
 
-        // Load base constants
         if (file_exists($file_path)) {
-            $include_content = include $file_path;
-            
-            // Load custom extensions
-            $custom_files = scandir($custom_files_path);
-            if (!empty($custom_files)) {
-                foreach ($custom_files as $custom_file) {
-                    if (substr($custom_file, -4) !== '.php') {
-                        continue;
+            $core_include_content = include $file_path;
+            $include_content = [];
+
+            // Collect custom extensions (all *.php files, alphabetical order)
+            if (is_dir($custom_files_path)) {
+                $custom_files = scandir($custom_files_path);
+                if (!empty($custom_files)) {
+                    foreach ($custom_files as $custom_file) {
+                        if (substr($custom_file, -4) !== '.php') {
+                            continue;
+                        }
+                        $loaded_custom_content = include $custom_files_path . $custom_file;
+                        $include_content = array_merge($include_content, $loaded_custom_content);
                     }
-                    
-                    $custom_content = include $custom_files_path . $custom_file;
-                    // Merge custom constants with base
-                    $include_content = array_merge($include_content, $custom_content);
                 }
+            }
+
+            // Merge with core unless $only_custom_if_exist is set and custom files returned data
+            if (!($only_custom_if_exist && !empty($include_content))) {
+                $include_content = array_merge($core_include_content, $include_content);
             }
         } else {
             return false;
@@ -225,6 +242,8 @@ class ConstantsLoader
     }
 }
 ```
+
+With `$only_custom_if_exist = true`, non-empty custom content replaces the core constants entirely (used for `quick_create`). Paths are relative, so the working directory must be `api/`.
 
 ### Using Constants in Code
 
@@ -309,7 +328,7 @@ custom/constants/module_icons/
 └── 99-overrides.php
 ```
 
-All files are merged in alphabetical order. Use numeric prefixes to control merge order.
+All files are merged in alphabetical order. Use numeric prefixes to control merge order. String keys are overridden by later files; list-style constants (numeric keys, e.g. `global_search_excluded_modules`) are appended.
 
 ## Configuration
 
@@ -322,16 +341,18 @@ Configuration files contain **runtime settings** such as:
 - API secrets
 - Environment-specific settings
 
-These are **NOT extensible** via the `custom/` directory and should **NOT** be committed to version control (use `.gitignore`).
+These are **NOT extensible** via the `custom/` directory. Instance values (keys, `config_override.php`) are git-ignored; only the defaults file `configs/mint/config.php` is committed.
 
 ### Location
 
 ```
 api/configs/
-├── .gitignore
-├── private.key            # OAuth2 private key (RSA)
-├── public.key             # OAuth2 public key (RSA)
-└── mint/                  # MintHCM-specific configs
+├── .gitignore             # *.key, /*/*, !/*/config.php
+├── private.key            # OAuth2 private key (RSA, git-ignored)
+├── public.key             # OAuth2 public key (RSA, git-ignored)
+└── mint/
+    ├── config.php         # $mint_config defaults (committed); includes every other file in mint/
+    └── config_override.php # Instance settings (git-ignored, written by the installer)
 ```
 
 ### AppConfig Class
@@ -369,10 +390,10 @@ $basePath = AppConfig::getBasePath();
 
 ### Database Configuration
 
-Database configuration is inherited from the legacy MintHCM installation. Doctrine reads connection settings from:
+Doctrine does **not** read `legacy/config.php`. Its connection settings come from `$mint_config['database']` (`DoctrineContainerBuilder::addSettings()`), with defaults in `configs/mint/config.php` and the real credentials written by the installer to:
 
 ```
-../legacy/config.php
+api/configs/mint/config_override.php
 ```
 
 ### OAuth2 Keys
@@ -385,14 +406,20 @@ configs/
 └── public.key     # Generated RSA public key
 ```
 
-**Generate keys:**
+**Generate keys** (from the MintHCM root):
 
 ```bash
-cd configs
-# Generate private key
+./MintCLI oauth2:createKeys
+```
+
+Or manually:
+
+```bash
+cd api/configs
 openssl genrsa -out private.key 2048
-# Generate public key
 openssl rsa -in private.key -pubout -out public.key
+chmod 600 private.key public.key
+chown www-data:www-data private.key public.key
 ```
 
 **OAuth2 Client Secrets:**
@@ -405,12 +432,12 @@ Since version 4.3.0, OAuth2 client secrets (e.g., for the frontend client) are s
 
 This command:
 - Generates a new random secret for the 'frontend' OAuth2 client
-- Stores it in the database (plain text, not hashed)
+- Stores only its SHA-256 hash in the database (`legacy/MintCLI/src/Services/OAuth2Service.php`)
 - Does not require manual configuration in frontend `.env` files
 
 ### $mint_config — Application Settings
 
-The `$mint_config` global array (defined in `configs/mint/config.php`) holds runtime settings consumed by the API. It is loaded before every request and can be overridden per-environment via `configs/mint/config_override.php` (git-ignored).
+The `$mint_config` global array (defined in `configs/mint/config.php`) holds runtime settings consumed by the API. It is loaded before every request (composer `autoload.files`) and can be overridden per-environment via `configs/mint/config_override.php` (git-ignored). `config.php` includes every other file in `configs/mint/`, in alphabetical order.
 
 #### Available keys
 
@@ -421,7 +448,7 @@ The `$mint_config` global array (defined in `configs/mint/config.php`) holds run
 | `search.default_page_size` | `25` | Default number of items per list page |
 | `search.engines.ElasticSearch` | `[['host'=>'localhost','port'=>'9200',...]]` | ElasticSearch node list |
 | `oauth2_encryption_key` | `'MintHCM-DEFKEY'` | Encryption key for OAuth2 token payload |
-| `session_grant_interval` | `'PT4H'` | OAuth2 access token lifetime (ISO 8601 duration). Controls how long a user stays logged in before re-authentication is required. |
+| `session_grant_interval` | `'PT4H'` (config.php; code fallback `Server::GRANT_INTERVAL = 'PT1H'`) | OAuth2 access token lifetime (ISO 8601 duration). A browser session refreshes it silently, so it does not end the session – see `session_idle_timeout` / `session_absolute_timeout` below. |
 
 #### Overriding settings per environment
 
@@ -440,7 +467,7 @@ $mint_config['session_grant_interval'] = 'PT8H';
 
 Valid ISO 8601 duration examples: `PT1H` (1 hour), `PT4H` (4 hours), `PT8H` (8 hours), `P1D` (1 day).
 
-> **Note:** Changing `session_grant_interval` only affects **newly issued tokens**. Users logged in before the change will be logged out at their original token expiry; they receive the new TTL on next login.
+> **Note:** Changing `session_grant_interval` only affects **newly issued tokens**. Existing tokens keep their original expiry; browser sessions then get a token with the new TTL on the next silent refresh, while other API clients get it when they request a new token.
 
 #### Reading $mint_config in code
 
@@ -455,6 +482,29 @@ public static function getGrantInterval(): string
 
 Always provide a sensible fallback (`?? self::GRANT_INTERVAL`) so the application works even if `config_override.php` does not define the key.
 
+
+### $sugar_config — Security Settings Shared with Legacy
+
+Settings read by both layers (legacy pages and the API) live in `$sugar_config` – set them in `legacy/config_override.php`:
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `session_idle_timeout` | `'PT8H'` | Browser session ends after this long without a user request (ISO 8601; `'0'` disables). Polling requests marked with `X-Mint-Background-Request: 1` do not count. |
+| `session_absolute_timeout` | `'P7D'` | Browser session ends this long after the login, whatever the activity (ISO 8601; `'0'` disables). |
+| `hsts_max_age` | `0` (off) | `Strict-Transport-Security: max-age` sent over HTTPS by legacy pages and the API. Enable only with a valid certificate – browsers refuse plain HTTP for `max-age` seconds. |
+| `passwordsetting['legacy_md5_allowed']` | `true` | Accept plain unsalted md5 password hashes (re-hashed to bcrypt on login). Set to `false` after a transition period; accounts still holding md5 then need a password reset. |
+| `forgot_password_throttle` | `['max_per_username' => 5, 'max_per_ip' => 20, 'window_minutes' => 15]` | Rate limit of `POST /api/forget_password`. |
+| `login_throttle` | `['max_ip_failures' => 20, 'lock_timeout' => 3]` | Login rate limit: failed logins from one IP per lockout period, seconds to wait for the counter lock. |
+| `trusted_proxies` | `[]` | Reverse proxy addresses whose `X-Forwarded-For` is trusted by the rate limits. |
+| `session_cookie_samesite` | `'Lax'` | `SameSite` attribute of the session cookie. |
+
+Details: [Middlewares → Session and Login Hardening](11-middlewares.md#session-and-login-hardening).
+
+#### Production hardening
+
+- **Serve MintHCM over HTTPS only.** Configure TLS in the web server (or the reverse proxy in front of it) and redirect all plain HTTP requests to HTTPS. The session cookie gets the `Secure` flag automatically on HTTPS requests.
+- **HSTS** is off by default, because on an instance without a valid certificate it locks users out. Once HTTPS works, enable it with `hsts_max_age`, starting with a short value and raising it when everything works: `$sugar_config['hsts_max_age'] = 300;` → `31536000` (one year). Behind a reverse proxy that terminates TLS, set the header in the proxy instead.
+- **Error details** of the API (file, line, stack trace) are returned only when `$sugar_config['developerMode']` is on – keep it off in production.
 
 ## When to Use Constants vs Configuration
 
@@ -479,17 +529,18 @@ Always provide a sensible fallback (`?? self::GRANT_INTERVAL`) so the applicatio
 
 ### Use Configuration When:
 
-- ✅ Storing secrets (passwords, API keys, OAuth tokens)
-- ✅ Environment-specific settings (dev, staging, prod)
-- ✅ Database connection strings
-- ✅ Third-party service credentials
-- ✅ File paths that vary by environment
+- ✅ Storing secrets (passwords, encryption keys)
+- ✅ Environment-specific settings
+- ✅ Database connection settings
+- ✅ Search engine hosts
 
 **Examples:**
-- OAuth2 private/public keys
-- Database credentials
-- SMTP server settings
-- External API endpoints
+- OAuth2 private/public keys (`configs/*.key`)
+- Database credentials (`$mint_config['database']`)
+- ElasticSearch hosts (`$mint_config['search']`)
+- OAuth2 encryption key and token lifetime (`oauth2_encryption_key`, `session_grant_interval`)
+
+Settings shared with legacy (session timeouts, throttling, HSTS, ...) belong in `$sugar_config` (`legacy/config_override.php`), see above.
 
 ## Best Practices
 
@@ -549,35 +600,16 @@ Always provide a sensible fallback (`?? self::GRANT_INTERVAL`) so the applicatio
 
 ### Configuration
 
-1. **Never commit secrets to git**
+1. **Never commit secrets to git** - `configs/.gitignore` already ignores them:
    ```gitignore
-   # configs/.gitignore
-   private.key
-   public.key
-   *.local.php
+   *.key
+   /*/*
+   !/*/config.php
    ```
 
-2. **Provide example files**
-   ```bash
-   configs/database.example.php  # Committed
-   configs/database.php          # Ignored, created from example
-   ```
+2. **Keep defaults in `config.php`, instance values in `config_override.php`** - add new keys with a default to `configs/mint/config.php` and override them per instance.
 
-3. **Use environment variables for sensitive data**
-   ```php
-   $dbPassword = getenv('DB_PASSWORD') ?: 'default';
-   ```
-
-4. **Document configuration requirements**
-   ```php
-   /**
-    * OAuth2 Configuration
-    * 
-    * Requires:
-    * - configs/private.key (RSA 2048-bit)
-    * - configs/public.key (generated from private key)
-    */
-   ```
+3. **Always read keys with a fallback** - `$mint_config['my_key'] ?? self::DEFAULT` (see `Server::getGrantInterval()` above).
 
 ## Common Patterns
 
@@ -618,6 +650,7 @@ return [
 
 ```php
 // custom/constants/quick_create/custom_entries.php
+// Replaces the core list entirely - only these modules will be shown
 return [
     'Tasks' => translate('LBL_LIST_TITLE', 'Tasks'),
     'Meetings' => translate('LBL_LIST_TITLE', 'Meetings'),
@@ -628,17 +661,12 @@ return [
 ### Pattern: Environment-Specific Config
 
 ```php
-// app/Config/AppConfig.php
-public static function getEnvironment()
-{
-    return getenv('APP_ENV') ?: 'production';
-}
-
-public static function isDebug()
-{
-    return self::getEnvironment() === 'development';
-}
+// configs/mint/config_override.php (git-ignored, per instance)
+$mint_config['search']['default_page_size'] = 50;
+$mint_config['session_grant_interval'] = 'PT8H';
 ```
+
+Developer mode in the API follows `$sugar_config['developerMode']` (Doctrine dev mode, error details in `MintExceptionHandler`); there is no separate API environment setting.
 
 ### Real-World Example: Complete Custom Constants Setup
 
@@ -662,7 +690,7 @@ return [
     'PerformanceNotes',
 ];
 
-// custom/constants/quick_create/hr_quick_create.php
+// custom/constants/quick_create/hr_quick_create.php (replaces the core quick create list)
 return [
     'Employees' => translate('LBL_LIST_TITLE', 'Employees'),
     'Candidates' => translate('LBL_LIST_TITLE', 'Candidates'),
@@ -709,17 +737,13 @@ $icons = [
 
 **Solution:**
 ```bash
-# 1. Verify the constant is loaded
-php -r "require 'api/utils/ConstantsLoader.php'; 
-        var_dump(MintHCM\Util\ConstantsLoader::getConstants('global_search_excluded_modules'));"
-
-# 2. Rebuild ElasticSearch index
+# Verify the constant is loaded (run from api/ - paths are relative)
 cd api
-php bin/console elasticsearch:reindex
-
-# 3. Clear caches
-rm -rf api/data/cache/*
+php -r "require 'utils/ConstantsLoader.php';
+        var_dump(MintHCM\Utils\ConstantsLoader::getConstants('global_search_excluded_modules'));"
 ```
+
+No reindex or cache clearing is needed: the exclusion is applied when the search query is built. If the module still appears, check the module name (it must match the `$beanList` key) and that the file returns an array.
 
 ### Configuration Not Found
 
@@ -727,14 +751,15 @@ rm -rf api/data/cache/*
 
 **Solution:**
 ```bash
-# Check file exists
-ls -la configs/private.key
+# Check the key files exist (from api/)
+ls -la configs/private.key configs/public.key
 
-# Verify permissions
-chmod 600 configs/private.key
+# Verify permissions and ownership
+chmod 600 configs/private.key configs/public.key
+chown www-data:www-data configs/private.key configs/public.key
 
-# Check paths in code
-var_dump(realpath('configs/private.key'));
+# Check the instance config is present
+ls -la configs/mint/config_override.php
 ```
 
 ## Next Steps

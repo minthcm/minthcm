@@ -28,7 +28,7 @@
 
                 <div class="form-content">
                     <MintStatusBox v-if="loginError" type="error">
-                        {{ languages.label('LBL_MINT4_AUTH_LOGIN_ERROR') }}
+                        {{ languages.label(auth.loginErrorLabel) }}
                     </MintStatusBox>
                     <MintStatusBox v-if="authorizeError" type="error">
                         {{ languages.label('LBL_MINT4_MCP_AUTHORIZE_FAILED') }}

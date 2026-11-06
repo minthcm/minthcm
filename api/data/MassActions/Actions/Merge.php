@@ -11,6 +11,9 @@ class Merge extends MassAction
     
     public function execute()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         $_SESSION['merge_uids'] = $this->ids;
         return ['success' => true, 'module' => $this->module_name];
     }

@@ -750,6 +750,9 @@ class SugarWebServiceImpl
             return 0;
         }
 
+        // lets this session (once, for 60 seconds) be opened in the UI with the MSID parameter
+        $_SESSION['seamless_login_until'] = time() + 60;
+
         $GLOBALS['log']->info('End: SugarWebServiceImpl->seamless_login');
         return 1;
     }

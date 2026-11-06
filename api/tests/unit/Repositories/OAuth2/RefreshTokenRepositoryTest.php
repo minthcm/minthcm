@@ -18,9 +18,21 @@ final class RefreshTokenRepositoryTest extends TestCase
         self::assertTrue($repository->isRefreshTokenRevoked('token-id'));
     }
 
+    public function testReturnsTrueWhenRefreshTokenIsExplicitlyRevoked(): void
+    {
+        $token = $this->createMintToken();
+        $token->token_is_revoked = true;
+        $token->refresh_token_expires = new \DateTime('+1 day');
+
+        $repository = new RefreshTokenRepository($this->createEntityManager($token));
+
+        self::assertTrue($repository->isRefreshTokenRevoked('token-id'));
+    }
+
     public function testReturnsTrueWhenRefreshTokenIsExpired(): void
     {
         $token = $this->createMintToken();
+        $token->token_is_revoked = false;
         $token->refresh_token_expires = new \DateTime('-1 hour');
 
         $repository = new RefreshTokenRepository($this->createEntityManager($token));
@@ -31,7 +43,8 @@ final class RefreshTokenRepositoryTest extends TestCase
     public function testReturnsFalseWhenRefreshTokenIsValid(): void
     {
         $token = $this->createMintToken();
-        $token->refresh_token_expires = new \DateTime('+1 hour');
+        $token->token_is_revoked = false;
+        $token->refresh_token_expires = new \DateTime('+1 day');
 
         $repository = new RefreshTokenRepository($this->createEntityManager($token));
 
@@ -48,10 +61,12 @@ final class RefreshTokenRepositoryTest extends TestCase
         $repository->revokeRefreshToken('token-id');
     }
 
-    public function testSetsDeletedAndFlushesWhenRevokingRefreshToken(): void
+    public function testMarksTokenAsRevokedAndFlushesWhenRevokingRefreshToken(): void
     {
         $token = $this->createMintToken();
         $token->deleted = false;
+        $token->token_is_revoked = false;
+        $token->refresh_token_expires = new \DateTime('+1 day');
 
         $em = $this->createEntityManager($token);
         $em->expects($this->once())->method('persist')->with($token);
@@ -61,6 +76,8 @@ final class RefreshTokenRepositoryTest extends TestCase
         $repository->revokeRefreshToken('token-id');
 
         self::assertTrue($token->deleted);
+        self::assertTrue($token->token_is_revoked);
+        self::assertTrue($repository->isRefreshTokenRevoked('token-id'));
     }
 
     private function createMintToken(): MintToken&MockObject

@@ -15,7 +15,7 @@ interface BeanData {
     fieldDefs: ComputedRef
 }
 
-export const useLink = (link: string, relationshipName: string, beanData: BeanData, fake: boolean = false) => {
+export const useLink = (link: string, relationshipName: string, beanData: BeanData, fake = false) => {
     const beans = ref<Map<string, ReturnType<typeof useBean>>>(new Map())
     const beansToAdd = ref<Map<string, RelationshipRecord>>(new Map())
     const beansToRemove = ref<Set<string>>(new Set())
@@ -97,7 +97,7 @@ export const useLink = (link: string, relationshipName: string, beanData: BeanDa
         })
     }
 
-    async function fetchRelatedRecords(subpanelKey: string, paginateBy: number = -1, page: number = 0, sortBy: string = '', sortOrder: string = '') {
+    async function fetchRelatedRecords(subpanelKey: string, paginateBy = -1, page = 0, sortBy = '', sortOrder = '', signal?: AbortSignal) {
         const result = await subpanelsApi.fetchSubpanelsData(
             beanData.module,
             subpanelKey,
@@ -105,7 +105,8 @@ export const useLink = (link: string, relationshipName: string, beanData: BeanDa
             paginateBy,
             page,
             sortBy,
-            sortOrder
+            sortOrder,
+            signal
         )
         if (!result.data) {
             return

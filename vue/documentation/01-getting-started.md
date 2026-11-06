@@ -6,8 +6,8 @@ This guide will help you set up the MintHCM frontend development environment and
 
 Before you begin, ensure you have:
 
-- **Node.js** - Version21.x (recommended: latest LTS)
-- **npm** - Comes with Node.js (version 7+ recommended)
+- **Node.js** - `^26.12.1 || ^24.22.1` (the `engines` field in `vue/package.json`). Node 26 LTS is recommended; the repository-root `.nvmrc` pins `26.12.1`, so `nvm use` run from the repository root selects it
+- **npm** - The version bundled with that Node release
 - **Git** - For version control
 - **Code Editor** - VS Code recommended with these extensions:
   - Volar (Vue Language Features)
@@ -20,11 +20,10 @@ Before you begin, ensure you have:
 ```bash
 # Check Node.js version
 node --version
-# Should output: v21.x.x
+# Should output: v26.x.x (>= 26.12.1) or v24.x.x (>= 24.22.1)
 
 # Check npm version
 npm --version
-# Should output: 7.x.x or higher
 ```
 
 ## Installation
@@ -85,7 +84,7 @@ npm run dev
 You should see output like:
 
 ```
-  VITE v3.x.x  ready in 1234 ms
+  VITE v6.x.x  ready in 1234 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
@@ -114,30 +113,27 @@ Create an optimized production build:
 npm run build
 ```
 
-Output will be in the `dist/` directory:
+Output will be in the `vue/dist/` directory:
 
 ```
 dist/
 ├── assets/          # Bundled JS/CSS with cache busting
 ├── index.html       # Entry point
-└── ...
+├── favicon.ico      # From public/
+└── bg.jpg           # From public/
 ```
+
+`vue/dist/` is committed to the repository and served in place: the root `.htaccess` sets `DirectoryIndex vue/dist/index.html` and rewrites `assets/*` to `vue/dist/assets/*`. There is no copy step.
 
 **Build size:** Typically 2-4 MB (minified, gzipped ~800KB)
 
 ### Build for Repository
 
-Special build that copies assets to the parent directory:
-
 ```bash
 npm run build:repo
 ```
 
-This:
-1. Builds the production version
-2. Removes old `../assets/` directory
-3. Copies new build to parent directory
-4. Removes `../index.html` (not needed in MintHCM structure)
+`build:repo` is an alias of `npm run build` (see `package.json`). It is kept for compatibility with existing scripts and does not copy files anywhere.
 
 ## First Steps
 
@@ -153,17 +149,11 @@ After starting the dev server, you should see:
 
 Make a simple change to test hot reload:
 
-**File:** `src/views/DashboardView/DashboardView.vue`
+**File:** `src/views/AuthView/AuthViewLogin.vue` (the login form, rendered at `#/auth/login` when you are logged out)
 
-```vue
-<template>
-    <div>
-        <h1>Dashboard</h1>
-        <!-- Add this line: -->
-        <p>Hello, MintHCM Developer!</p>
-    </div>
-</template>
-```
+Add a line to its template, for example `<p>Hello, MintHCM Developer!</p>`.
+
+> Note: the dashboard (`/`) is rendered by `LegacyView` (an iframe with the legacy Home page), so `src/views/DashboardView/DashboardView.vue` is not used by any route and editing it shows nothing.
 
 Save the file. The browser should update automatically without full page reload.
 
@@ -199,17 +189,13 @@ npm run lint -- --fix
 ```
 
 **Configuration files:**
-- `.eslintrc.js` - ESLint rules
-- `prettier.config.js` - Code formatting rules
+- `.eslintrc.js` - ESLint rules; the Prettier options (no semicolons, single quotes, 4-space indent, `printWidth: 120`) are set in its `prettier/prettier` rule. There is no separate Prettier config file.
 
 ### TypeScript
 
 The project uses TypeScript for type safety:
 
-```bash
-# Check TypeScript errors (happens automatically in IDE)
-npx vue-tsc --noEmit
-```
+Type errors are reported by the IDE (Volar). `vue-tsc` is not a project dependency and `vite build` does not type-check, so a type error does not fail the build.
 
 **Configuration:** `tsconfig.json`
 
@@ -276,7 +262,7 @@ If port 5173 is already taken:
 npm run dev -- --port 3000
 ```
 
-Or set it in `vite.config.ts`:
+Or set it in `vite.config.mts`:
 
 ```typescript
 server: {
@@ -293,12 +279,16 @@ server: {
 1. Check `.env` file exists and has correct PROXY_URL
 2. Restart dev server after changing `.env`
 3. Verify backend is running at the specified URL
-4. Check `vite.config.ts` proxy configuration:
+4. Check `vite.config.mts` proxy configuration (both `/api` and `/legacy` are proxied):
 
 ```typescript
 server: {
     proxy: {
         '/api': {
+            target: process.env.PROXY_URL ?? '',
+            changeOrigin: true,
+        },
+        '/legacy': {
             target: process.env.PROXY_URL ?? '',
             changeOrigin: true,
         },
@@ -322,7 +312,7 @@ server: {
 
 **Solutions:**
 
-1. Check TypeScript errors: `npx vue-tsc --noEmit`
+1. Check the Node version against `engines` (`node --version`)
 2. Fix any ESLint errors: `npm run lint`
 3. Clear cache and rebuild:
    ```bash
@@ -347,24 +337,24 @@ Available environment variables:
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `PROXY_URL` | Backend API URL | - | ✅ Yes |
+| `PROXY_URL` | Backend URL the dev server proxies `/api` and `/legacy` to | - | ✅ Yes (dev server only) |
+| `CLIENT_SECRET` | Legacy OAuth2 client secret, exposed as `process.env.CLIENT_SECRET` | `''` | No - not read by app code since 4.3.0 (see below) |
 | `NODE_ENV` | Environment mode | `development` | Auto-set |
 
 ### Using Environment Variables in Code
 
-```typescript
-// In vite.config.ts
-export default defineConfig({
-    define: {
-        'process.env': {
-            PROXY_URL: process.env.PROXY_URL ?? '',
-        },
-    },
-})
+`vite.config.mts` loads `.env` with `loadEnv()` and exposes to application code only what is listed in `define`. Today that is just `CLIENT_SECRET`:
 
-// Access in code
-const proxyUrl = process.env.PROXY_URL
+```typescript
+// vite.config.mts
+define: {
+    'process.env': {
+        CLIENT_SECRET: process.env.CLIENT_SECRET ?? '',
+    },
+},
 ```
+
+`PROXY_URL` is used only by the dev-server proxy and is **not** available in application code. To expose another variable, add it to `define` in the same way.
 
 **OAuth2 Client Secret Handling:**
 
@@ -403,7 +393,7 @@ npm run dev -- --host    # Expose to network
 
 # Production
 npm run build            # Build for production
-npm run build:repo       # Build and copy to parent
+npm run build:repo       # Alias of npm run build
 
 # Code Quality
 npm run lint             # Check code style

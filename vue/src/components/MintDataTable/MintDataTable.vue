@@ -60,10 +60,10 @@ interface Column {
 }
 
 interface Props {
-    columns: Array<Object>
-    records: Array<Object>
+    columns: Array<unknown>
+    records: Array<unknown>
     module?: string
-    subpanel?: Object
+    subpanel?: unknown
     loading?: number
     skeletonIds?: Set<string>
 }
@@ -89,7 +89,7 @@ function onSortBy(sortItems: Array<{ key: string; order: string }>) {
 const headers = computed(() => {
     const cols: { key: string; title: string; sortable: boolean }[] = typedColumns.value.map(col => ({
         key: col.name,
-        title: col.label,
+        title: languages.label(col.label, props.module),
         sortable: true,
     }))
     if (hasInlineButtons.value) {

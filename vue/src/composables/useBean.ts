@@ -57,6 +57,12 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
 
     const filesToSave = ref<{ [key: string]: File }>({})
 
+    let fetchAbortController = new AbortController()
+    function abort() {
+        fetchAbortController.abort()
+        fetchAbortController = new AbortController()
+    }
+
     function getFieldDefs(fieldName: string): FieldVardef {
         if (fieldDefs.value[fieldName]) {
             return fieldDefs.value[fieldName]
@@ -272,7 +278,7 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         const apiCall = mintApi
             .post(`${module}/Get${id ? `/${id}` : ''}`, {
                 links: fetch_links
-            }, { rawError: true })
+            }, { rawError: true, signal: fetchAbortController.signal })
             .then((response) => {
                 if (response.status === 200 && response.data) {
                     setData(response.data)
@@ -322,7 +328,7 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         const response = await mintApi.post(`${module}/Logic${id ? `/${id}` : ''}`, {
             attributes: fieldsValues.value,
             triggerFields
-        })
+        }, { signal: fetchAbortController.signal })
         if (response.data.rules?.length) {
             response.data.rules.forEach((r: any) => {
                 const rule = logic.rules.value.find((rule: any) => rule.key === r.key)
@@ -630,5 +636,6 @@ export const useBean = (module: string, id: string, fetch_links: Array<string> =
         setAttributesFromBeanId,
         originalId,
         clearDuplicateState,
+        abort,
     }
 }

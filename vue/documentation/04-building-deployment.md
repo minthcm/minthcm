@@ -2,6 +2,11 @@
 
 This guide covers how to build the MintHCM frontend for development and production environments.
 
+## Requirements
+
+- **Node.js** `^26.12.1 || ^24.22.1` (`engines` in `vue/package.json`; the repository-root `.nvmrc` pins `26.12.1`)
+- Dependencies installed with `npm install` (or `npm ci`) in `vue/`
+
 ## Build Modes
 
 ### Development Build
@@ -21,18 +26,18 @@ npm run dev
 **Output:**
 
 ```
-VITE v3.x.x  ready in 450 ms
+VITE v6.x.x  ready in 450 ms
 
 ➜  Local:   http://localhost:5173/
 ➜  Network: use --host to expose
-➜  press h to show help
+➜  press h + enter to show help
 ```
 
 **What happens:**
 
-1. Vite starts HTTP server on port 5173
+1. Vite starts HTTP server on port 5173 (Vite default; not set in `vite.config.mts`)
 2. No bundling - serves files as native ES modules
-3. Proxies `/api` and `/legacy` to backend (from PROXY_URL)
+3. Proxies `/api` and `/legacy` to backend (from `PROXY_URL` in `.env`)
 4. Watches files for changes
 5. Hot-reloads components on save
 
@@ -77,9 +82,9 @@ npm run build
 **What happens:**
 
 ```
-1. TypeScript compilation
+1. TypeScript → JavaScript (transpiled by esbuild, no type-check)
    ↓
-2. Vue SFC compilation  
+2. Vue SFC compilation
    ↓
 3. SCSS → CSS processing
    ↓
@@ -87,495 +92,191 @@ npm run build
    ↓
 5. Code splitting (create chunks)
    ↓
-6. Minification (reduce file size)
+6. Minification (esbuild, Vite default)
    ↓
-7. Asset optimization (images, fonts)
+7. Asset hashing (images, fonts)
    ↓
-8. Generate dist/ folder
+8. Generate vue/dist/ folder
 ```
 
 **Build output:**
 
 ```
-dist/
+vue/dist/
 ├── index.html                      # Entry point
 ├── assets/
-│   ├── index.a1b2c3d4.js          # Main bundle (~800 KB gzipped)
-│   ├── index.e5f6g7h8.css         # Styles (~100 KB gzipped)
-│   ├── vendor.i9j0k1l2.js         # Third-party libs
-│   ├── ListView.m3n4o5p6.js       # Route chunk
-│   ├── DetailView.q7r8s9t0.js     # Route chunk
-│   └── ...
-├── favicon.ico
-└── robots.txt
+│   ├── index-<hash>.js             # Main bundle
+│   ├── index-<hash>.css            # Main styles
+│   ├── <Chunk>-<hash>.js           # Lazy-loaded chunks (field components, admin view, ...)
+│   └── ...                         # Fonts, images, flag SVGs
+├── favicon.ico                     # From public/
+└── bg.jpg                          # From public/
 ```
 
 **File naming:**
-- Hash in filename (e.g., `a1b2c3d4`) changes when content changes
-- Enables long-term caching (cache forever, new hash = new file)
+- Hash in filename (e.g., `C_TSTIPe` in `index-C_TSTIPe.js`) changes when content changes
+- Enables long-term caching (new hash = new file)
 
-**Build statistics:**
-
-```bash
-vite build
-
-vite v3.x.x building for production...
-✓ 245 modules transformed.
-dist/index.html                   0.45 kB
-dist/assets/index.a1b2c3d4.js     312.45 kB │ gzip: 98.23 kB
-dist/assets/index.e5f6g7h8.css    45.12 kB │ gzip: 12.34 kB
-✓ built in 15.43s
-```
-
-### Repository Build
-
-Special build for MintHCM's structure (copies to parent directory):
+### `build:repo`
 
 ```bash
 npm run build:repo
 ```
 
-**What it does:**
-
-```bash
-npm run build &&           # Build production
-rm -r ../assets &&         # Remove old assets
-cp -r dist/* ../ &&        # Copy to parent
-rm ../index.html           # Remove index (not needed in MintHCM)
-```
-
-**Result:**
-
-```
-/var/www/minthcm/
-├── assets/                # Built assets
-│   ├── index.a1b2.js
-│   └── index.c3d4.css
-├── api/                   # Backend
-├── legacy/                # Legacy PHP
-└── vue/                   # Source (for next rebuild)
-```
+`build:repo` is an alias of `npm run build` (`"build:repo": "npm run build"` in `package.json`). It does not copy anything; the output stays in `vue/dist/`.
 
 ## Build Configuration
 
-### `vite.config.ts`
+### `vite.config.mts`
 
-Main build configuration:
+Main build configuration (abridged from the real file):
 
 ```typescript
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
+import path from 'path'
+
+// Load .env into process.env for this config
+process.env = {
+    ...process.env,
+    ...loadEnv(process.env.NODE_ENV as string, process.cwd(), ''),
+}
 
 export default defineConfig({
-    base: './',                    // Use relative paths
-    
+    base: './',                     // Relative asset paths (instance can live in a subfolder)
+
     plugins: [
         vue(),                      // Vue 3 support
-        vuetify({                   // Vuetify auto-import
+        vuetify({                   // Vuetify 4 auto-import
             autoImport: true,
         }),
     ],
-    
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, 'src'),  // @ = src/
-        },
-    },
-    
-    build: {
-        target: 'esnext',           // Modern browsers only
-        outDir: 'dist',             // Output directory
-        assetsDir: 'assets',        // Assets subdirectory
-        sourcemap: false,           // No source maps in prod
-        minify: 'terser',           // Minification method
-    },
-    
-    server: {
-        port: 5173,                 // Dev server port
-        proxy: {
-            '/api': {               // Proxy API requests
-                target: process.env.PROXY_URL,
-                changeOrigin: true,
-            },
-            '/legacy': {            // Proxy legacy requests
-                target: process.env.PROXY_URL,
-                changeOrigin: true,
-            },
-        },
-    },
-})
-```
 
-### Environment Variables
-
-Build-time environment variables (`.env`):
-
-```bash
-# Backend URL for API proxy
-PROXY_URL=http://localhost:8080/minthcm
-
-# OAuth client secret (optional)
-CLIENT_SECRET=your_secret_here
-```
-
-**Access in code:**
-
-```typescript
-// vite.config.ts
-export default defineConfig({
     define: {
         'process.env': {
             CLIENT_SECRET: process.env.CLIENT_SECRET ?? '',
         },
     },
-})
 
-// In application code
-const secret = process.env.CLIENT_SECRET
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),  // @ = src/
+        },
+    },
+
+    build: {
+        target: 'esnext',           // Modern browsers only
+    },
+
+    server: {
+        base: '/',
+        proxy: {
+            '/api': {               // Proxy API requests
+                target: process.env.PROXY_URL ?? '',
+                changeOrigin: true,
+            },
+            '/legacy': {            // Proxy legacy requests
+                target: process.env.PROXY_URL ?? '',
+                changeOrigin: true,
+            },
+        },
+    },
+})
 ```
 
-**Environment modes:**
+`outDir` (`dist`), `assetsDir` (`assets`), `minify` (esbuild) and `sourcemap` (off) use Vite defaults.
+
+### Environment Variables
+
+Environment variables (`.env`, created from `.env.example`):
 
 ```bash
-# Development (default)
-npm run dev
-# Uses .env
+# Backend URL for the dev-server proxy
+PROXY_URL=http://localhost:8080/minthcm
 
-# Production
-npm run build
-# Uses .env.production (if exists) or .env
+# Legacy OAuth client secret - kept in .env.example, not read by app code since 4.3.0
+CLIENT_SECRET=
 ```
+
+`PROXY_URL` is used only by the dev server. `CLIENT_SECRET` is still exposed through `define`, but since 4.3.0 the frontend fetches the client secret from the backend at login (`getInternalFrontendToken` in `src/store/auth.ts`). See [Getting Started](./01-getting-started.md#environment-variables).
 
 ## Optimization Strategies
 
 ### Code Splitting
 
-**Automatic route-based splitting:**
+**Route-based splitting** - lazy route components get their own chunk:
 
 ```typescript
 // router/routes.ts
-const routes = [
-    {
-        path: '/modules/:module/list',
-        // Lazy load - creates separate chunk
-        component: () => import('@/views/ListView/ListView.vue')
-    }
-]
+{
+    path: '/Administration/:viewName',
+    name: 'admin-view',
+    component: () => import('@/views/AdminView/AdminView.vue'),
+    meta: { auth: true, adminOnly: true },
+},
 ```
 
-**Manual splitting:**
+`ListView`, `RecordView` and `LegacyView` are imported eagerly and are part of the main bundle.
 
-```typescript
-// Lazy load heavy component
-const TinyMCE = defineAsyncComponent(() =>
-    import('@/components/MintWysiwyg.vue')
-)
-```
-
-**Benefits:**
-- Smaller initial bundle
-- Faster first paint
-- Load features on demand
+**Component splitting:** `Field.vue` loads every field component with a dynamic `import()`, so each `{type}.{view}.vue` is its own chunk.
 
 ### Tree Shaking
 
-Vite automatically removes unused code:
+Vite automatically removes unused exports from ES modules. Import specific exports (`import { DateTime } from 'luxon'`) rather than whole namespaces.
 
-```typescript
-// utils.ts
-export function used() { }
-export function unused() { }  // Not imported anywhere
+### Assets
 
-// app.ts
-import { used } from './utils'
-used()
-
-// Build result: unused() is NOT in final bundle
-```
-
-**Tips for better tree shaking:**
-- Use ES modules (`import/export`)
-- Avoid side effects
-- Import specific exports: `import { foo } from 'lib'` not `import * as lib from 'lib'`
-
-### Asset Optimization
-
-**Images:**
-
-```vue
-<template>
-    <!-- Vite optimizes and hashes images -->
-    <img src="@/assets/logo.png" alt="Logo" />
-    <!-- Result: <img src="/assets/logo.a1b2c3.png" /> -->
-</template>
-```
-
-**Fonts:**
-
-```scss
-@font-face {
-    font-family: 'Roboto';
-    // Vite inlines small fonts, hashes large ones
-    src: url('@/assets/fonts/roboto.woff2');
-}
-```
-
-**CSS:**
-
-- Unused CSS is purged
-- Critical CSS can be inlined
-- Styles are minified and hashed
+- Images imported from `src/assets/` (e.g. `@/assets/mint_logo.png`) are hashed and emitted to `dist/assets/`; with `base: './'` they are referenced relatively.
+- Icon fonts come from `@mdi/font` (imported in `src/plugins/vuetify.ts`); Roboto is loaded from Google Fonts at runtime by `src/plugins/webfontloader.ts`.
+- CSS is minified and hashed. No CSS purging is configured.
 
 ### Bundle Analysis
 
-Analyze bundle size:
-
-```bash
-# Install analyzer
-npm install -D rollup-plugin-visualizer
-
-# Add to vite.config.ts
-import { visualizer } from 'rollup-plugin-visualizer'
-
-export default defineConfig({
-    plugins: [
-        visualizer({
-            open: true,
-            gzipSize: true,
-        })
-    ]
-})
-
-# Build and analyze
-npm run build
-```
-
-Opens interactive treemap showing what's in your bundle.
+To inspect the bundle, temporarily add `rollup-plugin-visualizer` (not a project dependency) to the `plugins` array in `vite.config.mts` and run `npm run build`. Do not commit that change.
 
 ## Deployment
 
-### Static File Hosting
+### How MintHCM Serves the Frontend
 
-The `dist/` folder is a standard static site - deploy anywhere:
-
-**Nginx:**
-
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-    root /var/www/minthcm;
-    
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-    
-    location /api {
-        proxy_pass http://backend:9000;
-    }
-    
-    location /legacy {
-        proxy_pass http://backend:9000;
-    }
-}
-```
-
-**Apache:**
+The frontend is **not** copied anywhere. `vue/dist/` is committed to the repository and served in place by Apache through the instance root `.htaccess` (not tracked in git; the template is `legacy/MintCLI/src/Assets/.htaccess`, written during installation and regenerated by upgrade scripts, keeping the instance `RewriteBase`). Relevant rules:
 
 ```apache
-<VirtualHost *:80>
-    DocumentRoot /var/www/minthcm
-    
-    <Directory /var/www/minthcm>
-        Options -Indexes +FollowSymLinks
-        AllowOverride All
-        Require all granted
-        
-        # SPA routing
-        RewriteEngine On
-        RewriteBase /
-        RewriteRule ^index\.html$ - [L]
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule . /index.html [L]
-    </Directory>
-    
-    ProxyPass /api http://backend:9000/api
-    ProxyPass /legacy http://backend:9000/legacy
-</VirtualHost>
+DirectoryIndex vue/dist/index.html
+
+RewriteRule ^assets/(.*?)$ vue/dist/assets/$1 [L]
+RewriteRule ^legacy/(.*?)$ legacy/index.php/$1 [L]
+RewriteRule ^api/(.*?)$ api/index.php [L]
+RewriteRule ^bg.jpg$ vue/dist/bg.jpg [L]
+RewriteRule ^favicon.ico$ vue/dist/favicon.ico [L]
+
+# SPA fallback
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ vue/dist/index.html [L]
 ```
 
-### MintHCM Integration
-
-In MintHCM, the built frontend lives in the root:
-
-```
-/var/www/minthcm/
-├── assets/              # Built Vue assets
-├── index.html           # (Not used - PHP handles entry)
-├── api/                 # Backend API
-├── legacy/              # Legacy PHP application
-└── index.php            # PHP entry point
-```
+The API (`api/index.php`) and the legacy application (`legacy/`) are PHP in the same document root, so no reverse proxy is needed. Routing inside the SPA uses hash history (`#/...`).
 
 **Build and deploy:**
 
 ```bash
 cd vue
-npm run build:repo
+npm run build      # or npm run build:repo (alias)
 ```
 
-This automatically:
-1. Builds production bundle
-2. Copies to parent `assets/`
-3. Removes unnecessary `index.html`
+Then commit the changed `vue/dist/` together with the source changes, or rebuild on the target server.
 
-### CDN Deployment
+### Caching
 
-For optimal performance, serve assets via CDN:
-
-**1. Build with absolute paths:**
-
-```typescript
-// vite.config.ts
-export default defineConfig({
-    base: 'https://cdn.your-domain.com/assets/',
-})
-```
-
-**2. Build:**
-
-```bash
-npm run build
-```
-
-**3. Upload `dist/assets/` to CDN**
-
-**4. Update HTML to reference CDN URLs**
-
-### Caching Strategy
-
-**Recommended HTTP headers:**
-
-```nginx
-# Versioned assets (have hash in filename) - cache forever
-location /assets/ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-}
-
-# index.html - never cache
-location = /index.html {
-    expires -1;
-    add_header Cache-Control "no-cache, no-store, must-revalidate";
-}
-```
-
-**Why?**
-- Hashed assets can be cached forever (hash changes = new file)
-- index.html must be fresh (contains references to current hashed assets)
-
-## Performance Optimization
-
-### Lazy Loading
-
-**Routes:**
-
-```typescript
-const routes = [
-    {
-        path: '/admin',
-        component: () => import('@/views/AdminView.vue')
-    }
-]
-```
-
-**Components:**
-
-```typescript
-import { defineAsyncComponent } from 'vue'
-
-const HeavyComponent = defineAsyncComponent(() =>
-    import('@/components/HeavyComponent.vue')
-)
-```
-
-**Libraries:**
-
-```typescript
-// Don't import entire library
-import { format } from 'date-fns'  // ✅ Tree-shakeable
-
-// Instead of:
-import DateFns from 'date-fns'     // ❌ Imports everything
-```
-
-### Compression
-
-Enable gzip/brotli on server:
-
-**Nginx:**
-
-```nginx
-gzip on;
-gzip_types text/css application/javascript application/json;
-gzip_min_length 1000;
-
-# Or use brotli (better compression)
-brotli on;
-brotli_types text/css application/javascript application/json;
-```
-
-**Result:**
-- JS bundle: 800 KB → ~200 KB (gzipped)
-- CSS: 100 KB → ~25 KB (gzipped)
-
-### Preloading
-
-Preload critical resources:
-
-```html
-<!-- In index.html -->
-<link rel="preload" href="/assets/index.a1b2.js" as="script">
-<link rel="preload" href="/assets/index.c3d4.css" as="style">
-```
-
-### Service Worker
-
-For offline support and caching:
-
-```bash
-npm install -D vite-plugin-pwa
-
-# vite.config.ts
-import { VitePWA } from 'vite-plugin-pwa'
-
-export default defineConfig({
-    plugins: [
-        VitePWA({
-            registerType: 'autoUpdate',
-            workbox: {
-                globPatterns: ['**/*.{js,css,html,ico,png,svg}']
-            }
-        })
-    ]
-})
-```
+The root `.htaccess` sends `Cache-Control: no-store, no-cache, must-revalidate` for `index.html`, so a new build is picked up immediately. Hashed files in `assets/` can be cached long-term by the web server.
 
 ## Troubleshooting
 
 ### Build Fails
 
-**TypeScript errors:**
+**Wrong Node version:** check `node --version` against `engines` (`^26.12.1 || ^24.22.1`); with nvm, run `nvm use` in the repository root.
 
-```bash
-# Check TS errors
-npx vue-tsc --noEmit
-
-# Fix errors or suppress with:
-// @ts-ignore
-```
+**TypeScript errors:** `vite build` does not type-check, so type errors do not stop the build; check them in the IDE (Volar). `vue-tsc` is not a project dependency.
 
 **Out of memory:**
 
@@ -586,102 +287,34 @@ NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
 ### Large Bundle Size
 
-**1. Analyze bundle:**
-
-```bash
-npm install -D rollup-plugin-visualizer
-# Add visualizer plugin, rebuild
-```
-
-**2. Check for:**
-- Unnecessary dependencies
-- Imported but unused libraries
-- Large images not optimized
-
-**3. Optimize:**
-- Use dynamic imports
-- Remove unused dependencies
-- Compress images
-
-### Slow Build
-
-**1. Check:**
-- Number of files
-- Large dependencies
-- CPU/RAM availability
-
-**2. Optimize:**
-```typescript
-// vite.config.ts
-export default defineConfig({
-    build: {
-        terserOptions: {
-            compress: {
-                drop_console: true,  // Remove console.log
-            }
-        }
-    }
-})
-```
+- Look for unnecessary or unused dependencies
+- Prefer dynamic `import()` for rarely used views and heavy components
+- Use the bundle analysis described above
 
 ### Assets Not Loading
 
-**Check paths:**
-- Use `@/` alias for imports
-- Check `base` in `vite.config.ts`
-- Verify assets are in `dist/` after build
-
-**CORS issues:**
-- Ensure CDN has correct CORS headers
-- Check API proxy configuration
+- Use the `@/` alias for imports
+- Keep `base: './'` in `vite.config.mts` (instances often live in a subfolder)
+- Verify the files exist in `vue/dist/assets/` after the build and that the root `.htaccess` contains the `assets` rewrite
 
 ## Best Practices
 
 ### Development
 
-- ✅ Use dev server, not production build
-- ✅ Enable source maps
-- ✅ Keep dependencies updated
+- ✅ Use the dev server, not the production build
+- ✅ Use the Node version from `engines` / `.nvmrc`
 - ✅ Use Vue DevTools
 
 ### Production
 
-- ✅ Minify code
-- ✅ Enable compression (gzip/brotli)
-- ✅ Set cache headers correctly
-- ✅ Test build before deploying
-- ✅ Use CDN for assets (optional)
-
-### Continuous Integration
-
-**Example GitHub Actions:**
-
-```yaml
-name: Build
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist/
-```
+- ✅ Rebuild `vue/dist/` after every frontend change and commit it with the source change
+- ✅ Test the build before deploying
 
 ## Next Steps
 
 - Learn about [Customization](./11-customization.md)
-- Explore [Styling & Theming](./12-styling-theming.md)
-- Understand [Best Practices](./15-best-practices.md)
+- Explore the [User Theme System](./14-user-theme.md)
+- Understand the [Field System](./09-fields.md)
 
 ---
 

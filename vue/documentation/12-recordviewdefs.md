@@ -8,7 +8,10 @@
 
 ```
 legacy/modules/{Module}/metadata/recordviewdefs.php
+legacy/custom/modules/{Module}/metadata/recordviewdefs.php   # full-file override (takes precedence)
 ```
+
+The frontend reads the merged, cached result (`legacy/cache/modules/{Module}/recordviewdefs.php`), not these files directly — after editing them run Quick Repair & Rebuild (see [RecordView Extensions](../../api/documentation/18-recordview-extensions.md)).
 
 ## Extending recordviewdefs from a package
 
@@ -22,11 +25,11 @@ Full contract (extension file format, merge order, cache lazy-build, and how to 
 <?php
 
 $viewdefs['{Module}'] = [
+    'sidepanel' => ['MintWidgetTenure'],    // Optional, see Sidepanel & Widgets
     'order' => ['basicInfo', 'subpanels'],  // Panel order
     'panels' => [
         'basicInfo' => [
             'component' => 'MintPanelRecordDetails',
-            'title' => 'LBL_PANEL_TITLE',  // Optional panel title
             'data' => [
                 'sections' => [
                     'sectionName' => [
@@ -42,11 +45,12 @@ $viewdefs['{Module}'] = [
         ],
         'subpanels' => [
             'component' => 'MintPanelSubpanels',
-            'title' => 'LBL_SUBPANELS',
         ],
     ],
 ];
 ```
+
+**Panel titles.** `MintPanel.vue` passes only a panel's `data` to its component, so a panel-level `'title'` key is not rendered by itself. Components that show a heading read `data.title` (e.g. `MintPanelFiles`, `MintPanelChecklist`, `MintPanelRecordPanel`, `MintPanelAdminConfig`). `MetaController` copies a panel-level `title` into `data.title` only for panels that use `data.fields` (such as `MintPanelRecordPanel`). `MintPanelRecordDetails` shows **section** titles only.
 
 ## Available Components
 
@@ -57,7 +61,6 @@ Standard form fields panel. Most commonly used component for displaying and edit
 ```php
 'basicInfo' => [
     'component' => 'MintPanelRecordDetails',
-    'title' => 'LBL_BASIC_INFO',  // Optional
     'data' => [
         'sections' => [
             'basic' => [
@@ -71,6 +74,8 @@ Standard form fields panel. Most commonly used component for displaying and edit
     ],
 ],
 ```
+
+**Automatic `other` section.** `MetaController::getRecordViewMeta()` appends a collapsed section `other` (title `LBL_OTHER`) with `assigned_user_name`, `date_entered` and `date_modified` (`MetaController::FIELDS_IN_OTHER_SECTION`) to every `MintPanelRecordDetails` panel. Define your own section with the key `other` to replace it.
 
 #### Header Components
 
@@ -92,7 +97,7 @@ Each entry is a component name, dynamically imported from `@/components/{name}/{
 
 #### Actions
 
-`data.actions` renders a menu of record-level actions (Edit, Delete, Duplicate, ...). Each entry is either:
+`data.actions` renders a menu of record-level actions (Audit, Delete, Duplicate, ...). Each entry is either:
 
 - a **string** — the class name of a `BeanAction` subclass in `vue/src/business/BeanActions/Actions/` (e.g. `'Audit'`), or an object `{ name, ...options }` passed to that class's constructor (e.g. `skipFields` for `Duplicate`);
 - a **generic action config** (object containing `api_route`) — recognized automatically and handled by `GenericApiAction` (`vue/src/business/BeanActions/GenericApiAction.ts`) without writing any TS code. Use this for simple "POST to an endpoint on click" actions with optional confirmation, a single text prompt, and visibility conditions.
@@ -146,9 +151,10 @@ Each entry is a component name, dynamically imported from `@/components/{name}/{
 
 **Security:** the button being hidden (ACL / `customVisibility`) is a UI convenience only — the endpoint **must** independently re-check ACL server-side (e.g. `$bean->ACLAccess('edit')`) and load the record by `id` itself; never trust field values from the request body beyond `id`/`module` — including the free-text `value` field sent for `type: 'prompt'`, which the endpoint must independently validate, length-limit and (if persisted or rendered elsewhere) sanitize/escape server-side before use.
 
-**Example — "Close" button on Meetings** (`legacy/modules/Meetings/metadata/recordviewdefs.php`), a reference end-to-end implementation (metadata → generic frontend action → dedicated API endpoint):
+**Example — "Close" button on Meetings** (`legacy/modules/Meetings/metadata/recordviewdefs.php`), a reference end-to-end implementation (metadata → generic frontend action → dedicated API endpoint). The panel lists its whole menu explicitly, so it opts out of the defaults — otherwise the default `Duplicate` would be shown next to `DuplicateMeetings`:
 
 ```php
+'includeDefaultActions' => false,
 'actions' => [
     'Audit',
     'Delete',
@@ -207,7 +213,6 @@ Displays related records (relationships).
 ```php
 'subpanels' => [
     'component' => 'MintPanelSubpanels',
-    'title' => 'LBL_SUBPANELS',
 ],
 ```
 
@@ -230,7 +235,7 @@ Each row in a subpanel can display action buttons (Edit, Remove, Delete). These 
 
 **Extending with a custom inline action:**
 
-Create a new class extending `SubpanelAction` — in `vue/src/business/SubpanelActions/InlineActions/` for core, or `vue/src/custom/business/SubpanelActions/InlineActions/` for a deployment — then register its `widget_class` mapping in `MintSubpanelsInlineButtons.vue`.
+Create a new class extending `SubpanelAction` — in `vue/src/business/SubpanelActions/InlineActions/` for core, or `vue/src/custom/business/SubpanelActions/InlineActions/` for a deployment — then register its `widget_class` mapping in the `inlineActionMap` of `MintSubpanelsInlineButtons.vue`. Note that this map lives in a core file, so a brand-new `widget_class` requires a core change; overriding an existing inline action (same file name) does not.
 
 ```typescript
 // vue/src/custom/business/SubpanelActions/InlineActions/MyAction.ts
@@ -248,7 +253,7 @@ export class MyAction extends SubpanelAction {
 }
 ```
 
-The file is auto-discovered by `index.ts` via `import.meta.glob`, which scans the core directory first and the custom one second — so a custom file with the same name as a core inline action overrides it. No registration is needed beyond adding the `widget_class` mapping in `MintSubpanelsInlineButtons.vue`. The same applies to non-inline subpanel actions (`vue/src/custom/business/SubpanelActions/Actions/`). See [Customization Guide](11-customization.md), section *Custom Business Logic*.
+The file is auto-discovered by `index.ts` via `import.meta.glob`, which scans the core directory first and the custom one second — so a custom file with the same name as a core inline action overrides it. No registration is needed beyond adding the `widget_class` mapping in `MintSubpanelsInlineButtons.vue`. Inline actions and regular subpanel actions share one registry keyed by file name, so their names must not collide. The same applies to non-inline subpanel actions (`vue/src/custom/business/SubpanelActions/Actions/`). See [Customization Guide](11-customization.md), section *Custom Business Logic*.
 
 ### MintPanelFiles
 Displays file attachments.
@@ -257,45 +262,58 @@ Displays file attachments.
 ```php
 'files' => [
     'component' => 'MintPanelFiles',
-    'title' => 'LBL_FILES',
+    'data' => [
+        'title' => 'LBL_FILES',  // Optional, defaults to LBL_FILES
+    ],
 ],
 ```
 
 ### MintPanelScheduler
-Displays calendar/scheduler for time-based records.
+Displays calendar/scheduler for time-based records (used by `Meetings`).
 
 **Usage**:
 ```php
 'scheduler' => [
     'component' => 'MintPanelScheduler',
-    'title' => 'LBL_SCHEDULER',
 ],
 ```
 
 ### MintPanelChecklist
-Displays checklist functionality.
+Displays checklist functionality (used by `Tasks`).
 
 **Usage**:
 ```php
 'checklist' => [
     'component' => 'MintPanelChecklist',
-    'title' => 'LBL_CHECKLIST',
+    'data' => [
+        'title' => 'LBL_CHECKLIST',  // Optional, defaults to LBL_DETAILS
+    ],
 ],
 ```
 
 ### MintPanelPositionCard
-Displays position card information (HR-specific).
+Displays position card information (HR-specific, used by `Positions` and `EmployeeRoles`).
 
 **Usage**:
 ```php
-'position' => [
+'positionCard' => [
     'component' => 'MintPanelPositionCard',
-    'title' => 'LBL_POSITION',
+],
+```
+
+### MintPanelComments
+Displays the record's comment thread (used by `News`).
+
+**Usage**:
+```php
+'comments' => [
+    'component' => 'MintPanelComments',
+    'data' => [],
 ],
 ```
 
 ### MintPanelRecordPanel
-Generic record panel for custom implementations.
+Simple field panel without sections or actions (not used by core modules). It requires `data.fields` (rows, same shape as section `fields`); a panel-level `title` is copied into `data.title` by `MetaController`.
 
 **Usage**:
 ```php
@@ -303,14 +321,18 @@ Generic record panel for custom implementations.
     'component' => 'MintPanelRecordPanel',
     'title' => 'LBL_CUSTOM',
     'data' => [
-        // Custom data structure
+        'fields' => [
+            ['name', 'status'],
+        ],
     ],
 ],
 ```
 
+Admin screens use further panel components (`MintPanelAdminConfig`, `MintPanelElasticsearchTools`, `MintPanelLanguages`) — see [Admin Views](15-admin-views.md).
+
 ## Field Layout
 
-Fields are organized in rows and columns:
+Fields are organized in rows of at most two columns:
 
 ```php
 'fields' => [
@@ -318,14 +340,46 @@ Fields are organized in rows and columns:
     ['field3'],                // Row 2: 1 column (100% width)
     ['field4', ''],            // Row 3: Left column only (empty right)
     ['', 'field5'],            // Row 4: Right column only (empty left)
-    ['field6', 'field7', 'field8'],  // Row 5: 3 columns (33% width each)
 ]
 ```
 
 **Tips**:
 - Empty string (`''`) creates empty column
 - Single field in array spans full width
-- Multiple fields divide width equally
+- `MintPanelRecordDetails` renders at most **two** columns — a third entry in a row is silently ignored
+- On small screens (`mdAndDown`) every field is rendered in its own row
+
+### Field entries
+
+A cell is either a vardef field name (string) or an array. Array entries are merged with the field's vardef by `MetaController::mergeModuleFields()`, so they can override vardef properties such as `type` or `label`:
+
+```php
+'fields' => [
+    [
+        ['name' => 'email1', 'type' => 'email'],     // override the field type
+        ['name' => 'birthdate', 'type' => 'age'],     // render a date as age
+    ],
+    [
+        [
+            'name' => 'primary_address',
+            'type' => 'fieldset',                     // several fields shown as one
+            'label' => 'LBL_PRIMARY_ADDRESS',
+            'properties' => [
+                'fields' => [
+                    'primary_address_street',
+                    'primary_address_city',
+                    'primary_address_postalcode',
+                    'primary_address_country',
+                ],
+                'separator' => ', ',
+            ],
+        ],
+        '',
+    ],
+],
+```
+
+An `enum`/`multienum` entry can also take its options from a PHP function (`'function' => ['name' => [Class, method], 'params' => []]`), resolved server-side — see [List View Panels, Record View Function Options and Schedulers](../../api/documentation/21-list-view-panels-and-meta.md). The real `legacy/modules/Employees/metadata/recordviewdefs.php` is a good reference for all of the above.
 
 ## Multiple Sections
 
@@ -366,47 +420,28 @@ Control the order panels appear:
 
 ## Complete Example
 
+A shortened version of `legacy/modules/Employees/metadata/recordviewdefs.php` (the `files` panel is added for illustration):
+
 ```php
 <?php
 
 $viewdefs['Employees'] = [
-    'order' => ['basicInfo', 'employment', 'subpanels', 'files'],
+    'sidepanel' => ['MintWidgetTenure', 'MintWidgetLeave', 'MintWidgetCalendar', 'MintWidgetTrainings', 'MintWidgetKudos'],
+    'order' => ['basicInfo', 'subpanels', 'files'],
     'panels' => [
         'basicInfo' => [
             'component' => 'MintPanelRecordDetails',
-            'title' => 'LBL_BASIC_INFO',
             'data' => [
                 'sections' => [
-                    'personal' => [
-                        'title' => 'LBL_PERSONAL_INFO',
+                    'basic' => [
+                        'title' => 'LBL_BASIC',
                         'fields' => [
                             ['first_name', 'last_name'],
-                            ['email', 'phone'],
-                            ['date_of_birth', 'gender'],
-                        ],
-                    ],
-                    'contact' => [
-                        'title' => 'LBL_CONTACT_INFO',
-                        'fields' => [
-                            ['address'],
-                            ['city', 'postal_code'],
-                            ['country'],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'employment' => [
-            'component' => 'MintPanelRecordDetails',
-            'title' => 'LBL_EMPLOYMENT',
-            'data' => [
-                'sections' => [
-                    'employment' => [
-                        'title' => 'LBL_EMPLOYMENT_INFO',
-                        'fields' => [
-                            ['department', 'position'],
-                            ['employment_status', 'hire_date'],
-                            ['reports_to_name'],
+                            [['name' => 'email1', 'type' => 'email'], 'phone_mobile'],
+                            ['employee_status', ['name' => 'birthdate', 'type' => 'age']],
+                            ['position_name', ['name' => 'photo', 'type' => 'image']],
+                            ['securitygroup_name', 'reports_to_name'],
+                            ['description'],
                         ],
                     ],
                 ],
@@ -414,11 +449,12 @@ $viewdefs['Employees'] = [
         ],
         'subpanels' => [
             'component' => 'MintPanelSubpanels',
-            'title' => 'LBL_RELATED',
         ],
         'files' => [
             'component' => 'MintPanelFiles',
-            'title' => 'LBL_DOCUMENTS',
+            'data' => [
+                'title' => 'LBL_FILES',
+            ],
         ],
     ],
 ];
@@ -436,8 +472,8 @@ When migrating from legacy views:
 1. Analyze existing detailviewdefs.php and editviewdefs.php
 2. Create recordviewdefs.php with equivalent structure
 3. Migrate vt_* View Tools to MintLogic logicdefs.php (see: `api/documentation/13-mintlogic.md`)
-4. Remove module from `api/constants/legacy_views.php`
-5. Test thoroughly
+4. Make sure `api/constants/legacy_views.php` does not force the legacy view: the record view switches to Vue automatically once `recordviewdefs.php` exists (and the list view once `eslistviewdefs.php` exists), unless that file sets `'record' => true` / `'list' => true` for the module (`Init::getLegacyViews()` in `api/app/Controllers/Init/Init.php`)
+5. Run Quick Repair & Rebuild so the recordviewdefs cache is built, then test thoroughly
 
 ## Best Practices
 
@@ -457,6 +493,7 @@ When migrating from legacy views:
 ## Troubleshooting
 
 **Panel not showing**:
+- Run Quick Repair & Rebuild — the frontend reads the cached `legacy/cache/modules/{Module}/recordviewdefs.php`
 - Check component name spelling
 - Verify panel key exists in 'order' array
 - Check panel structure matches component requirements

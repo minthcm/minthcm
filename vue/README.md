@@ -11,15 +11,18 @@ Welcome to the MintHCM frontend documentation. This guide will help you understa
 4. [Building & Deployment](./documentation/04-building-deployment.md) - Development and production builds
 
 ### Components & Views
-5. [Field System](./documentation/09-fields.md) - Dynamic field rendering and customization
+5. [Field System](./documentation/09-fields.md) - Dynamic field rendering and field types
 6. [Working with Beans](./documentation/10-working-with-beans.md) - CRUD operations and record management
-7. [Sidepanel & Widgets](./documentation/13-sidepanel.md) - Record-view side panel and its data widgets
-8. [User Theme System](./documentation/14-user-theme.md) - Light/dark/system theme preference, Vuetify integration, legacy CSS bridge
-9. [Admin Views](./documentation/15-admin-views.md) - Metadata-driven Administration pages
+7. [Record View Definitions](./documentation/12-recordviewdefs.md) - RecordView metadata (`recordviewdefs.php`): panels, sections, actions
+8. [Sidepanel & Widgets](./documentation/13-sidepanel.md) - Record-view side panel and its data widgets
+9. [User Theme System](./documentation/14-user-theme.md) - Light/dark/system theme preference, Vuetify integration, legacy CSS bridge
 10. [List View Panels](./documentation/16-list-view-panels.md) - Extra components under the list view, `crontab` field
 
+### Admin Views
+11. [Admin Views](./documentation/15-admin-views.md) - Metadata-driven Administration pages
+
 ### Customization
-10. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
+12. [Customization Guide](./documentation/11-customization.md) - Extending the frontend via `custom/` directory
 
 ---
 
@@ -30,7 +33,8 @@ Welcome to the MintHCM frontend documentation. This guide will help you understa
 - **Vue 3** - Progressive JavaScript framework with Composition API
 - **TypeScript** - Type-safe development
 - **Vite** - Fast build tool and dev server
-- **Vuetify** - Material Design component library
+- **Vuetify 4** - Material Design component library
+- **Node.js** - `^26.12.1 || ^24.22.1` (`engines` in `package.json`; `.nvmrc` in the repository root pins `26.12.1`)
 - **Pinia** - State management
 - **Vue Router** - Client-side routing
 - **Axios** - HTTP client for API communication
@@ -58,9 +62,14 @@ vue/
 │   ├── composables/     # Reusable composition functions
 │   ├── layouts/         # Page layout templates
 │   ├── business/        # Business logic (Actions, Logic)
+│   ├── bundler/         # Drawer bundle (core + custom drawers)
+│   ├── drawers/         # Right-side drawer definitions
+│   ├── plugins/         # Vuetify, fonts, Pinia reset plugin
+│   ├── assets/          # Images bundled by Vite
 │   ├── custom/          # Your customizations (safe from updates)
 │   └── utils/           # Helper functions
 ├── public/              # Static assets
+├── dist/                # Build output, committed and served in place
 ├── documentation/       # This documentation
 └── package.json         # Dependencies and scripts
 ```
@@ -68,9 +77,8 @@ vue/
 ### Key Features
 
 - **Dynamic Field Rendering** - Fields automatically adapt based on type and view mode
-- **Module-Based Views** - ListView, DetailView, EditView work for any module
+- **Module-Based Views** - ListView and RecordView (detail/edit) work for any module; modules flagged in `legacy_views` render in `LegacyView` (iframe)
 - **Customizable Actions** - Bean Actions, Mass Actions, Subpanel Actions
-- **Real-time Updates** - WebSocket support for notifications
 - **Responsive Design** - Mobile-friendly UI
 - **Internationalization** - Multi-language support
 - **Access Control** - ACL-based permissions
@@ -81,14 +89,14 @@ vue/
 2. **Make changes** in `src/` (or `src/custom/` for customizations)
 3. **See live updates** in browser (hot module replacement)
 4. **Build for production**: `npm run build`
-5. **Deploy** the `dist/` folder
+5. **Deploy** - the build lands in `vue/dist/`, which the root `.htaccess` serves directly (no copy step)
 
 ### Getting Help
 
 - **For setup issues**: See [Getting Started](./documentation/01-getting-started.md)
 - **For customization**: See [Customization Guide](./documentation/11-customization.md)
 - **For working with data**: See [Working with Beans](./documentation/10-working-with-beans.md)
-- **For custom fields**: See [Field System](./documentation/09-fields.md)
+- **For field types**: See [Field System](./documentation/09-fields.md)
 
 ### Next Steps
 
@@ -102,5 +110,5 @@ New to MintHCM frontend? Start here:
 Already familiar? Jump to:
 
 - [Working with Beans](./documentation/10-working-with-beans.md) to learn CRUD operations
-- [Field System](./documentation/09-fields.md) to create custom fields
+- [Field System](./documentation/09-fields.md) to understand and add field types
 - [Customization Guide](./documentation/11-customization.md) to extend functionality  

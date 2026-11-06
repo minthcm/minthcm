@@ -1027,18 +1027,50 @@ EOQ;
      */
     public static function checkPasswordMD5($passwordMd5, $userHash)
     {
+        // The API login path implements the same policy in api/lib/Services/Auth/PasswordHash.php -
+        // change both together.
         if (empty($userHash)) {
             return false;
         }
 
-        if ($userHash[0] !== '$' && strlen($userHash) === 32) {
-            // Legacy md5 password
-            $valid = strtolower($passwordMd5) === $userHash;
-        } else {
-            $valid = password_verify(strtolower($passwordMd5), $userHash);
+        if (static::isLegacyMd5Hash($userHash)) {
+            return static::isLegacyMd5Allowed() && hash_equals($userHash, strtolower($passwordMd5));
         }
 
-        return $valid;
+        return password_verify(strtolower($passwordMd5), $userHash);
+    }
+
+    protected static function isLegacyMd5Hash($userHash)
+    {
+        return $userHash[0] !== '$' && strlen($userHash) === 32;
+    }
+
+    /**
+     * Plain md5 hashes stay accepted (and get re-hashed on login) until
+     * $sugar_config['passwordsetting']['legacy_md5_allowed'] is set to false.
+     */
+    public static function isLegacyMd5Allowed()
+    {
+        $allowed = $GLOBALS['sugar_config']['passwordsetting']['legacy_md5_allowed'] ?? true;
+        return !in_array($allowed, [false, 0, '0', 'false'], true);
+    }
+
+    /**
+     * Replaces a plain md5 or outdated bcrypt hash after a successful login. Only user_hash is written -
+     * setNewPassword() would also reset pwd_last_changed and system_generated_password.
+     */
+    public static function rehashPasswordIfNeeded($userId, $passwordMd5, $userHash)
+    {
+        if (empty($userId) || empty($userHash)) {
+            return;
+        }
+        if (!static::isLegacyMd5Hash($userHash) && !password_needs_rehash($userHash, PASSWORD_DEFAULT)) {
+            return;
+        }
+
+        $db = DBManagerFactory::getInstance();
+        $newHash = $db->quote(static::getPasswordHashMD5($passwordMd5));
+        $db->query("UPDATE users SET user_hash='{$newHash}' WHERE id='" . $db->quote($userId) . "'");
     }
 
     /**
@@ -1070,7 +1102,11 @@ EOQ;
         $result = $db->limitQuery($query, 0, 1, false);
         if (!empty($result)) {
             $row = $db->fetchByAssoc($result);
-            if (!$checkPasswordMD5 || static::checkPasswordMD5($password, $row['user_hash'])) {
+            if (!$checkPasswordMD5) {
+                return $row;
+            }
+            if (static::checkPasswordMD5($password, $row['user_hash'])) {
+                static::rehashPasswordIfNeeded($row['id'], $password, $row['user_hash']);
                 return $row;
             }
         }

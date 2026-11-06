@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import axios from 'axios'
 import { defineStore } from 'pinia'
 import { useLanguagesStore } from './languages'
 import { mintApi } from '@/api/api'
@@ -19,8 +20,11 @@ export interface User {
 
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null)
+    // Label of the error to show after authenticate() returned false
+    const loginErrorLabel = ref('LBL_MINT4_AUTH_LOGIN_ERROR')
 
     async function authenticate(username: string, password: string) {
+        loginErrorLabel.value = 'LBL_MINT4_AUTH_LOGIN_ERROR'
         if (!username || !password) {
             return false
         }
@@ -42,6 +46,9 @@ export const useAuthStore = defineStore('auth', () => {
             }
             return true
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 429) {
+                loginErrorLabel.value = 'LBL_MINT4_AUTH_LOGIN_TOO_MANY_ATTEMPTS'
+            }
             return false
         }
     }
@@ -59,6 +66,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user,
+        loginErrorLabel,
         authenticate,
         logout,
     }

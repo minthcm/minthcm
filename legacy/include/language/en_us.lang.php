@@ -4625,6 +4625,7 @@ $app_strings['LBL_MINT4_AUTH_SSO_LOGIN_BTN'] = 'Log in with SSO';
 $app_strings['LBL_MINT4_AUTH_OR_LOCAL_LOGIN'] = 'or log in with a local account';
 $app_strings['LBL_MINT4_AUTH_BACK_TO_LOGIN'] = 'Back to login';
 $app_strings['LBL_MINT4_AUTH_LOGIN_ERROR'] = 'Incorrect email or password, please try another one.';
+$app_strings['LBL_MINT4_AUTH_LOGIN_TOO_MANY_ATTEMPTS'] = 'Too many login attempts. Please try again later.';
 $app_strings['LBL_MINT4_AUTH_FORGET_TITLE'] = 'Forgot Password';
 $app_strings['LBL_MINT4_AUTH_FORGET_BTN'] = 'Reset Password';
 $app_strings['LBL_MINT4_AUTH_FORGET_PASSWORD_QUESTION'] = 'Forgot password?';

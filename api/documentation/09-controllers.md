@@ -4,39 +4,43 @@ Controllers are the heart of the API - they handle HTTP requests, coordinate bus
 
 ## Controller Basics
 
-A controller is a PHP class that processes HTTP requests and returns responses. Each controller method (action) handles a specific endpoint.
+A controller is a PHP class that processes HTTP requests and returns responses. Each controller method (action) handles a specific endpoint defined in a route file (see [Routing](./05-routing.md)).
+
+Route controllers are instantiated by `RouteManager` (`app/Routes/RouteManager.php`) with `new $route['class'](...)`; every constructor parameter is resolved from the PHP-DI container by its type. They are **not** created through `CustomLoader` — to replace a core controller, redefine its route in `custom/` (see [Extending the API](./08-extending-api.md#example-overriding-a-route-controller)).
 
 ### Anatomy of a Controller
 
 ```php
 <?php
 
-namespace MintHCM\Api\Controllers;
+namespace MintHCM\Custom\Api\Controllers;
 
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Employees;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
 
 class EmployeeController
 {
     // Dependencies injected via constructor
-    private $repository;
-
-    public function __construct(EmployeeRepository $repository)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->repository = $repository;
     }
 
     // Action method
     public function list(Request $request, Response $response): Response
     {
-        // 1. Get request data
-        $params = $request->getQueryParams();
-        
+        // 1. Get request data (declared in the route, validated by ParamsMiddleware)
+        $status = $request->getAttribute('status');
+
         // 2. Process request
-        $employees = $this->repository->findAll();
-        
-        // 3. Return response
-        return $response->withJson(['data' => $employees]);
+        $employees = $this->entityManager->getRepository(Employees::class)
+            ->findBy(['employee_status' => $status], ['last_name' => 'ASC'], 50);
+
+        // 3. Return response (entities must be serialized, see below)
+        $data = array_map(fn(Employees $employee) => $employee->getSerialized(), $employees);
+        $response->getBody()->write(json_encode(['data' => $data]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
@@ -45,19 +49,33 @@ class EmployeeController
 
 The `Request` object (PSR-7 `ServerRequestInterface`) provides access to all request data.
 
-### Query Parameters
+### Validated Parameters (Request Attributes)
+
+`ParamsMiddleware` validates the request against the `pathParams`, `queryParams` and `bodyParams` declared in the route and stores every declared parameter as a **request attribute** with its parsed value (e.g. `IntType` gives an `int`). This is how the core controllers read input:
 
 ```php
 public function list(Request $request, Response $response): Response
 {
-    // GET /api/employees?page=1&limit=20
-    $queryParams = $request->getQueryParams();
-    
-    $page = $queryParams['page'] ?? 1;
-    $limit = $queryParams['limit'] ?? 20;
-    
+    // GET /api/MyModule/items?page=1&limit=20  (page/limit declared as IntType queryParams)
+    $page = $request->getAttribute('page') ?? 1;
+    $limit = $request->getAttribute('limit') ?? 20;
+
     // Use parameters...
 }
+```
+
+Important:
+- A query or body parameter that is not declared in the route causes **400 Bad Request** before the controller runs.
+- A missing required parameter or an invalid value also causes **400**.
+- Declared but absent optional parameters are `null`.
+
+### Query Parameters
+
+The raw values are still available:
+
+```php
+$queryParams = $request->getQueryParams();
+$page = $queryParams['page'] ?? 1;   // string, not validated
 ```
 
 ### Request Body
@@ -65,14 +83,15 @@ public function list(Request $request, Response $response): Response
 ```php
 public function create(Request $request, Response $response): Response
 {
-    // POST /api/employees
+    // POST /api/...
     // Body: {"first_name": "John", "last_name": "Doe"}
+    $firstName = $request->getAttribute('first_name');  // declared bodyParam
+    $lastName = $request->getAttribute('last_name');
+
+    // Raw parsed JSON body (parsed by JsonBodyParserMiddleware)
     $data = $request->getParsedBody();
-    
-    $firstName = $data['first_name'] ?? null;
-    $lastName = $data['last_name'] ?? null;
-    
-    // Create employee...
+
+    // Create record...
 }
 ```
 
@@ -81,10 +100,11 @@ public function create(Request $request, Response $response): Response
 ```php
 public function detail(Request $request, Response $response, array $args): Response
 {
-    // GET /api/employees/123
-    $id = $args['id'];  // "123"
-    
-    // Fetch employee...
+    // GET /api/MyModule/item/123
+    $id = $request->getAttribute('id');  // "123" - declared pathParam
+    $id = $args['id'];                   // also available from Slim's route arguments
+
+    // Fetch record...
 }
 ```
 
@@ -107,18 +127,20 @@ public function process(Request $request, Response $response): Response
 }
 ```
 
-### Request Attributes
+### Current User and Route Context
 
-Attributes are set by middlewares:
+The authenticated user is **not** a request attribute. `AuthMiddleware` sets the legacy globals:
 
 ```php
 public function action(Request $request, Response $response): Response
 {
-    // Attributes set by middlewares
-    $currentUser = $request->getAttribute('current_user');
-    $module = $request->getAttribute('module');
-    
-    // Use attributes...
+    global $current_user, $api_client;   // User bean; 'frontend', 'mobile' or another client id
+
+    // Matched route (name, pattern, arguments)
+    $route = \Slim\Routing\RouteContext::fromRequest($request)->getRoute();
+
+    // Module routes are named "{Module}___{key}" and their pattern starts with "/{Module}"
+    $module = explode('/', $route->getPattern())[1] ?? null;
 }
 ```
 
@@ -144,7 +166,7 @@ public function info(Request $request, Response $response): Response
 {
     $uri = $request->getUri();
     
-    $path = $uri->getPath();        // /api/employees/123
+    $path = $uri->getPath();        // /api/Employees/Get/123
     $query = $uri->getQuery();      // page=1&limit=20
     $scheme = $uri->getScheme();    // http or https
     $host = $uri->getHost();        // example.com
@@ -153,42 +175,60 @@ public function info(Request $request, Response $response): Response
 
 ## Response Object
 
-The `Response` object (PSR-7 `ResponseInterface`) represents the HTTP response.
+The `Response` object is a plain `Slim\Psr7\Response` (PSR-7 `ResponseInterface`). PSR-7 responses are immutable: every `with*()` call returns a new object, so always use the returned value.
 
 ### JSON Responses
 
-```php
-use MintHCM\Api\utils\MintResponse;
+The response has **no** `withJson()` method. Encode the data, write it to the body and set the header:
 
+```php
 public function list(Request $request, Response $response): Response
 {
-    $data = ['employees' => [...]];
-    
-    // Using MintResponse::withJson()
-    return $response->withJson($data);
-    
-    // With custom status code
-    return $response->withJson($data, 201);
+    $data = ['employees' => [/* ... */]];
+
+    $response->getBody()->write(json_encode($data));
+    return $response->withHeader('Content-Type', 'application/json');
 }
+```
+
+With a custom status code:
+
+```php
+$response->getBody()->write(json_encode($data));
+return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
+```
+
+(`utils/MintResponse.php` contains an old `withJson()` helper; it is not autoloadable and not used by the application.)
+
+### Serializing Entities
+
+Doctrine entities extend `MintEntity` and keep their fields in `protected` properties, so `json_encode($entity)` returns `{}`. Use `getSerialized()`:
+
+```php
+$response->getBody()->write(json_encode(['data' => $entity->getSerialized()]));
+return $response->withHeader('Content-Type', 'application/json');
 ```
 
 ### Status Codes
 
 ```php
-public function create(Request $request, Response $response): Response
-{
-    // Success
-    return $response->withJson($data, 201);  // Created
-    
-    // Client errors
-    return $response->withJson(['error' => 'Not found'], 404);
-    return $response->withJson(['error' => 'Unauthorized'], 401);
-    return $response->withJson(['error' => 'Forbidden'], 403);
-    return $response->withJson(['error' => 'Bad request'], 400);
-    
-    // Server errors
-    return $response->withJson(['error' => 'Internal error'], 500);
-}
+// Success
+$response->getBody()->write(json_encode($data));
+return $response->withHeader('Content-Type', 'application/json')->withStatus(201);  // Created
+
+// Client errors
+$response->getBody()->write(json_encode(['error' => 'Not found']));
+return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+```
+
+Common codes: `400` bad request, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict (duplicates), `422` validation failed (MintLogic).
+
+Alternatively throw a Slim HTTP exception and let `MintExceptionHandler` build the error response (see [Error Handling](./19-error-handling.md)):
+
+```php
+use Slim\Exception\HttpNotFoundException;
+
+throw new HttpNotFoundException($request);
 ```
 
 ### Headers
@@ -206,6 +246,8 @@ public function action(Request $request, Response $response): Response
 }
 ```
 
+`SecurityHeadersMiddleware` adds `Cache-Control: no-store` to every response that does not set its own `Cache-Control` (e.g. set it explicitly for file downloads).
+
 ### Body
 
 ```php
@@ -220,6 +262,8 @@ public function custom(Request $request, Response $response): Response
 
 ## Common Controller Patterns
 
+The examples below assume a controller with `private EntityManagerInterface $entityManager` injected in the constructor and use the `Employees` entity. Repositories are obtained with `$this->entityManager->getRepository(...)`; they extend `MintEntityRepository` (see [Entities & Repositories](./10-entities-repositories.md)).
+
 ### CRUD Operations
 
 #### List (Index)
@@ -227,43 +271,48 @@ public function custom(Request $request, Response $response): Response
 ```php
 public function list(Request $request, Response $response): Response
 {
-    $queryParams = $request->getQueryParams();
-    $page = $queryParams['page'] ?? 1;
-    $limit = $queryParams['limit'] ?? 20;
-    
-    $offset = ($page - 1) * $limit;
-    
-    $qb = $this->repository->createQueryBuilder('e')
+    $page = $request->getAttribute('page') ?? 1;     // IntType queryParam
+    $limit = $request->getAttribute('limit') ?? 20;  // IntType queryParam
+
+    $repository = $this->entityManager->getRepository(Employees::class);
+    $records = $repository->createQueryBuilder('e')
         ->orderBy('e.date_entered', 'DESC')
-        ->setFirstResult($offset)
-        ->setMaxResults($limit);
-    
-    $records = $qb->getQuery()->getResult();
-    $total = $this->repository->count([]);
-    
-    return $response->withJson([
-        'data' => $records,
-        'total' => $total,
+        ->setFirstResult(($page - 1) * $limit)
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult();
+
+    $response->getBody()->write(json_encode([
+        'data' => array_map(fn($record) => $record->getSerialized(), $records),
+        'total' => $repository->count([]),
         'page' => $page,
         'limit' => $limit,
-    ]);
+    ]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
+
+Deleted rows (`deleted = 1`) are excluded automatically by the global `soft_delete` Doctrine filter.
+
+For module list views the core already provides `MintEntityRepository::getList()` and the `/{Module}/...` list routes (see [List View Panels & Meta](./21-list-view-panels-and-meta.md)).
 
 #### Detail (Show)
 
 ```php
 public function detail(Request $request, Response $response, array $args): Response
 {
-    $id = $args['id'];
-    
-    $record = $this->repository->find($id);
-    
+    $record = $this->entityManager->getRepository(Employees::class)->find($request->getAttribute('id'));
+
     if (!$record) {
-        return $response->withJson(['error' => 'Not found'], 404);
+        $response->getBody()->write(json_encode(['error' => 'Not found']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
     }
-    
-    return $response->withJson(['data' => $record]);
+    if (!$record->hasAccess('view')) {
+        return $response->withStatus(403);
+    }
+
+    $response->getBody()->write(json_encode(['data' => $record->getSerialized()]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
 
@@ -272,25 +321,17 @@ public function detail(Request $request, Response $response, array $args): Respo
 ```php
 public function create(Request $request, Response $response): Response
 {
-    $data = $request->getParsedBody();
-    
-    // Validate
-    if (empty($data['name'])) {
-        return $response->withJson(['error' => 'Name is required'], 400);
-    }
-    
-    // Create entity
-    $entity = new Employee();
-    $entity->name = $data['name'];
-    $entity->email = $data['email'] ?? null;
-    $entity->date_entered = new \DateTime();
-    
-    // Save
-    $em = $this->repository->getEntityManager();
-    $em->persist($entity);
-    $em->flush();
-    
-    return $response->withJson(['data' => $entity], 201);
+    $repository = $this->entityManager->getRepository(Employees::class);
+
+    $entity = $repository->getNewEntity();
+    $entity->first_name = $request->getAttribute('first_name');  // required StringType bodyParam
+    $entity->last_name = $request->getAttribute('last_name');
+
+    // Saves through the legacy SugarBean (logic hooks, ACL-related fields, custom fields)
+    $repository->save($entity, true);
+
+    $response->getBody()->write(json_encode(['data' => $entity->getSerialized()]));
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
 }
 ```
 
@@ -299,30 +340,26 @@ public function create(Request $request, Response $response): Response
 ```php
 public function update(Request $request, Response $response, array $args): Response
 {
-    $id = $args['id'];
-    $data = $request->getParsedBody();
-    
-    $entity = $this->repository->find($id);
-    
+    $repository = $this->entityManager->getRepository(Employees::class);
+    $entity = $repository->find($request->getAttribute('id'));
+
     if (!$entity) {
-        return $response->withJson(['error' => 'Not found'], 404);
+        $response->getBody()->write(json_encode(['error' => 'Not found']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
     }
-    
-    // Update fields
-    if (isset($data['name'])) {
-        $entity->name = $data['name'];
+    if (!$entity->hasAccess('edit')) {
+        return $response->withStatus(403);
     }
-    if (isset($data['email'])) {
-        $entity->email = $data['email'];
+
+    $lastName = $request->getAttribute('last_name');
+    if ($lastName !== null) {
+        $entity->last_name = $lastName;
     }
-    
-    $entity->date_modified = new \DateTime();
-    
-    // Save
-    $em = $this->repository->getEntityManager();
-    $em->flush();
-    
-    return $response->withJson(['data' => $entity]);
+
+    $repository->save($entity, true);
+
+    $response->getBody()->write(json_encode(['data' => $entity->getSerialized()]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
 
@@ -331,76 +368,74 @@ public function update(Request $request, Response $response, array $args): Respo
 ```php
 public function delete(Request $request, Response $response, array $args): Response
 {
-    $id = $args['id'];
-    
-    $entity = $this->repository->find($id);
-    
+    $repository = $this->entityManager->getRepository(Employees::class);
+    $entity = $repository->find($request->getAttribute('id'));
+
     if (!$entity) {
-        return $response->withJson(['error' => 'Not found'], 404);
+        $response->getBody()->write(json_encode(['error' => 'Not found']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
     }
-    
-    $em = $this->repository->getEntityManager();
-    $em->remove($entity);
-    $em->flush();
-    
-    return $response->withJson(['message' => 'Deleted'], 200);
+
+    // Legacy mark_deleted() (soft delete), not a SQL DELETE
+    $repository->delete($entity);
+
+    $response->getBody()->write(json_encode(['message' => 'Deleted']));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
+
+⚠️ Do not use `$entityManager->persist()/flush()` or `remove()` directly for module records: that bypasses the legacy save (logic hooks, related data) and `remove()` deletes the row physically. The core `ModuleController` (`app/Controllers/ModuleController.php`) already implements generic create/update/delete/get routes for every module (`app/Routes/modules/module.php`).
 
 ### Search
 
 ```php
 public function search(Request $request, Response $response): Response
 {
-    $queryParams = $request->getQueryParams();
-    $query = $queryParams['q'] ?? '';
-    
+    $query = $request->getAttribute('q');
+
     if (empty($query)) {
-        return $response->withJson(['data' => []]);
+        $response->getBody()->write(json_encode(['data' => []]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
-    
-    $qb = $this->repository->createQueryBuilder('e')
-        ->where('e.name LIKE :query')
-        ->orWhere('e.email LIKE :query')
+
+    $results = $this->entityManager->getRepository(Employees::class)->createQueryBuilder('e')
+        ->where('e.first_name LIKE :query')
+        ->orWhere('e.last_name LIKE :query')
         ->setParameter('query', '%' . $query . '%')
-        ->setMaxResults(50);
-    
-    $results = $qb->getQuery()->getResult();
-    
-    return $response->withJson(['data' => $results]);
+        ->setMaxResults(50)
+        ->getQuery()
+        ->getResult();
+
+    $response->getBody()->write(json_encode(['data' => array_map(fn($e) => $e->getSerialized(), $results)]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
+
+For full-text search across modules use the existing global search (`GlobalSearchController`, ElasticSearch).
 
 ### Filtering
 
 ```php
 public function list(Request $request, Response $response): Response
 {
-    $queryParams = $request->getQueryParams();
-    
-    $qb = $this->repository->createQueryBuilder('e');
-    
+    $qb = $this->entityManager->getRepository(Employees::class)->createQueryBuilder('e');
+
     // Filter by status
-    if (isset($queryParams['status'])) {
-        $qb->andWhere('e.status = :status')
-           ->setParameter('status', $queryParams['status']);
+    if ($request->getAttribute('status') !== null) {
+        $qb->andWhere('e.employee_status = :status')
+           ->setParameter('status', $request->getAttribute('status'));
     }
-    
-    // Filter by department
-    if (isset($queryParams['department'])) {
-        $qb->andWhere('e.department_id = :dept')
-           ->setParameter('dept', $queryParams['department']);
-    }
-    
+
     // Filter by date range
-    if (isset($queryParams['from'])) {
+    if ($request->getAttribute('from') !== null) {
         $qb->andWhere('e.date_entered >= :from')
-           ->setParameter('from', new \DateTime($queryParams['from']));
+           ->setParameter('from', new \DateTime($request->getAttribute('from')));
     }
-    
+
     $results = $qb->getQuery()->getResult();
-    
-    return $response->withJson(['data' => $results]);
+
+    $response->getBody()->write(json_encode(['data' => array_map(fn($e) => $e->getSerialized(), $results)]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
 
@@ -409,46 +444,53 @@ public function list(Request $request, Response $response): Response
 ```php
 public function list(Request $request, Response $response): Response
 {
-    $queryParams = $request->getQueryParams();
-    
-    $sortBy = $queryParams['sort'] ?? 'date_entered';
-    $sortDir = strtoupper($queryParams['dir'] ?? 'DESC');
-    
-    // Validate
-    $allowedFields = ['name', 'email', 'date_entered'];
-    if (!in_array($sortBy, $allowedFields)) {
+    $sortBy = $request->getAttribute('sort') ?? 'date_entered';
+    $sortDir = strtoupper($request->getAttribute('dir') ?? 'DESC');
+
+    // Validate - never put user input into DQL unchecked
+    $allowedFields = ['first_name', 'last_name', 'date_entered'];
+    if (!in_array($sortBy, $allowedFields, true)) {
         $sortBy = 'date_entered';
     }
-    
-    if (!in_array($sortDir, ['ASC', 'DESC'])) {
+
+    if (!in_array($sortDir, ['ASC', 'DESC'], true)) {
         $sortDir = 'DESC';
     }
-    
-    $qb = $this->repository->createQueryBuilder('e')
-        ->orderBy("e.{$sortBy}", $sortDir);
-    
-    $results = $qb->getQuery()->getResult();
-    
-    return $response->withJson(['data' => $results]);
+
+    $results = $this->entityManager->getRepository(Employees::class)->createQueryBuilder('e')
+        ->orderBy("e.{$sortBy}", $sortDir)
+        ->getQuery()
+        ->getResult();
+
+    $response->getBody()->write(json_encode(['data' => array_map(fn($e) => $e->getSerialized(), $results)]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
 
 ## Dependency Injection
 
-Controllers receive dependencies through constructor injection.
+Controllers receive dependencies through constructor injection. `RouteManager` asks the PHP-DI container for every constructor parameter type:
 
-### Injecting Repositories
+- `EntityManagerInterface` is defined explicitly (`data/ORM/Doctrine/DoctrineContainerBuilder.php`).
+- Concrete classes whose own dependencies can be resolved are **autowired** (e.g. `DuplicateDetectionService` in `ModuleController`).
+- Interfaces and classes that are not defined in the container cannot be injected — e.g. `LoggerInterface`, or repositories (their constructor needs `ClassMetadata`). Get repositories from the entity manager instead.
+
+### Injecting the Entity Manager
 
 ```php
-use MintHCM\Api\Repositories\EmployeesRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Users;
 
-class EmployeeController
+class UserInfoController
 {
-    private $repository;
-
-    public function __construct(EmployeesRepository $repository)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->repository = $repository;
+    }
+
+    public function info(Request $request, Response $response): Response
+    {
+        $repository = $this->entityManager->getRepository(Users::class); // UsersRepository
+        // ...
     }
 }
 ```
@@ -456,21 +498,19 @@ class EmployeeController
 ### Injecting Services
 
 ```php
-use MintHCM\Lib\Services\EmployeeService;
+use MintHCM\Custom\Api\Services\EmployeeStatsService;   // custom/app/Services/
 
-class EmployeeController
+class EmployeeStatsController
 {
-    private $service;
-
-    public function __construct(EmployeeService $service)
+    public function __construct(private EmployeeStatsService $statsService)
     {
-        $this->service = $service;
     }
 
-    public function calculateBonus(Request $request, Response $response, array $args): Response
+    public function count(Request $request, Response $response): Response
     {
-        $bonus = $this->service->calculateBonus($args['id']);
-        return $response->withJson(['bonus' => $bonus]);
+        $count = $this->statsService->countByStatus($request->getAttribute('status'));
+        $response->getBody()->write(json_encode(['count' => $count]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
@@ -480,68 +520,75 @@ class EmployeeController
 ```php
 class EmployeeController
 {
-    private $repository;
-    private $logger;
-    private $validator;
-
     public function __construct(
-        EmployeesRepository $repository,
-        LoggerInterface $logger,
-        ValidatorInterface $validator
+        private EntityManagerInterface $entityManager,
+        private DuplicateDetectionService $duplicateDetectionService,
+        private EmployeeStatsService $statsService
     ) {
-        $this->repository = $repository;
-        $this->logger = $logger;
-        $this->validator = $validator;
     }
 }
 ```
+
+### Calling Legacy Code
+
+Legacy `BeanFactory` and other SuiteCRM code expect the `legacy/` working directory. Core controllers switch it around such calls:
+
+```php
+chdir('../legacy');
+$bean = \BeanFactory::getBean('Kudos', $id);
+$bean->save(false);
+chdir('../api');
+```
+
+See [Legacy Integration](./07-legacy-integration.md).
 
 ## Error Handling
 
 ### Validation Errors
 
+Basic presence and type validation is done by `ParamsMiddleware` from the route definition (400). Business validation of module records belongs in [MintLogic](./13-mintlogic.md) validators — `ModuleController` returns **422** with `{"isValid": false, "error": "ERR_..."}` when they fail. For custom endpoints:
+
 ```php
 public function create(Request $request, Response $response): Response
 {
-    $data = $request->getParsedBody();
-    
+    $email = $request->getAttribute('email');   // EmailType already validated the format
+
     $errors = [];
-    
-    if (empty($data['name'])) {
-        $errors['name'] = 'Name is required';
+    if ($this->emailIsTaken($email)) {
+        $errors['email'] = 'LBL_EMAIL_TAKEN';
     }
-    
-    if (empty($data['email'])) {
-        $errors['email'] = 'Email is required';
-    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Invalid email format';
-    }
-    
+
     if (!empty($errors)) {
-        return $response->withJson(['errors' => $errors], 400);
+        $response->getBody()->write(json_encode(['errors' => $errors]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(422);
     }
-    
+
     // Continue with creation...
 }
 ```
 
 ### Exception Handling
 
+Let unexpected exceptions propagate: `MintExceptionHandler` logs them and returns a uniform JSON error (details only in developer mode). For expected client errors throw Slim HTTP exceptions:
+
 ```php
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
+
 public function process(Request $request, Response $response): Response
 {
     try {
         $result = $this->service->doSomething();
-        return $response->withJson(['data' => $result]);
     } catch (\InvalidArgumentException $e) {
-        return $response->withJson(['error' => $e->getMessage()], 400);
-    } catch (\Exception $e) {
-        // Log error
-        error_log($e->getMessage());
-        return $response->withJson(['error' => 'Internal server error'], 500);
+        throw new HttpBadRequestException($request, $e->getMessage());
     }
+
+    $response->getBody()->write(json_encode(['data' => $result]));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 ```
+
+See [Error Handling](./19-error-handling.md).
 
 ## Best Practices
 
@@ -551,9 +598,9 @@ public function process(Request $request, Response $response): Response
 // ✅ Good - delegate to service
 public function process(Request $request, Response $response): Response
 {
-    $data = $request->getParsedBody();
-    $result = $this->service->processEmployee($data);
-    return $response->withJson($result);
+    $result = $this->service->processEmployee($request->getAttribute('employee_id'));
+    $response->getBody()->write(json_encode($result));
+    return $response->withHeader('Content-Type', 'application/json');
 }
 
 // ❌ Bad - too much logic
@@ -579,52 +626,42 @@ public function list($request, $response)
 }
 ```
 
-### 3. Validate Input
+### 3. Declare and Validate Input
 
 ```php
-// ✅ Good
-public function create(Request $request, Response $response): Response
-{
-    $data = $request->getParsedBody();
-    
-    if (empty($data['name'])) {
-        return $response->withJson(['error' => 'Name required'], 400);
-    }
-    
-    // Continue...
-}
+// ✅ Good - parameter declared in the route ('required' => true), read as attribute
+$name = $request->getAttribute('name');
 
-// ❌ Bad - no validation
-public function create(Request $request, Response $response): Response
-{
-    $data = $request->getParsedBody();
-    $entity->name = $data['name'];  // May be undefined!
-}
+// ❌ Bad - undeclared parameter: ParamsMiddleware rejects the request with 400
+$data = $request->getParsedBody();
+$entity->name = $data['name'];
 ```
 
 ### 4. Return Consistent Response Format
 
 ```php
 // ✅ Good - consistent structure
-return $response->withJson([
+$response->getBody()->write(json_encode([
     'data' => $records,
-    'meta' => ['total' => $count, 'page' => $page]
-]);
+    'meta' => ['total' => $count, 'page' => $page],
+]));
+return $response->withHeader('Content-Type', 'application/json');
 
-// ❌ Bad - inconsistent
-return $response->withJson($records);  // Sometimes array, sometimes object
+// ❌ Bad - inconsistent: sometimes array, sometimes object
+$response->getBody()->write(json_encode($records));
 ```
 
 ### 5. Use Proper HTTP Status Codes
 
 ```php
 // ✅ Good
-return $response->withJson($data, 201);  // Created
-return $response->withJson(['error' => '...'], 404);  // Not found
-return $response->withJson(['error' => '...'], 400);  // Bad request
+return $response->withHeader('Content-Type', 'application/json')->withStatus(201);  // Created
+return $response->withHeader('Content-Type', 'application/json')->withStatus(404);  // Not found
+return $response->withHeader('Content-Type', 'application/json')->withStatus(400);  // Bad request
 
-// ❌ Bad - always 200
-return $response->withJson(['error' => 'Not found']);  // Still 200!
+// ❌ Bad - error body with status 200
+$response->getBody()->write(json_encode(['error' => 'Not found']));
+return $response->withHeader('Content-Type', 'application/json');  // Still 200!
 ```
 
 ## Next Steps

@@ -49,6 +49,7 @@ namespace MintHCM\Api;
 use MintHCM\Api\ExceptionHandlers\Doctrine\DoctrineConnectionExceptionHandler;
 use MintHCM\Api\ExceptionHandlers\MintExceptionHandler;
 use MintHCM\Api\Middlewares\Admin\AdminMiddleware;
+use MintHCM\Api\Middlewares\Security\SecurityHeadersMiddleware;
 use MintHCM\Api\Middlewares\Auth\AuthMiddleware;
 use MintHCM\Api\Middlewares\Params\ParamsMiddleware;
 use MintHCM\Api\Middlewares\Parsers\JsonBodyParserMiddleware;
@@ -84,6 +85,15 @@ class ApiManager
         $this->app->addRoutingMiddleware();
         $this->routeManager->execute();
         $this->setErrorMiddleware();
+        $this->addAfterErrorMiddlewares();
+    }
+
+    /**
+     * Middlewares added after the error middleware wrap it, so they also see the error responses.
+     */
+    protected function addAfterErrorMiddlewares()
+    {
+        $this->app->add(CustomLoader::getObject(SecurityHeadersMiddleware::class));
     }
 
     protected function addBeforeRouteMiddlewares()
@@ -98,6 +108,7 @@ class ApiManager
 
     protected function setErrorMiddleware()
     {
+        // Error details are controlled by developerMode in MintExceptionHandler, not by this flag.
         $errorMiddleware = $this->app->addErrorMiddleware(true, false, false);
         $errorMiddleware->setDefaultErrorHandler(MintExceptionHandler::class);
         $errorMiddleware->setErrorHandler(

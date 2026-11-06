@@ -61,10 +61,11 @@ final class AccessTokenRepositoryTest extends TestCase
         $repository->revokeAccessToken('token-id');
     }
 
-    public function testSetsDeletedAndFlushesWhenRevokingAccessToken(): void
+    public function testMarksTokenAsRevokedAndFlushesWhenRevokingAccessToken(): void
     {
         $token = $this->createMintToken();
         $token->deleted = false;
+        $token->token_is_revoked = false;
 
         $em = $this->createEntityManager($token);
         $em->expects($this->once())->method('persist')->with($token);
@@ -74,6 +75,20 @@ final class AccessTokenRepositoryTest extends TestCase
         $repository->revokeAccessToken('token-id');
 
         self::assertTrue($token->deleted);
+        self::assertTrue($token->token_is_revoked);
+    }
+
+    public function testRevokedAccessTokenIsRejectedAfterRevoking(): void
+    {
+        $token = $this->createMintToken();
+        $token->deleted = false;
+        $token->token_is_revoked = false;
+        $token->access_token_expires = new \DateTime('+1 hour');
+
+        $repository = new AccessTokenRepository($this->createEntityManager($token));
+        $repository->revokeAccessToken('token-id');
+
+        self::assertTrue($repository->isAccessTokenRevoked('token-id'));
     }
 
     private function createMintToken(): MintToken&MockObject

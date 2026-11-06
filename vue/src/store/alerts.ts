@@ -36,7 +36,8 @@ export const useAlertsStore = defineStore('alerts', () => {
             return
         }
         isFetching.value = true
-        const response = await mintApi.get('Alerts')
+        // polling - must not count as user activity for the session idle timeout
+        const response = await mintApi.get('Alerts', { headers: { 'X-Mint-Background-Request': '1' } })
         alerts.value = response.data?.alerts ?? []
         moreResults.value = response.data?.moreResults ?? false
         isFetching.value = false

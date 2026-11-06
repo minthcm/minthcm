@@ -120,6 +120,27 @@ class SugarApplication
 
         $authController = new AuthenticationController();
 
+        // The API (AuthMiddleware) enforces the same limits on the shared session
+        if (isset($_SESSION['authenticated_user_id'])) {
+            $sessionTimeout = new \SuiteCRM\Utility\SessionTimeout();
+            // alerts.js polls this every 60 s - it must not count as user activity
+            $isAlertsPolling = strtolower((string) $this->controller->module) === 'alerts'
+                && strtolower((string) $this->controller->action) === 'get';
+            if ($sessionTimeout->isExpired($_SESSION, time())) {
+                session_destroy();
+                if ($isAlertsPolling) {
+                    // alerts.js redirects to the login page on this answer
+                    echo 'lost session';
+                    exit();
+                }
+                SugarApplication::redirect('index.php?action=Login&module=Users');
+                die();
+            }
+            if (!$isAlertsPolling) {
+                $sessionTimeout->touch($_SESSION, time());
+            }
+        }
+
         if (($user_unique_key != $server_unique_key) && (!in_array($this->controller->action, $allowed_actions)) &&
                 (!isset($_SESSION['login_error']))) {
             session_destroy();
@@ -602,9 +623,12 @@ class SugarApplication
     {
         $sessionIdCookie = isset($_COOKIE['PHPSESSID']) ? $_COOKIE['PHPSESSID'] : null;
         if (isset($_REQUEST['MSID'])) {
+            // Seamless login: a web service client (SOAP/REST) opens the UI with its own session id.
+            // Only a web service session that has just called seamless_login is accepted, once.
+            // Any other session (e.g. the UI session of a user) cannot be adopted through MSID.
             session_id($_REQUEST['MSID']);
             session_start();
-            if (!isset($_SESSION['user_id'])) {
+            if (!isset($_SESSION['user_id']) || ($_SESSION['seamless_login_until'] ?? 0) < time()) {
                 if (isset($_COOKIE['PHPSESSID'])) {
                     self::setCookie('PHPSESSID', '', time() - 42000, '/');
                 }
@@ -612,6 +636,7 @@ class SugarApplication
                 session_destroy();
                 exit('Not a valid entry method');
             }
+            unset($_SESSION['seamless_login_until']);
         } else {
             if (can_start_session()) {
                 session_start();

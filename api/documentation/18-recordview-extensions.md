@@ -14,14 +14,19 @@ Any filename ending in `.php` is picked up. The file has full read/write access 
 
 ```php
 <?php
-// legacy/custom/Extension/modules/Meetings/recordview/close_button.php
+// legacy/custom/Extension/modules/Meetings/recordview/cancel_button.php
 $viewdefs['Meetings']['panels']['basicInfo']['data']['actions'][] = [
-    'key' => 'CloseMeeting',
-    'label' => 'LBL_CLOSE_BUTTON_TITLE',
-    'icon' => 'mdi-check',
+    'key' => 'CancelMeeting',
+    'label' => 'LBL_CANCEL_MEETING_BUTTON_TITLE',
+    'icon' => 'mdi-cancel',
     'acl' => 'edit',
+    'type' => 'confirm',
+    'confirm' => ['body' => 'LBL_CANCEL_MEETING_CONFIRM_BODY'],
+    'api_route' => 'Meetings/cancelMeeting', // your own endpoint
 ];
 ```
+
+A generic action needs `api_route` and a unique `key`; a named action needs `name` (or is a plain string). An entry with neither identifier is silently skipped by `RecordViewActionsMerger` (`api/app/RecordView/RecordViewActionsMerger.php`), and reusing an existing identifier (e.g. core Meetings' `CloseMeeting`) replaces that action instead of adding one.
 
 ```php
 <?php
@@ -35,7 +40,7 @@ unset($viewdefs['Employees']['sidepanel']);
 
 **Stick to mutating `$viewdefs` — don't declare functions or classes.** The builder wraps the merge in a `try`/`catch` so one module's broken extension can't abort the rebuild for every other module, but a "Cannot redeclare" fatal (the same file built twice in one request, or two extension files picking the same function/class name) is a PHP compile error, not a catchable exception — it isn't covered by that `try`/`catch` and can still take down the whole run.
 
-Appending to `['data']['actions']` is additive on top of the module's own declarations **and** on top of the default record-view actions (`Audit`, `Delete`, `Duplicate`) — a package adding a button never removes them, unless the panel itself opts out with `includeDefaultActions => false` (several core modules do, to keep a deliberately narrower menu). The merge rules (identifier, in-place override, `includeDefaultActions`) are documented in [Record View Definitions](../../vue/documentation/12-recordviewdefs.md), section *Actions*.
+Appending to `['data']['actions']` is additive on top of the module's own declarations **and** on top of the default record-view actions (`Audit`, `Delete`, `Duplicate`) — a package adding a button never removes them, unless the panel itself opts out with `includeDefaultActions => false` (several core modules do, to keep a deliberately narrower menu — e.g. `Meetings`, `Candidatures`, `Kudos`, `Costs`, `News`). The merge rules (identifier, in-place override, `includeDefaultActions`) are documented in [Record View Definitions](../../vue/documentation/12-recordviewdefs.md), section *Actions*.
 
 ## Where the merged result lives: the cache
 

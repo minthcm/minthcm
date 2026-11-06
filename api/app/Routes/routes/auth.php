@@ -182,7 +182,7 @@ $routes = array(
             "username" => array(
                 "type" => StringType::class,
                 "required" => true,
-                "desc" => "Username",
+                "desc" => "Username of the account to reset - must match the token owner",
                 "example" => 'user',
             ),
             "new_password" => array(

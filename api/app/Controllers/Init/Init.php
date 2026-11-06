@@ -325,6 +325,9 @@ class Init
         if (isset($_SESSION['mintRebuildID']) && !empty($_SESSION['mintRebuildID'])) {
             return $_SESSION['mintRebuildID'];
         }
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         chdir('../legacy');
         $mintRebuildFile = fopen("cache/mintRebuild", 'r');
         if (!$mintRebuildFile) {

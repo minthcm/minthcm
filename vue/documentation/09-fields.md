@@ -6,37 +6,48 @@ The Field System is one of the most powerful features of MintHCM frontend. It au
 
 Fields in MintHCM are **dynamic** and **self-configuring**. A single `<Field>` component automatically:
 
-1. Detects the field type (string, enum, date, etc.)
-2. Loads the appropriate sub-component (string.edit.vue, enum.detail.vue, etc.)
+1. Detects the field type (`varchar`, `enum`, `date`, etc.)
+2. Loads the appropriate sub-component (`varchar.edit.vue`, `enum.detail.vue`, etc.)
 3. Renders with proper styling and behavior
-4. Handles validation and state management
+4. Shows the required/error state and the error message
+
+In record views a field is always backed by a **`MintField`** - the per-field model created by `useField` and kept in `bean.fields` (see [Working with Beans](./10-working-with-beans.md)). Edit components write to `props.field.model`, so the `field` prop is required in edit view:
 
 ```vue
 <template>
-    <!-- Same component, different behavior based on props -->
-    
-    <!-- Edit mode: shows text input -->
-    <Field 
-        :defs="{ type: 'string', name: 'first_name' }"
+    <!-- Edit mode: text input bound to the bean's MintField -->
+    <Field
+        :defs="bean.fieldDefs.value.first_name"
         :view="'edit'"
-        v-model="formData.first_name"
+        :label="languages.label('LBL_FIRST_NAME', 'Employees')"
+        :field="bean.fields.value.first_name"
+        :required="bean.logic.requiredFields.value.includes('first_name')"
+        :errorMessage="bean.errorMessages.value.first_name"
+        @update:modelValue="(value) => bean.updateFields({ first_name: value })"
     />
-    
-    <!-- Detail mode: shows plain text -->
-    <Field 
-        :defs="{ type: 'string', name: 'first_name' }"
+
+    <!-- Detail mode: plain text -->
+    <Field
+        :defs="bean.fieldDefs.value.first_name"
         :view="'detail'"
-        :modelValue="record.first_name"
+        :label="languages.label('LBL_FIRST_NAME', 'Employees')"
+        :field="bean.fields.value.first_name"
+        :modelValue="bean.syncAttributes.value.first_name"
     />
-    
-    <!-- List mode: shows truncated text -->
-    <Field 
-        :defs="{ type: 'string', name: 'first_name' }"
-        :view="'list'"
-        :modelValue="record.first_name"
+
+    <!-- List mode: each list row is a bean as well -->
+    <Field
+        view="list"
+        :defs="store.defs.columns.first_name"
+        :data="{ bean: item }"
+        :label="languages.label(store.defs.columns.first_name.label, store.module)"
+        :field="item.fields.first_name"
+        :modelValue="item.attributes.first_name"
     />
 </template>
 ```
+
+The canonical usages are `MintPanelRecordPanel.vue` (`src/components/MintPanel/MintPanelRecordPanel/`) and `ListViewTable.vue` (`src/views/ListView/`).
 
 ## Architecture
 
@@ -45,455 +56,348 @@ Fields in MintHCM are **dynamic** and **self-configuring**. A single `<Field>` c
 ```
 components/Fields/
 ├── Field.vue              # Main router component
-├── Field.config.ts        # Field type configuration
-├── Field.model.ts         # TypeScript interfaces
-├── useField.ts            # Composable for field logic
+├── Field.config.ts        # Glob-built type registry + typeMap
+├── Field.model.ts         # FieldProps, FieldInterface
+├── useField.ts            # MintField: model, dirty flag, validation, formatting
 ├── Pencil.vue             # Edit mode toggle button
 │
 └── {fieldType}/           # Each field type has a folder
     ├── {fieldType}.detail.vue    # Detail view
     ├── {fieldType}.edit.vue      # Edit view
     ├── {fieldType}.list.vue      # List view
-    └── {fieldType}.options.ts    # Configuration (optional)
+    └── {fieldType}.ts            # FieldInterface: validator / formatters (optional)
 ```
+
+A type does not need all three views; a missing view simply falls back to `varchar` for that view.
 
 ### Field Type Folder Structure
 
-Example: String field
+Example: `varchar` (the default text field)
 
 ```
-Fields/string/
-├── string.detail.vue      # Plain text display
-├── string.edit.vue        # Text input
-└── string.list.vue        # Truncated text for tables
+Fields/varchar/
+├── varchar.detail.vue      # Plain text display
+├── varchar.edit.vue        # Text input (v-model on props.field.model)
+└── varchar.list.vue        # Text for tables
 ```
 
 ### How Field Loading Works
 
 ```
 1. <Field> component receives props
-   - defs: { type: 'enum', name: 'status' }
+   - defs: { type: 'enum', name: 'status', ... }
    - view: 'edit'
    ↓
 2. Field.vue resolves field type
-   - Checks defs.type: 'enum'
-   - Maps special types (Field.config.ts)
-   - Falls back to default if not found
+   - date_entered / date_modified in detail view → 'datetimecombined'
+   - defs.type has a component for this view? → use it
+   - else typeMap[defs.type] has one? → use it
+   - else → 'varchar' (console warning)
    ↓
 3. Dynamically imports component
    - import(`@/components/Fields/enum/enum.edit.vue`)
    ↓
 4. Renders loaded component
-   - Passes through all props
-   - Emits v-model updates
+   - Passes defs, label, field, modelValue, options, data, view and the computed state
    ↓
-5. Component displays/handles input
+5. Component displays/handles input and emits update:modelValue
 ```
 
 ## Field Types
 
 ### Available Field Types
 
-MintHCM includes ~30 field types:
+`src/components/Fields/` contains 26 type folders:
 
-| Type | Description | Example Use |
-|------|-------------|-------------|
-| `varchar` / `string` | Text input | Names, titles |
-| `text` | Multi-line text | Descriptions |
-| `enum` | Dropdown select | Status, category |
-| `multienum` | Multi-select | Tags, skills |
-| `bool` | Checkbox/toggle | Is Active, Published |
-| `date` | Date picker | Birth date |
-| `datetime` | Date + time picker | Created date |
-| `datetimecombined` | Combined display | Modified date |
-| `email` | Email input | Email address |
-| `phone` | Phone input | Phone number |
-| `url` | URL input | Website |
-| `int` / `integer` | Number input | Age, count |
-| `float` / `decimal` | Decimal input | Price, rating |
-| `currency` | Money input | Salary, budget |
-| `file` | File upload | Documents |
-| `image` | Image upload | Photos |
-| `relate` | Related record | Manager, Department |
-| `parent` | Polymorphic relation | Parent record |
-| `age` | Calculated age | Years since date |
-| `achievements` | Achievement badges | Milestones |
-| `appraisaltoken` | Appraisal token | Performance review |
-| `fieldset` | Group of fields | Address block |
-| `html` | Rich text editor | Content, notes |
+| Type | Views | Description |
+|------|-------|-------------|
+| `varchar` | detail, edit, list | Text input (default/fallback type) |
+| `text` | detail, edit, list | Multi-line text |
+| `name` | list | Record name in lists (links to the record) |
+| `id` | detail, edit, list | Record ID |
+| `enum` | detail, edit, list | Dropdown select |
+| `multienum` | detail, edit, list | Multi-select |
+| `bool` | detail, edit, list | Checkbox/toggle |
+| `int` | detail, edit, list | Integer input |
+| `currency` | detail, edit, list | Money input |
+| `date` | detail, edit, list | Date picker |
+| `datetime` | detail, edit, list | Date + time picker |
+| `datetimecombined` | detail | Date + time display (used for `date_entered` / `date_modified`) |
+| `email` | detail, edit, list | Email address |
+| `phone` | detail, edit, list | Phone number |
+| `url` | detail, edit, list | Website |
+| `file` | detail, edit, list | File / image upload |
+| `relate` | detail, edit, list | Related record |
+| `parent` | detail, edit, list | Polymorphic relation (parent type + record) |
+| `richtext` | detail, edit, list | Rich text (HTML) |
+| `markdown` | detail, edit | Markdown content |
+| `fieldset` | detail, edit | Group of fields (e.g. address block) |
+| `repeat` | detail, edit | Recurrence settings (meetings, work schedules) |
+| `crontab` | detail, edit, list | Cron expression (see [List View Panels](./16-list-view-panels.md)) |
+| `age` | detail, edit, list | Calculated age |
+| `achievements` | detail | Achievement badges |
+| `appraisaltoken` | list | Appraisal token |
+
+Backend types mapped to another component through `typeMap`: `char` → `varchar`, `name` → `varchar` (detail/edit), `datetimecombo` → `datetime`, `ColoredEnum` / `ColoredActivityStatus` → `enum`, `image` → `file`, `html` → `richtext`. Any other unknown type (e.g. `float`, `decimal`) is rendered as `varchar`.
 
 ### Field Type Configuration
 
 **File:** `Field.config.ts`
 
 ```typescript
+const listFields = import.meta.glob('@/components/Fields/*/*.list.vue', { eager: true })
+const editFields = import.meta.glob('@/components/Fields/*/*.edit.vue', { eager: true })
+const detailFields = import.meta.glob('@/components/Fields/*/*.detail.vue', { eager: true })
+const fields = import.meta.glob('@/components/Fields/*/*.ts', { eager: true })
+
 export const fieldConfig = {
-    // Available field types per view
+    // Types available per view - derived from the files that exist
     allowedTypes: {
-        list: ['string', 'enum', 'date', ...],
-        edit: ['string', 'enum', 'date', ...],
-        detail: ['string', 'enum', 'date', ...],
+        list: Object.keys(listFields).map(getFieldName),
+        edit: Object.keys(editFields).map(getFieldName),
+        detail: Object.keys(detailFields).map(getFieldName),
     },
 
-    // Map backend types to component types
-    typeMap: {
-        'char': 'varchar',              // char → varchar component
-        'datetimecombo': 'datetime',    // datetimecombo → datetime
-        'ColoredEnum': 'enum',          // ColoredEnum → enum
-        'image': 'file',                // image → file
-        'html': 'richtext',             // html → richtext
-    },
+    // FieldInterface objects from {type}/{type}.ts, keyed by type
+    fields: { /* e.g. enum: { userFormatter }, date: { ... } */ },
 
     // Default type when resolution fails
     defaultType: 'varchar',
-    
-    // Field-specific options
-    options: {
-        enum: { ... },
-        date: { ... },
-    }
+
+    // Map backend types to component types
+    typeMap: {
+        char: 'varchar',
+        datetimecombo: 'datetime',
+        ColoredActivityStatus: 'enum',
+        ColoredEnum: 'enum',
+        image: 'file',
+        html: 'richtext',
+        name: 'varchar',
+    },
 }
 ```
 
-## Creating Custom Field Types
+There is nothing to register by hand: adding a file is enough.
+
+### Field Behavior File (`{type}.ts`)
+
+A type folder may contain `{type}.ts` exporting a `FieldInterface` (`Field.model.ts`). `useField` uses it for every bean field of that type:
+
+```typescript
+export interface FieldInterface {
+    validator?: (value: any) => string | void            // return an error label to fail validation
+    toAppFormat?: (value: any) => any                     // server value → model value
+    userFormatter?: (value: any, defs: FieldVardef) => string | number | boolean | string[]   // display
+    serverFormatter?: (value: any, defs: FieldVardef) => string | number | boolean | string[] // value sent on save
+}
+```
+
+Example - `enum/enum.ts`:
+
+```typescript
+const field: FieldInterface = {
+    userFormatter: (value: string, defs: FieldVardef) => {
+        if (!value) {
+            return ''
+        }
+        const language = useLanguagesStore()
+        return language.translateListValue(value, defs.options) || value
+    },
+}
+
+export default field
+```
+
+Types with such a file today: `date`, `datetime`, `datetimecombined`, `enum`, `file`, `multienum`, `text`.
+
+## Adding a New Field Type
+
+> **Important:** field types are resolved only from `src/components/Fields/`. Files in `src/custom/components/Fields/` are **not** loaded by `Field.vue` or `Field.config.ts`, so a field type cannot currently be added through `custom/`.
+
+To add a type, create a folder in core:
 
 ### Step 1: Create Field Components
 
-**File:** `custom/components/Fields/rating/rating.detail.vue`
-
-```vue
-<template>
-    <div class="rating-detail">
-        <v-rating
-            :model-value="modelValue"
-            readonly
-            color="amber"
-            density="compact"
-        />
-        <span class="rating-value">{{ modelValue }}/5</span>
-    </div>
-</template>
-
-<script setup lang="ts">
-import { FieldProps } from '@/components/Fields/Field.model'
-
-const props = defineProps<Pick<FieldProps, 'modelValue' | 'defs'>>()
-</script>
-
-<style scoped>
-.rating-detail {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.rating-value {
-    font-size: 14px;
-    color: #666;
-}
-</style>
-```
-
-**File:** `custom/components/Fields/rating/rating.edit.vue`
+**File:** `src/components/Fields/rating/rating.edit.vue`
 
 ```vue
 <template>
     <div class="rating-edit">
-        <label v-if="label">{{ label }}</label>
+        <label v-if="props.label">{{ props.label }}</label>
         <v-rating
-            :model-value="modelValue"
-            @update:model-value="$emit('update:modelValue', $event)"
-            color="amber"
+            v-model="props.field.model"
+            @update:modelValue="(v) => emit('update:modelValue', v)"
             hover
             :length="5"
-            :size="32"
         />
-        <div v-if="state === 'error'" class="error-message">
-            Rating is required
-        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { FieldProps } from '@/components/Fields/Field.model'
+import { FieldProps } from '../Field.model'
 
-const props = defineProps<FieldProps>()
+const props = defineProps<FieldProps<number>>()
 const emit = defineEmits(['update:modelValue'])
 </script>
-
-<style scoped>
-.rating-edit {
-    padding: 8px 0;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.error-message {
-    color: red;
-    font-size: 12px;
-    margin-top: 4px;
-}
-</style>
 ```
 
-**File:** `custom/components/Fields/rating/rating.list.vue`
+**File:** `src/components/Fields/rating/rating.detail.vue`
 
 ```vue
 <template>
-    <v-rating
-        :model-value="modelValue"
-        readonly
-        color="amber"
-        density="compact"
-        size="small"
-    />
+    <v-rating :model-value="Number(props.modelValue) || 0" readonly density="compact" />
 </template>
 
 <script setup lang="ts">
-import { FieldProps } from '@/components/Fields/Field.model'
+import { FieldProps } from '../Field.model'
 
-const props = defineProps<Pick<FieldProps, 'modelValue'>>()
+const props = defineProps<FieldProps<number>>()
 </script>
 ```
 
-### Step 2: Register Field Type
+Add `rating.list.vue` the same way if the type should render differently in lists, and `rating.ts` for validation or formatting.
 
-Modify field configuration to include your custom type:
+### Step 2: Use in Backend
 
-```typescript
-// Field.config.ts or custom/components/Fields/config.ts
-export const customFieldTypes = {
-    allowedTypes: {
-        detail: ['rating'],
-        edit: ['rating'],
-        list: ['rating'],
-    },
-    typeMap: {
-        'stars': 'rating',  // Map backend 'stars' type to 'rating' component
-    }
-}
-```
-
-### Step 3: Use in Backend
-
-Define field in backend vardefs:
+Define the field in the module vardefs with the folder name as `type` (or map an existing backend type in `typeMap`):
 
 ```php
-// modules/Products/vardefs.php
-$dictionary['Product']['fields']['customer_rating'] = [
+// legacy/custom/Extension/modules/Candidates/Ext/Vardefs/customer_rating.php
+$dictionary['Candidates']['fields']['customer_rating'] = [
     'name' => 'customer_rating',
-    'type' => 'rating',  // or 'stars' which maps to 'rating'
-    'label' => 'Customer Rating',
+    'vname' => 'LBL_CUSTOMER_RATING',
+    'type' => 'rating',
+    'dbType' => 'int',
 ];
 ```
 
-### Step 4: Use in Frontend
+### Step 3: Rebuild
 
-The field now works automatically:
-
-```vue
-<template>
-    <!-- Automatically uses rating.edit.vue in edit mode -->
-    <Field 
-        :defs="{ type: 'rating', name: 'customer_rating' }"
-        :view="'edit'"
-        v-model="product.customer_rating"
-        label="Customer Rating"
-    />
-</template>
-```
+The new type is picked up by the globs at build time: run `npm run build` in `vue/` and commit `vue/dist/`.
 
 ## Field Props Interface
 
-Every field component receives these props:
+Every field component receives these props (`Field.model.ts`):
 
 ```typescript
-interface FieldProps {
-    // View mode
-    view: 'edit' | 'detail' | 'list'
-    
-    // Field definition from backend
-    defs: FieldVardef
-    
-    // Display label
-    label: string
-    
-    // Current value
-    modelValue?: any
-    
-    // Full record data (for computed fields)
-    data?: any
-    
-    // Custom options
-    options?: any
-    
-    // Visual state
-    state?: 'normal' | 'error' | 'required'
-    
-    // Validation
+interface FieldProps<T = any> {
+    view: 'edit' | 'detail' | 'list'   // View mode
+    defs: FieldVardef                   // Field definition from backend
+    label: string                       // Display label (translated)
+    field: MintField<T>                 // Per-field model from bean.fields (required for edit)
+    modelValue?: any                    // Current value (detail/list)
+    data?: any                          // Extra data, e.g. { bean } in record views
+    options?: any                       // Options override (from logic: bean.logic.fieldsOptions)
+    state?: 'normal' | 'error' | 'required'  // Set by Field.vue, not by the caller
     required?: boolean
     error?: boolean
-    errorMessage?: string
-    
-    // UI state
+    errorMessage?: string               // Label key of the error to show
     disabled?: boolean
     hidePencil?: boolean
-    isDirty?: boolean
+    isDirty?: boolean                   // Show the "required" error only after editing / save attempt
+    minuteStep?: number                 // Time pickers
 }
 ```
 
 ### FieldVardef Interface
 
-Field definitions from backend:
+Field definitions from backend (`src/store/modules.ts`):
 
 ```typescript
 interface FieldVardef {
-    name: string                // Field name
-    type: string                // Field type
-    label?: string              // Display label
-    required?: boolean          // Is required
-    readonly?: boolean          // Is readonly
-    len?: number                // Max length
-    options?: string            // Options list name
-    default?: any               // Default value
-    validation?: any            // Validation rules
-    // ... other metadata
+    name: string
+    type: string
+    label: string
+    inputType?: string                       // varchar: HTML input type
+    config_key?: string
+    id_name?: string                         // relate: ID field
+    type_name?: string                       // parent: type field
+    options?: string | Record<string, string> // enum: list name or { key: label }
+    options_colors?: string                  // colored enums
+    default?: string
+    readonly?: boolean
+    properties?: PropertiesObject            // fieldset: separator + fields
+    filters?: { [moduleName: string]: filterDef[] } | filterDef[]  // relate: search filters
+    comment?: string                         // help text (aria description)
+    hide_detail?: boolean
+    additional_info?: string
+    upload_handler?: string
+    static_value?: string
+    visible_when?: Array<{ field: string; value: any }>
 }
 ```
 
 ## Field States
 
-Fields have visual states to indicate status:
+`Field.vue` computes the state itself and passes it to the component; a `state` passed to `<Field>` is ignored:
 
-### Normal State
-
-Default appearance:
-
-```vue
-<Field 
-    :state="'normal'"
-    v-model="data.field"
-/>
-```
-
-### Required State
-
-Indicates field is required:
+| State | When | Visual |
+|-------|------|--------|
+| `normal` | Not edit view, or no error and not required | Default outline |
+| `required` | Edit view and `required` is true | Label gets the ` (required)` suffix (`LBL_REQUIRED`) |
+| `error` | Edit view and an error message exists | Error message shown below the field |
 
 ```vue
-<Field 
-    :state="'required'"
+<Field
+    :defs="defs"
+    :view="'edit'"
+    :label="label"
+    :field="bean.fields.value.email"
     :required="true"
-    v-model="data.field"
+    :isDirty="bean.isDirty.value || bean.fields.value.email?.isDirty"
+    :errorMessage="bean.errorMessages.value.email"
 />
 ```
-
-**Styling:**
-- Label has asterisk (*)
-- Special border color (blue)
-
-### Error State
-
-Shows validation error:
-
-```vue
-<Field 
-    :state="'error'"
-    :error="true"
-    :errorMessage="'ERR_FIELD_REQUIRED'"
-    v-model="data.field"
-/>
-```
-
-**Styling:**
-- Red border
-- Error message below field
-- Error icon
 
 ## Field Validation
 
 ### Built-in Validation
 
-Field component handles basic validation:
+The error message shown by `Field.vue` (edit view only):
 
-```vue
-<script setup lang="ts">
+```typescript
 const errorMessage = computed(() => {
     if (props.view !== 'edit') {
         return ''
     }
-    
-    // Check required
-    if (props.required && !props.modelValue) {
-        return languagesStore.label('ERR_FIELD_REQUIRED')
-    }
-    
-    // Check custom error
+    // 1. Explicit error (from bean.errorMessages / logic)
     if (props.errorMessage) {
-        return languagesStore.label(props.errorMessage)
+        return languagesStore.label(props.errorMessage, modulesStore.currentModule?.name)
     }
-    
-    return ''
-})
-</script>
-```
-
-### Custom Validation
-
-Add field-specific validation:
-
-```vue
-<!-- email.edit.vue -->
-<script setup lang="ts">
-import { computed } from 'vue'
-
-const isValidEmail = computed(() => {
-    if (!props.modelValue) return true
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return regex.test(props.modelValue)
-})
-
-const errorMessage = computed(() => {
-    if (!isValidEmail.value) {
-        return 'Invalid email address'
+    // 2. Required and empty, once the field is dirty (or a save was attempted)
+    if (props.isDirty && props.required) {
+        const fieldValue = props.field?.formatted?.server ?? props.modelValue
+        if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
+            return languagesStore.label('ERR_FIELD_REQUIRED', modulesStore.currentModule?.name)
+        }
     }
     return ''
 })
-</script>
-
-<template>
-    <v-text-field
-        :model-value="modelValue"
-        :error="!isValidEmail"
-        :error-messages="errorMessage"
-        @update:model-value="$emit('update:modelValue', $event)"
-    />
-</template>
 ```
+
+### Type-Level Validation
+
+Validation for a whole type goes into `validator` in `{type}/{type}.ts`. `useField().validate()` calls it, and `bean.errorMessages` collects the results for the fields of the record form (`MintPanelRecordDetails`). A non-empty `bean.errorMessages` makes `bean.isValid` false.
+
+```typescript
+// Fields/mytype/mytype.ts
+const field: FieldInterface = {
+    validator: (value: string) => {
+        if (value && !/^[A-Z]{2}\d+$/.test(value)) {
+            return 'LBL_INVALID_FORMAT' // label key
+        }
+    },
+}
+export default field
+```
+
+Record-specific rules (required/readonly/hidden fields, error messages) come from backend logic, see [Working with Beans](./10-working-with-beans.md#business-logic).
 
 ## Special Field Types
 
 ### Relate Field
 
-Displays and selects related records:
-
-```vue
-<Field
-    :defs="{
-        type: 'relate',
-        name: 'manager_id',
-        module: 'Users',
-        id_name: 'manager_id',
-        rname: 'name'
-    }"
-    :view="'edit'"
-    v-model="employee.manager_name"
-/>
-```
+Displays and selects related records. The vardef provides `module`, `id_name` and optionally `filters`.
 
 **Features:**
 - Autocomplete search with **multi-word support** — each word is matched independently using a wildcard (`word*`), so typing `"Jan Ko"` finds records matching both `Jan*` and `Ko*`
@@ -505,81 +409,38 @@ Displays and selects related records:
 
 ### Enum Field
 
-Dropdown with options:
+Dropdown with options. Options come from `props.options` (logic override) or `defs.options`:
 
-```vue
-<Field 
-    :defs="{
-        type: 'enum',
-        name: 'status',
-        options: 'employee_status_dom'
-    }"
-    :view="'edit'"
-    v-model="employee.status"
-/>
-```
+- a **string** - name of an app list (`languages.getList(name)`);
+- an **object** `{ key: label }`;
+- an **array** of `{ key, value }`.
 
 **Features:**
-- Options loaded from backend
-- Translated labels
-- Custom colors (ColoredEnum)
+- Translated labels (`enum.ts` `userFormatter`)
+- Colored variants via the `ColoredEnum` / `ColoredActivityStatus` types and `options_colors`
 
 ### DateTime Field
 
-Date and time picker:
-
-```vue
-<Field 
-    :defs="{
-        type: 'datetime',
-        name: 'meeting_date'
-    }"
-    :view="'edit'"
-    v-model="meeting.meeting_date"
-/>
-```
+Date and time picker (`datetime`; backend `datetimecombo` maps to it).
 
 **Features:**
 - Date picker calendar
-- Time picker
-- Timezone aware
-- Format localization
+- Time picker (`minuteStep`)
+- Timezone aware (user timezone from preferences)
+- Format localization (user date/time format)
 
 ### File Field
 
-File upload:
-
-```vue
-<Field 
-    :defs="{
-        type: 'file',
-        name: 'attachment'
-    }"
-    :view="'edit'"
-    v-model="document.attachment"
-/>
-```
+Single file upload (`file`; backend `image` maps to it).
 
 **Features:**
-- Drag & drop upload
-- Progress indication
-- File preview
-- Multiple files support
+- One file per field (`v-file-input`)
+- Image preview with zoom popup for image fields
+- On save, the file is read as a data URL and sent with the record (see [Working with Beans](./10-working-with-beans.md#file-uploads))
 
 ### Richtext Field
 
-Rich text (HTML) content, backed by the `html` vardef type:
-
-```vue
-<Field
-    :defs="{
-        type: 'html',
-        name: 'content_of_announcement'
-    }"
-    :view="'edit'"
-    v-model="news.content_of_announcement"
-/>
-```
+Rich text (HTML) content, backed by the `html` vardef type.
 
 **Features:**
 - Edit view uses `MintWysiwyg` (TinyMCE) for formatting
@@ -588,221 +449,131 @@ Rich text (HTML) content, backed by the `html` vardef type:
 
 ## Field Options
 
-Some fields accept custom options:
+The `options` prop overrides `defs.options` for option-based types (`enum`, `multienum`, `parent`). In record views it is filled from backend logic:
 
 ```vue
-<Field 
-    :defs="{ type: 'enum', name: 'status' }"
-    :options="{
-        items: [
-            { value: 'draft', label: 'Draft' },
-            { value: 'published', label: 'Published' },
-        ],
-        color: true,  // Use colored badges
-    }"
-    v-model="record.status"
+<Field
+    :defs="defs"
+    :view="'edit'"
+    :label="label"
+    :field="bean.fields.value.status"
+    :options="bean.logic.fieldsOptions.value.status"
 />
 ```
 
-**Field-specific options file:**
-
-```typescript
-// components/Fields/enum/enum.options.ts
-export default {
-    // Custom options for enum field
-    colorMap: {
-        'Active': 'green',
-        'Inactive': 'red',
-        'Draft': 'orange',
-    },
-    iconMap: {
-        'Active': 'mdi-check-circle',
-        'Inactive': 'mdi-close-circle',
-    }
-}
-```
+Accepted shapes: an app list name, `{ key: label }`, or `[{ key, value }]`.
 
 ## View-Specific Behavior
 
 ### Detail View
 
-- **Read-only** display
+- **Read-only** display of `modelValue` (in record views: `bean.syncAttributes`)
 - Formatted output
-- Links to related records
-- Copy to clipboard
-
-```vue
-<!-- string.detail.vue -->
-<template>
-    <div class="string-detail">
-        <span>{{ modelValue }}</span>
-        <v-btn 
-            icon 
-            size="small"
-            @click="copyToClipboard"
-        >
-            <v-icon>mdi-content-copy</v-icon>
-        </v-btn>
-    </div>
-</template>
-```
+- Links to related records (relate, parent, name)
 
 ### Edit View
 
-- **Input controls**
-- Validation
-- Error messages
-- Help text
+- **Input controls** bound to `props.field.model`
+- Emit `update:modelValue` so the parent can call `bean.updateFields()`
+- Error state and message from `Field.vue`
+- Help text from `defs.comment` (aria description)
 
 ```vue
-<!-- string.edit.vue -->
+<!-- varchar.edit.vue (excerpt) -->
 <template>
     <v-text-field
-        :model-value="modelValue"
-        :label="label"
-        :error="state === 'error'"
-        :required="required"
-        @update:model-value="$emit('update:modelValue', $event)"
+        :label="props.label"
+        variant="outlined"
+        density="compact"
+        hide-details
+        :name="props.defs.name"
+        v-model="props.field.model"
+        :error="props.state === 'error'"
+        :type="props.defs.inputType || 'text'"
+        @update:modelValue="(v) => $emit('update:modelValue', v)"
     />
 </template>
 ```
 
 ### List View
 
-- **Compact** display
-- Truncated text
-- Quick actions
-- Sortable
+- **Compact** display of `modelValue`
+- `richtext.list.vue` strips tags and truncates; `name.list.vue` links to the record
 
-```vue
-<!-- string.list.vue -->
-<template>
-    <div class="string-list">
-        {{ truncatedValue }}
-    </div>
-</template>
+## `useField` (MintField)
 
-<script setup lang="ts">
-const truncatedValue = computed(() => {
-    const max = 50
-    if (props.modelValue?.length > max) {
-        return props.modelValue.substring(0, max) + '...'
-    }
-    return props.modelValue
-})
-</script>
-```
+**File:** `src/components/Fields/useField.ts`
 
-## Composable: useField
-
-Reusable field logic:
+`useBean` creates one `MintField` per attribute with `useField(defs, initialValue)`:
 
 ```typescript
-// composables/useField.ts
-import { computed } from 'vue'
-import { useLanguagesStore } from '@/store/languages'
+export const useField = <T>(defs: FieldVardef, initialValue: T, opts: FieldOptions = {}) => {
+    const resolvedFieldType = fieldConfig.typeMap[defs.type] || defs.type
+    const fieldInterface: FieldInterface = fieldConfig.fields[resolvedFieldType] || {}
 
-export function useField(props: FieldProps) {
-    const languages = useLanguagesStore()
-    
-    const displayLabel = computed(() => {
-        let label = props.label
-        if (props.required && props.view === 'edit') {
-            label += ` (${languages.label('LBL_REQUIRED').toLowerCase()})`
+    const model = ref<T>(fieldInterface.toAppFormat ? fieldInterface.toAppFormat(initialValue) : initialValue)
+    const isDirty = ref(false) // becomes true on the first change of model
+
+    const formatted = computed(() => ({
+        user: fieldInterface.userFormatter ? fieldInterface.userFormatter(model.value, defs) : model.value,
+        server: fieldInterface.serverFormatter ? fieldInterface.serverFormatter(model.value, defs) : model.value,
+    }))
+
+    function validate() {
+        if (typeof fieldInterface.validator === 'function') {
+            return fieldInterface.validator(model.value)
         }
-        return label
-    })
-    
-    const hasError = computed(() => {
-        return props.state === 'error' || props.error
-    })
-    
-    const errorText = computed(() => {
-        if (props.errorMessage) {
-            return languages.label(props.errorMessage)
-        }
-        if (props.required && !props.modelValue && props.isDirty) {
-            return languages.label('ERR_FIELD_REQUIRED')
-        }
-        return ''
-    })
-    
-    return {
-        displayLabel,
-        hasError,
-        errorText,
     }
+
+    return { initialValue, model, isDirty, validate, formatted }
 }
 ```
 
-**Usage in field component:**
-
-```vue
-<script setup lang="ts">
-import { useField } from '@/composables/useField'
-
-const props = defineProps<FieldProps>()
-const { displayLabel, hasError, errorText } = useField(props)
-</script>
-
-<template>
-    <div>
-        <label>{{ displayLabel }}</label>
-        <input :class="{ error: hasError }" />
-        <span v-if="hasError">{{ errorText }}</span>
-    </div>
-</template>
-```
+`formatted.server` is what `bean.save()` sends; the label suffix and error message logic live in `Field.vue`, not here.
 
 ## Best Practices
 
 ### ✅ DO
 
-- **Use TypeScript** for type safety
-- **Follow naming convention**: `{type}.{view}.vue`
-- **Handle all views**: detail, edit, list
-- **Emit v-model** updates properly
+- **Use TypeScript** (`FieldProps<T>`) for type safety
+- **Follow naming convention**: `{type}/{type}.{view}.vue`
+- **Bind edit inputs to `props.field.model`** and emit `update:modelValue`
+- **Put validation and formatting in `{type}.ts`**, not in the components
+- **Use translation labels** for messages
 - **Style with scoped CSS**
-- **Support validation** and error states
-- **Test with different data** types
 
 ### ❌ DON'T
 
-- **Modify core** field components (use custom/)
-- **Duplicate code** between views (use composables)
-- **Ignore props** interface
+- **Put field types in `custom/`** - they are not loaded
+- **Duplicate code** between views (share it through `{type}.ts`)
+- **Ignore the props interface**
 - **Hardcode labels** (use translations)
-- **Skip error handling**
 
 ## Troubleshooting
 
-### Field Not Rendering
+### Field Not Rendering / Rendered as Plain Text
 
 **Check:**
-1. Field type is in `allowedTypes` for the view
-2. Component file exists at correct path
-3. No TypeScript errors in component
-4. Props are passed correctly
+1. The folder and file names match `defs.type` (or a `typeMap` entry): `Fields/{type}/{type}.{view}.vue`
+2. The file exists for this view (otherwise `varchar` is used and a `resolveFieldType` warning is logged)
+3. The file is in `src/components/Fields/`, not in `src/custom/`
+4. The frontend was rebuilt after adding the files
 
-### Field Shows Wrong Component
+### Edit Field Throws `Cannot read properties of undefined (reading 'model')`
 
-**Check:**
-1. `typeMap` in Field.config.ts
-2. `defs.type` value
-3. Component naming matches type
+The `field` prop is missing. Pass the bean's `MintField`: `:field="bean.fields.value[name]"`.
 
-### v-model Not Updating
+### Value Not Saved
 
 **Check:**
-1. Emitting `update:modelValue` correctly
-2. Props interface includes `modelValue`
-3. Parent component has `v-model`
+1. The edit component writes to `props.field.model` (that is what `save()` sends via `formatted.server`)
+2. The parent handles `update:modelValue` with `bean.updateFields()`
 
 ## Next Steps
 
-- See [Customization Guide](./11-customization.md) for custom fields
-- Read [Component System](./08-components.md) for general components
-- Check [Best Practices](./15-best-practices.md) for code quality
+- See [Working with Beans](./10-working-with-beans.md) for `bean.fields` and saving
+- Read [Record View Definitions](./12-recordviewdefs.md) for placing fields on the record view
+- See [Customization Guide](./11-customization.md) for what can be extended via `custom/`
 
 ---
 

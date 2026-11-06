@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
+import { onMounted, onUnmounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import MintPanel from '@/components/MintPanel/MintPanel.vue'
 import MintSidepanel from '@/components/MintSidepanel/MintSidepanel.vue'
@@ -130,6 +130,7 @@ const route = useRoute()
 const router = useRouter()
 
 store.resetBean()
+const trackerAbortController = new AbortController()
 
 onMounted(async () => {
     const savedWidth = localStorage.getItem(SIDEPANEL_WIDTH_KEY)
@@ -184,11 +185,22 @@ onMounted(async () => {
             await store.bean.setAttributesFromBeanId(route.query.copy_id as string, excludedFields)
         }
     } else {
-        await mintApi.post('Trackers', {
-            record: store.bean?.id,
-            module_name: store.bean?.module
-        }, { rawError: true});
+        try {
+            await mintApi.post('Trackers', {
+                record: store.bean?.id,
+                module_name: store.bean?.module
+            }, { rawError: true, signal: trackerAbortController.signal });
+        } catch (error) {
+            if (trackerAbortController.signal.aborted) {
+                return
+            }
+            throw error
+        }
     }
+})
+
+onBeforeUnmount(() => {
+    trackerAbortController.abort()
 })
 
 function recordAccessError(error: any): Promise<any> {

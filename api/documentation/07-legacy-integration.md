@@ -4,7 +4,7 @@ The MintHCM API integrates seamlessly with the legacy SuiteCRM/SugarCRM codebase
 
 ## Overview
 
-MintHCM is built on top of SuiteCRM (a fork of SugarCRM), so the API layer coexists with the legacy PHP codebase. The **LegacyConnector** class provides a bridge between modern API code and legacy code.
+MintHCM is built on top of SuiteCRM (a fork of SugarCRM), so the API layer coexists with the legacy PHP codebase. `MintHCM\Data\BeanFactory` (records) and the **LegacyConnector** / **LegacyStaticConnector** classes (any legacy class or function) provide the bridge between modern API code and legacy code. The legacy environment itself is already initialized by `index.php` (`include/entryPoint.php`), so globals such as `$current_user`, `$db`, `$beanList` and classes such as `SugarBean` and the legacy `BeanFactory` are loaded.
 
 ```
 ┌─────────────────────────────────┐
@@ -12,7 +12,7 @@ MintHCM is built on top of SuiteCRM (a fork of SugarCRM), so the API layer coexi
 │   (Modern Slim/Doctrine)        │
 └───────────┬─────────────────────┘
             │
-            │ LegacyConnector
+            │ BeanFactory / LegacyConnector
             ▼
 ┌─────────────────────────────────┐
 │      Legacy SuiteCRM            │
@@ -26,63 +26,51 @@ The `LegacyConnector` allows you to instantiate and use legacy classes from the 
 
 ### How It Works
 
-**File:** `utils/LegacyConnector.php`
+**File:** `utils/LegacyConnector.php` (simplified)
 
 ```php
 <?php
 
 namespace MintHCM\Utils;
 
+#[\AllowDynamicProperties]
 class LegacyConnector
 {
     protected $class;
+    protected static $static_class;
 
-    public function __construct($class_name, $link = null, $params = [])
+    public function __construct($class_name, $link = null, $params = array())
     {
+        $old_cwd = getcwd();
         chdir('../legacy/');  // Switch to legacy directory
-        
-        if (isset($link)) {
-            require_once $link;  // Include legacy file
+        try {
+            if (isset($link)) {
+                require_once $link;  // Include legacy file (relative to legacy/)
+            }
+            $this->class = !empty($params) ? new $class_name(...$params) : new $class_name();
+            static::$static_class = !empty($params) ? new $class_name(...$params) : new $class_name();
+        } finally {
+            chdir($old_cwd);  // Restore the previous working directory
         }
-        
-        if (!empty($params)) {
-            $this->class = new $class_name(...$params);
-        } else {
-            $this->class = new $class_name();
-        }
-        
-        chdir('../api/');  // Return to API directory
     }
 
-    public function __get($name)
-    {
-        chdir('../legacy/');
-        $response = $this->class->$name;
-        chdir('../api/');
-        return $response;
-    }
+    // __get, __set, __call and __callStatic do the same chdir + try/finally around
+    // $this->class->$name, $this->class->$name = $value, $this->class->$name(...$arguments)
+    // and static::$static_class::$name(...$arguments)
 
-    public function __set($name, $value)
-    {
-        chdir('../legacy/');
-        $this->class->$name = $value;
-        chdir('../api/');
-    }
+    public static function callFunction(string $function_name, ...$arguments): mixed { /* ... */ }
 
-    public function __call($name, $arguments)
-    {
-        chdir('../legacy/');
-        $response = $this->class->$name(...$arguments);
-        chdir('../api/');
-        return $response;
-    }
+    public static function runCallable(callable $fn): mixed { /* ... */ }
 }
 ```
 
 **Key features:**
-- **Directory switching**: Changes to `../legacy/` when calling legacy code
-- **Magic methods**: Proxies property access and method calls
+- **Directory switching**: Changes to `../legacy/` when calling legacy code and restores the previous directory afterwards (also on exceptions)
+- **Magic methods**: Proxies property access, method calls and static calls
 - **Auto-include**: Can require legacy files before instantiation
+- **Helpers**: `callFunction()` for global functions, `runCallable()` for any block of legacy code
+
+**Note:** Values returned through the connector are raw legacy objects. Calling methods on them later runs with the API working directory - use `MintHCM\Data\BeanFactory` for beans, or `runCallable()`.
 
 ## Using LegacyConnector
 
@@ -91,16 +79,14 @@ class LegacyConnector
 ```php
 use MintHCM\Utils\LegacyConnector;
 
-// Instantiate legacy class
-$bean = new LegacyConnector('SugarBean');
+// Instantiate a legacy class
+$timeDate = new LegacyConnector('TimeDate', 'include/TimeDate.php');
 
-// Call methods
-$bean->retrieve($id);
-$bean->save();
+// Call methods (executed inside legacy/)
+$now = $timeDate->nowDb();
 
 // Access properties
-$name = $bean->name;
-$bean->status = 'Active';
+$timeDate->allow_cache = false;
 ```
 
 ### With File Include
@@ -138,6 +124,20 @@ $label = LegacyConnector::callFunction('translate', 'LBL_START_DATE', 'Delegatio
 
 It switches to `../legacy/` for the duration of the call (so the function can resolve legacy includes/globals) and restores the previous working directory afterward — the same isolation `LegacyConnector` provides for instance methods.
 
+### Running a Block of Legacy Code
+
+`LegacyConnector::runCallable()` runs any closure inside `legacy/` and returns its result (used e.g. in `app/Controllers/Admin/AdminConfigController.php`, `ElasticSearchAdminController.php`):
+
+```php
+use MintHCM\Utils\LegacyConnector;
+
+$result = LegacyConnector::runCallable(function () use ($id) {
+    $bean = \BeanFactory::getBean('Employees', $id);
+    $bean->description = 'Updated from API';
+    return $bean->save();
+});
+```
+
 ## The LegacyStaticConnector Class
 
 Some legacy classes use the Singleton pattern with a private constructor (e.g. `TrackerManager`) and can only be obtained through a static factory method such as `getInstance()`. `LegacyConnector` cannot wrap these — it always calls `new $class_name()` directly, which fails against a private constructor. Use `LegacyStaticConnector` instead.
@@ -163,36 +163,24 @@ The factory method defaults to `getInstance()`; pass a different method name (an
 
 ### BeanFactory
 
-Use `BeanFactory` to retrieve and create beans (records):
+Use the API's `MintHCM\Data\BeanFactory` (`api/data/BeanFactory.php`) to retrieve and create beans (records). It calls the legacy `BeanFactory` inside `legacy/` and wraps the result in `MintHCM\Data\MintBean`, which proxies property access and method calls (`save()`, `mark_deleted()`, `ACLAccess()`, `load_relationship()`, ...) with the same `chdir` isolation:
 
 ```php
-use MintHCM\Utils\LegacyConnector;
+use MintHCM\Data\BeanFactory;
 
-// Get BeanFactory
-$beanFactory = new LegacyConnector('BeanFactory', 'data/BeanFactory.php');
-
-// Retrieve a bean
-$employee = $beanFactory->getBean('Employees', $id);
+// Retrieve a bean (MintBean wrapper)
+$employee = BeanFactory::getBean('Employees', $id);
 
 // Create new bean
-$newEmployee = $beanFactory->newBean('Employees');
+$newEmployee = BeanFactory::newBean('Employees');
 $newEmployee->first_name = 'John';
 $newEmployee->last_name = 'Doe';
 $newEmployee->save();
 ```
 
-### Direct Bean Usage
+### Legacy BeanFactory
 
-The API provides its own `BeanFactory` in the `data/` directory:
-
-```php
-use BeanFactory;
-
-// No need for LegacyConnector - already available
-$employee = BeanFactory::getBean('Employees', $id);
-```
-
-**Note:** `BeanFactory` is already included in `index.php` during initialization:
+The legacy global `\BeanFactory` is also loaded (by `include/entryPoint.php` in `index.php`), but it returns raw beans and runs with the API working directory, so code that includes legacy files by relative path may fail. Use it only inside `LegacyConnector::runCallable()` or prefer `MintHCM\Data\BeanFactory`:
 
 ```php
 // index.php
@@ -206,6 +194,8 @@ chdir('../api/');
 Common methods available on legacy beans:
 
 ```php
+use MintHCM\Data\BeanFactory;
+
 // Retrieve record
 $bean = BeanFactory::getBean('Employees', $id);
 
@@ -219,9 +209,10 @@ $bean->save();
 // Delete
 $bean->mark_deleted($id);
 
-// Load relationships
-$bean->load_relationship('documents');
-$documents = $bean->documents->getBeans();
+// Load relationships (link names come from the module vardefs)
+if ($bean->load_relationship('contracts')) {
+    $contracts = $bean->contracts->getBeans();
+}
 
 // Check ACL
 if ($bean->ACLAccess('edit')) {
@@ -268,7 +259,7 @@ $dateFormat = $current_user->getPreference('datef');
 Check permissions:
 
 ```php
-$bean = BeanFactory::getBean('Employees', $id);
+$bean = \MintHCM\Data\BeanFactory::getBean('Employees', $id);
 
 // Check specific permission
 if ($bean->ACLAccess('edit')) {
@@ -293,7 +284,7 @@ if (!$app_list_strings) {
 }
 
 // Get dropdown options
-$statusOptions = $app_list_strings['employee_status_list'];
+$statusOptions = $app_list_strings['employee_status_dom'];
 
 // Get translated string
 $label = $app_strings['LBL_EMPLOYEES'];
@@ -316,21 +307,22 @@ global $sugar_config;        // Configuration array
 ### Using Globals in Controllers
 
 ```php
-class EmployeeController
+class MyModulesController
 {
-    public function list(Request $request, Response $response): Response
+    public function list(Request $request, Response $response, array $args): Response
     {
         global $current_user, $beanList;
-        
-        // Check if user is admin
+
+        // Check if user is admin (or use the route option 'admin_only' => true)
         if (!$current_user->is_admin) {
             return $response->withStatus(403);
         }
-        
+
         // Get all modules
         $modules = array_keys($beanList);
-        
-        return $response->withJson(['modules' => $modules]);
+
+        $response->getBody()->write(json_encode(['modules' => $modules]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
@@ -342,13 +334,13 @@ While the API uses Doctrine, you can still access the legacy database connection
 ```php
 global $db;
 
-// Run query
-$result = $db->query("SELECT * FROM users WHERE id = '{$id}'");
+// Run query - always quote user input ($db->quoted() adds the quotes)
+$result = $db->query("SELECT * FROM users WHERE id = " . $db->quoted($id));
 
 // Fetch row
 $row = $db->fetchByAssoc($result);
 
-// Prepared statement (legacy style)
+// Escaping without quotes (legacy style)
 $result = $db->query(sprintf(
     "SELECT * FROM users WHERE id = '%s'",
     $db->quote($id)
@@ -357,35 +349,9 @@ $result = $db->query(sprintf(
 
 **Warning:** Prefer Doctrine for new code. Use legacy DB only when necessary.
 
-## Working with Legacy Controllers
+## Working with Legacy Classes That Need the Legacy Directory
 
-### Calling Legacy Controller Actions
-
-```php
-use MintHCM\Utils\LegacyConnector;
-
-// Instantiate legacy controller
-$controller = new LegacyConnector(
-    'EmployeesController',
-    'modules/Employees/controller.php'
-);
-
-// Call action
-$controller->action_detail();
-```
-
-### Using Legacy Views
-
-```php
-chdir('../legacy/');
-
-require_once 'include/MVC/View/SugarView.php';
-
-$view = new SugarView();
-$view->display();
-
-chdir('../api/');
-```
+Legacy controllers and views (`SugarController`, `SugarView`) depend on the full legacy request cycle (`$_REQUEST`, output buffering, Smarty) and are not meant to be called from the API. Call the underlying business logic (beans, utility classes, global functions) through `MintHCM\Data\BeanFactory`, `LegacyConnector` or `LegacyConnector::runCallable()` instead.
 
 ## Legacy vs API Comparison
 
@@ -394,109 +360,80 @@ chdir('../api/');
 | **Data Access** | SugarBean | Doctrine Entities |
 | **Routing** | `index.php?module=X&action=Y` | Slim routes |
 | **Responses** | HTML/Smarty | JSON |
-| **Authentication** | Session-based | JWT/OAuth2 |
+| **Authentication** | Session-based | OAuth2 bearer token or the legacy PHP session (frontend) |
 | **Database** | Direct SQL via `$db` | Doctrine ORM |
-| **Autoloading** | Manual `require_once` | Composer PSR-4 |
+| **Autoloading** | `require_once` + SuiteCRM autoloader | Composer PSR-4 |
 
 ## Integration Patterns
 
 ### Pattern: Using Legacy Logic in API
 
 ```php
-class EmployeeController
+use MintHCM\Data\BeanFactory;
+
+class MyEmployeesController
 {
-    public function create(Request $request, Response $response): Response
+    public function create(Request $request, Response $response, array $args): Response
     {
         $data = $request->getParsedBody();
-        
+
         // Use legacy bean for business logic
         $employee = BeanFactory::newBean('Employees');
-        
-        foreach ($data as $field => $value) {
-            $employee->$field = $value;
+        foreach (['first_name', 'last_name'] as $field) {   // whitelist fields
+            $employee->$field = $data[$field] ?? null;
         }
-        
-        // Legacy save (includes hooks, logic hooks, etc.)
+
+        // Legacy save (logic hooks, workflows, audit)
         $employee->save();
-        
-        // Return modern JSON response
-        return $response->withJson([
+
+        $response->getBody()->write(json_encode([
             'id' => $employee->id,
             'name' => $employee->name,
-        ]);
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }
 ```
 
-### Pattern: Migrating from Legacy to API
+### Pattern: Doctrine Entities With Legacy Writes
 
-**Step 1:** Wrap legacy logic in API endpoint
+Doctrine entities already delegate writes to legacy beans: `MintEntityRepository::save()` / `delete()` call `$bean->save()` / `$bean->mark_deleted()` for entities with legacy actions (`MintEntity::LEGACY_ACTIONS`, `true` by default). Read with Doctrine and write through the repository - logic hooks still run:
 
 ```php
-public function legacyAction(Request $request, Response $response): Response
-{
-    chdir('../legacy/');
-    
-    // Call legacy function
-    require_once 'modules/Employees/legacy_function.php';
-    $result = legacy_process_employee($id);
-    
-    chdir('../api/');
-    
-    return $response->withJson($result);
+use MintHCM\Api\Entities\Employees;
+
+$repository = $entityManager->getRepository(Employees::class);
+foreach ($repository->findBy(['status' => 'Active']) as $employee) {
+    $employee->description = 'Reviewed';
+    $repository->save($employee, true);   // legacy save, triggers logic hooks
 }
 ```
 
-**Step 2:** Gradually refactor to modern code
-
-```php
-public function modernAction(Request $request, Response $response): Response
-{
-    // New Doctrine-based implementation
-    $employee = $this->repository->find($id);
-    $result = $this->service->processEmployee($employee);
-    
-    return $response->withJson($result);
-}
-```
-
-### Pattern: Hybrid Data Access
-
-```php
-// Use Doctrine for reads (faster)
-$employees = $repository->findBy(['status' => 'Active']);
-
-// Use legacy beans for writes (preserves hooks)
-foreach ($employees as $employeeEntity) {
-    $bean = BeanFactory::getBean('Employees', $employeeEntity->id);
-    $bean->bonus_calculated = true;
-    $bean->save();  // Triggers logic hooks
-}
-```
+See [Database Communication](./06-database.md#creating-records).
 
 ## Best Practices
 
-### 1. Prefer API Code Over Legacy
+### 1. Prefer Doctrine for Reads
 
 ```php
-// ✅ Good - use Doctrine when possible
+// ✅ Good - Doctrine for reads; writes via $repository->save() still run legacy hooks
 $employee = $repository->find($id);
 
-// ❌ Avoid - use legacy only when necessary
-$employee = BeanFactory::getBean('Employees', $id);
+// OK when you need bean-only features (ACLAccess, relationships, legacy methods)
+$employee = \MintHCM\Data\BeanFactory::getBean('Employees', $id);
 ```
 
 ### 2. Use LegacyConnector for Isolation
 
 ```php
-// ✅ Good - encapsulated
-$connector = new LegacyConnector('MyLegacyClass');
-$result = $connector->doSomething();
+// ✅ Good - encapsulated, working directory restored even on exceptions
+$timeDate = new LegacyConnector('TimeDate', 'include/TimeDate.php');
+$now = $timeDate->nowDb();
 
-// ❌ Bad - direct legacy access
+// ❌ Bad - manual chdir, not restored if an exception is thrown
 chdir('../legacy/');
-require_once 'include/MyLegacyClass.php';
-$obj = new MyLegacyClass();
+require_once 'include/TimeDate.php';
+$now = (new TimeDate())->nowDb();
 chdir('../api/');
 ```
 
@@ -508,7 +445,7 @@ class EmployeeService
 {
     public function calculateBonus($employeeId): float
     {
-        $bean = BeanFactory::getBean('Employees', $employeeId);
+        $bean = \MintHCM\Data\BeanFactory::getBean('Employees', $employeeId);
         return $this->legacyBonusCalculation($bean);
     }
     
@@ -545,13 +482,11 @@ public function legacyBonusCalculation(string $employeeId): float
 // ❌ Wrong - in API directory
 require_once 'modules/Employees/Employee.php';  // Not found!
 
-// ✅ Correct - switch to legacy directory
-chdir('../legacy/');
-require_once 'modules/Employees/Employee.php';
-chdir('../api/');
-
-// ✅ Better - use LegacyConnector
+// ✅ Correct - LegacyConnector includes the file relative to legacy/
 $employee = new LegacyConnector('Employee', 'modules/Employees/Employee.php');
+
+// ✅ Also fine for beans - MintHCM\Data\BeanFactory handles the directory
+$employee = \MintHCM\Data\BeanFactory::newBean('Employees');
 ```
 
 ### 2. Global Variable Scope
@@ -571,19 +506,21 @@ function myFunction() {
 }
 ```
 
-### 3. Autoloading Conflicts
+### 3. Legacy Classes Not Loaded
 
 **Problem:** Class not found
 
+Core legacy classes (`SugarBean`, `BeanFactory`, `User`, ...) are loaded by `include/entryPoint.php`. Module-specific or include files are not:
+
 ```php
-// Legacy class not autoloaded by Composer
-$bean = new SugarBean();  // Error!
+// ❌ Class from a file that entryPoint does not load
+$obj = new SomeLegacyHelper();  // Error!
 
-// ✅ Solution 1: Use BeanFactory
-$bean = BeanFactory::newBean('Employees');
+// ✅ Solution 1: Use BeanFactory for beans
+$bean = \MintHCM\Data\BeanFactory::newBean('Employees');
 
-// ✅ Solution 2: Use LegacyConnector
-$bean = new LegacyConnector('SugarBean');
+// ✅ Solution 2: Use LegacyConnector with the file to include
+$timeDate = new LegacyConnector('TimeDate', 'include/TimeDate.php');
 ```
 
 ## Debugging Legacy Integration
@@ -594,9 +531,11 @@ $bean = new LegacyConnector('SugarBean');
 // In legacy code
 $GLOBALS['log']->fatal('Debug message');
 $GLOBALS['log']->error('Error message');
+```
 
-// View logs
-tail -f legacy/sugarcrm.log
+```bash
+# View logs (logger name 'minthcm' in legacy/config.php)
+tail -f legacy/minthcm.log
 ```
 
 ### Check Global State
@@ -610,38 +549,13 @@ var_dump($GLOBALS['sugar_config']);
 ### Test Legacy Functions
 
 ```php
-chdir('../legacy/');
-
 // Test legacy code directly
-require_once 'modules/Employees/Employee.php';
-$emp = new Employee();
+$emp = LegacyConnector::runCallable(function () {
+    require_once 'modules/Employees/Employee.php';
+    return new Employee();
+});
 var_dump($emp);
-
-chdir('../api/');
 ```
-
-## Migration Strategy
-
-### Phase 1: Wrapper Approach
-
-Wrap legacy code in API endpoints:
-- Keep business logic in legacy beans
-- Expose via JSON API
-- Minimal code changes
-
-### Phase 2: Hybrid Approach
-
-Mix legacy and modern code:
-- Read with Doctrine (performance)
-- Write with beans (preserve hooks)
-- Gradual refactoring
-
-### Phase 3: Full Migration
-
-Replace legacy code entirely:
-- Reimplement business logic in API
-- Use Doctrine exclusively
-- Deprecate legacy endpoints
 
 ## Next Steps
 

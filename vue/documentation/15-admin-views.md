@@ -4,7 +4,7 @@
 
 `AdminView` is a generic, metadata-driven page for **Administration** screens — the admin-page equivalent of `RecordView` for record pages (see [Record View Definitions](12-recordviewdefs.md)). A new admin page is added by writing metadata rather than a bespoke Vue view.
 
-It was introduced for the Elasticsearch settings screen and is meant to be reused for future admin pages.
+It was introduced for the Elasticsearch settings screen and now also drives System Settings (`ConfiguratorSettings`, generic `MintPanelAdminConfig`) and `LanguageSettings` (custom `MintPanelLanguages` panel).
 
 ## Routing
 
@@ -43,7 +43,7 @@ $admin_option_defs['Administration']['elastic_search'] = [
 
 ## Metadata
 
-`AdminView` reads its layout from `backend.initData.adminViews[viewName]` — populated server-side by merging every `legacy/modules/Administration/metadata/admins/*.php` file (see the API-side [Admin Views](../../api/documentation/20-admin-views.md) doc for the metadata format). Structure mirrors `recordviewdefs.php`:
+`AdminView` reads its layout from `backend.initData.adminViews[viewName]` — populated server-side (for admin users only) by merging every `legacy/modules/Administration/metadata/admins/*.php` file; there is no `custom/` override for this directory (see the API-side [Admin Views](../../api/documentation/20-admin-views.md) doc for the metadata format and the supported field keys such as `config_key`, `settings_key`, `visible_when`). Structure mirrors `recordviewdefs.php`, but fields are complete inline definitions (`name`, `type`, `label`, ...) rather than vardef names, and empty cells are `[]`:
 
 ```php
 $viewdefs['Administration']['ElasticsearchSettings'] = [
@@ -78,7 +78,7 @@ Use it whenever an admin screen is a flat form over `$sugar_config` values. For 
 
 ## Adding a New Admin View
 
-1. Add `legacy/modules/Administration/metadata/admins/{viewName}.php` describing panels/sections/fields.
+1. Add a file in `legacy/modules/Administration/metadata/admins/` defining `$viewdefs['Administration']['{viewName}']` with panels/sections/fields (a `custom/` location is not read).
 2. Link to it from `legacy/modules/Administration/metadata/adminpaneldefs.php` (hash URL as shown above).
 3. If the view is a flat config form, no new Vue component is needed — `MintPanelAdminConfig` handles it.
 4. For custom behavior, add a new component under `components/MintPanel/{ComponentName}/` and reference it in the metadata.

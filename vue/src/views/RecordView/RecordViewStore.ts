@@ -6,6 +6,7 @@ import { useLanguagesStore } from '@/store/languages'
 import { useBean } from '@/composables/useBean'
 import { useACL } from '@/composables/useACL'
 import { useBackendStore } from '@/store/backend'
+import { useLocalStorageStore } from '@/store/localStorage'
 import { MintInlineButton } from '@/components/MintPanel/MintPanelSubpanels/MintSubpanelsInlineButtons.vue'
 
 interface Panel {
@@ -68,11 +69,16 @@ export const useRecordViewStore = defineStore('recordview', () => {
     const bean = ref<ReturnType<typeof useBean>>(useBean(module.value, recordId.value))
 
     function resetBean() {
+        abortSubpanelsFetch()
+        bean.value.abort()
         bean.value = useBean(module.value, recordId.value)
         view.value = 'detail'
         editCycles.value = false
         hasCyclicRecords.value = false
         subpanelsData.value = null
+        subpanelsFullyLoaded.value = {}
+        subpanelsLoading.value = {}
+        subpanelsInitialFetch.value = {}
     }
 
     const view = ref<'detail' | 'edit' | 'list'>('detail')
@@ -100,7 +106,6 @@ export const useRecordViewStore = defineStore('recordview', () => {
     //DEV: defs - (await mintApi.get('init')).data.modules.Candidates.metadata.Subpanels
     //DEV: data - (await mintApi.get('Candidates/subpanel/meetings/5ad6d7fd-e141-0a2c-4944-6449a8e50ad3')).data
     const subpanels = computed(() => {
-        const languages = useLanguagesStore()
         const module = modulesStore.currentModule
         if (!module) {
             return []
@@ -135,16 +140,18 @@ export const useRecordViewStore = defineStore('recordview', () => {
                     subpanelDefs[key].properties?.filters && Object.keys(subpanelDefs[key].properties?.filters).length
                         ? subpanelDefs[key].properties?.filters
                         : {},
+                // label is the raw language key here, not translated — translating it eagerly
+                // for every column of every subpanel while building this list would call
+                // languages.label() (and its per-module fetchModuleLanguage side effect) before
+                // fetchLanguagesForSubpanels()'s batch request gets a chance to run, since that
+                // batch itself has to read subpanels.value first to know which modules to fetch.
+                // MintDataTable.vue already translates column.label lazily at render time.
                 columns: Object.entries(subpanelDefs[key].columns ?? {})
                     .filter(([col, props]) => props.usage !== 'query_only')
                     .map(([col, props]) => ({
                         ...(props || {}),
                         name: col,
-                        label:
-                            languages.label(
-                                props.label || '',
-                                subpanelDefs[key].properties?.module?.toString() || '',
-                            ) || '',
+                        label: props.label || '',
                         type: props.type || '',
                     })),
                 records: subpanelsData.value?.[key]?.records ?? [],
@@ -160,45 +167,111 @@ export const useRecordViewStore = defineStore('recordview', () => {
         return subpanels.value.find((sp) => sp.key === subpanelKey)
     }
 
+    const subpanelsFullyLoaded = ref<Record<string, boolean>>({})
+
+    // One AbortController per in-flight subpanel fetch, keyed by subpanel key, so aborting one
+    // (e.g. an on-expand fetchSubpanelRecords() superseding fetchSubpanelsData()'s initial fetch
+    // for that same key) never drops the abort reference for any other subpanel's fetch.
+    const subpanelsFetchAbortControllers = new Map<string, AbortController>()
+
+    function abortSubpanelsFetch() {
+        subpanelsFetchAbortControllers.forEach((controller) => controller.abort())
+        subpanelsFetchAbortControllers.clear()
+    }
+
+    // Tracks the in-flight initial (collapsed, paginateBy=1) fetch per subpanel key, so that
+    // expanding a panel while its initial fetch is still running can await it instead of firing
+    // a second, overlapping fetchSubpanelRecords() call for the same key.
+    const subpanelsInitialFetch = ref<Record<string, Promise<void> | undefined>>({})
+
+    async function fetchOneSubpanel(subpanel: ReturnType<typeof getSubpanelByKey>, isExpanded: boolean, controller: AbortController) {
+        if (!subpanel) return
+        subpanelsLoading.value[subpanel.key] = true
+        try {
+            let link = bean.value.loadRelationship(subpanel.properties?.get_subpanel_data.toString())
+
+            if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
+                link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
+            }
+
+            if (!link) return
+
+            // Collapsed panels only need the total (badge/clickability) — paginateBy=1
+            // runs the same backend COUNT(*) but returns 1 record instead of a full
+            // page. Expanded panels still fetch full data as before.
+            const paginateBy = isExpanded ? subpanel.paginateBy : 1
+            await link.fetchRelatedRecords(subpanel.key, paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder, controller.signal)
+
+            if (controller.signal.aborted) return
+
+            if (!subpanelsData.value) {
+                subpanelsData.value = {}
+            }
+            subpanelsData.value[subpanel.key] = {
+                records: isExpanded ? link.beansArray : [],
+                page: link.currentPage,
+                total: link.total
+            }
+            subpanelsFullyLoaded.value[subpanel.key] = isExpanded
+        } catch (error) {
+            if (controller.signal.aborted) return
+            throw error
+        } finally {
+            if (!controller.signal.aborted) {
+                subpanelsLoading.value[subpanel.key] = false
+            }
+        }
+    }
+
     async function fetchSubpanelsData() {
         if (!subpanels.value || subpanels.value.length === 0) return
 
+        abortSubpanelsFetch()
+
+        const storage = useLocalStorageStore()
+        const expandedSubpanels = storage.getPanelSections(bean.value.module, 'MintPanelSubpanels')
+
         await Promise.all(
-            subpanels.value.map(async (subpanel) => {
-                subpanelsLoading.value[subpanel.key] = true
-                try {
-                    let link = bean.value.loadRelationship(subpanel.properties?.get_subpanel_data.toString())
-
-                    if (!link && subpanel.properties?.get_subpanel_data.toString().includes('function:')) {
-                        link = bean.value.createFakeLink(subpanel.properties?.get_subpanel_data.toString())
+            subpanels.value.map((subpanel) => {
+                const controller = new AbortController()
+                subpanelsFetchAbortControllers.set(subpanel.key, controller)
+                const isExpanded = expandedSubpanels.includes(subpanel.key)
+                const promise = fetchOneSubpanel(subpanel, isExpanded, controller)
+                subpanelsInitialFetch.value[subpanel.key] = promise
+                return promise.finally(() => {
+                    delete subpanelsInitialFetch.value[subpanel.key]
+                    if (subpanelsFetchAbortControllers.get(subpanel.key) === controller) {
+                        subpanelsFetchAbortControllers.delete(subpanel.key)
                     }
-
-                    if (link) {
-                        await link.fetchRelatedRecords(subpanel.key, subpanel.paginateBy, 0, subpanel.properties?.sortBy, subpanel.properties?.sortOrder)
-
-                        if (!subpanelsData.value) {
-                            subpanelsData.value = {}
-                        }
-                        subpanelsData.value[subpanel.key] = {
-                            records: link.beansArray,
-                            page: link.currentPage,
-                            total: link.total
-                        }
-                    }
-                } finally {
-                    subpanelsLoading.value[subpanel.key] = false
-                }
-            }),
+                })
+            })
         )
     }
 
-    async function fetchSubpanelRecords(
-        subpanelKey: string,
-        paginateBy: number,
-        page: number,
-        sortBy = '',
-        sortOrder = '',
-    ) {
+    async function fetchSubpanelRecords(subpanelKey: string, paginateBy: number, page: number, sortBy = '', sortOrder = '') {
+        // If the collapsed-panel initial fetch for this key is still running, wait for it to
+        // settle first instead of racing it — both writes target the same subpanelsData/
+        // subpanelsFullyLoaded keys, and whichever finished last would silently win. Deliberately
+        // NOT registering our own controller in subpanelsFetchAbortControllers yet: the initial
+        // fetch's own controller is still the map's entry for this key at this point, so a
+        // navigation-triggered abortSubpanelsFetch() during this await still cancels it (and, via
+        // its aborted signal, the fetchRelatedRecords() call it's awaiting) instead of being
+        // shadowed by an unrelated controller for a fetch that hasn't started yet.
+        const initialFetchController = subpanelsFetchAbortControllers.get(subpanelKey)
+        try {
+            await subpanelsInitialFetch.value[subpanelKey]
+        } catch (error) {
+            // A real (non-abort) error in the initial fetch shouldn't block this fetch.
+            console.error(error)
+        }
+
+        if (initialFetchController?.signal.aborted) {
+            return
+        }
+
+        const controller = new AbortController()
+        subpanelsFetchAbortControllers.set(subpanelKey, controller)
+
         const subpanel = getSubpanelByKey(subpanelKey)
         const getSubpanelData = subpanel?.properties?.get_subpanel_data?.toString()
 
@@ -211,7 +284,11 @@ export const useRecordViewStore = defineStore('recordview', () => {
             if (!link) {
                 return
             }
-            await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder)
+            await link.fetchRelatedRecords(subpanelKey, paginateBy, page, sortBy || subpanel?.properties?.sortBy, sortOrder || subpanel?.properties?.sortOrder, controller.signal)
+
+            if (controller.signal.aborted) {
+                return
+            }
 
             if (!subpanelsData.value) {
                 subpanelsData.value = {}
@@ -221,8 +298,19 @@ export const useRecordViewStore = defineStore('recordview', () => {
                 page: link.currentPage,
                 total: link.total
             }
+            subpanelsFullyLoaded.value[subpanelKey] = true
+        } catch (error) {
+            if (controller.signal.aborted) {
+                return
+            }
+            throw error
         } finally {
-            subpanelsLoading.value[subpanelKey] = false
+            if (!controller.signal.aborted) {
+                subpanelsLoading.value[subpanelKey] = false
+            }
+            if (subpanelsFetchAbortControllers.get(subpanelKey) === controller) {
+                subpanelsFetchAbortControllers.delete(subpanelKey)
+            }
         }
     }
 
@@ -273,9 +361,8 @@ export const useRecordViewStore = defineStore('recordview', () => {
 
     async function fetchLanguagesForSubpanels() {
         const languages = useLanguagesStore()
-        subpanels.value.forEach((subpanel) => {
-            languages.fetchModuleLanguage(subpanel.module)
-        })
+        const modules = subpanels.value.map((subpanel) => subpanel.module).filter(Boolean)
+        await languages.fetchModulesLanguage(modules)
     }
 
     function updateField(field: string, value: any, additionalFields: { [fieldName: string]: any }) {
@@ -315,5 +402,6 @@ export const useRecordViewStore = defineStore('recordview', () => {
         subpanelsLoading,
         hasSidepanel,
         sidepanelWidgets,
+        subpanelsFullyLoaded,
     }
 })

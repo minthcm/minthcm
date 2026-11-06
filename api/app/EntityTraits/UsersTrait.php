@@ -30,6 +30,9 @@
 
 namespace MintHCM\Api\EntityTraits;
 
+use MintHCM\Lib\Services\Auth\PasswordHash;
+use MintHCM\Utils\CustomLoader;
+
 trait UsersTrait
 {
     public function getIdentifier(): string
@@ -39,16 +42,17 @@ trait UsersTrait
 
     public function checkPassword(string $password): bool
     {
-        if (empty($this->user_hash)) {
-            return false;
-        }
+        return $this->getPasswordHash()->verifyMd5(md5($password), $this->user_hash);
+    }
 
-        $passwordMd5 = md5($password);
-        if ($this->user_hash[0] !== '$' && strlen($this->user_hash) === 32) {
-            return strtolower($passwordMd5) === $this->user_hash;
-        }
+    public function passwordNeedsRehash(): bool
+    {
+        return $this->getPasswordHash()->needsRehash($this->user_hash);
+    }
 
-        return password_verify(strtolower($passwordMd5), $this->user_hash);
+    protected function getPasswordHash(): PasswordHash
+    {
+        return CustomLoader::getObject(PasswordHash::class);
     }
 }
 

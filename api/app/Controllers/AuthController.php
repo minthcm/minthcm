@@ -51,10 +51,16 @@ use MintHCM\Api\Controllers\OAuth2\Controller;
 use MintHCM\Api\Entities\OAuth2\Client;
 use MintHCM\Api\Entities\UsersPasswordLink;
 use MintHCM\Api\Utils\AuthHelper;
+use MintHCM\Lib\Services\Auth\ForgotPasswordThrottle;
+use MintHCM\Lib\Services\Auth\SessionTokenRevoker;
+use MintHCM\Lib\Services\Http\ClientIpResolver;
+use MintHCM\Utils\CustomLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Psr7\Response;
+use SuiteCRM\Utility\SessionTimeout;
 
 class AuthController
 {
@@ -101,9 +107,12 @@ class AuthController
         $request_body['grant_type'] = 'frontend';
         $request_body['client_id'] = 'frontend';
         $request = $request->withParsedBody($request_body);
-        $oauth_controller = new Controller($this->entityManager);
+        $oauth_controller = $this->createOAuthController();
         $token_response = $oauth_controller->accessToken($request, $response, $args);
 
+        if ($token_response->getStatusCode() === 429) {
+            throw new HttpException($request, 'Too many failed login attempts.', 429);
+        }
         if ($token_response->getStatusCode() !== 200) {
             throw new HttpUnauthorizedException($request);
         }
@@ -127,6 +136,8 @@ class AuthController
             throw new HttpUnauthorizedException($request);
         }
 
+        $this->regenerateSession();
+
         if (!empty($login_language)) {
             $_SESSION['authenticated_user_language'] = $login_language;
         }
@@ -136,6 +147,7 @@ class AuthController
         $_SESSION['oauth_access_token'] = $token_data['access_token'];
         $_SESSION['oauth_refresh_token'] = $token_data['refresh_token'];
         $_SESSION['oauth_secrect'] = $request_body['client_secret'];
+        $this->startSessionTimeout();
 
         $response = new Response();
         $response = $response->withHeader('Content-type', 'application/json');
@@ -205,7 +217,7 @@ class AuthController
         $request_body['client_secret'] = $client->secret;
         $request = $request->withParsedBody($request_body);
         
-        $oauth_controller = new Controller($this->entityManager);
+        $oauth_controller = $this->createOAuthController();
         $token_response = $oauth_controller->accessToken($request, new Response(), []);
 
         if ($token_response->getStatusCode() !== 200) {
@@ -214,9 +226,11 @@ class AuthController
         }
 
         $token_data = json_decode((string) $token_response->getBody(), true);
+        $this->regenerateSession();
         $_SESSION['oauth_access_token'] = $token_data['access_token'];
         $_SESSION['oauth_refresh_token'] = $token_data['refresh_token'];
         $_SESSION['oauth_secrect'] = $request_body['client_secret'];
+        $this->startSessionTimeout();
         $this->clearSamlOAuthPending();
         return true;
     }
@@ -244,7 +258,7 @@ class AuthController
         $request_body['client_secret'] = $client->secret;
         $request = $request->withParsedBody($request_body);
 
-        $oauth_controller = new Controller($this->entityManager);
+        $oauth_controller = $this->createOAuthController();
         $token_response = $oauth_controller->accessToken($request, new Response(), []);
         $token_body = (string) $token_response->getBody();
 
@@ -254,11 +268,29 @@ class AuthController
         }
 
         $token_data = json_decode($token_body, true);
+        $this->regenerateSession();
         $_SESSION['oauth_access_token'] = $token_data['access_token'];
         $_SESSION['oauth_refresh_token'] = $token_data['refresh_token'];
         $_SESSION['oauth_secrect'] = $request_body['client_secret'];
+        $this->startSessionTimeout();
         $this->clearOIDCOAuthPending();
         return true;
+    }
+
+    protected function createOAuthController(): Controller
+    {
+        return new Controller($this->entityManager);
+    }
+
+    /**
+     * Issues a new session id once the user is authenticated (session fixation defence).
+     * The session data is kept, only the identifier changes.
+     */
+    protected function regenerateSession(): void
+    {
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+            session_regenerate_id(true);
+        }
     }
 
     private function IsLdapOn()
@@ -287,6 +319,12 @@ class AuthController
     {
         global $current_user;
 
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        $this->revokeSessionTokens($request);
+
         chdir('../legacy/');
         $current_user->call_custom_logic('before_logout');
 
@@ -311,14 +349,50 @@ class AuthController
         return $response;
     }
 
+    /**
+     * Revokes the OAuth token pair behind the current session (or Bearer header),
+     * so a stolen token stops working at logout instead of at its natural expiry.
+     */
+    private function revokeSessionTokens(Request $request): void
+    {
+        global $current_user;
+
+        $revoker = CustomLoader::getObject(SessionTokenRevoker::class);
+
+        // The session token was put there by the server - no ownership check. It is needed only for a
+        // token from the request: frontend-grant tokens have no assigned_user_id, so checking it would
+        // skip exactly the browser sessions.
+        $session_jwt = $_SESSION['oauth_access_token'] ?? '';
+        if (!empty($session_jwt)) {
+            $revoker->revoke($session_jwt);
+            return;
+        }
+
+        $bearer_jwt = preg_replace('/^Bearer\s+/i', '', $request->getHeaderLine('Authorization'));
+        if (!empty($bearer_jwt) && !empty($current_user->id)) {
+            $revoker->revoke($bearer_jwt, $current_user->id);
+        }
+    }
+
+    /**
+     * Sets the idle / absolute timeout markers of a freshly logged in browser session.
+     */
+    protected function startSessionTimeout(): void
+    {
+        (new SessionTimeout())->start($_SESSION, time());
+    }
+
     public function forgetPassword(Request $request, Response $response, array $args): Response
     {
-        global $sugar_config;
-
         $response = $response->withHeader('Content-type', 'application/json');
 
-        $username = $request->getAttribute('username');
+        $username = (string) $request->getAttribute('username');
         $email = $request->getAttribute('email');
+
+        $ip = $this->getClientIpResolver()->resolve($request->getServerParams());
+        if (!$this->getForgotPasswordThrottle()->isAllowed($username, $ip)) {
+            throw new HttpException($request, 'Too many password reset requests.', 429);
+        }
 
         chdir('../legacy/');
         $user = new \User();
@@ -327,16 +401,27 @@ class AuthController
         $is_primary_email = !empty($user) ? $user->isPrimaryEmail($email) : false;
         chdir('../api/');
 
-        if (
-            empty($user->id)
-            || $user->id !== $user_id
-            || !$is_primary_email
-            || $user->portal_only
-            || $user->is_group
-        ) {
-            $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
-            return $response;
+        $is_valid_request = !empty($user->id)
+            && $user->id === $user_id
+            && $is_primary_email
+            && !$user->portal_only
+            && !$user->is_group;
+
+        // The reset link is stored and e-mailed after the response has been sent: doing it before would
+        // make the answer for a valid login + e-mail pair measurably slower (SMTP), revealing the account.
+        if ($is_valid_request) {
+            $this->runAfterResponse(function () use ($user, $username, $user_id): void {
+                $this->sendPasswordResetLink($user, $username, $user_id);
+            });
         }
+
+        $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
+        return $response;
+    }
+
+    protected function sendPasswordResetLink(\User $user, string $username, string $user_id): void
+    {
+        global $sugar_config;
 
         $usersPasswordLink = new UsersPasswordLink();
         $usersPasswordLink->username = $username;
@@ -356,16 +441,55 @@ class AuthController
         );
 
         chdir('../legacy/');
-        $result = $user->sendEmailForPassword($emailTemp_id, $additionalData);
-        chdir('../api/');
-
-        if (true !== $result['status']) {
-            $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
-            return $response;
+        try {
+            $result = $user->sendEmailForPassword($emailTemp_id, $additionalData);
+        } finally {
+            chdir('../api/');
         }
 
-        $response->getBody()->write(json_encode(array('message' => 'LBL_MINT4_AUTH_FORGET_SUCCESS')));
-        return $response;
+        if (true !== $result['status']) {
+            $GLOBALS['log']->error("Password reset e-mail for user {$user_id} was not sent: " . ($result['message'] ?? ''));
+        }
+    }
+
+    /**
+     * Runs the task once the response is on its way to the client. Needs PHP-FPM
+     * (fastcgi_finish_request); under other SAPIs (mod_php) the task runs right away, before the response.
+     * A failing task is logged, never turned into an error response - in either case the response must
+     * not depend on what the task did.
+     */
+    protected function runAfterResponse(callable $task): void
+    {
+        $guarded_task = function () use ($task): void {
+            try {
+                $task();
+            } catch (\Throwable $exception) {
+                $GLOBALS['log']->fatal('Deferred task failed: ' . $exception->getMessage());
+            }
+        };
+
+        if (!function_exists('fastcgi_finish_request')) {
+            $guarded_task();
+            return;
+        }
+
+        $working_directory = getcwd();
+        register_shutdown_function(function () use ($guarded_task, $working_directory): void {
+            fastcgi_finish_request();
+            // some SAPIs change the working directory before shutdown functions run
+            chdir($working_directory);
+            $guarded_task();
+        });
+    }
+
+    protected function getForgotPasswordThrottle(): ForgotPasswordThrottle
+    {
+        return CustomLoader::getObject(ForgotPasswordThrottle::class);
+    }
+
+    protected function getClientIpResolver(): ClientIpResolver
+    {
+        return CustomLoader::getObject(ClientIpResolver::class);
     }
 
     public function validToken(Request $request, Response $response, array $args): Response
@@ -374,13 +498,87 @@ class AuthController
 
         $response = $response->withHeader('Content-type', 'application/json');
 
-        $token = $request->getAttribute('token');
+        $usersPasswordLink = $this->entityManager->getRepository(UsersPasswordLink::class)
+            ->findOneById($request->getAttribute('token'));
+        $errorResponse = $this->getPasswordLinkErrorResponse($usersPasswordLink, $response);
+        if ($errorResponse !== null) {
+            return $errorResponse;
+        }
+
+        $pwd_settings = $sugar_config['passwordsetting'];
+        $response->getBody()->write(json_encode(array(
+            'username' => $usersPasswordLink->username,
+            'password_settings' => array(
+                "oneupper" => !empty($pwd_settings['oneupper']) ? true : false,
+                "onelower" => !empty($pwd_settings['onelower']) ? true : false,
+                "onenumber" => !empty($pwd_settings['onenumber']) ? true : false,
+                "onespecial" => !empty($pwd_settings['onespecial']) ? true : false,
+                "minpwdlength" => !empty($pwd_settings['minpwdlength']) ? (int) $pwd_settings['minpwdlength'] : false,
+            ),
+
+        )));
+
+        return $response;
+    }
+
+    public function resetForgetPassword(Request $request, Response $response, array $args): Response
+    {
+        global $mod_strings;
+
+        $new_password = $request->getAttribute('new_password');
+
+        $response = $response->withHeader('Content-type', 'application/json');
 
         $usersPasswordLink = $this->entityManager->getRepository(UsersPasswordLink::class)
-            ->findOneById($token);
-        if (!$usersPasswordLink) {
+            ->findOneById($request->getAttribute('token'));
+        $errorResponse = $this->getPasswordLinkErrorResponse($usersPasswordLink, $response);
+        if ($errorResponse !== null) {
+            return $errorResponse;
+        }
+
+        // The target account is always the token owner, never the username sent in the request
+        $username = $usersPasswordLink->username;
+
+        // The token is single-use: invalidate it on first use, regardless of the outcome
+        $this->entityManager->getRepository(UsersPasswordLink::class)
+            ->markAllAsDeletedByUsername($username);
+
+        if ($request->getAttribute('username') !== $username) {
+            $GLOBALS['log']->warn(
+                "Password reset rejected: username from request does not match the token owner ({$username}) - possible manipulation attempt"
+            );
             $response = $response->withStatus(400);
+            $response->getBody()->write(json_encode(array('message' => 'LBL_TOKEN_USERNAME_MISMATCH')));
             return $response;
+        }
+
+        chdir('../legacy/');
+        $user = new \User();
+        $mod_strings = return_module_language($GLOBALS['current_language'], 'Users');
+        $errors = $user->passwordValidationCheck($new_password);
+        chdir('../api/');
+
+        if (!empty($errors)) {
+            $response = $response->withStatus(400);
+            $response->getBody()->write(json_encode(array('message' => $errors)));
+            return $response;
+        }
+
+        chdir('../legacy/');
+        $user_id = $user->retrieve_user_id($username);
+        $user->retrieve($user_id);
+        $user->setNewPassword($new_password);
+        chdir('../api/');
+
+        return $response;
+    }
+
+    protected function getPasswordLinkErrorResponse(?UsersPasswordLink $usersPasswordLink, Response $response): ?Response
+    {
+        global $sugar_config;
+
+        if (!$usersPasswordLink) {
+            return $response->withStatus(400);
         }
 
         $pwd_settings = $sugar_config['passwordsetting'];
@@ -407,58 +605,7 @@ class AuthController
             return $response;
         }
 
-        $response->getBody()->write(json_encode(array(
-            'username' => $usersPasswordLink->username,
-            'password_settings' => array(
-                "oneupper" => !empty($pwd_settings['oneupper']) ? true : false,
-                "onelower" => !empty($pwd_settings['onelower']) ? true : false,
-                "onenumber" => !empty($pwd_settings['onenumber']) ? true : false,
-                "onespecial" => !empty($pwd_settings['onespecial']) ? true : false,
-                "minpwdlength" => !empty($pwd_settings['minpwdlength']) ? (int) $pwd_settings['minpwdlength'] : false,
-            ),
-
-        )));
-
-        return $response;
-    }
-
-    public function resetForgetPassword(Request $request, Response $response, array $args): Response
-    {
-        global $mod_strings;
-
-        $username = $request->getAttribute('username');
-        $new_password = $request->getAttribute('new_password');
-
-        $response = $this->validToken($request, $response, $args);
-        if ($response->getStatusCode() !== 200) {
-            return $response;
-        }
-
-        $response = new Response();
-        $response = $response->withHeader('Content-type', 'application/json');
-
-        chdir('../legacy/');
-        $user = new \User();
-        $mod_strings = return_module_language($GLOBALS['current_language'], 'Users');
-        $errors = $user->passwordValidationCheck($new_password);
-        chdir('../api/');
-
-        if (!empty($errors)) {
-            $response = $response->withStatus(400);
-            $response->getBody()->write(json_encode(array('message' => $errors)));
-            return $response;
-        }
-
-        chdir('../legacy/');
-        $user_id = $user->retrieve_user_id($username);
-        $user->retrieve($user_id);
-        $user->setNewPassword($new_password);
-        chdir('../api/');
-
-        $this->entityManager->getRepository(UsersPasswordLink::class)
-            ->markAllAsDeletedByUsername($username);
-
-        return $response;
+        return null;
     }
 
     public function confirmLoginWizard(Request $request, Response $response, array $args): Response

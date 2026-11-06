@@ -11,7 +11,7 @@ POST /{module}/MassActions/{action}
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `{module}` | path | Module name (e.g., `Employees`) |
-| `{action}` | path | Action class name (e.g., `Delete`, `Export`, `MassUpdate`) |
+| `{action}` | path | Action short class name (e.g., `Delete`, `Export`, `Update`) |
 
 ### Body Parameters
 
@@ -19,7 +19,7 @@ POST /{module}/MassActions/{action}
 |-----------|----------|------|-------------|
 | `ids` | ✅ | array | Record IDs to act on, or `["all"]` to act on all filtered records |
 | `filter` | ❌ | object | Active list view filters — required when `ids` is `["all"]` |
-| `update_fields` | ❌ | object | Fields to update (used by `MassUpdate` action) |
+| `update_fields` | ❌ | object | Fields to update — required (non-empty, else `400`) for any action that defines `setArrayFields()`, i.e. `Update` |
 
 ## Select All Records
 
@@ -75,8 +75,8 @@ The `filter` body parameter mirrors the ListView filter state:
 
 | Action class | File | Description |
 |---|---|---|
-| `Delete` | `api/data/MassActions/Actions/Delete.php` | Hard-delete records |
-| `MassUpdate` | `api/data/MassActions/Actions/MassUpdate.php` | Update fields on all selected records |
+| `Delete` | `api/data/MassActions/Actions/Delete.php` | Soft-delete records (`mark_deleted()`) |
+| `Update` | `api/data/MassActions/Actions/Update.php` | Update fields on all selected records (mass update) |
 | `Export` | `api/data/MassActions/Actions/Export.php` | Export to CSV via legacy `export.php` |
 | `Merge` | `api/data/MassActions/Actions/Merge.php` | Merge records via legacy `MergeRecords` |
 | `MassConfirmation` | `api/data/MassActions/Actions/MassConfirmation.php` | WorkSchedules mass confirmation |
@@ -107,10 +107,16 @@ class Archive extends MassAction
 
     public function execute()
     {
-        foreach ($this->getBeans() as $bean) {
+        $beans = $this->getBeans();
+        chdir('../legacy'); // bean saves expect the legacy working directory
+        foreach ($beans as $bean) {
+            if (!$bean->ACLAccess('edit')) {
+                continue;
+            }
             $bean->status = 'Archived';
             $bean->save();
         }
+        chdir('../api');
         return ['success' => true];
     }
 
@@ -121,7 +127,16 @@ class Archive extends MassAction
 }
 ```
 
-2. Register the action in the module's `massActions` config so the frontend shows it in the mass actions menu.
+2. List the action's short name in the `massActions` key of the module's `eslistviewdefs.php` (`legacy/modules/{Module}/metadata/` or its `custom/` override) so the frontend shows it in the mass actions menu:
+
+```php
+$ESListViewDefs['WorkSchedules'] = [
+    // ...
+    'massActions' => ['Delete', 'Export', 'Merge', 'MassConfirmation', 'Update', 'MassAcceptance'],
+];
+```
+
+The key **replaces** the default list (`ListInitController::DEFAULT_MASS_ACTIONS`: `Delete`, `Export`, `Merge`, `Update`) — list the defaults again if you want to keep them. Each listed action is shown only when its `hasAccess()` returns `true`; the menu entry carries `icon`, `label` and `action` (the PHP short class name) from `MassAction::getFrontendData()`.
 
 3. Add a matching `actionName` static property on the **frontend** action class. The Vue `MassAction` base uses `static readonly actionName` (not `this.constructor.name`) to build the request URL — production builds minify class names, so `this.constructor.name` becomes unreliable:
 
@@ -138,7 +153,7 @@ export class Archive extends MassAction {
 }
 ```
 
-The string MUST equal the PHP class name on the backend (without the `Actions\\` namespace prefix), because the backend routes by `POST /{module}/MassActions/{actionName}`.
+The string MUST equal the PHP short class name on the backend (no namespace), because the backend routes by `POST /{module}/MassActions/{actionName}`. The **file name** must match it too: the frontend registry (`vue/src/business/MassActions/index.ts` via `registerActionModules()`) keys classes by the file's basename, and the menu looks them up by the `action` name sent from the backend.
 
 `$this->ids` is always a resolved array of IDs — the `all` expansion happens in the base constructor before `execute()` is called.
 
@@ -235,3 +250,5 @@ public function execute()
 ```
 
 **Frontend** iterates in batches and pushes per-batch results into a reactive state bound to a `v-progress-linear` popup. After all batches complete, show a summary with `{accepted}` / `{skipped}` placeholders resolved from `languages.label(...)`. Reference component: `vue/src/components/MintPopups/MintPopupMassAcceptance.vue`.
+
+Limitations of the current implementation (`vue/src/business/MassActions/Actions/MassAcceptance.ts`): batching slices the frontend `ids` array, so with "select all" (`ids: ['all']`) everything is sent in a single request and resolved on the backend — the progress bar then shows a single step. The per-batch `errors` array returned by the backend is not used by the frontend.

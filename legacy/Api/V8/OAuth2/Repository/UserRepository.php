@@ -48,8 +48,11 @@ class UserRepository implements UserRepositoryInterface
             throw new \InvalidArgumentException('No user found with this username: ' . $username);
         }
 
-        if (!\User::checkPassword($password, $user->user_hash)&& !$this->IsLdapOn()) {
-            throw new \InvalidArgumentException('The password is invalid: ' . $password);
+        if (!$this->IsLdapOn()) {
+            if (!\User::checkPassword($password, $user->user_hash)) {
+                throw new \InvalidArgumentException('The password is invalid: ' . $password);
+            }
+            \User::rehashPasswordIfNeeded($user->id, md5($password), $user->user_hash);
         }
 
         return new UserEntity($user->id);

@@ -4,191 +4,55 @@ This guide shows you how to safely extend and customize the MintHCM frontend wit
 
 ## The `custom/` Directory
 
-All customizations should go in `src/custom/` to ensure they're not overwritten during updates.
+Customizations go in `src/custom/` so that they are kept separate from core code during updates.
 
 ```
 src/custom/
-├── drawers/        # Custom drawer definitions
-├── router/         # Custom routes
-├── store/          # Custom Pinia stores
-└── views/          # Custom page components
+├── business/
+│   ├── BeanActions/Actions/             # Record actions
+│   ├── MassActions/Actions/             # Mass actions
+│   └── SubpanelActions/
+│       ├── Actions/                     # Subpanel header actions
+│       └── InlineActions/               # Subpanel row actions
+├── components/
+│   └── ListViewPanels/                  # Panels under the list view
+├── drawers/                             # Right-side drawers (*.ts)
+├── router/
+│   └── index.ts                         # Custom routes (default-exported array)
+├── store/                               # Custom Pinia stores
+└── views/                               # Custom page components
+    └── ListView/Actions/                # List row actions (*.ts)
 ```
 
 **Why use `custom/`?**
 
 ✅ **Update-safe** - Core updates won't overwrite your code  
 ✅ **Organized** - Clear separation of core vs custom  
-✅ **Portable** - Easy to version control separately  
 ✅ **Maintainable** - See what you've customized at a glance
 
-## Customizing Components
+## Extension Points
 
-### Extending Field Types
+Only the following paths are picked up automatically (all through `import.meta.glob`, so a rebuild is required after changes). Anything else under `custom/` is used only if you import it yourself, for example from a custom route.
 
-Create a custom field type by adding to `custom/`:
+| What | Custom path | Loaded by | Rule |
+|------|-------------|-----------|------|
+| Routes | `custom/router/index.ts` (default export `RouteRecordRaw[]`) | `router/routes.ts` | Appended after core routes |
+| Record actions | `custom/business/BeanActions/Actions/<Name>.ts` | `business/BeanActions/index.ts` | Same file name overrides core |
+| Mass actions | `custom/business/MassActions/Actions/<Name>.ts` | `business/MassActions/index.ts` | Same file name overrides core |
+| Subpanel actions | `custom/business/SubpanelActions/{Actions,InlineActions}/<Name>.ts` | `business/SubpanelActions/index.ts` | Same file name overrides core |
+| List row actions | `custom/views/ListView/Actions/<Name>.ts` | `views/ListView/ListViewStore.ts` | Used for action names that core does not define |
+| List view panels | `custom/components/ListViewPanels/<Name>.vue` | `views/ListView/ListView.vue` | Custom wins over core panel of the same name |
+| Drawers | `custom/drawers/<name>.drawer.ts` | `bundler/drawers.bundle.ts` | Added next to core drawers (key `custom-<name>`) |
+| Menu components | `custom/components/**/<Path>.vue` | `utils/componentLoader.ts` | `componentPath` of a menu action; custom checked first |
 
-**Goal:** Add a custom "color picker" field type
+**Not supported:**
 
-**1. Create field component:**
+- **Overriding a core component or view by placing a file at the same path in `custom/`.** There is no such mechanism: core imports always resolve to `src/`.
+- **Custom field types in `custom/components/Fields/`.** `Field.vue` and `Field.config.ts` load field components only from `src/components/Fields/`. A new field type is currently added in core as `src/components/Fields/<type>/<type>.{detail,edit,list}.vue` and is registered automatically by the glob; see [Field System](./09-fields.md#adding-a-new-field-type).
 
-```
-src/custom/
-└── components/
-    └── Fields/
-        └── colorpicker/
-            ├── colorpicker.detail.vue
-            ├── colorpicker.edit.vue
-            └── colorpicker.list.vue
-```
+## Custom Components
 
-**File:** `custom/components/Fields/colorpicker/colorpicker.edit.vue`
-
-```vue
-<template>
-    <div class="color-picker-field">
-        <label v-if="label">{{ label }}</label>
-        <input 
-            type="color" 
-            :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)"
-        />
-    </div>
-</template>
-
-<script setup lang="ts">
-interface Props {
-    modelValue?: string
-    label?: string
-    defs?: any
-    state?: 'normal' | 'required' | 'error'
-}
-
-const props = defineProps<Props>()
-defineEmits(['update:modelValue'])
-</script>
-
-<style scoped>
-input[type="color"] {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-</style>
-```
-
-**File:** `custom/components/Fields/colorpicker/colorpicker.detail.vue`
-
-```vue
-<template>
-    <div class="color-picker-detail">
-        <div 
-            class="color-swatch"
-            :style="{ backgroundColor: modelValue }"
-        ></div>
-        <span>{{ modelValue }}</span>
-    </div>
-</template>
-
-<script setup lang="ts">
-interface Props {
-    modelValue?: string
-    label?: string
-}
-
-const props = defineProps<Props>()
-</script>
-
-<style scoped>
-.color-picker-detail {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.color-swatch {
-    width: 30px;
-    height: 30px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-</style>
-```
-
-**2. Register field type:**
-
-Modify `src/components/Fields/Field.config.ts` to include your custom type:
-
-```typescript
-// Or better: create custom/components/Fields/Field.config.ts
-export const customFieldConfig = {
-    allowedTypes: {
-        detail: ['colorpicker'],
-        edit: ['colorpicker'],
-        list: ['colorpicker'],
-    },
-    typeMap: {
-        'color': 'colorpicker',  // Map backend type to your component
-    }
-}
-```
-
-**3. Use in module:**
-
-Now any field with `type: 'colorpicker'` will use your custom component:
-
-```typescript
-// Backend vardefs
-$dictionary['MyModule']['fields']['brand_color'] = [
-    'name' => 'brand_color',
-    'type' => 'colorpicker',
-    'label' => 'Brand Color',
-];
-```
-
-### Overriding Core Components
-
-To replace a core component, create a file at the same path in `custom/`:
-
-**Example:** Customize the Dashboard
-
-**File:** `custom/views/DashboardView/DashboardView.vue`
-
-```vue
-<template>
-    <div class="custom-dashboard">
-        <h1>Custom Dashboard</h1>
-        
-        <!-- Your custom dashboard content -->
-        <div class="widgets">
-            <CustomWidget />
-            <AnotherWidget />
-        </div>
-    </div>
-</template>
-
-<script setup lang="ts">
-import CustomWidget from './CustomWidget.vue'
-import AnotherWidget from './AnotherWidget.vue'
-</script>
-
-<style scoped>
-.custom-dashboard {
-    padding: 20px;
-}
-
-.widgets {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-</style>
-```
-
-**Loading:** Update bundler or import system to prioritize `custom/` over core.
-
-### Creating Reusable Components
+Reusable components for your customizations can live anywhere under `custom/` and are imported explicitly.
 
 **File:** `custom/components/MyCustomComponent.vue`
 
@@ -254,21 +118,28 @@ function onAction() {
 
 ## Custom Routes
 
-Add new routes without modifying core router.
+Add new routes without modifying the core router. `src/router/routes.ts` already imports `@/custom/router` and appends its default export after the core routes:
 
-**File:** `custom/router/routes.ts`
+```typescript
+// src/router/routes.ts (core - no change needed)
+import customRoutes from '@/custom/router'
+// ...
+const routes: Array<RouteRecordRaw> = [...coreRoutes, ...customRoutes]
+```
+
+**File:** `custom/router/index.ts`
 
 ```typescript
 import { RouteRecordRaw } from 'vue-router'
 
-const customRoutes: RouteRecordRaw[] = [
+const customRoutes: Array<RouteRecordRaw> = [
     {
         path: '/my-custom-page',
         name: 'my-custom-page',
-        component: () => import('@/custom/views/MyCustomPage.vue'),
+        component: () => import('@/custom/views/MyCustomPage/MyCustomPage.vue'),
         meta: {
             auth: true,  // Requires authentication
-        }
+        },
     },
     {
         path: '/public-page',
@@ -276,43 +147,14 @@ const customRoutes: RouteRecordRaw[] = [
         component: () => import('@/custom/views/PublicPage.vue'),
         meta: {
             auth: false,  // Public page
-        }
+        },
     },
 ]
 
 export default customRoutes
 ```
 
-**File:** `custom/router/index.ts`
-
-```typescript
-import { Router } from 'vue-router'
-import customRoutes from './routes'
-
-export function registerCustomRoutes(router: Router) {
-    customRoutes.forEach(route => {
-        router.addRoute(route)
-    })
-}
-```
-
-**File:** `src/router/index.ts` (modify to include custom routes)
-
-```typescript
-import { createRouter } from 'vue-router'
-import routes from './routes'
-import { registerCustomRoutes } from '@/custom/router'
-
-const router = createRouter({
-    history: createWebHashHistory(),
-    routes,
-})
-
-// Register custom routes
-registerCustomRoutes(router)
-
-export default router
-```
+The global guards in `src/router/index.ts` (install check, `init`, authentication via `meta.auth`, `meta.adminOnly`) apply to custom routes as well. The app uses hash history, so the page is reachable at `#/my-custom-page`.
 
 ## Custom Stores
 
@@ -372,13 +214,10 @@ export const useMyFeatureStore = defineStore('myFeature', () => {
         await mintApi.delete(`/my-feature/items/${id}`)
         items.value = items.value.filter(item => item.id !== id)
     }
-    
-    function $reset() {
-        items.value = []
-        loading.value = false
-        error.value = null
-    }
-    
+
+    // No manual $reset() needed: the global reset-store plugin (src/plugins/reset-store.ts)
+    // gives every store a $reset() that restores its initial state.
+
     return {
         // State
         items,
@@ -392,7 +231,6 @@ export const useMyFeatureStore = defineStore('myFeature', () => {
         createItem,
         updateItem,
         deleteItem,
-        $reset,
     }
 })
 ```
@@ -603,8 +441,10 @@ Named actions are bundled at build time, so a new or changed class needs:
 
 ```bash
 cd vue
-npm run build:repo
+npm run build   # build:repo is an alias
 ```
+
+Then commit the rebuilt `vue/dist/` together with the source.
 
 **Security:** `isAvailable()` and `customVisibility` only control what the UI shows. Any endpoint an
 action calls must independently re-check ACL, the record's existence and module, and every business
@@ -621,12 +461,14 @@ The same core-then-custom rule applies to the remaining action types:
 | Subpanel actions | `vue/src/business/SubpanelActions/Actions/` | `vue/src/custom/business/SubpanelActions/Actions/` |
 | Subpanel inline actions | `vue/src/business/SubpanelActions/InlineActions/` | `vue/src/custom/business/SubpanelActions/InlineActions/` |
 
+**List row actions** work differently: for an action name in the list view config that has no core implementation, `ListViewStore.loadCustomAction()` lazily loads `vue/src/custom/views/ListView/Actions/<Name>.ts`. Its default export is a factory that receives `{ router, store, url, languages, popups, backend, ComponentLoader, mintApi }` and returns `{ icon, label?, onClick(item), hasAccess?(item) }`.
+
 Mass actions additionally need a backend counterpart — see
 [Mass Actions](../../api/documentation/15-mass-actions.md), section *Custom actions in `api/custom/`*.
 
 ## Custom API Endpoints
 
-Add custom API integration.
+Add custom API integration. `custom/api/` is a convention, not an auto-loaded directory: import the file where you need it. The endpoints themselves must exist in the API (custom routes in `api/custom/`, see [Extending the API](../../api/documentation/08-extending-api.md)). Paths are relative to the `mintApi` base URL `api/` (a leading `/` is stripped by axios). Built-in record endpoints use `PATCH {module}/Update/{id}`; the `put`/`delete` calls below assume your custom routes define those methods.
 
 **File:** `custom/api/myfeature.api.ts`
 
@@ -713,122 +555,86 @@ await myFeatureApi.createItem({ name: 'New' })
 
 ## Custom Drawers
 
-Add custom sidebar drawers.
+Add custom drawers to the right-side drawer bar. `bundler/drawers.bundle.ts` loads every `src/drawers/*.ts` and `src/custom/drawers/*.ts` file; a custom file `myDrawer.drawer.ts` gets the key `custom-myDrawer`.
 
 **File:** `custom/drawers/myDrawer.drawer.ts`
 
 ```typescript
+import MyDrawer from '@/custom/components/MyDrawer.vue'
+import { useACL } from '@/composables/useACL'
+
 export default {
-    name: 'myDrawer',
-    component: () => import('@/custom/components/MyDrawer.vue'),
-    props: {
-        module: String,
-        recordId: String,
-    }
+    icon: 'mdi-star',                    // Button icon in the drawer bar
+    component: MyDrawer,                 // Rendered with <component :is> - pass a component, not () => import()
+    label: 'LBL_MY_DRAWER',              // Button aria-label (translated)
+    descriptionLabel: 'LBL_MY_DRAWER_HELP', // Optional help text
+    // Required: the button is shown only when this returns true (note the spelling used by core)
+    isAvaliable: () => useACL().hasAccess('Employees', 'list', true),
+    // Optional: badge content; the badge is shown when truthy
+    badge: () => 0,
+    // Optional: called on scroll of the drawer content (e.g. infinite loading)
+    onScroll: (drawerElement: HTMLElement) => {},
 }
 ```
 
+To load the component lazily, wrap it: `component: defineAsyncComponent(() => import('@/custom/components/MyDrawer.vue'))`.
+
 **File:** `custom/components/MyDrawer.vue`
+
+The component is rendered inside the drawer container provided by `DefaultLayoutDrawer.vue`, receives no props, and must not create its own `v-navigation-drawer`:
 
 ```vue
 <template>
-    <v-navigation-drawer
-        v-model="isOpen"
-        temporary
-        location="right"
-        width="400"
-    >
-        <v-toolbar>
-            <v-toolbar-title>My Custom Drawer</v-toolbar-title>
-            <v-spacer />
-            <v-btn icon @click="isOpen = false">
-                <v-icon>mdi-close</v-icon>
-            </v-btn>
-        </v-toolbar>
-        
-        <v-card-text>
-            <!-- Drawer content -->
-            <p>Module: {{ module }}</p>
-            <p>Record ID: {{ recordId }}</p>
-        </v-card-text>
-    </v-navigation-drawer>
+    <div class="my-drawer">
+        <h2>{{ languages.label('LBL_MY_DRAWER') }}</h2>
+        <!-- Drawer content: read what you need from stores, e.g. the current route/module -->
+        <p>Module: {{ route.params.module }}</p>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useLanguagesStore } from '@/store/languages'
 
-interface Props {
-    module: string
-    recordId: string
-}
-
-const props = defineProps<Props>()
-const isOpen = ref(true)
+const route = useRoute()
+const languages = useLanguagesStore()
 </script>
 ```
 
 ## Styling Customizations
 
-Override or extend styles.
+There is no automatically loaded custom stylesheet.
 
-**File:** `custom/styles/custom.scss`
+- **Theme colors** (light/dark) are defined in `src/plugins/vuetify.ts` (`theme.themes.light/dark.colors`); see [User Theme System](./14-user-theme.md). Vuetify 4 does not read SASS variables such as `$primary` from an imported SCSS file.
+- **Custom components** should use scoped styles and the theme CSS variables so they follow light/dark mode:
 
-```scss
-// Override Vuetify variables
-$primary: #2196F3;
-$secondary: #424242;
-$accent: #82B1FF;
-
-// Custom utility classes
-.custom-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
+```vue
+<style scoped lang="scss">
 .custom-card {
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: rgb(var(--v-theme-surface));
+    color: rgb(var(--v-theme-on-surface));
+    border-left: 4px solid rgb(var(--v-theme-primary));
 }
-
-// Override core component styles
-.list-view {
-    .custom-header {
-        background: linear-gradient(135deg, $primary 0%, $secondary 100%);
-        color: white;
-        padding: 20px;
-    }
-}
-
-// Add dark mode support
-.v-theme--dark {
-    .custom-card {
-        background: #1e1e1e;
-    }
-}
+</style>
 ```
 
-**Import in main:**
-
-```typescript
-// src/main.ts
-import '@/custom/styles/custom.scss'
-```
+- **Global overrides** of core styles need an import in core `src/main.ts` (or `src/main.scss`). That is a core change, so keep it minimal and document it.
 
 ## Best Practices
 
 ### ✅ DO
 
-- **Use `custom/` directory** for all customizations
+- **Use the `custom/` extension points** listed above
 - **Follow naming conventions** (PascalCase for components, camelCase for utils)
 - **Type your code** with TypeScript interfaces
 - **Document your customizations** with comments
+- **Rebuild** (`npm run build`) and commit `vue/dist/` after changes
 - **Test thoroughly** before deploying
-- **Version control** your `custom/` directory separately
 
 ### ❌ DON'T
 
-- **Modify core files** (they'll be overwritten)
+- **Modify core files** unless there is no extension point (field types, global styles); keep such changes minimal
 - **Duplicate core code** (extend instead)
 - **Hardcode values** (use constants/config)
 - **Skip TypeScript** (type safety prevents bugs)
@@ -839,32 +645,34 @@ import '@/custom/styles/custom.scss'
 ### Custom Component Not Loading
 
 **Check:**
-1. File path matches expected pattern
+1. The file is in one of the auto-loaded paths (see [Extension Points](#extension-points)) or is imported explicitly
 2. Component is properly exported
 3. No TypeScript errors
 4. Import path uses `@/` alias correctly
+5. The frontend was rebuilt
 
 ### Custom Route Not Working
 
 **Check:**
-1. Route is registered in router
+1. The route is in the default export of `custom/router/index.ts`
 2. Route name is unique
 3. Component path is correct
-4. Meta auth property is set correctly
+4. `meta.auth` is set correctly
+5. The URL uses the hash (`#/my-custom-page`)
 
 ### Custom Store Not Updating
 
 **Check:**
-1. Using `.value` for refs
-2. Store is returned from defineStore
+1. Using `.value` for refs inside the store
+2. State is returned from the `defineStore` setup function
 3. Store is imported correctly
 4. Calling actions, not accessing them
 
 ## Next Steps
 
-- Learn about [Field System](./09-fields.md) for custom field types
-- Explore [Styling & Theming](./12-styling-theming.md) for appearance customization
-- Read [Best Practices](./15-best-practices.md) for code quality
+- Learn about [Field System](./09-fields.md) for field types
+- Explore [User Theme System](./14-user-theme.md) for appearance customization
+- Read [Record View Definitions](./12-recordviewdefs.md) for record view metadata and actions
 
 ---
 

@@ -9,17 +9,24 @@ Rather than adding these routes to the central `app/Routes/routes/`, each module
 ```
 api/modules/Employees/api/routes/sidepanel.php
 api/modules/Candidatures/api/routes/sidepanel.php
+api/modules/Recruitments/api/routes/sidepanel.php
 ```
+
+| Module | Endpoints (`GET /{Module}/{id}/sidepanel/...`) |
+|---|---|
+| `Employees` | `tenure`, `leave`, `trainings`, `competencies`, `kudos` |
+| `Candidatures` | `score`, `history` |
+| `Recruitments` | `candidature-statuses` |
 
 These use the standard `$routes` array format, so no new registration mechanism is involved. Because they are module-owned, their paths are automatically prefixed with the module name — `'path' => '/{id}/sidepanel/tenure'` is served as `GET /api/Employees/{id}/sidepanel/tenure`. Keeping them in a separate `sidepanel.php` (instead of the module's main route file) simply keeps the feature's routes together. All are `GET`, `auth => true`, and take the record id as a `StringType` path parameter.
 
 ## Controller convention
 
-Each module has a single sidepanel controller (`EmployeeSidepanelController`, `CandidaturesSidepanelController`) with one action per widget. The actions are deliberately thin: check access, run one read query (or delegate to a service), and write JSON. Non-trivial aggregation is extracted into `lib/Services/` (e.g. `LeaveService`, `KudosSummaryService`) so it stays unit-testable and out of the HTTP layer, and is injected via the constructor. Responses are a plain `json_encode` of the array/DTO the widget expects — there is no wrapping envelope.
+Each module has a single sidepanel controller in `api/app/Controllers/` (`EmployeeSidepanelController`, `CandidaturesSidepanelController`, `RecruitmentsSidepanelController`) with one action per widget. The actions are deliberately thin: check access, run one read query through the injected `EntityManagerInterface` (or delegate to a service), and write JSON. Non-trivial aggregation is extracted into `api/lib/Services/` (e.g. `LeaveService`, `KudosSummaryService`, both used by `EmployeeSidepanelController`) so it stays unit-testable and out of the HTTP layer, and is injected via the constructor. Responses are a plain `json_encode` of the array/DTO the widget expects — there is no wrapping envelope.
 
 ## Per-record access check
 
-These endpoints expose one employee's or candidate's data to whoever asks for it by id, so they must authorize on the **viewer's ACL for that specific record**, not merely on being authenticated. `EmployeeSidepanelController::checkEmployeeAccess()` implements the sanctioned pattern, mirroring `KudosController`, `CommentsController`, and `FilesController`:
+These endpoints expose one employee's or candidate's data to whoever asks for it by id, so they must authorize on the **viewer's ACL for that specific record**, not merely on being authenticated. `EmployeeSidepanelController::checkEmployeeAccess()` (and its counterpart `CandidaturesSidepanelController::checkCandidatureAccess()`) implements the sanctioned pattern, mirroring `KudosController`, `CommentsController`, and `FilesController`:
 
 ```php
 private function checkEmployeeAccess(string $employeeId): ?Response

@@ -8,11 +8,6 @@ legacy/upload/*
 !legacy/upload/index.html
 legacy/public/
 legacy/cache/**/*
-!legacy/cache/themes/
-!legacy/cache/themes/SuiteP/
-!legacy/cache/themes/SuiteP/css/
-!legacy/cache/themes/SuiteP/css/*/
-!legacy/cache/themes/SuiteP/css/*/style.css
 legacy/custom/blowfish/
 legacy/custom/modules/*/logic_hooks.php
 legacy/custom/modules/*/Ext/Vardefs/vardefs.ext.php

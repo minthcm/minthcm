@@ -53,14 +53,19 @@ use MintHCM\Api\Controllers\OAuth2\Controller;
 use MintHCM\Api\Controllers\OAuth2\Server;
 use MintHCM\Api\Entities\OAuth2\MintToken;
 use MintHCM\Api\Middlewares\Middleware;
+use MintHCM\Lib\Services\Auth\SessionTokenRevoker;
+use MintHCM\Utils\CustomLoader;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Psr7\Response;
+use SuiteCRM\Utility\SessionTimeout;
 
 class AuthMiddleware extends Middleware
 {
+    public const BACKGROUND_REQUEST_HEADER = 'X-Mint-Background-Request';
+
     private ResourceServer $server;
 
     private EntityManagerInterface $entityManager;
@@ -144,8 +149,17 @@ class AuthMiddleware extends Middleware
             // would fail state validation and bounce the user back to login. Leave the
             // session intact and just report "unauthenticated" until the callback returns.
             if ($this->isExternalAuthHandshakeInProgress()) {
+                $this->closeSessionIfOpen();
                 return false;
             }
+            session_destroy();
+            return false;
+        }
+
+        $session_timeout = $this->getSessionTimeout();
+        if ($session_timeout->isExpired($_SESSION, time())) {
+            // the silent refresh below would otherwise keep the session alive forever
+            CustomLoader::getObject(SessionTokenRevoker::class)->revoke($token);
             session_destroy();
             return false;
         }
@@ -170,10 +184,32 @@ class AuthMiddleware extends Middleware
         if ($authenticated) {
             global $api_client;
             $api_client = 'frontend';
+            if (!$this->isBackgroundRequest($request)) {
+                $session_timeout->touch($_SESSION, time());
+            }
+            // The activity marker above must be written before the session is closed. Endpoints that
+            // must write to $_SESSION after this point (mass action Export/Merge, AuthController::logout())
+            // call session_start() themselves to resume this same session before writing —
+            // session_write_close() only releases the lock, it doesn't destroy data.
+            $this->closeSessionIfOpen();
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Releases the exclusive file-session lock as soon as auth is resolved, instead of
+     * holding it for the rest of the request. The default PHP file session handler keeps
+     * an exclusive lock on the session file until it is closed, which otherwise serializes
+     * every concurrent request from the same user (e.g. the ~50 requests a RecordView fires
+     * on load) on the server side even though the browser sends them in parallel.
+     */
+    private function closeSessionIfOpen(): void
+    {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
     }
 
     /**
@@ -185,6 +221,20 @@ class AuthMiddleware extends Middleware
     private function isExternalAuthHandshakeInProgress(): bool
     {
         return !empty($_SESSION['oidc_state']) || !empty($_SESSION['AuthNRequestID']);
+    }
+
+    protected function getSessionTimeout(): SessionTimeout
+    {
+        return new SessionTimeout();
+    }
+
+    /**
+     * Requests the frontend sends on its own (polling) carry this header and do not count as user
+     * activity - otherwise an open browser tab would keep the session from ever going idle.
+     */
+    protected function isBackgroundRequest(Request $request): bool
+    {
+        return $request->getHeaderLine(self::BACKGROUND_REQUEST_HEADER) === '1';
     }
 
     private function refreshToken(Request $request): bool

@@ -1,7 +1,13 @@
 <template>
     <div v-if="!store.bean.isNew" class="subpanels-panel">
         <h1>{{ languages.label('LBL_RELATED_RECORDS') }}</h1>
-        <v-expansion-panels v-model="expandedSubpanels" class="subpanels-accordion" multiple variant="accordion">
+        <v-expansion-panels
+            :model-value="expandedSubpanels"
+            @update:model-value="persistExpandedSubpanels"
+            class="subpanels-accordion"
+            multiple
+            variant="accordion"
+        >
             <v-expansion-panel
                 v-for="subpanel in store.subpanels"
                 :key="subpanel.key"
@@ -68,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 
 import { useRecordViewStore } from '@/views/RecordView/RecordViewStore'
 import { useLanguagesStore } from '@/store/languages'
@@ -77,22 +83,49 @@ import MintPanelSubpanelsButtons from './MintPanelSubpanelsButtons.vue'
 import MintDataTablePagination from '@/components/MintDataTablePagination/MintDataTablePagination.vue'
 import { useLocalStorageStore } from '@/store/localStorage'
 import { useModulesStore } from '@/store/modules'
-
-onMounted(() => {
-    if (store.view == 'detail' && store.bean.id) {
-        store.fetchLanguagesForSubpanels()
-        store.fetchSubpanelsData()
-    }
-})
+import { useEagerFetch } from '@/composables/useEagerFetch'
 
 const store = useRecordViewStore()
 const languages = useLanguagesStore()
+
+const shouldFetchSubpanelData = () => store.view === 'detail' && !!store.bean.id
+
+// Must run before this component's template first renders — see useEagerFetch for why.
+useEagerFetch(shouldFetchSubpanelData, () => store.fetchLanguagesForSubpanels())
+
+onMounted(() => {
+    if (shouldFetchSubpanelData()) {
+        store.fetchSubpanelsData()
+    }
+})
 const storage = useLocalStorageStore()
 
-const expandedSubpanels = computed({
-    get: () => storage.getPanelSections(store.bean.module, 'MintPanelSubpanels'),
-    set: (value: string[]) => storage.setPanelSections(store.bean.module, 'MintPanelSubpanels', value)
-});
+function expandSubpanels(keys: string[]) {
+    keys.forEach((subpanelKey) => {
+        if (store.subpanelsFullyLoaded[subpanelKey]) return
+        const subpanel = store.subpanels.find(sp => sp.key === subpanelKey)
+        if (!subpanel) return
+        // fetchSubpanelRecords() awaits any in-flight collapsed-panel initial fetch for this
+        // key before overwriting subpanelsData, so this never races fetchSubpanelsData().
+        store.fetchSubpanelRecords(subpanelKey, subpanel.paginateBy, 0, subpanel.sortBy, subpanel.sortOrder)
+    })
+}
+
+// Read-only: v-model writes go through persistExpandedSubpanels() below, not a setter here,
+// so the two responsibilities (persisting to localStorage, triggering data fetch) live in
+// separate watch callbacks instead of a single setter doing both.
+const expandedSubpanels = computed(() => storage.getPanelSections(store.bean.module, 'MintPanelSubpanels'))
+
+function persistExpandedSubpanels(value: string[]) {
+    storage.setPanelSections(store.bean.module, 'MintPanelSubpanels', value)
+}
+
+// Record-to-record navigation remounts this component (App.vue keys <router-view> on
+// $route.fullPath), so store.bean.module can never change during this component's lifetime —
+// every fire of this watcher is a real user expand/collapse, never a navigation side effect.
+watch(expandedSubpanels, (value) => {
+    expandSubpanels(value)
+})
 
 const subpanelSortState = ref<{ [key: string]: { sortBy: string; sortOrder: string } }>({})
 

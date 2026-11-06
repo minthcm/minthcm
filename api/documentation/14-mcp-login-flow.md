@@ -1,6 +1,6 @@
 # MCP Login Flow
 
-The MintHCM API provides a CSRF-protected OAuth2 consent flow that replaces the legacy PHP login form (`mcp/Auth/login.php`) with a Vue SPA consent page at `/#/mcp/login`.
+The MintHCM API provides a CSRF-protected OAuth2 consent flow whose login/consent step is a Vue SPA page at `/#/mcp/login` (it replaced the former PHP login form of the MCP server).
 
 ## Overview
 
@@ -69,7 +69,7 @@ Completes the authorization after the user clicks **Authorize**.
 - `400` — flow not found or expired
 - `401` — user not authenticated
 - `403` — invalid or missing `consent_token`
-- `500` — internal error from `OAuth2Server::completeAuthorization()`
+- `500` — `OAuth2Server::completeAuthorization()` threw, or did not return a `302` with a `Location` header
 
 ### `POST /mcp/deny`
 
@@ -92,23 +92,23 @@ Cancels the authorization and returns a RFC 6749 `access_denied` redirect URL. T
 ## Sequence Diagram
 
 ```
-MCP Client           Browser           mcp/OAuth2Server      Vue SPA          api/McpController
-    |                   |                      |                  |                    |
-    |-- GET /oauth/authorize?... ------------->|                  |                    |
-    |                   |         store oauth_flows[flowId]       |                    |
-    |                   |<-- 302 /#/mcp/login?flow=<id> ---------|                    |
-    |                   |-- load SPA --------->|                  |                    |
-    |                   |                      |-- GET /mcp/oauth-info?flow=<id> ----->|
-    |                   |                      |<-- { client_name, scope,              |
-    |                   |                      |     consent_token, authenticated_user }|
-    |                   |                      |                  |                    |
-    |   [if not logged in: POST /login → session established]     |                    |
-    |                   |                      |                  |                    |
-    |   [user clicks Authorize]                |                  |                    |
-    |                   |                      |-- POST /mcp/authorize { flow, token } >|
-    |                   |                      |<-- { redirect_url: ...?code=... } ----|
-    |                   |-- window.location = redirect_url        |                    |
-    |<-- redirect with code -------------------|                  |                    |
+MCP Client        Browser          mcp/OAuth2Server        Vue SPA            api/McpController
+    |                |                    |                    |                      |
+    |-- authorize request (via browser) ->|                    |                      |
+    |                |       store oauth_flows[flowId]         |                      |
+    |                |<-- 302 /#/mcp/login?flow=<id>           |                      |
+    |                |-- load SPA ----------------------------->|                      |
+    |                |                    |                    |-- GET /mcp/oauth-info?flow=<id> ->|
+    |                |                    |                    |<-- { client_name, scope,          |
+    |                |                    |                    |   consent_token, authenticated_user }
+    |                |                    |                    |                      |
+    |                |                    |   [if not logged in: POST /login]         |
+    |                |                    |                    |                      |
+    |                |                    |   [user clicks Authorize]                 |
+    |                |                    |                    |-- POST /mcp/authorize { flow, consent_token } ->|
+    |                |                    |                    |<-- { redirect_url: ...?code=... }  |
+    |                |<-- window.location = redirect_url ------|                      |
+    |<-- redirect with code                |                    |                      |
 ```
 
 ## Security Notes
@@ -129,9 +129,12 @@ The controller has no constructor dependencies — it uses a private `initLegacy
 private function initLegacySession(): void
 {
     chdir('../legacy/');
-    require_once 'include/MVC/SugarApplication.php';
-    (new \SugarApplication())->startSession();
-    chdir('../api/');
+    try {
+        require_once 'include/MVC/SugarApplication.php';
+        (new \SugarApplication())->startSession();
+    } finally {
+        chdir('../api/');
+    }
 }
 ```
 

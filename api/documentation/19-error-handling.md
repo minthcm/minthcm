@@ -1,4 +1,4 @@
-# 19. Error Handling
+# Error Handling
 
 ## Overview
 
@@ -11,8 +11,18 @@ be exploited by an attacker.
 
 **Location:** `api/app/ExceptionHandlers/MintExceptionHandler.php`
 
-The handler is registered as Slim's error handler in `api/app/ApiManager.php` and is
-invoked for every unhandled `\Throwable`.
+The handler is registered as Slim's default error handler in `api/app/ApiManager.php`
+(`$errorMiddleware->setDefaultErrorHandler(MintExceptionHandler::class)`) and is invoked for
+every unhandled `\Throwable`. Slim's `$displayErrorDetails` flag is ignored — only
+`developerMode` decides what is exposed.
+
+### Status code
+
+The HTTP status is taken from `$exception->getCode()`. A code that is not an integer between
+100 and 599 (e.g. `0`, or the string SQLSTATE codes of `PDOException`) is normalized to `500`,
+so such exceptions are treated as server errors (and their message is hidden in production).
+Throw Slim's HTTP exceptions (`HttpBadRequestException`, `HttpForbiddenException`, ...) or set
+an explicit 4xx code when the client should see the message.
 
 ### Behavior by environment
 
@@ -73,7 +83,7 @@ Doctrine's `dev_mode` flag controls whether ORM metadata is read from source ann
 every request (slow, always fresh) or from a pre-built cache (fast, must be manually
 cleared after schema changes).
 
-Previously hardcoded to `true`, it now reads the same `developerMode` flag:
+It reads the same `developerMode` flag:
 
 ```php
 'dev_mode' => (bool)($sugar_config['developerMode'] ?? false),

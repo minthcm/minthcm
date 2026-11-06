@@ -106,6 +106,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
             throw new \InvalidArgumentException('Refresh token is not found for this client');
         }
 
+        $token->token_is_revoked = true;
         $token->deleted = true;
         $this->entityManager->persist($token);
         $this->entityManager->flush();
@@ -126,6 +127,6 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
             return true;
         }
 
-        return new \DateTime() > $token->refresh_token_expires;
+        return $token->token_is_revoked === true || new \DateTime() > $token->refresh_token_expires;
     }
 }

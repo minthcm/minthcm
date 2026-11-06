@@ -178,6 +178,37 @@ if (empty($GLOBALS['installing'])) {
         session_save_path($sugar_config['session_dir']);
     }
 
+    // Session cookie hardening. This file is loaded by both legacy and the API before any
+    // session_start(), so the flags do not depend on the web server configuration.
+    if (session_status() === PHP_SESSION_NONE) {
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.use_only_cookies', '1');
+
+        $sessionSameSite = $sugar_config['session_cookie_samesite'] ?? 'Lax';
+        if (!in_array($sessionSameSite, ['Lax', 'Strict', 'None'], true)) {
+            $sessionSameSite = 'Lax';
+        }
+        // X-Forwarded-Proto / X-Forwarded-SSL (checked by isSSL()) count only when they come from
+        // a trusted proxy; $sugar_config['session_cookie_secure'] forces the flag either way
+        $sessionSecure = $sugar_config['session_cookie_secure'] ?? null;
+        if (!is_bool($sessionSecure)) {
+            $trustedProxies = is_array($sugar_config['trusted_proxies'] ?? null) ? array_map('strval', $sugar_config['trusted_proxies']) : [];
+            $sessionSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || (isSSL() && in_array((string) ($_SERVER['REMOTE_ADDR'] ?? ''), $trustedProxies, true));
+        }
+        if ($sessionSameSite === 'None' && !$sessionSecure) {
+            // browsers reject SameSite=None cookies that are not Secure
+            $sessionSameSite = 'Lax';
+        }
+        session_set_cookie_params([
+            'lifetime' => 0,
+            'path' => ini_get('session.cookie_path') ?: '/',
+            'secure' => $sessionSecure,
+            'httponly' => true,
+            'samesite' => $sessionSameSite,
+        ]);
+    }
+
     SugarApplication::preLoadLanguages();
 
     $timedate = TimeDate::getInstance();

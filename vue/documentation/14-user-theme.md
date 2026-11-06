@@ -9,7 +9,12 @@ MintHCM supports a UI color-scheme preference that inherits from the OS by defau
 - **`preference`** — what the user asked for: `'system'` or the name of a registered Vuetify theme (`'light'`, `'dark'`, ...). Persisted in `localStorage` under `mint.theme.preference`.
 - **`activeTheme`** — the theme actually applied. Always one of the themes registered in Vuetify, never `'system'`. Computed from `preference`, falling back to the OS-detected `systemTheme` (via `window.matchMedia('(prefers-color-scheme: dark)')`) when `preference === 'system'` or points at an unregistered theme.
 
-Adding a theme beyond light/dark means registering it in `vue/src/plugins/vuetify.ts` (`theme.themes`) and adding it to `RESOLVED_THEMES` in `theme.ts` — no changes needed to the preference/active-theme split itself.
+Adding a theme beyond light/dark requires no change to the preference/active-theme split itself, but it does touch several places:
+
+1. register it in `vue/src/plugins/vuetify.ts` (`theme.themes`) and add it to `RESOLVED_THEMES` in `theme.ts`;
+2. add it to `UserThemeController::ALLOWED_THEMES` on the API (`api/app/Controllers/User/UserThemeController.php`) — otherwise `POST user/theme` answers `422` (see [API docs — User Theme Preference](../../api/documentation/17-user-theme.md));
+3. add an `html[data-mint-theme="..."]` block of `--mint-*` tokens to `legacy/themes/SuiteP/css/mint-theme-tokens.css` (and overrides in `dark-mode.css` if needed);
+4. add the option to the theme `<select>` in `legacy/modules/Users/tpls/EditViewFooter.tpl`.
 
 ## Initialization and persistence
 
@@ -31,7 +36,7 @@ Keep both in sync if the resolution logic changes.
 The legacy layer doesn't run Pinia, so it's synchronized via `postMessage` across the `LegacyView.vue` iframe boundary:
 
 - **Vue → legacy**: `LegacyView.vue` watches `themeStore.activeTheme` and posts `{ type: 'mint-theme', theme }` to the iframe on every change and on load. The `_head.tpl` bootstrap script listens for this and updates `data-mint-theme` live.
-- **Legacy → Vue**: the theme `<select>` added to `legacy/modules/Users/tpls/EditViewFooter.tpl` (User Settings) posts `{ type: 'mint-theme-preference', preference }` to `window.parent` on change (it also calls `POST api/user/theme` directly, since the legacy page itself needs to update before any Vue round-trip). `LegacyView.vue`'s message handler picks this up and calls `themeStore.setPreference(...)`, which fans the change back out to Vuetify and to `localStorage`.
+- **Legacy → Vue**: the theme `<select>` added to `legacy/modules/Users/tpls/EditViewFooter.tpl` (User Settings) posts `{ type: 'mint-theme-preference', preference }` to `window.parent` on change (it also calls `POST api/user/theme` directly, since the legacy page itself needs to update before any Vue round-trip). `LegacyView.vue`'s message handler picks this up and calls `themeStore.setPreference(...)`, which fans the change back out to Vuetify and to `localStorage` — and also POSTs `user/theme` again, so a change made in the legacy settings page is saved to the server twice (harmless, same value).
 
 ## CSS tokens
 

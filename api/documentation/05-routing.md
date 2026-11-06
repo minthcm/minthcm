@@ -7,7 +7,7 @@ The MintHCM API uses a flexible routing system built on Slim Framework that supp
 Routes map HTTP requests to controller methods. Each route defines:
 
 - **Method**: HTTP method (GET, POST, PUT, DELETE, etc.)
-- **Path**: URL pattern (e.g., `/employees/{id}`)
+- **Path**: URL pattern with optional placeholders (e.g., `/subpanel/{relation_name}/{id}`)
 - **Class**: Controller class to handle the request
 - **Function**: Method name to invoke (optional if using `__invoke`)
 
@@ -18,18 +18,19 @@ Routes are defined as PHP arrays in route files:
 ```php
 <?php
 
-use MintHCM\Api\Controllers\ModuleController;
+use MintHCM\Api\Controllers\GlobalSearchController;
 
 $routes = [
-    'route.name' => [
-        'method' => 'GET',                    // HTTP method(s)
-        'path' => '/employees/{id}',          // URL pattern
-        'class' => ModuleController::class,   // Controller class
-        'function' => 'detail',               // Method to call
+    'global_search' => [
+        'method' => 'GET',                          // HTTP method(s)
+        'path' => '/global_search',                 // URL pattern
+        'class' => GlobalSearchController::class,   // Controller class
+        'function' => 'getData',                    // Method to call
     ],
 ];
 ```
 
+The controller is instantiated per request; its constructor parameters are resolved from the DI container by type (`RouteManager::prepareConstructorArguments()`). The method is called with `(Request $request, Response $response, array $args)`.
 
 
 ### Route Properties
@@ -41,10 +42,21 @@ $routes = [
 | `class` | ✅ | string | Fully qualified controller class name |
 | `function` | ❌ | string | Method name. If omitted, `__invoke` is used |
 | `desc` | ❌ | string | Route description (for documentation/API specs) |
-| `options` | ❌ | array | Route options (e.g., `['auth' => false]`) |
+| `options` | ❌ | array | Route options (see below) |
 | `pathParams` | ❌ | array | URL parameter definitions and validation |
-| `queryParams` | ❌ | array | Query string parameter definitions and validation |
-| `bodyParams` | ❌ | array | Request body parameter definitions and validation |
+| `queryParams` | ❌* | array | Query string parameter definitions and validation |
+| `bodyParams` | ❌* | array | Request body parameter definitions and validation |
+
+\* Every query/body parameter the client sends must be declared here - see [Undeclared Parameters](#undeclared-parameters-are-rejected).
+
+#### Route Options
+
+| Option | Default | Checked by | Description |
+|--------|---------|------------|-------------|
+| `auth` | `true` | `AuthMiddleware` | Require a valid OAuth2 bearer token or logged-in session |
+| `optional_auth` | `false` | `AuthMiddleware` | Try to authenticate but tolerate a failed session (see below) |
+| `admin_only` | `false` | `AdminMiddleware` | Only administrators may call the route |
+| `access` | `'all'` | `RouteAccessMiddleware` | Which API client may call the route: `'all'`, `'frontend'`, `'mobile'`, `'external'`, or an array of these. Other clients get `404` |
 
 #### OAuth Authentication Flag
 
@@ -64,7 +76,7 @@ $routes = [
 ];
 ```
 
-**Important:** Routes with `'auth' => false` are publicly accessible without JWT token. Use carefully!
+**Important:** Routes with `'auth' => false` are publicly accessible without an OAuth2 token or session. Use carefully!
 
 #### Optional Authentication Flag
 
@@ -87,7 +99,7 @@ $routes = [
 ];
 ```
 
-When `optional_auth` is `true`, the `AuthMiddleware` **attempts** to validate the token or session. If validation succeeds, `$current_user` is set as usual. If it fails, the request proceeds anyway — no `401` is thrown.
+When `optional_auth` is `true`, the `AuthMiddleware` **attempts** to validate the token or session. If validation succeeds, `$current_user` is set as usual. A failed **session** check (request with a `PHPSESSID` cookie) is tolerated and the request proceeds without a `401`. Without a session cookie the bearer token is still validated, so a missing or invalid token returns the OAuth2 error (`401`) even with `optional_auth`.
 
 **Summary of `auth` / `optional_auth` combinations:**
 
@@ -95,7 +107,7 @@ When `optional_auth` is `true`, the `AuthMiddleware` **attempts** to validate th
 |--------|-----------------|----------|
 | `true` (default) | `false` (default) | **Required** — valid token/session mandatory; `401` on failure |
 | `false` | `false` | **Public** — authentication is skipped entirely |
-| `false` | `true` | **Optional** — authentication is attempted but failure is allowed |
+| `false` | `true` | **Optional** — authentication is attempted; a failed session is allowed (a request without a session cookie still needs a valid token) |
 
 **Use cases:**
 - `/logout` — should cleanly terminate a session if one exists, but must not break if the session is already gone
@@ -108,7 +120,11 @@ The array key becomes the route name, used for:
 - Debugging
 - URL generation (if needed)
 
-**Convention:** Use dot notation: `module.action` (e.g., `employees.list`, `auth.login`)
+**Convention:** Core route files mostly use snake_case keys (e.g., `get_login`, `global_search`, `list_data`); some module files use dot notation (e.g., `employees.sidepanel.tenure`). Either works - pick one style per file and keep keys descriptive. Module routes are registered as `{Module}___{key}` (e.g., `Employees___detail`).
+
+**Key rules** (`RouteManager::getRoutesData()`):
+- Two files in the **same** location defining the same key throw an exception (`Duplicate route key ...`).
+- A later location overrides an earlier one with the same key (`array_merge`), so a file in `custom/app/Routes/routes/` can replace a core route by reusing its key. For modules, a key in `modules/{Module}/api/routes/` overrides the generic route with the same key from `app/Routes/modules/module.php`.
 
 ## Route Locations
 
@@ -129,13 +145,13 @@ custom/app/Routes/routes/        # Custom global routes
 ### Module-Specific Routes
 
 ```
-app/Routes/modules/{ModuleName}/           # Core module routes
-custom/app/Routes/modules/{ModuleName}/    # Custom module routes
+app/Routes/modules/*.php                   # Generic routes registered for EVERY module (module.php)
+custom/app/Routes/modules/*.php            # Custom generic routes for every module
 modules/{ModuleName}/api/routes/           # Module-owned routes
 custom/modules/{ModuleName}/api/routes/    # Custom module-owned routes
 ```
 
-Module routes automatically get prefixed with `/{ModuleName}`.
+Module routes are built for every module in `$beanList`, get prefixed with `/{ModuleName}` and are named `{ModuleName}___{key}`. The generic routes in `app/Routes/modules/module.php` include e.g. `list` (`GET /{Module}`), `detail` (`GET /{Module}/Detail/{id}`), `create` (`POST /{Module}/Create`), `update` (`PATCH /{Module}/Update[/{id}]`), `get_record` (`POST /{Module}/Get[/{id}]`), `delete` (`DELETE /{Module}/{id}`), `list_data`, `subpanel_records`, `mass_actions`, `link`, `unlink`.
 
 ## How Routes Are Loaded
 
@@ -162,9 +178,9 @@ protected $modules_locations = [
 1. Scan all route locations
 2. Include all `.php` files
 3. Expect each file to define `$routes` array
-4. Merge all routes
+4. Merge all routes (later locations override earlier ones by key)
 5. For module routes, add module prefix
-6. Register with Slim router
+6. Register with Slim router - routes that fail validation are skipped **silently** (see [Route Validation](#route-validation))
 
 ## Adding a New Route
 
@@ -175,11 +191,10 @@ protected $modules_locations = [
 ```php
 <?php
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Psr7\Response;
+use MintHCM\Custom\Api\Controllers\HelloController;
 
 $routes = [
-    'hello.world' => [
+    'hello_world' => [
         'method' => 'GET',
         'path' => '/hello',
         'class' => HelloController::class,
@@ -215,41 +230,63 @@ class HelloController
 **Route definition:**
 
 ```php
+use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
+use MintHCM\Custom\Api\Controllers\MyUsersController;
+
 $routes = [
-    'user.detail' => [
+    'my_user_detail' => [
         'method' => 'GET',
-        'path' => '/users/{id}',
-        'class' => UserController::class,
+        'path' => '/my_users/{id}',
+        'class' => MyUsersController::class,
         'function' => 'getUser',
+        'pathParams' => [
+            'id' => ['type' => StringType::class, 'required' => true],
+        ],
     ],
 ];
 ```
 
-**Controller:**
+**Controller** (`custom/app/Controllers/MyUsersController.php`):
 
 ```php
-public function getUser(Request $request, Response $response, array $args): Response
+namespace MintHCM\Custom\Api\Controllers;
+
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Users;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class MyUsersController
 {
-    $userId = $args['id'];  // URL parameter
-    
-    // Fetch user...
-    $user = $this->repository->find($userId);
-    
-    return $response->withJson(['data' => $user]);
+    public function __construct(private EntityManagerInterface $entityManager) {}
+
+    public function getUser(Request $request, Response $response, array $args): Response
+    {
+        $userId = $args['id'];  // raw URL parameter; validated value: $request->getAttribute('id')
+
+        $user = $this->entityManager->getRepository(Users::class)->find($userId);
+        if (!$user) {
+            $response->getBody()->write(json_encode(['error' => 'Not found']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+        }
+
+        $response->getBody()->write(json_encode(['data' => ['id' => $user->id, 'user_name' => $user->user_name]]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }
 ```
 
-**Access:** `GET /api/users/123` → `$args['id'] = '123'`
+**Access:** `GET /api/my_users/{uuid}` → `$args['id'] = '{uuid}'`
 
 ### Example 3: Multiple HTTP Methods
 
 ```php
 $routes = [
-    'resource.handle' => [
-        'method' => ['GET', 'POST', 'PUT'],
-        'path' => '/resource/{id}',
-        'class' => ResourceController::class,
-        'function' => 'handle',
+    'logout' => [
+        'method' => ['POST', 'GET'],   // see app/Routes/routes/auth.php
+        'path' => '/logout',
+        'class' => AuthController::class,
+        'function' => 'logout',
     ],
 ];
 ```
@@ -257,25 +294,27 @@ $routes = [
 ### Example 4: Using `__invoke` (Callable Controller)
 
 ```php
+// app/Routes/routes/base.php
 $routes = [
-    'action.process' => [
-        'method' => 'POST',
-        'path' => '/action/process',
-        'class' => ProcessAction::class,
+    'get_login' => [
+        'method' => 'GET',
+        'path' => '/login',
+        'class' => LoginAction::class,   // MintHCM\Api\Controllers\Actions\LoginAction
         // No 'function' specified - uses __invoke
+        'options' => ['auth' => false],
     ],
 ];
 ```
 
-**Controller:**
+**Controller** (pattern used by `app/Controllers/Actions/`):
 
 ```php
-class ProcessAction
+class MyAction
 {
-    public function __invoke(Request $request, Response $response): Response
+    public function __invoke(Request $request, Response $response, array $args): Response
     {
-        // Handle request
-        return $response->withJson(['status' => 'processed']);
+        $response->getBody()->write(json_encode(['status' => 'processed']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
@@ -290,38 +329,51 @@ Each parameter is defined as an array with the following properties:
 
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
-| `type` | ✅ | string | Parameter type class (e.g., `StringType::class`, `IntType::class`) |
-| `required` | ✅ | boolean | Whether the parameter is mandatory |
+| `type` | ✅ | string | Parameter type class (e.g., `StringType::class`, `IntType::class`); a missing/unknown class → `400` |
+| `required` | ❌ | boolean | Whether the parameter is mandatory. Default: `true` for `pathParams`, `false` for `queryParams`/`bodyParams` |
 | `desc` | ❌ | string | Parameter description for documentation |
 | `example` | ❌ | mixed | Example value for documentation |
-| `default` | ❌ | mixed | Default value if not provided |
+
+There is **no `default` support**: a missing optional parameter yields `null` (`ParamType::getValue()`). Apply defaults in the controller (`$request->getAttribute('page') ?? 1`).
 
 ### Available Parameter Types
+
+Namespace `MintHCM\Api\Middlewares\Params\ParamTypes` (`app/Middlewares/Params/ParamTypes/`):
 
 - `StringType::class` - String values
 - `IntType::class` - Integer values
 - `BoolType::class` - Boolean values
 - `ArrayType::class` - Array values
 - `EmailType::class` - Email addresses (validated)
-- `DateType::class` - Date values
-- `FloatType::class` - Floating point numbers
+- `FileType::class` - Uploaded files
+
+Custom types extend `MintHCM\Api\Middlewares\Params\ParamType` and implement `validate($value): bool` and `parseValue($value)`.
+
+### Undeclared Parameters Are Rejected
+
+`ParamsMiddleware` validates query and body parameters strictly:
+- If the route declares no `queryParams` (or `bodyParams`) but the request sends any, the response is `400`.
+- Every sent parameter must be declared in the route, otherwise the response is `400`.
+- Only the global parameters from `app/Constants/global_params.php` are always accepted (currently the query parameter `XDEBUG_SESSION_START`).
+
+Declare every parameter your clients send, even optional ones.
 
 ### Example: Complete Route with Parameters
 
 ```php
 <?php
 
-use MintHCM\Api\Controllers\EmployeeController;
+use MintHCM\Custom\Api\Controllers\MyEmployeesController;
 use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\IntType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\EmailType;
 use MintHCM\Api\Middlewares\Params\ParamTypes\BoolType;
 
 $routes = [
-    'employee.create' => [
+    'my_employee_create' => [
         'method' => 'POST',
-        'path' => '/employees',
-        'class' => EmployeeController::class,
+        'path' => '/my_employees',
+        'class' => MyEmployeesController::class,
         'function' => 'create',
         'desc' => 'Create a new employee',
         'options' => [
@@ -359,7 +411,6 @@ $routes = [
                 'required' => false,
                 'desc' => 'Whether employee is a manager',
                 'example' => false,
-                'default' => false,
             ],
         ],
     ],
@@ -370,10 +421,10 @@ $routes = [
 
 ```php
 $routes = [
-    'employee.update' => [
+    'my_employee_update' => [
         'method' => 'PUT',
-        'path' => '/employees/{id}',
-        'class' => EmployeeController::class,
+        'path' => '/my_employees/{id}',
+        'class' => MyEmployeesController::class,
         'function' => 'update',
         'desc' => 'Update an existing employee',
         'pathParams' => [
@@ -406,10 +457,10 @@ $routes = [
 
 ```php
 $routes = [
-    'employee.list' => [
+    'my_employee_list' => [
         'method' => 'GET',
-        'path' => '/employees',
-        'class' => EmployeeController::class,
+        'path' => '/my_employees',
+        'class' => MyEmployeesController::class,
         'function' => 'list',
         'desc' => 'List all employees with optional filtering',
         'queryParams' => [
@@ -418,14 +469,12 @@ $routes = [
                 'required' => false,
                 'desc' => 'Page number for pagination',
                 'example' => 1,
-                'default' => 1,
             ],
             'limit' => [
                 'type' => IntType::class,
                 'required' => false,
                 'desc' => 'Number of items per page',
                 'example' => 20,
-                'default' => 20,
             ],
             'status' => [
                 'type' => StringType::class,
@@ -448,12 +497,12 @@ $routes = [
 
 ```php
 $routes = [
-    'auth.login' => [
+    'login' => [   // app/Routes/routes/auth.php
         'method' => 'POST',
         'path' => '/login',
         'class' => AuthController::class,
         'function' => 'login',
-        'desc' => 'Authenticate user and get JWT token',
+        'desc' => 'Auth user in MintHCM',
         'options' => [
             'auth' => false,  // Public route - no authentication required
         ],
@@ -481,7 +530,6 @@ $routes = [
                 'required' => false,
                 'desc' => 'Preferred language code',
                 'example' => 'pl_PL',
-                'default' => 'en_us',
             ],
         ],
     ],
@@ -490,27 +538,24 @@ $routes = [
 
 ### Benefits of Parameter Definitions
 
-1. **Automatic Validation**: The `ParamsMiddleware` validates parameters according to their definitions
-2. **Type Safety**: Parameters are converted to the correct type
-3. **Documentation**: Enables automatic API documentation generation
+1. **Automatic Validation**: The `ParamsMiddleware` validates parameters according to their definitions; an invalid, missing required or undeclared parameter returns `400 Bad Request`
+2. **Type Safety**: Parsed values are stored as request attributes in the declared type
+3. **Documentation**: `desc` and `example` describe the endpoint contract
 4. **Developer Experience**: Clear contract for what the endpoint expects
-5. **Error Messages**: Descriptive validation errors when parameters are invalid
 
 ### Accessing Validated Parameters in Controllers
 
+`ParamsMiddleware` stores each parsed value (path, query and body) as a **request attribute** (`$request->withAttribute($name, $parsed_value)`). `getParsedBody()` / `getQueryParams()` still return the raw, unconverted data.
+
 ```php
-public function create(Request $request, Response $response): Response
+public function create(Request $request, Response $response, array $args): Response
 {
-    // Parameters are already validated and typed
-    $data = $request->getParsedBody();
-    
-    // Access with confidence - validation already done
-    $firstName = $data['first_name'];  // Guaranteed to be a string if required
-    $lastName = $data['last_name'];
-    $email = $data['email'];  // Guaranteed to be valid email format
-    $age = $data['age'] ?? null;  // Optional parameter
-    $isManager = $data['is_manager'] ?? false;  // Has default value
-    
+    // Validated and parsed values
+    $firstName = $request->getAttribute('first_name');   // string (required)
+    $email = $request->getAttribute('email');            // valid email (required)
+    $age = $request->getAttribute('age');                // int or null (optional)
+    $isManager = $request->getAttribute('is_manager') ?? false;  // no 'default' support - apply it here
+
     // Create employee...
 }
 ```
@@ -521,42 +566,35 @@ Module routes are automatically prefixed with the module name.
 
 ### Example: Employee Module Routes
 
-**File:** `modules/Employees/api/routes/employees.php`
+**File:** `modules/Employees/api/routes/sidepanel.php` (shortened)
 
 ```php
 <?php
 
-use MintHCM\Api\Controllers\Module\EmployeeController;
+use MintHCM\Api\Controllers\EmployeeSidepanelController;
+use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 
 $routes = [
-    'detail' => [
+    'employees.sidepanel.tenure' => [
         'method' => 'GET',
-        'path' => '/{id}',                    // Becomes: /Employees/{id}
-        'class' => EmployeeController::class,
-        'function' => 'detail',
-    ],
-    'list' => [
-        'method' => 'GET',
-        'path' => '',                         // Becomes: /Employees
-        'class' => EmployeeController::class,
-        'function' => 'list',
-    ],
-    'create' => [
-        'method' => 'POST',
-        'path' => '',                         // Becomes: /Employees
-        'class' => EmployeeController::class,
-        'function' => 'create',
+        'path' => '/{id}/sidepanel/tenure',   // Becomes: /Employees/{id}/sidepanel/tenure
+        'class' => EmployeeSidepanelController::class,
+        'function' => 'getTenureSummary',
+        'options' => ['auth' => true],
+        'pathParams' => [
+            'id' => ['type' => StringType::class, 'required' => true, 'desc' => 'Employee ID'],
+        ],
     ],
 ];
 ```
 
 **Result:**
-- `GET /api/Employees` → `list()`
-- `GET /api/Employees/123` → `detail()`
-- `POST /api/Employees` → `create()`
+- `GET /api/Employees/{id}/sidepanel/tenure` → `EmployeeSidepanelController::getTenureSummary()`
 
 **Route names:**
-- Module routes are automatically namespaced: `Employees___detail`, `Employees___list`
+- Module routes are automatically namespaced: `Employees___employees.sidepanel.tenure`
+- The generic routes from `app/Routes/modules/module.php` are named the same way: `Employees___detail`, `Employees___list`, ...
+- A module file that reuses a generic key (e.g. `detail`) replaces that generic route for this module only.
 
 ## Route Registration Process
 
@@ -617,179 +655,107 @@ protected function shouldSkipRoute($route)
 
 ## Advanced Patterns
 
-### Pattern: RESTful Resource Routes
+### Pattern: Generic Module Routes
 
-```php
-$routes = [
-    'resource.index' => [
-        'method' => 'GET',
-        'path' => '/resources',
-        'class' => ResourceController::class,
-        'function' => 'index',
-    ],
-    'resource.show' => [
-        'method' => 'GET',
-        'path' => '/resources/{id}',
-        'class' => ResourceController::class,
-        'function' => 'show',
-    ],
-    'resource.store' => [
-        'method' => 'POST',
-        'path' => '/resources',
-        'class' => ResourceController::class,
-        'function' => 'store',
-    ],
-    'resource.update' => [
-        'method' => ['PUT', 'PATCH'],
-        'path' => '/resources/{id}',
-        'class' => ResourceController::class,
-        'function' => 'update',
-    ],
-    'resource.destroy' => [
-        'method' => 'DELETE',
-        'path' => '/resources/{id}',
-        'class' => ResourceController::class,
-        'function' => 'destroy',
-    ],
-];
+The core does not use classic REST paths for records. Every module gets the generic routes from `app/Routes/modules/module.php`, e.g.:
+
 ```
+GET    /api/{Module}                 → list (ListInitController)
+GET    /api/{Module}/Detail/{id}     → ModuleController::detail
+POST   /api/{Module}/Create          → ModuleController::create
+PATCH  /api/{Module}/Update[/{id}]   → ModuleController::update
+POST   /api/{Module}/Get[/{id}]      → ModuleController::getRecord
+DELETE /api/{Module}/{id}            → ModuleController::delete
+```
+
+Add a new module-specific endpoint in `modules/{Module}/api/routes/` (or `custom/modules/{Module}/api/routes/`) instead of duplicating these.
 
 ### Pattern: Nested Resources
 
 ```php
+// Several placeholders in one path
 $routes = [
-    'employee.documents.list' => [
-        'method' => 'GET',
-        'path' => '/employees/{employee_id}/documents',
-        'class' => EmployeeDocumentsController::class,
-        'function' => 'list',
-    ],
-    'employee.documents.show' => [
-        'method' => 'GET',
-        'path' => '/employees/{employee_id}/documents/{id}',
-        'class' => EmployeeDocumentsController::class,
-        'function' => 'show',
+    'subpanel_records' => [   // app/Routes/modules/module.php
+        'method' => 'POST',
+        'path' => '/subpanel/{relation_name}/{id}',
+        'class' => ModuleController::class,
+        'function' => 'subpanelRecords',
+        // pathParams: relation_name, id; queryParams: paginate_by, page, ...
     ],
 ];
 ```
 
-### Pattern: Versioned Routes
+## Route-Level Access Control
+
+There is no per-route middleware registration. Restrict routes with options checked by the global middlewares (see [Route Options](#route-options) and [Middlewares](./11-middlewares.md)):
 
 ```php
-$routes = [
-    'api.v1.users' => [
-        'method' => 'GET',
-        'path' => '/v1/users',
-        'class' => V1\UserController::class,
-        'function' => 'list',
-    ],
-    'api.v2.users' => [
-        'method' => 'GET',
-        'path' => '/v2/users',
-        'class' => V2\UserController::class,
-        'function' => 'list',
-    ],
-];
+'options' => [
+    'auth' => true,
+    'admin_only' => true,        // AdminMiddleware: administrators only
+    'access' => ['frontend'],    // RouteAccessMiddleware: only the frontend client
+],
 ```
 
-## Route Middleware
-
-While routes are registered globally, you can add route-specific middleware in the controller:
-
-```php
-class SecureController
-{
-    public function __construct()
-    {
-        // Add middleware logic
-        if (!$this->isAuthorized()) {
-            throw new UnauthorizedException();
-        }
-    }
-}
-```
-
-Or use global middlewares that check route attributes (see [Middlewares](./11-middlewares.md)).
+For record-level checks inside a controller, throw a Slim HTTP exception, e.g. `throw new \Slim\Exception\HttpForbiddenException($request);`.
 
 ## URL Parameters
 
 ### Simple Parameters
 
 ```php
-// Route: /users/{id}
+// Route
 $routes = [
-    'user.show' => [
-        'path' => '/users/{id}',
-        // ...
+    'my_user_show' => [
+        'method' => 'GET',
+        'path' => '/my_users/{id}',
+        // class, function, pathParams ...
     ],
 ];
 
 // Controller
-public function show(Request $request, Response $response, array $args)
+public function show(Request $request, Response $response, array $args): Response
 {
-    $id = $args['id'];  // Access parameter
+    $id = $args['id'];                      // raw value
+    $id = $request->getAttribute('id');     // value validated by pathParams
+    // ...
 }
 ```
 
 ### Multiple Parameters
 
 ```php
-// Route: /departments/{dept_id}/employees/{id}
-$routes = [
-    'dept.employee.show' => [
-        'path' => '/departments/{dept_id}/employees/{id}',
-        // ...
-    ],
-];
-
-// Controller
-public function show(Request $request, Response $response, array $args)
+// Route: /subpanel/{relation_name}/{id}
+public function subpanelRecords(Request $request, Response $response, array $args): Response
 {
-    $deptId = $args['dept_id'];
-    $employeeId = $args['id'];
+    $relationName = $args['relation_name'];
+    $id = $args['id'];
+    // ...
 }
 ```
 
 ### Optional Parameters
 
-Slim doesn't support optional parameters directly. Use separate routes:
-
-```php
-$routes = [
-    'search.all' => [
-        'path' => '/search',
-        'class' => SearchController::class,
-        'function' => 'search',
-    ],
-    'search.module' => [
-        'path' => '/search/{module}',
-        'class' => SearchController::class,
-        'function' => 'search',
-    ],
-];
-```
+Slim 4 supports optional segments in square brackets. The core uses them, e.g. `'path' => '/Update[/{id}]'` (`app/Routes/modules/module.php`). An optional path parameter should be declared with `'required' => false` in `pathParams`.
 
 ### Regular Expression Constraints
 
-Use Slim's route patterns:
+Put the FastRoute regex directly in the `path`:
 
 ```php
-// In controller or route setup
-$route->setPattern('/users/{id:[0-9]+}');  // Only numeric IDs
+'path' => '/my_users/{id:[0-9a-f-]{36}}',  // only UUID-like IDs
 ```
 
 ## Query Parameters
 
-Query parameters (e.g., `?page=1&limit=10`) are accessed via the request object:
+Query parameters (e.g., `?page=1&paginate_by=10`) must be declared in `queryParams` (otherwise `400`, see [Undeclared Parameters](#undeclared-parameters-are-rejected)). Read the validated values from the request attributes:
 
 ```php
-public function list(Request $request, Response $response): Response
+public function list(Request $request, Response $response, array $args): Response
 {
-    $queryParams = $request->getQueryParams();
-    
-    $page = $queryParams['page'] ?? 1;
-    $limit = $queryParams['limit'] ?? 20;
-    
+    $page = $request->getAttribute('page') ?? 1;
+    $paginateBy = $request->getAttribute('paginate_by') ?? 20;
+
     // Use parameters...
 }
 ```
@@ -798,37 +764,24 @@ public function list(Request $request, Response $response): Response
 
 ### List All Routes
 
-Create a debug route:
+All loaded route definitions are available from the `RouteManager` singleton; registered Slim routes from the app's route collector:
 
 ```php
-$routes = [
-    'debug.routes' => [
-        'method' => 'GET',
-        'path' => '/debug/routes',
-        'class' => DebugController::class,
-        'function' => 'listRoutes',
-    ],
-];
-```
+use MintHCM\Api\Routes\RouteManager;
 
-```php
-public function listRoutes(Request $request, Response $response): Response
-{
-    $routeCollector = $this->app->getRouteCollector();
-    $routes = $routeCollector->getRoutes();
-    
-    $routeList = [];
-    foreach ($routes as $route) {
-        $routeList[] = [
-            'name' => $route->getName(),
-            'pattern' => $route->getPattern(),
-            'methods' => $route->getMethods(),
-        ];
-    }
-    
-    return $response->withJson($routeList);
+$definitions = RouteManager::getInstance()->getRoutes();   // global + per-module definitions
+
+global $mint_app;
+foreach ($mint_app->getRouteCollector()->getRoutes() as $route) {
+    $routeList[] = [
+        'name' => $route->getName(),
+        'pattern' => $route->getPattern(),
+        'methods' => $route->getMethods(),
+    ];
 }
 ```
+
+A route missing from the collector was skipped by `shouldSkipRoute()` (missing `method`/`path`/`class`, class not found, or method not found).
 
 ### Check Route Errors
 
@@ -848,28 +801,24 @@ php -r "include 'custom/app/Routes/routes/myroute.php'; var_dump(\$routes);"
 
 ```php
 // ✅ Good - clear, descriptive
-'employee.list'
-'employee.detail'
-'employee.create'
+'global_search'
+'list_data'
+'employees.sidepanel.tenure'
 
 // ❌ Bad - unclear
 'emp_l'
 'get_emp'
 ```
 
-### 2. RESTful Conventions
+### 2. Follow the Existing URL Conventions
 
 ```php
-// ✅ Good - follows REST conventions
-GET    /employees        → list
-GET    /employees/{id}   → detail
-POST   /employees        → create
-PUT    /employees/{id}   → update
-DELETE /employees/{id}   → delete
+// ✅ Good - reuse the generic module routes, add module-specific ones under the module prefix
+POST /api/{Module}/Create
+GET  /api/Employees/{id}/sidepanel/tenure
 
-// ❌ Bad - non-standard
-GET /getEmployees
-POST /createEmployee
+// ❌ Bad - duplicating generic record operations in a new global route
+GET /api/getEmployee/{id}
 ```
 
 ### 3. Use Custom Directory
@@ -946,11 +895,11 @@ custom/app/Routes/routes/misc.php  // Everything thrown together
         'type' => StringType::class,
         'required' => false,  // Optional
         'desc' => 'User nickname',
-        'default' => null,
     ],
 ],
 
-// ❌ Bad - unclear if required
+// ❌ Bad - unclear if required (body/query params default to optional,
+// path params to required)
 'bodyParams' => [
     'name' => [
         'type' => StringType::class,
@@ -963,7 +912,7 @@ custom/app/Routes/routes/misc.php  // Everything thrown together
 
 ```php
 // ✅ Good - public login endpoint
-'auth.login' => [
+'login' => [
     'path' => '/login',
     'options' => ['auth' => false],  // Makes sense - can't auth before login
 ],

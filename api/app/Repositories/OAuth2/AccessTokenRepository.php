@@ -106,6 +106,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
             throw new InvalidArgumentException('Access token is not found for this client');
         }
 
+        $token->token_is_revoked = true;
         $token->deleted = true;
         $this->entityManager->persist($token);
         $this->entityManager->flush();

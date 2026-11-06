@@ -4,7 +4,12 @@ This page describes the API-side pieces introduced when the **Schedulers** modul
 
 ## Switching a Module to Vue Views
 
-Whether a module is rendered by a native Vue view or by the `LegacyView` iframe is controlled by `api/constants/legacy_views.php`:
+Whether a module is rendered by a native Vue view or by the `LegacyView` iframe is decided per view in `Init::getLegacyViews()` (`api/app/Controllers/Init/Init.php`) and sent to the frontend as `initData.legacy_views`:
+
+- **list** — native Vue when the module has `metadata/eslistviewdefs.php` (in `legacy/modules/{Module}/` or `legacy/custom/modules/{Module}/`), unless `api/constants/legacy_views.php` sets `'list'` for that module explicitly;
+- **record** — native Vue when the module has `metadata/recordviewdefs.php` (core or custom). Without that file the record view is always legacy; with it, `legacy_views.php` can still force `'record' => true`.
+
+`api/constants/legacy_views.php` is therefore an override list, not the switch itself. Schedulers is listed with both views set to `false`:
 
 ```php
 'Schedulers' => [
@@ -49,9 +54,9 @@ An `enum` or `multienum` field in `recordviewdefs.php` can take its options from
 - it loads the module language (`$mod_strings`) first, so the function can return translated labels,
 - `function.name` is either a `[class, method]` pair or the name of a global function, and `function.params` are passed as arguments,
 - a non-empty result is stored as the field's `options` (key => label map),
-- the `function` key is always removed, so no callable is exposed to the client.
+- the `function` key of a processed field is always removed, so no callable is exposed to the client.
 
-Only `enum` and `multienum` fields are processed. This is the record view counterpart of the list view columns, where options of fields using a vardef `function` are resolved separately.
+Only `enum` and `multienum` fields inside `data.sections` panels (e.g. `MintPanelRecordDetails`) are processed; other fields keep their `function` key untouched. This is the record view counterpart of the list view columns, where options of fields using a vardef `function` are resolved separately.
 
 ## Server Information for Admins (`Init`)
 

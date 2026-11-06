@@ -2,7 +2,7 @@
     <div>
         <h2 v-text="languages.label('LBL_MINT4_AUTH_LOGIN_TITLE')" />
         <MintStatusBox v-if="loginError" type="error">{{
-            languages.label('LBL_MINT4_AUTH_LOGIN_ERROR')
+            languages.label(auth.loginErrorLabel)
         }}</MintStatusBox>
         <MintStatusBox v-if="route.query.reset === 'success'" type="success">
             {{ languages.label('LBL_MINT4_AUTH_RESET_SUCCESS') }}

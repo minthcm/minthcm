@@ -13,12 +13,17 @@ api/
 │   ├── Entities/
 │   └── Routes/
 └── custom/            # Your customizations
-    ├── app/
+    ├── app/           # MintHCM\Custom\Api\     (PSR-4 autoloaded)
     │   ├── Controllers/
-    │   ├── Entities/
+    │   ├── Middlewares/
     │   └── Routes/
+    ├── modules/       # MintHCM\Custom\Modules\ (PSR-4 autoloaded)
+    ├── data/          # MintHCM\Custom\Data\    (PSR-4 autoloaded)
+    ├── lib/MintLogic/ # logicdefs files only (included, not autoloaded)
     └── constants/
 ```
+
+**Autoloading:** `api/composer.json` maps only `MintHCM\Custom\Api\` → `custom/app/`, `MintHCM\Custom\Modules\` → `custom/modules/` and `MintHCM\Custom\Data\` → `custom/data/`. There is **no** mapping for `custom/lib/` or `custom/utils/` — PHP classes placed there will not be found. Put new classes (services, helpers, validators) under `custom/app/` or `custom/modules/`.
 
 **Benefits:**
 - ✅ Upgrades don't overwrite your changes
@@ -36,6 +41,9 @@ The API provides several ways to extend functionality:
 4. **Module Routes** - Add module-specific endpoints
 5. **Middlewares** - Add request/response processing
 6. **Duplicate Detection** - Add record deduplication queries
+7. **MintLogic** - Add form logic in `custom/lib/MintLogic/{Module}/*logicdefs.php` (see [MintLogic](./13-mintlogic.md))
+8. **Mass / record / subpanel actions** - `custom/data/MassActions/Actions/` and custom action definitions (see [Mass Actions](./15-mass-actions.md), [RecordView Extensions](./18-recordview-extensions.md))
+9. **Doctrine event subscribers** - `custom/data/ORM/Doctrine/MintEventManager/Subscribers/` (namespace `MintHCM\Custom\Data\ORM\Doctrine\MintEventManager\Subscribers`, loaded by `data/ORM/Doctrine/MintEventManager/MintEventManager.php`)
 
 ## Adding Custom Routes
 
@@ -48,6 +56,9 @@ Create route files in `custom/app/Routes/routes/`:
 ```php
 <?php
 
+use MintHCM\Api\Middlewares\Params\ParamTypes\BoolType;
+use MintHCM\Api\Middlewares\Params\ParamTypes\IntType;
+use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 use MintHCM\Custom\Api\Controllers\MyFeatureController;
 
 $routes = [
@@ -69,8 +80,8 @@ $routes = [
         'desc' => 'Get feature details',
         'pathParams' => [
             'id' => [
-                'type' => 'string',
-                'description' => 'Feature ID',
+                'type' => StringType::class,
+                'desc' => 'Feature ID',
             ],
         ],
     ],
@@ -82,14 +93,15 @@ $routes = [
         'desc' => 'Search features',
         'queryParams' => [
             'query' => [
-                'type' => 'string',
+                'type' => StringType::class,
                 'required' => true,
-                'description' => 'Search query',
+                'desc' => 'Search query',
             ],
             'limit' => [
-                'type' => 'int',
+                'type' => IntType::class,
                 'required' => false,
-                'description' => 'Results limit',
+                'desc' => 'Results limit',
+                'example' => 20,
             ],
         ],
     ],
@@ -101,19 +113,19 @@ $routes = [
         'desc' => 'Create new feature',
         'bodyParams' => [
             'name' => [
-                'type' => 'string',
+                'type' => StringType::class,
                 'required' => true,
-                'description' => 'Feature name',
+                'desc' => 'Feature name',
             ],
             'description' => [
-                'type' => 'string',
+                'type' => StringType::class,
                 'required' => false,
-                'description' => 'Feature description',
+                'desc' => 'Feature description',
             ],
             'enabled' => [
-                'type' => 'bool',
+                'type' => BoolType::class,
                 'required' => false,
-                'description' => 'Is feature enabled',
+                'desc' => 'Is feature enabled',
             ],
         ],
     ],
@@ -124,15 +136,26 @@ $routes = [
 
 | Property | Required | Description | Example |
 |----------|----------|-------------|---------|
-| `method` | ✅ Yes | HTTP method | `'GET'`, `'POST'`, `'PUT'`, `'DELETE'` |
+| `method` | ✅ Yes | HTTP method (string or array of methods) | `'GET'`, `['GET', 'POST']` |
 | `path` | ✅ Yes | URL path (can include `{param}` placeholders) | `'/myfeature/{id}'` |
-| `class` | ✅ Yes | Controller class | `MyController::class` |
-| `function` | ✅ Yes | Controller method | `'list'`, `'detail'` |
+| `class` | ✅ Yes | Controller class (must exist, or the route is skipped) | `MyController::class` |
+| `function` | ✅ Yes* | Controller method (*omit only for an `__invoke` controller) | `'list'`, `'detail'` |
 | `desc` | ❌ No | Route description (for documentation) | `'Get feature details'` |
-| `options` | ❌ No | Route options (auth, etc.) | `['auth' => false]` |
+| `options` | ❌ No | Route options read by the global middlewares (see below) | `['auth' => false]` |
 | `pathParams` | ❌ No | URL path parameters definition | See below |
 | `queryParams` | ❌ No | Query string parameters definition | See below |
 | `bodyParams` | ❌ No | Request body parameters definition | See below |
+
+**Route keys and overriding:** keys must be unique within one location (a duplicate throws an exception), but files from later locations override earlier ones with `array_merge()` (`app/Routes/RouteManager.php`). Order for global routes: `app/Routes/routes/` → `custom/app/Routes/routes/`. A custom file that redefines a core route key therefore replaces that route.
+
+**Route options (`options`):**
+
+| Option | Default | Read by | Effect |
+|--------|---------|---------|--------|
+| `auth` | `true` | `AuthMiddleware` | Require a valid session / Bearer token (401 otherwise) |
+| `optional_auth` | `false` | `AuthMiddleware` | Try to authenticate, but continue without a user if it fails (see [Routing](./05-routing.md)) |
+| `admin_only` | `false` | `AdminMiddleware` | Only admins (`$current_user->isAdmin()`), others get 403 |
+| `access` | `'all'` | `RouteAccessMiddleware` | Client restriction: `'all'`, `'frontend'`, `'mobile'`, `'external'` or an array of them; other clients get 404 |
 
 **Authentication Control (`options.auth`):**
 
@@ -172,24 +195,30 @@ Each parameter definition supports:
 
 ```php
 'param_name' => [
-    'type' => 'string',        // string, int, bool, email, etc.
-    'required' => true,        // Is parameter required?
-    'description' => 'Description for docs',
-    'validation' => [...],     // Custom validation rules (optional)
+    'type' => StringType::class,  // ParamType class (required)
+    'required' => true,           // Default: true for pathParams, false for query/body params
+    'desc' => 'Description for docs',
+    'example' => 'value',         // Optional, documentation only
 ],
 ```
 
-**Available Parameter Types:**
+**Available Parameter Types** (namespace `MintHCM\Api\Middlewares\Params\ParamTypes`):
 
-- `string` - Text value
-- `int` - Integer number
-- `bool` - Boolean (true/false)
-- `email` - Email address
-- `date` - Date value
-- `datetime` - Date and time
-- `array` - Array of values
+- `StringType::class` - Text value
+- `IntType::class` - Integer number
+- `BoolType::class` - Boolean (true/false)
+- `EmailType::class` - Email address (validated)
+- `ArrayType::class` - Array of values
+- `FileType::class` - Uploaded file
 
-For complete parameter type reference, see [Routing Documentation](./05-routing.md#defining-route-parameters).
+**Validation rules enforced by `ParamsMiddleware`:**
+
+- `type` must be an existing class — a plain string such as `'string'` makes every request to the route fail with **400 Bad Request**.
+- Any query or body parameter that is **not declared** in the route results in **400** (the only globally accepted parameter is `XDEBUG_SESSION_START`, see `app/Constants/global_params.php`). Declare every parameter your endpoint accepts.
+- A missing required parameter or a value that fails type validation results in **400**.
+- Every declared parameter (path, query and body) is stored as a **request attribute** with its parsed value — read it with `$request->getAttribute('name')`. This is the pattern used by the core controllers.
+
+For more on routing, see [Routing Documentation](./05-routing.md#defining-route-parameters).
 
 **Controller:** `custom/app/Controllers/MyFeatureController.php`
 
@@ -206,58 +235,71 @@ class MyFeatureController
     public function list(Request $request, Response $response): Response
     {
         $data = ['items' => []];
-        return $response->withJson($data);
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    // Path parameters accessed via $args
+    // Path parameters: request attribute (also available in $args)
     public function detail(Request $request, Response $response, array $args): Response
     {
-        $id = $args['id'];  // From /myfeature/{id}
+        $id = $request->getAttribute('id');  // From /myfeature/{id}
         $data = ['id' => $id, 'name' => 'Example'];
-        return $response->withJson($data);
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    // Query parameters accessed via $request->getQueryParams()
+    // Query parameters: validated and parsed by ParamsMiddleware
     public function search(Request $request, Response $response): Response
     {
-        $queryParams = $request->getQueryParams();
-        $query = $queryParams['query'] ?? '';
-        $limit = (int)($queryParams['limit'] ?? 20);
-        
+        $query = $request->getAttribute('query');
+        $limit = $request->getAttribute('limit') ?? 20;
+
         $results = ['query' => $query, 'limit' => $limit];
-        return $response->withJson($results);
+        $response->getBody()->write(json_encode($results));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    // Body parameters accessed via $request->getParsedBody()
+    // Body parameters: validated and parsed by ParamsMiddleware
     public function create(Request $request, Response $response): Response
     {
-        $body = $request->getParsedBody();
-        $name = $body['name'];
-        $description = $body['description'] ?? '';
-        $enabled = $body['enabled'] ?? true;
-        
+        $name = $request->getAttribute('name');
+        $description = $request->getAttribute('description') ?? '';
+        $enabled = $request->getAttribute('enabled') ?? true;
+
         // Create logic here...
-        
-        return $response->withJson(['id' => 'new-id', 'name' => $name], 201);
+
+        $response->getBody()->write(json_encode(['id' => 'new-id', 'name' => $name]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
     // Public endpoint (auth => false)
     public function public(Request $request, Response $response): Response
     {
-        return $response->withJson(['public' => true, 'message' => 'No auth required']);
+        $response->getBody()->write(json_encode(['public' => true, 'message' => 'No auth required']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
 
+> **JSON responses:** the response object is a plain `Slim\Psr7\Response` — it has no `withJson()` method. Write the encoded body and set the header as shown above. (`utils/MintResponse.php` is a legacy class that is not autoloadable and is not used by the application.)
+
 ### Module-Specific Custom Routes
 
-Add routes for specific modules in `custom/modules/{Module}/api/routes/`:
+Add routes for a specific module in `custom/modules/{Module}/api/routes/`. The route path is prefixed with `/{Module}` and the route is named `{Module}___{key}`. Module routes are built only for modules registered in legacy `$beanList`.
+
+Module route locations, in loading order (later ones override earlier keys):
+
+1. `app/Routes/modules/*.php` - core routes added to **every** module (e.g. `module.php`)
+2. `custom/app/Routes/modules/*.php` - custom routes added to **every** module (files only; subdirectories are ignored)
+3. `modules/{Module}/api/routes/*.php` - core routes of one module
+4. `custom/modules/{Module}/api/routes/*.php` - custom routes of one module
 
 **File:** `custom/modules/Employees/api/routes/custom.php`
 
 ```php
 <?php
 
+use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
 use MintHCM\Custom\Api\Controllers\CustomEmployeeController;
 
 $routes = [
@@ -269,9 +311,9 @@ $routes = [
         'desc' => 'Export employees to CSV',
         'queryParams' => [
             'format' => [
-                'type' => 'string',
+                'type' => StringType::class,
                 'required' => false,
-                'description' => 'Export format (csv, xlsx)',
+                'desc' => 'Export format (csv, xlsx)',
             ],
         ],
     ],
@@ -283,8 +325,8 @@ $routes = [
         'desc' => 'Get department statistics',
         'pathParams' => [
             'department_id' => [
-                'type' => 'string',
-                'description' => 'Department ID',
+                'type' => StringType::class,
+                'desc' => 'Department ID',
             ],
         ],
     ],
@@ -297,33 +339,27 @@ Use `CustomLoader` to extend core classes without modifying them.
 
 ### How CustomLoader Works
 
-`CustomLoader::getObject()` automatically checks for a custom version of a class:
+`CustomLoader::getObject()` (`utils/CustomLoader.php`) checks for a custom version of a class by inserting `\Custom` after `MintHCM`:
 
 ```php
 // Core class
-MintHCM\Api\Controllers\ModuleController
+MintHCM\Api\ApiManager
 
-// Custom class (loaded if exists)
-MintHCM\Custom\Api\Controllers\ModuleController
+// Custom class (used if it exists AND extends the core class)
+MintHCM\Custom\Api\ApiManager
 ```
 
-### Example: Extending a Controller
+Rules:
+- The custom class is used only if it **extends** the core class (`is_subclass_of`). A class with the same name that does not extend the core class is silently ignored.
+- The custom class must be autoloadable (`custom/app/`, `custom/modules/` or `custom/data/`, see above).
+- Constructor arguments are resolved from the DI container by type; unresolvable ones are taken from the extra arguments passed to `getObject()`.
+- Only classes that the core creates through `CustomLoader::getObject()` can be overridden this way, e.g. `ApiManager`, `RouteManager`, the global middlewares, `AppConfig`, `LoginThrottle`, `SessionTokenRevoker`, `RecordViewActionsMerger`.
 
-**Core:** `app/Controllers/ModuleController.php`
+### Example: Overriding a Route Controller
 
-```php
-namespace MintHCM\Api\Controllers;
+Route controllers are **not** created through `CustomLoader` — `RouteManager` instantiates `$route['class']` directly (constructor dependencies come from the DI container). A subclass in `custom/app/Controllers/` alone has no effect: you must also redefine the route so that it points to your class.
 
-class ModuleController
-{
-    public function list(Request $request, Response $response): Response
-    {
-        // Core implementation
-    }
-}
-```
-
-**Custom:** `custom/app/Controllers/ModuleController.php`
+**Custom controller:** `custom/app/Controllers/ModuleController.php`
 
 ```php
 <?php
@@ -337,85 +373,48 @@ use Slim\Psr7\Response;
 class ModuleController extends BaseModuleController
 {
     // Override method
-    public function list(Request $request, Response $response): Response
+    public function getRecord(Request $request, Response $response, array $args): Response
     {
-        // Custom implementation
-        $customData = $this->getCustomData();
-        
-        // Or call parent
-        $response = parent::list($request, $response);
-        
-        return $response;
-    }
-    
-    // Add new method
-    public function customAction(Request $request, Response $response): Response
-    {
-        return $response->withJson(['custom' => true]);
+        // Custom logic before/after the core implementation
+        return parent::getRecord($request, $response, $args);
     }
 }
 ```
 
-**Usage:**
+**Route override:** `custom/app/Routes/modules/module_overrides.php`
 
-```php
-use MintHCM\Utils\CustomLoader;
-
-// Automatically uses custom version if it exists
-$controller = CustomLoader::getObject(ModuleController::class);
-```
-
-### Example: Extending a Repository
-
-**Custom:** `custom/app/Repositories/EmployeesRepository.php`
+Files in `custom/app/Routes/modules/` are loaded after `app/Routes/modules/` and override routes with the same key for every module:
 
 ```php
 <?php
 
-namespace MintHCM\Custom\Api\Repositories;
+use MintHCM\Custom\Api\Controllers\ModuleController;
 
-use MintHCM\Api\Repositories\EmployeesRepository as BaseRepository;
+// Reuse the core definition (params, options) and only swap the controller class
+require __DIR__ . '/../../../../app/Routes/modules/module.php';
+$core_routes = $routes;
 
-class EmployeesRepository extends BaseRepository
-{
-    public function findTopPerformers(int $limit = 10): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.performance_score >= :threshold')
-            ->setParameter('threshold', 90)
-            ->orderBy('e.performance_score', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-}
+$routes = [
+    'get_record' => array_merge($core_routes['get_record'], ['class' => ModuleController::class]),
+];
 ```
 
-### Example: Extending an Entity
+For global routes do the same in `custom/app/Routes/routes/` with the key from `app/Routes/routes/*.php`.
 
-**Custom:** `custom/app/Entities/Employees.php`
+### Example: Extending ApiManager
 
-```php
-<?php
+`ApiManager` is created through `CustomLoader`, so a subclass in `custom/app/ApiManager.php` is picked up automatically — see [Creating Custom Middlewares](#creating-custom-middlewares).
 
-namespace MintHCM\Custom\Api\Entities;
+### Repositories and Entities
 
-use MintHCM\Api\Entities\Employees as BaseEmployees;
+Custom repository or entity subclasses are **not** picked up automatically:
+- Doctrine takes the repository class from the entity annotation (`repositoryClass`), and `MintRepositoryFactory` resolves short names (`getRepository('Employees')`) in `MintHCM\Api\Entities` first.
+- Entity files in `app/Entities/` are generated from vardefs (see [Entities & Repositories](./10-entities-repositories.md)).
 
-class Employees extends BaseEmployees
-{
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    public $custom_field;
-
-    // Add custom methods
-    public function getFullNameWithTitle(): string
-    {
-        return "{$this->title} {$this->first_name} {$this->last_name}";
-    }
-}
-```
+Recommended alternatives:
+- **New fields:** add them as custom fields (Studio / vardefs with `source => custom_fields`). Quick Repair generates a `{Module}_cstm` entity linked to the main entity, and the fields are reachable through the main entity's magic accessors.
+- **Reusable entity methods:** an Entity Trait declared in vardefs (`doctrineEntity.traits`).
+- **Custom queries:** a service class in `custom/app/` that receives `EntityManagerInterface` and uses `$em->getRepository('Module')` or a query builder.
 
 ## Extending Constants
 
@@ -441,42 +440,35 @@ custom/constants/
 return [
     'MyCustomModule' => 'briefcase',
     'AnotherModule' => 'chart-line',
-    'Employees' => 'user-tie',  // Override default
+    'Employees' => 'account-tie',  // Override default
 ];
 ```
 
-When `ConstantsLoader::getConstants('module_icons')` is called:
-1. Base constants loaded from `constants/module_icons.php`
-2. Custom constants merged from all files in `custom/constants/module_icons/`
+Icon names are [Material Design Icons](https://pictogrammers.com/library/mdi/) names without the `mdi-` prefix (see `constants/module_icons.php`).
+
+When `ConstantsLoader::getConstants('module_icons')` is called (`utils/ConstantsLoader.php`):
+1. Base constants loaded from `constants/module_icons.php` — if this file does not exist, the call returns `false` and custom files are not read
+2. Custom constants merged from all `*.php` files in `custom/constants/module_icons/`
 3. Later files override earlier ones (alphabetically)
+4. The custom result is merged over the base array
 
-### Example: Adding Quick Create Fields
+`getConstants()` has a second parameter, `$only_custom_if_exist`. When it is `true` and at least one custom file returns entries, the custom entries **replace** the base array instead of being merged into it.
 
-**File:** `custom/constants/quick_create/employees.php`
+### Example: Configuring Quick Create
 
-```php
-### Example: Adding Module Icons
-
-**File:** `custom/constants/module_icons/custom_modules.php`
+Quick create is the "+" menu in the top navigation that allows quick creation of records. The constant is a simple array mapping module names to their display labels:
 
 ```php
-<?php
-
-return [
-    'MyCustomModule' => 'briefcase',
-    'AnotherModule' => 'chart-line',
-    'Employees' => 'user-tie',  // Override default
-];
+// Base: constants/quick_create.php (excerpt)
+return array(
+    "Ideas" => translate("LBL_LIST_TITLE", "Ideas"),
+    "Kudos" => translate("LBL_LIST_TITLE", "Kudos"),
+    "Tasks" => translate("LBL_LIST_TITLE", "Tasks"),
+    // ...
+);
 ```
 
-When `ConstantsLoader::getConstants('module_icons')` is called:
-1. Base constants loaded from `constants/module_icons.php`
-2. Custom constants merged from all files in `custom/constants/module_icons/`
-3. Later files override earlier ones (alphabetically)
-
-### Example: Adding Modules to Quick Create
-
-Quick create is the "+" menu in the top navigation that allows quick creation of records.
+⚠️ `quick_create` is loaded with `getConstants('quick_create', true)` (`app/Controllers/Init/Init.php`), so custom files **replace** the whole base list — they are not merged. List every module that should appear in the menu, including the core ones you want to keep:
 
 **File:** `custom/constants/quick_create/custom.php`
 
@@ -484,37 +476,14 @@ Quick create is the "+" menu in the top navigation that allows quick creation of
 <?php
 
 return [
+    'Ideas' => translate('LBL_LIST_TITLE', 'Ideas'),
+    'Tasks' => translate('LBL_LIST_TITLE', 'Tasks'),
     'MyCustomModule' => translate('LBL_LIST_TITLE', 'MyCustomModule'),
-    'Projects' => translate('LBL_LIST_TITLE', 'Projects'),
-    'Ideas' => translate('LBL_CUSTOM_TITLE', 'Ideas'),  // Override default label
+    'CustomModule' => 'Quick Create Custom',  // Static label
 ];
 ```
 
-**How it works:**
-
-The quick create constant is a simple array mapping module names to their display labels:
-
-```php
-// Base: constants/quick_create.php
-return [
-    "Ideas" => translate("LBL_LIST_TITLE", "Ideas"),
-    "Kudos" => translate("LBL_LIST_TITLE", "Kudos"),
-    "Tasks" => translate("LBL_LIST_TITLE", "Tasks"),
-];
-```
-
-**Custom additions:**
-
-```php
-// custom/constants/quick_create/my_modules.php
-return [
-    "MyModule" => translate("LBL_LIST_TITLE", "MyModule"),
-    "CustomModule" => "Quick Create Custom",  // Static label
-];
-```
-
-The merged result will include all modules from both base and custom files. When a user clicks the "+" icon in the navigation, they'll see options to create records for these modules (subject to ACL permissions).
-```
+When a user clicks the "+" icon in the navigation, they'll see options to create records for these modules (subject to ACL permissions).
 
 ## Creating Custom Middlewares
 
@@ -527,34 +496,36 @@ Add custom request/response processing:
 
 namespace MintHCM\Custom\Api\Middlewares;
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 
 class CustomAuthMiddleware
 {
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function __invoke(Request $request, RequestHandler $handler): ResponseInterface
     {
         // Pre-processing
         $customHeader = $request->getHeaderLine('X-Custom-Auth');
-        
+
         if (empty($customHeader)) {
             $response = new Response();
-            return $response->withStatus(401)->withJson(['error' => 'Custom auth required']);
+            $response->getBody()->write(json_encode(['error' => 'Custom auth required']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
         }
-        
+
         // Continue to next middleware
         $response = $handler->handle($request);
-        
+
         // Post-processing
-        $response = $response->withHeader('X-Processed-By', 'CustomAuth');
-        
-        return $response;
+        return $response->withHeader('X-Processed-By', 'CustomAuth');
     }
 }
 ```
 
 **Register middleware:**
+
+`ApiManager` is created through `CustomLoader`, so the subclass below replaces it automatically.
 
 **File:** `custom/app/ApiManager.php`
 
@@ -571,155 +542,115 @@ class ApiManager extends BaseApiManager
     protected function addBeforeRouteMiddlewares()
     {
         parent::addBeforeRouteMiddlewares();
-        
-        // Add custom middleware
+
+        // Added last = executed first (before AuthMiddleware), for EVERY route
         $this->app->add(new CustomAuthMiddleware());
     }
 }
 ```
 
+⚠️ A middleware added this way runs for every route, including `/login` and other public endpoints. The example above would block login for clients that do not send `X-Custom-Auth`. To limit a middleware to some routes, read the matched route's definition (e.g. a custom key in `options`) by extending `MintHCM\Api\Middlewares\Middleware` and calling `$this->getRouteData($request)` — see [Middlewares](./11-middlewares.md).
+
 ## Creating Custom Services
 
-Encapsulate business logic in service classes:
+Encapsulate business logic in service classes. Put them in an autoloadable custom namespace (here `custom/app/Services/` → `MintHCM\Custom\Api\Services`). Classes in `custom/lib/` are **not** autoloaded.
 
-**File:** `custom/lib/Services/EmployeeService.php`
+**File:** `custom/app/Services/EmployeeStatsService.php`
 
 ```php
 <?php
 
-namespace MintHCM\Custom\Lib\Services;
+namespace MintHCM\Custom\Api\Services;
 
-use MintHCM\Api\Repositories\EmployeesRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use MintHCM\Api\Entities\Employees;
 
-class EmployeeService
+class EmployeeStatsService
 {
-    private $repository;
-
-    public function __construct(EmployeesRepository $repository)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->repository = $repository;
     }
 
-    public function calculateYearlySalary(string $employeeId): float
+    public function countByStatus(string $status): int
     {
-        $employee = $this->repository->find($employeeId);
-        
+        // Rows with deleted = 1 are hidden by the global soft_delete filter
+        return $this->entityManager->getRepository(Employees::class)
+            ->count(['employee_status' => $status, 'show_on_employees' => 1]);
+    }
+
+    public function changeStatus(string $employeeId, string $status): void
+    {
+        $repository = $this->entityManager->getRepository(Employees::class);
+        $employee = $repository->find($employeeId);
         if (!$employee) {
-            throw new \Exception('Employee not found');
+            throw new \InvalidArgumentException('Employee not found'); // see note below
         }
+        $employee->employee_status = $status;
 
-        // Custom business logic
-        $baseSalary = $employee->base_salary ?? 0;
-        $bonus = $employee->annual_bonus ?? 0;
-        
-        return $baseSalary * 12 + $bonus;
-    }
-
-    public function promoteEmployee(string $employeeId, string $newPosition): void
-    {
-        $employee = $this->repository->find($employeeId);
-        $employee->position = $newPosition;
-        $employee->promotion_date = new \DateTime();
-        
-        // Use EntityManager to save
-        $this->repository->getEntityManager()->flush();
+        // MintEntityRepository::save() goes through the legacy SugarBean save (logic hooks etc.)
+        $repository->save($employee, true);
     }
 }
 ```
 
 **Use in controller:**
 
-```php
-use MintHCM\Custom\Lib\Services\EmployeeService;
-
-class EmployeeController
-{
-    private $employeeService;
-
-    public function __construct(EmployeeService $employeeService)
-    {
-        $this->employeeService = $employeeService;
-    }
-
-    public function calculateSalary(Request $request, Response $response, array $args): Response
-    {
-        $salary = $this->employeeService->calculateYearlySalary($args['id']);
-        return $response->withJson(['yearly_salary' => $salary]);
-    }
-}
-```
-
-### Example: Implementing Duplicate Detection
-
-The `DuplicateDetectionService` uses class-based autodiscovery to find and execute duplicate detection queries by module name. This allows you to add duplicate detection support for any module using a simple naming convention.
-
-**How it works:**
-
-When checking for duplicates in a module (e.g., "Candidates"), the service automatically looks for a query class using this convention:
-1. **Custom first:** `MintHCM\Custom\Modules\{Module}\Custom{Module}DuplicateQuery`
-2. **Core fallback:** `MintHCM\Modules\{Module}\{Module}DuplicateQuery`
-
-If either class exists and implements `DuplicateQueryInterface`, it will be used.
-
-**Example: Adding duplicate detection for a custom module**
-
-**File:** `modules/Candidates/CandidatesDuplicateQuery.php`
+Constructor dependencies of route controllers are resolved from the PHP-DI container by type. `EntityManagerInterface` is defined explicitly; concrete classes such as the service above are autowired. Repositories and interfaces that are not defined in the container (e.g. `LoggerInterface`) cannot be injected.
 
 ```php
 <?php
 
-namespace MintHCM\Modules\Candidates;
+namespace MintHCM\Custom\Api\Controllers;
 
-use Doctrine\DBAL\Query\QueryBuilder;
-use MintHCM\Lib\DuplicateDetection\DuplicateArrayQuery;
-use MintHCM\Lib\DuplicateDetection\DuplicateQueryInterface;
+use MintHCM\Custom\Api\Services\EmployeeStatsService;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response;
 
-class CandidatesDuplicateQuery implements DuplicateQueryInterface
+class EmployeeStatsController
 {
-    public function buildQueries(QueryBuilder $query_builder, array $record_data): DuplicateArrayQuery
+    public function __construct(private EmployeeStatsService $statsService)
     {
-        $duplicate_array_query = new DuplicateArrayQuery();
-        
-        // Check if minimum required data exists
-        if (empty($record_data['first_name']) || empty($record_data['last_name'])) {
-            return $duplicate_array_query;
-        }
-        
-        // Build query to find candidates with matching first/last names
-        $candidate_query = $query_builder
-            ->select('c.id', 'c.first_name', 'c.last_name', 'c.phone_mobile')
-            ->from('candidates', 'c')
-            ->where('c.first_name = :first_name')
-            ->andWhere('c.last_name = :last_name')
-            ->andWhere('c.deleted = 0')
-            ->setParameters([
-                'first_name' => $record_data['first_name'],
-                'last_name' => $record_data['last_name'],
-            ]);
-        
-        $duplicate_array_query->addQuery('by_name', $candidate_query);
-        
-        // Search by email if provided
-        if (!empty($record_data['email1'])) {
-            $email_query = clone $query_builder;
-            $email_query
-                ->select('c.id', 'c.first_name', 'c.last_name', 'c.phone_mobile')
-                ->from('email_addresses', 'ea')
-                ->join('ea', 'email_addr_bean_rel', 'eabr', 'ea.id = eabr.email_address_id')
-                ->join('eabr', 'candidates', 'c', 'eabr.bean_id = c.id')
-                ->where('ea.email_address = :email')
-                ->andWhere('c.deleted = 0')
-                ->setParameter('email', $record_data['email1']);
-            
-            $duplicate_array_query->addQuery('by_email', $email_query);
-        }
-        
-        return $duplicate_array_query;
+    }
+
+    public function count(Request $request, Response $response): Response
+    {
+        $count = $this->statsService->countByStatus($request->getAttribute('status'));
+        $response->getBody()->write(json_encode(['count' => $count]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ```
 
-**For custom modules in `custom/`:**
+Note: Slim's `Http*Exception` classes need the request (`new HttpNotFoundException($request)`). In a service without the request, throw your own exception and map it in the controller, or let `MintExceptionHandler` turn it into a 500 (see [Error Handling](./19-error-handling.md)).
+
+### Example: Implementing Duplicate Detection
+
+The `DuplicateDetectionService` (`lib/DuplicateDetection/Service/DuplicateDetectionService.php`) uses class-based autodiscovery to find duplicate detection queries by module name. This allows you to add duplicate detection support for any module using a simple naming convention.
+
+**How it works:**
+
+When checking for duplicates in a module (e.g., "Candidates"), the service looks for a query class using this convention:
+1. **Custom first:** `MintHCM\Custom\Modules\{Module}\Custom{Module}DuplicateQuery` (file `custom/modules/{Module}/Custom{Module}DuplicateQuery.php`)
+2. **Core fallback:** `MintHCM\Modules\{Module}\{Module}DuplicateQuery` (file `modules/{Module}/{Module}DuplicateQuery.php`)
+
+The first class that exists is used. It must implement `DuplicateQueryInterface`, otherwise a `LogicException` is thrown.
+
+**Integration with saving:** `ModuleController::create()`/`update()` call the service before saving. When duplicates are found the API answers **409** with:
+
+```json
+{
+  "duplicates_info": {
+    "records": [ { "id": "...", "first_name": "...", "last_name": "...", "module": "Candidates" } ],
+    "count": 1
+  }
+}
+```
+
+Sending the body parameter `force_save` skips the check.
+
+**Core example:** `modules/Candidates/CandidatesDuplicateQuery.php` searches candidates and employees by first + last name combined with e-mail or mobile phone. Each sub-query is built on a fresh `clone $query_builder`.
+
+**Example: Adding duplicate detection for a custom module**
 
 **File:** `custom/modules/MyModule/CustomMyModuleDuplicateQuery.php`
 
@@ -737,52 +668,64 @@ class CustomMyModuleDuplicateQuery implements DuplicateQueryInterface
     public function buildQueries(QueryBuilder $query_builder, array $record_data): DuplicateArrayQuery
     {
         $duplicate_array_query = new DuplicateArrayQuery();
-        
-        // Your duplicate detection logic here
-        
+
+        // Check if minimum required data exists
+        if (empty($record_data['name'])) {
+            return $duplicate_array_query;
+        }
+
+        // Clone the pristine builder for every independent query
+        $by_name = clone $query_builder;
+        $by_name->select('m.id', 'm.name', "'MyModule' AS module")
+            ->from('my_module', 'm')
+            ->where('m.name = :name')
+            ->andWhere('m.deleted = 0')
+            ->andWhere('m.id != :id')
+            ->setParameters([
+                'name' => $record_data['name'],
+                'id' => $record_data['id'] ?? '',
+            ]);
+
+        $duplicate_array_query->addQuery('by_name', $by_name);
+
         return $duplicate_array_query;
     }
 }
 ```
 
-**Usage in service:**
+**Usage in a service or controller:**
 
 ```php
 use MintHCM\Lib\DuplicateDetection\Service\DuplicateDetectionService;
 
-$service = new DuplicateDetectionService($entityManager);
-
-// Check if module supports duplicate detection
-if ($service->shouldProcessModule('Candidates')) {
-    $duplicates = $service->getDuplicates('Candidates', [
-        'id' => 'candidate-123',
-        'first_name' => 'John',
-        'last_name' => 'Doe',
-        'email1' => 'john.doe@example.com',
+// Injected via the constructor (autowired), or: new DuplicateDetectionService($entityManager)
+if ($duplicateDetectionService->shouldProcessModule('MyModule')) {
+    $duplicates = $duplicateDetectionService->getDuplicates('MyModule', [
+        'id' => 'record-123',
+        'name' => 'Example',
     ]);
-    
-    // Returns empty array [] if no duplicates found or no query class exists
+    // Rows from all sub-queries; [] when nothing is found
 }
 ```
 
 **Key points:**
 
 - If no query class exists for a module, `getDuplicates()` returns `[]` (empty array) and processing is skipped
-- Implement `DuplicateQueryInterface` — it requires one method: `buildQueries(QueryBuilder $qb, array $data): DuplicateArrayQuery`
-- Return `DuplicateArrayQuery` to support multiple sub-queries (by name, by email, etc.)
+- Implement `DuplicateQueryInterface` — it requires one method: `buildQueries(QueryBuilder $query_builder, array $record_data): DuplicateArrayQuery`
+- Return `DuplicateArrayQuery` to support multiple sub-queries (by name, by email, etc.); `addQuery()` ignores `null`/non-QueryBuilder values
 - Always check `$record_data` contents before building queries
-- Use `clone $query_builder` when creating multiple independent queries
+- Clone the **unmodified** `$query_builder` for each independent query — a clone of an already configured builder keeps its FROM, WHERE and parameters
 
 ## Custom Utilities
 
-Add helper functions and utilities:
+Add helper classes in an autoloadable custom namespace. `custom/utils/` is **not** autoloaded (`MintHCM\Utils\` maps only to `utils/`).
 
-**File:** `custom/utils/StringHelper.php`
+**File:** `custom/app/Utils/StringHelper.php`
 
 ```php
 <?php
 
-namespace MintHCM\Custom\Utils;
+namespace MintHCM\Custom\Api\Utils;
 
 class StringHelper
 {
@@ -807,7 +750,7 @@ class StringHelper
 **Usage:**
 
 ```php
-use MintHCM\Custom\Utils\StringHelper;
+use MintHCM\Custom\Api\Utils\StringHelper;
 
 $slug = StringHelper::slugify('Hello World!');  // "hello-world"
 ```
@@ -818,159 +761,88 @@ Recommended structure for custom extensions:
 
 ```
 custom/
-├── app/
-│   ├── ApiManager.php              # Extended API manager
+├── app/                                  # MintHCM\Custom\Api\
+│   ├── ApiManager.php                    # Extended API manager
 │   ├── Controllers/
 │   │   ├── MyController.php
-│   │   └── ModuleController.php    # Extended core controller
-│   ├── Entities/
-│   │   └── Employees.php           # Extended entity
+│   │   └── ModuleController.php          # Extended core controller (+ route override)
 │   ├── Middlewares/
 │   │   └── CustomMiddleware.php
-│   ├── Repositories/
-│   │   └── EmployeesRepository.php # Extended repository
+│   ├── Services/
+│   │   └── EmployeeStatsService.php
+│   ├── Utils/
+│   │   └── StringHelper.php
 │   └── Routes/
 │       ├── routes/
-│       │   └── custom.php          # Custom global routes
+│       │   └── custom.php                # Custom global routes / overrides
 │       └── modules/
-│           └── Employees/
-│               └── custom.php      # Custom module routes
+│           └── module_overrides.php      # Routes added to / overriding EVERY module
 ├── constants/
 │   ├── module_icons/
 │   │   └── custom.php
 │   └── quick_create/
 │       └── custom.php
+├── data/                                 # MintHCM\Custom\Data\
+│   ├── MassActions/Actions/              # Custom mass actions
+│   └── ORM/Doctrine/MintEventManager/Subscribers/
 ├── lib/
-│   ├── Services/
-│   │   └── EmployeeService.php
 │   └── MintLogic/
-│       └── CustomLogic.php
-├── modules/
-│   └── MyModule/
-│       └── CustomMyModuleDuplicateQuery.php  # Duplicate detection for custom module
-└── utils/
-    └── StringHelper.php
+│       └── MyModule/
+│           └── custom.logicdefs.php      # MintLogic rules (included, not autoloaded)
+└── modules/                              # MintHCM\Custom\Modules\
+    └── MyModule/
+        ├── api/routes/custom.php         # Routes of one module (/MyModule/...)
+        └── CustomMyModuleDuplicateQuery.php
 ```
 
 ## Complete Example: Custom Feature
 
-Let's create a complete custom feature - an employee performance review system.
+Let's create a complete custom feature - an endpoint returning employee counts per status.
 
 ### Step 1: Add Route
 
-**File:** `custom/app/Routes/routes/performance.php`
+**File:** `custom/app/Routes/routes/employee_stats.php`
 
 ```php
 <?php
 
-use MintHCM\Custom\Api\Controllers\PerformanceController;
+use MintHCM\Api\Middlewares\Params\ParamTypes\StringType;
+use MintHCM\Custom\Api\Controllers\EmployeeStatsController;
 
 $routes = [
-    'performance.list' => [
+    'employee_stats.count' => [
         'method' => 'GET',
-        'path' => '/performance/reviews',
-        'class' => PerformanceController::class,
-        'function' => 'listReviews',
-    ],
-    'performance.create' => [
-        'method' => 'POST',
-        'path' => '/performance/reviews',
-        'class' => PerformanceController::class,
-        'function' => 'createReview',
+        'path' => '/employee-stats/count',
+        'class' => EmployeeStatsController::class,
+        'function' => 'count',
+        'desc' => 'Count employees with the given status',
+        'queryParams' => [
+            'status' => [
+                'type' => StringType::class,
+                'required' => true,
+                'desc' => 'Employee status',
+                'example' => 'Active',
+            ],
+        ],
     ],
 ];
 ```
 
 ### Step 2: Create Controller
 
-**File:** `custom/app/Controllers/PerformanceController.php`
-
-```php
-<?php
-
-namespace MintHCM\Custom\Api\Controllers;
-
-use MintHCM\Custom\Lib\Services\PerformanceService;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Psr7\Response;
-
-class PerformanceController
-{
-    private $performanceService;
-
-    public function __construct(PerformanceService $performanceService)
-    {
-        $this->performanceService = $performanceService;
-    }
-
-    public function listReviews(Request $request, Response $response): Response
-    {
-        $reviews = $this->performanceService->getAllReviews();
-        return $response->withJson(['data' => $reviews]);
-    }
-
-    public function createReview(Request $request, Response $response): Response
-    {
-        $data = $request->getParsedBody();
-        $review = $this->performanceService->createReview($data);
-        return $response->withJson(['data' => $review], 201);
-    }
-}
-```
+Use `EmployeeStatsController` from [Creating Custom Services](#creating-custom-services) in `custom/app/Controllers/EmployeeStatsController.php`.
 
 ### Step 3: Create Service
 
-**File:** `custom/lib/Services/PerformanceService.php`
-
-```php
-<?php
-
-namespace MintHCM\Custom\Lib\Services;
-
-use MintHCM\Api\Repositories\PerformanceReviewsRepository;
-use MintHCM\Api\Entities\PerformanceReviews;
-
-class PerformanceService
-{
-    private $repository;
-
-    public function __construct(PerformanceReviewsRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    public function getAllReviews(): array
-    {
-        return $this->repository->findAll();
-    }
-
-    public function createReview(array $data): PerformanceReviews
-    {
-        $review = new PerformanceReviews();
-        $review->employee_id = $data['employee_id'];
-        $review->score = $data['score'];
-        $review->comments = $data['comments'];
-        $review->review_date = new \DateTime();
-
-        $em = $this->repository->getEntityManager();
-        $em->persist($review);
-        $em->flush();
-
-        return $review;
-    }
-}
-```
+Use `EmployeeStatsService` from [Creating Custom Services](#creating-custom-services) in `custom/app/Services/EmployeeStatsService.php`.
 
 ### Step 4: Test
 
-```bash
-# List reviews
-curl http://your-instance/api/performance/reviews
+The route requires authentication (`auth` defaults to `true`), so send a Bearer token or the session cookie:
 
-# Create review
-curl -X POST http://your-instance/api/performance/reviews \
-  -H "Content-Type: application/json" \
-  -d '{"employee_id": "123", "score": 85, "comments": "Great work!"}'
+```bash
+curl -H "Authorization: Bearer <access_token>" \
+  "http://your-instance/api/employee-stats/count?status=Active"
 ```
 
 ## Best Practices
@@ -1001,16 +873,18 @@ namespace MintHCM\Api\Controllers;  // Don't use in custom/
 // ✅ Good - extend core class
 class ModuleController extends BaseModuleController
 {
-    public function list(...) {
+    public function getRecord(Request $request, Response $response, array $args): Response
+    {
         // Add custom logic
-        parent::list(...);  // Call parent if needed
+        return parent::getRecord($request, $response, $args);  // Call parent if needed
     }
 }
 
 // ❌ Bad - completely replace
 class ModuleController
 {
-    // No parent, no upgrade path
+    // No parent, no upgrade path. CustomLoader ignores custom classes
+    // that do not extend the core class.
 }
 ```
 
@@ -1033,13 +907,7 @@ class ModuleController extends BaseModuleController
 
 ### 5. Version Control Custom Code
 
-```bash
-# Initialize git in custom/
-cd custom
-git init
-git add .
-git commit -m "Initial custom code"
-```
+Keep `api/custom/` under version control together with the rest of the instance repository. Since the core repository already tracks files there (e.g. `custom/data/MassActions/Actions/.gitkeep`), do not create a nested repository inside it.
 
 ## Troubleshooting
 
@@ -1048,7 +916,12 @@ git commit -m "Initial custom code"
 **Problem:** CustomLoader not finding custom class
 
 **Solution:**
-```bash
+```text
+# Check that the class is created through CustomLoader at all
+# (route controllers are not - override the route instead, see "Overriding a Route Controller")
+
+# Check that the directory is autoloaded: custom/app, custom/modules, custom/data only
+
 # Check namespace
 # Core:   namespace MintHCM\Api\Controllers;
 # Custom: namespace MintHCM\Custom\Api\Controllers;
@@ -1077,6 +950,8 @@ php -r "include 'custom/app/Routes/routes/myroutes.php'; var_dump(\$routes);"
 php -l custom/app/Routes/routes/myroutes.php
 ```
 
+Also check that the controller class and method exist (otherwise the route is skipped silently), that the route key is not duplicated within the same directory (exception), and - for module routes - that the module is in `$beanList`. If the route registers but answers 400, check the parameter definitions (`type` must be a ParamType class, all accepted parameters must be declared).
+
 ### Constants Not Merging
 
 **Problem:** Custom constants not appearing
@@ -1089,9 +964,13 @@ ls -la custom/constants/module_icons/
 # File must end in .php
 mv custom_icons.txt custom_icons.php
 
-# Test loading
-php -r "require 'utils/ConstantsLoader.php'; var_dump(ConstantsLoader::getConstants('module_icons'));"
+# The base file constants/module_icons.php must exist
+
+# Test loading (run from api/)
+php -r "require 'vendor/autoload.php'; var_dump(\MintHCM\Utils\ConstantsLoader::getConstants('module_icons'));"
 ```
+
+Remember that some constants are loaded with `$only_custom_if_exist = true` (e.g. `quick_create`) - custom files replace the base list instead of being merged.
 
 ## Next Steps
 

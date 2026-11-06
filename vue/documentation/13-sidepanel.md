@@ -1,6 +1,6 @@
 # Sidepanel & Widgets
 
-The **sidepanel** is a resizable, collapsible column that `RecordView` renders alongside the record panels. It hosts self-contained **widgets** showing read-only, at-a-glance HR context for the record being viewed — for Employees: tenure, upcoming leave, today's calendar, kudos, trainings, competencies; for Candidatures: recruitment stage, candidate score, application timeline. Each widget fetches and renders its own data independently; the panel itself only handles layout, ordering, and collapse.
+The **sidepanel** is a resizable, collapsible column that `RecordView` renders alongside the record panels. It hosts self-contained **widgets** showing read-only, at-a-glance HR context for the record being viewed — for Employees: tenure, upcoming leave, today's calendar, trainings, kudos; for Candidatures: recruitment stage, candidate score, application timeline; for Recruitments: candidature counts per status. (`MintWidgetCompetencies` is registered and has an endpoint, but no core module enables it.) Each widget fetches and renders its own data independently; the panel itself only handles layout, ordering, and collapse.
 
 All components live in `src/components/MintSidepanel/`.
 
@@ -11,11 +11,19 @@ The panel is driven by the module's `recordviewdefs.php` metadata (see [Record V
 ```php
 // legacy/modules/Employees/metadata/recordviewdefs.php
 $viewdefs['Employees'] = [
-    'sidepanel' => ['MintWidgetTenure', 'MintWidgetLeave', 'MintWidgetCalendar', 'MintWidgetTrainings', 'MintWidgetCompetencies', 'MintWidgetKudos'],
+    'sidepanel' => ['MintWidgetTenure', 'MintWidgetLeave', 'MintWidgetCalendar', 'MintWidgetTrainings', 'MintWidgetKudos'],
     'order'  => [/* ... */],
     'panels' => [/* ... */],
 ];
 ```
+
+Core configuration:
+
+| Module | `sidepanel` widgets | Backend |
+|---|---|---|
+| `Employees` | `MintWidgetTenure`, `MintWidgetLeave`, `MintWidgetCalendar`, `MintWidgetTrainings`, `MintWidgetKudos` | `Employees/{id}/sidepanel/*`; calendar uses `/scheduler` |
+| `Candidatures` | `MintWidgetRecruitmentStage`, `MintWidgetCandidateScore`, `MintWidgetApplicationTimeline` | `Candidatures/{id}/sidepanel/score`, `.../history`; stage has no fetch |
+| `Recruitments` | `MintWidgetCandidatureStatuses` | `Recruitments/{id}/sidepanel/candidature-statuses` |
 
 `RecordViewStore` reads this from `defs.value.sidepanel` and exposes it as `store.sidepanelWidgets`, plus a `store.hasSidepanel` guard. The panel renders only when the array is non-empty **and** the record already exists — it is hidden on new/unsaved records, because every widget keys its data off `store.bean.id`.
 

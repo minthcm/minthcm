@@ -1,49 +1,75 @@
 # Testing
 
-Testing ensures your API works correctly and prevents regressions. The MintHCM API uses PHPUnit for testing.
+Testing ensures your API works correctly and prevents regressions. The MintHCM API uses **PHPUnit 11** (`phpunit/phpunit ^11.5` in `api/composer.json`, PHP 8.2) for unit tests.
+
+Run the unit tests after every implementation and after manual testing, before committing.
 
 ## Testing Setup
 
 ### PHPUnit Configuration
 
-**File:** `phpunit.xml`
+**File:** `api/phpunit.xml`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true">
+<phpunit
+    colors="true"
+    testdox="true"
+    bootstrap="tests/bootstrap.php"
+>
     <testsuites>
-        <testsuite name="API Tests">
-            <directory>./tests</directory>
+        <testsuite name="MintApi Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
 ```
 
+`tests/bootstrap.php` only loads `vendor/autoload.php`. The legacy application, the database, the Slim app (`$mint_app`) and the DI container are **not** initialized — the suite contains pure unit tests.
+
+### Test Directory Layout
+
+```
+api/tests/
+├── bootstrap.php
+├── unit/                  # main location for new tests
+│   ├── Controllers/       # e.g. AuthControllerTest, MetaControllerTest, GlobalSearchControllerTest
+│   ├── ExceptionHandlers/
+│   ├── Legacy/
+│   ├── Lib/Services/      # Auth (PasswordHash, LoginThrottle, ...), Http
+│   ├── MassActions/
+│   ├── Middlewares/       # Auth, Params (ParamTypesTest), Security
+│   ├── RecordView/
+│   ├── Repositories/      # UsersRepository, CurrenciesRepository, OAuth2/*
+│   └── utils/             # LuxonMapperTest, ConstantsLoaderTest
+└── Unit/                  # older tests (Comments, Search, DynamicPropertiesTest)
+```
+
+Both directories are part of the suite (`<directory>tests</directory>`). Test namespaces follow the path: `MintHCM\Tests\Unit\{Area}` (e.g. `MintHCM\Tests\Unit\Middlewares\Params`). There is no `autoload-dev` mapping; PHPUnit discovers test files by directory.
+
 ### Running Tests
 
+Run from `api/`:
+
 ```bash
-# Run all tests
-./vendor/bin/phpunit
+# Run all tests (canonical)
+composer test
+# equivalent:
+php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml
 
 # Run specific test file
-./vendor/bin/phpunit tests/AuthTest.php
+./vendor/bin/phpunit tests/unit/Controllers/AuthControllerTest.php
 
 # Run specific test method
-./vendor/bin/phpunit --filter testLogin tests/AuthTest.php
+./vendor/bin/phpunit --filter testLoginFailsWithInvalidPassword tests/unit/Controllers/AuthControllerTest.php
 
-# Run with coverage
+# Run with coverage (requires the pcov or xdebug extension)
 ./vendor/bin/phpunit --coverage-html coverage/
 ```
 
-Using the test runner script:
+`api/runTests.php` is a legacy runner: it boots legacy and only picks up `tests/*Test.php` files at the top level of `tests/`, where there are none — do not use it.
 
-```bash
-php runTests.php
-```
+Functional/E2E coverage (real database, legacy, browser) is provided by the Playwright tests in the repository root `tests/` directory, not by PHPUnit.
 
 ## Test Structure
 
@@ -52,11 +78,11 @@ php runTests.php
 ```php
 <?php
 
-namespace MintHCM\Api\Tests;
+namespace MintHCM\Tests\Unit\MyFeature;
 
 use PHPUnit\Framework\TestCase;
 
-class MyFeatureTest extends TestCase
+final class MyFeatureTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -76,253 +102,98 @@ class MyFeatureTest extends TestCase
         $expected = 'value';
         
         // Act
-        $actual = $this->doSomething();
+        $actual = strtolower('VALUE');
         
         // Assert
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }
 ```
 
-## Testing Routes and Controllers
+## Testing Controllers
 
-### Example: Testing Authentication
+Controllers are tested by calling the action directly with a mocked PSR-7 request and a real `Slim\Psr7\Response`. Mock `getAttribute()` — that is how controllers read the parameters validated by `ParamsMiddleware`. Code paths that need legacy (`BeanFactory`, database) cannot run under `tests/bootstrap.php`; cover them with E2E tests.
 
-**File:** `tests/AuthTest.php`
+**Real example:** `tests/unit/Controllers/CloseMeetingTest.php`
 
 ```php
 <?php
 
-namespace MintHCM\Api\Tests;
+namespace MintHCM\Tests\Unit\Controllers;
 
+use MintHCM\Modules\Meetings\api\controllers\CloseMeeting;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Psr7\Response;
 
-class AuthTest extends TestCase
+final class CloseMeetingTest extends TestCase
 {
-    private $app;
-
-    protected function setUp(): void
+    public function testThrowsBadRequestWhenIdIsMissing(): void
     {
-        parent::setUp();
-        
-        // Initialize Slim app for testing
-        $this->app = $this->createApplication();
+        $this->expectException(HttpBadRequestException::class);
+        (new CloseMeeting())($this->requestWithId(null), new Response());
     }
 
-    public function testLoginSuccess(): void
+    private function requestWithId(?string $id): ServerRequestInterface
     {
-        $request = $this->createRequest('POST', '/auth/login', [
-            'username' => 'admin',
-            'password' => 'password123',
-        ]);
-        
-        $response = $this->app->handle($request);
-        
-        $this->assertEquals(200, $response->getStatusCode());
-        
-        $body = (string) $response->getBody();
-        $data = json_decode($body, true);
-        
-        $this->assertArrayHasKey('token', $data);
-        $this->assertNotEmpty($data['token']);
-    }
-
-    public function testLoginInvalidCredentials(): void
-    {
-        $request = $this->createRequest('POST', '/auth/login', [
-            'username' => 'admin',
-            'password' => 'wrongpassword',
-        ]);
-        
-        $response = $this->app->handle($request);
-        
-        $this->assertEquals(401, $response->getStatusCode());
-    }
-
-    public function testLoginMissingUsername(): void
-    {
-        $request = $this->createRequest('POST', '/auth/login', [
-            'password' => 'password123',
-        ]);
-        
-        $response = $this->app->handle($request);
-        
-        $this->assertEquals(400, $response->getStatusCode());
-        
-        $body = (string) $response->getBody();
-        $data = json_decode($body, true);
-        
-        $this->assertArrayHasKey('error', $data);
-    }
-
-    private function createApplication()
-    {
-        // Create Slim app instance for testing
-        // Implementation depends on your setup
-    }
-
-    private function createRequest(string $method, string $path, array $data = [])
-    {
-        // Create PSR-7 request for testing
-        // Implementation depends on your setup
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->method('getAttribute')->with('id')->willReturn($id);
+        return $request;
     }
 }
 ```
 
-## Testing Repositories
+Asserting a JSON response:
 
-### Example: Testing Employee Repository
+```php
+$response = $controller->list($request, new Response());
 
-**File:** `tests/EmployeeRepositoryTest.php`
+$this->assertSame(200, $response->getStatusCode());
+$this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
+
+$data = json_decode((string) $response->getBody(), true);
+$this->assertArrayHasKey('data', $data);
+```
+
+## Testing Repositories and Services
+
+Repositories and services receive their dependencies through the constructor, so they can be tested with mocks of `EntityManagerInterface`, repositories or Doctrine query objects. See `tests/unit/Repositories/` (e.g. `CurrenciesRepositoryTest`, `OAuth2/AccessTokenRepositoryTest`).
+
+Example for the `EmployeeStatsService` from [Extending the API](./08-extending-api.md#creating-custom-services):
 
 ```php
 <?php
 
-namespace MintHCM\Api\Tests;
+namespace MintHCM\Tests\Unit\Custom;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use MintHCM\Api\Entities\Employees;
-use MintHCM\Api\Repositories\EmployeesRepository;
+use MintHCM\Custom\Api\Services\EmployeeStatsService;
 use PHPUnit\Framework\TestCase;
 
-class EmployeeRepositoryTest extends TestCase
+final class EmployeeStatsServiceTest extends TestCase
 {
-    private $repository;
-    private $entityManager;
-
-    protected function setUp(): void
+    public function testCountByStatusQueriesActiveEmployees(): void
     {
-        parent::setUp();
-        
-        // Get entity manager
-        global $mint_app;
-        $container = $mint_app->getContainer();
-        $this->entityManager = $container->get(\Doctrine\ORM\EntityManager::class);
-        
-        $this->repository = $this->entityManager->getRepository(Employees::class);
-    }
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->expects($this->once())
+            ->method('count')
+            ->with(['employee_status' => 'Active', 'show_on_employees' => 1])
+            ->willReturn(42);
 
-    public function testFindActiveEmployees(): void
-    {
-        $employees = $this->repository->findBy(['status' => 'Active']);
-        
-        $this->assertIsArray($employees);
-        
-        foreach ($employees as $employee) {
-            $this->assertEquals('Active', $employee->status);
-        }
-    }
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getRepository')->with(Employees::class)->willReturn($repository);
 
-    public function testSearchByName(): void
-    {
-        $results = $this->repository->searchByName('John');
-        
-        $this->assertIsArray($results);
-        
-        foreach ($results as $employee) {
-            $this->assertStringContainsStringIgnoringCase(
-                'john',
-                $employee->first_name . ' ' . $employee->last_name
-            );
-        }
-    }
+        $service = new EmployeeStatsService($entityManager);
 
-    public function testCreateEmployee(): void
-    {
-        $employee = new Employees();
-        $employee->first_name = 'Test';
-        $employee->last_name = 'User';
-        $employee->user_name = 'testuser_' . time();
-        $employee->date_entered = new \DateTime();
-        
-        $this->entityManager->persist($employee);
-        $this->entityManager->flush();
-        
-        $this->assertNotNull($employee->id);
-        
-        // Cleanup
-        $this->entityManager->remove($employee);
-        $this->entityManager->flush();
-    }
-
-    public function testCount(): void
-    {
-        $total = $this->repository->count([]);
-        
-        $this->assertIsInt($total);
-        $this->assertGreaterThan(0, $total);
+        $this->assertSame(42, $service->countByStatus('Active'));
     }
 }
 ```
 
-## Testing Services
-
-### Example: Testing Employee Service
-
-**File:** `tests/EmployeeServiceTest.php`
-
-```php
-<?php
-
-namespace MintHCM\Api\Tests;
-
-use MintHCM\Lib\Services\EmployeeService;
-use PHPUnit\Framework\TestCase;
-
-class EmployeeServiceTest extends TestCase
-{
-    private $service;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        
-        // Initialize service with dependencies
-        $this->service = new EmployeeService(
-            $this->createMock(EmployeesRepository::class)
-        );
-    }
-
-    public function testCalculateYearlySalary(): void
-    {
-        $employeeId = '123';
-        
-        // Mock repository
-        $repository = $this->createMock(EmployeesRepository::class);
-        
-        $employee = new Employees();
-        $employee->base_salary = 5000;
-        $employee->annual_bonus = 10000;
-        
-        $repository->expects($this->once())
-            ->method('find')
-            ->with($employeeId)
-            ->willReturn($employee);
-        
-        $service = new EmployeeService($repository);
-        
-        $yearlySalary = $service->calculateYearlySalary($employeeId);
-        
-        $this->assertEquals(70000, $yearlySalary); // 5000 * 12 + 10000
-    }
-
-    public function testCalculateYearlySalaryEmployeeNotFound(): void
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Employee not found');
-        
-        $employeeId = 'nonexistent';
-        
-        $repository = $this->createMock(EmployeesRepository::class);
-        $repository->expects($this->once())
-            ->method('find')
-            ->with($employeeId)
-            ->willReturn(null);
-        
-        $service = new EmployeeService($repository);
-        $service->calculateYearlySalary($employeeId);
-    }
-}
-```
+⚠️ Do not instantiate generated entities and set their properties in unit tests: `MintEntity::__set()` looks up the entity manager through the global `$mint_app`, which does not exist under `tests/bootstrap.php`. Mock the entity or test the logic that does not touch entities.
 
 ## Mocking
 
@@ -331,24 +202,22 @@ class EmployeeServiceTest extends TestCase
 ```php
 use PHPUnit\Framework\TestCase;
 
-class MyTest extends TestCase
+final class MyTest extends TestCase
 {
     public function testWithMock(): void
     {
         // Create mock
-        $repository = $this->createMock(EmployeesRepository::class);
-        
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $repository = $this->createMock(EntityRepository::class);
+
         // Set expectations
-        $repository->expects($this->once())
-            ->method('find')
-            ->with('123')
-            ->willReturn(new Employees());
-        
+        $entityManager->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
         // Use mock
-        $service = new EmployeeService($repository);
-        $employee = $service->getEmployee('123');
-        
-        $this->assertInstanceOf(Employees::class, $employee);
+        $service = new EmployeeStatsService($entityManager);
+        // ...
     }
 }
 ```
@@ -358,15 +227,13 @@ class MyTest extends TestCase
 ```php
 public function testMultipleCalls(): void
 {
-    $repository = $this->createMock(EmployeesRepository::class);
+    $repository = $this->createMock(EntityRepository::class);
     
     $repository->expects($this->exactly(2))
-        ->method('find')
-        ->willReturn(new Employees());
+        ->method('count')
+        ->willReturn(1);
     
-    $service = new EmployeeService($repository);
-    $service->getEmployee('123');
-    $service->getEmployee('456');
+    // ... code under test calls count() twice
 }
 ```
 
@@ -375,24 +242,28 @@ public function testMultipleCalls(): void
 ```php
 public function testDifferentReturns(): void
 {
-    $repository = $this->createMock(EmployeesRepository::class);
+    $repository = $this->createMock(EntityRepository::class);
     
     $repository->expects($this->exactly(2))
-        ->method('find')
-        ->willReturnOnConsecutiveCalls(
-            new Employees(),
-            null
-        );
+        ->method('count')
+        ->willReturnOnConsecutiveCalls(5, 0);
     
-    $service = new EmployeeService($repository);
-    
-    $first = $service->getEmployee('123');
-    $this->assertInstanceOf(Employees::class, $first);
-    
-    $second = $service->getEmployee('456');
-    $this->assertNull($second);
+    $this->assertSame(5, $repository->count([]));
+    $this->assertSame(0, $repository->count([]));
 }
 ```
+
+### Mocking Request Attributes
+
+```php
+$request = $this->createMock(ServerRequestInterface::class);
+$request->method('getAttribute')->willReturnMap([
+    ['username', null, 'john'],
+    ['email', null, 'john@example.com'],
+]);
+```
+
+(The `null` is the `$default` argument of `getAttribute()`; see `tests/unit/Controllers/AuthControllerTest.php`.)
 
 ## Assertions
 
@@ -442,40 +313,32 @@ $this->assertGreaterThanOrEqual(10, $value);
 ```php
 public function testCustomAssertion(): void
 {
-    $employee = new Employees();
-    $employee->first_name = 'John';
-    $employee->last_name = 'Doe';
-    
-    $this->assertEmployeeName($employee, 'John', 'Doe');
+    $data = ['first_name' => 'John', 'last_name' => 'Doe'];
+
+    $this->assertPersonName($data, 'John', 'Doe');
 }
 
-private function assertEmployeeName(Employees $employee, string $first, string $last): void
+private function assertPersonName(array $data, string $first, string $last): void
 {
-    $this->assertEquals($first, $employee->first_name, 'First name mismatch');
-    $this->assertEquals($last, $employee->last_name, 'Last name mismatch');
+    $this->assertSame($first, $data['first_name'], 'First name mismatch');
+    $this->assertSame($last, $data['last_name'], 'Last name mismatch');
 }
 ```
 
 ## Data Providers
 
-Test the same logic with different data:
+Test the same logic with different data. In PHPUnit 11 data provider methods **must be `public static`** (a non-static provider throws `InvalidDataProviderException`), and they are attached with the `#[DataProvider]` attribute (the `@dataProvider` doc-comment annotation is deprecated):
 
 ```php
-/**
- * @dataProvider salaryDataProvider
- */
-public function testCalculateSalary(float $base, float $bonus, float $expected): void
+use PHPUnit\Framework\Attributes\DataProvider;
+
+#[DataProvider('salaryDataProvider')]
+public function testCalculateYearlySalary(float $monthly, float $bonus, float $expected): void
 {
-    $employee = new Employees();
-    $employee->base_salary = $base;
-    $employee->annual_bonus = $bonus;
-    
-    $result = $this->service->calculateYearlySalary($employee);
-    
-    $this->assertEquals($expected, $result);
+    $this->assertEquals($expected, $monthly * 12 + $bonus);
 }
 
-public function salaryDataProvider(): array
+public static function salaryDataProvider(): array
 {
     return [
         'standard salary' => [5000, 10000, 70000],
@@ -485,147 +348,42 @@ public function salaryDataProvider(): array
 }
 ```
 
+Real example: `tests/unit/Middlewares/Params/ParamTypesTest.php`.
+
 ## Testing Exceptions
 
 ```php
-public function testThrowsException(): void
+public function testThrowsBadRequestForInvalidValue(): void
 {
-    $this->expectException(\InvalidArgumentException::class);
-    $this->expectExceptionMessage('Invalid employee ID');
-    
-    $this->service->getEmployee('invalid');
+    $this->expectException(\Slim\Exception\HttpBadRequestException::class);
+
+    (new \MintHCM\Api\Middlewares\Params\ParamTypes\IntType())($this->createMock(ServerRequestInterface::class), 'abc');
 }
 ```
 
-## Integration Tests
+## Integration and E2E Tests
 
-Test multiple components together:
+There is no PHPUnit harness that boots the Slim application, legacy and the database. Verify endpoints end-to-end with:
 
-```php
-class EmployeeIntegrationTest extends TestCase
-{
-    public function testCreateAndRetrieveEmployee(): void
-    {
-        // Create employee
-        $data = [
-            'first_name' => 'Integration',
-            'last_name' => 'Test',
-            'user_name' => 'inttest_' . time(),
-        ];
-        
-        $request = $this->createRequest('POST', '/employees', $data);
-        $response = $this->app->handle($request);
-        
-        $this->assertEquals(201, $response->getStatusCode());
-        
-        $body = json_decode((string) $response->getBody(), true);
-        $employeeId = $body['data']['id'];
-        
-        // Retrieve employee
-        $request = $this->createRequest('GET', "/employees/{$employeeId}");
-        $response = $this->app->handle($request);
-        
-        $this->assertEquals(200, $response->getStatusCode());
-        
-        $body = json_decode((string) $response->getBody(), true);
-        
-        $this->assertEquals('Integration', $body['data']['first_name']);
-        $this->assertEquals('Test', $body['data']['last_name']);
-        
-        // Cleanup
-        $this->deleteEmployee($employeeId);
-    }
-}
-```
-
-## Test Database
-
-### Using Transactions
-
-Roll back changes after each test:
-
-```php
-class DatabaseTest extends TestCase
-{
-    private $entityManager;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        
-        global $mint_app;
-        $container = $mint_app->getContainer();
-        $this->entityManager = $container->get(\Doctrine\ORM\EntityManager::class);
-        
-        // Start transaction
-        $this->entityManager->beginTransaction();
-    }
-
-    protected function tearDown(): void
-    {
-        // Rollback transaction
-        $this->entityManager->rollback();
-        
-        parent::tearDown();
-    }
-}
-```
-
-### Test Fixtures
-
-Create test data:
-
-```php
-class EmployeeTest extends TestCase
-{
-    private function createTestEmployee(): Employees
-    {
-        $employee = new Employees();
-        $employee->first_name = 'Test';
-        $employee->last_name = 'User';
-        $employee->user_name = 'testuser_' . uniqid();
-        $employee->date_entered = new \DateTime();
-        
-        $this->entityManager->persist($employee);
-        $this->entityManager->flush();
-        
-        return $employee;
-    }
-
-    public function testSomethingWithEmployee(): void
-    {
-        $employee = $this->createTestEmployee();
-        
-        // Test logic...
-        
-        // Cleanup
-        $this->entityManager->remove($employee);
-        $this->entityManager->flush();
-    }
-}
-```
+- the Playwright E2E tests in the repository root `tests/` directory,
+- manual requests against a running instance, e.g. `curl -H "Authorization: Bearer <token>" http://your-instance/api/...` (module routes are `/{Module}/...`, the login endpoint is `POST /api/login`).
 
 ## Best Practices
 
 ### 1. Test One Thing Per Test
 
 ```php
-// ✅ Good - one assertion
-public function testEmployeeHasFirstName(): void
+// ✅ Good - one behaviour per test
+public function testIntTypeRejectsNonNumericString(): void
 {
-    $employee = new Employees();
-    $employee->first_name = 'John';
-    
-    $this->assertEquals('John', $employee->first_name);
+    $this->expectException(HttpBadRequestException::class);
+    (new IntType())($this->request(), 'abc');
 }
 
-// ❌ Bad - multiple unrelated assertions
-public function testEmployee(): void
+// ❌ Bad - several unrelated behaviours in one test
+public function testParamTypes(): void
 {
-    $employee = new Employees();
-    $this->assertNotNull($employee);
-    $this->assertEquals('Active', $employee->status);
-    $this->assertTrue($employee->save());
+    // checks Int, Bool and Email parsing and error handling at once...
 }
 ```
 
@@ -645,90 +403,54 @@ public function testLogin(): void
 public function testSomething(): void
 {
     // Arrange - set up test data
-    $employee = new Employees();
-    $employee->salary = 5000;
+    $monthly = 5000;
     
     // Act - perform action
-    $yearlySalary = $employee->salary * 12;
+    $yearly = $monthly * 12;
     
     // Assert - verify result
-    $this->assertEquals(60000, $yearlySalary);
+    $this->assertEquals(60000, $yearly);
 }
 ```
 
-### 4. Clean Up Test Data
+### 4. Keep Tests Independent
 
-```php
-public function testCreateEmployee(): void
-{
-    $employee = $this->createEmployee();
-    
-    $this->assertNotNull($employee->id);
-    
-    // Clean up
-    $this->entityManager->remove($employee);
-    $this->entityManager->flush();
-}
-```
+Unit tests must not depend on a database, legacy globals or execution order. Restore any global state (`$GLOBALS`, `$sugar_config`) you change in `tearDown()`.
 
 ### 5. Don't Test Framework Code
 
 ```php
 // ✅ Good - test your logic
-public function testCalculateBonus(): void
-{
-    $bonus = $this->service->calculateBonus($employee);
-    $this->assertEquals(5000, $bonus);
-}
+public function testCountByStatusQueriesActiveEmployees(): void { /* ... */ }
 
-// ❌ Bad - testing Doctrine
-public function testEntityManagerPersist(): void
+// ❌ Bad - testing Doctrine / PHPUnit itself
+public function testMockReturnsValue(): void
 {
-    $this->entityManager->persist($employee);
-    $this->assertTrue(true);
+    $repository = $this->createMock(EntityRepository::class);
+    $repository->method('count')->willReturn(1);
+    $this->assertSame(1, $repository->count([]));
 }
 ```
 
 ## Continuous Integration
 
-### Running Tests Automatically
+The repository CI (`.gitlab-ci.yml`) does not run the API unit tests. To run them in a pipeline, use PHP 8.2 and run the suite from `api/`:
 
-Add to your CI pipeline (e.g., GitHub Actions):
-
-```yaml
-name: Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
-      
-      - name: Install dependencies
-        run: composer install
-      
-      - name: Run tests
-        run: ./vendor/bin/phpunit
+```bash
+cd api
+composer install
+composer test
 ```
 
 ## Coverage Reports
 
-Generate code coverage:
+Generate code coverage (requires the pcov or xdebug PHP extension):
 
 ```bash
 # HTML coverage report
 ./vendor/bin/phpunit --coverage-html coverage/
 
-# Open report
-open coverage/index.html
+# Open coverage/index.html in a browser
 ```
 
 ## Debugging Tests
@@ -736,15 +458,14 @@ open coverage/index.html
 ```php
 public function testDebug(): void
 {
-    $employee = $this->createEmployee();
-    
+    $data = ['id' => 'abc'];
+
     // Debug output
-    var_dump($employee);
-    print_r($employee);
-    
+    var_dump($data);
+
     // Write to stderr (visible in PHPUnit output)
-    fwrite(STDERR, "Debug: " . $employee->id . "\n");
-    
+    fwrite(STDERR, "Debug: " . $data['id'] . "\n");
+
     $this->assertTrue(true);
 }
 ```

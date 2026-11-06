@@ -3412,6 +3412,15 @@ function send_security_headers()
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
+    // Pages carry personal data; do not rely on session.cache_limiter for this.
+    // Entry points that serve files set their own Cache-Control later and override it.
+    header('Cache-Control: no-store');
+
+    // Opt-in only: HSTS on an instance without a valid certificate locks users out
+    $hsts_max_age = $sugar_config['hsts_max_age'] ?? 0;
+    if (is_numeric($hsts_max_age) && (int) $hsts_max_age > 0 && isSSL()) {
+        header('Strict-Transport-Security: max-age=' . (int) $hsts_max_age);
+    }
 }
 // MintHCM End
 
