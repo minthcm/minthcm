@@ -458,10 +458,16 @@ abstract class SugarRelationship
      *
      * @static
      *
-     * @param SugarBean $bean
+     * @param SugarBean|mixed $bean anything that is not a SugarBean (e.g. false returned by
+     *                              BeanFactory::getBean() for an already deleted record) is ignored
      */
     public static function addToResaveList($bean)
     {
+        #MintHCM start
+        if (!$bean instanceof SugarBean) {
+            return;
+        }
+        #MintHCM end
         if (!isset(self::$beansToResave[$bean->module_dir])) {
             self::$beansToResave[$bean->module_dir] = array();
         }
