@@ -127,10 +127,10 @@ function runModifiers(modifier: any, value: any) {
     display: flex;
     align-items: center;
     gap: 16px;
-    border-bottom: 1px solid #0000001f;
+    border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
 .mass-update-row:first-child {
-    border-top: 1px solid #0000001f;
+    border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 </style>

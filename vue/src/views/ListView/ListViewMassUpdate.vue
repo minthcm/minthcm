@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="list-view-mass-update">
         <div v-if="isLoading" class="loading-screen">
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
         </div>
@@ -99,6 +99,10 @@
 </script>
 
 <style scoped lang="scss">
+.list-view-mass-update {
+    border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
 .list-mass-update {
     width: 100%;
     display: flex;
