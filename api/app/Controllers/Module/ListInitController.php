@@ -116,7 +116,7 @@ class ListInitController
     {
         $routeContext = RouteContext::fromRequest($this->request);
         $route = $routeContext->getRoute();
-        $this->module = str_replace('/', '', $route->getPattern());
+        $this->module = $route->getArguments()['module'];
         chdir('../legacy/');
         $this->bean = \BeanFactory::newBean($this->module);
         chdir('../api/');

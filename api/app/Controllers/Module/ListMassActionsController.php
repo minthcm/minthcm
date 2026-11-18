@@ -18,7 +18,7 @@ class ListMassActionsController
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        $module = explode('/', $route->getPattern())[1] ?? '';
+        $module = $route->getArguments()['module'] ?? '';
 
         if (empty($module) || empty($action) || empty($ids)) {
             throw new HttpBadRequestException($request);

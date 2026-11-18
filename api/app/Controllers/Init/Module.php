@@ -86,7 +86,7 @@ class Module
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        $module = explode('/', $route->getPattern())[1] ?? null;
+        $module = $route->getArguments()['module'] ?? null;
         if(!$module) {
             throw new HttpBadRequestException($request);
         }

@@ -84,8 +84,7 @@ class ListController
         $response = $response->withHeader('Content-type', 'application/json');
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        preg_match('/(?<=\/)([^\/]+)/m', $route->getPattern(), $matches);
-        $bean = BeanFactory::newBean($matches[0]);
+        $bean = BeanFactory::newBean($route->getArguments()['module']);
         if (empty($bean) || !$bean->ACLAccess('list')) {
             return $response->withStatus(403);
         }
@@ -114,8 +113,7 @@ class ListController
         global $current_user;
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        preg_match('/(?<=\/)([^\/]+)/m', $route->getPattern(), $matches);
-        $module = $matches[0];
+        $module = $route->getArguments()['module'];
         $preferences = $request->getAttribute('preferences');
         global $beanList;
         if (!isset($beanList[$module]) || empty($beanList[$module])) {
@@ -143,8 +141,7 @@ class ListController
         global $mint_config, $current_user;
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        preg_match('/(?<=\/)([^\/]+)/m', $route->getPattern(), $matches);
-        $module = $matches[0];
+        $module = $route->getArguments()['module'];
         $params = array();
         $params['filters'] = ["bool" => []];
         $params['search'] = 'list';
@@ -152,7 +149,7 @@ class ListController
         $params['from'] = $request->getAttribute('page') && $request->getAttribute('page') > 0 ? ($request->getAttribute('page') - 1) * $params['items'] : -1;
         $params['sort_by'] = $request->getAttribute('sortBy') ?? static::DEFAULT_SORT_BY;
         $params['sort_order'] = $params['sort_by'] == static::DEFAULT_SORT_BY ? 'desc' : $request->getAttribute('sortOrder') ?? 'asc';
-        $params['type'] = str_replace('/', '', $route->getPattern());
+        $params['type'] = $module;
         $params['filters'] = $this->getParsedFilters($request, (string) $module ?? '');
         $params["fields"] = array("*__last^5", "*__first^4", "*__name.*^3", "*");
         $sortParams = (new UserPreference($current_user))->getPreference($module, 'eslist')['sortParams'] ?? null;

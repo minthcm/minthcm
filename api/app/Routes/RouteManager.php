@@ -107,7 +107,7 @@ class RouteManager
             }
             $route_data['path'] = '/' . $module . $route_data['path'];
             $route_name = $module . '___' . $route_name;
-            $this->buildRoute($route_data, $route_name);
+            $this->buildRoute($route_data, $route_name, $module);
         }
     }
 
@@ -118,7 +118,7 @@ class RouteManager
         }
     }
 
-    protected function buildRoute(&$route_data, $route_name)
+    protected function buildRoute(&$route_data, $route_name, $module = null)
     {
         $route = $this->addRoute($route_data);
         if (!$route) {
@@ -126,6 +126,9 @@ class RouteManager
         }
 
         $route->setName($route_name);
+        if ($module !== null) {
+            $route->setArgument('module', $module);
+        }
     }
 
     protected function addRoute($route)

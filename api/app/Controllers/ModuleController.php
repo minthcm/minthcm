@@ -493,7 +493,7 @@ class ModuleController
     {
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-        return explode('/', $route->getPattern())[1] ?? null;
+        return $route->getArguments()['module'] ?? null;
     }
 
     protected function mergeRecordData(MintEntity $entity, $related_records = []): array
