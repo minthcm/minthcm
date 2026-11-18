@@ -73,9 +73,7 @@ class OrganizationStructureDataProvider
      */
     public function getData(string $virtualRootName = 'Organisation'): array
     {
-        global $sugar_config;
-
-        $siteURL   = rtrim($sugar_config['site_url'] ?? '', '/');
+        $siteURL   = \SuiteCRM\Utility\SiteUrl::base();
         $employees = $this->fetchEmployees();
 
         if (empty($employees)) {

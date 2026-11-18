@@ -8,6 +8,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 use MintHCM\AI\Tools\Config\ToolConfig;
 use MintHCM\AI\Tools\Exceptions\ModuleNotAllowedException;
+use SuiteCRM\Utility\SiteUrl;
 
 /**
  * Shared base for AI tool implementations. Owns the bits that MCP previously
@@ -68,9 +69,7 @@ abstract class AbstractTool
             return '';
         }
 
-        $base_url = rtrim((string) $sugar_config['site_url'], '/');
-
-        return $base_url . '/#/modules/' . $module_name . '/DetailView/' . $id;
+        return SiteUrl::build('#/modules/' . $module_name . '/DetailView/' . $id);
     }
 
     /**

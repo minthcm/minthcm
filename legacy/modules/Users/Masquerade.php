@@ -11,7 +11,7 @@ if (!empty($_SESSION['masquerade_admin_id'])) {
     if (ob_get_level()) {
         ob_clean();
     }
-    echo '<script>top.location.href=' . json_encode(rtrim($GLOBALS['sugar_config']['site_url'] ?? '', '/') . '/') . ';</script>';
+    echo '<script>top.location.href=' . json_encode(\SuiteCRM\Utility\SiteUrl::build()) . ';</script>';
     exit;
 }
 
@@ -39,8 +39,6 @@ if (is_admin($current_user) && !empty($_REQUEST['record']) && preg_match('/^[0-9
         && !$mask_user->is_group
         && !is_admin($mask_user)
     ) {
-        global $sugar_config;
-
         unset($_SESSION['EAPM']);
 
         $_SESSION['masquerade_admin_id'] = $GLOBALS['current_user']->id;
@@ -58,7 +56,7 @@ if (is_admin($current_user) && !empty($_REQUEST['record']) && preg_match('/^[0-9
             ob_clean();
         }
 
-        $site_url = rtrim($sugar_config['site_url'] ?? '', '/') . '/';
+        $site_url = \SuiteCRM\Utility\SiteUrl::build();
         echo '<script>top.location.href=' . json_encode($site_url) . ';</script>';
         exit;
     }

@@ -487,7 +487,6 @@ class OIDCAuthenticate extends SugarAuthenticate
      */
     private function getRedirectUri(): string
     {
-        global $sugar_config;
-        return rtrim($sugar_config['site_url'], '/') . '/legacy/index.php?action=Login&module=Users';
+        return \SuiteCRM\Utility\SiteUrl::build('legacy/index.php?action=Login&module=Users');
     }
 }

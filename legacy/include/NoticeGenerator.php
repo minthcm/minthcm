@@ -434,8 +434,7 @@ class NoticeGenerator {
             }
          }
       }
-      global $sugar_config;
-      $url = rtrim($sugar_config['site_url'], '/');
+      $url = \SuiteCRM\Utility\SiteUrl::base();
       $_additional_fields['link_to_bean'] = "<a href='" . $url . '/index.php' . "?module=" . $bean->module_dir . "&action=DetailView&record=" . $bean->id . "'>" . $bean->name . "</a>";
       $_additional_fields['pure_link'] = $url . '/index.php' . "?module=" . $bean->module_dir . "&action=DetailView&record=" . $bean->id;
 

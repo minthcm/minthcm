@@ -231,7 +231,7 @@ class SugarOAuthServer
      */
     public function authUrl()
     {
-        return urlencode(rtrim($GLOBALS['sugar_config']['site_url'], '/')."/index.php?module=OAuthTokens&action=authorize");
+        return urlencode(\SuiteCRM\Utility\SiteUrl::build('index.php?module=OAuthTokens&action=authorize'));
     }
 
     /**

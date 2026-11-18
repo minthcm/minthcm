@@ -52,6 +52,7 @@ use MintHCM\Api\Controllers\Init\Preferences;
 use MintHCM\Api\Utils\AuthHelper;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response;
+use SuiteCRM\Utility\SiteUrl;
 
 class LoginAction
 {
@@ -85,8 +86,6 @@ class LoginAction
 
     private function getRedirectUrl(): ?string
     {
-        global $sugar_config;
-
         if (!AuthHelper::isSAML2On() && !AuthHelper::isOIDCOn()) {
             return null;
         }
@@ -101,6 +100,6 @@ class LoginAction
         // navigate there top-level. pre_login() then issues the state and redirects to the
         // IdP within the very session the callback returns to, so validation passes on the
         // first try.
-        return rtrim($sugar_config['site_url'], '/') . '/legacy/index.php?module=Users&action=Login';
+        return SiteUrl::build('legacy/index.php?module=Users&action=Login');
     }
 }

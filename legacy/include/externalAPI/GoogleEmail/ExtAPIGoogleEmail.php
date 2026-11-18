@@ -15,6 +15,7 @@ require_once 'include/externalAPI/Base/ExternalAPIBase.php';
 
 use Google\Client;
 use Google\Service\Gmail;
+use SuiteCRM\Utility\SiteUrl;
 
 /**
  * ExtAPIGoogleEmail
@@ -81,8 +82,7 @@ class ExtAPIGoogleEmail extends ExternalAPIBase
     {
         $config = array();
         include 'custom/modules/Connectors/connectors/sources/ext/eapm/google/config.php';
-        $config['redirect_uri'] = rtrim(SugarConfig::getInstance()->get('site_url'), '/')
-            . '/oauth-handler/GoogleOauth2Redirect';
+        $config['redirect_uri'] = SiteUrl::build('oauth-handler/GoogleOauth2Redirect');
 
         return $config;
     }

@@ -290,6 +290,24 @@ $statusOptions = $app_list_strings['employee_status_dom'];
 $label = $app_strings['LBL_EMPLOYEES'];
 ```
 
+### Absolute URLs (SiteUrl)
+
+`$sugar_config['site_url']` may be configured with or without a trailing slash, so never
+concatenate it by hand (`$sugar_config['site_url'] . '/path'` yields `https://host//path`).
+Use `SuiteCRM\Utility\SiteUrl` (`legacy/lib/Utility/SiteUrl.php`) — available in both layers:
+
+```php
+use SuiteCRM\Utility\SiteUrl;
+
+SiteUrl::build("#/auth/reset?token={$token}"); // https://host/#/auth/reset?token=...
+SiteUrl::build('legacy/index.php?module=Users&action=Login');
+SiteUrl::build();                              // https://host/  (site root)
+SiteUrl::base();                               // https://host   (no trailing slash)
+```
+
+`build()` always joins with exactly one `/` (leading slashes of the path are ignored).
+Both methods accept an optional explicit base URL as the last argument (useful in unit tests).
+
 ## Global Variables
 
 Legacy code relies on global variables. Key globals available in the API:

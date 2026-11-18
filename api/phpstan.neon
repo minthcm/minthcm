@@ -9,6 +9,9 @@ parameters:
         - lib
         - utils
         - modules
+    # Legacy classes used by the API (loaded at runtime by legacy's composer autoloader)
+    scanFiles:
+        - ../legacy/lib/Utility/SiteUrl.php
     excludePaths:
         - vendor/*
         - cache/*

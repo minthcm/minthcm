@@ -61,8 +61,6 @@ class ViewSourceProperties extends ViewList
 
     public function display()
     {
-        global $sugar_config;
-
         require_once('include/connectors/sources/SourceFactory.php');
         require_once('include/connectors/utils/ConnectorUtils.php');
 
@@ -81,7 +79,7 @@ class ViewSourceProperties extends ViewList
 
         // treat string as a template (the string resource plugin is unavailable in the current Smarty version)
         if (isset($connector_language['LBL_LICENSING_INFO'])) {
-            $siteUrl = rtrim($sugar_config['site_url'], '/');
+            $siteUrl = \SuiteCRM\Utility\SiteUrl::base();
             $connector_language['LBL_LICENSING_INFO'] = str_replace(
                 '{$SITE_URL}',
                 $siteUrl,

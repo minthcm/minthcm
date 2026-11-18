@@ -485,7 +485,7 @@ class UserViewHelper
         $this->ss->assign('CALENDAR_PUBLISH_KEY', $publish_key);
 
         /* MintHCM #138652 START */
-        $site_url = rtrim($sugar_config['site_url'], '/');
+        $site_url = \SuiteCRM\Utility\SiteUrl::base();
         $publish_url = $site_url . '/vcal_server.php';
         $token = "?";
         /* MintHCM #138652 END */

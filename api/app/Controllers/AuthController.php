@@ -61,6 +61,7 @@ use Slim\Exception\HttpException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Psr7\Response;
 use SuiteCRM\Utility\SessionTimeout;
+use SuiteCRM\Utility\SiteUrl;
 
 class AuthController
 {
@@ -433,7 +434,7 @@ class AuthController
 
         $emailTemp_id = $sugar_config['passwordsetting']['lostpasswordtmpl'];
 
-        $url = $sugar_config['site_url'] . "/#/auth/reset?token={$usersPasswordLink->id}";
+        $url = SiteUrl::build("#/auth/reset?token={$usersPasswordLink->id}");
         $additionalData = array(
             'link' => true,
             'password' => '',

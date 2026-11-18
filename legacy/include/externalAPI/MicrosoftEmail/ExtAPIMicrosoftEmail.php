@@ -17,6 +17,7 @@ require_once __DIR__ . '/GraphProxy.php';
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Model;
+use SuiteCRM\Utility\SiteUrl;
 
 /**
  * ExtAPIMicrosoft
@@ -343,8 +344,7 @@ class ExtAPIMicrosoftEmail extends ExternalAPIBase
     {
         $config = array();
         include 'custom/modules/Connectors/connectors/sources/ext/eapm/microsoft/config.php';
-        $config['redirect_uri'] = rtrim(SugarConfig::getInstance()->get('site_url'), '/')
-            . '/oauth-handler/MicrosoftOauth2Redirect';
+        $config['redirect_uri'] = SiteUrl::build('oauth-handler/MicrosoftOauth2Redirect');
 
         return $config;
     }

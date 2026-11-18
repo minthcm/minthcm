@@ -221,8 +221,7 @@ class OrganizationStructure
 
         $body = $ss->fetch('modules/Home/Dashlets/OrganizationStructureDashlet/OrganizationStructureDashlet.tpl');
 
-        $siteUrl = rtrim($GLOBALS['sugar_config']['site_url'] ?? '', '/');
-        $faviconUrl = htmlspecialchars($siteUrl . '/favicon.ico', ENT_QUOTES, 'UTF-8');
+        $faviconUrl = htmlspecialchars(\SuiteCRM\Utility\SiteUrl::build('favicon.ico'), ENT_QUOTES, 'UTF-8');
 
         return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
             . '<link rel="icon" href="' . $faviconUrl . '">'

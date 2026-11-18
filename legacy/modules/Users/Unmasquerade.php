@@ -5,7 +5,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 if (!empty($_SESSION['masquerade_admin_id'])) {
-    global $current_user, $sugar_config;
+    global $current_user;
 
     $admin_user = BeanFactory::newBean('Users');
     $admin_user->retrieve($_SESSION['masquerade_admin_id']);
@@ -27,7 +27,7 @@ if (!empty($_SESSION['masquerade_admin_id'])) {
         session_write_close();
         ob_clean();
 
-        $site_url = rtrim($sugar_config['site_url'] ?? '', '/') . '/';
+        $site_url = \SuiteCRM\Utility\SiteUrl::build();
         echo '<script>top.location.href=' . json_encode($site_url) . ';</script>';
         exit;
     }
