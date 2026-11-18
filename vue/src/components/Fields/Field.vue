@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, computed, watch, ref, nextTick, getCurrentInstance } from 'vue'
 import { useModulesStore } from '@/store/modules'
-import { fieldConfig } from '../Fields/Field.config'
+import { fieldConfig, componentLoaders } from '../Fields/Field.config'
 import { FieldProps, FieldState } from './Field.model'
 import { useLanguagesStore } from '@/store/languages'
 
@@ -125,16 +125,29 @@ const resolvedFieldType = computed(() => {
     return fieldConfig.defaultType
 })
 
-let FieldComponent = defineAsyncComponent(() => {
-    return import(`@/components/Fields/${resolvedFieldType.value}/${resolvedFieldType.value}.${props.view}.vue`)
-})
+// Reads resolvedFieldType lazily on purpose: the loader is re-created by the watch below whenever view/type change.
+const loadFieldComponent = () => {
+    const loaderKey = `${resolvedFieldType.value}/${props.view}`
+    const loader = componentLoaders[loaderKey]
+    if (loader) {
+        return loader()
+    }
+    // A custom type may ship a {type}.ts config without a component for every view - fall back to the default type.
+    const fallbackKey = `${fieldConfig.defaultType}/${props.view}`
+    const fallbackLoader = componentLoaders[fallbackKey]
+    if (!fallbackLoader) {
+        throw new Error(`Field.vue loadFieldComponent: no component loader registered for "${loaderKey}" nor for "${fallbackKey}"`)
+    }
+    console.warn(`Field.vue loadFieldComponent: no component loader for "${loaderKey}", falling back to "${fallbackKey}"`)
+    return fallbackLoader()
+}
+
+let FieldComponent = defineAsyncComponent(loadFieldComponent)
 
 watch(
     () => [props.view, props.defs?.type],
     () => {
-        FieldComponent = defineAsyncComponent(() => {
-            return import(`@/components/Fields/${resolvedFieldType.value}/${resolvedFieldType.value}.${props.view}.vue`)
-        })
+        FieldComponent = defineAsyncComponent(loadFieldComponent)
     },
     { immediate: true },
 )

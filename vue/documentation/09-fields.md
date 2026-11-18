@@ -65,8 +65,10 @@ components/Fields/
     ├── {fieldType}.detail.vue    # Detail view
     ├── {fieldType}.edit.vue      # Edit view
     ├── {fieldType}.list.vue      # List view
-    └── {fieldType}.ts            # FieldInterface: validator / formatters (optional)
+    └── {fieldType}.ts            # FieldInterface: validator / formatters / aliases (optional)
 ```
+
+Custom field types use the same layout under `src/custom/components/Fields/{fieldType}/` (see [Creating Custom Field Types](#creating-custom-field-types)).
 
 A type does not need all three views; a missing view simply falls back to `varchar` for that view.
 
@@ -94,8 +96,9 @@ Fields/varchar/
    - else typeMap[defs.type] has one? → use it
    - else → 'varchar' (console warning)
    ↓
-3. Dynamically imports component
-   - import(`@/components/Fields/enum/enum.edit.vue`)
+3. Loads the component from componentLoaders['enum/edit']
+   - lazy loader built by Field.config.ts from core + custom globs
+   - no loader for this type/view → loader of 'varchar' for this view (console warning)
    ↓
 4. Renders loaded component
    - Passes defs, label, field, modelValue, options, data, view and the computed state
@@ -145,20 +148,24 @@ Backend types mapped to another component through `typeMap`: `char` → `varchar
 **File:** `Field.config.ts`
 
 ```typescript
-const listFields = import.meta.glob('@/components/Fields/*/*.list.vue', { eager: true })
-const editFields = import.meta.glob('@/components/Fields/*/*.edit.vue', { eager: true })
-const detailFields = import.meta.glob('@/components/Fields/*/*.detail.vue', { eager: true })
-const fields = import.meta.glob('@/components/Fields/*/*.ts', { eager: true })
+// Core and custom folders are scanned together (lazy for components, eager for {type}.ts)
+const listFields = import.meta.glob(['@/components/Fields/*/*.list.vue', '@/custom/components/Fields/*/*.list.vue'])
+const editFields = import.meta.glob(['@/components/Fields/*/*.edit.vue', '@/custom/components/Fields/*/*.edit.vue'])
+const detailFields = import.meta.glob(['@/components/Fields/*/*.detail.vue', '@/custom/components/Fields/*/*.detail.vue'])
+const fields = import.meta.glob(['@/components/Fields/*/*.ts', '@/custom/components/Fields/*/*.ts'], { eager: true })
+
+// '{type}/{view}' → lazy loader; Field.vue loads components only through this map
+export const componentLoaders = { /* 'enum/edit': () => import(...), ... */ }
 
 export const fieldConfig = {
-    // Types available per view - derived from the files that exist
+    // Types available per view - derived from the files that exist (core + custom)
     allowedTypes: {
-        list: Object.keys(listFields).map(getFieldName),
-        edit: Object.keys(editFields).map(getFieldName),
-        detail: Object.keys(detailFields).map(getFieldName),
+        list: uniqueFieldNames(listFields),
+        edit: uniqueFieldNames(editFields),
+        detail: uniqueFieldNames(detailFields),
     },
 
-    // FieldInterface objects from {type}/{type}.ts, keyed by type
+    // FieldInterface objects from {type}/{type}.ts, keyed by type (custom wins over core)
     fields: { /* e.g. enum: { userFormatter }, date: { ... } */ },
 
     // Default type when resolution fails
@@ -173,11 +180,18 @@ export const fieldConfig = {
         image: 'file',
         html: 'richtext',
         name: 'varchar',
+        // + entries from the `aliases` of every {type}.ts
     },
 }
 ```
 
 There is nothing to register by hand: adding a file is enough.
+
+Merge rules:
+- When core and `custom/` contain the same type folder, the `custom/` file wins (per view and for `{type}.ts`).
+- `aliases` from `{type}.ts` are added to `typeMap`. An alias is ignored (with a console error) if it is already a field type name (core or custom) or is already mapped - a built-in entry such as `char` or `html`, or an alias declared by another type (the first declaration wins). To replace an existing type, use a `custom/components/Fields/{type}/` folder instead.
+- `__proto__`, `constructor` and `prototype` cannot be used as type names or aliases.
+- A rejected file or alias is skipped and logged with `console.error`; it never breaks the app.
 
 ### Field Behavior File (`{type}.ts`)
 
@@ -189,6 +203,7 @@ export interface FieldInterface {
     toAppFormat?: (value: any) => any                     // server value → model value
     userFormatter?: (value: any, defs: FieldVardef) => string | number | boolean | string[]   // display
     serverFormatter?: (value: any, defs: FieldVardef) => string | number | boolean | string[] // value sent on save
+    aliases?: string[]                                    // backend types rendered with this type (added to typeMap)
 }
 ```
 
@@ -212,9 +227,9 @@ Types with such a file today: `date`, `datetime`, `datetimecombined`, `enum`, `f
 
 ## Adding a New Field Type
 
-> **Important:** field types are resolved only from `src/components/Fields/`. Files in `src/custom/components/Fields/` are **not** loaded by `Field.vue` or `Field.config.ts`, so a field type cannot currently be added through `custom/`.
+> In a customization, put the type in `src/custom/components/Fields/` instead of core - see [Creating Custom Field Types](#creating-custom-field-types). The steps are the same.
 
-To add a type, create a folder in core:
+To add a type to core, create a folder in `src/components/Fields/`:
 
 ### Step 1: Create Field Components
 
@@ -274,6 +289,38 @@ $dictionary['Candidates']['fields']['customer_rating'] = [
 ### Step 3: Rebuild
 
 The new type is picked up by the globs at build time: run `npm run build` in `vue/` and commit `vue/dist/`.
+
+## Creating Custom Field Types
+
+A field type can be added (or a core type replaced) without touching core files, by placing it in `src/custom/components/Fields/{type}/`:
+
+```
+src/custom/components/Fields/rating/
+├── rating.detail.vue
+├── rating.edit.vue
+├── rating.list.vue      # optional
+└── rating.ts            # optional: validator, formatters, aliases
+```
+
+- Components follow the same contract as core ones (`FieldProps<T>`, `props.field.model`, `update:modelValue`); import shared types from `@/components/Fields/Field.model`.
+- Each type is self-contained in its own folder - there is no shared registration file, so independent customizations adding different types never edit the same file.
+- A folder with the same name as a core type replaces that type's components (per view) and its `{type}.ts`.
+- A missing view falls back to `varchar`, as for core types.
+
+To render other backend types with your component, declare `aliases` in the colocated `{type}.ts`:
+
+```typescript
+// src/custom/components/Fields/rating/rating.ts
+import { FieldInterface } from '@/components/Fields/Field.model'
+
+const field: FieldInterface = {
+    aliases: ['stars'], // vardefs with type 'stars' are rendered by the 'rating' components
+}
+
+export default field
+```
+
+The `{type}.ts` module must `export default` a `FieldInterface`; otherwise it is ignored with a console error. Rebuild the frontend after adding or changing files.
 
 ## Field Props Interface
 
@@ -544,7 +591,7 @@ export const useField = <T>(defs: FieldVardef, initialValue: T, opts: FieldOptio
 
 ### ❌ DON'T
 
-- **Put field types in `custom/`** - they are not loaded
+- **Edit core `Field.config.ts` or `Field.vue` to add a type** - put it in `custom/components/Fields/` instead
 - **Duplicate code** between views (share it through `{type}.ts`)
 - **Ignore the props interface**
 - **Hardcode labels** (use translations)
@@ -556,8 +603,9 @@ export const useField = <T>(defs: FieldVardef, initialValue: T, opts: FieldOptio
 **Check:**
 1. The folder and file names match `defs.type` (or a `typeMap` entry): `Fields/{type}/{type}.{view}.vue`
 2. The file exists for this view (otherwise `varchar` is used and a `resolveFieldType` warning is logged)
-3. The file is in `src/components/Fields/`, not in `src/custom/`
-4. The frontend was rebuilt after adding the files
+3. The file is in `src/components/Fields/{type}/` or `src/custom/components/Fields/{type}/` (not nested deeper)
+4. An alias in `{type}.ts` is not rejected (console error: already a field type name / already mapped)
+5. The frontend was rebuilt after adding the files
 
 ### Edit Field Throws `Cannot read properties of undefined (reading 'model')`
 

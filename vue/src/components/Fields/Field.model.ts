@@ -30,4 +30,5 @@ export interface FieldInterface {
     toAppFormat?: (value: any) => any
     userFormatter?: FieldFormatter<any>
     serverFormatter?: FieldFormatter<any>
+    aliases?: string[]
 }

@@ -44,11 +44,11 @@ Only the following paths are picked up automatically (all through `import.meta.g
 | List view panels | `custom/components/ListViewPanels/<Name>.vue` | `views/ListView/ListView.vue` | Custom wins over core panel of the same name |
 | Drawers | `custom/drawers/<name>.drawer.ts` | `bundler/drawers.bundle.ts` | Added next to core drawers (key `custom-<name>`) |
 | Menu components | `custom/components/**/<Path>.vue` | `utils/componentLoader.ts` | `componentPath` of a menu action; custom checked first |
+| Field types | `custom/components/Fields/<type>/<type>.{detail,edit,list}.vue` (+ optional `<type>.ts`) | `components/Fields/Field.config.ts` | Same type name overrides core; new types and `aliases` need no registration ([Field System](./09-fields.md#creating-custom-field-types)) |
 
 **Not supported:**
 
-- **Overriding a core component or view by placing a file at the same path in `custom/`.** There is no such mechanism: core imports always resolve to `src/`.
-- **Custom field types in `custom/components/Fields/`.** `Field.vue` and `Field.config.ts` load field components only from `src/components/Fields/`. A new field type is currently added in core as `src/components/Fields/<type>/<type>.{detail,edit,list}.vue` and is registered automatically by the glob; see [Field System](./09-fields.md#adding-a-new-field-type).
+- **Overriding a core component or view by placing a file at the same path in `custom/`.** There is no such mechanism: core imports always resolve to `src/` (field types are the exception - see the table above).
 
 ## Custom Components
 
