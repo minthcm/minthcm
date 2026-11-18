@@ -139,8 +139,9 @@ public function action(Request $request, Response $response): Response
     // Matched route (name, pattern, arguments)
     $route = \Slim\Routing\RouteContext::fromRequest($request)->getRoute();
 
-    // Module routes are named "{Module}___{key}" and their pattern starts with "/{Module}"
-    $module = explode('/', $route->getPattern())[1] ?? null;
+    // Module routes carry the module name as the "module" route argument (set by RouteManager);
+    // do not parse it from $route->getPattern()
+    $module = $route->getArguments()['module'] ?? null;
 }
 ```
 

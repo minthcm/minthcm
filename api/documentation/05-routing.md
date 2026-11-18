@@ -596,6 +596,14 @@ $routes = [
 - The generic routes from `app/Routes/modules/module.php` are named the same way: `Employees___detail`, `Employees___list`, ...
 - A module file that reuses a generic key (e.g. `detail`) replaces that generic route for this module only.
 
+**Module name in controllers:** every module route gets a `module` route argument with the module name, so a shared controller can tell which module it serves:
+
+```php
+$module = RouteContext::fromRequest($request)->getRoute()->getArguments()['module'] ?? null;
+```
+
+Do not parse the module name from `$route->getPattern()` – it breaks for nested patterns. Global routes (from `buildRoutes()`) have no `module` argument.
+
 ## Route Registration Process
 
 ### Internal Flow
@@ -614,14 +622,17 @@ public function execute()
 }
 
 // RouteManager::buildRoute()
-protected function buildRoute(&$route_data, $route_name)
+protected function buildRoute(&$route_data, $route_name, $module = null)
 {
     $route = $this->addRoute($route_data);
     if (!$route) {
         return null;
     }
-    
+
     $route->setName($route_name);
+    if ($module !== null) {
+        $route->setArgument('module', $module);   // passed by buildModulesRoutes()
+    }
 }
 ```
 
