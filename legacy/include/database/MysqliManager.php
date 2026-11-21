@@ -129,11 +129,6 @@ class MysqliManager extends MysqlManager {
 
       static $queryMD5 = array();
 
-      // MintHCM start
-      if ( stristr(strtolower($sql), 'workschedules ') && ( stristr(strtolower($sql), 'update ') || stristr(strtolower($sql), 'insert ') ) ) {
-         $GLOBALS['log']->dev('Mysqli Query:' . $sql);
-      }
-      // MintHCM end
       parent::countQuery($sql);
       $GLOBALS['log']->info('Query:' . $sql);
       $this->checkConnection();
