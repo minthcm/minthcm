@@ -1,0 +1,99 @@
+title: "[Install/Upgrade] "
+labels: ["installation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reaching out! The more details you give, the faster we can help.
+        Please check the [installation guide](https://minthcm.org/support/minthcm-installation-guide/) and existing discussions first.
+        Found a bug in MintHCM itself? Please open an [issue](https://github.com/minthcm/minthcm/issues).
+  - type: dropdown
+    id: scenario
+    attributes:
+      label: What are you doing?
+      options:
+        - New installation
+        - Upgrade of an existing instance
+        - Reinstall / uninstall
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: MintHCM version
+      description: For an upgrade, give both the current and the target version.
+      placeholder: "e.g. upgrading from 4.0.4 to 4.0.6"
+    validations:
+      required: true
+  - type: dropdown
+    id: method
+    attributes:
+      label: Installation method
+      options:
+        - Docker
+        - Manual installation (Apache/Nginx)
+        - XAMPP / WAMP / other local stack
+        - Cloud provider VM (AWS, Azure, GCP, ...)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and web server
+      placeholder: "e.g. Ubuntu 22.04, Apache 2.4"
+    validations:
+      required: true
+  - type: input
+    id: php
+    attributes:
+      label: PHP version
+      placeholder: "e.g. 8.2.x"
+    validations:
+      required: true
+  - type: input
+    id: database
+    attributes:
+      label: Database and version
+      placeholder: "e.g. MySQL 8.0 or MariaDB 10.11"
+    validations:
+      required: true
+  - type: input
+    id: elasticsearch
+    attributes:
+      label: Elasticsearch version
+      placeholder: "e.g. 7.10"
+    validations:
+      required: false
+  - type: textarea
+    id: problem
+    attributes:
+      label: What goes wrong?
+      description: Describe the problem and paste the exact error message.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps you took
+      description: Commands you ran or steps you followed, in order.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Please attach relevant lines from php.log, minthcm.log and install.log. Remove any passwords or personal data first.
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you post
+      options:
+        - label: I searched existing discussions and the installation guide.
+          required: true
+        - label: I removed passwords and personal data from logs and screenshots.
+          required: true
