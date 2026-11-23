@@ -12,7 +12,7 @@ body:
     id: version
     attributes:
       label: MintHCM version
-      description: You can find it in the system footer or the About page.
+      description: Not sure? The version is stored in the file legacy/minthcm_version.php on your server.
       placeholder: "e.g. 4.0.6"
     validations:
       required: true
