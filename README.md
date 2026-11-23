@@ -168,8 +168,8 @@ Be part of the conversation.
 
 ## Do you have a problem? Maybe you'd like to ask us about something? ❌
 
+- ❓ If you are looking for help, start a [discussion](https://github.com/minthcm/minthcm/discussions).
 
-*  ❓  If you are looking for help, create a new topic on our [forum](https://minthcm.org/support/). 
 
 *  🐛 If you found a bug, create a new issue on the [GitHub](https://github.com/minthcm/minthcm/issues).
 
